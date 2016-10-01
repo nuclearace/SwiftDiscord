@@ -1,10 +1,45 @@
+import Foundation
+
+public enum DiscordGatewayPayloadData {
+	case object([String: Any])
+	case integer(Int)
+	case null
+
+	var value: Any {
+		switch self {
+		case let .object(object):
+			return object
+		case let .integer(integer):
+			return integer
+		case .null:
+			return NSNull()
+		}
+	}
+
+	static func dataFromDictionary(_ data: Any?) -> DiscordGatewayPayloadData? {
+		guard let data = data else { return nil }
+
+		switch data {
+		case let object as [String: Any]:
+			return .object(object)
+		case let integer as Int:
+			return .integer(integer)
+		case is NSNull:
+			return .null
+		default:
+			return nil
+		}
+	}
+}
+
 public struct DiscordGatewayPayload {
 	let code: DiscordGatewayCode
-	let payload: [String: Any]
+	let payload: DiscordGatewayPayloadData
 	let sequenceNumber: Int?
 	let name: String?
 
-	public init(code: DiscordGatewayCode, payload: [String: Any], sequenceNumber: Int? = nil, name: String? = nil) {
+	public init(code: DiscordGatewayCode, payload: DiscordGatewayPayloadData, sequenceNumber: Int? = nil, 
+		name: String? = nil) {
 		self.code = code
 		self.payload = payload
 		self.sequenceNumber = sequenceNumber
@@ -14,7 +49,7 @@ public struct DiscordGatewayPayload {
 	func createPayloadString() -> String? {
 		var payload: [String: Any] = [
 			"op": code.rawValue,
-			"d": self.payload 
+			"d": self.payload.value
 		]
 
 		if sequenceNumber != nil {
@@ -36,7 +71,7 @@ extension DiscordGatewayPayload {
 		}
 
 		guard let op = dictionary["op"] as? Int, let code = DiscordGatewayCode(rawValue: op), 
-			let payload = dictionary["d"] as? [String: Any] else { 
+			let payload = DiscordGatewayPayloadData.dataFromDictionary(dictionary["d"]) else { 
 				return nil 
 		}
 		

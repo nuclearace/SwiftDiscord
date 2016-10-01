@@ -1,8 +1,11 @@
 import Foundation
 import Starscream
 
-open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandler {
+open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, DiscordEngineHeartbeatable {
 	public private(set) weak var client: DiscordClientSpec?
+	public private(set) var heartbeatInterval = 0 // Only touch on handleQueue
+	public private(set) var heartbeatQueue = DispatchQueue(label: "discordEngine.heartbeatQueue")
+	public private(set) var lastSequenceNumber = -1 // Only touch on handleQueue
 	public private(set) var websocket: WebSocket?
 
 	private let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
@@ -73,6 +76,10 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandler {
 	}
 
 	private func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
+		if let seq = payload.sequenceNumber {
+			lastSequenceNumber = seq
+		}
+
 		switch payload.code {
 		case .dispatch:
 			handleDispatch(payload)
@@ -111,14 +118,14 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandler {
 			// "shard": [1, 10]
 		]
 
-		let payload = DiscordGatewayPayload(code: .identify, payload: handshakeEventData)
+		let payload = DiscordGatewayPayload(code: .identify, payload: .object(handshakeEventData))
 
-		guard let payloadString = payload.createPayloadString() else {
-			error()
+		sendGatewayPayload(payload)
+	}
 
-			return
-		}
+	public func startHeartbeat(seconds: Int) {
+		heartbeatInterval = seconds
 
-		websocket?.write(string: payloadString)
+		sendHeartbeat()
 	}
 }
