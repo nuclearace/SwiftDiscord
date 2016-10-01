@@ -28,3 +28,21 @@ public struct DiscordGatewayPayload {
 		return encodeJSON(payload)
 	}
 }
+
+extension DiscordGatewayPayload {
+	static func payloadFromString(_ string: String) -> DiscordGatewayPayload? {
+		guard let decodedJSON = decodeJSON(string), case let JSON.dictionary(dictionary) = decodedJSON else { 
+			return nil 
+		}
+
+		guard let op = dictionary["op"] as? Int, let code = DiscordGatewayCode(rawValue: op), 
+			let payload = dictionary["d"] as? [String: Any] else { 
+				return nil 
+		}
+		
+		let sequenceNumber = dictionary["s"] as? Int
+		let name = dictionary["t"] as? String
+
+		return DiscordGatewayPayload(code: code, payload: payload, sequenceNumber: sequenceNumber, name: name)
+	}
+}

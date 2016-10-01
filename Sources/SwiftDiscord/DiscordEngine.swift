@@ -1,32 +1,22 @@
 import Foundation
 import Starscream
 
-open class DiscordEngine : DiscordEngineSpec {
+open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandler {
 	public private(set) weak var client: DiscordClientSpec?
 	public private(set) var websocket: WebSocket?
 
+	private let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
 	private let handleQueue = DispatchQueue(label: "discordEngine.handleQueue")
 
 	public required init(client: DiscordClientSpec) {
 		self.client = client
 	}
 
-	deinit {
-
-	}
-
 	open func attachWebSocket() {
-		guard let token = client?.token else {
-			print("DiscordEngine: Could not get client token")
-
-			return 
-		}
-
 		print("DiscordEngine: Attaching WebSocket")
 
 		websocket = WebSocket(url: URL(string: "wss://gateway.discord.gg")!)
-		websocket?.headers["Autherization"] = token
-		websocket?.callbackQueue = handleQueue
+		websocket?.callbackQueue = parseQueue
 
 		attachWebSocketHandlers()
 	}
@@ -50,7 +40,11 @@ open class DiscordEngine : DiscordEngineSpec {
 		}
 
 		websocket?.onText = {[weak self] string in
-			print("DiscordEngine: Got message: \(string)")
+			guard let this = self else { return }
+
+			// print("DiscordEngine: Got message: \(string)")
+
+			this.parseGatewayMessage(string)
 		}
 	}
 
@@ -70,6 +64,29 @@ open class DiscordEngine : DiscordEngineSpec {
 
 	open func error() {
 		print("DiscordEngine: errored")
+	}
+
+	open func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
+		handleQueue.async {
+			self._handleGatewayPayload(payload)
+		}
+	}
+
+	private func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
+		switch payload.code {
+		case .dispatch:
+			handleDispatch(payload)
+		default:
+			break
+		}
+	}
+
+	open func parseGatewayMessage(_ string: String) {
+		print("DiscordEngine: Parsing")
+
+		guard let decoded = DiscordGatewayPayload.payloadFromString(string) else { return }
+
+		handleGatewayPayload(decoded)
 	}
 
 	open func startHandshake() {
