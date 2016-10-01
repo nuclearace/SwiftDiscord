@@ -91,7 +91,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	open func parseGatewayMessage(_ string: String) {
 		print("DiscordEngine: Parsing")
 
-		guard let decoded = DiscordGatewayPayload.payloadFromString(string) else { return }
+		guard let decoded = DiscordGatewayPayload.payloadFromString(string) else { fatalError("What happened") }
 
 		handleGatewayPayload(decoded)
 	}

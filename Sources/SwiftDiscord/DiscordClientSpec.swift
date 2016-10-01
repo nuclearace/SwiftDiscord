@@ -2,6 +2,7 @@ import Foundation
 
 public protocol DiscordClientSpec : class, DiscordEngineClient {
 	var token: String { get }
+	var user: DiscordUser? { get }
 
 	init(token: String)
 
