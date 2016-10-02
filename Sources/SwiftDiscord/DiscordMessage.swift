@@ -96,7 +96,7 @@ public struct DiscordMessage {
 	public let embeds: [DiscordEmbed]
 	public let id: String
 	public let mentionEveryone: Bool
-	public let mentionRoles: [DiscordRole]
+	public let mentionRoles: [String]
 	public let mentions: [DiscordUser]
 	public let timestamp: Date
 	public let tts: Bool
@@ -104,6 +104,7 @@ public struct DiscordMessage {
 
 extension DiscordMessage {
 	init(messageObject: [String: Any]) {
+		print(messageObject["mention_roles"])
 		let attachments = DiscordAttachment.attachmentsFromArray(
 			messageObject["attachments"] as? [[String: Any]] ?? [])
 		let author = DiscordUser(userObject: messageObject["author"] as? [String: Any] ?? [:])
@@ -112,8 +113,7 @@ extension DiscordMessage {
 		let embeds = DiscordEmbed.embedsFromArray(messageObject["embeds"] as? [[String: Any]] ?? [])
 		let id = messageObject["id"] as? String ?? ""
 		let mentionEveryone = messageObject["mention_everyone"] as? Bool ?? false
-		let mentionRoles = DiscordRole.rolesFromArray(messageObject["mention_roles"] as? [[String: Any]] ?? [])
-			.map({ return $0.value })
+		let mentionRoles = messageObject["mention_roles"] as? [String] ?? []
 		let mentions = DiscordUser.usersFromArray(messageObject["mentions"] as? [[String: Any]] ?? [])
 		let tts = messageObject["tts"] as? Bool ?? false
 
