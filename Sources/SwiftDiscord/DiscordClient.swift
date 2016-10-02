@@ -37,8 +37,6 @@ open class DiscordClient : DiscordClientSpec {
 			print("DiscordClient: setting guilds")
 
 			self?.guilds = DiscordGuild.guildsFromArray(guilds)
-
-			print(self!.guilds["201533018215677953"]!.channels)
 		}
 	}
 

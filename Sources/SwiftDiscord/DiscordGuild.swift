@@ -21,6 +21,7 @@ public struct DiscordGuild {
 	public var memberCount: Int
 	public var members: [String: DiscordGuildMember]
 	public var name: String
+	public var presences: [String: DiscordPresence]
 	public var roles: [String: DiscordRole]
 	public var voiceStates: [String: DiscordVoiceState]
 }
@@ -41,6 +42,7 @@ extension DiscordGuild {
 		let mfaLevel = guildObject["mfa_level"] as? Int ?? -1
 		let name = guildObject["name"] as? String ?? ""
 		let ownerId = guildObject["owner_id"] as? String ?? ""
+		let presences = DiscordPresence.presencesFromArray(guildObject["presences"] as? [[String: Any]] ?? [], guildId: id)
 		let region = guildObject["region"] as? String ?? ""
 		let roles = DiscordRole.rolesFromArray(guildObject["roles"] as? [[String: Any]] ?? [])
 		let splash = guildObject["splash"] as? String ?? ""
@@ -56,7 +58,7 @@ extension DiscordGuild {
 			embedEnabled: embedEnabled, features: features, icon: icon, id: id, joinedAt: joinedAt,large: large, 
 			mfaLevel: mfaLevel, ownerId: ownerId, region: region, splash: splash, unavailable: unavailable, 
 			verificationLevel: verificationLevel, channels: channels, emojis: emojis, memberCount: memberCount, 
-			members: members, name: name, roles: roles, voiceStates: voiceStates)
+			members: members, name: name, presences: presences, roles: roles, voiceStates: voiceStates)
 	}
 
 	// Used to setup initial guilds
