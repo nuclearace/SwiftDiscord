@@ -1,6 +1,6 @@
 import Foundation
 
-open class DiscordClient : DiscordClientSpec {
+open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	public let token: String
 
 	public var engine: DiscordEngineSpec?
@@ -21,22 +21,6 @@ open class DiscordClient : DiscordClientSpec {
 
 		on("engine.disconnect") {[weak self] data in
 			print("Engine disconnected")
-		}
-
-		on("engine.user") {[weak self] data in
-			guard let user = data[0] as? [String: Any] else { return }
-
-			print("DiscordClient: setting user")
-
-			self?.user = DiscordUser.userFromDictionary(user)
-		}
-
-		on("engine.guilds") {[weak self] data in
-			guard let guilds = data[0] as? [[String: Any]] else { return }
-
-			print("DiscordClient: setting guilds")
-
-			self?.guilds = DiscordGuild.guildsFromArray(guilds)
 		}
 	}
 
@@ -66,8 +50,26 @@ open class DiscordClient : DiscordClientSpec {
 		}
 	}
 
+	open func handleEngineDispatch(event: DiscordDispatchEvent, data: DiscordGatewayPayloadData) {
+		handleQueue.async {
+			self.handleDispatch(event: event, data: data)
+		}
+	}
+
 	open func handleEngineEvent(_ event: String, with data: [Any]) {
 		handleEvent(event, with: data)
+	}
+
+	open func handleReady(with data: [String: Any]) {
+		if let user = data["user"] as? [String: Any] {
+			self.user = DiscordUser.userFromDictionary(user)
+		}
+
+		if let guilds = data["guilds"] as? [[String: Any]] {
+			self.guilds = DiscordGuild.guildsFromArray(guilds)
+		}
+
+		handleEvent("connect", with: [])
 	}
 
 	open func on(_ event: String, callback: @escaping ([Any]) -> Void) {

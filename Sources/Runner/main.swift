@@ -24,6 +24,10 @@ client.on("engine.disconnect") {data in
 	exit(0)
 }
 
+client.on("connect") {data in
+	print(client.guilds)
+}
+
 client.connect()
 
 CFRunLoopRun()

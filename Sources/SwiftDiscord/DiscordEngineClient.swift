@@ -1,4 +1,5 @@
 public protocol DiscordEngineClient {
+	func handleEngineDispatch(event: DiscordDispatchEvent, data: DiscordGatewayPayloadData)
 	func handleEngineEvent(_ event: String, with data: [Any])
 }
 

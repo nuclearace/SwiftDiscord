@@ -6,34 +6,19 @@ protocol DiscordEngineGatewayHandling : DiscordEngineSpec, DiscordEngineHeartbea
 
 extension DiscordEngineGatewayHandling {
 	func handleDispatch(_ payload: DiscordGatewayPayload) {
-		if let type = payload.name, type == "READY" {
-			handleReady(payload)
+		guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
+			error()
 
 			return
 		}
 
-		print("Should handle payload")
-	}
-
-	func handleReady(_ payload: DiscordGatewayPayload) {
-		// Setup the heartbeat
-		guard case let DiscordGatewayPayloadData.object(payloadData) = payload.payload, 
-			let milliseconds = payloadData["heartbeat_interval"] as? Int else { 
-				error()
-
-				return
+		if event == .ready, case let DiscordGatewayPayloadData.object(payloadData) = payload.payload, 
+			let milliseconds = payloadData["heartbeat_interval"] as? Int {
+				startHeartbeat(seconds: milliseconds / 1000)
+		} else {
+			fatalError("Failed to start our heartbeat")
 		}
 
-		startHeartbeat(seconds: milliseconds / 1000)
-
-		// Tell the client about their user settings
-		if let user = payloadData["user"] as? [String: Any] {
-			client?.handleEngineEvent("engine.user", with: [user])
-		}
-
-		// Tell the client about their guilds
-		if let guilds = payloadData["guilds"] as? [Any] {
-			client?.handleEngineEvent("engine.guilds", with: [guilds])
-		}
+		client?.handleEngineDispatch(event: event, data: payload.payload)
 	}
 }
