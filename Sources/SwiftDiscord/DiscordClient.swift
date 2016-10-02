@@ -6,6 +6,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	public var engine: DiscordEngineSpec?
 
 	public private(set) var guilds = [String: DiscordGuild]()
+	public private(set) var relationships = [[String: Any]]()
 	public private(set) var user: DiscordUser?
 
 	private(set) var handleQueue = DispatchQueue.main
@@ -14,14 +15,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 	public required init(token: String) {
 		self.token = token
-
-		on("engine.connect") {[weak self] data in
-			print("Engine connected")
-		}
-
-		on("engine.disconnect") {[weak self] data in
-			print("Engine disconnected")
-		}
 	}
 
 	open func attachEngine() {
@@ -62,11 +55,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 	open func handleReady(with data: [String: Any]) {
 		if let user = data["user"] as? [String: Any] {
-			self.user = DiscordUser.userFromDictionary(user)
+			self.user = DiscordUser(userObject: user)
 		}
 
 		if let guilds = data["guilds"] as? [[String: Any]] {
 			self.guilds = DiscordGuild.guildsFromArray(guilds)
+		}
+
+		if let relationships = data["relationships"] as? [[String: Any]] {
+			self.relationships = relationships
 		}
 
 		handleEvent("connect", with: [])

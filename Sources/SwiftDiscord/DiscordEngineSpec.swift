@@ -10,7 +10,7 @@ public protocol DiscordEngineSpec : class {
 	init(client: DiscordClientSpec)
 
 	func connect()
-	func error()
+	func error(message: String)
 	func disconnect()
 	func sendGatewayPayload(_ payload: DiscordGatewayPayload)
 }
@@ -18,7 +18,7 @@ public protocol DiscordEngineSpec : class {
 public extension DiscordEngineSpec {
 	func sendGatewayPayload(_ payload: DiscordGatewayPayload) {
 		guard let payloadString = payload.createPayloadString() else {
-			error()
+			error(message: "Could not create payload string")
 
 			return
 		}

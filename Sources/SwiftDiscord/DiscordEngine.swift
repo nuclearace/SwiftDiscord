@@ -65,8 +65,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		websocket?.disconnect()
 	}
 
-	open func error() {
-		print("DiscordEngine: errored")
+	open func error(message: String) {
+		print("DiscordEngine: errored \(message)")
 	}
 
 	open func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
@@ -98,8 +98,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
 	open func startHandshake() {
 		guard let client = self.client else { 
-			// TODO error
-			error()
+			error(message: "Client nil before handshaked")
 
 			return
 		}

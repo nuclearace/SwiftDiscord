@@ -12,7 +12,7 @@ public struct DiscordGuildMember {
 
 extension DiscordGuildMember {
 	init(guildMemberObject: [String: Any]) {
-		let user = DiscordUser.userFromDictionary(guildMemberObject["user"] as? [String: Any] ?? [:])
+		let user = DiscordUser(userObject: guildMemberObject["user"] as? [String: Any] ?? [:])
 		let deaf = guildMemberObject["deaf"] as? Bool ?? false
 		let mute = guildMemberObject["mute"] as? Bool ?? false
 		let nick = guildMemberObject["nick"] as? String

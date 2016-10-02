@@ -25,7 +25,13 @@ client.on("engine.disconnect") {data in
 }
 
 client.on("connect") {data in
-	print(client.guilds)
+	// print(client.guilds)
+}
+
+client.on("message") {data in
+	guard let message = data[0] as? DiscordMessage else { fatalError("Didn't get message in message event") }
+
+	print(message)
 }
 
 client.connect()

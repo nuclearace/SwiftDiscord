@@ -39,7 +39,7 @@ public struct DiscordPresence {
 
 extension DiscordPresence {
 	init(presenceObject: [String: Any], guildId: String) {
-		let user = DiscordUser.userFromDictionary(presenceObject["user"] as? [String: Any] ?? [:])
+		let user = DiscordUser(userObject: presenceObject["user"] as? [String: Any] ?? [:])
 		let game = DiscordGame(string: presenceObject["game"] as? String)
 		let nick = presenceObject["nick"] as? String ?? ""
 		let status = DiscordPresenceStatus(string: presenceObject["status"] as? String ?? "") ?? .offline
