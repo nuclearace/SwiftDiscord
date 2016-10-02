@@ -81,6 +81,16 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		handleEvent("guildMemberRemove", with: [guildId, removedGuildMember])
 	}
 
+	open func handleGuildMemberUpdate(with data: [String: Any]) {
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let user = data["user"] as? [String: Any], let roles = data["roles"] as? [String], 
+			let id = user["id"] as? String else { return }
+
+		guilds[guildId]?.members[id]?.roles = roles
+
+		handleEvent("guildMemberUpdate", with: [guildId, user, roles])
+	}
+
 	open func handleReady(with data: [String: Any]) {
 		if let user = data["user"] as? [String: Any] {
 			self.user = DiscordUser(userObject: user)
