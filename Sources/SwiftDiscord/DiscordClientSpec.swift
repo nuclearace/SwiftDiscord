@@ -1,6 +1,7 @@
 import Foundation
 
 public protocol DiscordClientSpec : class, DiscordEngineClient {
+	var guilds: [String: DiscordGuild] { get }
 	var token: String { get }
 	var user: DiscordUser? { get }
 

@@ -15,7 +15,9 @@ public enum DiscordGatewayPayloadData {
 			return NSNull()
 		}
 	}
+}
 
+extension DiscordGatewayPayloadData {
 	static func dataFromDictionary(_ data: Any?) -> DiscordGatewayPayloadData? {
 		guard let data = data else { return nil }
 

@@ -24,3 +24,19 @@ func decodeJSON(_ string: String) -> JSON? {
 		return nil
 	}
 }
+
+func convertISO8601(string: String) -> Date? {
+	if #available(macOS 10.12, *) {
+		let formatter = ISO8601DateFormatter()
+
+		formatter.formatOptions = .withFullDate
+
+		return formatter.date(from: string)
+	} else {
+		let RFC3339DateFormatter = DateFormatter()
+
+		RFC3339DateFormatter.dateFormat = "YYYY-MM-DD'T'HH:mm:ss.SSSSSS+HH:mm"
+
+		return RFC3339DateFormatter.date(from: string)
+	}
+}

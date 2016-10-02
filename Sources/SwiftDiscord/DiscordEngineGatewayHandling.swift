@@ -27,8 +27,13 @@ extension DiscordEngineGatewayHandling {
 		startHeartbeat(seconds: milliseconds / 1000)
 
 		// Tell the client about their user settings
-		guard let user = payloadData["user"] as? [String: Any] else { return }
+		if let user = payloadData["user"] as? [String: Any] {
+			client?.handleEngineEvent("engine.user", with: [user])
+		}
 
-		client?.handleEngineEvent("engine.user", with: [user])
+		// Tell the client about their guilds
+		if let guilds = payloadData["guilds"] as? [Any] {
+			client?.handleEngineEvent("engine.guilds", with: [guilds])
+		}
 	}
 }

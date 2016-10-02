@@ -118,9 +118,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			// "shard": [1, 10]
 		]
 
-		let payload = DiscordGatewayPayload(code: .identify, payload: .object(handshakeEventData))
-
-		sendGatewayPayload(payload)
+		sendGatewayPayload(DiscordGatewayPayload(code: .identify, payload: .object(handshakeEventData)))
 	}
 
 	public func startHeartbeat(seconds: Int) {
