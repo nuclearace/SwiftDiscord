@@ -35,10 +35,10 @@ extension DiscordGatewayPayloadData {
 }
 
 public struct DiscordGatewayPayload {
-	let code: DiscordGatewayCode
-	let payload: DiscordGatewayPayloadData
-	let sequenceNumber: Int?
-	let name: String?
+	public let code: DiscordGatewayCode
+	public let payload: DiscordGatewayPayloadData
+	public let sequenceNumber: Int?
+	public let name: String?
 
 	public init(code: DiscordGatewayCode, payload: DiscordGatewayPayloadData, sequenceNumber: Int? = nil, 
 		name: String? = nil) {

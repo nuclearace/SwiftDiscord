@@ -38,7 +38,7 @@ open class DiscordClient : DiscordClientSpec {
 
 			self?.guilds = DiscordGuild.guildsFromArray(guilds)
 
-			// print(self!.guilds["201533018215677953"]!.joinedAt)
+			print(self!.guilds["201533018215677953"]!.channels)
 		}
 	}
 

@@ -121,7 +121,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		sendGatewayPayload(DiscordGatewayPayload(code: .identify, payload: .object(handshakeEventData)))
 	}
 
-	public func startHeartbeat(seconds: Int) {
+	open func startHeartbeat(seconds: Int) {
 		heartbeatInterval = seconds
 
 		sendHeartbeat()

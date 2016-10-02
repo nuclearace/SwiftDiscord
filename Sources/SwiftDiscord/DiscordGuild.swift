@@ -1,28 +1,33 @@
 import Foundation
 
-// TODO figure out which fields are mutable
 public struct DiscordGuild {
-	let defaultMessageNotifications: Int
-	let embedChannelId: String
-	let embedEnabled: Bool
-	let emojis: [String: DiscordEmoji]
-	let features: [Any] // TODO figure out what features are
-	let icon: String
-	let id: String
-	let joinedAt: Date
-	let large: Bool
-	let mfaLevel: Int
-	let name: String
-	let ownerId: String
-	let region: String
-	let roles: [String: DiscordRole]
-	let splash: String
-	let unavailable: Bool
-	let verificationLevel: Int
+	public let defaultMessageNotifications: Int
+	public let embedChannelId: String
+	public let embedEnabled: Bool
+	public let features: [Any] // TODO figure out what features are
+	public let icon: String
+	public let id: String
+	public let joinedAt: Date
+	public let large: Bool
+	public let mfaLevel: Int
+	public let ownerId: String
+	public let region: String
+	public let splash: String
+	public let unavailable: Bool
+	public let verificationLevel: Int
+
+	public var channels: [String: DiscordGuildChannel]
+	public var emojis: [String: DiscordEmoji]
+	public var memberCount: Int
+	public var members: [String: DiscordGuildMember]
+	public var name: String
+	public var roles: [String: DiscordRole]
+	public var voiceStates: [String: DiscordVoiceState]
 }
 
 extension DiscordGuild {
 	init(guildObject: [String: Any]) {
+		let channels = DiscordGuildChannel.guildChannelsFromArray(guildObject["channels"] as? [[String: Any]] ?? [])
 		let defaultMessageNotifications = guildObject["default_message_notifications"] as? Int ?? -1
 		let embedEnabled = guildObject["embed_enabled"] as? Bool ?? false
 		let embedChannelId = guildObject["embed_channel_id"] as? String ?? ""
@@ -31,6 +36,8 @@ extension DiscordGuild {
 		let icon = guildObject["icon"] as? String ?? ""
 		let id = guildObject["id"] as? String ?? ""
 		let large = guildObject["large"] as? Bool ?? false
+		let memberCount = guildObject["member_count"] as? Int ?? -1
+		let members = DiscordGuildMember.guildMembersFromArray(guildObject["members"] as? [[String: Any]] ?? [])
 		let mfaLevel = guildObject["mfa_level"] as? Int ?? -1
 		let name = guildObject["name"] as? String ?? ""
 		let ownerId = guildObject["owner_id"] as? String ?? ""
@@ -38,15 +45,18 @@ extension DiscordGuild {
 		let roles = DiscordRole.rolesFromArray(guildObject["roles"] as? [[String: Any]] ?? [])
 		let splash = guildObject["splash"] as? String ?? ""
 		let verificationLevel = guildObject["verification_level"] as? Int ?? -1
+		let voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject["voice_states"] as? [[String: Any]] ?? [],
+			guildId: id)
 		let unavailable = guildObject["unavailable"] as? Bool ?? false
 		
 		let joinedAtString = guildObject["joined_at"] as? String ?? ""
 		let joinedAt = convertISO8601(string: joinedAtString) ?? Date()
 
 		self.init(defaultMessageNotifications: defaultMessageNotifications, embedChannelId: embedChannelId, 
-			embedEnabled: embedEnabled, emojis: emojis, features: features, icon: icon, id: id, joinedAt: joinedAt,
-			large: large, mfaLevel: mfaLevel, name: name, ownerId: ownerId, region: region, roles: roles, 
-			splash: splash, unavailable: unavailable, verificationLevel: verificationLevel)
+			embedEnabled: embedEnabled, features: features, icon: icon, id: id, joinedAt: joinedAt,large: large, 
+			mfaLevel: mfaLevel, ownerId: ownerId, region: region, splash: splash, unavailable: unavailable, 
+			verificationLevel: verificationLevel, channels: channels, emojis: emojis, memberCount: memberCount, 
+			members: members, name: name, roles: roles, voiceStates: voiceStates)
 	}
 
 	// Used to setup initial guilds

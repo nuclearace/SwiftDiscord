@@ -1,14 +1,14 @@
 import Foundation
 
 public struct DiscordUser {
-	let avatar: String
-	let bot: Bool
-	let discriminator: String
-	let email: String
-	let id: String
-	let mfaEnabled: Bool
-	let username: String
-	let verified: Bool
+	public let avatar: String
+	public let bot: Bool
+	public let discriminator: String
+	public let email: String
+	public let id: String
+	public let mfaEnabled: Bool
+	public let username: String
+	public let verified: Bool
 }
 
 extension DiscordUser {

@@ -1,19 +1,14 @@
 import Foundation
 
-// TODO permissions
-public enum DiscordPermission : Int {
-	case none
-}
-
 public struct DiscordRole {
-	let color: Int
-	let hoist: Bool
-	let id: String
-	let managed: Bool
-	let mentionable: Bool
-	let name: String
-	let permissions: Int // Bit field
-	let position: Int
+	public let color: Int
+	public let hoist: Bool
+	public let id: String
+	public let managed: Bool
+	public let mentionable: Bool
+	public let name: String
+	public let permissions: Int // Bit field
+	public let position: Int
 }
 
 extension DiscordRole {

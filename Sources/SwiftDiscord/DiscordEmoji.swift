@@ -1,9 +1,9 @@
 public struct DiscordEmoji {
-	let id: String
-	let managed: Bool
-	let name: String
-	let requireColons: Bool
-	let roles: [String]
+	public let id: String
+	public let managed: Bool
+	public let name: String
+	public let requireColons: Bool
+	public let roles: [String]
 }
 
 extension DiscordEmoji {
