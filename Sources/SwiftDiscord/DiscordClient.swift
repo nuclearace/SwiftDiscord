@@ -91,6 +91,38 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		handleEvent("guildMemberUpdate", with: [guildId, user, roles])
 	}
 
+	open func handleGuildRoleCreate(with data: [String: Any]) {
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let roleObject = data["role"] as? [String: Any] else { return }
+
+		let role = DiscordRole(roleObject: roleObject)
+
+		guilds[guildId]?.roles[role.id] = role
+
+		handleEvent("guildRoleCreate", with: [guildId, role])
+	}
+
+	open func handleGuildRoleRemove(with data: [String: Any]) {
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let roleId = data["role_id"] as? String else { return }
+
+		let removedRole = guilds[guildId]?.roles.removeValue(forKey: roleId)
+
+		handleEvent("guildRoleRemove", with: [guildId, removedRole])
+	}
+
+	open func handleGuildRoleUpdate(with data: [String: Any]) {
+		// Functionally the same as adding
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let roleObject = data["role"] as? [String: Any] else { return }
+
+		let role = DiscordRole(roleObject: roleObject)
+
+		guilds[guildId]?.roles[role.id] = role
+
+		handleEvent("guildRoleUpdate", with: [guildId, role])
+	}
+
 	open func handleReady(with data: [String: Any]) {
 		if let user = data["user"] as? [String: Any] {
 			self.user = DiscordUser(userObject: user)
