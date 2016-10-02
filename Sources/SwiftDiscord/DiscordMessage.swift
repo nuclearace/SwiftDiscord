@@ -104,7 +104,6 @@ public struct DiscordMessage {
 
 extension DiscordMessage {
 	init(messageObject: [String: Any]) {
-		print(messageObject["mention_roles"])
 		let attachments = DiscordAttachment.attachmentsFromArray(
 			messageObject["attachments"] as? [[String: Any]] ?? [])
 		let author = DiscordUser(userObject: messageObject["author"] as? [String: Any] ?? [:])

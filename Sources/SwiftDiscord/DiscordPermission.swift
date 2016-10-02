@@ -39,12 +39,6 @@ extension DiscordPermissionOverwrite {
 	}
 
 	static func overwritesFromArray(_ permissionOverwritesArray: [[String: Any]]) -> [DiscordPermissionOverwrite] {
-		var permissionOverwrites = [DiscordPermissionOverwrite]()
-
-		for permissionOverwrite in permissionOverwritesArray {
-			permissionOverwrites.append(DiscordPermissionOverwrite(permissionOverwriteObject: permissionOverwrite))
-		}
-
-		return permissionOverwrites
+		return permissionOverwritesArray.map(DiscordPermissionOverwrite.init)
 	}
 }

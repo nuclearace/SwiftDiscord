@@ -53,6 +53,34 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		handleEvent(event, with: data)
 	}
 
+	open func handleGuildEmojiUpdate(with data: [String: Any]) {
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let emojis = data["emojis"] as? [[String: Any]] else { return }
+
+		guilds[guildId]?.emojis = DiscordEmoji.emojisFromArray(emojis)
+
+		handleEvent("emojiUpdate", with: [guildId, guilds[guildId]?.emojis ?? [:]])
+	}
+
+	open func handleGuildMemberAdd(with data: [String: Any]) {
+		guard let guildId = data["guild_id"] as? String else { return }
+
+		let guildMember = DiscordGuildMember(guildMemberObject: data)
+
+		guilds[guildId]?.members[guildMember.user.id] = guildMember
+
+		handleEvent("guildMemberAdd", with: [guildId, guildMember])
+	}
+
+	open func handleGuildMemberRemove(with data: [String: Any]) {
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let user = data["user"] as? [String: Any], let id = user["id"] as? String else { return }
+
+		let removedGuildMember = guilds[guildId]?.members.removeValue(forKey: id)
+
+		handleEvent("guildMemberRemove", with: [guildId, removedGuildMember])
+	}
+
 	open func handleReady(with data: [String: Any]) {
 		if let user = data["user"] as? [String: Any] {
 			self.user = DiscordUser(userObject: user)
@@ -66,7 +94,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 			self.relationships = relationships
 		}
 
-		handleEvent("connect", with: [])
+		handleEvent("connect", with: [data])
 	}
 
 	open func on(_ event: String, callback: @escaping ([Any]) -> Void) {
