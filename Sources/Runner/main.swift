@@ -1,5 +1,7 @@
 import Foundation
 import SwiftDiscord
+import COPUS
+import Sodium
 
 let queue = DispatchQueue(label: "Async Read")
 let client = DiscordClient(token: "")
