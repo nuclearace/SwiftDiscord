@@ -84,14 +84,14 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		case .dispatch:
 			handleDispatch(payload)
 		default:
-			break
+			print("Unhandled payload: \(payload.code)")
 		}
 	}
 
 	open func parseGatewayMessage(_ string: String) {
-		print("DiscordEngine: Parsing")
-
-		guard let decoded = DiscordGatewayPayload.payloadFromString(string) else { fatalError("What happened") }
+		guard let decoded = DiscordGatewayPayload.payloadFromString(string) else { 
+			fatalError("What happened \(string)") 
+		}
 
 		handleGatewayPayload(decoded)
 	}

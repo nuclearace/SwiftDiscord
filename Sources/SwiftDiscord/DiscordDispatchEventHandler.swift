@@ -8,12 +8,15 @@ public protocol DiscordDispatchEventHandler : DiscordClientSpec {
 	func handleGuildRoleRemove(with data: [String: Any])
 	func handleGuildRoleUpdate(with data: [String: Any])
 	func handleGuildUpdate(with data: [String: Any])
+	func handlePresenceUpdate(with data: [String: Any])
 	func handleReady(with data: [String: Any])
 }
 
 public extension DiscordDispatchEventHandler {
 	func handleDispatch(event: DiscordDispatchEvent, data: DiscordGatewayPayloadData) {
 		switch (event, data) {
+		case let (.presenceUpdate, .object(data)):
+			handlePresenceUpdate(with: data)
 		case let (.messageCreate, .object(data)):
 			handleEvent("message", with: [DiscordMessage(messageObject: data)])
 		case let (.guildMemberAdd, .object(data)):

@@ -22,4 +22,6 @@ public enum DiscordDispatchEvent : String {
 	case guildRoleDelete = "GUILD_ROLE_DELETE"
 	case guildRoleUpdate = "GUILD_ROLE_UPDATE"
 	case guildUpdate = "GUILD_UPDATE"
+
+	case presenceUpdate = "PRESENCE_UPDATE"
 }
