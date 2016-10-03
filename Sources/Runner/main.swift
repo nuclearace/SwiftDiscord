@@ -2,6 +2,7 @@ import Foundation
 import SwiftDiscord
 import COPUS
 import Sodium
+import Socks
 
 let queue = DispatchQueue(label: "Async Read")
 let client = DiscordClient(token: "")
