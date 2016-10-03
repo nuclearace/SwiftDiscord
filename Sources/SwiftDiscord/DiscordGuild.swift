@@ -1,29 +1,76 @@
 import Foundation
 
 public struct DiscordGuild {
-	public let defaultMessageNotifications: Int
-	public let embedChannelId: String
-	public let embedEnabled: Bool
 	public let features: [Any] // TODO figure out what features are
-	public let icon: String
 	public let id: String
-	public let joinedAt: Date
 	public let large: Bool
-	public let mfaLevel: Int
-	public let ownerId: String
-	public let region: String
+	public let joinedAt: Date
 	public let splash: String
 	public let unavailable: Bool
-	public let verificationLevel: Int
+
+	public private(set) var defaultMessageNotifications: Int
+	public private(set) var embedChannelId: String
+	public private(set) var embedEnabled: Bool
+	public private(set) var icon: String
+	public private(set) var memberCount: Int
+	public private(set) var mfaLevel: Int
+	public private(set) var name: String
+	public private(set) var ownerId: String
+	public private(set) var region: String
+	public private(set) var verificationLevel: Int
 
 	public var channels: [String: DiscordGuildChannel]
 	public var emojis: [String: DiscordEmoji]
-	public var memberCount: Int
 	public var members: [String: DiscordGuildMember]
-	public var name: String
 	public var presences: [String: DiscordPresence]
 	public var roles: [String: DiscordRole]
 	public var voiceStates: [String: DiscordVoiceState]
+
+	mutating func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
+		print("update guild")
+
+		if let defaultMessageNotifications = newGuild["default_message_notifications"] as? Int {
+			self.defaultMessageNotifications = defaultMessageNotifications
+		}
+
+		if let embedChannelId = newGuild["embed_channel_id"] as? String {
+			self.embedChannelId = embedChannelId
+		}
+
+		if let embedEnabled = newGuild["embed_enabled"] as? Bool {
+			self.embedEnabled = embedEnabled
+		}
+
+		if let icon = newGuild["icon"] as? String {
+			self.icon = icon
+		}
+
+		if let memberCount = newGuild["member_count"] as? Int {
+			self.memberCount = memberCount
+		}
+
+		if let mfaLevel = newGuild["mfa_level"] as? Int {
+			self.mfaLevel = mfaLevel
+		}
+
+		if let name = newGuild["name"] as? String {
+			self.name = name
+		}
+
+		if let ownerId = newGuild["owner_id"] as? String {
+			self.ownerId = ownerId
+		}
+
+		if let region = newGuild["region"] as? String {
+			self.region = region
+		}
+
+		if let verificationLevel = newGuild["verification_level"] as? Int {
+			self.verificationLevel = verificationLevel
+		}
+
+		return self
+	}
 }
 
 extension DiscordGuild {
@@ -54,11 +101,12 @@ extension DiscordGuild {
 		let joinedAtString = guildObject["joined_at"] as? String ?? ""
 		let joinedAt = convertISO8601(string: joinedAtString) ?? Date()
 
-		self.init(defaultMessageNotifications: defaultMessageNotifications, embedChannelId: embedChannelId, 
-			embedEnabled: embedEnabled, features: features, icon: icon, id: id, joinedAt: joinedAt,large: large, 
-			mfaLevel: mfaLevel, ownerId: ownerId, region: region, splash: splash, unavailable: unavailable, 
-			verificationLevel: verificationLevel, channels: channels, emojis: emojis, memberCount: memberCount, 
-			members: members, name: name, presences: presences, roles: roles, voiceStates: voiceStates)
+		self.init(features: features, id: id, large: large, joinedAt: joinedAt, splash: splash, 
+			unavailable: unavailable, defaultMessageNotifications: defaultMessageNotifications, 
+			embedChannelId: embedChannelId, embedEnabled: embedEnabled, icon: icon, memberCount: memberCount, 
+			mfaLevel: mfaLevel, name: name, ownerId: ownerId, region: region, verificationLevel: verificationLevel,
+			channels: channels, emojis: emojis, members: members, presences: presences, roles: roles, 
+			voiceStates: voiceStates)
 	}
 
 	// Used to setup initial guilds

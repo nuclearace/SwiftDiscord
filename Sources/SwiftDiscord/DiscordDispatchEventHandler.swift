@@ -7,6 +7,7 @@ public protocol DiscordDispatchEventHandler : DiscordClientSpec {
 	func handleGuildRoleCreate(with data: [String: Any])
 	func handleGuildRoleRemove(with data: [String: Any])
 	func handleGuildRoleUpdate(with data: [String: Any])
+	func handleGuildUpdate(with data: [String: Any])
 	func handleReady(with data: [String: Any])
 }
 
@@ -27,6 +28,8 @@ public extension DiscordDispatchEventHandler {
 			handleGuildRoleRemove(with: data)
 		case let (.guildRoleUpdate, .object(data)):
 			handleGuildRoleUpdate(with: data)
+		case let (.guildUpdate, .object(data)):
+			handleGuildUpdate(with: data)
 		case let (.guildEmojisUpdate, .object(data)):
 			handleGuildEmojiUpdate(with: data)
 		case let (.ready, .object(data)):

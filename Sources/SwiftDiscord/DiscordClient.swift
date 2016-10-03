@@ -123,6 +123,14 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		handleEvent("guildRoleUpdate", with: [guildId, role])
 	}
 
+	open func handleGuildUpdate(with data: [String: Any]) {
+		guard let id = data["id"] as? String else { return }
+
+		let updatedGuild = self.guilds[id]?.updateGuild(with: data)
+
+		handleEvent("guildUpdate", with: [updatedGuild])
+	}
+
 	open func handleReady(with data: [String: Any]) {
 		if let user = data["user"] as? [String: Any] {
 			self.user = DiscordUser(userObject: user)
