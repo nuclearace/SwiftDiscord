@@ -7,6 +7,7 @@ let package = Package(
     	Target(name: "SwiftDiscord")
     ],
     dependencies: [
-    	.Package(url: "https://github.com/daltoniam/Starscream", majorVersion: 2)
+    	.Package(url: "https://github.com/daltoniam/Starscream", majorVersion: 2),
+    	.Package(url: "https://github.com/nuclearace/copus", majorVersion: 1)
     ]
 )
