@@ -126,4 +126,8 @@ extension DiscordMessage {
 			editedTimestamp: editedTimestamp, embeds: embeds, id: id, mentionEveryone: mentionEveryone, 
 			mentionRoles: mentionRoles, mentions: mentions, timestamp: timestamp, tts: tts)
 	}
+
+	static func messagesFromArray(_ array: [[String: Any]]) -> [DiscordMessage] {
+		return array.map(DiscordMessage.init)
+	}
 }

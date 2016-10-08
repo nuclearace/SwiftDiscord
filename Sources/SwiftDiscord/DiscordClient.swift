@@ -157,6 +157,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		handleEvent("connect", with: [data])
 	}
 
+	open func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage] = [],
+		callback: @escaping ([DiscordMessage]) -> Void) {
+		DiscordEndpoint.getMessages(for: channel, with: token, options: options, callback: callback)
+	}
+
 	open func on(_ event: String, callback: @escaping ([Any]) -> Void) {
 		handlers[event] = DiscordEventHandler(event: event, callback: callback)
 	}

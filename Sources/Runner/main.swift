@@ -1,8 +1,5 @@
 import Foundation
 import SwiftDiscord
-import COPUS
-import Sodium
-import Socks
 
 let queue = DispatchQueue(label: "Async Read")
 let client = DiscordClient(token: "")
@@ -13,9 +10,15 @@ func readAsync() {
 
         if input == "quit" {
             client.disconnect()
+        } else if input == "testget" {
+        	client.getMessages(for: "232184444340011009", options: [.limit(3)]) {messages in
+        		print(messages)
+        	}
         } else {
-        	readAsync()
+        	client.sendMessage(input, to: "232184444340011009")
         }
+
+        readAsync()
 	}
 }
 
@@ -28,6 +31,7 @@ client.on("engine.disconnect") {data in
 }
 
 client.on("connect") {data in
+	print("connect")
 	// print(client.guilds)
 }
 
