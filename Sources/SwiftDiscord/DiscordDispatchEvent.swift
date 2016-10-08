@@ -23,5 +23,9 @@ public enum DiscordDispatchEvent : String {
 	case guildRoleUpdate = "GUILD_ROLE_UPDATE"
 	case guildUpdate = "GUILD_UPDATE"
 
+	// Voice
+	case voiceServerUpdate = "VOICE_SERVER_UPDATE"
+	case voiceStateUpdate = "VOICE_STATE_UPDATE"
+
 	case presenceUpdate = "PRESENCE_UPDATE"
 }

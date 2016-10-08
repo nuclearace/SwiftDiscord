@@ -2,14 +2,16 @@ import Foundation
 import Starscream
 
 open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, DiscordEngineHeartbeatable {
+	public internal(set) var heartbeatInterval = 0 // Only touch on handleQueue
+
 	public private(set) weak var client: DiscordClientSpec?
-	public private(set) var heartbeatInterval = 0 // Only touch on handleQueue
 	public private(set) var heartbeatQueue = DispatchQueue(label: "discordEngine.heartbeatQueue")
 	public private(set) var lastSequenceNumber = -1 // Only touch on handleQueue
-	public private(set) var websocket: WebSocket?
 
-	private let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
-	private let handleQueue = DispatchQueue(label: "discordEngine.handleQueue")
+	public internal(set) var websocket: WebSocket?
+
+	let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
+	let handleQueue = DispatchQueue(label: "discordEngine.handleQueue")
 
 	public required init(client: DiscordClientSpec) {
 		self.client = client
@@ -59,6 +61,22 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		websocket?.connect()
 	}
 
+	open func createHandshakeObject() -> [String: Any] {
+		return [
+			"token": client!.token,
+			"properties": [
+				"$os": "macOS",
+				"$browser": "SwiftDiscord",
+				"$device": "SwiftDiscord",
+				"$referrer": "",
+				"$referring_domain": ""
+			],
+			"compress": false,
+			"large_threshold": 250,
+			// "shard": [1, 10]
+		]
+	}
+
 	open func disconnect() {
 		print("DiscordEngine: Disconnecting")
 
@@ -75,7 +93,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		}
 	}
 
-	private func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
+	func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
 		if let seq = payload.sequenceNumber {
 			lastSequenceNumber = seq
 		}
@@ -103,19 +121,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			return
 		}
 
-		let handshakeEventData: [String: Any] = [
-			"token": client.token,
-			"properties": [
-				"$os": "macOS",
-				"$browser": "SwiftDiscord",
-				"$device": "SwiftDiscord",
-				"$referrer": "",
-				"$referring_domain": ""
-			],
-			"compress": false,
-			"large_threshold": 250,
-			// "shard": [1, 10]
-		]
+		let handshakeEventData = createHandshakeObject()
 
 		sendGatewayPayload(DiscordGatewayPayload(code: .identify, payload: .object(handshakeEventData)))
 	}

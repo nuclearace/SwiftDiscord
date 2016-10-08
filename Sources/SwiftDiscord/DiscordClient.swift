@@ -4,14 +4,19 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	public let token: String
 
 	public var engine: DiscordEngineSpec?
+	public var voiceEngine: DiscordVoiceEngineSpec?
 
 	public private(set) var guilds = [String: DiscordGuild]()
 	public private(set) var relationships = [[String: Any]]()
 	public private(set) var user: DiscordUser?
+	public private(set) var voiceState: DiscordVoiceState?
 
 	private(set) var handleQueue = DispatchQueue.main
 
 	private var handlers = [String: DiscordEventHandler]()
+	private var joiningVoiceChannel = false
+	private var voiceQueue = DispatchQueue(label: "voiceQueue")
+	private var voiceServerInformation: [String: Any]?
 
 	public required init(token: String) {
 		self.token = token
@@ -157,16 +162,83 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		handleEvent("connect", with: [data])
 	}
 
-	open func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage] = [],
+	open func handleVoiceServerUpdate(with data: [String: Any]) {
+		voiceQueue.async {
+			self.voiceServerInformation = data
+
+			if self.joiningVoiceChannel {
+				print("got voice server \(data)")
+				self.startVoiceConnection()
+			}
+		}
+	}
+
+	open func handleVoiceStateUpdate(with data: [String: Any]) {
+		voiceQueue.async {
+			// Only care about our state right now
+			guard data["user_id"] as? String == self.user?.id else { return }
+			guard let guildId = data["guild_id"] as? String else { return }
+
+			self.voiceState = DiscordVoiceState(voiceStateObject: data, guildId: guildId)
+
+			if self.joiningVoiceChannel {
+				print("Got voice state \(data)")
+				self.startVoiceConnection()
+			}
+		}
+	}
+
+	open func getMessages(for channelId: String, options: [DiscordEndpointOptions.GetMessage] = [],
 		callback: @escaping ([DiscordMessage]) -> Void) {
-		DiscordEndpoint.getMessages(for: channel, with: token, options: options, callback: callback)
+		DiscordEndpoint.getMessages(for: channelId, with: token, options: options, callback: callback)
+	}
+
+	private func guildForChannel(_ channelId: String) -> DiscordGuild? {
+		for (_, guild) in guilds where guild.channels[channelId] != nil {
+			return guild
+		}
+
+		return nil
+	}
+
+	open func joinVoiceChannel(_ channelId: String, callback: @escaping (String) -> Void) {
+		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId], channel.type == .voice else {
+			callback("invalid channel")
+
+			return
+		}
+
+		// begin async voice connection establishment
+		voiceQueue.async {
+			self.joiningVoiceChannel = true
+
+			self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .voiceStatusUpdate, payload: .object([
+				"guild_id": guild.id,
+				"channel_id": channel.id,
+				"self_mute": false,
+				"self_deaf": false
+			])))
+		}
 	}
 
 	open func on(_ event: String, callback: @escaping ([Any]) -> Void) {
 		handlers[event] = DiscordEventHandler(event: event, callback: callback)
 	}
 
-	open func sendMessage(_ message: String, to channel: String, tts: Bool = false) {
-		DiscordEndpoint.sendMessage(message, with: token, to: channel, tts: tts)
+	open func sendMessage(_ message: String, to channelId: String, tts: Bool = false) {
+		DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts)
+	}
+
+	private func startVoiceConnection() {
+		// We need both to start the connection
+		guard voiceState != nil && voiceServerInformation != nil else {
+			return
+		}
+
+		voiceEngine = DiscordVoiceEngine(client: self, voiceServerInformation: voiceServerInformation!)
+
+		print("Connecting voice engine")
+
+		voiceEngine?.connect()
 	}
 }

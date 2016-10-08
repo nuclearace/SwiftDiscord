@@ -5,6 +5,7 @@ public protocol DiscordClientSpec : class, DiscordEngineClient {
 	var relationships: [[String: Any]] { get } // TODO make this a [DiscordRelationship]
 	var token: String { get }
 	var user: DiscordUser? { get }
+	var voiceState: DiscordVoiceState? { get }
 
 	init(token: String)
 
@@ -14,5 +15,6 @@ public protocol DiscordClientSpec : class, DiscordEngineClient {
 	func handleEvent(_ event: String, with data: [Any])
 	func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage],
 		callback: @escaping ([DiscordMessage]) -> Void)
-	func sendMessage(_ message: String, to channel: String, tts: Bool)
+	func joinVoiceChannel(_ channelId: String, callback: @escaping (String) -> Void)
+	func sendMessage(_ message: String, to channelId: String, tts: Bool)
 }

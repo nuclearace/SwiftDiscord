@@ -33,6 +33,9 @@ client.on("engine.disconnect") {data in
 client.on("connect") {data in
 	print("connect")
 	// print(client.guilds)
+	client.joinVoiceChannel("201533018215677954") {message in
+		print(message)
+	}
 }
 
 client.on("message") {data in

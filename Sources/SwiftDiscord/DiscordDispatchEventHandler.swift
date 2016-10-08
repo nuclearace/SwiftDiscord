@@ -10,6 +10,8 @@ public protocol DiscordDispatchEventHandler : DiscordClientSpec {
 	func handleGuildUpdate(with data: [String: Any])
 	func handlePresenceUpdate(with data: [String: Any])
 	func handleReady(with data: [String: Any])
+	func handleVoiceServerUpdate(with data: [String: Any])
+	func handleVoiceStateUpdate(with data: [String: Any])
 }
 
 public extension DiscordDispatchEventHandler {
@@ -35,6 +37,10 @@ public extension DiscordDispatchEventHandler {
 			handleGuildUpdate(with: data)
 		case let (.guildEmojisUpdate, .object(data)):
 			handleGuildEmojiUpdate(with: data)
+		case let (.voiceServerUpdate, .object(data)):
+			handleVoiceServerUpdate(with: data)
+		case let (.voiceStateUpdate, .object(data)):
+			handleVoiceStateUpdate(with: data)
 		case let (.ready, .object(data)):
 			handleReady(with: data)
 		default:

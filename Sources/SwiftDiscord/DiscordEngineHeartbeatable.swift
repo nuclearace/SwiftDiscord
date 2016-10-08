@@ -10,6 +10,8 @@ public protocol DiscordEngineHeartbeatable : DiscordEngineSpec {
 
 public extension DiscordEngineHeartbeatable {
 	func sendHeartbeat() {
+		guard websocket?.isConnected ?? false else { return }
+
 		print("DiscordEngineHeartbeatable: about to send heartbeat")
 
 		let payload = DiscordGatewayPayload(code: .heartbeat, payload: .integer(lastSequenceNumber))
