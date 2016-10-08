@@ -160,4 +160,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	open func on(_ event: String, callback: @escaping ([Any]) -> Void) {
 		handlers[event] = DiscordEventHandler(event: event, callback: callback)
 	}
+
+	open func sendMessage(_ message: String, to channel: String, tts: Bool = false) {
+		DiscordEndpoint.sendMessage(message, with: token, to: channel, tts: tts)
+	}
 }

@@ -12,4 +12,5 @@ public protocol DiscordClientSpec : class, DiscordEngineClient {
 	func disconnect()
 	func on(_ event: String, callback: @escaping ([Any]) -> Void)
 	func handleEvent(_ event: String, with data: [Any])
+	func sendMessage(_ message: String, to channel: String, tts: Bool)
 }
