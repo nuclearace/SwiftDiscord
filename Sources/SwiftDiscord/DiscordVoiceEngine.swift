@@ -38,9 +38,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public override func attachWebSocket() {
 		print("DiscordVoiceEngine: Attaching WebSocket")
 
-		// For some reason their wss:// endpoint fails on SSL handshaking
-		// Probably Apple not liking a cert
-		websocket = WebSocket(url: URL(string: "ws://" + endpoint)!)
+		websocket = WebSocket(url: URL(string: "wss://" + endpoint.components(separatedBy: ":")[0])!)
 		websocket?.callbackQueue = parseQueue
 
 		attachWebSocketHandlers()
