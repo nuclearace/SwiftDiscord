@@ -115,18 +115,22 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	override func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
-		switch payload.code {
-		case .identify:
-			handleIdentify(with: payload.payload)
-		case .voiceStatusUpdate:
-			udpQueue.async { self.handleVoiceStateUpdate(with: payload.payload) }
+		guard case let .voice(voiceCode) = payload.code else {
+			fatalError("Got gateway payload in non gateway engine")
+		}
+
+		switch voiceCode {
+		case .ready:
+			handleReady(with: payload.payload)
+		case .sessionDescription:
+			udpQueue.async { self.handleVoiceSessionDescription(with: payload.payload) }
 		default:
 			// print("Got voice payload \(payload)")
 			break
 		}
 	}
 
-	private func handleIdentify(with payload: DiscordGatewayPayloadData) {
+	private func handleReady(with payload: DiscordGatewayPayloadData) {
 		guard case let .object(voiceInformation) = payload,
 			let heartbeatInterval = voiceInformation["heartbeat_interval"] as? Int,
 			let ssrc = voiceInformation["ssrc"] as? Int, let udpPort = voiceInformation["port"] as? Int,
@@ -145,7 +149,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		startUDP()
 	}
 
-	private func handleVoiceStateUpdate(with payload: DiscordGatewayPayloadData) {
+	private func handleVoiceSessionDescription(with payload: DiscordGatewayPayloadData) {
 		guard case let .object(voiceInformation) = payload, 
 			let secret = voiceInformation["secret_key"] as? [Int] else {
 				// TODO tell them we failed
@@ -155,6 +159,14 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			}
 
 		self.secret = secret.map({ UInt8($0) })
+	}
+
+	public override func parseGatewayMessage(_ string: String) {
+		guard let decoded = DiscordGatewayPayload.payloadFromString(string, fromGateway: false) else { 
+			fatalError("What happened \(string)") 
+		}
+
+		handleGatewayPayload(decoded)
 	}
 
 	// Tells the voice websocket what our ip and port is, and what encryption mode we will use
@@ -172,16 +184,16 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			]
 		]
 
-		sendGatewayPayload(DiscordGatewayPayload(code: .heartbeat, payload: .object(payloadData)))
+		sendGatewayPayload(DiscordGatewayPayload(code: .voice(.selectProtocol), payload: .object(payloadData)))
 		startHeartbeat(seconds: heartbeatInterval / 1000)
 	}
 
-	public func sendHeartbeat() {
+	public override func sendHeartbeat() {
 		guard websocket?.isConnected ?? false else { return }
 
 		// print("About to send voice heartbeat")
 
-		sendGatewayPayload(DiscordGatewayPayload(code: .statusUpdate, payload: .integer(currentUnixTime)))
+		sendGatewayPayload(DiscordGatewayPayload(code: .voice(.heartbeat), payload: .integer(currentUnixTime)))
 
 		let time = DispatchTime.now() + Double(Int64(heartbeatInterval * Int(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
 
@@ -191,9 +203,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public override func startHandshake() {
 		guard client != nil else { return }
 
+		// print("starting voice handshake")
+		
 		let handshakeEventData = createHandshakeObject()
 
-		sendGatewayPayload(DiscordGatewayPayload(code: .dispatch, payload: .object(handshakeEventData)))
+		sendGatewayPayload(DiscordGatewayPayload(code: .voice(.identify), payload: .object(handshakeEventData)))
 	}
 
 	public override func startHeartbeat(seconds: Int) {

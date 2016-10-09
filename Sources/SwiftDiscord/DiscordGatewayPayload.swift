@@ -50,7 +50,7 @@ public struct DiscordGatewayPayload {
 
 	func createPayloadString() -> String? {
 		var payload: [String: Any] = [
-			"op": code.rawValue,
+			"op": code.rawCode,
 			"d": self.payload.value
 		]
 
@@ -67,14 +67,24 @@ public struct DiscordGatewayPayload {
 }
 
 extension DiscordGatewayPayload {
-	static func payloadFromString(_ string: String) -> DiscordGatewayPayload? {
+	static func payloadFromString(_ string: String, fromGateway: Bool = true) -> DiscordGatewayPayload? {
 		guard let decodedJSON = decodeJSON(string), case let JSON.dictionary(dictionary) = decodedJSON else { 
 			return nil 
 		}
 
-		guard let op = dictionary["op"] as? Int, let code = DiscordGatewayCode(rawValue: op), 
+		guard let op = dictionary["op"] as? Int,
 			let payload = DiscordGatewayPayloadData.dataFromDictionary(dictionary["d"]) else { 
 				return nil 
+		}
+
+		let code: DiscordGatewayCode
+
+		if fromGateway, let gatewayCode = DiscordNormalGatewayCode(rawValue: op) {
+			code = .gateway(gatewayCode)
+		} else if let voiceCode = DiscordVoiceGatewayCode(rawValue: op) {
+			code = .voice(voiceCode)
+		} else {
+			return nil
 		}
 		
 		let sequenceNumber = dictionary["s"] as? Int

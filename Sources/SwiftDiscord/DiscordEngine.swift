@@ -98,7 +98,11 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			lastSequenceNumber = seq
 		}
 
-		switch payload.code {
+		guard case let .gateway(gatewayCode) = payload.code else {
+			fatalError("Got voice payload in non voice engine")
+		}
+
+		switch gatewayCode {
 		case .dispatch:
 			handleDispatch(payload)
 		default:
@@ -114,6 +118,18 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		handleGatewayPayload(decoded)
 	}
 
+	open func sendHeartbeat() {
+		guard websocket?.isConnected ?? false else { return }
+
+		// print("DiscordEngineHeartbeatable: about to send heartbeat")
+
+		sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
+
+		let time = DispatchTime.now() + Double(Int64(heartbeatInterval * Int(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+
+		heartbeatQueue.asyncAfter(deadline: time) {[weak self] in self?.sendHeartbeat() }
+	}
+
 	open func startHandshake() {
 		guard client != nil else { 
 			error(message: "Client nil before handshaked")
@@ -121,7 +137,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			return
 		}
 
-		sendGatewayPayload(DiscordGatewayPayload(code: .identify, payload: .object(createHandshakeObject())))
+		sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.identify), payload: .object(createHandshakeObject())))
 	}
 
 	open func startHeartbeat(seconds: Int) {

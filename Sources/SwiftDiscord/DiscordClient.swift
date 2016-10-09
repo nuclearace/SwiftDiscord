@@ -213,7 +213,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		voiceQueue.async {
 			self.joiningVoiceChannel = true
 
-			self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .voiceStatusUpdate, payload: .object([
+			self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate), payload: .object([
 				"guild_id": guild.id,
 				"channel_id": channel.id,
 				"self_mute": false,
