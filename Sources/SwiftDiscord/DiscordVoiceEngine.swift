@@ -210,12 +210,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		sendGatewayPayload(DiscordGatewayPayload(code: .voice(.identify), payload: .object(handshakeEventData)))
 	}
 
-	public override func startHeartbeat(seconds: Int) {
-		heartbeatInterval = seconds
-
-		sendHeartbeat()
-	}
-
 	private func startUDP() {
 		guard udpPort != -1 else { return }
 
