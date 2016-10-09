@@ -40,6 +40,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		print("DiscordClient: Disconnecting")
 
 		engine?.disconnect()
+		voiceEngine?.disconnect()
 	}
 
 	open func handleEvent(_ event: String, with data: [Any]) {
@@ -167,7 +168,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 			self.voiceServerInformation = data
 
 			if self.joiningVoiceChannel {
-				print("got voice server \(data)")
+				// print("got voice server \(data)")
 				self.startVoiceConnection()
 			}
 		}
@@ -182,7 +183,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 			self.voiceState = DiscordVoiceState(voiceStateObject: data, guildId: guildId)
 
 			if self.joiningVoiceChannel {
-				print("Got voice state \(data)")
+				// print("Got voice state \(data)")
 				self.startVoiceConnection()
 			}
 		}

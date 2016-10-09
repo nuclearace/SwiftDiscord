@@ -12,11 +12,9 @@ public extension DiscordEngineHeartbeatable {
 	func sendHeartbeat() {
 		guard websocket?.isConnected ?? false else { return }
 
-		print("DiscordEngineHeartbeatable: about to send heartbeat")
+		// print("DiscordEngineHeartbeatable: about to send heartbeat")
 
-		let payload = DiscordGatewayPayload(code: .heartbeat, payload: .integer(lastSequenceNumber))
-
-		sendGatewayPayload(payload)
+		sendGatewayPayload(DiscordGatewayPayload(code: .heartbeat, payload: .integer(lastSequenceNumber)))
 
 		let time = DispatchTime.now() + Double(Int64(heartbeatInterval * Int(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
 

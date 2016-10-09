@@ -5,6 +5,25 @@ enum JSON {
 	case dictionary([String: Any])
 }
 
+// Why does Apple not expose this?
+infix operator &<< : BitwiseShiftPrecedence
+
+public func &<<(lhs: Int, rhs: Int) -> Int {
+    let bitsCount = MemoryLayout<Int>.size * 8
+    let shiftCount = min(rhs, bitsCount - 1)
+    var shiftedValue = 0
+    
+    for bitIndex in 0..<bitsCount {
+        let bit = 1 << bitIndex
+
+        if lhs & bit == bit {
+            shiftedValue = shiftedValue | (bit << shiftCount)
+        }
+    }
+    
+    return shiftedValue
+}
+
 func encodeJSON(_ object: Any) -> String? {
 	guard let data = try? JSONSerialization.data(withJSONObject: object) else { return nil }
 

@@ -1,22 +1,42 @@
 import Foundation
 import Starscream
+import Socks
+import Sodium
+
+enum DiscordVoiceEngineError : Error {
+	case ipExtraction
+}
 
 public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
+	public private(set) var endpoint: String!
+	public private(set) var modes = [String]()
+	public private(set) var ssrc = -1
+	public private(set) var udpSocket: UDPClient?
+	public private(set) var udpPort = -1
 	public private(set) var voiceServerInformation: [String: Any]!
 
-	public convenience init(client: DiscordClientSpec, voiceServerInformation: [String: Any]) {
+	private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
+
+	private var currentUnixTime: Int {
+		return Int(String(Date().timeIntervalSince1970).replacingOccurrences(of: ".", with: ""))!
+	}
+
+	private var secret: [UInt8]?
+
+	public convenience init?(client: DiscordClientSpec, voiceServerInformation: [String: Any]) {
 		self.init(client: client)
 
 		self.voiceServerInformation = voiceServerInformation
+
+		if let endpoint = voiceServerInformation["endpoint"] as? String {
+			self.endpoint = endpoint
+		} else {
+			return nil
+		}
 	}
 
 	public override func attachWebSocket() {
-		guard let endpoint = voiceServerInformation["endpoint"] as? String else {
-			// TODO tell them the voice connection failed
-			return
-		}
-
-		print("DiscordEngine: Attaching Voice WebSocket")
+		print("DiscordVoiceEngine: Attaching WebSocket")
 
 		// For some reason their wss:// endpoint fails on SSL handshaking
 		// Probably Apple not liking a cert
@@ -32,7 +52,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		websocket?.onDisconnect = {[weak self] err in
 			guard let this = self else { return }
 
-			print("DiscordEngine: Voice WebSocket disconnected \(err)")
+			print("DiscordVoiceEngine: WebSocket disconnected \(err)")
 
 			this.client?.handleEngineEvent("voiceEngine.disconnect", with: [])
 		}
@@ -47,42 +67,123 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		]
 	}
 
+	public override func disconnect() {
+		print("DiscordVoiceEngine: Disconnecting")
+
+		super.disconnect()
+
+		do {
+			try udpSocket?.close()
+		} catch {}
+		
+
+		client?.handleEngineEvent("voiceEngine.disconnect", with: [])
+	}
+
+	private func extractIPAndPort(from bytes: [UInt8]) throws -> (String, Int) {
+		// print("extracting our ip and port from \(bytes)")
+
+		let ipData = Data(bytes: bytes.dropLast(2))
+		let portBytes = Array(bytes.suffix(from: bytes.endIndex.advanced(by: -2)))
+		let port = (Int(portBytes[0]) | Int(portBytes[1])) &<< 8
+
+		guard let ipString = String(data: ipData, encoding: .utf8)?.replacingOccurrences(of: "\0", with: "") else {
+			throw DiscordVoiceEngineError.ipExtraction
+		}
+
+		return (ipString, port)
+	}
+
+	// https://discordapp.com/developers/docs/topics/voice-connections#ip-discovery
+	private func findIP() {
+		udpQueue.async {
+			guard let udpSocket = self.udpSocket else { return }
+
+			// print("Finding IP")
+			let discoveryData = [UInt8](repeating: 0x00, count: 70)
+
+			do {
+				try udpSocket.send(bytes: discoveryData)
+
+				let (data, _) = try udpSocket.receive(maxBytes: 70)
+				let (ip, port) = try self.extractIPAndPort(from: data)
+
+				self.selectProtocol(with: ip, on: port)
+			} catch {
+				// print("Something blew up")
+				self.disconnect()
+			}
+		}
+	}
+
 	override func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
 		switch payload.code {
 		case .identify:
 			handleIdentify(with: payload.payload)
+		case .voiceStatusUpdate:
+			udpQueue.async { self.handleVoiceStateUpdate(with: payload.payload) }
 		default:
-			print("Got voice payload \(payload)")
+			// print("Got voice payload \(payload)")
+			break
 		}
 	}
 
 	private func handleIdentify(with payload: DiscordGatewayPayloadData) {
-		// TODO tell them the voice connection failed
-		guard case let .object(voiceInformation) = payload, 
-			let milliseconds = voiceInformation["heartbeat_interval"] as? Int, 
-			let port = voiceInformation["port"] as? Int else { 
+		guard case let .object(voiceInformation) = payload,
+			let heartbeatInterval = voiceInformation["heartbeat_interval"] as? Int,
+			let ssrc = voiceInformation["ssrc"] as? Int, let udpPort = voiceInformation["port"] as? Int,
+			let modes = voiceInformation["modes"] as? [String] else {
+				// TODO tell them the voice connection failed
+				disconnect()
+
 				return 
 			}
 
-		startHeartbeat(seconds: milliseconds / 1000)
+		self.udpPort = udpPort
+		self.modes = modes
+		self.ssrc = ssrc
+		self.heartbeatInterval = heartbeatInterval
 
-		print(port)
+		startUDP()
 	}
 
-	public override func startHeartbeat(seconds: Int) {
-		heartbeatInterval = seconds
+	private func handleVoiceStateUpdate(with payload: DiscordGatewayPayloadData) {
+		guard case let .object(voiceInformation) = payload, 
+			let secret = voiceInformation["secret_key"] as? [Int] else {
+				// TODO tell them we failed
+				disconnect()
 
-		sendHeartbeat()
+				return
+			}
+
+		self.secret = secret.map({ UInt8($0) })
+	}
+
+	// Tells the voice websocket what our ip and port is, and what encryption mode we will use
+	// currently only xsalsa20_poly1305 is supported
+	// After this point we are good to go in sending encrypted voice packets
+	private func selectProtocol(with ip: String, on port: Int) {
+		print("Selecting UDP protocol with ip: \(ip) on port: \(port)")
+
+		let payloadData: [String: Any] = [
+			"protocol": "udp",
+			"data": [
+				"address": ip,
+				"port": port,
+				"mode": "xsalsa20_poly1305"
+			]
+		]
+
+		sendGatewayPayload(DiscordGatewayPayload(code: .heartbeat, payload: .object(payloadData)))
+		startHeartbeat(seconds: heartbeatInterval / 1000)
 	}
 
 	public func sendHeartbeat() {
 		guard websocket?.isConnected ?? false else { return }
 
-		print("About to send voice heartbeat")
+		// print("About to send voice heartbeat")
 
-		let payload = DiscordGatewayPayload(code: .voiceServerPing, payload: .integer(0))
-
-		sendGatewayPayload(payload)
+		sendGatewayPayload(DiscordGatewayPayload(code: .statusUpdate, payload: .integer(currentUnixTime)))
 
 		let time = DispatchTime.now() + Double(Int64(heartbeatInterval * Int(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
 
@@ -95,5 +196,29 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		let handshakeEventData = createHandshakeObject()
 
 		sendGatewayPayload(DiscordGatewayPayload(code: .dispatch, payload: .object(handshakeEventData)))
+	}
+
+	public override func startHeartbeat(seconds: Int) {
+		heartbeatInterval = seconds
+
+		sendHeartbeat()
+	}
+
+	private func startUDP() {
+		guard udpPort != -1 else { return }
+
+		let base = endpoint.components(separatedBy: ":")[0]
+		let udpEndpoint = InternetAddress(hostname: base, port: UInt16(udpPort))
+
+		guard let client = try? UDPClient(address: udpEndpoint) else {
+			self.disconnect()
+
+			return
+		}
+
+		udpSocket = client
+
+		// Begin async UDP setup
+		findIP()
 	}
 }

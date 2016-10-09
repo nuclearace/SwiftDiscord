@@ -115,15 +115,13 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	}
 
 	open func startHandshake() {
-		guard let client = self.client else { 
+		guard client != nil else { 
 			error(message: "Client nil before handshaked")
 
 			return
 		}
 
-		let handshakeEventData = createHandshakeObject()
-
-		sendGatewayPayload(DiscordGatewayPayload(code: .identify, payload: .object(handshakeEventData)))
+		sendGatewayPayload(DiscordGatewayPayload(code: .identify, payload: .object(createHandshakeObject())))
 	}
 
 	open func startHeartbeat(seconds: Int) {
