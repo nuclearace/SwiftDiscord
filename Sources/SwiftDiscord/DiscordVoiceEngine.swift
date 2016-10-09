@@ -10,7 +10,7 @@ enum DiscordVoiceEngineError : Error {
 public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public private(set) var endpoint: String!
 	public private(set) var modes = [String]()
-	public private(set) var ssrc = -1
+	public private(set) var ssrc: UInt32 = 0
 	public private(set) var udpSocket: UDPClient?
 	public private(set) var udpPort = -1
 	public private(set) var voiceServerInformation: [String: Any]!
@@ -22,6 +22,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private var secret: [UInt8]?
+	private var sequenceNum = UInt16(arc4random() >> 16)
 
 	public convenience init?(client: DiscordClientSpec, voiceServerInformation: [String: Any]) {
 		self.init(client: client)
@@ -63,6 +64,37 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			"user_id": client!.user!.id,
 			"token": voiceServerInformation["token"] as! String
 		]
+	}
+
+	private func createRTPHeader() -> [UInt8] {
+		var rtpHeader = [UInt8](repeating: 0x00, count: 12)
+		var byteNumber = 0
+		var currentHeaderIndex = 2
+
+		rtpHeader[0] = 0x80
+		rtpHeader[1] = 0x78
+		
+		let sequenceBigEndian = self.sequenceNum.bigEndian
+		let ssrcBigEndian = self.ssrc.bigEndian
+
+		for i in 0..<10 {
+			if i < 2 {
+				rtpHeader[currentHeaderIndex] = UInt8((Int(sequenceBigEndian) >> (8 * byteNumber)) & 0xFF)
+			} else if i < 6 {
+				rtpHeader[currentHeaderIndex] = 0x69//UInt8((Int(timestamp) >> (8 * byteNumber)) & 0xFF)
+			} else {
+				rtpHeader[currentHeaderIndex] = UInt8((Int(ssrcBigEndian) >> (8 * byteNumber)) & 0xFF)
+			}
+
+			if i == 2 || i == 6 {
+				byteNumber = 0
+			}
+
+			currentHeaderIndex += 1
+			byteNumber += 1
+		}
+
+		return rtpHeader
 	}
 
 	public override func disconnect() {
@@ -143,7 +175,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		self.udpPort = udpPort
 		self.modes = modes
-		self.ssrc = ssrc
+		self.ssrc = UInt32(ssrc)
 		self.heartbeatInterval = heartbeatInterval
 
 		startUDP()
@@ -198,6 +230,14 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		let time = DispatchTime.now() + Double(Int64(heartbeatInterval * Int(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
 
 		heartbeatQueue.asyncAfter(deadline: time) {[weak self] in self?.sendHeartbeat() }
+	}
+
+	public func sendVoiceData(_ data: Data) {
+		udpQueue.async {
+			print("Should send voice data \(data)")
+
+			let rtpHeader = self.createRTPHeader()
+		}
 	}
 
 	public override func startHandshake() {

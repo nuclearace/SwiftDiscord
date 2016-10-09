@@ -6,6 +6,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	public var engine: DiscordEngineSpec?
 	public var voiceEngine: DiscordVoiceEngineSpec?
 
+	public private(set) var connected = false
 	public private(set) var guilds = [String: DiscordGuild]()
 	public private(set) var relationships = [[String: Any]]()
 	public private(set) var user: DiscordUser?
@@ -39,6 +40,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	open func disconnect() {
 		print("DiscordClient: Disconnecting")
 
+		connected = false
+		
 		engine?.disconnect()
 		voiceEngine?.disconnect()
 	}
@@ -160,6 +163,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 			self.relationships = relationships
 		}
 
+		connected = true
 		handleEvent("connect", with: [data])
 	}
 
@@ -227,6 +231,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	}
 
 	open func sendMessage(_ message: String, to channelId: String, tts: Bool = false) {
+		guard connected else { return }
+
 		DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts)
 	}
 
