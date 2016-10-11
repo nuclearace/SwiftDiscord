@@ -18,14 +18,19 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
 
 	private var currentUnixTime: Int {
-		return Int(String(Date().timeIntervalSince1970).replacingOccurrences(of: ".", with: ""))!
+		return Int(Date().timeIntervalSince1970 * 1000)
 	}
 
-	private var secret: [UInt8]?
+	private var playingAudio = false
+	private var secret: [UInt8]!
 	private var sequenceNum = UInt16(arc4random() >> 16)
+	private var startTime = 0
+	private var timestamp = arc4random()
 
 	public convenience init?(client: DiscordClientSpec, voiceServerInformation: [String: Any]) {
 		self.init(client: client)
+
+		_ = sodium_init()
 
 		self.voiceServerInformation = voiceServerInformation
 
@@ -67,6 +72,21 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private func createRTPHeader() -> [UInt8] {
+		@inline(__always)
+		func resetByteNumber(_ byteNumber: inout Int, _ currentHeaderIndex: inout Int, _ i: Int) {
+			if i + 1 == 2 {
+				byteNumber = 0
+				currentHeaderIndex += 1
+			} else if i + 1 == 6 {
+				byteNumber = 0
+				currentHeaderIndex += 1
+			} else {
+				byteNumber += 1
+				currentHeaderIndex += 1
+			}
+		}
+
+
 		var rtpHeader = [UInt8](repeating: 0x00, count: 12)
 		var byteNumber = 0
 		var currentHeaderIndex = 2
@@ -74,24 +94,25 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		rtpHeader[0] = 0x80
 		rtpHeader[1] = 0x78
 		
-		let sequenceBigEndian = self.sequenceNum.bigEndian
-		let ssrcBigEndian = self.ssrc.bigEndian
+		let sequenceBigEndian = sequenceNum.bigEndian
+		let ssrcBigEndian = ssrc.bigEndian
+		let timestampBigEndian = timestamp.bigEndian
 
 		for i in 0..<10 {
 			if i < 2 {
 				rtpHeader[currentHeaderIndex] = UInt8((Int(sequenceBigEndian) >> (8 * byteNumber)) & 0xFF)
+
+				resetByteNumber(&byteNumber, &currentHeaderIndex, i)
 			} else if i < 6 {
-				rtpHeader[currentHeaderIndex] = 0x69//UInt8((Int(timestamp) >> (8 * byteNumber)) & 0xFF)
+				rtpHeader[currentHeaderIndex] = UInt8((Int(timestampBigEndian) >> (8 * byteNumber)) & 0xFF)
+
+				resetByteNumber(&byteNumber, &currentHeaderIndex, i)
 			} else {
 				rtpHeader[currentHeaderIndex] = UInt8((Int(ssrcBigEndian) >> (8 * byteNumber)) & 0xFF)
-			}
 
-			if i == 2 || i == 6 {
-				byteNumber = 0
+				byteNumber += 1
+				currentHeaderIndex += 1
 			}
-
-			currentHeaderIndex += 1
-			byteNumber += 1
 		}
 
 		return rtpHeader
@@ -154,10 +175,12 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		switch voiceCode {
 		case .ready:
 			handleReady(with: payload.payload)
+		case .heartbeat:
+			break
 		case .sessionDescription:
 			udpQueue.async { self.handleVoiceSessionDescription(with: payload.payload) }
 		default:
-			// print("Got voice payload \(payload)")
+			print("Got voice payload \(payload)")
 			break
 		}
 	}
@@ -234,10 +257,71 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	public func sendVoiceData(_ data: Data) {
 		udpQueue.async {
+			guard !self.playingAudio, let udpSocket = self.udpSocket else { return }
+
+			self.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
+				"speaking": true,
+				"delay": 0
+			])))
+
+			self.playingAudio = true
+			self.startTime = self.currentUnixTime
+			var secret = self.secret!
+
 			print("Should send voice data \(data)")
 
-			let rtpHeader = self.createRTPHeader()
+			let stream = InputStream(data: data)
+			var count = 1
+
+			// (128 [kb] * 20 [frame_size]) / 8 == 320
+			let buf = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(crypto_secretbox_MACBYTES) + 320)
+
+			stream.open()
+
+			while stream.hasBytesAvailable {
+			    let bytesRead = stream.read(buf, maxLength: 320)
+
+			    guard bytesRead > 0 else { break }
+
+			    let rtpHeader = self.createRTPHeader()
+			    let enryptedCount = Int(crypto_secretbox_MACBYTES) + bytesRead
+
+			    var nonce = rtpHeader + [UInt8](repeating: 0x00, count: 12)
+			    _ = crypto_secretbox_easy(buf, buf, UInt64(bytesRead), &nonce, &secret)
+			    let bytes = Array(UnsafeBufferPointer<UInt8>(start: buf, count: enryptedCount))
+
+			    do {
+			    	try udpSocket.send(bytes: rtpHeader + bytes)
+			    	// print("Sent \(bytes.count) bytes of voice")
+			    } catch {
+			    	print("aaaaaaa")
+			    }
+
+			    self.audioSleep(count)
+			    // Fine to overflow here
+			    self.sequenceNum = self.sequenceNum &+ 1
+			    self.timestamp = self.timestamp &+ 960
+
+			    count += 1
+			}
+			
+			stream.close()
+			self.playingAudio = false
+			self.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
+				"speaking": false,
+				"delay": 0
+			])))
 		}
+	}
+
+	private func audioSleep(_ count: Int) {
+		let inner = (startTime + count * 20) - currentUnixTime
+		let waitTime = Double(20 + inner) / 1000.0
+
+		guard waitTime > 0 else { return }
+
+		// print("sleeping")
+		Thread.sleep(forTimeInterval: waitTime)
 	}
 
 	public override func startHandshake() {
