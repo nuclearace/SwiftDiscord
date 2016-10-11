@@ -72,12 +72,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private func createRTPHeader() -> [UInt8] {
-		@inline(__always)
 		func resetByteNumber(_ byteNumber: inout Int, _ currentHeaderIndex: inout Int, _ i: Int) {
-			if i + 1 == 2 {
-				byteNumber = 0
-				currentHeaderIndex += 1
-			} else if i + 1 == 6 {
+			if i + 1 == 2 || i + 1 == 6 {
 				byteNumber = 0
 				currentHeaderIndex += 1
 			} else {
@@ -266,11 +262,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 			self.playingAudio = true
 			self.startTime = self.currentUnixTime
-			var secret = self.secret!
 
 			print("Should send voice data \(data)")
 
 			let stream = InputStream(data: data)
+			let padding = [UInt8](repeating: 0x00, count: 12)
 			var count = 1
 
 			// (128 [kb] * 20 [frame_size]) / 8 == 320
@@ -286,15 +282,15 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			    let rtpHeader = self.createRTPHeader()
 			    let enryptedCount = Int(crypto_secretbox_MACBYTES) + bytesRead
 
-			    var nonce = rtpHeader + [UInt8](repeating: 0x00, count: 12)
-			    _ = crypto_secretbox_easy(buf, buf, UInt64(bytesRead), &nonce, &secret)
+			    var nonce = rtpHeader + padding
+			    _ = crypto_secretbox_easy(buf, buf, UInt64(bytesRead), &nonce, &self.secret!)
 			    let bytes = Array(UnsafeBufferPointer<UInt8>(start: buf, count: enryptedCount))
 
 			    do {
 			    	try udpSocket.send(bytes: rtpHeader + bytes)
 			    	// print("Sent \(bytes.count) bytes of voice")
 			    } catch {
-			    	print("aaaaaaa")
+			    	print("failed to send udp packet")
 			    }
 
 			    self.audioSleep(count)
