@@ -2,7 +2,10 @@ import Foundation
 import SwiftDiscord
 
 let queue = DispatchQueue(label: "Async Read")
+let writeQueue = DispatchQueue(label: "Async Write")
 let client = DiscordClient(token: "")
+
+var writer: FileHandle!
 
 func readAsync() {
 	queue.async {
@@ -15,24 +18,18 @@ func readAsync() {
         		print(messages)
         	}
         } else if input == "joinvoice" {
-        	client.joinVoiceChannel("201533018215677954") {message in
+        	client.joinVoiceChannel("186926277276598273") {message in
         		print(message)
         	}
         } else if input.hasPrefix("play") {
-        	let pipe = Pipe()
-        	let process = Process()
-        	let readHandle = pipe.fileHandleForReading
+        	let music = FileHandle(forReadingAtPath: "../../../Music/testing.mp3")!
+        	writeQueue.async {
+        		let data = music.readDataToEndOfFile()
 
-        	process.launchPath = "/usr/local/bin/ffmpeg"
-        	process.standardInput = FileHandle.nullDevice
-        	process.standardOutput = pipe
-        	process.arguments = ["-hide_banner", "-i", "../../../Music/testing.mp3", "-f", "data", "-map", "0:a", "-ar", 
-        		"48000", "-ac", "2", "-acodec", "libopus", "-sample_fmt", "s16", "-vbr", "off", "-b:a", "128000", 
-        		"-compression_level", "10", "pipe:1"]
-
-        	process.launch()
-
-        	client.voiceEngine?.sendVoiceData(readHandle.readDataToEndOfFile())
+        		print("read \(data)")
+        		writer.write(data)
+        	}
+        	// client.voiceEngine?.sendVoiceData(readHandle.readDataToEndOfFile())
         } else {
         	client.sendMessage(input, to: "232184444340011009")
         }
@@ -52,6 +49,14 @@ client.on("engine.disconnect") {data in
 client.on("connect") {data in
 	print("connect")
 	// print(client.guilds)
+}
+
+client.on("voiceEngine.writeHandle") {data in
+	guard let writeHandle = data[0] as? FileHandle else { fatalError() }
+
+	print("Got handle")
+
+	writer = writeHandle
 }
 
 client.on("message") {data in

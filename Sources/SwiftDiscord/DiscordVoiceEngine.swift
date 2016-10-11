@@ -15,17 +15,22 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public private(set) var udpPort = -1
 	public private(set) var voiceServerInformation: [String: Any]!
 
+	private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
 	private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
 
 	private var currentUnixTime: Int {
 		return Int(Date().timeIntervalSince1970 * 1000)
 	}
 
+	private var ffmpeg = Process()
 	private var playingAudio = false
+	private var reader: FileHandle!
+	private var readPipe = Pipe()
 	private var secret: [UInt8]!
 	private var sequenceNum = UInt16(arc4random() >> 16)
 	private var startTime = 0
 	private var timestamp = arc4random()
+	private var writePipe = Pipe()
 
 	public convenience init?(client: DiscordClientSpec, voiceServerInformation: [String: Any]) {
 		self.init(client: client)
@@ -60,6 +65,16 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 			this.client?.handleEngineEvent("voiceEngine.disconnect", with: [])
 		}
+	}
+
+	private func audioSleep(_ count: Int) {
+		let inner = (startTime + count * 20) - currentUnixTime
+		let waitTime = Double(20 + inner) / 1000.0
+
+		guard waitTime > 0 else { return }
+
+		// print("sleeping \(waitTime)")
+		Thread.sleep(forTimeInterval: waitTime)
 	}
 
 	public override func createHandshakeObject() -> [String: Any] {
@@ -123,7 +138,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			try udpSocket?.close()
 		} catch {}
 		
-
+		ffmpeg.terminate()
 		client?.handleEngineEvent("voiceEngine.disconnect", with: [])
 	}
 
@@ -220,6 +235,34 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		handleGatewayPayload(decoded)
 	}
 
+	private func readData() {
+		readQueue.async {
+			self.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
+				"speaking": true,
+				"delay": 0
+			])))
+
+			var count = 1
+			var data = self.reader.readData(ofLength: 320)
+
+			while data.count != 0 {
+				self.sendVoiceData(data)
+
+				self.sequenceNum = self.sequenceNum &+ 1
+				self.timestamp = self.timestamp &+ 960
+				self.audioSleep(count)
+
+				data = self.reader.readData(ofLength: 320)
+				count += 1
+			}
+
+			self.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
+				"speaking": false,
+				"delay": 0
+			])))
+		}
+	}
+
 	// Tells the voice websocket what our ip and port is, and what encryption mode we will use
 	// currently only xsalsa20_poly1305 is supported
 	// After this point we are good to go in sending encrypted voice packets
@@ -237,6 +280,13 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		sendGatewayPayload(DiscordGatewayPayload(code: .voice(.selectProtocol), payload: .object(payloadData)))
 		startHeartbeat(seconds: heartbeatInterval / 1000)
+
+		// setup for audio
+		let writeHandle = setupAudio()
+
+		client?.handleEngineEvent("voiceEngine.writeHandle", with: [writeHandle])
+
+		readData()
 	}
 
 	public override func sendHeartbeat() {
@@ -252,72 +302,56 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	public func sendVoiceData(_ data: Data) {
-		udpQueue.async {
-			guard !self.playingAudio, let udpSocket = self.udpSocket else { return }
+		udpQueue.sync {
+			guard self.playingAudio, let udpSocket = self.udpSocket, data.count > 0 else { return }
 
-			self.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
-				"speaking": true,
-				"delay": 0
-			])))
+			// print("Should send voice data \(data)")
 
-			self.playingAudio = true
-			self.startTime = self.currentUnixTime
+			data.withUnsafeBytes {(buf: UnsafePointer<UInt8>) in
+				let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(crypto_secretbox_MACBYTES) + 320)
+				let padding = [UInt8](repeating: 0x00, count: 12)
 
-			print("Should send voice data \(data)")
+				guard data.count > 0 else { return }
 
-			let stream = InputStream(data: data)
-			let padding = [UInt8](repeating: 0x00, count: 12)
-			var count = 1
+				let rtpHeader = self.createRTPHeader()
+				let enryptedCount = Int(crypto_secretbox_MACBYTES) + data.count
 
-			// (128 [kb] * 20 [frame_size]) / 8 == 320
-			let buf = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(crypto_secretbox_MACBYTES) + 320)
+				var nonce = rtpHeader + padding
+				_ = crypto_secretbox_easy(encrypted, buf, UInt64(data.count), &nonce, &self.secret!)
+				let encryptedBytes = Array(UnsafeBufferPointer<UInt8>(start: encrypted, count: enryptedCount))
 
-			stream.open()
-
-			while stream.hasBytesAvailable {
-			    let bytesRead = stream.read(buf, maxLength: 320)
-
-			    guard bytesRead > 0 else { break }
-
-			    let rtpHeader = self.createRTPHeader()
-			    let enryptedCount = Int(crypto_secretbox_MACBYTES) + bytesRead
-
-			    var nonce = rtpHeader + padding
-			    _ = crypto_secretbox_easy(buf, buf, UInt64(bytesRead), &nonce, &self.secret!)
-			    let bytes = Array(UnsafeBufferPointer<UInt8>(start: buf, count: enryptedCount))
-
-			    do {
-			    	try udpSocket.send(bytes: rtpHeader + bytes)
-			    	// print("Sent \(bytes.count) bytes of voice")
-			    } catch {
-			    	print("failed to send udp packet")
-			    }
-
-			    self.audioSleep(count)
-			    // Fine to overflow here
-			    self.sequenceNum = self.sequenceNum &+ 1
-			    self.timestamp = self.timestamp &+ 960
-
-			    count += 1
+				do {
+					try udpSocket.send(bytes: rtpHeader + encryptedBytes)
+					// print("Sent \(encryptedBytes.count) bytes of voice")
+				} catch {
+					print("failed to send udp packet")
+				}
 			}
-			
-			stream.close()
-			self.playingAudio = false
-			self.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
-				"speaking": false,
-				"delay": 0
-			])))
 		}
 	}
 
-	private func audioSleep(_ count: Int) {
-		let inner = (startTime + count * 20) - currentUnixTime
-		let waitTime = Double(20 + inner) / 1000.0
+	// Only call on udpQueue
+	private func setupAudio() -> FileHandle {
+		reader = writePipe.fileHandleForReading
 
-		guard waitTime > 0 else { return }
+		self.ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
+		self.ffmpeg.standardInput = self.readPipe.fileHandleForReading
+		self.ffmpeg.standardOutput = self.writePipe.fileHandleForWriting
+		self.ffmpeg.arguments = ["-hide_banner", "-i", "pipe:0", "-f", "data", "-map", "0:a", "-ar", 
+			"48000", "-ac", "2", "-acodec", "libopus", "-sample_fmt", "s16", "-vbr", "off", "-b:a", "128000", 
+			"-compression_level", "10", "pipe:1"]
 
-		// print("sleeping")
-		Thread.sleep(forTimeInterval: waitTime)
+		// TODO add termination handler to shutdown voice, since we can't do anything without ffmpeg
+		self.ffmpeg.launch()
+
+		self.ffmpeg.terminationHandler = {process in
+			print("Process died")
+		}
+
+		self.playingAudio = true
+		self.startTime = self.currentUnixTime
+
+		return readPipe.fileHandleForWriting
 	}
 
 	public override func startHandshake() {
