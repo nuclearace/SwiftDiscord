@@ -191,7 +191,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		case .sessionDescription:
 			udpQueue.async { self.handleVoiceSessionDescription(with: payload.payload) }
 		default:
-			print("Got voice payload \(payload)")
+			// print("Got voice payload \(payload)")
 			break
 		}
 	}
@@ -242,8 +242,10 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 				"delay": 0
 			])))
 
+
 			var count = 1
 			var data = self.reader.readData(ofLength: 320)
+			self.startTime = self.currentUnixTime
 
 			while data.count != 0 {
 				self.sendVoiceData(data)
@@ -330,26 +332,84 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		}
 	}
 
+	// public func sendVoiceDataOld(_ data: Data) {
+	// 	udpQueue.async {
+	// 		guard !self.playingAudio, let udpSocket = self.udpSocket else { return }
+
+	// 		self.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
+	// 			"speaking": true,
+	// 			"delay": 0
+	// 		])))
+
+	// 		self.playingAudio = true
+	// 		self.startTime = self.currentUnixTime
+
+	// 		print("Should send voice data \(data)")
+
+	// 		let stream = InputStream(data: data)
+	// 		let padding = [UInt8](repeating: 0x00, count: 12)
+	// 		var count = 1
+
+	// 		// (128 [kb] * 20 [frame_size]) / 8 == 320
+	// 		let buf = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(crypto_secretbox_MACBYTES) + 320)
+
+	// 		stream.open()
+
+	// 		while stream.hasBytesAvailable {
+	// 		    let bytesRead = stream.read(buf, maxLength: 320)
+
+	// 		    guard bytesRead > 0 else { break }
+
+	// 		    let rtpHeader = self.createRTPHeader()
+	// 		    let enryptedCount = Int(crypto_secretbox_MACBYTES) + bytesRead
+
+	// 		    var nonce = rtpHeader + padding
+	// 		    _ = crypto_secretbox_easy(buf, buf, UInt64(bytesRead), &nonce, &self.secret!)
+	// 		    let bytes = Array(UnsafeBufferPointer<UInt8>(start: buf, count: enryptedCount))
+
+	// 		    do {
+	// 		    	try udpSocket.send(bytes: rtpHeader + bytes)
+	// 		    	// print("Sent \(bytes.count) bytes of voice")
+	// 		    } catch {
+	// 		    	print("failed to send udp packet")
+	// 		    }
+
+	// 		    self.audioSleep(count)
+	// 		    // Fine to overflow here
+	// 		    self.sequenceNum = self.sequenceNum &+ 1
+	// 		    self.timestamp = self.timestamp &+ 960
+
+	// 		    count += 1
+	// 		}
+			
+	// 		stream.close()
+	// 		self.playingAudio = false
+	// 		self.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
+	// 			"speaking": false,
+	// 			"delay": 0
+	// 		])))
+	// 	}
+	// }
+
 	// Only call on udpQueue
 	private func setupAudio() -> FileHandle {
 		reader = writePipe.fileHandleForReading
 
-		self.ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
-		self.ffmpeg.standardInput = self.readPipe.fileHandleForReading
-		self.ffmpeg.standardOutput = self.writePipe.fileHandleForWriting
-		self.ffmpeg.arguments = ["-hide_banner", "-i", "pipe:0", "-f", "data", "-map", "0:a", "-ar", 
+		ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
+		ffmpeg.standardInput = readPipe.fileHandleForReading
+		ffmpeg.standardOutput = writePipe.fileHandleForWriting
+		ffmpeg.arguments = ["-hide_banner", "-i", "pipe:0", "-f", "data", "-map", "0:a", "-ar", 
 			"48000", "-ac", "2", "-acodec", "libopus", "-sample_fmt", "s16", "-vbr", "off", "-b:a", "128000", 
 			"-compression_level", "10", "pipe:1"]
 
 		// TODO add termination handler to shutdown voice, since we can't do anything without ffmpeg
-		self.ffmpeg.launch()
+		ffmpeg.launch()
 
-		self.ffmpeg.terminationHandler = {process in
+		ffmpeg.terminationHandler = {process in
 			print("Process died")
 		}
 
-		self.playingAudio = true
-		self.startTime = self.currentUnixTime
+		playingAudio = true
 
 		return readPipe.fileHandleForWriting
 	}

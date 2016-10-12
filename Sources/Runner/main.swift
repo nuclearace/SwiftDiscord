@@ -18,7 +18,7 @@ func readAsync() {
         		print(messages)
         	}
         } else if input == "joinvoice" {
-        	client.joinVoiceChannel("186926277276598273") {message in
+        	client.joinVoiceChannel("201533018215677954") {message in
         		print(message)
         	}
         } else if input.hasPrefix("play") {
@@ -30,6 +30,15 @@ func readAsync() {
         		writer.write(data)
         	}
         	// client.voiceEngine?.sendVoiceData(readHandle.readDataToEndOfFile())
+        } else if input.hasPrefix("youtube") {
+        	let link = input.components(separatedBy: " ")[1]
+        	let process = Process()
+
+        	process.launchPath = "/usr/local/bin/youtube-dl"
+        	process.arguments = ["-f", "bestaudio", "-o", "-", link]
+        	process.standardOutput = writer
+        	
+        	process.launch()
         } else {
         	client.sendMessage(input, to: "232184444340011009")
         }
