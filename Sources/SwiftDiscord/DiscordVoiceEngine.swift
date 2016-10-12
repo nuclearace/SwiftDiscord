@@ -241,7 +241,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	private func readData(_ count: Int) {
 		// print(count)
-		readIO?.read(offset: 0, length: 320, queue: readQueue) {done, data, int in
+		readIO?.read(offset: 0, length: 320, queue: readQueue) {done, data, errorCode in
 		    guard let data = data else { 
 		    	print("no data, reader probably closed")
 
@@ -252,10 +252,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		    	self.firstPlay = true
 		    	return
-		    }
-
-		    if data.count == 0 {
-		    	fatalError("aaa aafdafads\n\n\n\n\n")
 		    }
 
 		    if self.firstPlay {
@@ -278,10 +274,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		    self.readData(count + 1)
 		}
-		// readQueue.async {
-
-
-		// }
 	}
 
 	// Tells the voice websocket what our ip and port is, and what encryption mode we will use
@@ -332,9 +324,10 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 				let rtpHeader = self.createRTPHeader()
 				let enryptedCount = Int(crypto_secretbox_MACBYTES) + data.count
-
 				var nonce = rtpHeader + padding
+
 				_ = crypto_secretbox_easy(encrypted, buf, UInt64(data.count), &nonce, &self.secret!)
+				
 				let encryptedBytes = Array(UnsafeBufferPointer<UInt8>(start: encrypted, count: enryptedCount))
 
 				do {
@@ -347,10 +340,13 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		}
 	}
 
-	// Only call on udpQueue
-	public func requestNewWriter() {
+	public func requestNewWriter() {		
 		ffmpeg?.terminate()
 		readIO?.close(flags: .stop)
+
+		readQueue.sync {
+			self.firstPlay = true
+		}
 
 		ffmpeg = Process()
 		writePipe = Pipe()
