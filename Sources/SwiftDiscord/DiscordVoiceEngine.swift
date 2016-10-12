@@ -99,7 +99,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			}
 		}
 
-
 		var rtpHeader = [UInt8](repeating: 0x00, count: 12)
 		var byteNumber = 0
 		var currentHeaderIndex = 2
@@ -240,7 +239,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private func readData(_ count: Int) {
-		// print(count)
 		readIO?.read(offset: 0, length: 320, queue: readQueue) {done, data, errorCode in
 		    guard let data = data else { 
 		    	print("no data, reader probably closed")
@@ -264,8 +262,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		    	])))
 		    }
 		    
-		    // print(data)
-
 		    self.sendVoiceData(Data(data))
 
 		    self.sequenceNum = self.sequenceNum &+ 1
@@ -319,8 +315,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			data.withUnsafeBytes {(buf: UnsafePointer<UInt8>) in
 				let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(crypto_secretbox_MACBYTES) + 320)
 				let padding = [UInt8](repeating: 0x00, count: 12)
-
-				guard data.count > 0 else { return }
 
 				let rtpHeader = self.createRTPHeader()
 				let enryptedCount = Int(crypto_secretbox_MACBYTES) + data.count

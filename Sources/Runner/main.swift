@@ -6,6 +6,7 @@ let writeQueue = DispatchQueue(label: "Async Write")
 let client = DiscordClient(token: "")
 
 var writer: FileHandle!
+var youtube: Process!
 
 func readAsync() {
 	queue.async {
@@ -30,18 +31,19 @@ func readAsync() {
         		writer.write(data)
         	}
         	// client.voiceEngine?.sendVoiceData(music.readDataToEndOfFile())
-        } else if input == "newwriter" {
+        } else if input == "new" {
             // writer.closeFile()
+            youtube?.terminate()
             client.voiceEngine?.requestNewWriter()
         } else if input.hasPrefix("youtube") {
         	let link = input.components(separatedBy: " ")[1]
-        	let process = Process()
+        	youtube = Process()
 
-        	process.launchPath = "/usr/local/bin/youtube-dl"
-        	process.arguments = ["-f", "bestaudio", "-o", "-", link]
-        	process.standardOutput = writer
+        	youtube.launchPath = "/usr/local/bin/youtube-dl"
+        	youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
+        	youtube.standardOutput = writer
         	
-        	process.launch()
+        	youtube.launch()
         } else if input == "silence" {
             // client.voiceEngine?.sendVoiceData(Data(bytes: [0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE, 
             //     0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE]))
