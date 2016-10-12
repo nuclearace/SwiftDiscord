@@ -22,14 +22,17 @@ func readAsync() {
         		print(message)
         	}
         } else if input.hasPrefix("play") {
-        	let music = FileHandle(forReadingAtPath: "../../../Music/testing.mp3")!
+        	let music = FileHandle(forReadingAtPath: "../../Music/testing.mp3")!
         	writeQueue.async {
         		let data = music.readDataToEndOfFile()
 
         		print("read \(data)")
         		writer.write(data)
         	}
-        	// client.voiceEngine?.sendVoiceData(readHandle.readDataToEndOfFile())
+        	// client.voiceEngine?.sendVoiceData(music.readDataToEndOfFile())
+        } else if input == "newwriter" {
+            // writer.closeFile()
+            client.voiceEngine?.requestNewWriter()
         } else if input.hasPrefix("youtube") {
         	let link = input.components(separatedBy: " ")[1]
         	let process = Process()
@@ -39,6 +42,9 @@ func readAsync() {
         	process.standardOutput = writer
         	
         	process.launch()
+        } else if input == "silence" {
+            // client.voiceEngine?.sendVoiceData(Data(bytes: [0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE, 
+            //     0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE]))
         } else {
         	client.sendMessage(input, to: "232184444340011009")
         }

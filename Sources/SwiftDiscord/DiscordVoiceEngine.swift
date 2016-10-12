@@ -17,20 +17,22 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
 	private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
+	private var readIO: DispatchIO?
 
 	private var currentUnixTime: Int {
 		return Int(Date().timeIntervalSince1970 * 1000)
 	}
 
-	private var ffmpeg = Process()
+	private var ffmpeg: Process!
+	private var firstPlay = true
 	private var playingAudio = false
 	private var reader: FileHandle!
-	private var readPipe = Pipe()
+	private var readPipe: Pipe!
 	private var secret: [UInt8]!
 	private var sequenceNum = UInt16(arc4random() >> 16)
 	private var startTime = 0
 	private var timestamp = arc4random()
-	private var writePipe = Pipe()
+	private var writePipe: Pipe!
 
 	public convenience init?(client: DiscordClientSpec, voiceServerInformation: [String: Any]) {
 		self.init(client: client)
@@ -138,7 +140,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			try udpSocket?.close()
 		} catch {}
 		
-		ffmpeg.terminate()
+		ffmpeg?.terminate()
+		readIO?.close(flags: .stop)
+
 		client?.handleEngineEvent("voiceEngine.disconnect", with: [])
 	}
 
@@ -235,34 +239,49 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		handleGatewayPayload(decoded)
 	}
 
-	private func readData() {
-		readQueue.async {
-			self.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
-				"speaking": true,
-				"delay": 0
-			])))
+	private func readData(_ count: Int) {
+		// print(count)
+		readIO?.read(offset: 0, length: 320, queue: readQueue) {done, data, int in
+		    guard let data = data else { 
+		    	print("no data, reader probably closed")
 
+		    	self.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
+		    		"speaking": false,
+		    		"delay": 0
+		    	])))
 
-			var count = 1
-			var data = self.reader.readData(ofLength: 320)
-			self.startTime = self.currentUnixTime
+		    	self.firstPlay = true
+		    	return
+		    }
 
-			while data.count != 0 {
-				self.sendVoiceData(data)
+		    if data.count == 0 {
+		    	fatalError("aaa aafdafads\n\n\n\n\n")
+		    }
 
-				self.sequenceNum = self.sequenceNum &+ 1
-				self.timestamp = self.timestamp &+ 960
-				self.audioSleep(count)
+		    if self.firstPlay {
+		    	self.startTime = self.currentUnixTime
+		    	self.firstPlay = false
 
-				data = self.reader.readData(ofLength: 320)
-				count += 1
-			}
+		    	self.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
+		    		"speaking": true,
+		    		"delay": 0
+		    	])))
+		    }
+		    
+		    // print(data)
 
-			self.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
-				"speaking": false,
-				"delay": 0
-			])))
+		    self.sendVoiceData(Data(data))
+
+		    self.sequenceNum = self.sequenceNum &+ 1
+		    self.timestamp = self.timestamp &+ 960
+		    self.audioSleep(count)
+
+		    self.readData(count + 1)
 		}
+		// readQueue.async {
+
+
+		// }
 	}
 
 	// Tells the voice websocket what our ip and port is, and what encryption mode we will use
@@ -284,11 +303,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		startHeartbeat(seconds: heartbeatInterval / 1000)
 
 		// setup for audio
-		let writeHandle = setupAudio()
-
-		client?.handleEngineEvent("voiceEngine.writeHandle", with: [writeHandle])
-
-		readData()
+		requestNewWriter()
 	}
 
 	public override func sendHeartbeat() {
@@ -332,68 +347,22 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		}
 	}
 
-	// public func sendVoiceDataOld(_ data: Data) {
-	// 	udpQueue.async {
-	// 		guard !self.playingAudio, let udpSocket = self.udpSocket else { return }
-
-	// 		self.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
-	// 			"speaking": true,
-	// 			"delay": 0
-	// 		])))
-
-	// 		self.playingAudio = true
-	// 		self.startTime = self.currentUnixTime
-
-	// 		print("Should send voice data \(data)")
-
-	// 		let stream = InputStream(data: data)
-	// 		let padding = [UInt8](repeating: 0x00, count: 12)
-	// 		var count = 1
-
-	// 		// (128 [kb] * 20 [frame_size]) / 8 == 320
-	// 		let buf = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(crypto_secretbox_MACBYTES) + 320)
-
-	// 		stream.open()
-
-	// 		while stream.hasBytesAvailable {
-	// 		    let bytesRead = stream.read(buf, maxLength: 320)
-
-	// 		    guard bytesRead > 0 else { break }
-
-	// 		    let rtpHeader = self.createRTPHeader()
-	// 		    let enryptedCount = Int(crypto_secretbox_MACBYTES) + bytesRead
-
-	// 		    var nonce = rtpHeader + padding
-	// 		    _ = crypto_secretbox_easy(buf, buf, UInt64(bytesRead), &nonce, &self.secret!)
-	// 		    let bytes = Array(UnsafeBufferPointer<UInt8>(start: buf, count: enryptedCount))
-
-	// 		    do {
-	// 		    	try udpSocket.send(bytes: rtpHeader + bytes)
-	// 		    	// print("Sent \(bytes.count) bytes of voice")
-	// 		    } catch {
-	// 		    	print("failed to send udp packet")
-	// 		    }
-
-	// 		    self.audioSleep(count)
-	// 		    // Fine to overflow here
-	// 		    self.sequenceNum = self.sequenceNum &+ 1
-	// 		    self.timestamp = self.timestamp &+ 960
-
-	// 		    count += 1
-	// 		}
-			
-	// 		stream.close()
-	// 		self.playingAudio = false
-	// 		self.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
-	// 			"speaking": false,
-	// 			"delay": 0
-	// 		])))
-	// 	}
-	// }
-
 	// Only call on udpQueue
-	private func setupAudio() -> FileHandle {
+	public func requestNewWriter() {
+		ffmpeg?.terminate()
+		readIO?.close(flags: .stop)
+
+		ffmpeg = Process()
+		writePipe = Pipe()
+		readPipe = Pipe()
+
 		reader = writePipe.fileHandleForReading
+		readIO = DispatchIO(type: .stream, fileDescriptor: reader.fileDescriptor, queue: readQueue, 
+			cleanupHandler: {n in
+				print("closed")
+		})
+
+		readIO?.setLimit(lowWater: 1)
 
 		ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
 		ffmpeg.standardInput = readPipe.fileHandleForReading
@@ -411,7 +380,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		playingAudio = true
 
-		return readPipe.fileHandleForWriting
+		client?.handleEngineEvent("voiceEngine.writeHandle", with: [readPipe.fileHandleForWriting])
+
+		readData(1)
 	}
 
 	public override func startHandshake() {
