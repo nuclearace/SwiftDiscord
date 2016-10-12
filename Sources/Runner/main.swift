@@ -17,7 +17,7 @@ func readAsync() {
         	client.getMessages(for: "232184444340011009", options: [.limit(3)]) {messages in
         		print(messages)
         	}
-        } else if input == "joinvoice" {
+        } else if input == "join" {
         	client.joinVoiceChannel("201533018215677954") {message in
         		print(message)
         	}
