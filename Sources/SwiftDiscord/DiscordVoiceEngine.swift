@@ -324,7 +324,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	public func sendVoiceData(_ data: Data) {
 		udpQueue.sync {
-			guard let udpSocket = self.udpSocket, data.count > 0 else { return }
+			guard let udpSocket = self.udpSocket, data.count <= 320 else { return }
 
 			// print("Should send voice data \(data)")
 
