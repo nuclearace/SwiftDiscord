@@ -24,11 +24,19 @@ public enum DiscordEndpoint : String {
 	}
 
 	private static func createRequest(with token: String, for endpoint: DiscordEndpoint, 
-		replacing: [String: String], getParams: [String: String]? = nil) -> URLRequest {
+		replacing: [String: String], isBot bot: Bool, getParams: [String: String]? = nil) -> URLRequest {
 
 		var request = URLRequest(url: endpoint.createURL(replacing: replacing, getParams: getParams ?? [:]))
 
-		request.setValue(token, forHTTPHeaderField: "Authorization")
+		let tokenValue: String
+
+		if bot {
+			tokenValue = "Bot \(token)" 
+		} else {
+			tokenValue = token
+		}
+
+		request.setValue(tokenValue, forHTTPHeaderField: "Authorization")
 
 		return request
 	}
@@ -54,7 +62,8 @@ public enum DiscordEndpoint : String {
 	}
 
 	public static func getMessages(for channel: String, with token: String,
-		options: [DiscordEndpointOptions.GetMessage], callback: @escaping ([DiscordMessage]) -> Void) {
+			options: [DiscordEndpointOptions.GetMessage], isBot bot: Bool, 
+			callback: @escaping ([DiscordMessage]) -> Void) {
 		var getParams: [String: String] = [:]
 
 		for option in options {
@@ -70,7 +79,7 @@ public enum DiscordEndpoint : String {
 			}
 		}
 
-		var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel],
+		var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel], isBot: bot, 
 			getParams: getParams)
 
 		request.httpMethod = "GET"
@@ -93,7 +102,8 @@ public enum DiscordEndpoint : String {
 		})
 	}
 
-	public static func sendMessage(_ content: String, with token: String, to channel: String, tts: Bool) {
+	public static func sendMessage(_ content: String, with token: String, to channel: String, tts: Bool, 
+			isBot bot: Bool) {
 		let messageObject: [String: Any] = [
 			"content": content,
 			"tts": tts
@@ -103,7 +113,7 @@ public enum DiscordEndpoint : String {
 			return 
 		}
 
-		var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel])
+		var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel], isBot: bot)
 
 		request.httpMethod = "POST"
 		request.httpBody = contentData

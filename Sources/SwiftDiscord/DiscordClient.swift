@@ -6,6 +6,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	public var engine: DiscordEngineSpec?
 	public var voiceEngine: DiscordVoiceEngineSpec?
 
+	public var isBot: Bool {
+		guard let user = self.user else { return false }
+
+		return user.bot
+	}
+
 	public private(set) var connected = false
 	public private(set) var guilds = [String: DiscordGuild]()
 	public private(set) var relationships = [[String: Any]]()
@@ -195,7 +201,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 	open func getMessages(for channelId: String, options: [DiscordEndpointOptions.GetMessage] = [],
 		callback: @escaping ([DiscordMessage]) -> Void) {
-		DiscordEndpoint.getMessages(for: channelId, with: token, options: options, callback: callback)
+		DiscordEndpoint.getMessages(for: channelId, with: token, options: options,  isBot: isBot, callback: callback)
 	}
 
 	private func guildForChannel(_ channelId: String) -> DiscordGuild? {
@@ -207,6 +213,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	}
 
 	open func joinVoiceChannel(_ channelId: String, callback: @escaping (String) -> Void) {
+		print(guilds)
 		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId], channel.type == .voice else {
 			callback("invalid channel")
 
@@ -233,7 +240,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	open func sendMessage(_ message: String, to channelId: String, tts: Bool = false) {
 		guard connected else { return }
 
-		DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts)
+		DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts, isBot: isBot)
 	}
 
 	private func startVoiceConnection() {
