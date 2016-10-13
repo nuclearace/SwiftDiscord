@@ -68,6 +68,14 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		handleEvent(event, with: data)
 	}
 
+	open func handleGuildCreate(with data: [String: Any]) {
+		let guild = DiscordGuild(guildObject: data)
+
+		guilds[guild.id] = guild
+
+		handleEvent("guildCreate", with: [guild])
+	}
+
 	open func handleGuildEmojiUpdate(with data: [String: Any]) {
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let emojis = data["emojis"] as? [[String: Any]] else { return }
