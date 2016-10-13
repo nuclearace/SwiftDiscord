@@ -19,11 +19,14 @@ func readAsync() {
         		print(messages)
         	}
         } else if input == "join" {
+        	// 201533018215677954 // pu
+        	// 186926277276598273
+        	// 201533008627499008 // meat
         	client.joinVoiceChannel("201533018215677954") {message in
         		print(message)
         	}
         } else if input.hasPrefix("play") {
-        	let music = FileHandle(forReadingAtPath: "../../Music/testing.mp3")!
+        	let music = FileHandle(forReadingAtPath: "../../../Music/testing.mp3")!
         	writeQueue.async {
         		let data = music.readDataToEndOfFile()
 
@@ -34,7 +37,7 @@ func readAsync() {
         } else if input == "new" {
             // writer.closeFile()
             youtube?.terminate()
-            client.voiceEngine?.requestNewWriter()
+            client.voiceEngine?.requestNewEncoder()
         } else if input.hasPrefix("youtube") {
         	let link = input.components(separatedBy: " ")[1]
         	youtube = Process()
@@ -48,6 +51,8 @@ func readAsync() {
             // client.voiceEngine?.sendVoiceData(Data(bytes: [0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE, 
             //     0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE]))
         } else {
+        	// 186926276592795659
+        	// 232184444340011009
         	client.sendMessage(input, to: "232184444340011009")
         }
 
@@ -79,7 +84,7 @@ client.on("voiceEngine.writeHandle") {data in
 client.on("message") {data in
 	guard let message = data[0] as? DiscordMessage else { fatalError("Didn't get message in message event") }
 
-	print(message)
+	// print(message)
 }
 
 client.connect()

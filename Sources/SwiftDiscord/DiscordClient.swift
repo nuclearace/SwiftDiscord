@@ -242,7 +242,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 			return
 		}
 
-		voiceEngine = DiscordVoiceEngine(client: self, voiceServerInformation: voiceServerInformation!)
+		// Reuse a previous engine's encoder if possible
+		voiceEngine = DiscordVoiceEngine(client: self, voiceServerInformation: voiceServerInformation!, 
+			encoder: voiceEngine?.encoder, secret: voiceEngine?.secret)
 
 		print("Connecting voice engine")
 
