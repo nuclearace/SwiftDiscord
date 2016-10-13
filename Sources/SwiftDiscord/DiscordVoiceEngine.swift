@@ -329,7 +329,10 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			// print("Should send voice data \(data)")
 
 			data.withUnsafeBytes {(buf: UnsafePointer<UInt8>) in
-				let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: Int(crypto_secretbox_MACBYTES) + 320)
+				defer { encrypted.deallocate(capacity: audioSize) }
+
+				let audioSize = Int(crypto_secretbox_MACBYTES) + 320
+				let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
 				let padding = [UInt8](repeating: 0x00, count: 12)
 
 				let rtpHeader = self.createRTPHeader()
