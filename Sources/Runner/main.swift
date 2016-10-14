@@ -25,17 +25,19 @@ func readAsync() {
         	client.joinVoiceChannel("201533018215677954") {message in
         		print(message)
         	}
-        } else if input.hasPrefix("play") {
+        } else if input == "leave" {
+        	client.leaveVoiceChannel("201533018215677954")
+        } else if input == "play" {
         	let music = FileHandle(forReadingAtPath: "../../../Music/testing.mp3")!
         	writeQueue.async {
         		let data = music.readDataToEndOfFile()
 
         		print("read \(data)")
-        		writer.write(data)
+        		client.voiceEngine?.send(data)
         	}
         	// client.voiceEngine?.sendVoiceData(music.readDataToEndOfFile())
         } else if input == "new" {
-            // writer.closeFile()
+            // writer.closeFile()3072
             youtube?.terminate()
             client.voiceEngine?.requestNewEncoder()
         } else if input.hasPrefix("youtube") {
@@ -60,6 +62,11 @@ func readAsync() {
 	}
 }
 
+// If write fails because of a pipe closing, we get a signal we have to handle
+signal(SIGPIPE) {_ in
+	print("Pipe died")
+}
+
 print("Type 'quit' to stop")
 readAsync()
 
@@ -79,6 +86,10 @@ client.on("voiceEngine.writeHandle") {data in
 	print("Got handle")
 
 	writer = writeHandle
+}
+
+client.on("voiceEngine.disconnect") {data in
+	print("voice engine closed")
 }
 
 client.on("message") {data in

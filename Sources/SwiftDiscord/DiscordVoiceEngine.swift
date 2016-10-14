@@ -17,6 +17,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public private(set) var udpPort = -1
 	public private(set) var voiceServerInformation: [String: Any]!
 
+	private let writeQueue = DispatchQueue(label: "discordEngine.writeQueue")
 	private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
 	private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
 
@@ -147,8 +148,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			try udpSocket?.close()
 		} catch {}
 		
-		encoder?.ffmpeg.terminate()
-		encoder?.readIO.close(flags: .stop)
+		encoder = nil
 
 		client?.handleEngineEvent("voiceEngine.disconnect", with: [])
 	}
@@ -244,6 +244,33 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		}
 
 		handleGatewayPayload(decoded)
+	}
+
+	public func send(_ data: Data) {
+		writeQueue.async {[weak self] in
+			data.enumerateBytes { (bytes, range, stop) in
+				let buf = UnsafeRawPointer(bytes.baseAddress!)
+				var bytesRemaining = data.count
+
+				while bytesRemaining > 0 {
+					var bytesWritten: Int
+
+					repeat {
+						guard let this = self else { return }
+						guard let fd = this.encoder?.readPipe.fileHandleForWriting.fileDescriptor else { return }
+
+						bytesWritten = write(fd, buf.advanced(by: data.count - bytesRemaining), bytesRemaining)
+					} while bytesWritten < 0 && errno == EINTR
+
+					if bytesWritten <= 0 {
+						// Something went wrong
+						break
+					} else {
+						bytesRemaining -= bytesWritten
+					}
+				}
+			}
+		}
 	}
 
 	private func readData(_ count: Int) {
@@ -439,6 +466,8 @@ public class DiscordVoiceEncoder {
 	}
 
 	deinit {
+		print("encoder going bye bye")
 		ffmpeg.terminate()
+		readIO.close(flags: .stop)
 	}
 }
