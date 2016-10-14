@@ -367,10 +367,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			"48000", "-ac", "2", "-acodec", "libopus", "-sample_fmt", "s16", "-vbr", "off", "-b:a", "128000",
 			"-compression_level", "10", "pipe:1"]
 
-		ffmpeg.terminationHandler = {process in
-			print("Process died")
-		}
-
 		encoder = DiscordVoiceEncoder(ffmpeg: ffmpeg, reader: reader, readPipe: readPipe, writePipe: writePipe)
 
 		client?.handleEngineEvent("voiceEngine.writeHandle", with: [readPipe.fileHandleForWriting])

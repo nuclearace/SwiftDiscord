@@ -6,8 +6,7 @@ public class DiscordVoiceEncoder {
 	public let readPipe: Pipe
 	public let writePipe: Pipe
 
-	var readIO: DispatchIO
-
+	private let readIO: DispatchIO
 	private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
 	private let writeQueue = DispatchQueue(label: "discordEngine.writeQueue")
 
@@ -22,6 +21,10 @@ public class DiscordVoiceEncoder {
 		})
 
 		readIO.setLimit(lowWater: 1)
+
+		signal(SIGPIPE, SIG_IGN)
+
+		self.ffmpeg.terminationHandler = {_ in signal(SIGPIPE, SIG_DFL) }
 
 		self.ffmpeg.launch()
 	}
@@ -48,9 +51,7 @@ public class DiscordVoiceEncoder {
 					var bytesWritten: Int
 
 					repeat {
-						guard let this = self else { return }
-
-						let fd = this.readPipe.fileHandleForWriting.fileDescriptor
+						guard let fd = self?.readPipe.fileHandleForWriting.fileDescriptor else { return }
 
 						bytesWritten = Darwin.write(fd, buf.advanced(by: data.count - bytesRemaining), bytesRemaining)
 					} while bytesWritten < 0 && errno == EINTR
