@@ -17,19 +17,17 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public private(set) var udpPort = -1
 	public private(set) var voiceServerInformation: [String: Any]!
 
-	private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
 	private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
 
 	private var currentUnixTime: Int {
 		return Int(Date().timeIntervalSince1970 * 1000)
 	}
 
-	private var firstPlay = true
 	private var sequenceNum = UInt16(arc4random() >> 16)
 	private var startTime = 0
 	private var timestamp = arc4random()
-	
-	public convenience init?(client: DiscordClientSpec, voiceServerInformation: [String: Any], 
+
+	public convenience init?(client: DiscordClientSpec, voiceServerInformation: [String: Any],
 			encoder: DiscordVoiceEncoder?, secret: [UInt8]?) {
 		self.init(client: client)
 
@@ -50,7 +48,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		print("voice engine going bye bye")
 
 		super.disconnect()
-		
+
 		do {
 			try udpSocket?.close()
 		} catch {}
@@ -113,7 +111,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		rtpHeader[0] = 0x80
 		rtpHeader[1] = 0x78
-		
+
 		let sequenceBigEndian = sequenceNum.bigEndian
 		let ssrcBigEndian = ssrc.bigEndian
 		let timestampBigEndian = timestamp.bigEndian
@@ -146,7 +144,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		do {
 			try udpSocket?.close()
 		} catch {}
-		
+
 		encoder = nil
 
 		client?.handleEngineEvent("voiceEngine.disconnect", with: [])
@@ -214,7 +212,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 				// TODO tell them the voice connection failed
 				disconnect()
 
-				return 
+				return
 			}
 
 		self.udpPort = udpPort
@@ -226,7 +224,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private func handleVoiceSessionDescription(with payload: DiscordGatewayPayloadData) {
-		guard case let .object(voiceInformation) = payload, 
+		guard case let .object(voiceInformation) = payload,
 			let secret = voiceInformation["secret_key"] as? [Int] else {
 				// TODO tell them we failed
 				disconnect()
@@ -238,8 +236,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	public override func parseGatewayMessage(_ string: String) {
-		guard let decoded = DiscordGatewayPayload.payloadFromString(string, fromGateway: false) else { 
-			fatalError("What happened \(string)") 
+		guard let decoded = DiscordGatewayPayload.payloadFromString(string, fromGateway: false) else {
+			fatalError("What happened \(string)")
 		}
 
 		handleGatewayPayload(decoded)
@@ -250,9 +248,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private func readData(_ count: Int) {
-		encoder?.readIO.read(offset: 0, length: 320, queue: readQueue) {[weak self] done, data, errorCode in
+		encoder?.read {[weak self] done, data, errorCode in
 			guard let this = self else { return } // engine died
-		    guard let data = data else { 
+		    guard let data = data else {
 		    	// print("no data, reader probably closed")
 
 		    	this.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
@@ -260,22 +258,20 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		    		"delay": 0
 		    	])))
 
-		    	this.firstPlay = true
 		    	return
 		    }
 
 		    // print("Read \(data)")
 
-		    if this.firstPlay {
+		    if count == 1 {
 		    	this.startTime = this.currentUnixTime
-		    	this.firstPlay = false
 
 		    	this.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
 		    		"speaking": true,
 		    		"delay": 0
 		    	])))
 		    }
-		    
+
 		    this.sendVoiceData(Data(data))
 
 		    this.sequenceNum = this.sequenceNum &+ 1
@@ -343,7 +339,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 				var nonce = rtpHeader + padding
 
 				_ = crypto_secretbox_easy(encrypted, buf, UInt64(data.count), &nonce, &self.secret!)
-				
+
 				let encryptedBytes = Array(UnsafeBufferPointer<UInt8>(start: encrypted, count: enryptedCount))
 
 				do {
@@ -356,38 +352,26 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		}
 	}
 
-	public func requestNewEncoder() {		
-		encoder?.ffmpeg.terminate()
-		encoder?.readIO.close(flags: .stop)
-
-		readQueue.sync {
-			self.firstPlay = true
-		}
+	public func requestNewEncoder() {
+		encoder?.closeEncoder()
 
 		let ffmpeg = Process()
 		let writePipe = Pipe()
 		let readPipe = Pipe()
 		let reader = writePipe.fileHandleForReading
-		let readIO = DispatchIO(type: .stream, fileDescriptor: reader.fileDescriptor, queue: readQueue, 
-			cleanupHandler: {n in
-				print("closed")
-		})
-
-		readIO.setLimit(lowWater: 1)
 
 		ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
 		ffmpeg.standardInput = readPipe.fileHandleForReading
 		ffmpeg.standardOutput = writePipe.fileHandleForWriting
-		ffmpeg.arguments = ["-hide_banner", "-i", "pipe:0", "-f", "data", "-map", "0:a", "-ar", 
-			"48000", "-ac", "2", "-acodec", "libopus", "-sample_fmt", "s16", "-vbr", "off", "-b:a", "128000", 
+		ffmpeg.arguments = ["-hide_banner", "-loglevel", "error", "-i", "pipe:0", "-f", "data", "-map", "0:a", "-ar",
+			"48000", "-ac", "2", "-acodec", "libopus", "-sample_fmt", "s16", "-vbr", "off", "-b:a", "128000",
 			"-compression_level", "10", "pipe:1"]
 
 		ffmpeg.terminationHandler = {process in
 			print("Process died")
 		}
 
-		encoder = DiscordVoiceEncoder(ffmpeg: ffmpeg, reader: reader, readPipe: readPipe, writePipe: writePipe, 
-			readIO: readIO)
+		encoder = DiscordVoiceEncoder(ffmpeg: ffmpeg, reader: reader, readPipe: readPipe, writePipe: writePipe)
 
 		client?.handleEngineEvent("voiceEngine.writeHandle", with: [readPipe.fileHandleForWriting])
 
@@ -398,7 +382,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		guard client != nil else { return }
 
 		// print("starting voice handshake")
-		
+
 		let handshakeEventData = createHandshakeObject()
 
 		sendGatewayPayload(DiscordGatewayPayload(code: .voice(.identify), payload: .object(handshakeEventData)))

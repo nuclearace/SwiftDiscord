@@ -8,16 +8,34 @@ public class DiscordVoiceEncoder {
 
 	var readIO: DispatchIO
 
+	private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
 	private let writeQueue = DispatchQueue(label: "discordEngine.writeQueue")
 
-	public init(ffmpeg: Process, reader: FileHandle, readPipe: Pipe, writePipe: Pipe, readIO: DispatchIO) {
+	public init(ffmpeg: Process, reader: FileHandle, readPipe: Pipe, writePipe: Pipe) {
 		self.ffmpeg = ffmpeg
 		self.reader = reader
 		self.readPipe = readPipe
 		self.writePipe = writePipe
-		self.readIO = readIO
+		self.readIO = DispatchIO(type: .stream, fileDescriptor: reader.fileDescriptor, queue: readQueue,
+			cleanupHandler: {n in
+				print("closed")
+		})
+
+		readIO.setLimit(lowWater: 1)
 
 		self.ffmpeg.launch()
+	}
+
+	public func closeEncoder() {
+		ffmpeg.terminate()
+		readIO.close(flags: .stop)
+
+		// Block so readIO can get the stop signal
+		readQueue.sync {}
+	}
+
+	public func read(callback: @escaping (Bool, DispatchData?, Int32) -> Void) {
+		readIO.read(offset: 0, length: 320, queue: readQueue, ioHandler: callback)
 	}
 
 	public func write(_ data: Data) {
@@ -50,7 +68,6 @@ public class DiscordVoiceEncoder {
 
 	deinit {
 		print("encoder going bye bye")
-		ffmpeg.terminate()
-		readIO.close(flags: .stop)
+		closeEncoder()
 	}
 }

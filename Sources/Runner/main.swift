@@ -33,7 +33,7 @@ func readAsync() {
         	writeQueue.async {
         		let data = music.readDataToEndOfFile()
 
-        		print("read \(data)")
+        		// print("read \(data)")
         		client.voiceEngine?.send(data)
         	}
         	// client.voiceEngine?.sendVoiceData(music.readDataToEndOfFile())
@@ -48,10 +48,10 @@ func readAsync() {
         	youtube.launchPath = "/usr/local/bin/youtube-dl"
         	youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
         	youtube.standardOutput = writer
-        	
+
         	youtube.launch()
         } else if input == "silence" {
-            // client.voiceEngine?.sendVoiceData(Data(bytes: [0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE, 
+            // client.voiceEngine?.sendVoiceData(Data(bytes: [0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE,
             //     0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE]))
         } else {
         	// 186926276592795659
@@ -77,7 +77,7 @@ client.on("connect") {data in
 }
 
 client.on("voiceEngine.writeHandle") {data in
-	guard let writeHandle = data[0] as? FileHandle else { fatalError() }
+	guard let writeHandle = data[0] as? FileHandle else { fatalError("didn't get write handle") }
 
 	print("Got handle")
 
