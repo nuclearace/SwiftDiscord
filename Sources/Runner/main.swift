@@ -22,11 +22,11 @@ func readAsync() {
         	// 201533018215677954 // pu
         	// 186926277276598273
         	// 201533008627499008 // meat
-        	client.joinVoiceChannel("201533018215677954") {message in
+        	client.joinVoiceChannel("186926277276598273") {message in
         		print(message)
         	}
         } else if input == "leave" {
-        	client.leaveVoiceChannel("201533018215677954")
+        	client.leaveVoiceChannel("186926277276598273")
         } else if input == "play" {
         	let music = FileHandle(forReadingAtPath: "../../Music/testing.mp3")!
 
@@ -53,6 +53,8 @@ func readAsync() {
         } else if input == "silence" {
             // client.voiceEngine?.sendVoiceData(Data(bytes: [0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE,
             //     0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE]))
+        } else if input == "bot" {
+            print(client.getBotURL(with: [.readMessages, .useVAD, .attachFiles]))
         } else {
         	// 186926276592795659
         	// 232184444340011009

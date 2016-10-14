@@ -25,7 +25,6 @@ public class DiscordVoiceEncoder {
 		signal(SIGPIPE, SIG_IGN)
 
 		self.ffmpeg.terminationHandler = {_ in signal(SIGPIPE, SIG_DFL) }
-
 		self.ffmpeg.launch()
 	}
 

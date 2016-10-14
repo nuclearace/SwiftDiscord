@@ -23,7 +23,7 @@ public enum DiscordEndpoint : String {
 		return DiscordEndpoint.baseURL.rawValue + rawValue
 	}
 
-	private static func createRequest(with token: String, for endpoint: DiscordEndpoint, 
+	private static func createRequest(with token: String, for endpoint: DiscordEndpoint,
 		replacing: [String: String], isBot bot: Bool, getParams: [String: String]? = nil) -> URLRequest {
 
 		var request = URLRequest(url: endpoint.createURL(replacing: replacing, getParams: getParams ?? [:]))
@@ -31,7 +31,7 @@ public enum DiscordEndpoint : String {
 		let tokenValue: String
 
 		if bot {
-			tokenValue = "Bot \(token)" 
+			tokenValue = "Bot \(token)"
 		} else {
 			tokenValue = token
 		}
@@ -62,7 +62,7 @@ public enum DiscordEndpoint : String {
 	}
 
 	public static func getMessages(for channel: String, with token: String,
-			options: [DiscordEndpointOptions.GetMessage], isBot bot: Bool, 
+			options: [DiscordEndpointOptions.GetMessage], isBot bot: Bool,
 			callback: @escaping ([DiscordMessage]) -> Void) {
 		var getParams: [String: String] = [:]
 
@@ -79,7 +79,7 @@ public enum DiscordEndpoint : String {
 			}
 		}
 
-		var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel], isBot: bot, 
+		var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel], isBot: bot,
 			getParams: getParams)
 
 		request.httpMethod = "GET"
@@ -102,7 +102,7 @@ public enum DiscordEndpoint : String {
 		})
 	}
 
-	public static func sendMessage(_ content: String, with token: String, to channel: String, tts: Bool, 
+	public static func sendMessage(_ content: String, with token: String, to channel: String, tts: Bool,
 			isBot bot: Bool) {
 		let messageObject: [String: Any] = [
 			"content": content,
@@ -110,7 +110,7 @@ public enum DiscordEndpoint : String {
 		]
 
 		guard let contentData = encodeJSON(messageObject)?.data(using: .utf8, allowLossyConversion: false) else {
-			return 
+			return
 		}
 
 		var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel], isBot: bot)

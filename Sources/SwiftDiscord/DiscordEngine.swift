@@ -111,8 +111,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	}
 
 	open func parseGatewayMessage(_ string: String) {
-		guard let decoded = DiscordGatewayPayload.payloadFromString(string) else { 
-			fatalError("What happened \(string)") 
+		guard let decoded = DiscordGatewayPayload.payloadFromString(string) else {
+			fatalError("What happened \(string)")
 		}
 
 		handleGatewayPayload(decoded)
@@ -131,7 +131,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	}
 
 	open func startHandshake() {
-		guard client != nil else { 
+		guard client != nil else {
 			error(message: "Client nil before handshaked")
 
 			return

@@ -23,7 +23,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 	private var handlers = [String: DiscordEventHandler]()
 	private var joiningVoiceChannel = false
-	
+
 	private var voiceQueue = DispatchQueue(label: "voiceQueue")
 	private var voiceServerInformation: [String: Any]?
 
@@ -49,9 +49,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		print("DiscordClient: Disconnecting")
 
 		connected = false
-		
+
 		engine?.disconnect()
-		
+
 		for (_, voiceObject) in joinedVoiceChannels {
 			guard let engine = voiceObject["voiceEngine"] as? DiscordVoiceEngine else { continue }
 
@@ -113,7 +113,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 	open func handleGuildMemberUpdate(with data: [String: Any]) {
 		guard let guildId = data["guild_id"] as? String else { return }
-		guard let user = data["user"] as? [String: Any], let roles = data["roles"] as? [String], 
+		guard let user = data["user"] as? [String: Any], let roles = data["roles"] as? [String],
 			let id = user["id"] as? String else { return }
 
 		guilds[guildId]?.members[id]?.roles = roles
@@ -216,6 +216,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		}
 	}
 
+	open func getBotURL(with permissions: [DiscordPermission]) -> URL? {
+		guard let user = self.user else { return nil }
+
+		return DiscordOAuthEndpoint.createBotAddURL(for: user, with: permissions)
+	}
+
 	open func getMessages(for channelId: String, options: [DiscordEndpointOptions.GetMessage] = [],
 			callback: @escaping ([DiscordMessage]) -> Void) {
 		DiscordEndpoint.getMessages(for: channelId, with: token, options: options,  isBot: isBot, callback: callback)
@@ -230,7 +236,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	}
 
 	open func joinVoiceChannel(_ channelId: String, callback: @escaping (String) -> Void) {
-		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId], 
+		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
 				channel.type == .voice else {
 			callback("invalid channel")
 
@@ -242,7 +248,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		voiceQueue.async {
 			self.joiningVoiceChannel = true
 
-			self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate), 
+			self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
 				payload: .object([
 					"guild_id": guild.id,
 					"channel_id": channel.id,
@@ -255,7 +261,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	}
 
 	open func leaveVoiceChannel(_ channelId: String) {
-		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId], 
+		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
 				channel.type == .voice else {
 			return
 		}
@@ -264,7 +270,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 			self.voiceEngine?.disconnect()
 			self.voiceEngine = nil
 
-			self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate), 
+			self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
 				payload: .object([
 					"guild_id": guild.id,
 					"channel_id": NSNull(),
@@ -295,7 +301,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		}
 
 		// Reuse a previous engine's encoder if possible
-		voiceEngine = DiscordVoiceEngine(client: self, voiceServerInformation: voiceServerInformation!, 
+		voiceEngine = DiscordVoiceEngine(client: self, voiceServerInformation: voiceServerInformation!,
 			encoder: voiceEngine?.encoder, secret: voiceEngine?.secret)
 
 		print("Connecting voice engine")
