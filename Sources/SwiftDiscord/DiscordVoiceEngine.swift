@@ -17,7 +17,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public private(set) var udpPort = -1
 	public private(set) var voiceServerInformation: [String: Any]!
 
-	private let writeQueue = DispatchQueue(label: "discordEngine.writeQueue")
 	private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
 	private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
 
@@ -247,30 +246,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	public func send(_ data: Data) {
-		writeQueue.async {[weak self] in
-			data.enumerateBytes { (bytes, range, stop) in
-				let buf = UnsafeRawPointer(bytes.baseAddress!)
-				var bytesRemaining = data.count
-
-				while bytesRemaining > 0 {
-					var bytesWritten: Int
-
-					repeat {
-						guard let this = self else { return }
-						guard let fd = this.encoder?.readPipe.fileHandleForWriting.fileDescriptor else { return }
-
-						bytesWritten = write(fd, buf.advanced(by: data.count - bytesRemaining), bytesRemaining)
-					} while bytesWritten < 0 && errno == EINTR
-
-					if bytesWritten <= 0 {
-						// Something went wrong
-						break
-					} else {
-						bytesRemaining -= bytesWritten
-					}
-				}
-			}
-		}
+		encoder?.write(data)
 	}
 
 	private func readData(_ count: Int) {
@@ -444,30 +420,5 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		// Begin async UDP setup
 		findIP()
-	}
-}
-
-public class DiscordVoiceEncoder {
-	public let ffmpeg: Process
-	public let reader: FileHandle
-	public let readPipe: Pipe
-	public let writePipe: Pipe
-
-	fileprivate var readIO: DispatchIO
-
-	public init(ffmpeg: Process, reader: FileHandle, readPipe: Pipe, writePipe: Pipe, readIO: DispatchIO) {
-		self.ffmpeg = ffmpeg
-		self.reader = reader
-		self.readPipe = readPipe
-		self.writePipe = writePipe
-		self.readIO = readIO
-
-		self.ffmpeg.launch()
-	}
-
-	deinit {
-		print("encoder going bye bye")
-		ffmpeg.terminate()
-		readIO.close(flags: .stop)
 	}
 }
