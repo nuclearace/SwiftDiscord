@@ -28,4 +28,6 @@ public enum DiscordDispatchEvent : String {
 	case voiceStateUpdate = "VOICE_STATE_UPDATE"
 
 	case presenceUpdate = "PRESENCE_UPDATE"
+
+	case typingStart = "TYPING_START"
 }
