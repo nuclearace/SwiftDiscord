@@ -195,7 +195,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 			self.voiceServerInformation = data
 
 			if self.joiningVoiceChannel {
-				print("got voice server \(data)")
+				// print("got voice server \(data)")
 				self.startVoiceConnection(guildId: guildId)
 			}
 		}
@@ -210,7 +210,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 			self.voiceState = DiscordVoiceState(voiceStateObject: data, guildId: guildId)
 
 			if self.joiningVoiceChannel {
-				print("Got voice state \(data)")
+				// print("Got voice state \(data)")
 				self.startVoiceConnection(guildId: guildId)
 			}
 		}

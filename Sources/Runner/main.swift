@@ -28,7 +28,8 @@ func readAsync() {
         } else if input == "leave" {
         	client.leaveVoiceChannel("201533018215677954")
         } else if input == "play" {
-        	let music = FileHandle(forReadingAtPath: "../../../Music/testing.mp3")!
+        	let music = FileHandle(forReadingAtPath: "../../Music/testing.mp3")!
+
         	writeQueue.async {
         		let data = music.readDataToEndOfFile()
 
@@ -60,11 +61,6 @@ func readAsync() {
 
         readAsync()
 	}
-}
-
-// If write fails because of a pipe closing, we get a signal we have to handle
-signal(SIGPIPE) {_ in
-	print("Pipe died")
 }
 
 print("Type 'quit' to stop")
