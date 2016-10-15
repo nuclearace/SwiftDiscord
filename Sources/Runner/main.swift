@@ -1,6 +1,8 @@
 import Foundation
 import SwiftDiscord
 
+let session = arc4random()
+
 // 201533018215677954 // pu
 // 186926277276598273
 // 201533008627499008 // meat
@@ -61,6 +63,16 @@ func handleChannel() {
     }
 }
 
+func handleTestLimit() {
+    for i in 0..<100 {
+        client.sendMessage("\(session): \(i)", to: textChannel)
+    }
+
+    for i in 0..<100 {
+        client.sendMessage("\(session): \(i)", to: "236929907169427458")
+    }
+}
+
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -70,6 +82,7 @@ let handlers = [
     "new": handleNew,
     "bot": handleBot,
     "channel": handleChannel,
+    "testlimit": handleTestLimit,
 ]
 
 func readAsync() {
@@ -87,7 +100,7 @@ func readAsync() {
         	youtube.standardOutput = writer
 
         	youtube.launch()
-        } else if input.hasPrefix("message") {
+        } else {
         	client.sendMessage(input, to: textChannel)
         }
 

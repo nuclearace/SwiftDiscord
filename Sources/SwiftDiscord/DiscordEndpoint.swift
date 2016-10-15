@@ -56,20 +56,16 @@ public enum DiscordEndpoint : String {
 		return com.url!
 	}
 
-	private static func doRequest(with request: URLRequest,
-		callback: @escaping (Data?, URLResponse?, Error?) -> Void) {
-
-		URLSession.shared.dataTask(with: request, completionHandler: callback).resume()
-	}
-
 	public static func getChannel(_ channelId: String, with token: String, isBot bot: Bool,
 			callback: @escaping (DiscordGuildChannel?) -> Void) {
 		var request = createRequest(with: token, for: .channel, replacing: ["channel.id": channelId], isBot: bot)
 
 		request.httpMethod = "GET"
 
-		doRequest(with: request, callback: {data, response, error in
-			guard let response = response as? HTTPURLResponse, let data = data, response.statusCode == 200 else {
+		let rateLimiterKey = DiscordRateLimitKey(endpoint: .channel, parameters: ["channel.id": channelId])
+
+		DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+			guard let data = data, response?.statusCode == 200 else {
 				callback(nil)
 
 				return
@@ -109,8 +105,10 @@ public enum DiscordEndpoint : String {
 
 		request.httpMethod = "GET"
 
-		doRequest(with: request, callback: {data, response, error in
-			guard let response = response as? HTTPURLResponse, let data = data, response.statusCode == 200 else {
+		let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channel])
+
+		DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+			guard let data = data, response?.statusCode == 200 else {
 				callback([])
 
 				return
@@ -145,6 +143,10 @@ public enum DiscordEndpoint : String {
 		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 		request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
 
-        doRequest(with: request, callback: {_, _, _ in })
+		let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channel])
+
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+
+        })
 	}
 }
