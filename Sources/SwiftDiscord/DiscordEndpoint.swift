@@ -17,6 +17,7 @@ public struct DiscordEndpointOptions {
 
 public enum DiscordEndpoint : String {
 	case baseURL = "https://discordapp.com/api"
+	case channel = "/channels/channel.id"
 	case messages = "/channels/channel.id/messages"
 
 	var combined: String {
@@ -59,6 +60,30 @@ public enum DiscordEndpoint : String {
 		callback: @escaping (Data?, URLResponse?, Error?) -> Void) {
 
 		URLSession.shared.dataTask(with: request, completionHandler: callback).resume()
+	}
+
+	public static func getChannel(_ channelId: String, with token: String, isBot bot: Bool,
+			callback: @escaping (DiscordGuildChannel?) -> Void) {
+		var request = createRequest(with: token, for: .channel, replacing: ["channel.id": channelId], isBot: bot)
+
+		request.httpMethod = "GET"
+
+		doRequest(with: request, callback: {data, response, error in
+			guard let response = response as? HTTPURLResponse, let data = data, response.statusCode == 200 else {
+				callback(nil)
+
+				return
+			}
+
+			guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
+				case let .dictionary(channel) = json else {
+					callback(nil)
+
+					return
+			}
+
+			callback(DiscordGuildChannel(guildChannelObject: channel))
+		})
 	}
 
 	public static func getMessages(for channel: String, with token: String,

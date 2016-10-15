@@ -4,7 +4,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	public let token: String
 
 	public var engine: DiscordEngineSpec?
-	public var voiceEngine: DiscordVoiceEngine?
+	public var voiceEngine: DiscordVoiceEngineSpec?
 
 	public var isBot: Bool {
 		guard let user = self.user else { return false }
@@ -181,7 +181,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	}
 
 	open func handleVoiceServerUpdate(with data: [String: Any]) {
-		voiceQueue.async {
+		voiceQueue.sync {
 			self.voiceServerInformation = data
 
 			if self.joiningVoiceChannel {
@@ -192,7 +192,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	}
 
 	open func handleVoiceStateUpdate(with data: [String: Any]) {
-		voiceQueue.async {
+		voiceQueue.sync {
 			// Only care about our state right now
 			guard data["user_id"] as? String == self.user?.id else { return }
 			guard let guildId = data["guild_id"] as? String else { return }
@@ -206,6 +206,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		}
 	}
 
+	open func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> Void) {
+		DiscordEndpoint.getChannel(channelId, with: token, isBot: isBot, callback: callback)
+	}
+
 	open func getBotURL(with permissions: [DiscordPermission]) -> URL? {
 		guard let user = self.user else { return nil }
 
@@ -214,7 +218,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 	open func getMessages(for channelId: String, options: [DiscordEndpointOptions.GetMessage] = [],
 			callback: @escaping ([DiscordMessage]) -> Void) {
-		DiscordEndpoint.getMessages(for: channelId, with: token, options: options,  isBot: isBot, callback: callback)
+		DiscordEndpoint.getMessages(for: channelId, with: token, options: options, isBot: isBot, callback: callback)
 	}
 
 	private func guildForChannel(_ channelId: String) -> DiscordGuild? {

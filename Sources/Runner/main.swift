@@ -1,6 +1,13 @@
 import Foundation
 import SwiftDiscord
 
+// 201533018215677954 // pu
+// 186926277276598273
+// 201533008627499008 // meat
+let voiceChannel = "201533018215677954"
+// 186926276592795659
+// 232184444340011009
+let textChannel = "232184444340011009"
 let queue = DispatchQueue(label: "Async Read")
 let writeQueue = DispatchQueue(label: "Async Write")
 let client = DiscordClient(token: "")
@@ -8,39 +15,69 @@ let client = DiscordClient(token: "")
 var writer: FileHandle!
 var youtube: Process!
 
+func handleQuit() {
+    client.disconnect()
+}
+
+func handleTestGet() {
+    client.getMessages(for: "232184444340011009", options: [.limit(3)]) {messages in
+        print(messages)
+    }
+}
+
+func handleJoin() {
+    client.joinVoiceChannel(voiceChannel) {message in
+        print(message)
+    }
+}
+
+func handleLeave() {
+    client.leaveVoiceChannel(voiceChannel)
+}
+
+func handlePlay() {
+    let music = FileHandle(forReadingAtPath: "../../../Music/testing.mp3")!
+
+    writeQueue.async {
+        let data = music.readDataToEndOfFile()
+
+        // print("read \(data)")
+        client.voiceEngine?.send(data)
+    }
+}
+
+func handleNew() {
+    youtube?.terminate()
+    client.voiceEngine?.requestNewEncoder()
+}
+
+func handleBot() {
+    print(client.getBotURL(with: [.readMessages, .useVAD, .attachFiles]))
+}
+
+func handleChannel() {
+    client.getChannel(textChannel) {channel in
+        print(channel)
+    }
+}
+
+let handlers = [
+    "quit": handleQuit,
+    "testget": handleTestGet,
+    "join": handleJoin,
+    "leave": handleLeave,
+    "play": handlePlay,
+    "new": handleNew,
+    "bot": handleBot,
+    "channel": handleChannel,
+]
+
 func readAsync() {
 	queue.async {
 		guard let input = readLine(strippingNewline: true) else { return readAsync() }
 
-        if input == "quit" {
-            client.disconnect()
-        } else if input == "testget" {
-        	client.getMessages(for: "232184444340011009", options: [.limit(3)]) {messages in
-        		print(messages)
-        	}
-        } else if input == "join" {
-        	// 201533018215677954 // pu
-        	// 186926277276598273
-        	// 201533008627499008 // meat
-        	client.joinVoiceChannel("186926277276598273") {message in
-        		print(message)
-        	}
-        } else if input == "leave" {
-        	client.leaveVoiceChannel("186926277276598273")
-        } else if input == "play" {
-        	let music = FileHandle(forReadingAtPath: "../../Music/testing.mp3")!
-
-        	writeQueue.async {
-        		let data = music.readDataToEndOfFile()
-
-        		// print("read \(data)")
-        		client.voiceEngine?.send(data)
-        	}
-        	// client.voiceEngine?.sendVoiceData(music.readDataToEndOfFile())
-        } else if input == "new" {
-            // writer.closeFile()3072
-            youtube?.terminate()
-            client.voiceEngine?.requestNewEncoder()
+        if let handler = handlers[input] {
+            handler()
         } else if input.hasPrefix("youtube") {
         	let link = input.components(separatedBy: " ")[1]
         	youtube = Process()
@@ -50,15 +87,8 @@ func readAsync() {
         	youtube.standardOutput = writer
 
         	youtube.launch()
-        } else if input == "silence" {
-            // client.voiceEngine?.sendVoiceData(Data(bytes: [0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE,
-            //     0xF8, 0xFF, 0xFE, 0xF8, 0xFF, 0xFE]))
-        } else if input == "bot" {
-            print(client.getBotURL(with: [.readMessages, .useVAD, .attachFiles]))
-        } else {
-        	// 186926276592795659
-        	// 232184444340011009
-        	client.sendMessage(input, to: "232184444340011009")
+        } else if input.hasPrefix("message") {
+        	client.sendMessage(input, to: textChannel)
         }
 
         readAsync()

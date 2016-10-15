@@ -15,9 +15,13 @@ public protocol DiscordClientSpec : class, DiscordEngineClient {
 	func disconnect()
 	func on(_ event: String, callback: @escaping ([Any]) -> Void)
 	func handleEvent(_ event: String, with data: [Any])
-	func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage],
-		callback: @escaping ([DiscordMessage]) -> Void)
 	func joinVoiceChannel(_ channelId: String, callback: @escaping (String) -> Void)
 	func leaveVoiceChannel(_ channelId: String)
+
+	// REST API
+	func getBotURL(with permissions: [DiscordPermission]) -> URL?
+	func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> Void)
+	func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage],
+		callback: @escaping ([DiscordMessage]) -> Void)
 	func sendMessage(_ message: String, to channelId: String, tts: Bool)
 }
