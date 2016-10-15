@@ -97,15 +97,15 @@ extension DiscordGuild {
 		let voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject["voice_states"] as? [[String: Any]] ?? [],
 			guildId: id)
 		let unavailable = guildObject["unavailable"] as? Bool ?? false
-		
+
 		let joinedAtString = guildObject["joined_at"] as? String ?? ""
 		let joinedAt = convertISO8601(string: joinedAtString) ?? Date()
 
-		self.init(features: features, id: id, large: large, joinedAt: joinedAt, splash: splash, 
-			unavailable: unavailable, defaultMessageNotifications: defaultMessageNotifications, 
-			embedChannelId: embedChannelId, embedEnabled: embedEnabled, icon: icon, memberCount: memberCount, 
+		self.init(features: features, id: id, large: large, joinedAt: joinedAt, splash: splash,
+			unavailable: unavailable, defaultMessageNotifications: defaultMessageNotifications,
+			embedChannelId: embedChannelId, embedEnabled: embedEnabled, icon: icon, memberCount: memberCount,
 			mfaLevel: mfaLevel, name: name, ownerId: ownerId, region: region, verificationLevel: verificationLevel,
-			channels: channels, emojis: emojis, members: members, presences: presences, roles: roles, 
+			channels: channels, emojis: emojis, members: members, presences: presences, roles: roles,
 			voiceStates: voiceStates)
 	}
 

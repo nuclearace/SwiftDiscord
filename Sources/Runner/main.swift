@@ -54,12 +54,12 @@ func handleNew() {
 }
 
 func handleBot() {
-    print(client.getBotURL(with: [.readMessages, .useVAD, .attachFiles]))
+    print(client.getBotURL(with: [.readMessages, .useVAD, .attachFiles])!)
 }
 
 func handleChannel() {
     client.getChannel(textChannel) {channel in
-        print(channel)
+        print(channel!)
     }
 }
 

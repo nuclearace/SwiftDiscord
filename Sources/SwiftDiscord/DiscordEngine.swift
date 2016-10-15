@@ -39,7 +39,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		websocket?.onDisconnect = {[weak self] err in
 			guard let this = self else { return }
 
-			print("DiscordEngine: WebSocket disconnected \(err)")
+			print("DiscordEngine: WebSocket disconnected \(String(describing: err))")
 
 			this.client?.handleEngineEvent("engine.disconnect", with: [])
 		}
@@ -56,7 +56,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	open func connect() {
 		attachWebSocket()
 
-		print("DiscordEngine: connecting with token \(client?.token)")
+		print("DiscordEngine: connecting")
 
 		websocket?.connect()
 	}

@@ -98,7 +98,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let user = data["user"] as? [String: Any], let id = user["id"] as? String else { return }
 
-		let removedGuildMember = guilds[guildId]?.members.removeValue(forKey: id)
+		guard let removedGuildMember = guilds[guildId]?.members.removeValue(forKey: id) else { return }
 
 		handleEvent("guildMemberRemove", with: [guildId, removedGuildMember])
 	}
@@ -128,7 +128,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let roleId = data["role_id"] as? String else { return }
 
-		let removedRole = guilds[guildId]?.roles.removeValue(forKey: roleId)
+		guard let removedRole = guilds[guildId]?.roles.removeValue(forKey: roleId) else { return }
 
 		handleEvent("guildRoleRemove", with: [guildId, removedRole])
 	}
@@ -148,7 +148,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	open func handleGuildUpdate(with data: [String: Any]) {
 		guard let guildId = data["id"] as? String else { return }
 
-		let updatedGuild = self.guilds[guildId]?.updateGuild(with: data)
+		guard let updatedGuild = self.guilds[guildId]?.updateGuild(with: data) else { return }
 
 		handleEvent("guildUpdate", with: [guildId, updatedGuild])
 	}

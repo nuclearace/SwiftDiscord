@@ -13,6 +13,8 @@ final class DiscordRateLimiter {
 
     private var endpointLimits = [DiscordRateLimitKey: DiscordRateLimit]()
 
+    private init() {}
+
     static func executeRequest(_ request: URLRequest, for endpointKey: DiscordRateLimitKey,
             callback: @escaping (Data?, HTTPURLResponse?, Error?) -> Void) {
         limitQueue.async {

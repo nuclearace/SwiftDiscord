@@ -145,8 +145,6 @@ public enum DiscordEndpoint : String {
 
 		let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channel])
 
-        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-
-        })
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
 	}
 }
