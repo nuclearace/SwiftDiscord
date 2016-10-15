@@ -95,13 +95,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private func createRTPHeader() -> [UInt8] {
-		func resetByteNumber(_ byteNumber: inout Int, _ currentHeaderIndex: inout Int, _ i: Int) {
+		func resetByteNumber(_ byteNumber: inout Int,  _ i: Int) {
 			if i + 1 == 2 || i + 1 == 6 {
 				byteNumber = 0
-				currentHeaderIndex += 1
 			} else {
 				byteNumber += 1
-				currentHeaderIndex += 1
 			}
 		}
 
@@ -120,17 +118,18 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			if i < 2 {
 				rtpHeader[currentHeaderIndex] = UInt8((Int(sequenceBigEndian) >> (8 * byteNumber)) & 0xFF)
 
-				resetByteNumber(&byteNumber, &currentHeaderIndex, i)
+				resetByteNumber(&byteNumber, i)
 			} else if i < 6 {
 				rtpHeader[currentHeaderIndex] = UInt8((Int(timestampBigEndian) >> (8 * byteNumber)) & 0xFF)
 
-				resetByteNumber(&byteNumber, &currentHeaderIndex, i)
+				resetByteNumber(&byteNumber, i)
 			} else {
 				rtpHeader[currentHeaderIndex] = UInt8((Int(ssrcBigEndian) >> (8 * byteNumber)) & 0xFF)
 
 				byteNumber += 1
-				currentHeaderIndex += 1
 			}
+
+            currentHeaderIndex += 1
 		}
 
 		return rtpHeader

@@ -14,7 +14,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 	public private(set) var connected = false
 	public private(set) var guilds = [String: DiscordGuild]()
-	public private(set) var joinedVoiceChannels = [String: [String: Any?]]()
 	public private(set) var relationships = [[String: Any]]()
 	public private(set) var user: DiscordUser?
 	public private(set) var voiceState: DiscordVoiceState?
@@ -23,7 +22,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 	private var handlers = [String: DiscordEventHandler]()
 	private var joiningVoiceChannel = false
-
 	private var voiceQueue = DispatchQueue(label: "voiceQueue")
 	private var voiceServerInformation: [String: Any]?
 
@@ -51,12 +49,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		connected = false
 
 		engine?.disconnect()
-
-		for (_, voiceObject) in joinedVoiceChannels {
-			guard let engine = voiceObject["voiceEngine"] as? DiscordVoiceEngine else { continue }
-
-			engine.disconnect()
-		}
 	}
 
 	open func handleEvent(_ event: String, with data: [Any]) {
@@ -190,13 +182,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 	open func handleVoiceServerUpdate(with data: [String: Any]) {
 		voiceQueue.async {
-			guard let guildId = data["guild_id"] as? String else { return }
-
 			self.voiceServerInformation = data
 
 			if self.joiningVoiceChannel {
 				// print("got voice server \(data)")
-				self.startVoiceConnection(guildId: guildId)
+				self.startVoiceConnection()
 			}
 		}
 	}
@@ -211,7 +201,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 			if self.joiningVoiceChannel {
 				// print("Got voice state \(data)")
-				self.startVoiceConnection(guildId: guildId)
+				self.startVoiceConnection()
 			}
 		}
 	}
@@ -294,7 +284,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts, isBot: isBot)
 	}
 
-	private func startVoiceConnection(guildId: String) {
+	private func startVoiceConnection() {
 		// We need both to start the connection
 		guard voiceState != nil && voiceServerInformation != nil else {
 			return
