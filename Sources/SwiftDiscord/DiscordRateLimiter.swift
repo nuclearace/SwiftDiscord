@@ -21,8 +21,8 @@ final class DiscordRateLimiter {
             if DiscordRateLimiter.shared.endpointLimits[endpointKey] == nil {
                 // First time handling this endpoint, err on the side caution and limit to one
                 DiscordRateLimiter.shared.endpointLimits[endpointKey] =
-                DiscordRateLimit(endpointKey: endpointKey, limit: 1, remaining: 1,
-                    reset: Int(Date().timeIntervalSince1970) + 3)
+                    DiscordRateLimit(endpointKey: endpointKey, limit: 1, remaining: 1,
+                        reset: Int(Date().timeIntervalSince1970) + 3)
             }
 
             let rateLimit = DiscordRateLimiter.shared.endpointLimits[endpointKey]!

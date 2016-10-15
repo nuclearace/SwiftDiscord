@@ -13,12 +13,42 @@ public struct DiscordEndpointOptions {
 		case before(DiscordMessage)
 		case limit(Int)
 	}
+
+	public enum ModifyChannel {
+		case bitrate(Int)
+		case name(String)
+		case position(Int)
+		case topic(String)
+		case userLimit(Int)
+	}
+
+	public enum CreateInvite {
+
+	}
 }
+
+// TODO Group DM
+// Guilds
 
 public enum DiscordEndpoint : String {
 	case baseURL = "https://discordapp.com/api"
 	case channel = "/channels/channel.id"
+
+	// Messages
 	case messages = "/channels/channel.id/messages"
+	case bulkMessageDelete = "/channels/channel.id/messages/bulk_delete"
+	case channelMessage = "/channels/channel.id/messages/message.id"
+	case typing = "/channels/channel.id/typing"
+
+	// Permissions
+	case channelPermission = "/channels/channel.id/permissions/overwrite.id"
+
+	// Invites
+	case invites = "/channels/channel.id/invites"
+
+	// Pinned Messages
+	case pins = "/channels/channel.id/pins"
+	case pinnedMessage = "/channels/channel.id/pins/message.id"
 
 	var combined: String {
 		return DiscordEndpoint.baseURL.rawValue + rawValue
@@ -80,6 +110,25 @@ public enum DiscordEndpoint : String {
 
 			callback(DiscordGuildChannel(guildChannelObject: channel))
 		})
+	}
+
+	public static func deleteChannel(_ channelId: String, with token: String, isBot bot: Bool) {
+
+	}
+
+	// Messages
+	public static func bulkDeleteMessages(_ messages: [String], on channelId: String, with token: String,
+			isBot bot: Bool) {
+
+	}
+
+	public static func deleteMessage(_ messageId: String, on channelId: String, with token: String, isBot bot: Bool) {
+
+	}
+
+	public static func editMessage(_ messageId: String, on channelId: String, content: String, with token: String,
+			isBot bot: Bool) {
+
 	}
 
 	public static func getMessages(for channel: String, with token: String,
@@ -146,5 +195,46 @@ public enum DiscordEndpoint : String {
 		let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channel])
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
+	}
+
+	public static func triggerTyping(on channelId: String, with token: String, isBot bot: Bool) {
+
+	}
+
+	public static func uploadFile() {
+
+	}
+
+	// Permissions
+	public static func deleteChannelPermission(_ overwriteId: String, on channelId: String, with token: String,
+			isBot bot: Bool) {
+
+	}
+
+	public static func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String,
+			with token: String, isBot bot: Bool) {
+
+	}
+
+	// Invites
+	public static func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
+			with token: String, isBot bot: Bool, callback: @escaping (Any) -> Void) {
+
+	}
+
+	public static func getInvites(for channelId: String, with token: String, isBot bot: Bool,
+			callback: @escaping (Any) -> Void) {
+
+	}
+
+	// Pinned Messages
+	public static func deletePinnedMessage(_ messageId: String, on channelId: String, with token: String,
+			isBot bot: Bool) {
+
+	}
+
+	public static func getPinnedMessages(for channelId: String, with token: String, isBot bot: Bool,
+			callback: @escaping ([DiscordMessage]) -> Void) {
+
 	}
 }

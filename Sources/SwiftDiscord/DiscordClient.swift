@@ -51,6 +51,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		engine?.disconnect()
 	}
 
+	// Handling
+
+	open func on(_ event: String, callback: @escaping ([Any]) -> Void) {
+		handlers[event] = DiscordEventHandler(event: event, callback: callback)
+	}
+
 	open func handleEvent(_ event: String, with data: [Any]) {
 		handleQueue.async {
 			self.handlers[event]?.executeCallback(with: data)
@@ -206,6 +212,41 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		}
 	}
 
+	// REST api
+
+	open func bulkDeleteMessages(_ messages: [String], on channelId: String) {
+		DiscordEndpoint.bulkDeleteMessages(messages, on: channelId, with: token, isBot: isBot)
+	}
+
+	open func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
+			callback: @escaping (Any) -> Void) {
+		DiscordEndpoint.createInvite(for: channelId, options: options, with: token, isBot: isBot, callback: callback)
+	}
+
+	open func deleteChannel(_ channelId: String) {
+		DiscordEndpoint.deleteChannel(channelId, with: token, isBot: isBot)
+	}
+
+	open func deleteChannelPermission(_ overwriteId: String, on channelId: String) {
+		DiscordEndpoint.deleteChannelPermission(overwriteId, on: channelId, with: token, isBot: isBot)
+	}
+
+	open func deleteMessage(_ messageId: String, on channelId: String) {
+		DiscordEndpoint.deleteMessage(messageId, on: channelId, with: token, isBot: isBot)
+	}
+
+	open func deletePinnedMessage(_ messageId: String, on channelId: String) {
+		DiscordEndpoint.deletePinnedMessage(messageId, on: channelId, with: token, isBot: isBot)
+	}
+
+	open func editMessage(_ messageId: String, on channelId: String, content: String) {
+		DiscordEndpoint.editMessage(messageId, on: channelId, content: content, with: token, isBot: isBot)
+	}
+
+	open func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String) {
+		DiscordEndpoint.editChannelPermission(permissionOverwrite, on: channelId, with: token, isBot: isBot)
+	}
+
 	open func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> Void) {
 		DiscordEndpoint.getChannel(channelId, with: token, isBot: isBot, callback: callback)
 	}
@@ -216,9 +257,27 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		return DiscordOAuthEndpoint.createBotAddURL(for: user, with: permissions)
 	}
 
+	open func getInvites(for channelId: String, callback: @escaping (Any) -> Void) {
+		return DiscordEndpoint.getInvites(for: channelId, with: token, isBot: isBot, callback: callback)
+	}
+
 	open func getMessages(for channelId: String, options: [DiscordEndpointOptions.GetMessage] = [],
 			callback: @escaping ([DiscordMessage]) -> Void) {
 		DiscordEndpoint.getMessages(for: channelId, with: token, options: options, isBot: isBot, callback: callback)
+	}
+
+	open func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void) {
+		DiscordEndpoint.getPinnedMessages(for: channelId, with: token, isBot: isBot, callback: callback)
+	}
+
+	open func sendMessage(_ message: String, to channelId: String, tts: Bool = false) {
+		guard connected else { return }
+
+		DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts, isBot: isBot)
+	}
+
+	open func triggerTyping(on channelId: String) {
+		DiscordEndpoint.triggerTyping(on: channelId, with: token, isBot: isBot)
 	}
 
 	private func guildForChannel(_ channelId: String) -> DiscordGuild? {
@@ -228,6 +287,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 		return nil
 	}
+
+	// Voice
 
 	open func joinVoiceChannel(_ channelId: String, callback: @escaping (String) -> Void) {
 		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
@@ -276,16 +337,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 			self.joiningVoiceChannel = false
 		}
-	}
-
-	open func on(_ event: String, callback: @escaping ([Any]) -> Void) {
-		handlers[event] = DiscordEventHandler(event: event, callback: callback)
-	}
-
-	open func sendMessage(_ message: String, to channelId: String, tts: Bool = false) {
-		guard connected else { return }
-
-		DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts, isBot: isBot)
 	}
 
 	private func startVoiceConnection() {
