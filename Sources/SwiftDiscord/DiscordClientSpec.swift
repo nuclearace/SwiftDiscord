@@ -3,6 +3,7 @@ import Foundation
 public protocol DiscordClientSpec : class, DiscordEngineClient {
 	var connected: Bool { get }
 	var guilds: [String: DiscordGuild] { get }
+	var handleQueue: DispatchQueue { get set }
 	var isBot: Bool { get }
 	var relationships: [[String: Any]] { get } // TODO make this a [DiscordRelationship]
 	var token: String { get }
