@@ -236,11 +236,7 @@ extension DiscordEndpoint {
 
     public static func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String,
             with token: String, isBot bot: Bool) {
-        let overwriteJSON: [String: Any] = [
-            "allow": permissionOverwrite.allow,
-            "deny": permissionOverwrite.deny,
-            "type": permissionOverwrite.type.rawValue
-        ]
+        let overwriteJSON = permissionOverwrite.json
 
         guard let contentData = encodeJSON(overwriteJSON)?.data(using: .utf8, allowLossyConversion: false) else {
             return

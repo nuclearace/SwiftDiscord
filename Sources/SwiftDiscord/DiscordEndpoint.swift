@@ -3,6 +3,13 @@ import Foundation
 public struct DiscordEndpointOptions {
 	private init() {}
 
+	public enum CreateInvite {
+		case maxAge(Int)
+		case maxUses(Int)
+		case temporary(Int)
+		case unique(Bool)
+	}
+
 	/**
 		after, around and before are mutually exclusive.
 		They shouldn't be in the same get request
@@ -14,6 +21,14 @@ public struct DiscordEndpointOptions {
 		case limit(Int)
 	}
 
+	public enum GuildCreateChannel {
+		case bitrate(Int)
+		case name(String)
+		case permissionOverwrites([DiscordPermissionOverwrite])
+		case type(DiscordChannelType)
+		case userLimit(Int)
+	}
+
 	public enum ModifyChannel {
 		case bitrate(Int)
 		case name(String)
@@ -22,11 +37,16 @@ public struct DiscordEndpointOptions {
 		case userLimit(Int)
 	}
 
-	public enum CreateInvite {
-		case maxAge(Int)
-		case maxUses(Int)
-		case temporary(Int)
-		case unique(Bool)
+	public enum ModifyGuild {
+		case afkChannelId(String)
+		case afkTimeout(Int)
+		case defaultMessageNotifications(Int)
+		case icon(String)
+		case name(String)
+		case ownerId(String)
+		case region(String)
+		case splash(String)
+		case verificationLevel(Int)
 	}
 }
 
@@ -35,6 +55,8 @@ public struct DiscordEndpointOptions {
 
 public enum DiscordEndpoint : String {
 	case baseURL = "https://discordapp.com/api"
+
+	/* Channels */
 	case channel = "/channels/channel.id"
 
 	// Messages
@@ -54,6 +76,11 @@ public enum DiscordEndpoint : String {
 	// Pinned Messages
 	case pins = "/channels/channel.id/pins"
 	case pinnedMessage = "/channels/channel.id/pins/message.id"
+	/* End channels */
+
+	/* Guilds */
+	case guilds = "/guilds/guild.id"
+	case guildChannels = "/guilds/guild.id/channels"
 
 	var combined: String {
 		return DiscordEndpoint.baseURL.rawValue + rawValue

@@ -19,9 +19,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	public private(set) var user: DiscordUser?
 	public private(set) var voiceState: DiscordVoiceState?
 
+	private let voiceQueue = DispatchQueue(label: "voiceQueue")
+
 	private var handlers = [String: DiscordEventHandler]()
 	private var joiningVoiceChannel = false
-	private var voiceQueue = DispatchQueue(label: "voiceQueue")
 	private var voiceServerInformation: [String: Any]?
 
 	public required init(token: String) {
@@ -250,12 +251,20 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		DiscordEndpoint.createInvite(for: channelId, options: options, with: token, isBot: isBot, callback: callback)
 	}
 
+	open func createGuildChannel(on guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel]) {
+		DiscordEndpoint.createGuildChannel(guildId, options: options, with: token, isBot: isBot)
+	}
+
 	open func deleteChannel(_ channelId: String) {
 		DiscordEndpoint.deleteChannel(channelId, with: token, isBot: isBot)
 	}
 
 	open func deleteChannelPermission(_ overwriteId: String, on channelId: String) {
 		DiscordEndpoint.deleteChannelPermission(overwriteId, on: channelId, with: token, isBot: isBot)
+	}
+
+	open func deleteGuild(_ guildId: String) {
+		DiscordEndpoint.deleteGuild(guildId, with: token, isBot: isBot)
 	}
 
 	open func deleteMessage(_ messageId: String, on channelId: String) {
@@ -284,6 +293,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		return DiscordOAuthEndpoint.createBotAddURL(for: user, with: permissions)
 	}
 
+	open func getGuildChannels(_ guildId: String, callback: @escaping ([DiscordGuildChannel]) -> Void) {
+		DiscordEndpoint.getGuildChannels(guildId, with: token, isBot: isBot, callback: callback)
+	}
+
 	open func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void) {
 		return DiscordEndpoint.getInvites(for: channelId, with: token, isBot: isBot, callback: callback)
 	}
@@ -299,6 +312,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 	open func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel]) {
 		DiscordEndpoint.modifyChannel(channelId, options: options, with: token, isBot: isBot)
+	}
+
+	open func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild]) {
+		DiscordEndpoint.modifyGuild(guildId, options: options, with: token, isBot: isBot)
 	}
 
 	open func sendMessage(_ message: String, to channelId: String, tts: Bool = false) {

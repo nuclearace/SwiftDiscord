@@ -27,8 +27,6 @@ public struct DiscordGuild {
 	public var voiceStates: [String: DiscordVoiceState]
 
 	mutating func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
-		print("update guild")
-
 		if let defaultMessageNotifications = newGuild["default_message_notifications"] as? Int {
 			self.defaultMessageNotifications = defaultMessageNotifications
 		}

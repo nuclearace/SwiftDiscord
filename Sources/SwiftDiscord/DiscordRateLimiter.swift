@@ -3,7 +3,7 @@ import Foundation
 /// The DiscordRateLimiter is in charge of making sure we don't flood Discord with requests.
 /// It keeps a dictionary of DiscordRateLimitKeys and DiscordRateLimits.
 /// All requests to the REST api should be routed through the DiscordRateLimiter.
-/// If a DiscordRateLimit determines we have hit a limit, we add the request and it's callback to the limit's queue
+/// If a DiscordRateLimit determines we have hit a limit, we add the request and its callback to the limit's queue
 /// after that it is up to the DiscordRateLimit to decide when to make the request.
 /// TODO handle the global rate limit
 final class DiscordRateLimiter {

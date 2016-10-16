@@ -61,6 +61,22 @@ public struct DiscordPermissionOverwrite {
 
 	public var allow: Int // Bit field
 	public var deny: Int // Bit field
+
+	public init(id: String, type: DiscordPermissionOverwriteType, allow: Int, deny: Int) {
+		self.id = id
+		self.type = type
+		self.allow = allow
+		self.deny = deny
+	}
+
+	var json: [String: Any] {
+		return [
+			"id": id,
+            "allow": allow,
+            "deny": deny,
+            "type": type.rawValue
+        ]
+    }
 }
 
 extension DiscordPermissionOverwrite {

@@ -84,8 +84,8 @@ func handleDeletePermission() {
 func handleEditPermission() {
     var permission = client.guilds["201533018215677953"]!.channels["232184444340011009"]!.permissionOverwrites["194993070159298560"]!
 
-    permission.allow = DiscordPermission.readMessages | DiscordPermission.sendTTSMessages
-    permission.deny = DiscordPermission.sendMessages | DiscordPermission.readMessageHistory
+    permission.allow = DiscordPermission.readMessages | DiscordPermission.sendTTSMessages | DiscordPermission.sendMessages
+    permission.deny = DiscordPermission.readMessageHistory.rawValue
 
     client.editChannelPermission(permission, on: "232184444340011009")
 }
@@ -136,6 +136,25 @@ func handleModifyChannel() {
     client.modifyChannel("232184444340011009", options: [.name("Testing_SwiftDiscord"), .topic("evan is dumb")])
 }
 
+func handleModifyGuild() {
+    client.modifyGuild("201533018215677953", options: [.name("Evan's Pit")])
+}
+
+func handleGuildChannels() {
+    client.getGuildChannels("186926276592795659") {channels in
+        print(channels)
+    }
+}
+
+func handleCreateChannel() {
+    client.createGuildChannel(on: "201533018215677953", options: [.name("evan_is_dumb"), .type(.text),
+        .permissionOverwrites([
+            DiscordPermissionOverwrite(id: "194993070159298560", type: .member,
+                allow: DiscordPermission.sendMessages | DiscordPermission.readMessages,
+                deny: DiscordPermission.none.rawValue)
+        ])])
+}
+
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -159,6 +178,9 @@ let handlers = [
     "deletepin": handleDeletePin,
     "addpin": handleAddPin,
     "modifychannel": handleModifyChannel,
+    "modifyguild": handleModifyGuild,
+    "guildchannels": handleGuildChannels,
+    "createchannel": handleCreateChannel,
 ]
 
 func readAsync() {
