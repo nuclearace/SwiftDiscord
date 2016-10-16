@@ -19,6 +19,7 @@ public protocol DiscordClientSpec : class, DiscordEngineClient {
 	func leaveVoiceChannel(_ channelId: String)
 
 	// REST API
+	func addPinnedMessage(_ messageId: String, on channelId: String)
 	func bulkDeleteMessages(_ messages: [String], on channelId: String)
 	func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
 		callback: @escaping (DiscordInvite?) -> Void)

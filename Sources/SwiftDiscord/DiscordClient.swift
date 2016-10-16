@@ -214,6 +214,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 	// REST api
 
+	open func addPinnedMessage(_ messageId: String, on channelId: String) {
+		DiscordEndpoint.addPinnedMessage(messageId, on: channelId, with: token, isBot: isBot)
+	}
+
 	open func bulkDeleteMessages(_ messages: [String], on channelId: String) {
 		DiscordEndpoint.bulkDeleteMessages(messages, on: channelId, with: token, isBot: isBot)
 	}

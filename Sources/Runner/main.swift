@@ -118,6 +118,20 @@ func handleGetInvites() {
     })
 }
 
+func handleGetPins() {
+    client.getPinnedMessages(for: "232184444340011009", callback: {messages in
+        print(messages)
+    })
+}
+
+func handleDeletePin() {
+    client.deletePinnedMessage("237233947010924545", on: "232184444340011009")
+}
+
+func handleAddPin() {
+    client.addPinnedMessage("236956932919787522", on: "232184444340011009")
+}
+
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -137,6 +151,9 @@ let handlers = [
     "bulkdelete": handleBulkDelete,
     "createinvite": handleCreateInvite,
     "getinvites": handleGetInvites,
+    "getpins": handleGetPins,
+    "deletepin": handleDeletePin,
+    "addpin": handleAddPin,
 ]
 
 func readAsync() {
