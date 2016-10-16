@@ -114,22 +114,78 @@ public enum DiscordEndpoint : String {
 	}
 
 	public static func deleteChannel(_ channelId: String, with token: String, isBot bot: Bool) {
+		var request = createRequest(with: token, for: .channel, replacing: [
+			"channel.id": channelId,
+			], isBot: bot)
 
+		request.httpMethod = "DELETE"
+
+		let rateLimiterKey = DiscordRateLimitKey(endpoint: .channel, parameters: ["channel.id": channelId])
+
+		DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
 	}
 
 	// Messages
 	public static func bulkDeleteMessages(_ messages: [String], on channelId: String, with token: String,
 			isBot bot: Bool) {
+		var request = createRequest(with: token, for: .bulkMessageDelete, replacing: [
+			"channel.id": channelId
+			], isBot: bot)
 
+		let editObject = [
+			"messages": messages
+		]
+
+		guard let contentData = encodeJSON(editObject)?.data(using: .utf8, allowLossyConversion: false) else {
+			return
+		}
+
+		request.httpMethod = "POST"
+		request.httpBody = contentData
+		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+		request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
+
+		let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channelId])
+
+		DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
 	}
 
 	public static func deleteMessage(_ messageId: String, on channelId: String, with token: String, isBot bot: Bool) {
+		var request = createRequest(with: token, for: .channelMessage, replacing: [
+			"channel.id": channelId,
+			"message.id": messageId
+			], isBot: bot)
 
+		request.httpMethod = "DELETE"
+
+		let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channelId])
+
+		DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
 	}
 
 	public static func editMessage(_ messageId: String, on channelId: String, content: String, with token: String,
 			isBot bot: Bool) {
+		var request = createRequest(with: token, for: .channelMessage, replacing: [
+			"channel.id": channelId,
+			"message.id": messageId
+			], isBot: bot)
 
+		let editObject = [
+			"content": content
+		]
+
+		guard let contentData = encodeJSON(editObject)?.data(using: .utf8, allowLossyConversion: false) else {
+			return
+		}
+
+		request.httpMethod = "PATCH"
+		request.httpBody = contentData
+		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+		request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
+
+		let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channelId])
+
+		DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
 	}
 
 	public static func getMessages(for channel: String, with token: String,
@@ -212,7 +268,7 @@ public enum DiscordEndpoint : String {
 
 	}
 
-	// Permissionss
+	// Permissions
 	public static func deleteChannelPermission(_ overwriteId: String, on channelId: String, with token: String,
 			isBot bot: Bool) {
 		var request = createRequest(with: token, for: .channelPermission, replacing: [

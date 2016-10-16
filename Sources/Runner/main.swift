@@ -90,6 +90,22 @@ func handleEditPermission() {
     client.editChannelPermission(permission, on: "232184444340011009")
 }
 
+func handleDeleteChannel() {
+    client.deleteChannel("236929907169427458")
+}
+
+func handleDeleteMessage() {
+    client.deleteMessage("236999881917595648", on: "232184444340011009")
+}
+
+func handleEditMessage() {
+    client.editMessage("236956932919787522", on: "232184444340011009", content: "Way Down We Go")
+}
+
+func handleBulkDelete() {
+    client.bulkDeleteMessages(["236956795514519552", "236956849004478464"], on: "232184444340011009")
+}
+
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -103,6 +119,10 @@ let handlers = [
     "typing": handleTyping,
     "deletepermission": handleDeletePermission,
     "editpermission": handleEditPermission,
+    "deletechannel": handleDeleteChannel,
+    "deletemessage": handleDeleteMessage,
+    "editmessage": handleEditMessage,
+    "bulkdelete": handleBulkDelete
 ]
 
 func readAsync() {
