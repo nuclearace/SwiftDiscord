@@ -198,7 +198,13 @@ public enum DiscordEndpoint : String {
 	}
 
 	public static func triggerTyping(on channelId: String, with token: String, isBot bot: Bool) {
+		var request = createRequest(with: token, for: .typing, replacing: ["channel.id": channelId], isBot: bot)
 
+		request.httpMethod = "POST"
+
+		let rateLimiterKey = DiscordRateLimitKey(endpoint: .typing, parameters: ["channel.id": channelId])
+
+		DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
 	}
 
 	public static func uploadFile() {
