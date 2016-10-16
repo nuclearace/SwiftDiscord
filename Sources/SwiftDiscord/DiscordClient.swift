@@ -78,6 +78,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 		guilds[channel.guildId]?.channels[channel.id] = channel
 
+		print(channel)
+
 		handleEvent("channelUpdate", with: [channel.guildId, channel])
 	}
 
@@ -297,6 +299,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		DiscordEndpoint.getGuildChannels(guildId, with: token, isBot: isBot, callback: callback)
 	}
 
+	open func getGuildMember(by id: String, on guildId: String, callback: @escaping (DiscordGuildMember?) -> Void) {
+		DiscordEndpoint.getGuildMember(by: id, on: guildId, with: token, isBot: isBot, callback: callback)
+	}
+
 	open func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void) {
 		return DiscordEndpoint.getInvites(for: channelId, with: token, isBot: isBot, callback: callback)
 	}
@@ -316,6 +322,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 	open func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild]) {
 		DiscordEndpoint.modifyGuild(guildId, options: options, with: token, isBot: isBot)
+	}
+
+	open func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int) {
+		DiscordEndpoint.modifyGuildChannelPosition(on: guildId, channelId: channelId, position: position,
+			with: token, isBot: isBot)
 	}
 
 	open func sendMessage(_ message: String, to channelId: String, tts: Bool = false) {

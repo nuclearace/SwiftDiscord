@@ -51,7 +51,6 @@ public struct DiscordEndpointOptions {
 }
 
 // TODO Group DM
-// Guilds
 
 public enum DiscordEndpoint : String {
 	case baseURL = "https://discordapp.com/api"
@@ -80,7 +79,13 @@ public enum DiscordEndpoint : String {
 
 	/* Guilds */
 	case guilds = "/guilds/guild.id"
+
+	// Guild Channels
 	case guildChannels = "/guilds/guild.id/channels"
+
+	// Guild Members
+	case guildMembers = "/guilds/guild.id/members"
+	case guildMember = "/guilds/guild.id/members/user.id"
 
 	var combined: String {
 		return DiscordEndpoint.baseURL.rawValue + rawValue

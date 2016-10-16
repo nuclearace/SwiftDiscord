@@ -155,6 +155,20 @@ func handleCreateChannel() {
         ])])
 }
 
+func handlePosition() {
+    client.modifyGuildChannelPosition(on: "201533018215677953", channelId: "237294069968142336", position: 0)
+}
+
+func handleGuilds() {
+    print(client.guilds)
+}
+
+func handleGetMember() {
+    client.getGuildMember(by: "229316633414336512", on: "186926276592795659") {member in
+        print(member)
+    }
+}
+
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -181,6 +195,9 @@ let handlers = [
     "modifyguild": handleModifyGuild,
     "guildchannels": handleGuildChannels,
     "createchannel": handleCreateChannel,
+    "position": handlePosition,
+    "guilds": handleGuilds,
+    "getmember": handleGetMember,
 ]
 
 func readAsync() {
