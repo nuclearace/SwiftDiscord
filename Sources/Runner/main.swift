@@ -6,7 +6,7 @@ let session = arc4random()
 // 201533018215677954 // pu
 // 186926277276598273
 // 201533008627499008 // meat
-let voiceChannel = "201533018215677954"
+let voiceChannel = "186926277276598273"
 // 186926276592795659
 // 232184444340011009
 let textChannel = "232184444340011009"
@@ -73,6 +73,23 @@ func handleTestLimit() {
     }
 }
 
+func handleTyping() {
+    client.triggerTyping(on: textChannel)
+}
+
+func handleDeletePermission() {
+    client.deleteChannelPermission("194993070159298560", on: "232184444340011009")
+}
+
+func handleEditPermission() {
+    var permission = client.guilds["201533018215677953"]!.channels["232184444340011009"]!.permissionOverwrites["194993070159298560"]!
+
+    permission.allow = DiscordPermission.readMessages | DiscordPermission.sendTTSMessages
+    permission.deny = DiscordPermission.sendMessages | DiscordPermission.readMessageHistory
+
+    client.editChannelPermission(permission, on: "232184444340011009")
+}
+
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -83,6 +100,9 @@ let handlers = [
     "bot": handleBot,
     "channel": handleChannel,
     "testlimit": handleTestLimit,
+    "typing": handleTyping,
+    "deletepermission": handleDeletePermission,
+    "editpermission": handleEditPermission,
 ]
 
 func readAsync() {

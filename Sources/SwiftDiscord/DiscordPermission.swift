@@ -50,20 +50,9 @@ public func &=(lhs: inout Int, rhs: DiscordPermission) {
 	lhs &= rhs.rawValue
 }
 
-public enum DiscordPermissionOverwriteType {
-	case role
-	case member
-
-	public init?(string: String) {
-		switch string {
-		case "role":
-			self = .role
-		case "member":
-			self = .member
-		default:
-			return nil
-		}
-	}
+public enum DiscordPermissionOverwriteType : String {
+	case role = "role"
+	case member = "member"
 }
 
 public struct DiscordPermissionOverwrite {
@@ -77,14 +66,22 @@ public struct DiscordPermissionOverwrite {
 extension DiscordPermissionOverwrite {
 	init(permissionOverwriteObject: [String: Any]) {
 		let id = permissionOverwriteObject["id"] as? String ?? ""
-		let type = DiscordPermissionOverwriteType(string: permissionOverwriteObject["type"] as? String ?? "") ?? .role
+		let type = DiscordPermissionOverwriteType(rawValue: permissionOverwriteObject["type"] as? String ?? "") ?? .role
 		let allow = permissionOverwriteObject["allow"] as? Int ?? -1
 		let deny = permissionOverwriteObject["deny"] as? Int ?? -1
 
 		self.init(id: id, type: type, allow: allow, deny: deny)
 	}
 
-	static func overwritesFromArray(_ permissionOverwritesArray: [[String: Any]]) -> [DiscordPermissionOverwrite] {
-		return permissionOverwritesArray.map(DiscordPermissionOverwrite.init)
+	static func overwritesFromArray(_ permissionOverwritesArray: [[String: Any]]) -> [String: DiscordPermissionOverwrite] {
+		var overwrites = [String: DiscordPermissionOverwrite]()
+
+		for overwriteObject in permissionOverwritesArray {
+			let overwrite = DiscordPermissionOverwrite(permissionOverwriteObject: overwriteObject)
+
+			overwrites[overwrite.id] = overwrite
+		}
+
+		return overwrites
 	}
 }

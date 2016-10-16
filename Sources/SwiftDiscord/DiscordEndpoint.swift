@@ -41,6 +41,7 @@ public enum DiscordEndpoint : String {
 	case typing = "/channels/channel.id/typing"
 
 	// Permissions
+	case permissions = "/channels/channel.id/permissions"
 	case channelPermission = "/channels/channel.id/permissions/overwrite.id"
 
 	// Invites
@@ -211,15 +212,46 @@ public enum DiscordEndpoint : String {
 
 	}
 
-	// Permissions
+	// Permissionss
 	public static func deleteChannelPermission(_ overwriteId: String, on channelId: String, with token: String,
 			isBot bot: Bool) {
+		var request = createRequest(with: token, for: .channelPermission, replacing: [
+			"channel.id": channelId,
+			"overwrite.id": overwriteId
+			], isBot: bot)
 
+		request.httpMethod = "DELETE"
+
+		let rateLimiterKey = DiscordRateLimitKey(endpoint: .permissions, parameters: ["channel.id": channelId])
+
+		DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
 	}
 
 	public static func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String,
 			with token: String, isBot bot: Bool) {
+		let overwriteJSON: [String: Any] = [
+			"allow": permissionOverwrite.allow,
+			"deny": permissionOverwrite.deny,
+			"type": permissionOverwrite.type.rawValue
+		]
 
+		guard let contentData = encodeJSON(overwriteJSON)?.data(using: .utf8, allowLossyConversion: false) else {
+			return
+		}
+
+		var request = createRequest(with: token, for: .channelPermission, replacing: [
+			"channel.id": channelId,
+			"overwrite.id": permissionOverwrite.id
+			], isBot: bot)
+
+		request.httpMethod = "PUT"
+		request.httpBody = contentData
+		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+		request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
+
+		let rateLimiterKey = DiscordRateLimitKey(endpoint: .permissions, parameters: ["channel.id": channelId])
+
+		DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
 	}
 
 	// Invites

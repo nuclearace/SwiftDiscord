@@ -23,7 +23,7 @@ public struct DiscordGuildChannel {
 	public var bitrate: Int?
 	public var lastMessageId: String?
 	public var name: String
-	public var permissionOverwrites: [DiscordPermissionOverwrite]
+	public var permissionOverwrites: [String: DiscordPermissionOverwrite]
 	public var position: Int
 	public var topic: String?
 	public var userLimit: Int?
