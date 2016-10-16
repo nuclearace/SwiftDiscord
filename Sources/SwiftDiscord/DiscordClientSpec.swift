@@ -21,7 +21,7 @@ public protocol DiscordClientSpec : class, DiscordEngineClient {
 	// REST API
 	func bulkDeleteMessages(_ messages: [String], on channelId: String)
 	func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
-		callback: @escaping (Any) -> Void)
+		callback: @escaping (DiscordInvite?) -> Void)
 	func deleteChannel(_ channelId: String)
 	func deleteChannelPermission(_ overwriteId: String, on channelId: String)
 	func deleteMessage(_ messageId: String, on channelId: String)
@@ -30,7 +30,7 @@ public protocol DiscordClientSpec : class, DiscordEngineClient {
 	func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String)
 	func getBotURL(with permissions: [DiscordPermission]) -> URL?
 	func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> Void)
-	func getInvites(for channelId: String, callback: @escaping (Any) -> Void)
+	func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void)
 	func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage],
 		callback: @escaping ([DiscordMessage]) -> Void)
 	func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void)

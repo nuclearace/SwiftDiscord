@@ -6,7 +6,7 @@ let session = arc4random()
 // 201533018215677954 // pu
 // 186926277276598273
 // 201533008627499008 // meat
-let voiceChannel = "186926277276598273"
+let voiceChannel = "201533018215677954"
 // 186926276592795659
 // 232184444340011009
 let textChannel = "232184444340011009"
@@ -106,6 +106,18 @@ func handleBulkDelete() {
     client.bulkDeleteMessages(["236956795514519552", "236956849004478464"], on: "232184444340011009")
 }
 
+func handleCreateInvite() {
+    client.createInvite(for: "232184444340011009", options: [.maxUses(10), .maxAge(600)], callback: {invite in
+        print(invite)
+    })
+}
+
+func handleGetInvites() {
+    client.getInvites(for: "232184444340011009", callback: {invites in
+        print(invites)
+    })
+}
+
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -122,7 +134,9 @@ let handlers = [
     "deletechannel": handleDeleteChannel,
     "deletemessage": handleDeleteMessage,
     "editmessage": handleEditMessage,
-    "bulkdelete": handleBulkDelete
+    "bulkdelete": handleBulkDelete,
+    "createinvite": handleCreateInvite,
+    "getinvites": handleGetInvites,
 ]
 
 func readAsync() {

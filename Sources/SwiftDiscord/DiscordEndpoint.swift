@@ -23,7 +23,10 @@ public struct DiscordEndpointOptions {
 	}
 
 	public enum CreateInvite {
-
+		case maxAge(Int)
+		case maxUses(Int)
+		case temporary(Int)
+		case unique(Bool)
 	}
 }
 
@@ -45,7 +48,8 @@ public enum DiscordEndpoint : String {
 	case channelPermission = "/channels/channel.id/permissions/overwrite.id"
 
 	// Invites
-	case invites = "/channels/channel.id/invites"
+	case invites = "/invites/invite.code"
+	case channelInvites = "/channels/channel.id/invites"
 
 	// Pinned Messages
 	case pins = "/channels/channel.id/pins"
@@ -312,13 +316,81 @@ public enum DiscordEndpoint : String {
 
 	// Invites
 	public static func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
-			with token: String, isBot bot: Bool, callback: @escaping (Any) -> Void) {
+			with token: String, isBot bot: Bool, callback: @escaping (DiscordInvite?) -> Void) {
+		var inviteJSON: [String: Any] = [:]
 
+		for option in options {
+			switch option {
+			case let .maxAge(seconds):
+				inviteJSON["max_age"] = seconds
+			case let .maxUses(uses):
+				inviteJSON["max_uses"] = uses
+			case let .temporary(temporary):
+				inviteJSON["temporary"] = temporary
+			case let .unique(unique):
+				inviteJSON["unique"] = unique
+			}
+		}
+
+		guard let contentData = encodeJSON(inviteJSON)?.data(using: .utf8, allowLossyConversion: false) else {
+			return
+		}
+
+		var request = createRequest(with: token, for: .channelInvites, replacing: [
+			"channel.id": channelId
+			], isBot: bot)
+
+		request.httpMethod = "POST"
+		request.httpBody = contentData
+		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+		request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
+
+		let rateLimiterKey = DiscordRateLimitKey(endpoint: .channelInvites, parameters: ["channel.id": channelId])
+
+		DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+			guard let data = data, response?.statusCode == 200 else {
+				callback(nil)
+
+				return
+			}
+
+			guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
+				case let .dictionary(invite) = json else {
+					callback(nil)
+
+					return
+			}
+
+			print(DiscordInvite(inviteObject: invite))
+		})
 	}
 
 	public static func getInvites(for channelId: String, with token: String, isBot bot: Bool,
-			callback: @escaping (Any) -> Void) {
+			callback: @escaping ([DiscordInvite]) -> Void) {
+		var request = createRequest(with: token, for: .channelInvites, replacing: [
+			"channel.id": channelId
+			], isBot: bot)
 
+		request.httpMethod = "GET"
+
+		let rateLimiterKey = DiscordRateLimitKey(endpoint: .channelInvites, parameters: ["channel.id": channelId])
+
+		DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+			guard let data = data, response?.statusCode == 200 else {
+				callback([])
+
+				return
+			}
+
+			guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
+				case let .array(invites) = json else {
+					callback([])
+
+					return
+			}
+
+			callback(DiscordInvite.invitesFromArray(inviteArray: invites as? [[String: Any]] ?? []))
+		})
 	}
 
 	// Pinned Messages

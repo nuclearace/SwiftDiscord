@@ -1,17 +1,6 @@
-public enum DiscordChannelType {
-	case text
-	case voice
-
-	public init?(string: String) {
-		switch string {
-		case "text":
-			self = .text
-		case "voice":
-			self = .voice
-		default:
-			return nil
-		}
-	}
+public enum DiscordChannelType : String {
+	case text = "text"
+	case voice = "voice"
 }
 
 public struct DiscordGuildChannel {
@@ -33,7 +22,7 @@ extension DiscordGuildChannel {
 	init(guildChannelObject: [String: Any]) {
 		let id = guildChannelObject["id"] as? String ?? ""
 		let guildId = guildChannelObject["guild_id"] as? String ?? ""
-		let type = DiscordChannelType(string: guildChannelObject["type"] as? String ?? "") ?? .text
+		let type = DiscordChannelType(rawValue: guildChannelObject["type"] as? String ?? "") ?? .text
 		let bitrate = guildChannelObject["bitrate"] as? Int
 		let lastMessageId = guildChannelObject["last_message_id"] as? String
 		let name = guildChannelObject["name"] as? String ?? ""

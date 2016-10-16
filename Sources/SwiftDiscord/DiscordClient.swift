@@ -219,7 +219,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	}
 
 	open func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
-			callback: @escaping (Any) -> Void) {
+			callback: @escaping (DiscordInvite?) -> Void) {
 		DiscordEndpoint.createInvite(for: channelId, options: options, with: token, isBot: isBot, callback: callback)
 	}
 
@@ -257,7 +257,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		return DiscordOAuthEndpoint.createBotAddURL(for: user, with: permissions)
 	}
 
-	open func getInvites(for channelId: String, callback: @escaping (Any) -> Void) {
+	open func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void) {
 		return DiscordEndpoint.getInvites(for: channelId, with: token, isBot: isBot, callback: callback)
 	}
 
