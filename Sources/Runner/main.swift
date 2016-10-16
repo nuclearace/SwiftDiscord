@@ -132,6 +132,10 @@ func handleAddPin() {
     client.addPinnedMessage("236956932919787522", on: "232184444340011009")
 }
 
+func handleModifyChannel() {
+    client.modifyChannel("232184444340011009", options: [.name("Testing_SwiftDiscord"), .topic("evan is dumb")])
+}
+
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -154,6 +158,7 @@ let handlers = [
     "getpins": handleGetPins,
     "deletepin": handleDeletePin,
     "addpin": handleAddPin,
+    "modifychannel": handleModifyChannel,
 ]
 
 func readAsync() {

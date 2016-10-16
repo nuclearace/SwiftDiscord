@@ -39,6 +39,43 @@ extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    public static func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel],
+            with token: String, isBot bot: Bool) {
+        var modifyJSON: [String: Any] = [:]
+
+        for option in options {
+            switch option {
+            case let .bitrate(bps):
+                modifyJSON["bitrate"] = bps
+            case let .name(name):
+                modifyJSON["name"] = name
+            case let .position(position):
+                modifyJSON["position"] = position
+            case let .topic(topic):
+                modifyJSON["topic"] = topic
+            case let .userLimit(limit):
+                modifyJSON["user_limit"] = limit
+            }
+        }
+
+        guard let contentData = encodeJSON(modifyJSON)?.data(using: .utf8, allowLossyConversion: false) else {
+            return
+        }
+
+        var request = createRequest(with: token, for: .channel, replacing: [
+            "channel.id": channelId
+            ], isBot: bot)
+
+        request.httpMethod = "PATCH"
+        request.httpBody = contentData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
+
+        let rateLimiterKey = DiscordRateLimitKey(endpoint: .channel, parameters: ["channel.id": channelId])
+
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
+    }
+
     // Messages
     public static func bulkDeleteMessages(_ messages: [String], on channelId: String, with token: String,
             isBot bot: Bool) {

@@ -1,4 +1,7 @@
 public protocol DiscordDispatchEventHandler : DiscordClientSpec {
+	func handleChannelCreate(with data: [String: Any])
+	func handleChannelDelete(with data: [String: Any])
+	func handleChannelUpdate(with data: [String: Any])
 	func handleDispatch(event: DiscordDispatchEvent, data: DiscordGatewayPayloadData)
 	func handleGuildEmojiUpdate(with data: [String: Any])
 	func handleGuildMemberAdd(with data: [String: Any])
@@ -40,6 +43,12 @@ public extension DiscordDispatchEventHandler {
 			handleGuildUpdate(with: data)
 		case let (.guildEmojisUpdate, .object(data)):
 			handleGuildEmojiUpdate(with: data)
+		case let (.channelUpdate, .object(data)):
+			handleChannelUpdate(with: data)
+		case let (.channelCreate, .object(data)):
+			handleChannelCreate(with: data)
+		case let (.channelDelete, .object(data)):
+			handleChannelDelete(with: data)
 		case let (.voiceServerUpdate, .object(data)):
 			handleVoiceServerUpdate(with: data)
 		case let (.voiceStateUpdate, .object(data)):

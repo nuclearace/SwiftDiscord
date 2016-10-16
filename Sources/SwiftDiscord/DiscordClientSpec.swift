@@ -35,6 +35,7 @@ public protocol DiscordClientSpec : class, DiscordEngineClient {
 	func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage],
 		callback: @escaping ([DiscordMessage]) -> Void)
 	func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void)
+	func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel])
 	func sendMessage(_ message: String, to channelId: String, tts: Bool)
 	func triggerTyping(on channelId: String)
 }

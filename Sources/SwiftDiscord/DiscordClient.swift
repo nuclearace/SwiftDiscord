@@ -4,6 +4,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	public let token: String
 
 	public var engine: DiscordEngineSpec?
+	public var handleQueue = DispatchQueue.main
 	public var voiceEngine: DiscordVoiceEngineSpec?
 
 	public var isBot: Bool {
@@ -17,8 +18,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	public private(set) var relationships = [[String: Any]]()
 	public private(set) var user: DiscordUser?
 	public private(set) var voiceState: DiscordVoiceState?
-
-	private(set) var handleQueue = DispatchQueue.main
 
 	private var handlers = [String: DiscordEventHandler]()
 	private var joiningVoiceChannel = false
@@ -55,6 +54,30 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 	open func on(_ event: String, callback: @escaping ([Any]) -> Void) {
 		handlers[event] = DiscordEventHandler(event: event, callback: callback)
+	}
+
+	open func handleChannelCreate(with data: [String: Any]) {
+		let channel = DiscordGuildChannel(guildChannelObject: data)
+
+		guilds[channel.guildId]?.channels[channel.id] = channel
+
+		handleEvent("channelCreate", with: [channel.guildId, channel])
+	}
+
+	open func handleChannelDelete(with data: [String: Any]) {
+		let channel = DiscordGuildChannel(guildChannelObject: data)
+
+		guard let removedChannel = guilds[channel.guildId]?.channels.removeValue(forKey: channel.id) else { return }
+
+		handleEvent("channelDelete", with: [channel.guildId, removedChannel])
+	}
+
+	open func handleChannelUpdate(with data: [String: Any]) {
+		let channel = DiscordGuildChannel(guildChannelObject: data)
+
+		guilds[channel.guildId]?.channels[channel.id] = channel
+
+		handleEvent("channelUpdate", with: [channel.guildId, channel])
 	}
 
 	open func handleEvent(_ event: String, with data: [Any]) {
@@ -272,6 +295,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 	open func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void) {
 		DiscordEndpoint.getPinnedMessages(for: channelId, with: token, isBot: isBot, callback: callback)
+	}
+
+	open func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel]) {
+		DiscordEndpoint.modifyChannel(channelId, options: options, with: token, isBot: isBot)
 	}
 
 	open func sendMessage(_ message: String, to channelId: String, tts: Bool = false) {
