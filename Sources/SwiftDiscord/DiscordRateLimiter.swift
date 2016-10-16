@@ -36,7 +36,7 @@ final class DiscordRateLimiter {
 
             DiscordRateLimiter.shared.endpointLimits[endpointKey]?.remaining -= 1
 
-            // print("doing request \(DiscordRateLimiter.shared.endpointLimits[endpoint]?.remaining)")
+            // print("doing request \(DiscordRateLimiter.shared.endpointLimits[endpointKey]?.remaining)")
 
             URLSession.shared.dataTask(with: request,
                 completionHandler: handleResponse(endpointKey, callback)).resume()
@@ -67,17 +67,20 @@ final class DiscordRateLimiter {
                     return
                 }
 
+                let rateLimit = DiscordRateLimiter.shared.endpointLimits[endpointKey]!
+
                 if let limit = response.allHeaderFields["x-ratelimit-limit"] as? String,
                     let remaining = response.allHeaderFields["x-ratelimit-remaining"] as? String,
                     let reset = response.allHeaderFields["x-ratelimit-reset"] as? String {
-                        let rateLimit = DiscordRateLimiter.shared.endpointLimits[endpointKey]!
-
                         // Update the limit and attempt to schedule a limit reset
                         rateLimit.updateLimits(limit: Int(limit)!, remaining: Int(remaining)!, reset: Int(reset)!)
                         rateLimit.scheduleReset(on: limitQueue)
+                } else {
+                    rateLimit.scheduleReset(on: limitQueue)
                 }
 
-                // print("new limit: \(DiscordRateLimiter.shared.endpointLimits[endpointKey]?.remaining)")
+                // print("new limit: \(DiscordRateLimiter.shared.endpointLimits[endpointKey]?.limit)")
+                // print("new limit: \(DiscordRateLimiter.shared.endpointLimits[endpointKey]?.reset)")
 
                 callback(data, response, error)
             }
@@ -133,6 +136,8 @@ private final class DiscordRateLimit {
         let seconds = reset - Int(Date().timeIntervalSince1970)
 
         guard seconds > 0 else { return DispatchTime(uptimeNanoseconds: 0) }
+
+        // print("seconds till reset: \(seconds)")
 
         return DispatchTime.now() + Double(UInt64(seconds) * NSEC_PER_SEC) / Double(NSEC_PER_SEC)
     }
