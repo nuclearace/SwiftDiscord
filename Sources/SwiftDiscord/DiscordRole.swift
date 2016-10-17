@@ -7,7 +7,7 @@ public struct DiscordRole {
 	public let managed: Bool
 	public let mentionable: Bool
 	public let name: String
-	public let permissions: Int // Bit field
+	public let permissions: Int
 	public let position: Int
 }
 
@@ -22,7 +22,7 @@ extension DiscordRole {
 		let permissions = roleObject["permissions"] as? Int ?? -1
 		let position = roleObject["position"] as? Int ?? -1
 
-		self.init(color: color, hoist: hoist, id: id, managed: managed, mentionable: mentionable, name: name, 
+		self.init(color: color, hoist: hoist, id: id, managed: managed, mentionable: mentionable, name: name,
 			permissions: permissions, position: position)
 	}
 

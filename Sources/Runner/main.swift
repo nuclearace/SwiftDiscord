@@ -255,7 +255,7 @@ client.on("voiceEngine.disconnect") {data in
 	print("voice engine closed")
 }
 
-client.on("message") {data in
+client.on("messageCreate") {data in
 	guard let message = data[0] as? DiscordMessage else { fatalError("Didn't get message in message event") }
 
 	// print(message)

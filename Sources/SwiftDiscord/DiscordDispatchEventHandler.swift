@@ -24,7 +24,7 @@ public extension DiscordDispatchEventHandler {
 		case let (.presenceUpdate, .object(data)):
 			handlePresenceUpdate(with: data)
 		case let (.messageCreate, .object(data)):
-			handleEvent("message", with: [DiscordMessage(messageObject: data)])
+			handleEvent("messageCreate", with: [DiscordMessage(messageObject: data)])
 		case let (.guildMemberAdd, .object(data)):
 			handleGuildMemberAdd(with: data)
 		case let (.guildMemberUpdate, .object(data)):
