@@ -303,6 +303,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		DiscordEndpoint.getGuildMember(by: id, on: guildId, with: token, isBot: isBot, callback: callback)
 	}
 
+	open func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
+		callback: @escaping ([DiscordGuildMember]) -> Void) {
+		DiscordEndpoint.getGuildMembers(on: guildId, options: options, with: token, isBot: isBot, callback: callback)
+	}
+
 	open func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void) {
 		return DiscordEndpoint.getInvites(for: channelId, with: token, isBot: isBot, callback: callback)
 	}

@@ -169,6 +169,12 @@ func handleGetMember() {
     }
 }
 
+func handleGetMembers() {
+    client.getGuildMembers(on: "186926276592795659", options: [.limit(500)]) {members in
+        print(members)
+    }
+}
+
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -198,6 +204,7 @@ let handlers = [
     "position": handlePosition,
     "guilds": handleGuilds,
     "getmember": handleGetMember,
+    "getmembers": handleGetMembers,
 ]
 
 func readAsync() {

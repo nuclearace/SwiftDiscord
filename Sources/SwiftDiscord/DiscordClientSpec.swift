@@ -36,6 +36,8 @@ public protocol DiscordClientSpec : class, DiscordEngineClient {
 	func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> Void)
 	func getGuildChannels(_ guildId: String, callback: @escaping ([DiscordGuildChannel]) -> Void)
 	func getGuildMember(by id: String, on guildId: String, callback: @escaping (DiscordGuildMember?) -> Void)
+	func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
+		callback: @escaping ([DiscordGuildMember]) -> Void)
 	func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void)
 	func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage],
 		callback: @escaping ([DiscordMessage]) -> Void)

@@ -175,4 +175,42 @@ extension DiscordEndpoint {
             callback(DiscordGuildMember(guildMemberObject: member))
         })
     }
+
+    public static func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
+            with token: String, isBot bot: Bool, callback: @escaping ([DiscordGuildMember]) -> Void) {
+        var getParams: [String: String] = [:]
+
+        for option in options {
+            switch option {
+            case let .after(highest):
+                getParams["after"] = String(highest)
+            case let .limit(number):
+                getParams["limit"] = String(number)
+            }
+        }
+
+        var request = createRequest(with: token, for: .guildMembers, replacing: ["guild.id": guildId], isBot: bot,
+            getParams: getParams)
+
+        request.httpMethod = "GET"
+
+        let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildMembers, parameters: ["guild.id": guildId])
+
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            guard let data = data, response?.statusCode == 200 else {
+                callback([])
+
+                return
+            }
+
+            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
+                case let .array(members) = json else {
+                    callback([])
+
+                    return
+            }
+
+            callback(DiscordGuildMember.guildMembersFromArray(members as! [[String: Any]]).map({ $0.value }))
+        })
+    }
 }

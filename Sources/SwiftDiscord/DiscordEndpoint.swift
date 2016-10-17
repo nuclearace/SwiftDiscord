@@ -29,6 +29,11 @@ public struct DiscordEndpointOptions {
 		case userLimit(Int)
 	}
 
+	public enum GuildGetMembers {
+		case after(Int)
+		case limit(Int)
+	}
+
 	public enum ModifyChannel {
 		case bitrate(Int)
 		case name(String)
