@@ -113,7 +113,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 		guilds[guildId]?.emojis = DiscordEmoji.emojisFromArray(emojis)
 
-		handleEvent("emojiUpdate", with: [guildId, guilds[guildId]?.emojis ?? [:]])
+		handleEvent("guildEmojisUpdate", with: [guildId, guilds[guildId]?.emojis ?? [:]])
 	}
 
 	open func handleGuildMemberAdd(with data: [String: Any]) {
