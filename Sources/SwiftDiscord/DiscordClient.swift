@@ -304,7 +304,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	}
 
 	open func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
-		callback: @escaping ([DiscordGuildMember]) -> Void) {
+			callback: @escaping ([DiscordGuildMember]) -> Void) {
 		DiscordEndpoint.getGuildMembers(on: guildId, options: options, with: token, isBot: isBot, callback: callback)
 	}
 

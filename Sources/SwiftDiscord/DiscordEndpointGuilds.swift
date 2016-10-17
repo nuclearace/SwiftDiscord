@@ -1,3 +1,7 @@
+// TODO Add guild member
+// TODO Guild integrations
+// TODO Guild pruning
+// TODO Guild embeds
 extension DiscordEndpoint {
     // TODO create guild
     public static func deleteGuild(_ guildId: String, with token: String, isBot bot: Bool) {
