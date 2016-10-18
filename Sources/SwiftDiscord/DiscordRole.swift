@@ -1,14 +1,28 @@
 import Foundation
 
 public struct DiscordRole {
-	public let color: Int
-	public let hoist: Bool
 	public let id: String
-	public let managed: Bool
-	public let mentionable: Bool
-	public let name: String
-	public let permissions: Int
-	public let position: Int
+
+	public var color: Int
+	public var hoist: Bool
+	public var managed: Bool
+	public var mentionable: Bool
+	public var name: String
+	public var permissions: Int
+	public var position: Int
+
+	var json: [String: Any] {
+		return [
+			"id": id,
+			"color": color,
+			"hoist": hoist,
+			"managed": managed,
+			"mentionable": mentionable,
+			"name": name,
+			"permissions": permissions,
+			"position": position
+		]
+	}
 }
 
 extension DiscordRole {
@@ -22,7 +36,7 @@ extension DiscordRole {
 		let permissions = roleObject["permissions"] as? Int ?? -1
 		let position = roleObject["position"] as? Int ?? -1
 
-		self.init(color: color, hoist: hoist, id: id, managed: managed, mentionable: mentionable, name: name,
+		self.init(id: id, color: color, hoist: hoist, managed: managed, mentionable: mentionable, name: name,
 			permissions: permissions, position: position)
 	}
 

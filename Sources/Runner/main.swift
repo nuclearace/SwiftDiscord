@@ -189,6 +189,31 @@ func handleRemoveBan() {
     client.removeGuildBan(for: "225069761434746882", on: "201533018215677953")
 }
 
+func handleRoles() {
+    client.getGuildRoles(for: "201533018215677953") {roles in
+        print(roles)
+    }
+}
+
+func handleCreateRole() {
+    client.createGuildRole(on: "201533018215677953") {role in
+        print(role)
+    }
+}
+
+func handleModifyRole() {
+    var role = client.guilds["201533018215677953"]!.roles["238074249133162496"]!
+
+    role.name = "evan"
+    role.permissions = DiscordPermission.sendMessages | .readMessages
+
+    client.modifyGuildRole(role, on: "201533018215677953")
+}
+
+func handleRemoveRole() {
+    client.removeGuildRole("238074249133162496", on: "201533018215677953")
+}
+
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -222,6 +247,10 @@ let handlers = [
     "bans": handleBans,
     "ban": handleBan,
     "removeban": handleRemoveBan,
+    "roles": handleRoles,
+    "createrole": handleCreateRole,
+    "modifyrole": handleModifyRole,
+    "removerole": handleRemoveRole,
 ]
 
 func readAsync() {

@@ -18,36 +18,4 @@ public protocol DiscordClientSpec : class, DiscordEngineClient {
 	func handleEvent(_ event: String, with data: [Any])
 	func joinVoiceChannel(_ channelId: String, callback: @escaping (String) -> Void)
 	func leaveVoiceChannel(_ channelId: String)
-
-	// REST API
-	func addPinnedMessage(_ messageId: String, on channelId: String)
-	func bulkDeleteMessages(_ messages: [String], on channelId: String)
-	func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
-		callback: @escaping (DiscordInvite?) -> Void)
-	func createGuildChannel(on guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel])
-	func deleteChannel(_ channelId: String)
-	func deleteChannelPermission(_ overwriteId: String, on channelId: String)
-	func deleteGuild(_ guildId: String)
-	func deleteMessage(_ messageId: String, on channelId: String)
-	func deletePinnedMessage(_ messageId: String, on channelId: String)
-	func editMessage(_ messageId: String, on channelId: String, content: String)
-	func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String)
-	func getBotURL(with permissions: [DiscordPermission]) -> URL?
-	func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> Void)
-	func getGuildBans(for guildId: String, callback: @escaping ([DiscordUser]) -> Void)
-	func getGuildChannels(_ guildId: String, callback: @escaping ([DiscordGuildChannel]) -> Void)
-	func getGuildMember(by id: String, on guildId: String, callback: @escaping (DiscordGuildMember?) -> Void)
-	func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
-		callback: @escaping ([DiscordGuildMember]) -> Void)
-	func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void)
-	func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage],
-		callback: @escaping ([DiscordMessage]) -> Void)
-	func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void)
-	func guildBan(userId: String, on guildId: String, deleteMessageDays: Int)
-	func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel])
-	func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild])
-	func removeGuildBan(for userId: String, on guildId: String)
-	func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int)
-	func sendMessage(_ message: String, to channelId: String, tts: Bool)
-	func triggerTyping(on channelId: String)
 }

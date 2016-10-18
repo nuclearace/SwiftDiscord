@@ -1,6 +1,6 @@
 import Foundation
 
-open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
+open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, DiscordEndpointConsumer {
 	public let token: String
 
 	public var engine: DiscordEngineSpec?
@@ -234,125 +234,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 				self.startVoiceConnection()
 			}
 		}
-	}
-
-	// REST api
-
-	open func addPinnedMessage(_ messageId: String, on channelId: String) {
-		DiscordEndpoint.addPinnedMessage(messageId, on: channelId, with: token, isBot: isBot)
-	}
-
-	open func bulkDeleteMessages(_ messages: [String], on channelId: String) {
-		DiscordEndpoint.bulkDeleteMessages(messages, on: channelId, with: token, isBot: isBot)
-	}
-
-	open func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
-			callback: @escaping (DiscordInvite?) -> Void) {
-		DiscordEndpoint.createInvite(for: channelId, options: options, with: token, isBot: isBot, callback: callback)
-	}
-
-	open func createGuildChannel(on guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel]) {
-		DiscordEndpoint.createGuildChannel(guildId, options: options, with: token, isBot: isBot)
-	}
-
-	open func deleteChannel(_ channelId: String) {
-		DiscordEndpoint.deleteChannel(channelId, with: token, isBot: isBot)
-	}
-
-	open func deleteChannelPermission(_ overwriteId: String, on channelId: String) {
-		DiscordEndpoint.deleteChannelPermission(overwriteId, on: channelId, with: token, isBot: isBot)
-	}
-
-	open func deleteGuild(_ guildId: String) {
-		DiscordEndpoint.deleteGuild(guildId, with: token, isBot: isBot)
-	}
-
-	open func deleteMessage(_ messageId: String, on channelId: String) {
-		DiscordEndpoint.deleteMessage(messageId, on: channelId, with: token, isBot: isBot)
-	}
-
-	open func deletePinnedMessage(_ messageId: String, on channelId: String) {
-		DiscordEndpoint.deletePinnedMessage(messageId, on: channelId, with: token, isBot: isBot)
-	}
-
-	open func editMessage(_ messageId: String, on channelId: String, content: String) {
-		DiscordEndpoint.editMessage(messageId, on: channelId, content: content, with: token, isBot: isBot)
-	}
-
-	open func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String) {
-		DiscordEndpoint.editChannelPermission(permissionOverwrite, on: channelId, with: token, isBot: isBot)
-	}
-
-	open func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> Void) {
-		DiscordEndpoint.getChannel(channelId, with: token, isBot: isBot, callback: callback)
-	}
-
-	open func getBotURL(with permissions: [DiscordPermission]) -> URL? {
-		guard let user = self.user else { return nil }
-
-		return DiscordOAuthEndpoint.createBotAddURL(for: user, with: permissions)
-	}
-
-	open func getGuildBans(for guildId: String, callback: @escaping ([DiscordUser]) -> Void) {
-		DiscordEndpoint.getGuildBans(for: guildId, with: token, isBot: isBot, callback: callback)
-	}
-
-	open func getGuildChannels(_ guildId: String, callback: @escaping ([DiscordGuildChannel]) -> Void) {
-		DiscordEndpoint.getGuildChannels(guildId, with: token, isBot: isBot, callback: callback)
-	}
-
-	open func getGuildMember(by id: String, on guildId: String, callback: @escaping (DiscordGuildMember?) -> Void) {
-		DiscordEndpoint.getGuildMember(by: id, on: guildId, with: token, isBot: isBot, callback: callback)
-	}
-
-	open func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
-			callback: @escaping ([DiscordGuildMember]) -> Void) {
-		DiscordEndpoint.getGuildMembers(on: guildId, options: options, with: token, isBot: isBot, callback: callback)
-	}
-
-	open func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void) {
-		return DiscordEndpoint.getInvites(for: channelId, with: token, isBot: isBot, callback: callback)
-	}
-
-	open func getMessages(for channelId: String, options: [DiscordEndpointOptions.GetMessage] = [],
-			callback: @escaping ([DiscordMessage]) -> Void) {
-		DiscordEndpoint.getMessages(for: channelId, with: token, options: options, isBot: isBot, callback: callback)
-	}
-
-	open func guildBan(userId: String, on guildId: String, deleteMessageDays: Int = 7) {
-		DiscordEndpoint.guildBan(userId: userId, on: guildId, deleteMessageDays: deleteMessageDays, with: token,
-			isBot: isBot)
-	}
-
-	open func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void) {
-		DiscordEndpoint.getPinnedMessages(for: channelId, with: token, isBot: isBot, callback: callback)
-	}
-
-	open func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel]) {
-		DiscordEndpoint.modifyChannel(channelId, options: options, with: token, isBot: isBot)
-	}
-
-	open func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild]) {
-		DiscordEndpoint.modifyGuild(guildId, options: options, with: token, isBot: isBot)
-	}
-
-	open func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int) {
-		DiscordEndpoint.modifyGuildChannelPosition(on: guildId, channelId: channelId, position: position,
-			with: token, isBot: isBot)
-	}
-
-	open func removeGuildBan(for userId: String, on guildId: String) {
-		DiscordEndpoint.removeGuildBan(for: userId, on: guildId, with: token, isBot: isBot)
-	}
-
-	open func sendMessage(_ message: String, to channelId: String, tts: Bool = false) {
-		guard connected else { return }
-
-		DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts, isBot: isBot)
-	}
-
-	open func triggerTyping(on channelId: String) {
-		DiscordEndpoint.triggerTyping(on: channelId, with: token, isBot: isBot)
 	}
 
 	private func guildForChannel(_ channelId: String) -> DiscordGuild? {

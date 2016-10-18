@@ -1,6 +1,6 @@
 import Foundation
 
-extension DiscordEndpoint {
+public extension DiscordEndpoint {
     public static func getChannel(_ channelId: String, with token: String, isBot bot: Bool,
             callback: @escaping (DiscordGuildChannel?) -> Void) {
         var request = createRequest(with: token, for: .channel, replacing: ["channel.id": channelId], isBot: bot)
