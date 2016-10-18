@@ -92,6 +92,10 @@ public enum DiscordEndpoint : String {
 	case guildMembers = "/guilds/guild.id/members"
 	case guildMember = "/guilds/guild.id/members/user.id"
 
+	// Guild bans
+	case guildBans = "/guilds/guild.id/bans"
+	case guildBanUser = "/guilds/guild.id/bans/user.id"
+
 	var combined: String {
 		return DiscordEndpoint.baseURL.rawValue + rawValue
 	}

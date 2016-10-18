@@ -217,4 +217,66 @@ extension DiscordEndpoint {
             callback(DiscordGuildMember.guildMembersFromArray(members as! [[String: Any]]).map({ $0.value }))
         })
     }
+
+    public static func getGuildBans(for guildId: String, with token: String, isBot bot: Bool,
+            callback: @escaping ([DiscordUser]) -> Void) {
+        var request = createRequest(with: token, for: .guildBans, replacing: ["guild.id": guildId], isBot: bot)
+
+        request.httpMethod = "GET"
+
+        let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildBans, parameters: ["guild.id": guildId])
+
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            guard let data = data, response?.statusCode == 200 else {
+                callback([])
+
+                return
+            }
+
+            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
+                case let .array(users) = json else {
+                    callback([])
+
+                    return
+            }
+
+            callback(DiscordUser.usersFromArray(users as! [[String: Any]]))
+        })
+    }
+
+    public static func guildBan(userId: String, on guildId: String, deleteMessageDays: Int, with token: String,
+            isBot bot: Bool) {
+        let banJSON = ["delete-message-days": deleteMessageDays]
+
+        var request = createRequest(with: token, for: .guildBanUser, replacing: [
+            "guild.id": guildId,
+            "user.id": userId
+            ], isBot: bot)
+
+        guard let contentData = encodeJSON(banJSON)?.data(using: .utf8, allowLossyConversion: false) else {
+            return
+        }
+
+        request.httpMethod = "PUT"
+        request.httpBody = contentData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
+
+        let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildBans, parameters: ["guild.id": guildId])
+
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
+    }
+
+    public static func removeGuildBan(for userId: String, on guildId: String, with token: String, isBot bot: Bool) {
+        var request = createRequest(with: token, for: .guildBanUser, replacing: [
+            "guild.id": guildId,
+            "user.id": userId
+            ], isBot: bot)
+
+        request.httpMethod = "DELETE"
+
+        let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildBans, parameters: ["guild.id": guildId])
+
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
+    }
 }

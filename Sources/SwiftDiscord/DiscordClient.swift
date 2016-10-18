@@ -78,8 +78,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 
 		guilds[channel.guildId]?.channels[channel.id] = channel
 
-		print(channel)
-
 		handleEvent("channelUpdate", with: [channel.guildId, channel])
 	}
 
@@ -295,6 +293,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		return DiscordOAuthEndpoint.createBotAddURL(for: user, with: permissions)
 	}
 
+	open func getGuildBans(for guildId: String, callback: @escaping ([DiscordUser]) -> Void) {
+		DiscordEndpoint.getGuildBans(for: guildId, with: token, isBot: isBot, callback: callback)
+	}
+
 	open func getGuildChannels(_ guildId: String, callback: @escaping ([DiscordGuildChannel]) -> Void) {
 		DiscordEndpoint.getGuildChannels(guildId, with: token, isBot: isBot, callback: callback)
 	}
@@ -317,6 +319,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 		DiscordEndpoint.getMessages(for: channelId, with: token, options: options, isBot: isBot, callback: callback)
 	}
 
+	open func guildBan(userId: String, on guildId: String, deleteMessageDays: Int = 7) {
+		DiscordEndpoint.guildBan(userId: userId, on: guildId, deleteMessageDays: deleteMessageDays, with: token,
+			isBot: isBot)
+	}
+
 	open func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void) {
 		DiscordEndpoint.getPinnedMessages(for: channelId, with: token, isBot: isBot, callback: callback)
 	}
@@ -332,6 +339,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler {
 	open func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int) {
 		DiscordEndpoint.modifyGuildChannelPosition(on: guildId, channelId: channelId, position: position,
 			with: token, isBot: isBot)
+	}
+
+	open func removeGuildBan(for userId: String, on guildId: String) {
+		DiscordEndpoint.removeGuildBan(for: userId, on: guildId, with: token, isBot: isBot)
 	}
 
 	open func sendMessage(_ message: String, to channelId: String, tts: Bool = false) {

@@ -34,6 +34,7 @@ public protocol DiscordClientSpec : class, DiscordEngineClient {
 	func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String)
 	func getBotURL(with permissions: [DiscordPermission]) -> URL?
 	func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> Void)
+	func getGuildBans(for guildId: String, callback: @escaping ([DiscordUser]) -> Void)
 	func getGuildChannels(_ guildId: String, callback: @escaping ([DiscordGuildChannel]) -> Void)
 	func getGuildMember(by id: String, on guildId: String, callback: @escaping (DiscordGuildMember?) -> Void)
 	func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
@@ -42,8 +43,10 @@ public protocol DiscordClientSpec : class, DiscordEngineClient {
 	func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage],
 		callback: @escaping ([DiscordMessage]) -> Void)
 	func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void)
+	func guildBan(userId: String, on guildId: String, deleteMessageDays: Int)
 	func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel])
 	func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild])
+	func removeGuildBan(for userId: String, on guildId: String)
 	func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int)
 	func sendMessage(_ message: String, to channelId: String, tts: Bool)
 	func triggerTyping(on channelId: String)

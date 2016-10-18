@@ -6,7 +6,7 @@ let session = arc4random()
 // 201533018215677954 // pu
 // 186926277276598273
 // 201533008627499008 // meat
-let voiceChannel = "201533018215677954"
+let voiceChannel = "186926277276598273"
 // 186926276592795659
 // 232184444340011009
 let textChannel = "232184444340011009"
@@ -175,6 +175,20 @@ func handleGetMembers() {
     }
 }
 
+func handleBans() {
+    client.getGuildBans(for: "232184444340011009") {bans in
+        print(bans)
+    }
+}
+
+func handleBan() {
+    client.guildBan(userId: "225069761434746882", on: "201533018215677953")
+}
+
+func handleRemoveBan() {
+    client.removeGuildBan(for: "225069761434746882", on: "201533018215677953")
+}
+
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -205,6 +219,9 @@ let handlers = [
     "guilds": handleGuilds,
     "getmember": handleGetMember,
     "getmembers": handleGetMembers,
+    "bans": handleBans,
+    "ban": handleBan,
+    "removeban": handleRemoveBan,
 ]
 
 func readAsync() {
