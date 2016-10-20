@@ -33,6 +33,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		print("Attaching engine")
 
 		engine = DiscordEngine(client: self)
+
+		on("engine.disconnect") {[weak self] data in
+			self?.handleEvent("disconnect", with: data)
+		}
 	}
 
 	open func connect() {

@@ -6,7 +6,7 @@ let session = arc4random()
 // 201533018215677954 // pu
 // 186926277276598273
 // 201533008627499008 // meat
-let voiceChannel = "186926277276598273"
+let voiceChannel = "201533018215677954"
 // 186926276592795659
 // 232184444340011009
 let textChannel = "232184444340011009"
@@ -311,7 +311,7 @@ func readAsync() {
 print("Type 'quit' to stop")
 readAsync()
 
-client.on("engine.disconnect") {data in
+client.on("disconnect") {data in
 	print("Engine died, exiting")
 	exit(0)
 }
