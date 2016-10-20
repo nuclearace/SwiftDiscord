@@ -105,6 +105,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		handleEvent("guildCreate", with: [guild])
 	}
 
+	open func handleGuildDelete(with data: [String: Any]) {
+		guard let guildId = data["id"] as? String else { return }
+		guard let removedGuild = guilds.removeValue(forKey: guildId) else { return }
+
+		handleEvent("guildDelete", with: [guildId, removedGuild])
+	}
+
 	open func handleGuildEmojiUpdate(with data: [String: Any]) {
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let emojis = data["emojis"] as? [[String: Any]] else { return }

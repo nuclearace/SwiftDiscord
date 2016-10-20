@@ -54,7 +54,7 @@ func handleNew() {
 }
 
 func handleBot() {
-    print(client.getBotURL(with: [.readMessages, .useVAD, .attachFiles])!)
+    print(client.getBotURL(with: [.readMessages, .sendMessages])!)
 }
 
 func handleChannel() {
@@ -160,7 +160,7 @@ func handlePosition() {
 }
 
 func handleGuilds() {
-    print(client.guilds)
+    print(client.guilds.count)
 }
 
 func handleGetMember() {
@@ -225,7 +225,7 @@ func handleGetInvite() {
 }
 
 func handleRequestAll() {
-    client.requestAllUsers(on: "201533018215677953")
+    client.requestAllUsers(on: "81384788765712384")
 }
 
 let handlers = [
@@ -296,6 +296,10 @@ func readAsync() {
                     "url": NSNull()
                 ]
             ])
+        } else if input.hasPrefix("guild") {
+            let guildId = input.components(separatedBy: " ").dropFirst().first!
+
+            print(client.guilds[guildId]?.members.count)
         } else {
         	client.sendMessage(input, to: textChannel)
         }
@@ -333,6 +337,10 @@ client.on("messageCreate") {data in
 	guard let message = data[0] as? DiscordMessage else { fatalError("Didn't get message in message event") }
 
 	// print(message)
+}
+
+client.on("guildDelete") {data in
+    print(data)
 }
 
 client.connect()
