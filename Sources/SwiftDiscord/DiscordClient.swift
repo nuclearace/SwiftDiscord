@@ -295,6 +295,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		}
 	}
 
+	open func setPresence(_ presence: [String: Any]) {
+		engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.statusUpdate), payload: .object(presence)))
+	}
+
 	private func startVoiceConnection() {
 		// We need both to start the connection
 		guard voiceState != nil && voiceServerInformation != nil else {

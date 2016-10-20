@@ -280,6 +280,17 @@ func readAsync() {
         	youtube.standardOutput = writer
 
         	youtube.launch()
+        } else if input.hasPrefix("game") {
+            let game = input.components(separatedBy: " ").dropFirst().joined()
+
+            client.setPresence([
+                "idle_since": NSNull(),
+                "game": [
+                    "name": game,
+                    "type": NSNull(),
+                    "url": NSNull()
+                ]
+            ])
         } else {
         	client.sendMessage(input, to: textChannel)
         }
