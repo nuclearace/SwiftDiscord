@@ -1,6 +1,7 @@
 import Foundation
 
 public protocol DiscordEndpointConsumer : DiscordClientSpec {
+    func acceptInvite(_ invite: String)
     func addPinnedMessage(_ messageId: String, on channelId: String)
     func bulkDeleteMessages(_ messages: [String], on channelId: String)
     func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
@@ -22,6 +23,7 @@ public protocol DiscordEndpointConsumer : DiscordClientSpec {
     func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
         callback: @escaping ([DiscordGuildMember]) -> Void)
     func getGuildRoles(for guildId: String, callback: @escaping ([DiscordRole]) -> Void)
+    func getInvite(_ invite: String, callback: @escaping (DiscordInvite?) -> Void)
     func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void)
     func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage],
         callback: @escaping ([DiscordMessage]) -> Void)
@@ -38,6 +40,10 @@ public protocol DiscordEndpointConsumer : DiscordClientSpec {
 }
 
 public extension DiscordEndpointConsumer {
+    public func acceptInvite(_ invite: String) {
+        DiscordEndpoint.acceptInvite(invite, with: token, isBot: isBot)
+    }
+
     public func addPinnedMessage(_ messageId: String, on channelId: String) {
         DiscordEndpoint.addPinnedMessage(messageId, on: channelId, with: token, isBot: isBot)
     }
@@ -116,6 +122,10 @@ public extension DiscordEndpointConsumer {
 
     public func getGuildRoles(for guildId: String, callback: @escaping ([DiscordRole]) -> Void) {
         DiscordEndpoint.getGuildRoles(for: guildId, with: token, isBot: isBot, callback: callback)
+    }
+
+    public func getInvite(_ invite: String, callback: @escaping (DiscordInvite?) -> Void) {
+        DiscordEndpoint.getInvite(invite, with: token, isBot: isBot, callback: callback)
     }
 
     public func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void) {

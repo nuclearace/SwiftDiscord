@@ -214,6 +214,16 @@ func handleRemoveRole() {
     client.removeGuildRole("238074249133162496", on: "201533018215677953")
 }
 
+func handleAcceptInvite() {
+    client.acceptInvite("somecode")
+}
+
+func handleGetInvite() {
+    client.getInvite("somecode") {invite in
+        print(invite)
+    }
+}
+
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -251,6 +261,8 @@ let handlers = [
     "createrole": handleCreateRole,
     "modifyrole": handleModifyRole,
     "removerole": handleRemoveRole,
+    "acceptinvite": handleAcceptInvite,
+    "getinvite": handleGetInvite,
 ]
 
 func readAsync() {
