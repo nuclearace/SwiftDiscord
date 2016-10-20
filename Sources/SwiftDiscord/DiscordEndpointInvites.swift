@@ -10,9 +10,7 @@ public extension DiscordEndpoint {
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .invites, parameters: ["invite.code": invite])
 
-        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            print(response?.statusCode)
-        })
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
     public static func getInvite(_ invite: String, with token: String, isBot bot: Bool,
