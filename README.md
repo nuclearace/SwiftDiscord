@@ -21,3 +21,7 @@ Installing:
  - Run `swift build -Xlinker -L/usr/local/lib/`. The Xlinker option is needed to tell the package manager where to find the libsodium library that was installed through Homebrew.
 
 See Sources/Runner for a basic example
+
+Why no CocoaPods?
+=================
+I hate CocoaPods and the Swift Package Manager makes it easy to do system modules.
