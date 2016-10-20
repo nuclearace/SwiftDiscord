@@ -143,6 +143,22 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		handleEvent("guildMemberUpdate", with: [guildId, user, roles])
 	}
 
+	open func handleGuildMembersChunk(with data: [String: Any]) {
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let members = data["members"] as? [[String: Any]] else { return }
+		guard var guild = guilds[guildId] else { return }
+
+		let guildMembers = DiscordGuildMember.guildMembersFromArray(members)
+
+		for (memberId, member) in guildMembers {
+			guild.members[memberId] = member
+		}
+
+		guilds[guildId] = guild
+
+		handleEvent("guildMembersChunk", with: [guildId, guildMembers])
+	}
+
 	open func handleGuildRoleCreate(with data: [String: Any]) {
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let roleObject = data["role"] as? [String: Any] else { return }
@@ -293,6 +309,17 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 			self.joiningVoiceChannel = false
 		}
+	}
+
+	open func requestAllUsers(on guildId: String) {
+		let requestObject: [String: Any] = [
+			"guild_id": guildId,
+			"query": "",
+			"limit": 0
+		]
+
+		engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.requestGuildMembers),
+			payload: .object(requestObject)))
 	}
 
 	open func setPresence(_ presence: [String: Any]) {

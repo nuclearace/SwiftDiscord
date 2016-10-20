@@ -224,6 +224,10 @@ func handleGetInvite() {
     }
 }
 
+func handleRequestAll() {
+    client.requestAllUsers(on: "201533018215677953")
+}
+
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -263,6 +267,7 @@ let handlers = [
     "removerole": handleRemoveRole,
     "acceptinvite": handleAcceptInvite,
     "getinvite": handleGetInvite,
+    "requestall": handleRequestAll,
 ]
 
 func readAsync() {

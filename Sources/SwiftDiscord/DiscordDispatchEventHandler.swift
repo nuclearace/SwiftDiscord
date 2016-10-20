@@ -7,6 +7,7 @@ public protocol DiscordDispatchEventHandler : DiscordClientSpec {
 	func handleGuildMemberAdd(with data: [String: Any])
 	func handleGuildMemberRemove(with data: [String: Any])
 	func handleGuildMemberUpdate(with data: [String: Any])
+	func handleGuildMembersChunk(with data: [String: Any])
 	func handleGuildRoleCreate(with data: [String: Any])
 	func handleGuildRoleRemove(with data: [String: Any])
 	func handleGuildRoleUpdate(with data: [String: Any])
@@ -27,6 +28,8 @@ public extension DiscordDispatchEventHandler {
 			handleEvent("messageCreate", with: [DiscordMessage(messageObject: data)])
 		case let (.guildMemberAdd, .object(data)):
 			handleGuildMemberAdd(with: data)
+		case let (.guildMembersChunk, .object(data)):
+			handleGuildMembersChunk(with: data)
 		case let (.guildMemberUpdate, .object(data)):
 			handleGuildMemberUpdate(with: data)
 		case let (.guildMemberRemove, .object(data)):
