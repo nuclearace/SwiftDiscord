@@ -339,6 +339,10 @@ client.on("messageCreate") {data in
 	// print(message)
 }
 
+client.on("channelDelete") {data in
+    print(data)
+}
+
 client.on("guildDelete") {data in
     print(data)
 }

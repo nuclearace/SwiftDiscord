@@ -70,11 +70,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handleChannelDelete(with data: [String: Any]) {
-		let channel = DiscordGuildChannel(guildChannelObject: data)
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let channelId = data["id"] as? String else { return }
 
-		guard let removedChannel = guilds[channel.guildId]?.channels.removeValue(forKey: channel.id) else { return }
+		guard let removedChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) else { return }
 
-		handleEvent("channelDelete", with: [channel.guildId, removedChannel])
+		handleEvent("channelDelete", with: [guildId, removedChannel])
 	}
 
 	open func handleChannelUpdate(with data: [String: Any]) {
