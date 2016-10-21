@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol DiscordEngineHeartbeatable : DiscordEngineSpec {
+public protocol DiscordEngineHeartbeatable {
 	var heartbeatInterval: Int { get }
 	var heartbeatQueue: DispatchQueue { get }
 

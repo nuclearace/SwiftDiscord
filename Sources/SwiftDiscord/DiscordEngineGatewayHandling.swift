@@ -12,13 +12,6 @@ extension DiscordEngineGatewayHandling {
 			return
 		}
 
-		if event == .ready, case let DiscordGatewayPayloadData.object(payloadData) = payload.payload, 
-			let milliseconds = payloadData["heartbeat_interval"] as? Int {
-				startHeartbeat(seconds: milliseconds / 1000)
-		} else if heartbeatInterval == 0 {
-			fatalError("Failed to start our heartbeat")
-		}
-
 		client?.handleEngineDispatch(event: event, data: payload.payload)
 	}
 }

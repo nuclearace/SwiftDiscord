@@ -1,7 +1,7 @@
 import Foundation
 import Starscream
 
-public protocol DiscordEngineSpec : class {
+public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable {
 	weak var client: DiscordClientSpec? { get }
 
 	var lastSequenceNumber: Int { get }

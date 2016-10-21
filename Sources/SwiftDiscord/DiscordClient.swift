@@ -221,6 +221,14 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handleReady(with data: [String: Any]) {
+		guard let milliseconds = data["heartbeat_interval"] as? Int else {
+			handleEvent("disconnect", with: ["Failed to get heartbeat"])
+
+			return
+		}
+
+		engine?.startHeartbeat(seconds: milliseconds / 1000)
+
 		if let user = data["user"] as? [String: Any] {
 			self.user = DiscordUser(userObject: user)
 		}
@@ -270,8 +278,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		return nil
 	}
-
-	// Voice
 
 	open func joinVoiceChannel(_ channelId: String, callback: @escaping (String) -> Void) {
 		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
