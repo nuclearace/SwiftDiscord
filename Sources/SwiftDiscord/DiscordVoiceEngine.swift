@@ -82,6 +82,29 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		Thread.sleep(forTimeInterval: waitTime)
 	}
 
+	private func createEncoder() {
+		encoder = nil
+
+		let ffmpeg = Process()
+		let writePipe = Pipe()
+		let readPipe = Pipe()
+
+		ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
+		ffmpeg.standardInput = readPipe.fileHandleForReading
+		ffmpeg.standardOutput = writePipe
+		ffmpeg.arguments = ["-hide_banner", "-loglevel", "quiet", "-i", "pipe:0", "-f", "data", "-map", "0:a", "-ar",
+			"48000", "-ac", "2", "-acodec", "libopus", "-sample_fmt", "s16", "-vbr", "off", "-b:a", "128000",
+			"-compression_level", "10", "pipe:1"]
+
+		signal(SIGPIPE, SIG_IGN)
+
+		encoder = DiscordVoiceEncoder(ffmpeg: ffmpeg, readPipe: readPipe, writePipe: writePipe)
+
+		readData(1)
+
+		client?.handleEvent("voiceEngine.ready", with: [])
+	}
+
 	public override func createHandshakeObject() -> [String: Any] {
 		return [
 			"session_id": client!.voiceState!.sessionId,
@@ -240,21 +263,18 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	private func readData(_ count: Int) {
 		encoder?.read {[weak self] done, data, errorCode in
-			guard let this = self else { return } // engine died
+			guard let this = self, this.connected else { return } // engine died
 
 		    guard let data = data, data.count > 0 else {
-		    	// print("no data, reader probably closed")
+		    	// print("no data, reader probably closed\nNew encoder?")
 
 		    	this.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
 		    		"speaking": false,
 		    		"delay": 0
 		    	])))
 
-		    	guard self?.connected ?? false else { return }
-		    	self?.encoder?.closeReader()
-
 		    	DispatchQueue.main.async {
-		    		self?.createEncoder()
+		    		this.createEncoder()
 		    	}
 
 		    	return
@@ -275,8 +295,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		    this.sequenceNum = this.sequenceNum &+ 1
 		    this.timestamp = this.timestamp &+ 960
-		    this.audioSleep(count)
 
+		    this.audioSleep(count)
 		    this.readData(count + 1)
 		}
 	}
@@ -352,25 +372,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		}
 	}
 
-	private func createEncoder() {
-		let ffmpeg = Process()
-		let writePipe = Pipe()
-		let readPipe = Pipe()
-
-		ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
-		ffmpeg.standardInput = readPipe
-		ffmpeg.standardOutput = writePipe
-		ffmpeg.arguments = ["-hide_banner", "-loglevel", "quiet", "-i", "pipe:0", "-f", "data", "-map", "0:a", "-ar",
-			"48000", "-ac", "2", "-acodec", "libopus", "-sample_fmt", "s16", "-vbr", "off", "-b:a", "128000",
-			"-compression_level", "10", "pipe:1"]
-
-		signal(SIGPIPE, SIG_IGN)
-
-		encoder = DiscordVoiceEncoder(ffmpeg: ffmpeg, readPipe: readPipe, writePipe: writePipe)
-
-		client?.handleEngineEvent("voiceEngine.writeHandle", with: [readPipe.fileHandleForWriting])
-
-		readData(1)
+	public func requestFileHandleForWriting() -> FileHandle? {
+		return self.encoder?.readPipe.fileHandleForWriting
 	}
 
 	public func requestNewEncoder() {

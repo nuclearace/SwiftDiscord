@@ -14,7 +14,6 @@ let queue = DispatchQueue(label: "Async Read")
 let writeQueue = DispatchQueue(label: "Async Write")
 let client = DiscordClient(token: "")
 
-var writer: FileHandle!
 var youtube: Process!
 var new = false
 
@@ -298,7 +297,7 @@ func readAsync() {
             youtube = Process()
             youtube.launchPath = "/usr/local/bin/youtube-dl"
             youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
-            youtube.standardOutput = writer
+            youtube.standardOutput = client.voiceEngine!.requestFileHandleForWriting()
 
             youtube.terminationHandler = {process in
                 print("youtube-dl died")
@@ -345,16 +344,12 @@ client.on("connect") {data in
 	// print(client.guilds)
 }
 
-client.on("voiceEngine.writeHandle") {data in
-	guard let writeHandle = data[0] as? FileHandle else { fatalError("didn't get write handle") }
-
-	print("Got handle")
-
-	writer = writeHandle
-}
-
 client.on("voiceEngine.disconnect") {data in
 	print("voice engine closed")
+}
+
+client.on("voiceEngine.ready") {_ in
+    print("voice engine is ready")
 }
 
 client.on("messageCreate") {data in

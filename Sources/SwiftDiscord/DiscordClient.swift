@@ -19,8 +19,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	public private(set) var user: DiscordUser?
 	public private(set) var voiceState: DiscordVoiceState?
 
-	private let voiceQueue = DispatchQueue(label: "voiceQueue")
-
 	private var handlers = [String: DiscordEventHandler]()
 	private var joiningVoiceChannel = false
 	private var voiceServerInformation: [String: Any]?
@@ -247,28 +245,24 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handleVoiceServerUpdate(with data: [String: Any]) {
-		voiceQueue.sync {
-			self.voiceServerInformation = data
+		self.voiceServerInformation = data
 
-			if self.joiningVoiceChannel {
-				// print("got voice server \(data)")
-				self.startVoiceConnection()
-			}
+		if self.joiningVoiceChannel {
+			// print("got voice server \(data)")
+			self.startVoiceConnection()
 		}
 	}
 
 	open func handleVoiceStateUpdate(with data: [String: Any]) {
-		voiceQueue.sync {
-			// Only care about our state right now
-			guard data["user_id"] as? String == self.user?.id else { return }
-			guard let guildId = data["guild_id"] as? String else { return }
+		// Only care about our state right now
+		guard data["user_id"] as? String == self.user?.id else { return }
+		guard let guildId = data["guild_id"] as? String else { return }
 
-			self.voiceState = DiscordVoiceState(voiceStateObject: data, guildId: guildId)
+		self.voiceState = DiscordVoiceState(voiceStateObject: data, guildId: guildId)
 
-			if self.joiningVoiceChannel {
-				// print("Got voice state \(data)")
-				self.startVoiceConnection()
-			}
+		if self.joiningVoiceChannel {
+			// print("Got voice state \(data)")
+			self.startVoiceConnection()
 		}
 	}
 
@@ -288,21 +282,17 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			return
 		}
 
-		// begin async voice connection establishment
-		// TODO handle failures
-		voiceQueue.async {
-			self.joiningVoiceChannel = true
+		self.joiningVoiceChannel = true
 
-			self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
-				payload: .object([
-					"guild_id": guild.id,
-					"channel_id": channel.id,
-					"self_mute": false,
-					"self_deaf": false
-					])
-				)
+		self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
+			payload: .object([
+				"guild_id": guild.id,
+				"channel_id": channel.id,
+				"self_mute": false,
+				"self_deaf": false
+				])
 			)
-		}
+		)
 	}
 
 	open func leaveVoiceChannel(_ channelId: String) {
@@ -311,22 +301,20 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			return
 		}
 
-		voiceQueue.async {
-			self.voiceEngine?.disconnect()
-			self.voiceEngine = nil
+		self.voiceEngine?.disconnect()
+		self.voiceEngine = nil
 
-			self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
-				payload: .object([
-					"guild_id": guild.id,
-					"channel_id": NSNull(),
-					"self_mute": false,
-					"self_deaf": false
-					])
-				)
+		self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
+			payload: .object([
+				"guild_id": guild.id,
+				"channel_id": NSNull(),
+				"self_mute": false,
+				"self_deaf": false
+				])
 			)
+		)
 
-			self.joiningVoiceChannel = false
-		}
+		self.joiningVoiceChannel = false
 	}
 
 	open func requestAllUsers(on guildId: String) {

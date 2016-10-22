@@ -2,7 +2,6 @@ import Foundation
 
 public class DiscordVoiceEncoder {
 	public let ffmpeg: Process
-	public let reader: FileHandle
 	public let readPipe: Pipe
 	public let writePipe: Pipe
 
@@ -14,10 +13,10 @@ public class DiscordVoiceEncoder {
 
 	public init(ffmpeg: Process, readPipe: Pipe, writePipe: Pipe) {
 		self.ffmpeg = ffmpeg
-		self.reader = writePipe.fileHandleForReading
 		self.readPipe = readPipe
 		self.writePipe = writePipe
-		self.readIO = DispatchIO(type: .stream, fileDescriptor: reader.fileDescriptor, queue: readQueue,
+		self.readIO = DispatchIO(type: .stream, fileDescriptor: writePipe.fileHandleForReading.fileDescriptor,
+			queue: readQueue,
 			cleanupHandler: {_ in })
 
 		readIO.setLimit(lowWater: 1)
@@ -26,8 +25,6 @@ public class DiscordVoiceEncoder {
 	}
 
 	deinit {
-		// print("encoder going bye bye")
-
 		guard !encoderClosed else { return }
 
 		closeEncoder()
@@ -45,18 +42,24 @@ public class DiscordVoiceEncoder {
 
 	public func closeReader() {
 		readIO.close(flags: .stop)
+		readQueue.sync {}
 	}
 
 	/// Call only when you know you've finished writing data, but ffmpeg is still encoding, or has data we haven't read
+	/// This should cause ffmpeg to get an EOF on input, which will cause it to close once its output buffer is empty
 	public func finishEncodingAndClose() {
 		close(readPipe.fileHandleForWriting.fileDescriptor)
 	}
 
 	public func read(callback: @escaping (Bool, DispatchData?, Int32) -> Void) {
+		assert(!encoderClosed, "Tried reading from a closed encoder")
+
 		readIO.read(offset: 0, length: 320, queue: readQueue, ioHandler: callback)
 	}
 
 	public func write(_ data: Data, doneHandler: (() -> Void)? = nil) {
+		assert(!encoderClosed, "Tried writing to a closed encoder")
+
 		writeQueue.async {[weak self] in
 			data.enumerateBytes {bytes, range, stop in
 				let buf = UnsafeRawPointer(bytes.baseAddress!)
