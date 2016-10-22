@@ -19,6 +19,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	public private(set) var user: DiscordUser?
 	public private(set) var voiceState: DiscordVoiceState?
 
+	// crunchQueue should be used for tasks would block the handleQueue for too long
+	// DO NOT TOUCH ANY PROPERTIES WHILE ON THIS QUEUE. REENTER THE HANDLEQUEUE
+	private let crunchQueue = DispatchQueue(label: "crunchQueue", attributes: [])
+
 	private var handlers = [String: DiscordEventHandler]()
 	private var joiningVoiceChannel = false
 	private var voiceServerInformation: [String: Any]?
@@ -101,11 +105,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handleGuildCreate(with data: [String: Any]) {
-		let guild = DiscordGuild(guildObject: data)
+		crunchQueue.async {
+			let guild = DiscordGuild(guildObject: data)
 
-		guilds[guild.id] = guild
+			self.handleQueue.async {
+				self.guilds[guild.id] = guild
 
-		handleEvent("guildCreate", with: [guild])
+				self.handleEvent("guildCreate", with: [guild.id, guild])
+			}
+		}
 	}
 
 	open func handleGuildDelete(with data: [String: Any]) {
@@ -156,17 +164,22 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	open func handleGuildMembersChunk(with data: [String: Any]) {
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let members = data["members"] as? [[String: Any]] else { return }
-		guard var guild = guilds[guildId] else { return }
 
-		let guildMembers = DiscordGuildMember.guildMembersFromArray(members)
+		crunchQueue.async {
+			let guildMembers = DiscordGuildMember.guildMembersFromArray(members)
 
-		for (memberId, member) in guildMembers {
-			guild.members[memberId] = member
+			self.handleQueue.async {
+				guard var guild = self.guilds[guildId] else { return }
+
+				for (memberId, member) in guildMembers {
+					guild.members[memberId] = member
+				}
+
+				self.guilds[guildId] = guild
+
+				self.handleEvent("guildMembersChunk", with: [guildId, guildMembers])
+			}
 		}
-
-		guilds[guildId] = guild
-
-		handleEvent("guildMembersChunk", with: [guildId, guildMembers])
 	}
 
 	open func handleGuildRoleCreate(with data: [String: Any]) {

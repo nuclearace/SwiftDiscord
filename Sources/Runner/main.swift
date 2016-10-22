@@ -344,6 +344,13 @@ client.on("connect") {data in
 	// print(client.guilds)
 }
 
+client.on("guildCreate") {data in
+    guard let guild = data[1] as? DiscordGuild else { fatalError("didn't get guild") }
+
+    print("guild created \(guild.name)")
+}
+
+
 client.on("voiceEngine.disconnect") {data in
 	print("voice engine closed")
 }
