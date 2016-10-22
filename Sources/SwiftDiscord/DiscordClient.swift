@@ -30,7 +30,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func attachEngine() {
-		print("Attaching engine")
+		// print("Attaching engine")
 
 		engine = DiscordEngine(client: self)
 
@@ -40,7 +40,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func connect() {
-		print("DiscordClient connecting")
+		// print("DiscordClient connecting")
 
 		attachEngine()
 
@@ -48,7 +48,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func disconnect() {
-		print("DiscordClient: Disconnecting")
+		// print("DiscordClient: Disconnecting")
 
 		connected = false
 
@@ -354,7 +354,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		voiceEngine = DiscordVoiceEngine(client: self, voiceServerInformation: voiceServerInformation!,
 			encoder: voiceEngine?.encoder, secret: voiceEngine?.secret)
 
-		print("Connecting voice engine")
+		// print("Connecting voice engine")
 
 		voiceEngine?.connect()
 	}

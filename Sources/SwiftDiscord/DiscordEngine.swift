@@ -3,12 +3,11 @@ import Starscream
 
 open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, DiscordEngineHeartbeatable {
 	public internal(set) var heartbeatInterval = 0 // Only touch on handleQueue
+	public internal(set) var websocket: WebSocket?
 
 	public private(set) weak var client: DiscordClientSpec?
 	public private(set) var heartbeatQueue = DispatchQueue(label: "discordEngine.heartbeatQueue")
 	public private(set) var lastSequenceNumber = -1 // Only touch on handleQueue
-
-	public internal(set) var websocket: WebSocket?
 
 	let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
 	let handleQueue = DispatchQueue(label: "discordEngine.handleQueue")
@@ -18,7 +17,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	}
 
 	open func attachWebSocket() {
-		print("DiscordEngine: Attaching WebSocket")
+		// print("DiscordEngine: Attaching WebSocket")
 
 		websocket = WebSocket(url: URL(string: "wss://gateway.discord.gg")!)
 		websocket?.callbackQueue = parseQueue
@@ -30,7 +29,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		websocket?.onConnect = {[weak self] in
 			guard let this = self else { return }
 
-			print("DiscordEngine: WebSocket Connected")
+			// print("DiscordEngine: WebSocket Connected")
 
 			this.startHandshake()
 			// this.client?.handleEngineEvent("engine.connect", with: [])
@@ -39,7 +38,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		websocket?.onDisconnect = {[weak self] err in
 			guard let this = self else { return }
 
-			print("DiscordEngine: WebSocket disconnected \(String(describing: err))")
+			// print("DiscordEngine: WebSocket disconnected \(String(describing: err))")
 
 			this.client?.handleEngineEvent("engine.disconnect", with: [])
 		}
@@ -56,7 +55,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	open func connect() {
 		attachWebSocket()
 
-		print("DiscordEngine: connecting")
+		// print("DiscordEngine: connecting")
 
 		websocket?.connect()
 	}
@@ -78,7 +77,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	}
 
 	open func disconnect() {
-		print("DiscordEngine: Disconnecting")
+		// print("DiscordEngine: Disconnecting")
 
 		websocket?.disconnect()
 	}

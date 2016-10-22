@@ -62,7 +62,7 @@ public extension DiscordDispatchEventHandler {
 		case let (.ready, .object(data)):
 			handleReady(with: data)
 		default:
-			print("Dispatch event went unhandled \(event)\ndelegating to listeners")
+			// print("Dispatch event went unhandled \(event)\ndelegating to listeners")
 
 			handleEvent(event.rawValue, with: [data])
 		}

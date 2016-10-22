@@ -5,6 +5,12 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
 	var secret: [UInt8]! { get }
 
 	func requestNewEncoder()
-	func send(_ data: Data)
+	func send(_ data: Data, doneHandler: (() -> Void)?)
 	func sendVoiceData(_ data: Data)
+}
+
+public extension DiscordVoiceEngineSpec {
+    public func send(_ data: Data, doneHandler: (() -> Void)? = nil) {
+        encoder?.write(data, doneHandler: doneHandler)
+    }
 }

@@ -10,39 +10,55 @@ public class DiscordVoiceEncoder {
 	private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
 	private let writeQueue = DispatchQueue(label: "discordEngine.writeQueue")
 
-	public init(ffmpeg: Process, reader: FileHandle, readPipe: Pipe, writePipe: Pipe) {
+	private var encoderClosed = false
+
+	public init(ffmpeg: Process, readPipe: Pipe, writePipe: Pipe) {
 		self.ffmpeg = ffmpeg
-		self.reader = reader
+		self.reader = writePipe.fileHandleForReading
 		self.readPipe = readPipe
 		self.writePipe = writePipe
 		self.readIO = DispatchIO(type: .stream, fileDescriptor: reader.fileDescriptor, queue: readQueue,
-			cleanupHandler: {n in
-				print("closed")
-		})
+			cleanupHandler: {_ in })
 
 		readIO.setLimit(lowWater: 1)
 
-		signal(SIGPIPE, SIG_IGN)
-
-		self.ffmpeg.terminationHandler = {_ in signal(SIGPIPE, SIG_DFL) }
 		self.ffmpeg.launch()
 	}
 
-	public func closeEncoder() {
-		ffmpeg.terminate()
-		readIO.close(flags: .stop)
+	deinit {
+		// print("encoder going bye bye")
 
-		// Block so readIO can get the stop signal
-		readQueue.sync {}
+		guard !encoderClosed else { return }
+
+		closeEncoder()
+	}
+
+	// Abrubtly halts encoding and kills ffmpeg
+	public func closeEncoder() {
+		kill(ffmpeg.processIdentifier, SIGKILL)
+
+		closeReader()
+		ffmpeg.waitUntilExit()
+
+		encoderClosed = true
+	}
+
+	public func closeReader() {
+		readIO.close(flags: .stop)
+	}
+
+	/// Call only when you know you've finished writing data, but ffmpeg is still encoding, or has data we haven't read
+	public func finishEncodingAndClose() {
+		close(readPipe.fileHandleForWriting.fileDescriptor)
 	}
 
 	public func read(callback: @escaping (Bool, DispatchData?, Int32) -> Void) {
 		readIO.read(offset: 0, length: 320, queue: readQueue, ioHandler: callback)
 	}
 
-	public func write(_ data: Data) {
+	public func write(_ data: Data, doneHandler: (() -> Void)? = nil) {
 		writeQueue.async {[weak self] in
-			data.enumerateBytes { (bytes, range, stop) in
+			data.enumerateBytes {bytes, range, stop in
 				let buf = UnsafeRawPointer(bytes.baseAddress!)
 				var bytesRemaining = data.count
 
@@ -62,12 +78,9 @@ public class DiscordVoiceEncoder {
 						bytesRemaining -= bytesWritten
 					}
 				}
+
+				doneHandler?()
 			}
 		}
-	}
-
-	deinit {
-		print("encoder going bye bye")
-		closeEncoder()
 	}
 }

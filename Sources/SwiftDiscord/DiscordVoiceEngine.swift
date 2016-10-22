@@ -8,6 +8,7 @@ enum DiscordVoiceEngineError : Error {
 }
 
 public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
+	public private(set) var connected = false
 	public private(set) var encoder: DiscordVoiceEncoder?
 	public private(set) var endpoint: String!
 	public private(set) var modes = [String]()
@@ -45,17 +46,13 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	deinit {
-		print("voice engine going bye bye")
+		// print("voice engine going bye bye")
 
-		super.disconnect()
-
-		do {
-			try udpSocket?.close()
-		} catch {}
+		disconnect()
 	}
 
 	public override func attachWebSocket() {
-		print("DiscordVoiceEngine: Attaching WebSocket")
+		// print("DiscordVoiceEngine: Attaching WebSocket")
 
 		websocket = WebSocket(url: URL(string: "wss://" + endpoint.components(separatedBy: ":")[0])!)
 		websocket?.callbackQueue = parseQueue
@@ -69,7 +66,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		websocket?.onDisconnect = {[weak self] err in
 			guard let this = self else { return }
 
-			print("DiscordVoiceEngine: WebSocket disconnected \(err)")
+			// print("DiscordVoiceEngine: WebSocket disconnected \(err)")
 
 			this.client?.handleEngineEvent("voiceEngine.disconnect", with: [])
 		}
@@ -136,7 +133,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	public override func disconnect() {
-		print("DiscordVoiceEngine: Disconnecting")
+		// print("DiscordVoiceEngine: Disconnecting")
 
 		super.disconnect()
 
@@ -144,9 +141,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			try udpSocket?.close()
 		} catch {}
 
+		connected = false
 		encoder = nil
-
-		client?.handleEngineEvent("voiceEngine.disconnect", with: [])
 	}
 
 	private func extractIPAndPort(from bytes: [UInt8]) throws -> (String, Int) {
@@ -242,20 +238,24 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		handleGatewayPayload(decoded)
 	}
 
-	public func send(_ data: Data) {
-		encoder?.write(data)
-	}
-
 	private func readData(_ count: Int) {
 		encoder?.read {[weak self] done, data, errorCode in
 			guard let this = self else { return } // engine died
-		    guard let data = data else {
+
+		    guard let data = data, data.count > 0 else {
 		    	// print("no data, reader probably closed")
 
 		    	this.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
 		    		"speaking": false,
 		    		"delay": 0
 		    	])))
+
+		    	guard self?.connected ?? false else { return }
+		    	self?.encoder?.closeReader()
+
+		    	DispatchQueue.main.async {
+		    		self?.createEncoder()
+		    	}
 
 		    	return
 		    }
@@ -285,7 +285,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	// currently only xsalsa20_poly1305 is supported
 	// After this point we are good to go in sending encrypted voice packets
 	private func selectProtocol(with ip: String, on port: Int) {
-		print("Selecting UDP protocol with ip: \(ip) on port: \(port)")
+		// print("Selecting UDP protocol with ip: \(ip) on port: \(port)")
 
 		let payloadData: [String: Any] = [
 			"protocol": "udp",
@@ -298,10 +298,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		sendGatewayPayload(DiscordGatewayPayload(code: .voice(.selectProtocol), payload: .object(payloadData)))
 		startHeartbeat(seconds: heartbeatInterval / 1000)
+		connected = true
 
 		if encoder == nil {
 			// We are the first engine the client had, or they didn't give us an encoder to use
-			requestNewEncoder()
+			createEncoder()
 		} else {
 			// We inherited a previous engine's encoder, use it
 			readData(1)
@@ -351,26 +352,29 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		}
 	}
 
-	public func requestNewEncoder() {
-		encoder?.closeEncoder()
-
+	private func createEncoder() {
 		let ffmpeg = Process()
 		let writePipe = Pipe()
 		let readPipe = Pipe()
-		let reader = writePipe.fileHandleForReading
 
 		ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
-		ffmpeg.standardInput = readPipe.fileHandleForReading
-		ffmpeg.standardOutput = writePipe.fileHandleForWriting
-		ffmpeg.arguments = ["-hide_banner", "-loglevel", "error", "-i", "pipe:0", "-f", "data", "-map", "0:a", "-ar",
+		ffmpeg.standardInput = readPipe
+		ffmpeg.standardOutput = writePipe
+		ffmpeg.arguments = ["-hide_banner", "-loglevel", "quiet", "-i", "pipe:0", "-f", "data", "-map", "0:a", "-ar",
 			"48000", "-ac", "2", "-acodec", "libopus", "-sample_fmt", "s16", "-vbr", "off", "-b:a", "128000",
 			"-compression_level", "10", "pipe:1"]
 
-		encoder = DiscordVoiceEncoder(ffmpeg: ffmpeg, reader: reader, readPipe: readPipe, writePipe: writePipe)
+		signal(SIGPIPE, SIG_IGN)
+
+		encoder = DiscordVoiceEncoder(ffmpeg: ffmpeg, readPipe: readPipe, writePipe: writePipe)
 
 		client?.handleEngineEvent("voiceEngine.writeHandle", with: [readPipe.fileHandleForWriting])
 
 		readData(1)
+	}
+
+	public func requestNewEncoder() {
+		encoder?.closeEncoder()
 	}
 
 	public override func startHandshake() {

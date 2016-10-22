@@ -16,6 +16,7 @@ let client = DiscordClient(token: "")
 
 var writer: FileHandle!
 var youtube: Process!
+var new = false
 
 func handleQuit() {
     client.disconnect()
@@ -38,17 +39,29 @@ func handleLeave() {
 }
 
 func handlePlay() {
+    new = false
+
     let music = FileHandle(forReadingAtPath: "../../../Music/testing.mp3")!
 
     writeQueue.async {
         let data = music.readDataToEndOfFile()
 
         // print("read \(data)")
-        client.voiceEngine?.send(data)
+        client.voiceEngine?.send(data) {
+            print("wrote all")
+
+            guard !new else { return }
+
+            print("requesting finish and close")
+
+            client.voiceEngine?.encoder?.finishEncodingAndClose()
+        }
     }
 }
 
 func handleNew() {
+    new = true
+
     youtube?.terminate()
     client.voiceEngine?.requestNewEncoder()
 }
@@ -275,14 +288,25 @@ func readAsync() {
 		guard let input = readLine(strippingNewline: true) else { return readAsync() }
 
         if let handler = handlers[input] {
-            handler()
+            DispatchQueue.main.async {
+                handler()
+            }
         } else if input.hasPrefix("youtube") {
-        	let link = input.components(separatedBy: " ")[1]
-        	youtube = Process()
+            let link = input.components(separatedBy: " ")[1]
 
-        	youtube.launchPath = "/usr/local/bin/youtube-dl"
-        	youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
-        	youtube.standardOutput = writer
+            new = false
+            youtube = Process()
+            youtube.launchPath = "/usr/local/bin/youtube-dl"
+            youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
+            youtube.standardOutput = writer
+
+            youtube.terminationHandler = {process in
+                print("youtube-dl died")
+
+                guard !new else { return }
+
+                client.voiceEngine?.encoder?.finishEncodingAndClose()
+            }
 
         	youtube.launch()
         } else if input.hasPrefix("game") {
