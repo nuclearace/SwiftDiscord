@@ -36,6 +36,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public private(set) var voiceServerInformation: [String: Any]!
 
 	private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
+	private let udpQueueRead = DispatchQueue(label: "discordVoiceEngine.udpQueue")
 
 	private var currentUnixTime: Int {
 		return Int(Date().timeIntervalSince1970 * 1000)
@@ -170,6 +171,27 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		}
 
 		return rtpHeader
+	}
+
+	private func decryptVoiceData(_ data: Data) {
+		defer { unencrypted.deallocate(capacity: audioSize) }
+
+		let rtpHeader = Array(data.prefix(12))
+		let voiceData = Array(data.dropFirst(12))
+		let audioSize = voiceData.count - Int(crypto_secretbox_MACBYTES)
+		let unencrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
+		let padding = [UInt8](repeating: 0x00, count: 12)
+		var nonce = rtpHeader + padding
+
+		let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &self.secret!)
+
+		// Decryption failure
+		guard success != -1 else { return }
+
+		// TODO figure out the best way to give them this
+		// Do we decode it, and then give it to them?
+		// Or do we just give them the rtp header and the bytes and let the figure it out?
+		_ = Array(UnsafeBufferPointer<UInt8>(start: unencrypted, count: audioSize))
 	}
 
 	public override func disconnect() {
@@ -318,6 +340,22 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		}
 	}
 
+	private func readSocket() {
+		udpQueueRead.async {[weak self] in
+			guard let this = self, let socket = this.udpSocket else { return }
+
+			do {
+				let (data, _) = try socket.receive(maxBytes: 4096)
+
+				this.decryptVoiceData(Data(bytes: data))
+			} catch {
+				print("Error reading socket data")
+			}
+
+			this.readSocket()
+		}
+	}
+
 	// Tells the voice websocket what our ip and port is, and what encryption mode we will use
 	// currently only xsalsa20_poly1305 is supported
 	// After this point we are good to go in sending encrypted voice packets
@@ -344,6 +382,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			// We inherited a previous engine's encoder, use it
 			readData(1)
 		}
+
+		readSocket()
 	}
 
 	public override func sendHeartbeat() {
