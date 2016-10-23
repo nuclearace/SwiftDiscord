@@ -3,9 +3,9 @@
 A Discord API client for Swift.
 
 Features:
-  - Sending voice (receiving voice coming soon)
+  - Sending and receiving voice
   - Bot and User account support (OAuth coming soon)
-  - REST API sperate from client. You can use the REST API separately (via the DiscordEndpoint enum) from the client if you wish.
+  - REST API sperate from client. You can use the REST API separately to build your own client if you wish.
 
 Requirements:
   - macOS (I plan to eventually see what can be done on iOS)
