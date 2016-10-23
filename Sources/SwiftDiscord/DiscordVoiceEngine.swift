@@ -20,7 +20,7 @@ import Starscream
 import Socks
 import Sodium
 
-public typealias DiscordVoiceData = (rtpHeader: [UInt8], voiceData: Array<UInt8>)
+public typealias DiscordVoiceData = (rtpHeader: [UInt8], voiceData: [UInt8])
 
 enum DiscordVoiceEngineError : Error {
 	case ipExtraction
