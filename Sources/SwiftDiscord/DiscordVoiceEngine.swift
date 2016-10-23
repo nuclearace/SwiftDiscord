@@ -20,7 +20,7 @@ import Starscream
 import Socks
 import Sodium
 
-public typealias DiscordVoiceData = (rtpHeader: [UInt8], voiceData: Data)
+public typealias DiscordVoiceData = (rtpHeader: [UInt8], voiceData: Array<UInt8>)
 
 enum DiscordVoiceEngineError : Error {
 	case ipExtraction
@@ -191,7 +191,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		guard success != -1 else { return }
 
 		self.client?.handleVoiceData(DiscordVoiceData(rtpHeader: rtpHeader,
-			voiceData: Data(UnsafeBufferPointer<UInt8>(start: unencrypted, count: audioSize))))
+			voiceData: Array(UnsafeBufferPointer<UInt8>(start: unencrypted, count: audioSize))))
 	}
 
 	public override func disconnect() {
