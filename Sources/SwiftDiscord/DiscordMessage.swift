@@ -1,3 +1,20 @@
+// The MIT License (MIT)
+// Copyright (c) 2016 Erik Little
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without
+// limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+// Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+// BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+// EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+// ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+// DEALINGS IN THE SOFTWARE.
+
 import Foundation
 
 public struct DiscordAttachment {
@@ -58,7 +75,7 @@ extension DiscordEmbed {
 		let type = embedObject["type"] as? String ?? ""
 		let url = URL(string: embedObject["url"] as? String ?? "") ?? URL(string: "http://localhost/")!
 
-		self.init(description: description, provider: provider, thumbnail: thumbnail, title: title, type: type, 
+		self.init(description: description, provider: provider, thumbnail: thumbnail, title: title, type: type,
 			url: url)
 	}
 
@@ -122,8 +139,8 @@ extension DiscordMessage {
 		let timestampString = messageObject["timestamp"] as? String ?? ""
 		let timestamp = convertISO8601(string: timestampString) ?? Date()
 
-		self.init(attachments: attachments, author: author, channelId: channelId, content: content, 
-			editedTimestamp: editedTimestamp, embeds: embeds, id: id, mentionEveryone: mentionEveryone, 
+		self.init(attachments: attachments, author: author, channelId: channelId, content: content,
+			editedTimestamp: editedTimestamp, embeds: embeds, id: id, mentionEveryone: mentionEveryone,
 			mentionRoles: mentionRoles, mentions: mentions, timestamp: timestamp, tts: tts)
 	}
 
