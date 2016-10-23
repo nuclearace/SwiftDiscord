@@ -243,12 +243,20 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 	open func handlePresenceUpdate(with data: [String: Any]) {
 		guard let guildId = data["guild_id"] as? String else { return }
+		guard let user = data["user"] as? [String: Any] else { return }
+		guard let userId = user["id"] as? String else { return }
 
-		let presence = DiscordPresence(presenceObject: data, guildId: guildId)
+		var presence = guilds[guildId]?.presences[userId]
 
-		self.guilds[guildId]?.presences[presence.user.id] = presence
+		if presence != nil {
+			presence!.updatePresence(presenceObject: data)
+		} else {
+			presence = DiscordPresence(presenceObject: data, guildId: guildId)
+		}
 
-		handleEvent("presenceUpdate", with: [guildId, presence])
+		guilds[guildId]?.presences[presence!.user.id] = presence!
+
+		handleEvent("presenceUpdate", with: [guildId, presence!])
 	}
 
 	open func handleReady(with data: [String: Any]) {

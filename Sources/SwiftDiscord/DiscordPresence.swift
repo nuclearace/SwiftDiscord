@@ -15,33 +15,38 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-public struct DiscordGame {
-	public let name: String
+public enum DiscordGameType {
+	case game
+	case stream(String)
 
-	public init?(string: String?) {
-		guard let string = string else { return nil }
-
-		name = string
+	init(int: Int, url: String?) {
+		if int == 0 {
+			self = .game
+		} else if int == 1 && url != nil {
+			self = .stream(url!)
+		} else {
+			self = .game
+		}
 	}
 }
 
-public enum DiscordPresenceStatus {
-	case idle
-	case offline
-	case online
+public struct DiscordGame {
+	public let name: String
+	public let type: DiscordGameType
 
-	public init?(string: String) {
-		switch string {
-		case "idle":
-			self = .idle
-		case "offline":
-			self = .offline
-		case "online":
-			self = .online
-		default:
-			return nil
-		}
+	public init?(gameObject: [String: Any]?) {
+		guard let game = gameObject else { return nil }
+		guard let name = game["name"] as? String else { return nil }
+
+		self.name = name
+		self.type = DiscordGameType(int: game["type"] as? Int ?? 0, url: game["url"] as? String)
 	}
+}
+
+public enum DiscordPresenceStatus : String {
+	case idle = "idle"
+	case offline = "offline"
+	case online = "online"
 }
 
 public struct DiscordPresence {
@@ -52,14 +57,34 @@ public struct DiscordPresence {
 	public var nick: String
 	public var roles: [String]
 	public var status: DiscordPresenceStatus
+
+	mutating func updatePresence(presenceObject: [String: Any]) {
+		if let game = presenceObject["game"] as? [String: Any] {
+			self.game = DiscordGame(gameObject: game)
+		} else {
+			game = nil
+		}
+
+		if let nick = presenceObject["nick"] as? String {
+			self.nick = nick
+		}
+
+		if let roles = presenceObject["roles"] as? [String] {
+			self.roles = roles
+		}
+
+		if let status = presenceObject["status"] as? String {
+			self.status = DiscordPresenceStatus(rawValue: status) ?? .offline
+		}
+	}
 }
 
 extension DiscordPresence {
 	init(presenceObject: [String: Any], guildId: String) {
 		let user = DiscordUser(userObject: presenceObject["user"] as? [String: Any] ?? [:])
-		let game = DiscordGame(string: presenceObject["game"] as? String)
+		let game = DiscordGame(gameObject: presenceObject["game"] as? [String: Any])
 		let nick = presenceObject["nick"] as? String ?? ""
-		let status = DiscordPresenceStatus(string: presenceObject["status"] as? String ?? "") ?? .offline
+		let status = DiscordPresenceStatus(rawValue: presenceObject["status"] as? String ?? "") ?? .offline
 
 		self.init(guildId: guildId, user: user, game: game, nick: nick, roles: [], status: status)
 	}
