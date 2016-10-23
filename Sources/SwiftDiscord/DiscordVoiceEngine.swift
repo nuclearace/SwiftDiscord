@@ -38,7 +38,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public private(set) var voiceServerInformation: [String: Any]!
 
 	private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
-	private let udpQueueRead = DispatchQueue(label: "discordVoiceEngine.udpQueue")
+	private let udpQueueRead = DispatchQueue(label: "discordVoiceEngine.udpQueueRead")
 
 	private var currentUnixTime: Int {
 		return Int(Date().timeIntervalSince1970 * 1000)
@@ -342,17 +342,17 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	private func readSocket() {
 		udpQueueRead.async {[weak self] in
-			guard let this = self, let socket = this.udpSocket else { return }
+			guard let socket = self?.udpSocket else { return }
 
 			do {
 				let (data, _) = try socket.receive(maxBytes: 4096)
 
-				this.decryptVoiceData(Data(bytes: data))
+				self?.decryptVoiceData(Data(bytes: data))
 			} catch {
 				// print("Error reading socket data")
 			}
 
-			this.readSocket()
+			self?.readSocket()
 		}
 	}
 
