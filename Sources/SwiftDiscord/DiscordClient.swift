@@ -23,6 +23,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	public var engine: DiscordEngineSpec?
 	public var handleQueue = DispatchQueue.main
 	public var voiceEngine: DiscordVoiceEngineSpec?
+	public var onVoiceData: (DiscordVoiceData) -> Void = {_ in }
 
 	public var isBot: Bool {
 		guard let user = self.user else { return false }
@@ -39,6 +40,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	// crunchQueue should be used for tasks would block the handleQueue for too long
 	// DO NOT TOUCH ANY PROPERTIES WHILE ON THIS QUEUE. REENTER THE HANDLEQUEUE
 	private let crunchQueue = DispatchQueue(label: "crunchQueue")
+	private let voiceQueue = DispatchQueue(label: "voiceQueue")
 
 	private var handlers = [String: DiscordEventHandler]()
 	private var joiningVoiceChannel = false
@@ -272,6 +274,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		connected = true
 		handleEvent("connect", with: [data])
+	}
+
+	open func handleVoiceData(_ data: DiscordVoiceData) {
+		voiceQueue.async {
+			self.onVoiceData(data)
+		}
 	}
 
 	open func handleVoiceServerUpdate(with data: [String: Any]) {

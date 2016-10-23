@@ -20,6 +20,8 @@ import Starscream
 import Socks
 import Sodium
 
+public typealias DiscordVoiceData = (rtpHeader: [UInt8], voiceData: Data)
+
 enum DiscordVoiceEngineError : Error {
 	case ipExtraction
 }
@@ -188,10 +190,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		// Decryption failure
 		guard success != -1 else { return }
 
-		// TODO figure out the best way to give them this
-		// Do we decode it, and then give it to them?
-		// Or do we just give them the rtp header and the bytes and let the figure it out?
-		_ = Array(UnsafeBufferPointer<UInt8>(start: unencrypted, count: audioSize))
+		self.client?.handleVoiceData(DiscordVoiceData(rtpHeader: rtpHeader,
+			voiceData: Data(UnsafeBufferPointer<UInt8>(start: unencrypted, count: audioSize))))
 	}
 
 	public override func disconnect() {
@@ -349,7 +349,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 				this.decryptVoiceData(Data(bytes: data))
 			} catch {
-				print("Error reading socket data")
+				// print("Error reading socket data")
 			}
 
 			this.readSocket()
@@ -423,7 +423,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 					try udpSocket.send(bytes: rtpHeader + encryptedBytes)
 					// print("Sent \(encryptedBytes.count) bytes of voice")
 				} catch {
-					print("failed to send udp packet")
+					// print("failed to send udp packet")
 				}
 			}
 		}

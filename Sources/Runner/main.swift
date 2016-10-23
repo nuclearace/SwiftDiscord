@@ -388,6 +388,10 @@ client.on("guildDelete") {data in
     print(data)
 }
 
+client.onVoiceData = {voiceData in
+    // print("Got voice data \(voiceData)")
+}
+
 client.connect()
 
 CFRunLoopRun()
