@@ -16,7 +16,7 @@ public protocol DiscordClientSpec : class, DiscordEngineClient {
 	func disconnect()
 	func on(_ event: String, callback: @escaping ([Any]) -> Void)
 	func handleEvent(_ event: String, with data: [Any])
-	func joinVoiceChannel(_ channelId: String, callback: @escaping (String) -> Void)
+	func joinVoiceChannel(_ channelId: String)
 	func leaveVoiceChannel(_ channelId: String)
 	func requestAllUsers(on guildId: String)
 	func setPresence(_ presence: [String: Any])

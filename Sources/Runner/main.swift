@@ -28,9 +28,7 @@ func handleTestGet() {
 }
 
 func handleJoin() {
-    client.joinVoiceChannel(voiceChannel) {message in
-        print(message)
-    }
+    client.joinVoiceChannel(voiceChannel)
 }
 
 func handleLeave() {
@@ -40,7 +38,7 @@ func handleLeave() {
 func handlePlay() {
     new = false
 
-    let music = FileHandle(forReadingAtPath: "../../../Music/testing.mp3")!
+    let music = FileHandle(forReadingAtPath: ("~/Music/testing.mp3" as NSString).expandingTildeInPath)!
 
     writeQueue.async {
         let data = music.readDataToEndOfFile()

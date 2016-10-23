@@ -4,6 +4,8 @@ import SwiftDiscord
 let queue = DispatchQueue(label: "Async Read")
 let client = DiscordClient(token: "")
 
+let voiceChannel = ""
+
 func readAsync() {
     queue.async {
         guard let input = readLine(strippingNewline: true) else { return readAsync() }
@@ -24,6 +26,18 @@ client.on("disconnect") {data in
     exit(0)
 }
 
+client.on("connect") {data in
+    let deadline = DispatchTime.now() + 3
+
+    DispatchQueue.main.asyncAfter(deadline: deadline) {
+        client.joinVoiceChannel(voiceChannel)
+    }
+}
+
+client.on("voiceEngine.ready") {data in
+    print("Voice engine ready")
+}
+
 client.on("messageCreate") {data in
     guard let message = data[0] as? DiscordMessage else { return }
 
@@ -36,6 +50,17 @@ client.on("messageCreate") {data in
 
     if command == "swiftping" {
         client.sendMessage("pong", to: message.channelId)
+    } else if command == "youtube" {
+        let youtube = Process()
+        youtube.launchPath = "/usr/local/bin/youtube-dl"
+        youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", commandArgs.dropFirst().joined()]
+        youtube.standardOutput = client.voiceEngine!.requestFileHandleForWriting()
+
+        youtube.terminationHandler = {process in
+            client.voiceEngine?.encoder?.finishEncodingAndClose()
+        }
+
+        youtube.launch()
     }
 }
 

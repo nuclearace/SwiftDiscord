@@ -21,7 +21,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 	// crunchQueue should be used for tasks would block the handleQueue for too long
 	// DO NOT TOUCH ANY PROPERTIES WHILE ON THIS QUEUE. REENTER THE HANDLEQUEUE
-	private let crunchQueue = DispatchQueue(label: "crunchQueue", attributes: [])
+	private let crunchQueue = DispatchQueue(label: "crunchQueue")
 
 	private var handlers = [String: DiscordEventHandler]()
 	private var joiningVoiceChannel = false
@@ -287,10 +287,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		return nil
 	}
 
-	open func joinVoiceChannel(_ channelId: String, callback: @escaping (String) -> Void) {
+	open func joinVoiceChannel(_ channelId: String) {
 		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
 				channel.type == .voice else {
-			callback("invalid channel")
 
 			return
 		}
