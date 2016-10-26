@@ -21,6 +21,7 @@ public protocol DiscordEndpointConsumer : DiscordClientSpec {
     func acceptInvite(_ invite: String)
     func addPinnedMessage(_ messageId: String, on channelId: String)
     func bulkDeleteMessages(_ messages: [String], on channelId: String)
+    func createDM(with: String, callback: @escaping (DiscordDMChannel?) -> Void)
     func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
         callback: @escaping (DiscordInvite?) -> Void)
     func createGuildChannel(on guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel])
@@ -33,6 +34,7 @@ public protocol DiscordEndpointConsumer : DiscordClientSpec {
     func editMessage(_ messageId: String, on channelId: String, content: String)
     func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String)
     func getBotURL(with permissions: [DiscordPermission]) -> URL?
+    func getDMs(callback: @escaping ([String: DiscordDMChannel]) -> Void)
     func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> Void)
     func getGuildBans(for guildId: String, callback: @escaping ([DiscordUser]) -> Void)
     func getGuildChannels(_ guildId: String, callback: @escaping ([DiscordGuildChannel]) -> Void)
@@ -67,6 +69,10 @@ public extension DiscordEndpointConsumer {
 
     public func bulkDeleteMessages(_ messages: [String], on channelId: String) {
         DiscordEndpoint.bulkDeleteMessages(messages, on: channelId, with: token, isBot: isBot)
+    }
+
+    public func createDM(with: String, callback: @escaping (DiscordDMChannel?) -> Void) {
+        DiscordEndpoint.createDM(with: with, user: user!.id, with: token, isBot: isBot, callback: callback)
     }
 
     public func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
@@ -118,6 +124,10 @@ public extension DiscordEndpointConsumer {
         guard let user = self.user else { return nil }
 
         return DiscordOAuthEndpoint.createBotAddURL(for: user, with: permissions)
+    }
+
+    public func getDMs(callback: @escaping ([String: DiscordDMChannel]) -> Void) {
+        DiscordEndpoint.getDMs(user: user!.id, with: token, isBot: isBot, callback: callback)
     }
 
     public func getGuildBans(for guildId: String, callback: @escaping ([DiscordUser]) -> Void) {

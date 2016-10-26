@@ -116,6 +116,10 @@ public enum DiscordEndpoint : String {
 	// Guild Roles
 	case guildRoles = "/guilds/guild.id/roles"
 	case guildRole = "/guilds/guild.id/roles/role.id"
+	/* End Guilds */
+
+	/* User */
+	case userChannels = "/users/me/channels"
 
 	var combined: String {
 		return DiscordEndpoint.baseURL.rawValue + rawValue

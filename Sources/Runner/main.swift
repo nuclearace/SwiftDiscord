@@ -255,6 +255,18 @@ func handleRequestAll() {
     client.requestAllUsers(on: "81384788765712384")
 }
 
+func handleCreateDM() {
+    client.createDM(with: "104753987663712256") {channel in
+        print(channel)
+    }
+}
+
+func handleGetDMs() {
+    client.getDMs {dms in
+        print(dms)
+    }
+}
+
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -295,6 +307,8 @@ let handlers = [
     "acceptinvite": handleAcceptInvite,
     "getinvite": handleGetInvite,
     "requestall": handleRequestAll,
+    "createdm": handleCreateDM,
+    "getdms": handleGetDMs,
 ]
 
 func readAsync() {
@@ -378,6 +392,10 @@ client.on("messageCreate") {data in
 	guard let message = data[0] as? DiscordMessage else { fatalError("Didn't get message in message event") }
 
 	// print(message)
+}
+
+client.on("channelCreate") {channel in
+    print("channel created \(channel)")
 }
 
 client.on("channelDelete") {data in

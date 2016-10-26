@@ -23,6 +23,8 @@ let client = DiscordClient(token: "")
 
 let voiceChannel = ""
 
+var youtube: Process!
+
 func readAsync() {
     queue.async {
         guard let input = readLine(strippingNewline: true) else { return readAsync() }
@@ -68,7 +70,7 @@ client.on("messageCreate") {data in
     if command == "swiftping" {
         client.sendMessage("pong", to: message.channelId)
     } else if command == "youtube" {
-        let youtube = Process()
+        youtube = Process()
         youtube.launchPath = "/usr/local/bin/youtube-dl"
         youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", commandArgs.dropFirst().joined()]
         youtube.standardOutput = client.voiceEngine!.requestFileHandleForWriting()
@@ -78,6 +80,9 @@ client.on("messageCreate") {data in
         }
 
         youtube.launch()
+    } else if command == "skip" {
+        youtube.terminate()
+        client.voiceEngine?.requestNewEncoder()
     }
 }
 
