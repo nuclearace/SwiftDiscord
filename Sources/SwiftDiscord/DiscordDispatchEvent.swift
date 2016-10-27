@@ -22,6 +22,8 @@ public enum DiscordDispatchEvent : String {
 	case messageCreate = "MESSAGE_CREATE"
 	case messageDelete = "MESSAGE_DELETE"
 	case messageDeleteBulk = "MESSAGE_DELETE_BULK"
+	case messageReactionAdd = "MESSAGE_REACTION_ADD"
+	case messageReactionRemove = "MESSAGE_REACTION_REMOVE"
 	case messageUpdate = "MESSAGE_UPDATE"
 
 	// Guilds

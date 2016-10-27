@@ -23,6 +23,7 @@ public enum DiscordPermission : Int {
 	case administrator = 0x00000008
 	case manageChannels = 0x00000010
 	case manageGuild = 0x00000020
+	case addReactions = 0x00000040
 	case readMessages = 0x00000400
 	case sendMessages = 0x00000800
 	case sendTTSMessages = 0x00001000
