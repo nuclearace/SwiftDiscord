@@ -81,7 +81,7 @@ func handleNew() {
 }
 
 func handleBot() {
-    print(client.getBotURL(with: [.readMessages, .sendMessages])!)
+    print(client.getBotURL(with: [.addReactions])!)
 }
 
 func handleChannel() {
@@ -229,10 +229,10 @@ func handleCreateRole() {
 }
 
 func handleModifyRole() {
-    var role = client.guilds["201533018215677953"]!.roles["238074249133162496"]!
+    var role = client.guilds["201533018215677953"]!.roles["240986482846859265"]!
 
     role.name = "evan"
-    role.permissions = DiscordPermission.sendMessages | .readMessages
+    role.permissions = DiscordPermission.addReactions.rawValue
 
     client.modifyGuildRole(role, on: "201533018215677953")
 }
@@ -264,6 +264,12 @@ func handleCreateDM() {
 func handleGetDMs() {
     client.getDMs {dms in
         print(dms)
+    }
+}
+
+func handleGetGuilds() {
+    client.getGuilds {guilds in
+        print(guilds)
     }
 }
 
@@ -309,6 +315,7 @@ let handlers = [
     "requestall": handleRequestAll,
     "createdm": handleCreateDM,
     "getdms": handleGetDMs,
+    "getguilds": handleGetGuilds,
 ]
 
 func readAsync() {

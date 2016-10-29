@@ -41,6 +41,7 @@ public protocol DiscordEndpointConsumer : DiscordClientSpec {
     func getGuildMember(by id: String, on guildId: String, callback: @escaping (DiscordGuildMember?) -> Void)
     func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
         callback: @escaping ([DiscordGuildMember]) -> Void)
+    func getGuilds(callback: @escaping ([String: DiscordUserGuild]) -> Void)
     func getGuildRoles(for guildId: String, callback: @escaping ([DiscordRole]) -> Void)
     func getInvite(_ invite: String, callback: @escaping (DiscordInvite?) -> Void)
     func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void)
@@ -145,6 +146,10 @@ public extension DiscordEndpointConsumer {
     public func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
             callback: @escaping ([DiscordGuildMember]) -> Void) {
         DiscordEndpoint.getGuildMembers(on: guildId, options: options, with: token, isBot: isBot, callback: callback)
+    }
+
+    public func getGuilds(callback: @escaping ([String: DiscordUserGuild]) -> Void) {
+        DiscordEndpoint.getGuilds(user: user!.id, with: token, isBot: isBot, callback: callback)
     }
 
     public func getGuildRoles(for guildId: String, callback: @escaping ([DiscordRole]) -> Void) {

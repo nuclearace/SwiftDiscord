@@ -61,4 +61,30 @@ public extension DiscordEndpoint {
             callback(DiscordDMChannel.DMsfromArray(channels as! [[String: Any]]))
         })
     }
+
+    public static func getGuilds(user: String, with token: String, isBot bot: Bool,
+            callback: @escaping ([String: DiscordUserGuild]) -> Void) {
+        var request = createRequest(with: token, for: .userGuilds, replacing: ["me": user], isBot: bot)
+
+        request.httpMethod = "GET"
+
+        let rateLimiterKey = DiscordRateLimitKey(endpoint: .userGuilds, parameters: ["me": user])
+
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            guard let data = data, response?.statusCode == 200 else {
+                callback([:])
+
+                return
+            }
+
+            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
+                case let .array(guilds) = json else {
+                    callback([:])
+
+                    return
+            }
+
+            callback(DiscordUserGuild.userGuildsFromArray(guilds as! [[String: Any]]))
+        })
+    }
 }

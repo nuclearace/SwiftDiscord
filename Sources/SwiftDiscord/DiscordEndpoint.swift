@@ -120,12 +120,13 @@ public enum DiscordEndpoint : String {
 
 	/* User */
 	case userChannels = "/users/me/channels"
+	case userGuilds = "/users/me/guilds"
 
 	var combined: String {
 		return DiscordEndpoint.baseURL.rawValue + rawValue
 	}
 
-	static func createRequest(with token: String, for endpoint: DiscordEndpoint,
+	public static func createRequest(with token: String, for endpoint: DiscordEndpoint,
 		replacing: [String: String], isBot bot: Bool, getParams: [String: String]? = nil) -> URLRequest {
 
 		var request = URLRequest(url: endpoint.createURL(replacing: replacing, getParams: getParams ?? [:]))

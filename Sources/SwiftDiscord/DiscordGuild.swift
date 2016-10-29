@@ -137,3 +137,35 @@ extension DiscordGuild {
 		return guildDictionary
 	}
 }
+
+public struct DiscordUserGuild {
+	public let id: String
+	public let name: String
+	public let icon: String
+	public let owner: Bool
+	public let permissions: Int
+}
+
+extension DiscordUserGuild {
+	init(userGuildObject: [String: Any]) {
+		let id = userGuildObject["id"] as? String ?? ""
+		let name = userGuildObject["name"] as? String ?? ""
+		let icon = userGuildObject["icon"] as? String ?? ""
+		let owner = userGuildObject["owner"] as? Bool ?? false
+		let permissions = userGuildObject["permissions"] as? Int ?? 0
+
+		self.init(id: id, name: name, icon: icon, owner: owner, permissions: permissions)
+	}
+
+	static func userGuildsFromArray(_ guilds: [[String: Any]]) -> [String: DiscordUserGuild] {
+		var userGuildDictionary = [String: DiscordUserGuild]()
+
+		for guildObject in guilds {
+			let guild = DiscordUserGuild(userGuildObject: guildObject)
+
+			userGuildDictionary[guild.id] = guild
+		}
+
+		return userGuildDictionary
+	}
+}
