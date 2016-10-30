@@ -15,12 +15,15 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+public typealias DiscordVoiceData = (rtpHeader: [UInt8], voiceData: [UInt8])
+
+#if os(macOS)
+
 import Foundation
 import Starscream
 import Socks
 import Sodium
 
-public typealias DiscordVoiceData = (rtpHeader: [UInt8], voiceData: [UInt8])
 
 enum DiscordVoiceEngineError : Error {
 	case ipExtraction
@@ -465,3 +468,5 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		findIP()
 	}
 }
+
+#endif

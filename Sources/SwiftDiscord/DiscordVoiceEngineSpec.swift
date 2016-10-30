@@ -17,6 +17,8 @@
 
 import Foundation
 
+#if os(macOS)
+
 public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
 	var encoder: DiscordVoiceEncoder? { get }
 	var secret: [UInt8]! { get }
@@ -32,3 +34,5 @@ public extension DiscordVoiceEngineSpec {
         encoder?.write(data, doneHandler: doneHandler)
     }
 }
+
+#endif

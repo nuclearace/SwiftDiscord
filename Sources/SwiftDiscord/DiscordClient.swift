@@ -22,7 +22,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 	public var engine: DiscordEngineSpec?
 	public var handleQueue = DispatchQueue.main
+    #if os(macOS)
 	public var voiceEngine: DiscordVoiceEngineSpec?
+    #endif
 	public var onVoiceData: (DiscordVoiceData) -> Void = {_ in }
 
 	public var isBot: Bool {
@@ -74,7 +76,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		connected = false
 
 		engine?.disconnect()
+        
+        #if os(macOS)
 		voiceEngine?.disconnect()
+        #endif
 	}
 
 	// Handling
@@ -322,6 +327,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func joinVoiceChannel(_ channelId: String) {
+        #if os(macOS)
 		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
 				channel.type == .voice else {
 
@@ -339,9 +345,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 				])
 			)
 		)
+        #else
+        print("Only available on macOS")
+        #endif
 	}
 
 	open func leaveVoiceChannel(_ channelId: String) {
+        #if os(macOS)
 		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
 				channel.type == .voice else {
 			return
@@ -361,6 +371,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		)
 
 		self.joiningVoiceChannel = false
+        #else
+        print("Only available on macOS")
+        #endif
 	}
 
 	open func requestAllUsers(on guildId: String) {
@@ -379,6 +392,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	private func startVoiceConnection() {
+        #if os(macOS)
 		// We need both to start the connection
 		guard voiceState != nil && voiceServerInformation != nil else {
 			return
@@ -391,5 +405,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		// print("Connecting voice engine")
 
 		voiceEngine?.connect()
+        #else
+        print("Only available on macOS")
+        #endif
 	}
 }
