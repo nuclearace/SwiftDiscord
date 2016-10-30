@@ -8,7 +8,7 @@ Features:
   - REST API sperate from client. You can use the REST API separately to build your own client if you wish.
 
 Requirements:
-  - macOS (I plan to eventually see what can be done on iOS)
+  - macOS and iOS (iOS currently does not support voice)
   - ffmpeg installed via Homebrew (Make sure it is installed with opus support)
   - libsodium also installed via Homebrew.
   - Swift 3
