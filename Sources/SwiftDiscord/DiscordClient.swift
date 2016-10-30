@@ -74,6 +74,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		connected = false
 
 		engine?.disconnect()
+		voiceEngine?.disconnect()
 	}
 
 	// Handling
