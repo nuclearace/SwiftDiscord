@@ -139,7 +139,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	private func createRTPHeader() -> [UInt8] {
 		func resetByteNumber(_ byteNumber: inout Int,  _ i: Int) {
-			if i + 1 == 2 || i + 1 == 6 {
+			if i == 1 || i == 5 {
 				byteNumber = 0
 			} else {
 				byteNumber += 1

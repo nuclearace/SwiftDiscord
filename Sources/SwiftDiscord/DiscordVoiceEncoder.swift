@@ -25,8 +25,8 @@ public class DiscordVoiceEncoder {
 	public let writePipe: Pipe
 
 	private let readIO: DispatchIO
-	private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
-	private let writeQueue = DispatchQueue(label: "discordEngine.writeQueue")
+	private let readQueue = DispatchQueue(label: "discordVoiceEncoder.readQueue")
+	private let writeQueue = DispatchQueue(label: "discordVoiceEncoder.writeQueue")
 
 	private var encoderClosed = false
 
