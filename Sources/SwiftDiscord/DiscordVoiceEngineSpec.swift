@@ -17,7 +17,7 @@
 
 import Foundation
 
-#if os(macOS)
+#if os(macOS) || os(Linux)
 
 public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
 	var encoder: DiscordVoiceEncoder? { get }

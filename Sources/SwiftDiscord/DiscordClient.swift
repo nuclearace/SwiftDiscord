@@ -22,7 +22,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 	public var engine: DiscordEngineSpec?
 	public var handleQueue = DispatchQueue.main
-    #if os(macOS)
+    #if os(macOS) || os(Linux)
 	public var voiceEngine: DiscordVoiceEngineSpec?
     #endif
 	public var onVoiceData: (DiscordVoiceData) -> Void = {_ in }
@@ -76,8 +76,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		connected = false
 
 		engine?.disconnect()
-        
-        #if os(macOS)
+
+        #if os(macOS) || os(Linux)
 		voiceEngine?.disconnect()
         #endif
 	}
@@ -327,7 +327,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func joinVoiceChannel(_ channelId: String) {
-        #if os(macOS)
+        #if os(macOS) || os(Linux)
 		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
 				channel.type == .voice else {
 
@@ -351,11 +351,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func leaveVoiceChannel(_ channelId: String) {
-        #if os(macOS)
-		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
-				channel.type == .voice else {
-			return
-		}
+        #if os(macOS) || os(Linux)
+        guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
+        		channel.type == .voice else {
+        	return
+        }
 
 		self.voiceEngine?.disconnect()
 		self.voiceEngine = nil
@@ -392,7 +392,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	private func startVoiceConnection() {
-        #if os(macOS)
+        #if os(macOS) || os(Linux)
 		// We need both to start the connection
 		guard voiceState != nil && voiceServerInformation != nil else {
 			return

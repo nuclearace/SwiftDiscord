@@ -17,7 +17,7 @@
 
 public typealias DiscordVoiceData = (rtpHeader: [UInt8], voiceData: [UInt8])
 
-#if os(macOS)
+#if os(macOS) || os(Linux)
 
 import Foundation
 import Starscream
