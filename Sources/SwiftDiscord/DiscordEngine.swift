@@ -16,7 +16,12 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if !os(Linux)
 import Starscream
+#else
+import WebSockets
+#endif
+import Dispatch
 
 open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, DiscordEngineHeartbeatable {
 	public internal(set) var heartbeatInterval = 0 // Only touch on handleQueue
@@ -29,20 +34,14 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
 	let handleQueue = DispatchQueue(label: "discordEngine.handleQueue")
 
+	private var closed = false
+
 	public required init(client: DiscordClientSpec) {
 		self.client = client
 	}
 
-	open func attachWebSocket() {
-		// print("DiscordEngine: Attaching WebSocket")
-
-		websocket = WebSocket(url: URL(string: "wss://gateway.discord.gg")!)
-		websocket?.callbackQueue = parseQueue
-
-		attachWebSocketHandlers()
-	}
-
-	open func attachWebSocketHandlers() {
+	#if !os(Linux)
+	func attachWebSocketHandlers() {
 		websocket?.onConnect = {[weak self] in
 			guard let this = self else { return }
 
@@ -58,6 +57,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			// print("DiscordEngine: WebSocket disconnected \(String(describing: err))")
 
 			this.client?.handleEngineEvent("engine.disconnect", with: [])
+			this.closed = true
 		}
 
 		websocket?.onText = {[weak self] string in
@@ -68,13 +68,38 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			this.parseGatewayMessage(string)
 		}
 	}
+	#endif
 
 	open func connect() {
-		attachWebSocket()
-
 		// print("DiscordEngine: connecting")
+		// print("DiscordEngine: Attaching WebSocket")
 
+		#if os(iOS) || os(macOS)
+		websocket = WebSocket(url: URL(string: "wss://gateway.discord.gg")!)
+		websocket?.callbackQueue = parseQueue
+
+		attachWebSocketHandlers()
 		websocket?.connect()
+		#else
+
+		try? WebSocket.background(to: "wss://gateway.discord.gg") {[weak self] ws in
+			print("DiscordEngine Websocket connected")
+			self?.websocket = ws
+			self?.startHandshake()
+
+			self?.websocket?.onText = {ws, text in
+				// print("DiscordEngine got text \(text)")
+				self?.parseGatewayMessage(text)
+			}
+
+			self?.websocket?.onClose = {_, _, _, _ in
+				// print("DiscordEngine closed")
+
+				self?.client?.handleEngineEvent("engine.disconnect", with: [])
+				self?.closed = true
+			}
+		}
+		#endif
 	}
 
 	open func createHandshakeObject() -> [String: Any] {
@@ -96,7 +121,11 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	open func disconnect() {
 		// print("DiscordEngine: Disconnecting")
 
+		#if !os(Linux)
 		websocket?.disconnect()
+		#else
+		try? websocket?.close()
+		#endif
 	}
 
 	open func error(message: String) {
@@ -135,9 +164,9 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	}
 
 	open func sendHeartbeat() {
-		guard websocket?.isConnected ?? false else { return }
+		guard !closed else { return }
 
-		// print("DiscordEngineHeartbeatable: about to send heartbeat")
+		// print("DiscordEngine: about to send heartbeat")
 
 		sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
 

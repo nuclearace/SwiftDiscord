@@ -18,9 +18,13 @@
 #if os(macOS) || os(Linux)
 
 import Foundation
+import Dispatch
+#if os(Linux)
+import Glibc
+#endif
 
 public class DiscordVoiceEncoder {
-	public let ffmpeg: Process
+	public let ffmpeg: EncoderProcess
 	public let readPipe: Pipe
 	public let writePipe: Pipe
 
@@ -30,7 +34,7 @@ public class DiscordVoiceEncoder {
 
 	private var encoderClosed = false
 
-	public init(ffmpeg: Process, readPipe: Pipe, writePipe: Pipe) {
+	public init(ffmpeg: EncoderProcess, readPipe: Pipe, writePipe: Pipe) {
 		self.ffmpeg = ffmpeg
 		self.readPipe = readPipe
 		self.writePipe = writePipe
@@ -90,7 +94,11 @@ public class DiscordVoiceEncoder {
 					repeat {
 						guard let fd = self?.readPipe.fileHandleForWriting.fileDescriptor else { return }
 
+						#if os(macOS)
 						bytesWritten = Darwin.write(fd, buf.advanced(by: data.count - bytesRemaining), bytesRemaining)
+						#else
+						bytesWritten = Glibc.write(fd, buf.advanced(by: data.count - bytesRemaining), bytesRemaining)
+						#endif
 					} while bytesWritten < 0 && errno == EINTR
 
 					if bytesWritten <= 0 {

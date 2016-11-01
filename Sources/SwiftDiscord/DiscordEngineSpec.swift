@@ -16,7 +16,11 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if !os(Linux)
 import Starscream
+#else
+import WebSockets
+#endif
 
 public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable {
 	weak var client: DiscordClientSpec? { get }
@@ -40,6 +44,10 @@ public extension DiscordEngineSpec {
 			return
 		}
 
+		#if !os(Linux)
 		websocket?.write(string: payloadString)
+		#else
+		try? websocket?.send(payloadString)
+		#endif
 	}
 }

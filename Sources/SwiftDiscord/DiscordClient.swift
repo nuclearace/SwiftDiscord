@@ -16,6 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+import Dispatch
 
 open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, DiscordEndpointConsumer {
 	public let token: String

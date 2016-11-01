@@ -20,10 +20,14 @@ public typealias DiscordVoiceData = (rtpHeader: [UInt8], voiceData: [UInt8])
 #if os(macOS) || os(Linux)
 
 import Foundation
+import Dispatch
+#if os(macOS)
 import Starscream
+#else
+import WebSockets
+#endif
 import Socks
 import Sodium
-
 
 enum DiscordVoiceEngineError : Error {
 	case ipExtraction
@@ -47,9 +51,17 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		return Int(Date().timeIntervalSince1970 * 1000)
 	}
 
+	private var closed = false
+
+    #if os(macOS)
 	private var sequenceNum = UInt16(arc4random() >> 16)
-	private var startTime = 0
 	private var timestamp = arc4random()
+    #else
+    private var sequenceNum = UInt16(random() >> 16)
+    private var timestamp = random()
+    #endif
+
+	private var startTime = 0
 
 	public convenience init?(client: DiscordClientSpec, voiceServerInformation: [String: Any],
 			encoder: DiscordVoiceEncoder?, secret: [UInt8]?) {
@@ -69,30 +81,68 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	deinit {
-		// print("voice engine going bye bye")
-
 		disconnect()
 	}
 
-	public override func attachWebSocket() {
-		// print("DiscordVoiceEngine: Attaching WebSocket")
+	#if os(macOS)
+	override func attachWebSocketHandlers() {
+		websocket?.onConnect = {[weak self] in
+			guard let this = self else { return }
 
-		websocket = WebSocket(url: URL(string: "wss://" + endpoint.components(separatedBy: ":")[0])!)
-		websocket?.callbackQueue = parseQueue
+			// print("DiscordEngine: WebSocket Connected")
 
-		attachWebSocketHandlers()
-	}
-
-	public override func attachWebSocketHandlers() {
-		super.attachWebSocketHandlers()
+			this.startHandshake()
+			// this.client?.handleEngineEvent("engine.connect", with: [])
+		}
 
 		websocket?.onDisconnect = {[weak self] err in
 			guard let this = self else { return }
 
-			// print("DiscordVoiceEngine: WebSocket disconnected \(err)")
+			// print("DiscordEngine: WebSocket disconnected \(String(describing: err))")
 
 			this.client?.handleEngineEvent("voiceEngine.disconnect", with: [])
+			this.closed = true
 		}
+
+		websocket?.onText = {[weak self] string in
+			guard let this = self else { return }
+
+			// print("DiscordEngine: Got message: \(string)")
+
+			this.parseGatewayMessage(string)
+		}
+	}
+	#endif
+
+	public override func connect() {
+		// print("DiscordVoiceEngine: Attaching WebSocket")
+
+		#if os(macOS)
+		websocket = WebSocket(url: URL(string: "wss://" + endpoint.components(separatedBy: ":")[0])!)
+		websocket?.callbackQueue = parseQueue
+
+		attachWebSocketHandlers()
+		websocket?.connect()
+		#else
+		try? WebSocket.background(to: "wss://" + endpoint.components(separatedBy: ":")[0]) {[weak self] ws in
+			// print("DiscordVoiceEngine Websocket connected")
+			self?.websocket = ws
+			self?.startHandshake()
+
+			self?.websocket?.onText = {ws, text in
+				// print("DiscordVoiceEngine got text \(text)")
+
+				self?.parseGatewayMessage(text)
+			}
+
+			self?.websocket?.onClose = {_, _, _, _ in
+				// print("DiscordVoiceEngine closed")
+
+				self?.client?.handleEngineEvent("voiceEngine.disconnect", with: [])
+				self?.closed = true
+			}
+		}
+		#endif
 	}
 
 	private func audioSleep(_ count: Int) {
@@ -108,7 +158,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	private func createEncoder() {
 		encoder = nil
 
-		let ffmpeg = Process()
+		let ffmpeg = EncoderProcess()
 		let writePipe = Pipe()
 		let readPipe = Pipe()
 
@@ -390,13 +440,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	public override func sendHeartbeat() {
-		guard websocket?.isConnected ?? false else { return }
-
-		// print("About to send voice heartbeat")
+		guard !closed else { return }
 
 		sendGatewayPayload(DiscordGatewayPayload(code: .voice(.heartbeat), payload: .integer(currentUnixTime)))
 
-		let time = DispatchTime.now() + Double(Int64(heartbeatInterval * Int(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+		let time = DispatchTime.now() + Double(heartbeatInterval)
 
 		heartbeatQueue.asyncAfter(deadline: time) {[weak self] in self?.sendHeartbeat() }
 	}
