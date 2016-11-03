@@ -25,6 +25,8 @@ import WebSockets
 public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable {
 	weak var client: DiscordClientSpec? { get }
 
+	var connectURL: String { get }
+	var engineType: String { get }
 	var lastSequenceNumber: Int { get }
 	var websocket: WebSocket? { get }
 

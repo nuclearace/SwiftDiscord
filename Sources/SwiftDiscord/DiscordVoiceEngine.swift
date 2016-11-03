@@ -34,6 +34,14 @@ enum DiscordVoiceEngineError : Error {
 }
 
 public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
+	public override var connectURL: String {
+		return "wss://" + endpoint.components(separatedBy: ":")[0]
+	}
+
+	public override var engineType: String {
+		return "voiceEngine"
+	}
+
 	public private(set) var connected = false
 	public private(set) var encoder: DiscordVoiceEncoder?
 	public private(set) var endpoint: String!
@@ -82,67 +90,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	deinit {
 		disconnect()
-	}
-
-	#if os(macOS)
-	override func attachWebSocketHandlers() {
-		websocket?.onConnect = {[weak self] in
-			guard let this = self else { return }
-
-			// print("DiscordEngine: WebSocket Connected")
-
-			this.startHandshake()
-			// this.client?.handleEngineEvent("engine.connect", with: [])
-		}
-
-		websocket?.onDisconnect = {[weak self] err in
-			guard let this = self else { return }
-
-			// print("DiscordEngine: WebSocket disconnected \(String(describing: err))")
-
-			this.client?.handleEngineEvent("voiceEngine.disconnect", with: [])
-			this.closed = true
-		}
-
-		websocket?.onText = {[weak self] string in
-			guard let this = self else { return }
-
-			// print("DiscordEngine: Got message: \(string)")
-
-			this.parseGatewayMessage(string)
-		}
-	}
-	#endif
-
-	public override func connect() {
-		// print("DiscordVoiceEngine: Attaching WebSocket")
-
-		#if os(macOS)
-		websocket = WebSocket(url: URL(string: "wss://" + endpoint.components(separatedBy: ":")[0])!)
-		websocket?.callbackQueue = parseQueue
-
-		attachWebSocketHandlers()
-		websocket?.connect()
-		#else
-		try? WebSocket.background(to: "wss://" + endpoint.components(separatedBy: ":")[0]) {[weak self] ws in
-			// print("DiscordVoiceEngine Websocket connected")
-			self?.websocket = ws
-			self?.startHandshake()
-
-			self?.websocket?.onText = {ws, text in
-				// print("DiscordVoiceEngine got text \(text)")
-
-				self?.parseGatewayMessage(text)
-			}
-
-			self?.websocket?.onClose = {_, _, _, _ in
-				// print("DiscordVoiceEngine closed")
-
-				self?.client?.handleEngineEvent("voiceEngine.disconnect", with: [])
-				self?.closed = true
-			}
-		}
-		#endif
 	}
 
 	private func audioSleep(_ count: Int) {
