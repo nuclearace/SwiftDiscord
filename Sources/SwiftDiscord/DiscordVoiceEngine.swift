@@ -20,16 +20,28 @@ public typealias DiscordVoiceData = (rtpHeader: [UInt8], voiceData: [UInt8])
 #if os(macOS) || os(Linux)
 
 import Foundation
+import Dispatch
+#if os(macOS)
 import Starscream
+#else
+import WebSockets
+#endif
 import Socks
 import Sodium
-
 
 enum DiscordVoiceEngineError : Error {
 	case ipExtraction
 }
 
 public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
+	public override var connectURL: String {
+		return "wss://" + endpoint.components(separatedBy: ":")[0]
+	}
+
+	public override var engineType: String {
+		return "voiceEngine"
+	}
+
 	public private(set) var connected = false
 	public private(set) var encoder: DiscordVoiceEncoder?
 	public private(set) var endpoint: String!
@@ -47,9 +59,17 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		return Int(Date().timeIntervalSince1970 * 1000)
 	}
 
+	private var closed = false
+
+    #if os(macOS)
 	private var sequenceNum = UInt16(arc4random() >> 16)
-	private var startTime = 0
 	private var timestamp = arc4random()
+    #else
+    private var sequenceNum = UInt16(random() >> 16)
+    private var timestamp = random()
+    #endif
+
+	private var startTime = 0
 
 	public convenience init?(client: DiscordClientSpec, voiceServerInformation: [String: Any],
 			encoder: DiscordVoiceEncoder?, secret: [UInt8]?) {
@@ -69,30 +89,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	deinit {
-		// print("voice engine going bye bye")
-
 		disconnect()
-	}
-
-	public override func attachWebSocket() {
-		// print("DiscordVoiceEngine: Attaching WebSocket")
-
-		websocket = WebSocket(url: URL(string: "wss://" + endpoint.components(separatedBy: ":")[0])!)
-		websocket?.callbackQueue = parseQueue
-
-		attachWebSocketHandlers()
-	}
-
-	public override func attachWebSocketHandlers() {
-		super.attachWebSocketHandlers()
-
-		websocket?.onDisconnect = {[weak self] err in
-			guard let this = self else { return }
-
-			// print("DiscordVoiceEngine: WebSocket disconnected \(err)")
-
-			this.client?.handleEngineEvent("voiceEngine.disconnect", with: [])
-		}
 	}
 
 	private func audioSleep(_ count: Int) {
@@ -108,7 +105,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	private func createEncoder() {
 		encoder = nil
 
-		let ffmpeg = Process()
+		let ffmpeg = EncoderProcess()
 		let writePipe = Pipe()
 		let readPipe = Pipe()
 
@@ -390,13 +387,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	public override func sendHeartbeat() {
-		guard websocket?.isConnected ?? false else { return }
-
-		// print("About to send voice heartbeat")
+		guard !closed else { return }
 
 		sendGatewayPayload(DiscordGatewayPayload(code: .voice(.heartbeat), payload: .integer(currentUnixTime)))
 
-		let time = DispatchTime.now() + Double(Int64(heartbeatInterval * Int(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+		let time = DispatchTime.now() + Double(heartbeatInterval)
 
 		heartbeatQueue.asyncAfter(deadline: time) {[weak self] in self?.sendHeartbeat() }
 	}

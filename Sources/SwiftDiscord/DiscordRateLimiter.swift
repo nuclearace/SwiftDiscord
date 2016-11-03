@@ -16,6 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+import Dispatch
 
 /// The DiscordRateLimiter is in charge of making sure we don't flood Discord with requests.
 /// It keeps a dictionary of DiscordRateLimitKeys and DiscordRateLimits.
@@ -26,6 +27,8 @@ import Foundation
 final class DiscordRateLimiter {
     static let shared = DiscordRateLimiter()
 
+    private static let sharedSession = URLSession(configuration: .default, delegate: nil,
+                                                  delegateQueue: OperationQueue())
     private static var limitQueue = DispatchQueue(label: "limitQueue")
 
     private var endpointLimits = [DiscordRateLimitKey: DiscordRateLimit]()
@@ -55,7 +58,7 @@ final class DiscordRateLimiter {
 
             // print("doing request \(DiscordRateLimiter.shared.endpointLimits[endpointKey]?.remaining)")
 
-            URLSession.shared.dataTask(with: request,
+            sharedSession.dataTask(with: request,
                 completionHandler: handleResponse(endpointKey, callback)).resume()
         }
     }
@@ -86,11 +89,20 @@ final class DiscordRateLimiter {
 
                 let rateLimit = DiscordRateLimiter.shared.endpointLimits[endpointKey]!
 
-                if let limit = response.allHeaderFields["x-ratelimit-limit"] as? String,
-                    let remaining = response.allHeaderFields["x-ratelimit-remaining"] as? String,
-                    let reset = response.allHeaderFields["x-ratelimit-reset"] as? String {
+
+                if let limit = response.allHeaderFields["x-ratelimit-limit"],
+                    let remaining = response.allHeaderFields["x-ratelimit-remaining"],
+                    let reset = response.allHeaderFields["x-ratelimit-reset"] {
+                        #if os(macOS) || os(iOS)
                         // Update the limit and attempt to schedule a limit reset
-                        rateLimit.updateLimits(limit: Int(limit)!, remaining: Int(remaining)!, reset: Int(reset)!)
+                        rateLimit.updateLimits(limit: Int(limit as! String)!,
+                                               remaining: Int(remaining as! String)!,
+                                               reset: Int(reset as! String)!)
+                        #else
+                        rateLimit.updateLimits(limit: Int(limit)!,
+                                               remaining: Int(remaining)!,
+                                               reset: Int(reset)!)
+                        #endif
                         rateLimit.scheduleReset(on: limitQueue)
                 } else {
                     rateLimit.scheduleReset(on: limitQueue)
@@ -156,7 +168,7 @@ private final class DiscordRateLimit {
 
         // print("seconds till reset: \(seconds)")
 
-        return DispatchTime.now() + Double(UInt64(seconds) * NSEC_PER_SEC) / Double(NSEC_PER_SEC)
+        return DispatchTime.now() + Double(seconds)
     }
 
     init(endpointKey: DiscordRateLimitKey, limit: Int, remaining: Int, reset: Int) {

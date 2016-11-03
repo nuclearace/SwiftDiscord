@@ -15,10 +15,16 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import CoreFoundation
 import Foundation
 import SwiftDiscord
+import Dispatch
 
+#if os(macOS)
 let session = arc4random()
+#else
+let session = random()
+#endif
 
 // 201533018215677954 // pu
 // 186926277276598273
@@ -31,7 +37,7 @@ let queue = DispatchQueue(label: "Async Read")
 let writeQueue = DispatchQueue(label: "Async Write")
 let client = DiscordClient(token: "")
 
-var youtube: Process!
+var youtube: EncoderProcess!
 var new = false
 
 func handleQuit() {
@@ -135,7 +141,7 @@ func handleBulkDelete() {
 
 func handleCreateInvite() {
     client.createInvite(for: "232184444340011009", options: [.maxUses(10), .maxAge(600)], callback: {invite in
-        print(invite)
+        print(invite!)
     })
 }
 
@@ -192,7 +198,7 @@ func handleGuilds() {
 
 func handleGetMember() {
     client.getGuildMember(by: "229316633414336512", on: "186926276592795659") {member in
-        print(member)
+        print(member!)
     }
 }
 
@@ -224,7 +230,7 @@ func handleRoles() {
 
 func handleCreateRole() {
     client.createGuildRole(on: "201533018215677953") {role in
-        print(role)
+        print(role!)
     }
 }
 
@@ -247,7 +253,7 @@ func handleAcceptInvite() {
 
 func handleGetInvite() {
     client.getInvite("somecode") {invite in
-        print(invite)
+        print(invite!)
     }
 }
 
@@ -257,7 +263,7 @@ func handleRequestAll() {
 
 func handleCreateDM() {
     client.createDM(with: "104753987663712256") {channel in
-        print(channel)
+        print(channel!)
     }
 }
 
@@ -271,6 +277,10 @@ func handleGetGuilds() {
     client.getGuilds {guilds in
         print(guilds)
     }
+}
+
+func handleClose() {
+    exit(0)
 }
 
 let handlers = [
@@ -316,6 +326,7 @@ let handlers = [
     "createdm": handleCreateDM,
     "getdms": handleGetDMs,
     "getguilds": handleGetGuilds,
+    "close": handleClose,
 ]
 
 func readAsync() {
@@ -330,7 +341,7 @@ func readAsync() {
             let link = input.components(separatedBy: " ")[1]
 
             new = false
-            youtube = Process()
+            youtube = EncoderProcess()
             youtube.launchPath = "/usr/local/bin/youtube-dl"
             youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
             youtube.standardOutput = client.voiceEngine!.requestFileHandleForWriting()
@@ -358,7 +369,7 @@ func readAsync() {
         } else if input.hasPrefix("guild") {
             let guildId = input.components(separatedBy: " ").dropFirst().first!
 
-            print(client.guilds[guildId]?.members.count)
+            print(client.guilds[guildId]!.members.count)
         } else {
         	client.sendMessage(input, to: textChannel)
         }
@@ -372,7 +383,7 @@ readAsync()
 
 client.on("disconnect") {data in
 	print("Engine died, exiting")
-	exit(0)
+	// exit(0)
 }
 
 client.on("connect") {data in
@@ -386,6 +397,13 @@ client.on("guildCreate") {data in
     print("guild created \(guild.name)")
 }
 
+client.on("guildDelete") {data in
+    print(data)
+}
+
+client.on("guildUpdate") {data in
+    guard let guild = data[1] as? DiscordGuild else { return }
+}
 
 client.on("voiceEngine.disconnect") {data in
 	print("voice engine closed")
@@ -406,10 +424,6 @@ client.on("channelCreate") {channel in
 }
 
 client.on("channelDelete") {data in
-    print(data)
-}
-
-client.on("guildDelete") {data in
     print(data)
 }
 
