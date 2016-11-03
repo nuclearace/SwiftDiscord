@@ -68,7 +68,7 @@ func decodeJSON(_ string: String) -> JSON? {
 }
 
 func convertISO8601(string: String) -> Date? {
-	#if os(macOS) || os(iOS)
+	#if !os(Linux)
     if #available(macOS 10.12, iOS 10, *) {
         let formatter = ISO8601DateFormatter()
 
