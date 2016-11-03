@@ -77,7 +77,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			this.parseGatewayMessage(string)
 		}
 		#else
-		websocket?.onText = {ws, text in
+		websocket?.onText = {[weak self] ws, text in
 			// print("DiscordEngine got text \(text)")
 			self?.parseGatewayMessage(text)
 		}
@@ -107,7 +107,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			print("DiscordEngine Websocket connected")
 			self?.websocket = ws
 
-			self.attachWebSocketHandlers()
+			self?.attachWebSocketHandlers()
 			self?.startHandshake()
 		}
 		#endif
