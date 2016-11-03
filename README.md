@@ -26,6 +26,10 @@ If you wish to use Xcode with your Swift Package Manager project, you can do `sw
 
 ![](https://i.imgur.com/JR97eTO.png)
 
+You'll then want to remove all target dependencies and linked libraries except for Starscream (These are used on Linux, but not macOS or iOS).
+
+![](https://i.imgur.com/OxnyWE8.png)
+
 See Sources/Runner for a basic example
 
 Why no CocoaPods?
