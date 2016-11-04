@@ -104,7 +104,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		websocket?.connect()
 		#else
 		try? WebSocket.background(to: connectURL) {[weak self] ws in
-			print("DiscordEngine Websocket connected")
+			// print("DiscordEngine Websocket connected")
+
 			self?.websocket = ws
 
 			self?.attachWebSocketHandlers()
