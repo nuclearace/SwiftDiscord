@@ -16,6 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+import Dispatch
 
 public protocol DiscordEngineHeartbeatable {
 	var heartbeatInterval: Int { get }

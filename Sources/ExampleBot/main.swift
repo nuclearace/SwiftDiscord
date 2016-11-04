@@ -15,15 +15,17 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import CoreFoundation
 import Foundation
 import SwiftDiscord
+import Dispatch
 
 let queue = DispatchQueue(label: "Async Read")
 let client = DiscordClient(token: "")
 
 let voiceChannel = ""
 
-var youtube: Process!
+var youtube: EncoderProcess!
 
 func readAsync() {
     queue.async {
@@ -70,7 +72,7 @@ client.on("messageCreate") {data in
     if command == "swiftping" {
         client.sendMessage("pong", to: message.channelId)
     } else if command == "youtube" {
-        youtube = Process()
+        youtube = EncoderProcess()
         youtube.launchPath = "/usr/local/bin/youtube-dl"
         youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", commandArgs.dropFirst().joined()]
         youtube.standardOutput = client.voiceEngine!.requestFileHandleForWriting()

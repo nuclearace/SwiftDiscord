@@ -16,13 +16,14 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+import Dispatch
 
 open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, DiscordEndpointConsumer {
 	public let token: String
 
 	public var engine: DiscordEngineSpec?
 	public var handleQueue = DispatchQueue.main
-    #if os(macOS) || os(Linux)
+    #if !os(iOS)
 	public var voiceEngine: DiscordVoiceEngineSpec?
     #endif
 	public var onVoiceData: (DiscordVoiceData) -> Void = {_ in }
@@ -77,7 +78,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		engine?.disconnect()
 
-        #if os(macOS) || os(Linux)
+        #if !os(iOS)
 		voiceEngine?.disconnect()
         #endif
 	}
@@ -327,7 +328,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func joinVoiceChannel(_ channelId: String) {
-        #if os(macOS) || os(Linux)
+        #if !os(iOS)
 		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
 				channel.type == .voice else {
 
@@ -346,12 +347,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			)
 		)
         #else
-        print("Only available on macOS")
+        print("Only available on macOS and Linux")
         #endif
 	}
 
 	open func leaveVoiceChannel(_ channelId: String) {
-        #if os(macOS) || os(Linux)
+        #if !os(iOS)
         guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
         		channel.type == .voice else {
         	return
@@ -372,7 +373,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		self.joiningVoiceChannel = false
         #else
-        print("Only available on macOS")
+        print("Only available on macOS and Linux")
         #endif
 	}
 
@@ -392,7 +393,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	private func startVoiceConnection() {
-        #if os(macOS) || os(Linux)
+        #if !os(iOS)
 		// We need both to start the connection
 		guard voiceState != nil && voiceServerInformation != nil else {
 			return
@@ -406,7 +407,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		voiceEngine?.connect()
         #else
-        print("Only available on macOS")
+        print("Only available on macOS and Linux")
         #endif
 	}
 }

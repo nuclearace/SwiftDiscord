@@ -16,6 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+import Dispatch
 
 public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngineClient {
 	var connected: Bool { get }

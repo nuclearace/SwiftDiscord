@@ -25,8 +25,8 @@ let package = Package(
         Target(name: "SwiftDiscord")
     ],
     dependencies: [
-    	.Package(url: "https://github.com/daltoniam/Starscream", majorVersion: 2),
     	.Package(url: "https://github.com/nuclearace/Sodium", majorVersion: 1),
-    	.Package(url: "https://github.com/vapor/socks", majorVersion: 1)
+        .Package(url: "https://github.com/nuclearace/Starscream", majorVersion: 2),
+        .Package(url: "https://github.com/vapor/engine", majorVersion: 1)
     ]
 )

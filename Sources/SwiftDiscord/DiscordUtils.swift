@@ -22,6 +22,12 @@ enum JSON {
 	case dictionary([String: Any])
 }
 
+#if os(macOS)
+public typealias EncoderProcess = Process
+#elseif os(Linux)
+public typealias EncoderProcess = Task
+#endif
+
 // Why does Apple not expose this?
 infix operator &<< : BitwiseShiftPrecedence
 
@@ -62,17 +68,19 @@ func decodeJSON(_ string: String) -> JSON? {
 }
 
 func convertISO8601(string: String) -> Date? {
-	if #available(macOS 10.12, iOS 10, *) {
-		let formatter = ISO8601DateFormatter()
+	#if !os(Linux)
+    if #available(macOS 10.12, iOS 10, *) {
+        let formatter = ISO8601DateFormatter()
 
-		formatter.formatOptions = .withFullDate
+        formatter.formatOptions = .withFullDate
 
-		return formatter.date(from: string)
-	} else {
-		let RFC3339DateFormatter = DateFormatter()
+        return formatter.date(from: string)
+    }
+    #endif
 
-		RFC3339DateFormatter.dateFormat = "YYYY-MM-DD'T'HH:mm:ss.SSSSSS+HH:mm"
+	let RFC3339DateFormatter = DateFormatter()
 
-		return RFC3339DateFormatter.date(from: string)
-	}
+	RFC3339DateFormatter.dateFormat = "YYYY-MM-DD'T'HH:mm:ss.SSSSSS+HH:mm"
+
+	return RFC3339DateFormatter.date(from: string)
 }
