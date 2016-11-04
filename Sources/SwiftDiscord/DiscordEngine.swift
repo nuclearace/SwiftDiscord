@@ -93,7 +93,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	}
 
 	open func connect() {
-		// print("DiscordEngine: connecting")
+		// print("DiscordEngine: connecting to \(connectURL)")
 		// print("DiscordEngine: Attaching WebSocket")
 
 		#if !os(Linux)
