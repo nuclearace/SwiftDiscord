@@ -98,7 +98,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		guard waitTime > 0 else { return }
 
-		// print("sleeping \(waitTime)")
+		// print("sleeping \(waitTime) \(count)")
 		Thread.sleep(forTimeInterval: waitTime)
 	}
 
@@ -126,6 +126,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	public override func createHandshakeObject() -> [String: Any] {
+		// print("DiscordVoiceEngine: Creating handshakeObject")
+
 		return [
 			"session_id": client!.voiceState!.sessionId,
 			"server_id": client!.voiceState!.guildId,
@@ -251,8 +253,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		switch voiceCode {
 		case .ready:
 			handleReady(with: payload.payload)
-		case .heartbeat:
-			break
 		case .sessionDescription:
 			udpQueue.async { self.handleVoiceSessionDescription(with: payload.payload) }
 		default:
@@ -294,7 +294,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	public override func parseGatewayMessage(_ string: String) {
 		guard let decoded = DiscordGatewayPayload.payloadFromString(string, fromGateway: false) else {
-			fatalError("What happened \(string)")
+			print("DiscordVoiceEngine: Got unknown payload \(string), Endpoint is: \(endpoint!)")
+
+			return
 		}
 
 		handleGatewayPayload(decoded)
@@ -438,7 +440,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public override func startHandshake() {
 		guard client != nil else { return }
 
-		// print("starting voice handshake")
+		// print("DiscordVoiceEngine: Starting voice handshake")
 
 		let handshakeEventData = createHandshakeObject()
 
