@@ -169,7 +169,9 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
 	open func parseGatewayMessage(_ string: String) {
 		guard let decoded = DiscordGatewayPayload.payloadFromString(string) else {
-			fatalError("What happened \(string)")
+			print("DiscordEngine: Got unknown payload \(string)")
+
+			return
 		}
 
 		handleGatewayPayload(decoded)
