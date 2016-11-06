@@ -48,7 +48,6 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		self.client = client
 	}
 
-
 	open func attachWebSocketHandlers() {
 		#if !os(Linux)
 		websocket?.onConnect = {[weak self] in
@@ -64,9 +63,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			guard let this = self else { return }
 
 			// print("DiscordEngine: WebSocket disconnected \(String(describing: err))")
-
-			this.client?.handleEngineEvent("\(this.engineType).disconnect", with: [])
-			this.closed = true
+			this.handleClose()
 		}
 
 		websocket?.onText = {[weak self] string in
@@ -86,8 +83,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			guard let this = self else { return }
 			// print("DiscordEngine closed")
 
-			this.client?.handleEngineEvent("\(this.engineType).disconnect", with: [])
-			this.closed = true
+			this.handleClose()
 		}
 		#endif
 	}
@@ -142,6 +138,11 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
 	open func error(message: String) {
 		print("DiscordEngine: errored \(message)")
+	}
+
+	private func handleClose() {
+		client?.handleEngineEvent("\(engineType).disconnect", with: [])
+		closed = true
 	}
 
 	open func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
