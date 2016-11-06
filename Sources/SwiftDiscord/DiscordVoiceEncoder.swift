@@ -38,7 +38,7 @@ public class DiscordVoiceEncoder {
 		self.ffmpeg = ffmpeg
 		self.readPipe = readPipe
 		self.writePipe = writePipe
-		self.readIO = DispatchIO(type: .stream, fileDescriptor: writePipe.fileHandleForReading.fileDescriptor,
+		readIO = DispatchIO(type: .stream, fileDescriptor: writePipe.fileHandleForReading.fileDescriptor,
 			queue: readQueue,
 			cleanupHandler: {_ in })
 
