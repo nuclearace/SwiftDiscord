@@ -28,9 +28,7 @@ public class DiscordVoiceEncoder {
 	public let readPipe: Pipe
 	public let writePipe: Pipe
 
-	#if os(macOS)
 	private let readIO: DispatchIO
-	#endif
 	private let readQueue = DispatchQueue(label: "discordVoiceEncoder.readQueue")
 	private let writeQueue = DispatchQueue(label: "discordVoiceEncoder.writeQueue")
 
@@ -40,13 +38,11 @@ public class DiscordVoiceEncoder {
 		self.ffmpeg = ffmpeg
 		self.readPipe = readPipe
 		self.writePipe = writePipe
-		#if os(macOS)
 		self.readIO = DispatchIO(type: .stream, fileDescriptor: writePipe.fileHandleForReading.fileDescriptor,
 			queue: readQueue,
 			cleanupHandler: {_ in })
 
 		readIO.setLimit(lowWater: 1)
-		#endif
 
 		self.ffmpeg.launch()
 	}
@@ -68,10 +64,8 @@ public class DiscordVoiceEncoder {
 	}
 
 	public func closeReader() {
-		#if os(macOS)
 		readIO.close(flags: .stop)
 		readQueue.sync {}
-		#endif
 	}
 
 	/// Call only when you know you've finished writing data, but ffmpeg is still encoding, or has data we haven't read
@@ -83,23 +77,7 @@ public class DiscordVoiceEncoder {
 	public func read(callback: @escaping (Bool, DispatchData?, Int32) -> Void) {
 		assert(!encoderClosed, "Tried reading from a closed encoder")
 
-		#if !os(Linux)
 		readIO.read(offset: 0, length: 320, queue: readQueue, ioHandler: callback)
-		#else
-		readQueue.async {[weak self] in
-			guard let data = self?.writePipe.fileHandleForReading.readData(ofLength: 320) else {
-				callback(true, nil, 0)
-
-				return
-			}
-
-			data.withUnsafeBytes {(buf: UnsafePointer<UInt8>) in
-				let dispatchData = DispatchData(bytes: UnsafeBufferPointer(start: buf, count: data.count))
-
-				callback(false, dispatchData, 0)
-			}
-		}
-		#endif
 	}
 
 	public func write(_ data: Data, doneHandler: (() -> Void)? = nil) {
