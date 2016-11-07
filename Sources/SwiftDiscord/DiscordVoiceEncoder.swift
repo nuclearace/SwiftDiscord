@@ -24,7 +24,7 @@ import Glibc
 #endif
 
 public class DiscordVoiceEncoder {
-	public let ffmpeg: EncoderProcess
+	public let encoder: EncoderProcess
 	public let readPipe: Pipe
 	public let writePipe: Pipe
 
@@ -34,8 +34,8 @@ public class DiscordVoiceEncoder {
 
 	private var encoderClosed = false
 
-	public init(ffmpeg: EncoderProcess, readPipe: Pipe, writePipe: Pipe) {
-		self.ffmpeg = ffmpeg
+	public init(encoder: EncoderProcess, readPipe: Pipe, writePipe: Pipe) {
+		self.encoder = encoder
 		self.readPipe = readPipe
 		self.writePipe = writePipe
 		readIO = DispatchIO(type: .stream, fileDescriptor: writePipe.fileHandleForReading.fileDescriptor,
@@ -44,7 +44,22 @@ public class DiscordVoiceEncoder {
 
 		readIO.setLimit(lowWater: 1)
 
-		self.ffmpeg.launch()
+		self.encoder.launch()
+	}
+
+	public convenience init() {
+		let ffmpeg = EncoderProcess()
+		let writePipe = Pipe()
+		let readPipe = Pipe()
+
+		ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
+		ffmpeg.standardInput = readPipe.fileHandleForReading
+		ffmpeg.standardOutput = writePipe.fileHandleForWriting
+		ffmpeg.arguments = ["-hide_banner", "-loglevel", "quiet", "-i", "pipe:0", "-f", "data", "-map", "0:a", "-ar",
+			"48000", "-ac", "2", "-acodec", "libopus", "-sample_fmt", "s16", "-vbr", "off", "-b:a", "128000",
+			"-compression_level", "10", "pipe:1"]
+
+		self.init(encoder: ffmpeg, readPipe: readPipe, writePipe: writePipe)
 	}
 
 	deinit {
@@ -55,15 +70,10 @@ public class DiscordVoiceEncoder {
 
 	// Abrubtly halts encoding and kills ffmpeg
 	public func closeEncoder() {
-		kill(ffmpeg.processIdentifier, SIGKILL)
+		kill(encoder.processIdentifier, SIGKILL)
 
 		closeReader()
-		ffmpeg.waitUntilExit()
-
-		close(writePipe.fileHandleForReading.fileDescriptor)
-		close(writePipe.fileHandleForWriting.fileDescriptor)
-		close(readPipe.fileHandleForReading.fileDescriptor)
-		close(readPipe.fileHandleForWriting.fileDescriptor)
+		encoder.waitUntilExit()
 
 		encoderClosed = true
 	}

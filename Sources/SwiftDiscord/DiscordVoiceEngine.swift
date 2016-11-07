@@ -105,20 +105,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	private func createEncoder() {
 		encoder = nil
 
-		let ffmpeg = EncoderProcess()
-		let writePipe = Pipe()
-		let readPipe = Pipe()
-
-		ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
-		ffmpeg.standardInput = readPipe.fileHandleForReading
-		ffmpeg.standardOutput = writePipe.fileHandleForWriting
-		ffmpeg.arguments = ["-hide_banner", "-loglevel", "quiet", "-i", "pipe:0", "-f", "data", "-map", "0:a", "-ar",
-			"48000", "-ac", "2", "-acodec", "libopus", "-sample_fmt", "s16", "-vbr", "off", "-b:a", "128000",
-			"-compression_level", "10", "pipe:1"]
-
 		signal(SIGPIPE, SIG_IGN)
 
-		encoder = DiscordVoiceEncoder(ffmpeg: ffmpeg, readPipe: readPipe, writePipe: writePipe)
+		encoder = DiscordVoiceEncoder()
 
 		readData(1)
 

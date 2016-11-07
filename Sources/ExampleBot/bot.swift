@@ -150,7 +150,7 @@ class DiscordBot {
         youtube = EncoderProcess()
         youtube.launchPath = "/usr/local/bin/youtube-dl"
         youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
-        youtube.standardOutput = client.voiceEngine!.requestFileHandleForWriting()
+        youtube.standardOutput = client.voiceEngine!.requestFileHandleForWriting()!
 
         youtube.terminationHandler = {[weak self] process in
             print("yt died")
