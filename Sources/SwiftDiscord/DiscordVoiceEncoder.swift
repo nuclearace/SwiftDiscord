@@ -60,6 +60,11 @@ public class DiscordVoiceEncoder {
 		closeReader()
 		ffmpeg.waitUntilExit()
 
+		close(writePipe.fileHandleForReading.fileDescriptor)
+		close(writePipe.fileHandleForWriting.fileDescriptor)
+		close(readPipe.fileHandleForReading.fileDescriptor)
+		close(readPipe.fileHandleForWriting.fileDescriptor)
+
 		encoderClosed = true
 	}
 

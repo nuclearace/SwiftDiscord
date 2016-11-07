@@ -111,7 +111,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
 		ffmpeg.standardInput = readPipe.fileHandleForReading
-		ffmpeg.standardOutput = writePipe
+		ffmpeg.standardOutput = writePipe.fileHandleForWriting
 		ffmpeg.arguments = ["-hide_banner", "-loglevel", "quiet", "-i", "pipe:0", "-f", "data", "-map", "0:a", "-ar",
 			"48000", "-ac", "2", "-acodec", "libopus", "-sample_fmt", "s16", "-vbr", "off", "-b:a", "128000",
 			"-compression_level", "10", "pipe:1"]
@@ -321,7 +321,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		    	return
 		    }
 
-		    // print("Read \(data)")
+		    // print("Read \(Data(data))")
 
 		    if count == 1 {
 		    	this.startTime = this.currentUnixTime
