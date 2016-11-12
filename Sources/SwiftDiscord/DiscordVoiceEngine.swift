@@ -404,7 +404,13 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             _ = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &self.secret!)
 
             let encryptedBytes = Array(UnsafeBufferPointer<UInt8>(start: encrypted, count: enryptedCount))
-            try? udpSocket.send(bytes: rtpHeader + encryptedBytes)
+
+            do {
+            	try udpSocket.send(bytes: rtpHeader + encryptedBytes)
+            } catch {
+            	self.error(message: "Failed sending voice packet")
+            }
+
 		}
 	}
 
