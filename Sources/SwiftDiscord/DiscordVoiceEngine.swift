@@ -52,6 +52,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public private(set) var udpPort = -1
 	public private(set) var voiceServerInformation: [String: Any]!
 
+	private let encoderSemaphore = DispatchSemaphore(value: 1)
+	private let padding = [UInt8](repeating: 0x00, count: 12)
+
 	private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
 	private let udpQueueRead = DispatchQueue(label: "discordVoiceEngine.udpQueueRead")
 
@@ -60,6 +63,17 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private var closed = false
+	// This property can be accessed from multiple queues, therefore use encoderSemaphore to manage access
+	// Hopefully when Swift has property behaviors this can be made prettier
+	private var makeEncoder = true {
+		willSet {
+			encoderSemaphore.wait()
+		}
+
+		didSet {
+			encoderSemaphore.signal()
+		}
+	}
 
     #if os(macOS)
 	private var sequenceNum = UInt16(arc4random() >> 16)
@@ -105,13 +119,20 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private func createEncoder() {
+		// Any reads that get EOF because of the encoder dying should not trigger a new encoder
+		makeEncoder = false
+		// This will trigger a block while the old encoder is released and cleans itself up
+		// It's important that we first set it to nil, otherwise the new encoder will exist at the same time as the old
+		// one. Which causes weirdness
 		encoder = nil
-
 		encoder = DiscordVoiceEncoder()
 
 		readData(1)
 
 		client?.handleEvent("voiceEngine.ready", with: [])
+
+		// Reenable automatic encoder creation
+		makeEncoder = true
 	}
 
 	public override func createHandshakeObject() -> [String: Any] {
@@ -173,7 +194,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		let voiceData = Array(data.dropFirst(12))
 		let audioSize = voiceData.count - Int(crypto_secretbox_MACBYTES)
 		let unencrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
-		let padding = [UInt8](repeating: 0x00, count: 12)
 		var nonce = rtpHeader + padding
 
 		let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &self.secret!)
@@ -234,6 +254,20 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 				self.disconnect()
 			}
 		}
+	}
+
+	private func handleDoneReading() {
+		// Should we make a new encoder?
+		// If no, that means a new encoder has already been requested, creating a new one could lead to a race where we
+		// get stuck in a loop of making new encoders
+		encoderSemaphore.wait()
+		guard makeEncoder else {
+			encoderSemaphore.signal()
+			return
+		}
+
+		encoderSemaphore.signal()
+		createEncoder()
 	}
 
 	override func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
@@ -305,9 +339,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		    		"delay": 0
 		    	])))
 
-		    	this.udpQueue.async {
-		    		this.createEncoder()
-		    	}
+		    	this.handleDoneReading()
 
 		    	return
 		    }
@@ -354,7 +386,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	public func requestNewEncoder() {
-		encoder?.closeEncoder()
+		self.createEncoder()
 	}
 
 	// Tells the voice websocket what our ip and port is, and what encryption mode we will use
@@ -408,10 +440,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
             let audioSize = Int(crypto_secretbox_MACBYTES) + defaultAudioSize
             let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
-            let padding = [UInt8](repeating: 0x00, count: 12)
             let rtpHeader = self.createRTPHeader()
             let enryptedCount = Int(crypto_secretbox_MACBYTES) + data.count
-            var nonce = rtpHeader + padding
+            var nonce = rtpHeader + self.padding
 
             _ = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &self.secret!)
 

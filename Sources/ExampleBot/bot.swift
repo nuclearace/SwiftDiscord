@@ -126,7 +126,10 @@ class DiscordBot {
 
             client.joinVoiceChannel(channel.id)
         } else if command == "skip" {
-            youtube.terminate()
+            if youtube.isRunning {
+                youtube.terminate()
+            }
+
             client.voiceEngine?.requestNewEncoder()
         }
     }
