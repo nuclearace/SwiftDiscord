@@ -19,9 +19,6 @@
 
 import Foundation
 import Dispatch
-#if os(Linux)
-import Glibc
-#endif
 
 public class DiscordVoiceEncoder {
 	public let encoder: EncoderProcess
@@ -95,11 +92,7 @@ public class DiscordVoiceEncoder {
 			defer { free(buf) }
 
 			let buf = UnsafeMutableRawPointer.allocate(bytes: defaultAudioSize, alignedTo: 16)
-			#if os(macOS)
 			let bytesRead = Foundation.read(fd, buf, defaultAudioSize)
-			#else
-			let bytesRead = Glibc.read(fd, buf, defaultAudioSize)
-			#endif
 
 			// Error reading or done
 			guard bytesRead > 0 else { return callback(true, []) }
@@ -125,11 +118,7 @@ public class DiscordVoiceEncoder {
 					repeat {
 						guard let fd = self?.readPipe.fileHandleForWriting.fileDescriptor else { return }
 
-						#if os(macOS)
-						bytesWritten = Darwin.write(fd, buf.advanced(by: data.count - bytesRemaining), bytesRemaining)
-						#else
-						bytesWritten = Glibc.write(fd, buf.advanced(by: data.count - bytesRemaining), bytesRemaining)
-						#endif
+						bytesWritten = Foundation.write(fd, buf.advanced(by: data.count - bytesRemaining), bytesRemaining)
 					} while bytesWritten < 0 && errno == EINTR
 
 					if bytesWritten <= 0 {
