@@ -25,7 +25,7 @@ import Dispatch
 
 open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, DiscordEngineHeartbeatable {
 	open var connectURL: String {
-		return "wss://gateway.discord.gg"
+		return DiscordEndpointGateway.gatewayURL
 	}
 
 	open var engineType: String {

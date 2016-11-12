@@ -82,6 +82,8 @@ public class DiscordVoiceEncoder {
 
 		// Wait for the encoder to expire so that the pipes get closed
 		encoder.waitUntilExit()
+		// Cancel any reading we were doing
+		close(writePipe.fileHandleForReading.fileDescriptor)
 		// Wait until a dummy block gets executed. That way any pending reads see that they are done reading
 		readQueue.sync {}
 	}
@@ -117,6 +119,9 @@ public class DiscordVoiceEncoder {
 	public func write(_ data: Data, doneHandler: (() -> Void)? = nil) {
 		guard !closed else { return }
 
+		// FileHandle's write doesn't play nicely with the way we use pipes
+		// It will throw an exception that we cannot catch if the write handle is closed
+		// So do basically exactly what it does, but don't explode the app when the handle is closed
 		writeQueue.async {[weak self] in
 			data.enumerateBytes {bytes, range, stop in
 				let buf = UnsafeRawPointer(bytes.baseAddress!)

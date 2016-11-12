@@ -77,6 +77,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		_ = sodium_init()
 
+		signal(SIGPIPE, SIG_IGN)
+
 		self.voiceServerInformation = voiceServerInformation
 		self.encoder = encoder
 		self.secret = secret
@@ -104,8 +106,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	private func createEncoder() {
 		encoder = nil
-
-		signal(SIGPIPE, SIG_IGN)
 
 		encoder = DiscordVoiceEncoder()
 
@@ -192,7 +192,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		do {
 			try udpSocket?.close()
-		} catch {}
+		} catch {
+			self.error(message: "Error trying to close voice engine udp socket")
+		}
 
 		connected = false
 		encoder = nil
@@ -303,7 +305,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		    		"delay": 0
 		    	])))
 
-		    	DispatchQueue.main.async {
+		    	this.udpQueue.async {
 		    		this.createEncoder()
 		    	}
 
@@ -333,18 +335,26 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	private func readSocket() {
 		udpQueueRead.async {[weak self] in
-			guard let socket = self?.udpSocket else { return }
+			guard let socket = self?.udpSocket, self?.connected ?? false else { return }
 
 			do {
 				let (data, _) = try socket.receive(maxBytes: 4096)
 
 				self?.decryptVoiceData(Data(bytes: data))
 			} catch {
-				// print("Error reading socket data")
+				self?.error(message: "Error reading voice data from udp socket")
 			}
 
 			self?.readSocket()
 		}
+	}
+
+	public func requestFileHandleForWriting() -> FileHandle? {
+		return encoder?.readPipe.fileHandleForWriting
+	}
+
+	public func requestNewEncoder() {
+		encoder?.closeEncoder()
 	}
 
 	// Tells the voice websocket what our ip and port is, and what encryption mode we will use
@@ -399,7 +409,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             let audioSize = Int(crypto_secretbox_MACBYTES) + defaultAudioSize
             let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
             let padding = [UInt8](repeating: 0x00, count: 12)
-
             let rtpHeader = self.createRTPHeader()
             let enryptedCount = Int(crypto_secretbox_MACBYTES) + data.count
             var nonce = rtpHeader + padding
@@ -407,16 +416,14 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             _ = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &self.secret!)
 
             let encryptedBytes = Array(UnsafeBufferPointer<UInt8>(start: encrypted, count: enryptedCount))
-            try? udpSocket.send(bytes: rtpHeader + encryptedBytes)
+
+            do {
+            	try udpSocket.send(bytes: rtpHeader + encryptedBytes)
+            } catch {
+            	self.error(message: "Failed sending voice packet")
+            }
+
 		}
-	}
-
-	public func requestFileHandleForWriting() -> FileHandle? {
-		return self.encoder?.readPipe.fileHandleForWriting
-	}
-
-	public func requestNewEncoder() {
-		encoder?.closeEncoder()
 	}
 
 	public override func startHandshake() {
@@ -436,7 +443,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		let udpEndpoint = InternetAddress(hostname: base, port: UInt16(udpPort))
 
 		guard let client = try? UDPClient(address: udpEndpoint) else {
-			self.disconnect()
+			disconnect()
 
 			return
 		}
