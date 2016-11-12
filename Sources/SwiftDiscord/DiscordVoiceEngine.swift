@@ -386,7 +386,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	public func requestNewEncoder() {
-		self.createEncoder()
+		createEncoder()
 	}
 
 	// Tells the voice websocket what our ip and port is, and what encryption mode we will use
