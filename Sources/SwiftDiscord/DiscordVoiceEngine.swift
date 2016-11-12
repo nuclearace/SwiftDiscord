@@ -167,7 +167,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private func decryptVoiceData(_ data: Data) {
-		defer { unencrypted.deallocate(capacity: audioSize) }
+		defer { free(unencrypted) }
 
 		let rtpHeader = Array(data.prefix(12))
 		let voiceData = Array(data.dropFirst(12))
@@ -390,9 +390,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public func sendVoiceData(_ data: [UInt8]) {
 		udpQueue.sync {
 			guard let udpSocket = self.udpSocket, data.count <= defaultAudioSize else { return }
-			defer { encrypted.deallocate(capacity: audioSize) }
+			defer { free(encrypted) }
 
-			// print("Should send voice data \(data)")
+			// print("Should send voice data: \(data.count) bytes")
 
             var buf = data
 
@@ -407,13 +407,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             _ = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &self.secret!)
 
             let encryptedBytes = Array(UnsafeBufferPointer<UInt8>(start: encrypted, count: enryptedCount))
-
-            do {
-                try udpSocket.send(bytes: rtpHeader + encryptedBytes)
-                // print("Sent \(encryptedBytes.count) bytes of voice")
-            } catch {
-                // print("failed to send udp packet")
-            }
+            try? udpSocket.send(bytes: rtpHeader + encryptedBytes)
 		}
 	}
 

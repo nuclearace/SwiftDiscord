@@ -51,11 +51,6 @@ public class DiscordVoiceEncoder {
 			"-compression_level", "10", "pipe:1"]
 
 		self.init(encoder: ffmpeg, readPipe: readPipe, writePipe: writePipe)
-
-		encoder.terminationHandler = {[weak self] proc in
-			print("ffmpeg died")
-			self?.finishEncodingAndClose()
-		}
 	}
 
 	deinit {
