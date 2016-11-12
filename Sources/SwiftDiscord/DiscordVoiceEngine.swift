@@ -190,9 +190,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		super.disconnect()
 
-		do {
-			try udpSocket?.close()
-		} catch {}
+		try? udpSocket?.close()
 
 		connected = false
 		encoder = nil
@@ -399,7 +397,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             let audioSize = Int(crypto_secretbox_MACBYTES) + defaultAudioSize
             let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
             let padding = [UInt8](repeating: 0x00, count: 12)
-
             let rtpHeader = self.createRTPHeader()
             let enryptedCount = Int(crypto_secretbox_MACBYTES) + data.count
             var nonce = rtpHeader + padding
@@ -436,7 +433,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		let udpEndpoint = InternetAddress(hostname: base, port: UInt16(udpPort))
 
 		guard let client = try? UDPClient(address: udpEndpoint) else {
-			self.disconnect()
+			disconnect()
 
 			return
 		}
