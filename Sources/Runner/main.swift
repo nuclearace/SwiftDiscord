@@ -279,10 +279,6 @@ func handleGetGuilds() {
     }
 }
 
-func handleClose() {
-    exit(0)
-}
-
 let handlers = [
     "quit": handleQuit,
     "testget": handleTestGet,
@@ -326,7 +322,6 @@ let handlers = [
     "createdm": handleCreateDM,
     "getdms": handleGetDMs,
     "getguilds": handleGetGuilds,
-    "close": handleClose,
 ]
 
 func readAsync() {
@@ -337,7 +332,7 @@ func readAsync() {
             DispatchQueue.main.async {
                 handler()
             }
-        } else if input.hasPrefix("youtube") {
+        } else if input.hasPrefix("yt") {
             let link = input.components(separatedBy: " ")[1]
 
             new = false
@@ -383,7 +378,7 @@ readAsync()
 
 client.on("disconnect") {data in
 	print("Engine died, exiting")
-	// exit(0)
+	exit(0)
 }
 
 client.on("connect") {data in

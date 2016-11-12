@@ -319,12 +319,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		}
 	}
 
-	private func guildForChannel(_ channelId: String) -> DiscordGuild? {
-		for (_, guild) in guilds where guild.channels[channelId] != nil {
-			return guild
-		}
-
-		return nil
+	public func guildForChannel(_ channelId: String) -> DiscordGuild? {
+		return guilds.filter({ return $0.1.channels[channelId] != nil }).map({ $0.1 }).first
 	}
 
 	open func joinVoiceChannel(_ channelId: String) {

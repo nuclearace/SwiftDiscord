@@ -17,7 +17,9 @@
 
 import Foundation
 
-#if os(macOS) || os(Linux)
+#if !os(iOS)
+
+let defaultAudioSize = 320
 
 public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
 	var encoder: DiscordVoiceEncoder? { get }
@@ -26,7 +28,7 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
     func requestFileHandleForWriting() -> FileHandle?
     func requestNewEncoder()
     func send(_ data: Data, doneHandler: (() -> Void)?)
-    func sendVoiceData(_ data: Data)
+    func sendVoiceData(_ data: [UInt8])
 }
 
 public extension DiscordVoiceEngineSpec {

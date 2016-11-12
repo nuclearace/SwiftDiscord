@@ -17,7 +17,7 @@
 
 public typealias DiscordVoiceData = (rtpHeader: [UInt8], voiceData: [UInt8])
 
-#if os(macOS) || os(Linux)
+#if !os(iOS)
 
 import Foundation
 import Dispatch
@@ -105,20 +105,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	private func createEncoder() {
 		encoder = nil
 
-		let ffmpeg = EncoderProcess()
-		let writePipe = Pipe()
-		let readPipe = Pipe()
-
-		ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
-		ffmpeg.standardInput = readPipe.fileHandleForReading
-		ffmpeg.standardOutput = writePipe
-		ffmpeg.arguments = ["-hide_banner", "-loglevel", "quiet", "-i", "pipe:0", "-f", "data", "-map", "0:a", "-ar",
-			"48000", "-ac", "2", "-acodec", "libopus", "-sample_fmt", "s16", "-vbr", "off", "-b:a", "128000",
-			"-compression_level", "10", "pipe:1"]
-
 		signal(SIGPIPE, SIG_IGN)
 
-		encoder = DiscordVoiceEncoder(ffmpeg: ffmpeg, readPipe: readPipe, writePipe: writePipe)
+		encoder = DiscordVoiceEncoder()
 
 		readData(1)
 
@@ -178,7 +167,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private func decryptVoiceData(_ data: Data) {
-		defer { unencrypted.deallocate(capacity: audioSize) }
+		defer { free(unencrypted) }
 
 		let rtpHeader = Array(data.prefix(12))
 		let voiceData = Array(data.dropFirst(12))
@@ -303,11 +292,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private func readData(_ count: Int) {
-		encoder?.read {[weak self] done, data, errorCode in
+		encoder?.read {[weak self] done, data in
 			guard let this = self, this.connected else { return } // engine died
 
-		    guard let data = data, data.count > 0 else {
-		    	// print("no data, reader probably closed\nNew encoder?")
+		    guard !done else {
+		    	// print("no data, reader probably closed")
 
 		    	this.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
 		    		"speaking": false,
@@ -332,7 +321,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		    	])))
 		    }
 
-		    this.sendVoiceData(Data(data))
+		    this.sendVoiceData(data)
 
 		    this.sequenceNum = this.sequenceNum &+ 1
 		    this.timestamp = this.timestamp &+ 960
@@ -381,7 +370,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			// We are the first engine the client had, or they didn't give us an encoder to use
 			createEncoder()
 		} else {
-			// We inherited a previous engine's encoder, use it
+			// We inherited a previous engine's encoder, read from it
 			readData(1)
 		}
 
@@ -398,34 +387,27 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		heartbeatQueue.asyncAfter(deadline: time) {[weak self] in self?.sendHeartbeat() }
 	}
 
-	public func sendVoiceData(_ data: Data) {
+	public func sendVoiceData(_ data: [UInt8]) {
 		udpQueue.sync {
-			guard let udpSocket = self.udpSocket, data.count <= 320 else { return }
+			guard let udpSocket = self.udpSocket, data.count <= defaultAudioSize else { return }
+			defer { free(encrypted) }
 
-			// print("Should send voice data \(data)")
+			// print("Should send voice data: \(data.count) bytes")
 
-			data.withUnsafeBytes {(buf: UnsafePointer<UInt8>) in
-				defer { encrypted.deallocate(capacity: audioSize) }
+            var buf = data
 
-				let audioSize = Int(crypto_secretbox_MACBYTES) + 320
-				let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
-				let padding = [UInt8](repeating: 0x00, count: 12)
+            let audioSize = Int(crypto_secretbox_MACBYTES) + defaultAudioSize
+            let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
+            let padding = [UInt8](repeating: 0x00, count: 12)
 
-				let rtpHeader = self.createRTPHeader()
-				let enryptedCount = Int(crypto_secretbox_MACBYTES) + data.count
-				var nonce = rtpHeader + padding
+            let rtpHeader = self.createRTPHeader()
+            let enryptedCount = Int(crypto_secretbox_MACBYTES) + data.count
+            var nonce = rtpHeader + padding
 
-				_ = crypto_secretbox_easy(encrypted, buf, UInt64(data.count), &nonce, &self.secret!)
+            _ = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &self.secret!)
 
-				let encryptedBytes = Array(UnsafeBufferPointer<UInt8>(start: encrypted, count: enryptedCount))
-
-				do {
-					try udpSocket.send(bytes: rtpHeader + encryptedBytes)
-					// print("Sent \(encryptedBytes.count) bytes of voice")
-				} catch {
-					// print("failed to send udp packet")
-				}
-			}
+            let encryptedBytes = Array(UnsafeBufferPointer<UInt8>(start: encrypted, count: enryptedCount))
+            try? udpSocket.send(bytes: rtpHeader + encryptedBytes)
 		}
 	}
 

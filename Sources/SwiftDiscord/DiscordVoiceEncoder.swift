@@ -15,95 +15,107 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#if os(macOS) || os(Linux)
+#if !os(iOS)
 
 import Foundation
 import Dispatch
-#if os(Linux)
-import Glibc
-#endif
 
 public class DiscordVoiceEncoder {
-	public let ffmpeg: EncoderProcess
+	public let encoder: EncoderProcess
 	public let readPipe: Pipe
 	public let writePipe: Pipe
 
-	#if os(macOS)
-	private let readIO: DispatchIO
-	#endif
 	private let readQueue = DispatchQueue(label: "discordVoiceEncoder.readQueue")
 	private let writeQueue = DispatchQueue(label: "discordVoiceEncoder.writeQueue")
 
-	private var encoderClosed = false
+	private var closed = false
 
-	public init(ffmpeg: EncoderProcess, readPipe: Pipe, writePipe: Pipe) {
-		self.ffmpeg = ffmpeg
+	/// readPipe: What the encoder reads from, and what we write to to have things encoded into OPUS
+	/// writePipe: What the encoder writes to, and what we read from to get OPUS encoded data
+	public init(encoder: EncoderProcess, readPipe: Pipe, writePipe: Pipe) {
+		self.encoder = encoder
 		self.readPipe = readPipe
 		self.writePipe = writePipe
-		#if os(macOS)
-		self.readIO = DispatchIO(type: .stream, fileDescriptor: writePipe.fileHandleForReading.fileDescriptor,
-			queue: readQueue,
-			cleanupHandler: {_ in })
 
-		readIO.setLimit(lowWater: 1)
-		#endif
+		self.encoder.launch()
+	}
 
-		self.ffmpeg.launch()
+	public convenience init() {
+		let ffmpeg = EncoderProcess()
+		let writePipe = Pipe()
+		let readPipe = Pipe()
+
+		ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
+		ffmpeg.standardInput = readPipe.fileHandleForReading
+		ffmpeg.standardOutput = writePipe.fileHandleForWriting
+		ffmpeg.arguments = ["-hide_banner", "-loglevel", "quiet", "-i", "pipe:0", "-f", "data", "-map", "0:a", "-ar",
+			"48000", "-ac", "2", "-acodec", "libopus", "-sample_fmt", "s16", "-vbr", "off", "-b:a", "128000",
+			"-compression_level", "10", "pipe:1"]
+
+		self.init(encoder: ffmpeg, readPipe: readPipe, writePipe: writePipe)
+
+		encoder.terminationHandler = {[weak self] _ in
+			guard let this = self else { return }
+
+			// Make sure the pipes are closed, this avoids weird cases where subsequent encoders might receive bad
+			// data, seemingly from the void
+			// Don't close the read end of the encoder's writePipe, since we might still be reading from it
+			// It'll get closed when we deinit
+			close(this.readPipe.fileHandleForReading.fileDescriptor)
+			close(this.readPipe.fileHandleForWriting.fileDescriptor)
+			close(this.writePipe.fileHandleForWriting.fileDescriptor)
+		}
 	}
 
 	deinit {
-		guard !encoderClosed else { return }
+		guard !closed else { return }
 
 		closeEncoder()
 	}
 
-	// Abrubtly halts encoding and kills ffmpeg
+	/// Abrubtly halts encoding and kills the encoder
 	public func closeEncoder() {
-		kill(ffmpeg.processIdentifier, SIGKILL)
+		defer { closed = true }
+		guard encoder.isRunning else { return }
 
-		closeReader()
-		ffmpeg.waitUntilExit()
+		kill(encoder.processIdentifier, SIGKILL)
 
-		encoderClosed = true
-	}
-
-	public func closeReader() {
-		#if os(macOS)
-		readIO.close(flags: .stop)
+		// Wait for the encoder to expire so that the pipes get closed
+		encoder.waitUntilExit()
+		// Wait until a dummy block gets executed. That way any pending reads see that they are done reading
 		readQueue.sync {}
-		#endif
 	}
 
 	/// Call only when you know you've finished writing data, but ffmpeg is still encoding, or has data we haven't read
 	/// This should cause ffmpeg to get an EOF on input, which will cause it to close once its output buffer is empty
 	public func finishEncodingAndClose() {
+		guard !closed else { return }
+
 		close(readPipe.fileHandleForWriting.fileDescriptor)
 	}
 
-	public func read(callback: @escaping (Bool, DispatchData?, Int32) -> Void) {
-		assert(!encoderClosed, "Tried reading from a closed encoder")
+	public func read(callback: @escaping (Bool, [UInt8]) -> Void) {
+		guard !closed else { return callback(true, []) }
 
-		#if !os(Linux)
-		readIO.read(offset: 0, length: 320, queue: readQueue, ioHandler: callback)
-		#else
 		readQueue.async {[weak self] in
-			guard let data = self?.writePipe.fileHandleForReading.readData(ofLength: 320) else {
-				callback(true, nil, 0)
+			guard let fd = self?.writePipe.fileHandleForReading.fileDescriptor else { return }
+			defer { free(buf) }
 
-				return
-			}
+			let buf = UnsafeMutableRawPointer.allocate(bytes: defaultAudioSize, alignedTo: 16)
+			let bytesRead = Foundation.read(fd, buf, defaultAudioSize)
 
-			data.withUnsafeBytes {(buf: UnsafePointer<UInt8>) in
-				let dispatchData = DispatchData(bytes: UnsafeBufferPointer(start: buf, count: data.count))
+			// Error reading or done
+			guard bytesRead > 0 else { return callback(true, []) }
 
-				callback(false, dispatchData, 0)
-			}
+            let pointer = buf.assumingMemoryBound(to: UInt8.self)
+            let byteArray = Array(UnsafeBufferPointer(start: pointer, count: defaultAudioSize))
+
+            callback(false, byteArray)
 		}
-		#endif
 	}
 
 	public func write(_ data: Data, doneHandler: (() -> Void)? = nil) {
-		assert(!encoderClosed, "Tried writing to a closed encoder")
+		guard !closed else { return }
 
 		writeQueue.async {[weak self] in
 			data.enumerateBytes {bytes, range, stop in
@@ -116,11 +128,7 @@ public class DiscordVoiceEncoder {
 					repeat {
 						guard let fd = self?.readPipe.fileHandleForWriting.fileDescriptor else { return }
 
-						#if os(macOS)
-						bytesWritten = Darwin.write(fd, buf.advanced(by: data.count - bytesRemaining), bytesRemaining)
-						#else
-						bytesWritten = Glibc.write(fd, buf.advanced(by: data.count - bytesRemaining), bytesRemaining)
-						#endif
+						bytesWritten = Foundation.write(fd, buf.advanced(by: data.count - bytesRemaining), bytesRemaining)
 					} while bytesWritten < 0 && errno == EINTR
 
 					if bytesWritten <= 0 {
