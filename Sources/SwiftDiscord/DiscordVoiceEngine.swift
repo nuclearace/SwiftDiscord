@@ -296,7 +296,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			guard let this = self, this.connected else { return } // engine died
 
 		    guard !done else {
-		    	// print("no data, reader probably closed\nNew encoder?")
+		    	// print("no data, reader probably closed")
 
 		    	this.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
 		    		"speaking": false,
@@ -370,7 +370,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			// We are the first engine the client had, or they didn't give us an encoder to use
 			createEncoder()
 		} else {
-			// We inherited a previous engine's encoder, use it
+			// We inherited a previous engine's encoder, read from it
 			readData(1)
 		}
 

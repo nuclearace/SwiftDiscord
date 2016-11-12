@@ -30,6 +30,8 @@ public class DiscordVoiceEncoder {
 
 	private var closed = false
 
+	/// readPipe: What the encoder reads from, and what we write to to have things encoded into OPUS
+	/// writePipe: What the encoder writes to, and what we read from to get OPUS encoded data
 	public init(encoder: EncoderProcess, readPipe: Pipe, writePipe: Pipe) {
 		self.encoder = encoder
 		self.readPipe = readPipe
@@ -51,6 +53,18 @@ public class DiscordVoiceEncoder {
 			"-compression_level", "10", "pipe:1"]
 
 		self.init(encoder: ffmpeg, readPipe: readPipe, writePipe: writePipe)
+
+		encoder.terminationHandler = {[weak self] _ in
+			guard let this = self else { return }
+
+			// Make sure the pipes are closed, this avoids weird cases where subsequent encoders might receive bad
+			// data, seemingly from the void
+			// Don't close the read end of the encoder's writePipe, since we might still be reading from it
+			// It'll get closed when we deinit
+			close(this.readPipe.fileHandleForReading.fileDescriptor)
+			close(this.readPipe.fileHandleForWriting.fileDescriptor)
+			close(this.writePipe.fileHandleForWriting.fileDescriptor)
+		}
 	}
 
 	deinit {
@@ -59,16 +73,17 @@ public class DiscordVoiceEncoder {
 		closeEncoder()
 	}
 
-	// Abrubtly halts encoding and kills ffmpeg
+	/// Abrubtly halts encoding and kills the encoder
 	public func closeEncoder() {
-		close(readPipe.fileHandleForReading.fileDescriptor)
-		close(readPipe.fileHandleForWriting.fileDescriptor)
-		close(writePipe.fileHandleForReading.fileDescriptor)
-		close(writePipe.fileHandleForWriting.fileDescriptor)
+		defer { closed = true }
+		guard encoder.isRunning else { return }
 
 		kill(encoder.processIdentifier, SIGKILL)
 
-		closed = true
+		// Wait for the encoder to expire so that the pipes get closed
+		encoder.waitUntilExit()
+		// Wait until a dummy block gets executed. That way any pending reads see that they are done reading
+		readQueue.sync {}
 	}
 
 	/// Call only when you know you've finished writing data, but ffmpeg is still encoding, or has data we haven't read
