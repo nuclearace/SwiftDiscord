@@ -28,6 +28,9 @@ public class DiscordVoiceEncoder {
 	private let readQueue = DispatchQueue(label: "discordVoiceEncoder.readQueue")
 	private let writeQueue = DispatchQueue(label: "discordVoiceEncoder.writeQueue")
 
+	private let id = arc4random()
+
+
 	private var closed = false
 
 	/// readPipe: What the encoder reads from, and what we write to to have things encoded into OPUS
@@ -57,8 +60,7 @@ public class DiscordVoiceEncoder {
 		encoder.terminationHandler = {[weak self] _ in
 			guard let this = self else { return }
 
-			// Make sure the pipes are closed, this avoids weird cases where subsequent encoders might receive bad
-			// data, seemingly from the void
+			// Make sure the pipes are closed
 			// Don't close the read end of the encoder's writePipe, since we might still be reading from it
 			// It'll get closed when we deinit
 			close(this.readPipe.fileHandleForReading.fileDescriptor)
