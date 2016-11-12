@@ -28,21 +28,15 @@ public class DiscordVoiceEncoder {
 	public let readPipe: Pipe
 	public let writePipe: Pipe
 
-	private let readIO: DispatchIO
 	private let readQueue = DispatchQueue(label: "discordVoiceEncoder.readQueue")
 	private let writeQueue = DispatchQueue(label: "discordVoiceEncoder.writeQueue")
 
-	private var encoderClosed = false
+	private var closed = false
 
 	public init(encoder: EncoderProcess, readPipe: Pipe, writePipe: Pipe) {
 		self.encoder = encoder
 		self.readPipe = readPipe
 		self.writePipe = writePipe
-		readIO = DispatchIO(type: .stream, fileDescriptor: writePipe.fileHandleForReading.fileDescriptor,
-			queue: readQueue,
-			cleanupHandler: {_ in })
-
-		readIO.setLimit(lowWater: 1)
 
 		self.encoder.launch()
 	}
@@ -60,43 +54,65 @@ public class DiscordVoiceEncoder {
 			"-compression_level", "10", "pipe:1"]
 
 		self.init(encoder: ffmpeg, readPipe: readPipe, writePipe: writePipe)
+
+		encoder.terminationHandler = {[weak self] proc in
+			print("ffmpeg died")
+			self?.finishEncodingAndClose()
+		}
 	}
 
 	deinit {
-		guard !encoderClosed else { return }
+		guard !closed else { return }
 
 		closeEncoder()
 	}
 
 	// Abrubtly halts encoding and kills ffmpeg
 	public func closeEncoder() {
+		close(readPipe.fileHandleForReading.fileDescriptor)
+		close(readPipe.fileHandleForWriting.fileDescriptor)
+		close(writePipe.fileHandleForReading.fileDescriptor)
+		close(writePipe.fileHandleForWriting.fileDescriptor)
+
 		kill(encoder.processIdentifier, SIGKILL)
 
-		closeReader()
-		encoder.waitUntilExit()
-
-		encoderClosed = true
-	}
-
-	public func closeReader() {
-		readIO.close(flags: .stop)
-		readQueue.sync {}
+		closed = true
 	}
 
 	/// Call only when you know you've finished writing data, but ffmpeg is still encoding, or has data we haven't read
 	/// This should cause ffmpeg to get an EOF on input, which will cause it to close once its output buffer is empty
 	public func finishEncodingAndClose() {
+		guard !closed else { return }
+
 		close(readPipe.fileHandleForWriting.fileDescriptor)
 	}
 
-	public func read(callback: @escaping (Bool, DispatchData?, Int32) -> Void) {
-		assert(!encoderClosed, "Tried reading from a closed encoder")
+	public func read(callback: @escaping (Bool, [UInt8]) -> Void) {
+		guard !closed else { return callback(true, []) }
 
-		readIO.read(offset: 0, length: 320, queue: readQueue, ioHandler: callback)
+		readQueue.async {[weak self] in
+			guard let fd = self?.writePipe.fileHandleForReading.fileDescriptor else { return }
+			defer { free(buf) }
+
+			let buf = UnsafeMutableRawPointer.allocate(bytes: defaultAudioSize, alignedTo: 16)
+			#if os(macOS)
+			let bytesRead = Foundation.read(fd, buf, defaultAudioSize)
+			#else
+			let bytesRead = Glibc.read(fd, buf, defaultAudioSize)
+			#endif
+
+			// Error reading or done
+			guard bytesRead > 0 else { return callback(true, []) }
+
+            let pointer = buf.assumingMemoryBound(to: UInt8.self)
+            let byteArray = Array(UnsafeBufferPointer(start: pointer, count: defaultAudioSize))
+
+            callback(false, byteArray)
+		}
 	}
 
 	public func write(_ data: Data, doneHandler: (() -> Void)? = nil) {
-		assert(!encoderClosed, "Tried writing to a closed encoder")
+		guard !closed else { return }
 
 		writeQueue.async {[weak self] in
 			data.enumerateBytes {bytes, range, stop in
