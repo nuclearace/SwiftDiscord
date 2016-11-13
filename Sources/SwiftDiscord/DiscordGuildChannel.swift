@@ -37,17 +37,17 @@ public struct DiscordGuildChannel {
 
 extension DiscordGuildChannel {
 	init(guildChannelObject: [String: Any]) {
-		let id = guildChannelObject["id"] as? String ?? ""
-		let guildId = guildChannelObject["guild_id"] as? String ?? ""
-		let type = DiscordChannelType(rawValue: guildChannelObject["type"] as? String ?? "") ?? .text
-		let bitrate = guildChannelObject["bitrate"] as? Int
-		let lastMessageId = guildChannelObject["last_message_id"] as? String
-		let name = guildChannelObject["name"] as? String ?? ""
+		let id = guildChannelObject.get("id", or: "")
+		let guildId = guildChannelObject.get("guild_id", or: "")
+		let type = DiscordChannelType(rawValue: guildChannelObject.get("type", or: "")) ?? .text
+		let bitrate = guildChannelObject.get("bitrate", or: nil) as Int?
+		let lastMessageId = guildChannelObject.get("last_message_id", or: nil) as String?
+		let name = guildChannelObject.get("name", or: "")
 		let permissionOverwrites = DiscordPermissionOverwrite.overwritesFromArray(
-			guildChannelObject["permission_overwrites"] as? [[String: Any]] ?? [])
-		let position = guildChannelObject["position"] as? Int ?? -1
-		let topic = guildChannelObject["topic"] as? String
-		let userLimit = guildChannelObject["user_limit"] as? Int
+			guildChannelObject.get("permission_overwrites", or: [[String: Any]]()))
+		let position = guildChannelObject.get("position", or: 0)
+		let topic = guildChannelObject.get("topic", or: nil) as String?
+		let userLimit = guildChannelObject.get("user_limit", or: nil) as Int?
 
 		self.init(id: id, guildId: guildId, type: type, bitrate: bitrate, lastMessageId: lastMessageId, name: name,
 			permissionOverwrites: permissionOverwrites, position: position, topic: topic, userLimit: userLimit)

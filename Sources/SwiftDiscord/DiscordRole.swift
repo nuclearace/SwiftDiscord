@@ -15,7 +15,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-public struct DiscordRole {
+public struct DiscordRole : JSONAble {
 	public let id: String
 
 	public var color: Int
@@ -25,31 +25,18 @@ public struct DiscordRole {
 	public var name: String
 	public var permissions: Int
 	public var position: Int
-
-	var json: [String: Any] {
-		return [
-			"id": id,
-			"color": color,
-			"hoist": hoist,
-			"managed": managed,
-			"mentionable": mentionable,
-			"name": name,
-			"permissions": permissions,
-			"position": position
-		]
-	}
 }
 
 extension DiscordRole {
 	init(roleObject: [String: Any]) {
-		let color = roleObject["color"] as? Int ?? -1
-		let hoist = roleObject["hoist"] as? Bool ?? false
-		let id = roleObject["id"] as? String ?? ""
-		let managed = roleObject["managed"] as? Bool ?? false
-		let mentionable = roleObject["mentionable"] as? Bool ?? false
-		let name = roleObject["name"] as? String ?? ""
-		let permissions = roleObject["permissions"] as? Int ?? -1
-		let position = roleObject["position"] as? Int ?? -1
+		let color = roleObject.get("color", or: 0)
+		let hoist = roleObject.get("hoist", or: false)
+		let id = roleObject.get("id", or: "")
+		let managed = roleObject.get("managed", or: false)
+		let mentionable = roleObject.get("mentionable", or: false)
+		let name = roleObject.get("name", or: "")
+		let permissions = roleObject.get("permissions", or: 0)
+		let position = roleObject.get("position", or: 0)
 
 		self.init(id: id, color: color, hoist: hoist, managed: managed, mentionable: mentionable, name: name,
 			permissions: permissions, position: position)

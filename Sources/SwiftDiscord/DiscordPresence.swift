@@ -39,7 +39,7 @@ public struct DiscordGame {
 		guard let name = game["name"] as? String else { return nil }
 
 		self.name = name
-		self.type = DiscordGameType(int: game["type"] as? Int ?? 0, url: game["url"] as? String)
+		self.type = DiscordGameType(int: game.get("type", or: 0), url: game["url"] as? String)
 	}
 }
 
@@ -81,10 +81,10 @@ public struct DiscordPresence {
 
 extension DiscordPresence {
 	init(presenceObject: [String: Any], guildId: String) {
-		let user = DiscordUser(userObject: presenceObject["user"] as? [String: Any] ?? [:])
+		let user = DiscordUser(userObject: presenceObject.get("user", or: [String: Any]()))
 		let game = DiscordGame(gameObject: presenceObject["game"] as? [String: Any])
-		let nick = presenceObject["nick"] as? String ?? ""
-		let status = DiscordPresenceStatus(rawValue: presenceObject["status"] as? String ?? "") ?? .offline
+		let nick = presenceObject.get("nick", or: "")
+		let status = DiscordPresenceStatus(rawValue: presenceObject.get("status", or: "")) ?? .offline
 
 		self.init(guildId: guildId, user: user, game: game, nick: nick, roles: [], status: status)
 	}

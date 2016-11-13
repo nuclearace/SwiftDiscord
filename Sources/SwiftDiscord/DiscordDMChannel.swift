@@ -8,9 +8,9 @@ public struct DiscordDMChannel {
 
 extension DiscordDMChannel {
     init(dmObject: [String: Any]) {
-        let recipient = DiscordUser(userObject: dmObject["recipient"] as? [String: Any] ?? [:])
-        let id = dmObject["id"] as? String ?? ""
-        let lastMessageId = dmObject["lastMessageId"] as? String ?? ""
+        let recipient = DiscordUser(userObject: dmObject.get("recipient", or: [String: Any]()))
+        let id = dmObject.get("id", or: "")
+        let lastMessageId = dmObject.get("lastMessageId", or: "")
 
         self.init(id: id, recipient: recipient, lastMessageId: lastMessageId)
     }

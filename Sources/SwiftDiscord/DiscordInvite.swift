@@ -25,9 +25,9 @@ public struct DiscordInvite {
 
 extension DiscordInvite {
     init(inviteObject: [String: Any]) {
-        let code = inviteObject["code"] as? String ?? ""
-        let guild = DiscordInviteGuild(inviteGuildObject: inviteObject["guild"] as? [String: Any] ?? [:])
-        let channel = DiscordInviteChannel(inviteChannelObject: inviteObject["channel"] as? [String: Any] ?? [:])
+        let code = inviteObject.get("code", or: "")
+        let guild = DiscordInviteGuild(inviteGuildObject: inviteObject.get("guild", or: [String: Any]()))
+        let channel = DiscordInviteChannel(inviteChannelObject: inviteObject.get("channel", or: [String: Any]()))
 
         self.init(code: code, guild: guild, channel: channel)
     }
@@ -45,9 +45,9 @@ public struct DiscordInviteGuild {
 
 extension DiscordInviteGuild {
     init(inviteGuildObject: [String: Any]) {
-        let id = inviteGuildObject["id"] as? String ?? ""
-        let name = inviteGuildObject["name"] as? String ?? ""
-        let splashHash = inviteGuildObject["splash_hash"] as? String ?? ""
+        let id = inviteGuildObject.get("id", or: "")
+        let name = inviteGuildObject.get("name", or: "")
+        let splashHash = inviteGuildObject.get("splash_hash", or: "")
 
         self.init(id: id, name: name, splashHash: splashHash)
     }
@@ -61,9 +61,9 @@ public struct DiscordInviteChannel {
 
 extension DiscordInviteChannel {
     init(inviteChannelObject: [String: Any]) {
-        let id = inviteChannelObject["id"] as? String ?? ""
-        let name = inviteChannelObject["name"] as? String ?? ""
-        let type = DiscordChannelType(rawValue: inviteChannelObject["type"] as? String ?? "") ?? .text
+        let id = inviteChannelObject.get("id", or: "")
+        let name = inviteChannelObject.get("name", or: "")
+        let type = DiscordChannelType(rawValue: inviteChannelObject.get("type", or: "")) ?? .text
 
         self.init(id: id, name: name, type: type)
     }

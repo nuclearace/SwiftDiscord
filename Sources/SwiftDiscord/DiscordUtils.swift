@@ -17,11 +17,6 @@
 
 import Foundation
 
-enum JSON {
-	case array([Any])
-	case dictionary([String: Any])
-}
-
 #if os(macOS)
 public typealias EncoderProcess = Process
 #elseif os(Linux)
@@ -45,6 +40,12 @@ public func &<<(lhs: Int, rhs: Int) -> Int {
     }
 
     return shiftedValue
+}
+
+extension Dictionary {
+    func get<T>(_ value: Key, or default: T) -> T {
+        return self[value] as? T ?? `default`
+    }
 }
 
 func encodeJSON(_ object: Any) -> String? {

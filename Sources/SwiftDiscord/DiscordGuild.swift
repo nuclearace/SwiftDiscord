@@ -90,30 +90,29 @@ public struct DiscordGuild {
 
 extension DiscordGuild {
 	init(guildObject: [String: Any]) {
-		let channels = DiscordGuildChannel.guildChannelsFromArray(guildObject["channels"] as? [[String: Any]] ?? [])
-		let defaultMessageNotifications = guildObject["default_message_notifications"] as? Int ?? -1
-		let embedEnabled = guildObject["embed_enabled"] as? Bool ?? false
-		let embedChannelId = guildObject["embed_channel_id"] as? String ?? ""
-		let emojis = DiscordEmoji.emojisFromArray(guildObject["emojis"] as? [[String: Any]] ?? [])
-		let features = guildObject["features"] as? [Any] ?? []
-		let icon = guildObject["icon"] as? String ?? ""
-		let id = guildObject["id"] as? String ?? ""
-		let large = guildObject["large"] as? Bool ?? false
-		let memberCount = guildObject["member_count"] as? Int ?? -1
-		let members = DiscordGuildMember.guildMembersFromArray(guildObject["members"] as? [[String: Any]] ?? [])
-		let mfaLevel = guildObject["mfa_level"] as? Int ?? -1
-		let name = guildObject["name"] as? String ?? ""
-		let ownerId = guildObject["owner_id"] as? String ?? ""
-		let presences = DiscordPresence.presencesFromArray(guildObject["presences"] as? [[String: Any]] ?? [], guildId: id)
-		let region = guildObject["region"] as? String ?? ""
-		let roles = DiscordRole.rolesFromArray(guildObject["roles"] as? [[String: Any]] ?? [])
-		let splash = guildObject["splash"] as? String ?? ""
-		let verificationLevel = guildObject["verification_level"] as? Int ?? -1
-		let voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject["voice_states"] as? [[String: Any]] ?? [],
+		let channels = DiscordGuildChannel.guildChannelsFromArray(guildObject.get("channels", or: [[String: Any]]()))
+		let defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
+		let embedEnabled = guildObject.get("embed_enabled", or: false)
+		let embedChannelId = guildObject.get("embed_channel_id", or: "")
+		let emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: [[String: Any]]()))
+		let features = guildObject.get("features", or: [Any]())
+		let icon = guildObject.get("icon", or: "")
+		let id = guildObject.get("id", or: "")
+		let large = guildObject.get("large", or: false)
+		let memberCount = guildObject.get("member_count", or: 0)
+		let members = DiscordGuildMember.guildMembersFromArray(guildObject.get("members", or: [[String: Any]]()))
+		let mfaLevel = guildObject.get("mfa_level", or: -1)
+		let name = guildObject.get("name", or: "")
+		let ownerId = guildObject.get("owner_id", or: "")
+		let presences = DiscordPresence.presencesFromArray(guildObject.get("presences", or: [[String: Any]]()), guildId: id)
+		let region = guildObject.get("region", or: "")
+		let roles = DiscordRole.rolesFromArray(guildObject.get("roles", or: [[String: Any]]()))
+		let splash = guildObject.get("splash", or: "")
+		let verificationLevel = guildObject.get("verification_level", or: -1)
+		let voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject.get("voice_states", or: [[String: Any]]()),
 			guildId: id)
-		let unavailable = guildObject["unavailable"] as? Bool ?? false
-
-		let joinedAtString = guildObject["joined_at"] as? String ?? ""
+		let unavailable = guildObject.get("unavailable", or: false)
+		let joinedAtString = guildObject.get("joined_at", or: "")
 		let joinedAt = convertISO8601(string: joinedAtString) ?? Date()
 
 		self.init(features: features, id: id, large: large, joinedAt: joinedAt, splash: splash,
@@ -148,11 +147,11 @@ public struct DiscordUserGuild {
 
 extension DiscordUserGuild {
 	init(userGuildObject: [String: Any]) {
-		let id = userGuildObject["id"] as? String ?? ""
-		let name = userGuildObject["name"] as? String ?? ""
-		let icon = userGuildObject["icon"] as? String ?? ""
-		let owner = userGuildObject["owner"] as? Bool ?? false
-		let permissions = userGuildObject["permissions"] as? Int ?? 0
+		let id = userGuildObject.get("id", or: "")
+		let name = userGuildObject.get("name", or: "")
+		let icon = userGuildObject.get("icon", or: "")
+		let owner = userGuildObject.get("owner", or: false)
+		let permissions = userGuildObject.get("permissions", or: 0)
 
 		self.init(id: id, name: name, icon: icon, owner: owner, permissions: permissions)
 	}

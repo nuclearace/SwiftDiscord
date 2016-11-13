@@ -30,14 +30,14 @@ public struct DiscordVoiceState {
 
 extension DiscordVoiceState {
 	init(voiceStateObject: [String: Any], guildId: String) {
-		let channelId = voiceStateObject["channel_id"] as? String ?? ""
-		let sessionId = voiceStateObject["session_id"] as? String ?? ""
-		let userId = voiceStateObject["user_id"] as? String ?? ""
-		let deaf = voiceStateObject["deaf"] as? Bool ?? false
-		let mute = voiceStateObject["mute"] as? Bool ?? false
-		let selfDeaf = voiceStateObject["self_deaf"] as? Bool ?? false
-		let selfMute = voiceStateObject["self_mute"] as? Bool ?? false
-		let suppress = voiceStateObject["suppress"] as? Bool ?? false
+		let channelId = voiceStateObject.get("channel_id", or: "")
+		let sessionId = voiceStateObject.get("session_id", or: "")
+		let userId = voiceStateObject.get("user_id", or: "")
+		let deaf = voiceStateObject.get("deaf", or: false)
+		let mute = voiceStateObject.get("mute", or: false)
+		let selfDeaf = voiceStateObject.get("self_deaf", or: false)
+		let selfMute = voiceStateObject.get("self_mute", or: false)
+		let suppress = voiceStateObject.get("suppress", or: false)
 
 		self.init(channelId: channelId, guildId: guildId, sessionId: sessionId, userId: userId, deaf: deaf, mute: mute,
 			selfDeaf: selfDeaf, selfMute: selfMute, suppress: suppress)
