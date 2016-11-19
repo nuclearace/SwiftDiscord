@@ -21,6 +21,12 @@ import Foundation
 public typealias EncoderProcess = Process
 #elseif os(Linux)
 public typealias EncoderProcess = Task
+
+extension EncoderProcess {
+    var isRunning: Bool {
+        return running
+    }
+}
 #endif
 
 // Why does Apple not expose this?

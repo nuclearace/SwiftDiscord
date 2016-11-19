@@ -75,11 +75,7 @@ public class DiscordVoiceEncoder {
 	/// Abrubtly halts encoding and kills the encoder
 	public func closeEncoder() {
 		defer { closed = true }
-		#if !os(Linux)
 		guard encoder.isRunning else { return }
-		#else
-		guard encoder.running else { return }
-		#endif
 
 		kill(encoder.processIdentifier, SIGKILL)
 
