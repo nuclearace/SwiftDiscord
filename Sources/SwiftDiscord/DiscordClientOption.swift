@@ -15,27 +15,27 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-import Foundation
 import Dispatch
+import Foundation
 
-public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngineClient {
-	var connected: Bool { get }
-	var guilds: [String: DiscordGuild] { get }
-	var handleQueue: DispatchQueue { get set }
-	var isBot: Bool { get }
-	var relationships: [[String: Any]] { get } // TODO make this a [DiscordRelationship]
-	var token: String { get }
-	var user: DiscordUser? { get }
-	var voiceState: DiscordVoiceState? { get }
+public enum DiscordClientOption : CustomStringConvertible, Equatable {
+    case handleQueue(DispatchQueue)
+    case log(DiscordLogLevel)
+    case logger(DiscordLogger)
 
-	init(token: String, configuration: [DiscordClientOption])
+    public var description: String {
+        let description: String
 
-	func connect()
-	func disconnect()
-	func on(_ event: String, callback: @escaping ([Any]) -> Void)
-	func handleEvent(_ event: String, with data: [Any])
-	func joinVoiceChannel(_ channelId: String)
-	func leaveVoiceChannel(_ channelId: String)
-	func requestAllUsers(on guildId: String)
-	func setPresence(_ presence: [String: Any])
+        switch self {
+        case .handleQueue:  description = "handleQueue"
+        case .log:          description = "log"
+        case .logger:       description = "logger"
+        }
+
+        return description
+    }
+}
+
+public func ==(lhs: DiscordClientOption, rhs: DiscordClientOption) -> Bool {
+    return lhs.description == rhs.description
 }
