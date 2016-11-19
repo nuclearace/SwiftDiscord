@@ -22,7 +22,7 @@ public typealias EncoderProcess = Process
 #elseif os(Linux)
 public typealias EncoderProcess = Task
 
-extension EncoderProcess {
+public extension EncoderProcess {
     var isRunning: Bool {
         return running
     }
