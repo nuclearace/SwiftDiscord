@@ -43,18 +43,30 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	// crunchQueue should be used for tasks would block the handleQueue for too long
 	// DO NOT TOUCH ANY PROPERTIES WHILE ON THIS QUEUE. REENTER THE HANDLEQUEUE
 	private let crunchQueue = DispatchQueue(label: "crunchQueue")
+	private let logType = "DiscordClient"
 	private let voiceQueue = DispatchQueue(label: "voiceQueue")
 
 	private var handlers = [String: DiscordEventHandler]()
 	private var joiningVoiceChannel = false
 	private var voiceServerInformation: [String: Any]?
 
-	public required init(token: String) {
+	public required init(token: String, configuration: [DiscordClientOption] = []) {
 		self.token = token
+
+		for config in configuration {
+			switch config {
+			case let .handleQueue(queue):
+				handleQueue = queue
+			case let .log(level):
+				DefaultDiscordLogger.Logger.level = level
+			case let .logger(logger):
+				DefaultDiscordLogger.Logger = logger
+			}
+		}
 	}
 
 	open func attachEngine() {
-		// print("Attaching engine")
+		DefaultDiscordLogger.Logger.log("Attaching engine", type: logType)
 
 		engine = DiscordEngine(client: self)
 
@@ -64,7 +76,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func connect() {
-		// print("DiscordClient connecting")
+		DefaultDiscordLogger.Logger.log("Connecting", type: logType)
 
 		attachEngine()
 
@@ -72,7 +84,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func disconnect() {
-		// print("DiscordClient: Disconnecting")
+		DefaultDiscordLogger.Logger.log("Disconnecting", type: logType)
 
 		connected = false
 
@@ -90,7 +102,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handleChannelCreate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling channel create", type: logType)
+
 		let channel = DiscordGuildChannel(guildChannelObject: data)
+
+		DefaultDiscordLogger.Logger.verbose("Created channel: %@", type: logType, args: channel)
 
 		guilds[channel.guildId]?.channels[channel.id] = channel
 
@@ -98,16 +114,24 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handleChannelDelete(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling channel delete", type: logType)
+
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let channelId = data["id"] as? String else { return }
 
 		guard let removedChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) else { return }
 
+		DefaultDiscordLogger.Logger.verbose("Removed channel: %@", type: logType, args: removedChannel)
+
 		handleEvent("channelDelete", with: [guildId, removedChannel])
 	}
 
 	open func handleChannelUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling channel update", type: logType)
+
 		let channel = DiscordGuildChannel(guildChannelObject: data)
+
+		DefaultDiscordLogger.Logger.verbose("Updated channel: %@", type: logType, args: channel)
 
 		guilds[channel.guildId]?.channels[channel.id] = channel
 
@@ -131,8 +155,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handleGuildCreate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild create", type: logType)
+
 		crunchQueue.async {
 			let guild = DiscordGuild(guildObject: data)
+
+			DefaultDiscordLogger.Logger.verbose("Created guild: %@", type: self.logType, args: guild)
 
 			self.handleQueue.async {
 				self.guilds[guild.id] = guild
@@ -143,25 +171,40 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handleGuildDelete(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild delete", type: logType)
+
 		guard let guildId = data["id"] as? String else { return }
+
 		guard let removedGuild = guilds.removeValue(forKey: guildId) else { return }
+
+		DefaultDiscordLogger.Logger.verbose("Removed guild: %@", type: logType, args: removedGuild)
 
 		handleEvent("guildDelete", with: [guildId, removedGuild])
 	}
 
 	open func handleGuildEmojiUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild emoji update", type: logType)
+
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let emojis = data["emojis"] as? [[String: Any]] else { return }
 
-		guilds[guildId]?.emojis = DiscordEmoji.emojisFromArray(emojis)
+		let discordEmojis = DiscordEmoji.emojisFromArray(emojis)
 
-		handleEvent("guildEmojisUpdate", with: [guildId, guilds[guildId]?.emojis ?? [:]])
+		DefaultDiscordLogger.Logger.verbose("Created guild emojis: %@", type: logType, args: discordEmojis)
+
+		guilds[guildId]?.emojis = discordEmojis
+
+		handleEvent("guildEmojisUpdate", with: [guildId, discordEmojis])
 	}
 
 	open func handleGuildMemberAdd(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild member add", type: logType)
+
 		guard let guildId = data["guild_id"] as? String else { return }
 
 		let guildMember = DiscordGuildMember(guildMemberObject: data)
+
+		DefaultDiscordLogger.Logger.verbose("Created guild member: %@", type: logType, args: guildMember)
 
 		guilds[guildId]?.members[guildMember.user.id] = guildMember
 
@@ -169,25 +212,36 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handleGuildMemberRemove(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild member remove", type: logType)
+
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let user = data["user"] as? [String: Any], let id = user["id"] as? String else { return }
 
 		guard let removedGuildMember = guilds[guildId]?.members.removeValue(forKey: id) else { return }
 
+		DefaultDiscordLogger.Logger.verbose("Removed guild member: %@", type: logType, args: removedGuildMember)
+
 		handleEvent("guildMemberRemove", with: [guildId, removedGuildMember])
 	}
 
 	open func handleGuildMemberUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild member update", type: logType)
+
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let user = data["user"] as? [String: Any], let roles = data["roles"] as? [String],
 			let id = user["id"] as? String else { return }
 
 		guilds[guildId]?.members[id]?.roles = roles
 
+		// DefaultDiscordLogger.Logger.verbose("Updated guild member: %@", type: logType,
+		// 	args: guilds[guildId]?.members[id])
+
 		handleEvent("guildMemberUpdate", with: [guildId, user, roles])
 	}
 
 	open func handleGuildMembersChunk(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild members chunk", type: logType)
+
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let members = data["members"] as? [[String: Any]] else { return }
 
@@ -209,10 +263,14 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handleGuildRoleCreate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild role create", type: logType)
+
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let roleObject = data["role"] as? [String: Any] else { return }
 
 		let role = DiscordRole(roleObject: roleObject)
+
+		DefaultDiscordLogger.Logger.verbose("Created role: %@", type: logType, args: role)
 
 		guilds[guildId]?.roles[role.id] = role
 
@@ -220,20 +278,28 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handleGuildRoleRemove(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild role remove", type: logType)
+
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let roleId = data["role_id"] as? String else { return }
 
 		guard let removedRole = guilds[guildId]?.roles.removeValue(forKey: roleId) else { return }
 
+		DefaultDiscordLogger.Logger.verbose("Removed role: %@", type: logType, args: removedRole)
+
 		handleEvent("guildRoleRemove", with: [guildId, removedRole])
 	}
 
 	open func handleGuildRoleUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild role update", type: logType)
+
 		// Functionally the same as adding
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let roleObject = data["role"] as? [String: Any] else { return }
 
 		let role = DiscordRole(roleObject: roleObject)
+
+		DefaultDiscordLogger.Logger.verbose("Updated role: %@", type: logType, args: role)
 
 		guilds[guildId]?.roles[role.id] = role
 
@@ -241,14 +307,30 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handleGuildUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild update", type: logType)
+
 		guard let guildId = data["id"] as? String else { return }
 
 		guard let updatedGuild = self.guilds[guildId]?.updateGuild(with: data) else { return }
 
+		DefaultDiscordLogger.Logger.verbose("Updated guild: %@", type: logType, args: updatedGuild)
+
 		handleEvent("guildUpdate", with: [guildId, updatedGuild])
 	}
 
+	open func handleMessageCreate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling message create", type: logType)
+
+		let message = DiscordMessage(messageObject: data)
+
+		DefaultDiscordLogger.Logger.verbose("Message: %@", type: logType, args: message)
+
+		handleEvent("messageCreate", with: [message])
+	}
+
 	open func handlePresenceUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling presence update", type: logType)
+
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let user = data["user"] as? [String: Any] else { return }
 		guard let userId = user["id"] as? String else { return }
@@ -261,12 +343,16 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			presence = DiscordPresence(presenceObject: data, guildId: guildId)
 		}
 
+		DefaultDiscordLogger.Logger.debug("Updated presence: %@", type: logType, args: presence!)
+
 		guilds[guildId]?.presences[presence!.user.id] = presence!
 
 		handleEvent("presenceUpdate", with: [guildId, presence!])
 	}
 
 	open func handleReady(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling ready", type: logType)
+
 		guard let milliseconds = data["heartbeat_interval"] as? Int else {
 			handleEvent("disconnect", with: ["Failed to get heartbeat"])
 
@@ -298,6 +384,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handleVoiceServerUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling voice server update", type: logType)
+		DefaultDiscordLogger.Logger.verbose("Voice server update: %@", type: logType, args: data)
+
 		self.voiceServerInformation = data
 
 		if self.joiningVoiceChannel {
@@ -307,6 +396,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handleVoiceStateUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling voice state update", type: logType)
+		DefaultDiscordLogger.Logger.verbose("Voice state: %@", type: logType, args: data)
+
 		// Only care about our state right now
 		guard data["user_id"] as? String == self.user?.id else { return }
 		guard let guildId = data["guild_id"] as? String else { return }
@@ -330,6 +422,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 			return
 		}
+
+		DefaultDiscordLogger.Logger.log("Joining voice channel: %@", type: self.logType, args: channel)
 
 		self.joiningVoiceChannel = true
 
@@ -399,7 +493,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		voiceEngine = DiscordVoiceEngine(client: self, voiceServerInformation: voiceServerInformation!,
 			encoder: voiceEngine?.encoder, secret: voiceEngine?.secret)
 
-		// print("Connecting voice engine")
+		DefaultDiscordLogger.Logger.log("Connecting voice engine", type: logType)
 
 		voiceEngine?.connect()
         #else

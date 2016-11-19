@@ -52,6 +52,10 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public private(set) var udpPort = -1
 	public private(set) var voiceServerInformation: [String: Any]!
 
+	override var logType: String {
+		return "DiscordVoiceEngine"
+	}
+
 	private let encoderSemaphore = DispatchSemaphore(value: 1)
 	private let padding = [UInt8](repeating: 0x00, count: 12)
 
@@ -114,7 +118,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		guard waitTime > 0 else { return }
 
-		// print("sleeping \(waitTime) \(count)")
+		DefaultDiscordLogger.Logger.debug("Sleeping %@ %@", type: logType, args: waitTime, count)
 		Thread.sleep(forTimeInterval: waitTime)
 	}
 
@@ -136,7 +140,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	public override func createHandshakeObject() -> [String: Any] {
-		// print("DiscordVoiceEngine: Creating handshakeObject")
+		DefaultDiscordLogger.Logger.log("Creating handshakeObject", type: logType)
 
 		return [
 			"session_id": client!.voiceState!.sessionId,
@@ -206,7 +210,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	public override func disconnect() {
-		// print("DiscordVoiceEngine: Disconnecting")
+		DefaultDiscordLogger.Logger.log("Disconnecting VoiceEngine", type: logType)
 
 		super.disconnect()
 
@@ -221,7 +225,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private func extractIPAndPort(from bytes: [UInt8]) throws -> (String, Int) {
-		// print("extracting our ip and port from \(bytes)")
+		DefaultDiscordLogger.Logger.debug("Extracting ip and port from %@", type: logType, args: bytes)
 
 		let ipData = Data(bytes: bytes.dropLast(2))
 		let portBytes = Array(bytes.suffix(from: bytes.endIndex.advanced(by: -2)))
@@ -281,7 +285,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		case .sessionDescription:
 			udpQueue.async { self.handleVoiceSessionDescription(with: payload.payload) }
 		default:
-			// print("Got voice payload \(payload)")
+			DefaultDiscordLogger.Logger.debug("Unhandled voice payload %@", type: logType, args: payload)
 			break
 		}
 	}
@@ -319,7 +323,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	public override func parseGatewayMessage(_ string: String) {
 		guard let decoded = DiscordGatewayPayload.payloadFromString(string, fromGateway: false) else {
-			print("DiscordVoiceEngine: Got unknown payload \(string), Endpoint is: \(endpoint!)")
+			DefaultDiscordLogger.Logger.log("Got unknown payload %@", type: logType, args: string)
 
 			return
 		}
@@ -332,7 +336,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			guard let this = self, this.connected else { return } // engine died
 
 		    guard !done else {
-		    	// print("no data, reader probably closed")
+		    	DefaultDiscordLogger.Logger.debug("No data, reader probably closed", type: this.logType)
 
 		    	this.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
 		    		"speaking": false,
@@ -344,7 +348,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		    	return
 		    }
 
-		    // print("Read \(data)")
+		    DefaultDiscordLogger.Logger.debug("Read %@ bytes", type: this.logType, args: data.count)
 
 		    if count == 1 {
 		    	this.startTime = this.currentUnixTime
@@ -434,7 +438,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			guard let udpSocket = self.udpSocket, data.count <= defaultAudioSize else { return }
 			defer { free(encrypted) }
 
-			// print("Should send voice data: \(data.count) bytes")
+			DefaultDiscordLogger.Logger.debug("Should send voice data: %@ bytes", type: self.logType, args: data.count)
 
             var buf = data
 
@@ -460,7 +464,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public override func startHandshake() {
 		guard client != nil else { return }
 
-		// print("DiscordVoiceEngine: Starting voice handshake")
+		DefaultDiscordLogger.Logger.log("Starting voice handshake", type: logType)
 
 		let handshakeEventData = createHandshakeObject()
 

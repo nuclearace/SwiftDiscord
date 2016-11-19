@@ -19,8 +19,10 @@ import CoreFoundation
 import Dispatch
 import Foundation
 
+let token = ""
+
 let queue = DispatchQueue(label: "Async Read")
-let bot = DiscordBot(token: "")
+let bot = DiscordBot(token: token)
 
 func readAsync() {
     queue.async {
