@@ -35,6 +35,9 @@ public protocol DiscordLogger {
     /// Normal log messages
     func log(_ message: String, type: String, args: Any...)
 
+    /// More info on log messages
+    func verbose(_ message: String, type: String, args: Any...)
+
     /// Debug messages
     func debug(_ message: String, type: String, args: Any...)
 
