@@ -69,10 +69,15 @@ public extension DiscordLogger {
     }
 
     private func abstractLog(_ logType: String, message: String, type: String, args: [Any]) {
-        let newArgs = args.map({arg -> CVarArg in String(describing: arg)})
-        let messageFormat = String(format: message, arguments: newArgs)
+        var message = "\(logType): \(type): \(message)"
 
-        NSLog("\(logType) \(type): %@", messageFormat)
+        for arg in args {
+            guard let range = message.range(of: "%@") else { break }
+
+            message.replaceSubrange(range, with: String(describing: arg))
+        }
+
+        NSLog(message)
     }
 }
 
