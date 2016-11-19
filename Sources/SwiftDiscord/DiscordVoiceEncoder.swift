@@ -28,9 +28,6 @@ public class DiscordVoiceEncoder {
 	private let readQueue = DispatchQueue(label: "discordVoiceEncoder.readQueue")
 	private let writeQueue = DispatchQueue(label: "discordVoiceEncoder.writeQueue")
 
-	private let id = arc4random()
-
-
 	private var closed = false
 
 	/// readPipe: What the encoder reads from, and what we write to to have things encoded into OPUS

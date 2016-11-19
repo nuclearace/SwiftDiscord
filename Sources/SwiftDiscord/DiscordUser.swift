@@ -28,14 +28,14 @@ public struct DiscordUser {
 
 extension DiscordUser {
 	init(userObject: [String: Any]) {
-		let avatar = userObject["avatar"] as? String ?? ""
-		let bot = userObject["bot"] as? Bool ?? false
-		let discriminator = userObject["discriminator"] as? String ?? ""
-		let email = userObject["email"] as? String ?? ""
-		let id = userObject["id"] as? String ?? ""
-		let mfaEnabled = userObject["mfa_enabled"] as? Bool ?? false
-		let username = userObject["username"] as? String ?? ""
-		let verified = userObject["verified"] as? Bool ?? false
+		let avatar = userObject.get("avatar", or: "")
+		let bot = userObject.get("bot", or: false)
+		let discriminator = userObject.get("discriminator", or: "")
+		let email = userObject.get("email", or: "")
+		let id = userObject.get("id", or: "")
+		let mfaEnabled = userObject.get("mfa_enabled", or: false)
+		let username = userObject.get("username", or: "")
+		let verified = userObject.get("verified", or: false)
 
 		self.init(avatar: avatar, bot: bot, discriminator: discriminator, email: email, id: id,
 				mfaEnabled: mfaEnabled, username: username, verified: verified)

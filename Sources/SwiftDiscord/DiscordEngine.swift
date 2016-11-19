@@ -42,6 +42,10 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
 	let handleQueue = DispatchQueue(label: "discordEngine.handleQueue")
 
+	var logType: String {
+		return "DiscordEngine"
+	}
+
 	private var closed = false
 
 	public required init(client: DiscordClientSpec) {
@@ -53,7 +57,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		websocket?.onConnect = {[weak self] in
 			guard let this = self else { return }
 
-			// print("DiscordEngine: WebSocket Connected")
+			DefaultDiscordLogger.Logger.log("WebSocket Connected", type: this.logType)
 
 			this.startHandshake()
 			// this.client?.handleEngineEvent("engine.connect", with: [])
@@ -62,26 +66,32 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		websocket?.onDisconnect = {[weak self] err in
 			guard let this = self else { return }
 
-			// print("DiscordEngine: WebSocket disconnected \(String(describing: err))")
+			DefaultDiscordLogger.Logger.log("WebSocket disconnected %@",
+				type: this.logType, args: String(describing: err))
+
 			this.handleClose()
 		}
 
 		websocket?.onText = {[weak self] string in
 			guard let this = self else { return }
 
-			// print("DiscordEngine: Got message: \(string)")
+			DefaultDiscordLogger.Logger.debug("Got text: %@", type: this.logType, args: string)
 
 			this.parseGatewayMessage(string)
 		}
 		#else
 		websocket?.onText = {[weak self] ws, text in
-			// print("DiscordEngine got text \(text)")
-			self?.parseGatewayMessage(text)
+			guard let this = self else { return }
+
+			DefaultDiscordLogger.Logger.debug("Got text: %@", type: this.logType, args: text)
+
+			this.parseGatewayMessage(text)
 		}
 
 		websocket?.onClose = {[weak self] _, _, _, _ in
 			guard let this = self else { return }
-			// print("DiscordEngine closed")
+
+			DefaultDiscordLogger.Logger.log("WebSocket closed", type: this.logType)
 
 			this.handleClose()
 		}
@@ -89,8 +99,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	}
 
 	open func connect() {
-		// print("DiscordEngine: connecting to \(connectURL)")
-		// print("DiscordEngine: Attaching WebSocket")
+		DefaultDiscordLogger.Logger.log("Connecting to %@", type: logType, args: connectURL)
+		DefaultDiscordLogger.Logger.log("Attaching WebSocket", type: logType)
 
 		#if !os(Linux)
 		websocket = WebSocket(url: URL(string: connectURL)!)
@@ -100,7 +110,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		websocket?.connect()
 		#else
 		try? WebSocket.background(to: connectURL) {[weak self] ws in
-			// print("DiscordEngine Websocket connected")
+			DefaultDiscordLogger.Logger.log("Websocket connected", type: "DiscordEngine")
 
 			self?.websocket = ws
 
@@ -127,7 +137,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	}
 
 	open func disconnect() {
-		// print("DiscordEngine: Disconnecting")
+		DefaultDiscordLogger.Logger.log("Disconnecting", type: logType)
 
 		#if !os(Linux)
 		websocket?.disconnect()
@@ -137,7 +147,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	}
 
 	open func error(message: String) {
-		print("DiscordEngine: errored \(message)")
+		DefaultDiscordLogger.Logger.error(message, type: logType)
 	}
 
 	private func handleClose() {
@@ -164,13 +174,13 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		case .dispatch:
 			handleDispatch(payload)
 		default:
-			print("Unhandled payload: \(payload.code)")
+			error(message: "Unhandled payload: \(payload.code)")
 		}
 	}
 
 	open func parseGatewayMessage(_ string: String) {
 		guard let decoded = DiscordGatewayPayload.payloadFromString(string) else {
-			print("DiscordEngine: Got unknown payload \(string)")
+			error(message: "Got unknown payload \(string)")
 
 			return
 		}
@@ -181,7 +191,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	open func sendHeartbeat() {
 		guard !closed else { return }
 
-		// print("DiscordEngine: about to send heartbeat")
+		DefaultDiscordLogger.Logger.debug("Sending heartbeat", type: logType)
 
 		sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
 

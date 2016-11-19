@@ -25,11 +25,11 @@ public struct DiscordEmoji {
 
 extension DiscordEmoji {
 	init(emojiObject: [String: Any]) {
-		let id = emojiObject["id"] as? String ?? ""
-		let managed = emojiObject["managed"] as? Bool ?? false
-		let name = emojiObject["name"] as? String ?? ""
-		let requireColons = emojiObject["require_colons"] as? Bool ?? false
-		let roles = emojiObject["roles"] as? [String] ?? []
+		let id = emojiObject.get("id", or: "")
+		let managed = emojiObject.get("managed", or: false)
+		let name = emojiObject.get("name", or: "")
+		let requireColons = emojiObject.get("require_colons", or: false)
+		let roles = emojiObject.get("roles", or: [String]())
 
 		self.init(id: id, managed: managed, name: name, requireColons: requireColons, roles: roles)
 	}

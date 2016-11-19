@@ -29,13 +29,12 @@ public struct DiscordGuildMember {
 
 extension DiscordGuildMember {
 	init(guildMemberObject: [String: Any]) {
-		let user = DiscordUser(userObject: guildMemberObject["user"] as? [String: Any] ?? [:])
-		let deaf = guildMemberObject["deaf"] as? Bool ?? false
-		let mute = guildMemberObject["mute"] as? Bool ?? false
-		let nick = guildMemberObject["nick"] as? String
-		let roles = guildMemberObject["roles"] as? [String] ?? []
-
-		let joinedAtString = guildMemberObject["joined_at"] as? String ?? ""
+		let user = DiscordUser(userObject: guildMemberObject.get("user", or: [String: Any]()))
+		let deaf = guildMemberObject.get("deaf", or: false)
+		let mute = guildMemberObject.get("mute", or: false)
+		let nick = guildMemberObject.get("nick", or: nil) as String?
+		let roles = guildMemberObject.get("roles", or: [String]())
+		let joinedAtString = guildMemberObject.get("joined_at", or: "")
 		let joinedAt = convertISO8601(string: joinedAtString) ?? Date()
 
 		self.init(user: user, joinedAt: joinedAt, deaf: deaf, mute: mute, nick: nick, roles: roles)

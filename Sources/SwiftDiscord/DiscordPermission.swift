@@ -68,12 +68,16 @@ public func &=(lhs: inout Int, rhs: DiscordPermission) {
 	lhs &= rhs.rawValue
 }
 
-public enum DiscordPermissionOverwriteType : String {
+public enum DiscordPermissionOverwriteType : String, JSONRepresentable {
 	case role = "role"
 	case member = "member"
+
+	func jsonValue() -> JSONRepresentable {
+		return rawValue
+	}
 }
 
-public struct DiscordPermissionOverwrite {
+public struct DiscordPermissionOverwrite : JSONAble {
 	public let id: String
 	public let type: DiscordPermissionOverwriteType
 
@@ -86,23 +90,14 @@ public struct DiscordPermissionOverwrite {
 		self.allow = allow
 		self.deny = deny
 	}
-
-	var json: [String: Any] {
-		return [
-			"id": id,
-            "allow": allow,
-            "deny": deny,
-            "type": type.rawValue
-        ]
-    }
 }
 
 extension DiscordPermissionOverwrite {
 	init(permissionOverwriteObject: [String: Any]) {
-		let id = permissionOverwriteObject["id"] as? String ?? ""
-		let type = DiscordPermissionOverwriteType(rawValue: permissionOverwriteObject["type"] as? String ?? "") ?? .role
-		let allow = permissionOverwriteObject["allow"] as? Int ?? -1
-		let deny = permissionOverwriteObject["deny"] as? Int ?? -1
+		let id = permissionOverwriteObject.get("id", or: "")
+		let type = DiscordPermissionOverwriteType(rawValue: permissionOverwriteObject.get("type", or: "")) ?? .role
+		let allow = permissionOverwriteObject.get("allow", or: 0)
+		let deny = permissionOverwriteObject.get("deny", or: 0)
 
 		self.init(id: id, type: type, allow: allow, deny: deny)
 	}
