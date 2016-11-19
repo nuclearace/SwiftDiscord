@@ -110,7 +110,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		websocket?.connect()
 		#else
 		try? WebSocket.background(to: connectURL) {[weak self] ws in
-			DefaultDiscordLogger.Logger.log("Websocket connected", type: logType)
+			DefaultDiscordLogger.Logger.log("Websocket connected", type: "DiscordEngine")
 
 			self?.websocket = ws
 
