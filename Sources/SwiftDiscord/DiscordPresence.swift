@@ -58,6 +58,15 @@ public struct DiscordPresence {
 	public var roles: [String]
 	public var status: DiscordPresenceStatus
 
+	init(presenceObject: [String: Any], guildId: String) {
+		self.guildId = guildId
+		user = DiscordUser(userObject: presenceObject.get("user", or: [String: Any]()))
+		game = DiscordGame(gameObject: presenceObject["game"] as? [String: Any])
+		nick = presenceObject.get("nick", or: "")
+		status = DiscordPresenceStatus(rawValue: presenceObject.get("status", or: "")) ?? .offline
+		roles = []
+	}
+
 	mutating func updatePresence(presenceObject: [String: Any]) {
 		if let game = presenceObject["game"] as? [String: Any] {
 			self.game = DiscordGame(gameObject: game)
@@ -77,25 +86,17 @@ public struct DiscordPresence {
 			self.status = DiscordPresenceStatus(rawValue: status) ?? .offline
 		}
 	}
-}
 
-extension DiscordPresence {
-	init(presenceObject: [String: Any], guildId: String) {
-		let user = DiscordUser(userObject: presenceObject.get("user", or: [String: Any]()))
-		let game = DiscordGame(gameObject: presenceObject["game"] as? [String: Any])
-		let nick = presenceObject.get("nick", or: "")
-		let status = DiscordPresenceStatus(rawValue: presenceObject.get("status", or: "")) ?? .offline
-
-		self.init(guildId: guildId, user: user, game: game, nick: nick, roles: [], status: status)
-	}
-
-	static func presencesFromArray(_ presencesArray: [[String: Any]], guildId: String) -> [String: DiscordPresence] {
-		var presences = [String: DiscordPresence]()
+	static func presencesFromArray(_ presencesArray: [[String: Any]], guildId: String)
+			-> DiscordLazyDictionary<String, DiscordPresence> {
+		var presences = DiscordLazyDictionary<String, DiscordPresence>()
 
 		for presence in presencesArray {
-			let presence = DiscordPresence(presenceObject: presence, guildId: guildId)
+			guard let user = presence["user"] as? [String: Any], let id = user["id"] as? String else {
+				fatalError("Couldn't extract userId")
+			}
 
-			presences[presence.user.id] = presence
+			presences[lazy: id] = .lazy({ DiscordPresence(presenceObject: presence, guildId: guildId) })
 		}
 
 		return presences

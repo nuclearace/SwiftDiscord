@@ -25,21 +25,16 @@ public struct DiscordRole : JSONAble {
 	public var name: String
 	public var permissions: Int
 	public var position: Int
-}
 
-extension DiscordRole {
 	init(roleObject: [String: Any]) {
-		let color = roleObject.get("color", or: 0)
-		let hoist = roleObject.get("hoist", or: false)
-		let id = roleObject.get("id", or: "")
-		let managed = roleObject.get("managed", or: false)
-		let mentionable = roleObject.get("mentionable", or: false)
-		let name = roleObject.get("name", or: "")
-		let permissions = roleObject.get("permissions", or: 0)
-		let position = roleObject.get("position", or: 0)
-
-		self.init(id: id, color: color, hoist: hoist, managed: managed, mentionable: mentionable, name: name,
-			permissions: permissions, position: position)
+		color = roleObject.get("color", or: 0)
+		hoist = roleObject.get("hoist", or: false)
+		id = roleObject.get("id", or: "")
+		managed = roleObject.get("managed", or: false)
+		mentionable = roleObject.get("mentionable", or: false)
+		name = roleObject.get("name", or: "")
+		permissions = roleObject.get("permissions", or: 0)
+		position = roleObject.get("position", or: 0)
 	}
 
 	static func rolesFromArray(_ rolesArray: [[String: Any]]) -> [String: DiscordRole] {

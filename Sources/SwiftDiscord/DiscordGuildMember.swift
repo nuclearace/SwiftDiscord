@@ -25,28 +25,26 @@ public struct DiscordGuildMember {
 	public var mute: Bool
 	public var nick: String?
 	public var roles: [String]
-}
 
-extension DiscordGuildMember {
 	init(guildMemberObject: [String: Any]) {
-		let user = DiscordUser(userObject: guildMemberObject.get("user", or: [String: Any]()))
-		let deaf = guildMemberObject.get("deaf", or: false)
-		let mute = guildMemberObject.get("mute", or: false)
-		let nick = guildMemberObject.get("nick", or: nil) as String?
-		let roles = guildMemberObject.get("roles", or: [String]())
-		let joinedAtString = guildMemberObject.get("joined_at", or: "")
-		let joinedAt = convertISO8601(string: joinedAtString) ?? Date()
-
-		self.init(user: user, joinedAt: joinedAt, deaf: deaf, mute: mute, nick: nick, roles: roles)
+		user = DiscordUser(userObject: guildMemberObject.get("user", or: [String: Any]()))
+		deaf = guildMemberObject.get("deaf", or: false)
+		mute = guildMemberObject.get("mute", or: false)
+		nick = guildMemberObject["nick"] as? String
+		roles = guildMemberObject.get("roles", or: [String]())
+		joinedAt = convertISO8601(string: guildMemberObject.get("joined_at", or: "")) ?? Date()
 	}
 
-	static func guildMembersFromArray(_ guildMembersArray: [[String: Any]]) -> [String: DiscordGuildMember] {
-		var guildMembers = [String: DiscordGuildMember]()
+	static func guildMembersFromArray(_ guildMembersArray: [[String: Any]])
+			-> DiscordLazyDictionary<String, DiscordGuildMember> {
+		var guildMembers = DiscordLazyDictionary<String, DiscordGuildMember>()
 
 		for guildMember in guildMembersArray {
-			let guildMember = DiscordGuildMember(guildMemberObject: guildMember)
+			guard let user = guildMember["user"] as? [String: Any], let id = user["id"] as? String else {
+				fatalError("Couldn't extract userId")
+			}
 
-			guildMembers[guildMember.user.id] = guildMember
+			guildMembers[lazy: id] = .lazy({ DiscordGuildMember(guildMemberObject: guildMember) })
 		}
 
 		return guildMembers

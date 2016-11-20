@@ -21,17 +21,13 @@ public struct DiscordEmoji {
 	public let name: String
 	public let requireColons: Bool
 	public let roles: [String]
-}
 
-extension DiscordEmoji {
 	init(emojiObject: [String: Any]) {
-		let id = emojiObject.get("id", or: "")
-		let managed = emojiObject.get("managed", or: false)
-		let name = emojiObject.get("name", or: "")
-		let requireColons = emojiObject.get("require_colons", or: false)
-		let roles = emojiObject.get("roles", or: [String]())
-
-		self.init(id: id, managed: managed, name: name, requireColons: requireColons, roles: roles)
+		id = emojiObject.get("id", or: "")
+		managed = emojiObject.get("managed", or: false)
+		name = emojiObject.get("name", or: "")
+		requireColons = emojiObject.get("require_colons", or: false)
+		roles = emojiObject.get("roles", or: [String]())
 	}
 
 	static func emojisFromArray(_ emojiArray: [[String: Any]]) -> [String: DiscordEmoji] {
