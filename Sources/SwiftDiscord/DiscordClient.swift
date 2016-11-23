@@ -144,9 +144,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		}
 	}
 
-	open func handleEngineDispatch(event: DiscordDispatchEvent, data: DiscordGatewayPayloadData) {
+	open func handleEngineDispatch(_ payload: DiscordGatewayPayload) {
+		guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
+			DefaultDiscordLogger.Logger.error("Could not create dispatch event %@", type: logType, args: payload)
+
+			return
+		}
+
 		handleQueue.async {
-			self.handleDispatch(event: event, data: data)
+			self.handleDispatch(event: event, data: payload.payload)
 		}
 	}
 
