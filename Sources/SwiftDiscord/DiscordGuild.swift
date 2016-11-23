@@ -43,6 +43,7 @@ public struct DiscordGuild {
 	public var roles: [String: DiscordRole]
 	public var voiceStates: [String: DiscordVoiceState]
 
+	// Used to update a guild from a guildUpdate event
 	mutating func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
 		if let defaultMessageNotifications = newGuild["default_message_notifications"] as? Int {
 			self.defaultMessageNotifications = defaultMessageNotifications
@@ -85,6 +86,37 @@ public struct DiscordGuild {
 		}
 
 		return self
+	}
+
+	// Used to update a guild from a guildCreate event with data that come in after that create
+	// Guild creation is currently slow, especially for large guilds with 12,000 Users + Presences
+	// Guild creation currently happens off of the handleQueue, so that it doesn't block everything, however this means
+	// that events for the guild currently being created are stored in the "shell" that's gotten in the ready event
+	// So that we don't lose those updates, we need to play them back once the real guild is created
+	mutating func updateGuild(from guild: DiscordGuild) {
+		for (id, presence) in guild.presences {
+			DefaultDiscordLogger.Logger.debug("Updating presence for user: %@", type: "DiscordGuild", args: id)
+
+			presences[id] = presence
+		}
+
+		for (id, member) in guild.members {
+			DefaultDiscordLogger.Logger.debug("Updating member: %@", type: "DiscordGuild", args: id)
+
+			members[id] = member
+		}
+
+		for (id, role) in guild.roles {
+			DefaultDiscordLogger.Logger.debug("Updating role: %@", type: "DiscordGuild", args: id)
+
+			roles[id] = role
+		}
+
+		for (id, channel) in guild.channels {
+			DefaultDiscordLogger.Logger.debug("Updating channel: %@", type: "DiscordGuild", args: id)
+
+			channels[id] = channel
+		}
 	}
 }
 

@@ -164,11 +164,17 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		DefaultDiscordLogger.Logger.log("Handling guild create", type: logType)
 
 		crunchQueue.async {
-			let guild = DiscordGuild(guildObject: data)
+			var guild = DiscordGuild(guildObject: data)
 
 			DefaultDiscordLogger.Logger.verbose("Created guild: %@", type: self.logType, args: guild)
 
 			self.handleQueue.async {
+				if let oldGuild = self.guilds[guild.id] {
+					DefaultDiscordLogger.Logger.log("Guild already existed, updating", type: self.logType)
+
+					guild.updateGuild(from: oldGuild)
+				}
+
 				self.guilds[guild.id] = guild
 
 				self.handleEvent("guildCreate", with: [guild.id, guild])
