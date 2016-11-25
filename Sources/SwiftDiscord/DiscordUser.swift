@@ -24,21 +24,16 @@ public struct DiscordUser {
 	public let mfaEnabled: Bool
 	public let username: String
 	public let verified: Bool
-}
 
-extension DiscordUser {
 	init(userObject: [String: Any]) {
-		let avatar = userObject.get("avatar", or: "")
-		let bot = userObject.get("bot", or: false)
-		let discriminator = userObject.get("discriminator", or: "")
-		let email = userObject.get("email", or: "")
-		let id = userObject.get("id", or: "")
-		let mfaEnabled = userObject.get("mfa_enabled", or: false)
-		let username = userObject.get("username", or: "")
-		let verified = userObject.get("verified", or: false)
-
-		self.init(avatar: avatar, bot: bot, discriminator: discriminator, email: email, id: id,
-				mfaEnabled: mfaEnabled, username: username, verified: verified)
+		avatar = userObject.get("avatar", or: "")
+		bot = userObject.get("bot", or: false)
+		discriminator = userObject.get("discriminator", or: "")
+		email = userObject.get("email", or: "")
+		id = userObject.get("id", or: "")
+		mfaEnabled = userObject.get("mfa_enabled", or: false)
+		username = userObject.get("username", or: "")
+		verified = userObject.get("verified", or: false)
 	}
 
 	static func usersFromArray(_ userArray: [[String: Any]]) -> [DiscordUser] {

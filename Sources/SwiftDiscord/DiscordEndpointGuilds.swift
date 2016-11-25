@@ -232,7 +232,9 @@ public extension DiscordEndpoint {
                     return
             }
 
-            callback(DiscordGuildMember.guildMembersFromArray(members as! [[String: Any]]).map({ $0.value }))
+            let guildMembers = DiscordGuildMember.guildMembersFromArray(members as! [[String: Any]])
+
+            callback(guildMembers.map({ $0.1 }))
         })
     }
 

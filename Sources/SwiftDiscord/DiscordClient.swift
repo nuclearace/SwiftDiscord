@@ -163,23 +163,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	open func handleGuildCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild create", type: logType)
 
-		crunchQueue.async {
-			var guild = DiscordGuild(guildObject: data)
+		let guild = DiscordGuild(guildObject: data)
 
-			DefaultDiscordLogger.Logger.verbose("Created guild: %@", type: self.logType, args: guild)
+		DefaultDiscordLogger.Logger.verbose("Created guild: %@", type: self.logType, args: guild)
 
-			self.handleQueue.async {
-				if let oldGuild = self.guilds[guild.id] {
-					DefaultDiscordLogger.Logger.log("Guild already existed, updating", type: self.logType)
+		guilds[guild.id] = guild
 
-					guild.updateGuild(from: oldGuild)
-				}
-
-				self.guilds[guild.id] = guild
-
-				self.handleEvent("guildCreate", with: [guild.id, guild])
-			}
-		}
+		handleEvent("guildCreate", with: [guild.id, guild])
 	}
 
 	open func handleGuildDelete(with data: [String: Any]) {
@@ -357,7 +347,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		DefaultDiscordLogger.Logger.debug("Updated presence: %@", type: logType, args: presence!)
 
-		guilds[guildId]?.presences[presence!.user.id] = presence!
+		guilds[guildId]?.presences[userId] = presence!
 
 		handleEvent("presenceUpdate", with: [guildId, presence!])
 	}

@@ -18,18 +18,14 @@
 // TODO Meta object
 
 public struct DiscordInvite {
-    let code: String
-    let guild: DiscordInviteGuild
-    let channel: DiscordInviteChannel
-}
+    public let code: String
+    public let guild: DiscordInviteGuild
+    public let channel: DiscordInviteChannel
 
-extension DiscordInvite {
     init(inviteObject: [String: Any]) {
-        let code = inviteObject.get("code", or: "")
-        let guild = DiscordInviteGuild(inviteGuildObject: inviteObject.get("guild", or: [String: Any]()))
-        let channel = DiscordInviteChannel(inviteChannelObject: inviteObject.get("channel", or: [String: Any]()))
-
-        self.init(code: code, guild: guild, channel: channel)
+        code = inviteObject.get("code", or: "")
+        guild = DiscordInviteGuild(inviteGuildObject: inviteObject.get("guild", or: [String: Any]()))
+        channel = DiscordInviteChannel(inviteChannelObject: inviteObject.get("channel", or: [String: Any]()))
     }
 
     static func invitesFromArray(inviteArray: [[String: Any]]) -> [DiscordInvite] {
@@ -38,33 +34,25 @@ extension DiscordInvite {
 }
 
 public struct DiscordInviteGuild {
-    let id: String
-    let name: String
-    let splashHash: String
-}
+    public let id: String
+    public let name: String
+    public let splashHash: String
 
-extension DiscordInviteGuild {
     init(inviteGuildObject: [String: Any]) {
-        let id = inviteGuildObject.get("id", or: "")
-        let name = inviteGuildObject.get("name", or: "")
-        let splashHash = inviteGuildObject.get("splash_hash", or: "")
-
-        self.init(id: id, name: name, splashHash: splashHash)
+        id = inviteGuildObject.get("id", or: "")
+        name = inviteGuildObject.get("name", or: "")
+        splashHash = inviteGuildObject.get("splash_hash", or: "")
     }
 }
 
 public struct DiscordInviteChannel {
-    let id: String
-    let name: String
-    let type: DiscordChannelType
-}
+    public let id: String
+    public let name: String
+    public let type: DiscordChannelType
 
-extension DiscordInviteChannel {
     init(inviteChannelObject: [String: Any]) {
-        let id = inviteChannelObject.get("id", or: "")
-        let name = inviteChannelObject.get("name", or: "")
-        let type = DiscordChannelType(rawValue: inviteChannelObject.get("type", or: "")) ?? .text
-
-        self.init(id: id, name: name, type: type)
+        id = inviteChannelObject.get("id", or: "")
+        name = inviteChannelObject.get("name", or: "")
+        type = DiscordChannelType(rawValue: inviteChannelObject.get("type", or: "")) ?? .text
     }
 }
