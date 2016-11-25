@@ -331,7 +331,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handlePresenceUpdate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling presence update", type: logType)
+		DefaultDiscordLogger.Logger.debug("Handling presence update", type: logType)
 
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let user = data["user"] as? [String: Any] else { return }

@@ -56,6 +56,7 @@ public protocol DiscordEndpointConsumer : DiscordClientSpec {
     func removeGuildRole(_ roleId: String, on guildId: String)
     func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int)
     func sendMessage(_ message: String, to channelId: String, tts: Bool)
+    func sendFile(_ file: DiscordFileUpload, content: String, to channelId: String, tts: Bool)
     func triggerTyping(on channelId: String)
 }
 
@@ -207,6 +208,10 @@ public extension DiscordEndpointConsumer {
         guard connected else { return }
 
         DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts, isBot: isBot)
+    }
+
+    public func sendFile(_ file: DiscordFileUpload, content: String, to channelId: String, tts: Bool = false) {
+        DiscordEndpoint.sendFile(file, content: content, with: token, to: channelId, tts: tts, isBot: isBot)
     }
 
     public func triggerTyping(on channelId: String) {

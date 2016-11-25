@@ -17,6 +17,9 @@
 
 import Foundation
 import SwiftDiscord
+#if os(macOS)
+import ImageBrutalizer
+#endif
 
 class DiscordBot {
     let client: DiscordClient
@@ -60,6 +63,65 @@ class DiscordBot {
             self?.inVoiceChannel = false
             self?.playingYoutube = false
         }
+    }
+
+    func brutalizeImage(options: [String], channelId: String) {
+        #if os(macOS)
+        let args = options.map(BrutalArg.init)
+        var imagePath: String!
+
+        loop: for arg in args {
+            switch arg {
+            case let .url(image):
+                imagePath = image
+                break loop
+            default:
+                continue
+            }
+        }
+
+        guard imagePath != nil else {
+            client.sendMessage("Missing image url", to: channelId)
+
+            return
+        }
+
+        guard let request = createGetRequest(for: imagePath) else {
+            client.sendMessage("Invalid url", to: channelId)
+
+            return
+        }
+
+        getRequestData(for: request) {[weak self] data in
+            guard let this = self else { return }
+            guard let data = data else {
+                this.client.sendMessage("Something went wrong with the request", to: channelId)
+
+                return
+            }
+
+            guard let brutalizer = ImageBrutalizer(data: data) else {
+                this.client.sendMessage("Invalid image", to: channelId)
+
+                return
+            }
+
+            for arg in args {
+                arg.brutalize(with: brutalizer)
+            }
+
+            guard let outputData = brutalizer.outputData else {
+                this.client.sendMessage("Something went wrong brutalizing the image", to: channelId)
+
+                return
+            }
+
+            this.client.sendFile(DiscordFileUpload(data: outputData, filename: "brutalized.png", mimeType: "image/png"),
+                content: "Brutalized:", to: channelId)
+        }
+        #else
+        client.sendMessage("Not available on Linux", to: channelId)
+        #endif
     }
 
     func connect() {
@@ -131,6 +193,8 @@ class DiscordBot {
             }
 
             client.voiceEngine?.requestNewEncoder()
+        } else if command == "brutal" {
+            brutalizeImage(options: arguments, channelId: message.channelId)
         }
     }
 
@@ -164,4 +228,27 @@ class DiscordBot {
 
         return "Playing"
     }
+}
+
+private func createGetRequest(for string: String) -> URLRequest? {
+    guard let url = URL(string: string) else { return nil }
+
+    var request = URLRequest(url: url)
+
+    request.httpMethod = "GET"
+
+    return request
+}
+
+private func getRequestData(for request: URLRequest, callback: @escaping (Data?) -> Void) {
+    URLSession.shared.dataTask(with: request) {data, response, error in
+        guard data != nil, error == nil, let response = response as? HTTPURLResponse,
+                response.statusCode == 200 else {
+            callback(nil)
+
+            return
+        }
+
+        callback(data!)
+    }.resume()
 }
