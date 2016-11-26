@@ -144,9 +144,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		}
 	}
 
-	open func handleEngineDispatch(event: DiscordDispatchEvent, data: DiscordGatewayPayloadData) {
+	open func handleEngineDispatch(_ payload: DiscordGatewayPayload) {
+		guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
+			DefaultDiscordLogger.Logger.error("Could not create dispatch event %@", type: logType, args: payload)
+
+			return
+		}
+
 		handleQueue.async {
-			self.handleDispatch(event: event, data: data)
+			self.handleDispatch(event: event, data: payload.payload)
 		}
 	}
 
@@ -157,17 +163,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	open func handleGuildCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild create", type: logType)
 
-		crunchQueue.async {
-			let guild = DiscordGuild(guildObject: data)
+		let guild = DiscordGuild(guildObject: data)
 
-			DefaultDiscordLogger.Logger.verbose("Created guild: %@", type: self.logType, args: guild)
+		DefaultDiscordLogger.Logger.verbose("Created guild: %@", type: self.logType, args: guild)
 
-			self.handleQueue.async {
-				self.guilds[guild.id] = guild
+		guilds[guild.id] = guild
 
-				self.handleEvent("guildCreate", with: [guild.id, guild])
-			}
-		}
+		handleEvent("guildCreate", with: [guild.id, guild])
 	}
 
 	open func handleGuildDelete(with data: [String: Any]) {
@@ -329,7 +331,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	open func handlePresenceUpdate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling presence update", type: logType)
+		DefaultDiscordLogger.Logger.debug("Handling presence update", type: logType)
 
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let user = data["user"] as? [String: Any] else { return }
@@ -345,7 +347,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		DefaultDiscordLogger.Logger.debug("Updated presence: %@", type: logType, args: presence!)
 
-		guilds[guildId]?.presences[presence!.user.id] = presence!
+		guilds[guildId]?.presences[userId] = presence!
 
 		handleEvent("presenceUpdate", with: [guildId, presence!])
 	}

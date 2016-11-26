@@ -25,19 +25,15 @@ public struct DiscordAttachment {
 	public let size: Int
 	public let url: URL
 	public let width: Int?
-}
 
-extension DiscordAttachment {
 	init(attachmentObject: [String: Any]) {
-		let id = attachmentObject.get("id", or: "")
-		let filename = attachmentObject.get("filename", or: "")
-		let height = attachmentObject["height"] as? Int
-		let proxyUrl = URL(string: attachmentObject.get("proxy_url", or: "")) ?? URL(string: "http://localhost/")!
-		let size = attachmentObject.get("size", or: 0)
-		let url = URL(string: attachmentObject.get("url", or: "")) ?? URL(string: "http://localhost/")!
-		let width = attachmentObject["width"] as? Int
-
-		self.init(id: id, filename: filename, height: height, proxyUrl: proxyUrl, size: size, url: url, width: width)
+		id = attachmentObject.get("id", or: "")
+		filename = attachmentObject.get("filename", or: "")
+		height = attachmentObject["height"] as? Int
+		proxyUrl = URL(string: attachmentObject.get("proxy_url", or: "")) ?? URL(string: "http://localhost/")!
+		size = attachmentObject.get("size", or: 0)
+		url = URL(string: attachmentObject.get("url", or: "")) ?? URL(string: "http://localhost/")!
+		width = attachmentObject["width"] as? Int
 	}
 
 	static func attachmentsFromArray(_ attachmentArray: [[String: Any]]) -> [DiscordAttachment] {
@@ -64,19 +60,14 @@ public struct DiscordEmbed {
 	public let title: String
 	public let type: String
 	public let url: URL
-}
 
-extension DiscordEmbed {
 	init(embedObject: [String: Any]) {
-		let description = embedObject.get("description", or: "")
-		let provider = Provider(providerObject: embedObject.get("provider", or: [String: Any]()))
-		let thumbnail = Thumbnail(thumbnailObject: embedObject.get("provider", or: [String: Any]()))
-		let title = embedObject.get("title", or: "")
-		let type = embedObject.get("type", or: "")
-		let url = URL(string: embedObject.get("url", or: "")) ?? URL(string: "http://localhost/")!
-
-		self.init(description: description, provider: provider, thumbnail: thumbnail, title: title, type: type,
-			url: url)
+		description = embedObject.get("description", or: "")
+		provider = Provider(providerObject: embedObject.get("provider", or: [String: Any]()))
+		thumbnail = Thumbnail(thumbnailObject: embedObject.get("provider", or: [String: Any]()))
+		title = embedObject.get("title", or: "")
+		type = embedObject.get("type", or: "")
+		url = URL(string: embedObject.get("url", or: "")) ?? URL(string: "http://localhost/")!
 	}
 
 	static func embedsFromArray(_ embedsArray: [[String: Any]]) -> [DiscordEmbed] {
@@ -117,28 +108,20 @@ public struct DiscordMessage {
 	public let mentions: [DiscordUser]
 	public let timestamp: Date
 	public let tts: Bool
-}
 
-extension DiscordMessage {
 	init(messageObject: [String: Any]) {
-		let attachments = DiscordAttachment.attachmentsFromArray(messageObject.get("attachments", or: [[String: Any]]()))
-		let author = DiscordUser(userObject: messageObject.get("author", or: [String: Any]()))
-		let channelId = messageObject.get("channel_id", or: "")
-		let content = messageObject.get("content", or: "")
-		let embeds = DiscordEmbed.embedsFromArray(messageObject.get("embeds", or: [[String: Any]]()))
-		let id = messageObject.get("id", or: "")
-		let mentionEveryone = messageObject.get("mention_everyone", or: false)
-		let mentionRoles = messageObject.get("mention_roles", or: [String]())
-		let mentions = DiscordUser.usersFromArray(messageObject.get("mentions", or: [[String: Any]]()))
-		let tts = messageObject.get("tts", or: false)
-		let editedTimestampString = messageObject.get("edited_timestamp", or: "")
-		let editedTimestamp = convertISO8601(string: editedTimestampString) ?? Date()
-		let timestampString = messageObject.get("timestamp", or: "")
-		let timestamp = convertISO8601(string: timestampString) ?? Date()
-
-		self.init(attachments: attachments, author: author, channelId: channelId, content: content,
-			editedTimestamp: editedTimestamp, embeds: embeds, id: id, mentionEveryone: mentionEveryone,
-			mentionRoles: mentionRoles, mentions: mentions, timestamp: timestamp, tts: tts)
+		attachments = DiscordAttachment.attachmentsFromArray(messageObject.get("attachments", or: [[String: Any]]()))
+		author = DiscordUser(userObject: messageObject.get("author", or: [String: Any]()))
+		channelId = messageObject.get("channel_id", or: "")
+		content = messageObject.get("content", or: "")
+		embeds = DiscordEmbed.embedsFromArray(messageObject.get("embeds", or: [[String: Any]]()))
+		id = messageObject.get("id", or: "")
+		mentionEveryone = messageObject.get("mention_everyone", or: false)
+		mentionRoles = messageObject.get("mention_roles", or: [String]())
+		mentions = DiscordUser.usersFromArray(messageObject.get("mentions", or: [[String: Any]]()))
+		tts = messageObject.get("tts", or: false)
+		editedTimestamp = convertISO8601(string: messageObject.get("edited_timestamp", or: "")) ?? Date()
+		timestamp = convertISO8601(string: messageObject.get("timestamp", or: "")) ?? Date()
 	}
 
 	static func messagesFromArray(_ array: [[String: Any]]) -> [DiscordMessage] {

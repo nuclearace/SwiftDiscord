@@ -38,11 +38,12 @@ public struct DiscordGuild {
 
 	public var channels: [String: DiscordGuildChannel]
 	public var emojis: [String: DiscordEmoji]
-	public var members: [String: DiscordGuildMember]
-	public var presences: [String: DiscordPresence]
+	public var members: DiscordLazyDictionary<String, DiscordGuildMember>
+	public var presences: DiscordLazyDictionary<String, DiscordPresence>
 	public var roles: [String: DiscordRole]
 	public var voiceStates: [String: DiscordVoiceState]
 
+	// Used to update a guild from a guildUpdate event
 	mutating func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
 		if let defaultMessageNotifications = newGuild["default_message_notifications"] as? Int {
 			self.defaultMessageNotifications = defaultMessageNotifications
@@ -86,41 +87,31 @@ public struct DiscordGuild {
 
 		return self
 	}
-}
 
-extension DiscordGuild {
 	init(guildObject: [String: Any]) {
-		let channels = DiscordGuildChannel.guildChannelsFromArray(guildObject.get("channels", or: [[String: Any]]()))
-		let defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
-		let embedEnabled = guildObject.get("embed_enabled", or: false)
-		let embedChannelId = guildObject.get("embed_channel_id", or: "")
-		let emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: [[String: Any]]()))
-		let features = guildObject.get("features", or: [Any]())
-		let icon = guildObject.get("icon", or: "")
-		let id = guildObject.get("id", or: "")
-		let large = guildObject.get("large", or: false)
-		let memberCount = guildObject.get("member_count", or: 0)
-		let members = DiscordGuildMember.guildMembersFromArray(guildObject.get("members", or: [[String: Any]]()))
-		let mfaLevel = guildObject.get("mfa_level", or: -1)
-		let name = guildObject.get("name", or: "")
-		let ownerId = guildObject.get("owner_id", or: "")
-		let presences = DiscordPresence.presencesFromArray(guildObject.get("presences", or: [[String: Any]]()), guildId: id)
-		let region = guildObject.get("region", or: "")
-		let roles = DiscordRole.rolesFromArray(guildObject.get("roles", or: [[String: Any]]()))
-		let splash = guildObject.get("splash", or: "")
-		let verificationLevel = guildObject.get("verification_level", or: -1)
-		let voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject.get("voice_states", or: [[String: Any]]()),
+		channels = DiscordGuildChannel.guildChannelsFromArray(guildObject.get("channels", or: [[String: Any]]()))
+		defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
+		embedEnabled = guildObject.get("embed_enabled", or: false)
+		embedChannelId = guildObject.get("embed_channel_id", or: "")
+		emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: [[String: Any]]()))
+		features = guildObject.get("features", or: [Any]())
+		icon = guildObject.get("icon", or: "")
+		id = guildObject.get("id", or: "")
+		large = guildObject.get("large", or: false)
+		memberCount = guildObject.get("member_count", or: 0)
+		members = DiscordGuildMember.guildMembersFromArray(guildObject.get("members", or: [[String: Any]]()))
+		mfaLevel = guildObject.get("mfa_level", or: -1)
+		name = guildObject.get("name", or: "")
+		ownerId = guildObject.get("owner_id", or: "")
+		presences = DiscordPresence.presencesFromArray(guildObject.get("presences", or: [[String: Any]]()), guildId: id)
+		region = guildObject.get("region", or: "")
+		roles = DiscordRole.rolesFromArray(guildObject.get("roles", or: [[String: Any]]()))
+		splash = guildObject.get("splash", or: "")
+		verificationLevel = guildObject.get("verification_level", or: -1)
+		voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject.get("voice_states", or: [[String: Any]]()),
 			guildId: id)
-		let unavailable = guildObject.get("unavailable", or: false)
-		let joinedAtString = guildObject.get("joined_at", or: "")
-		let joinedAt = convertISO8601(string: joinedAtString) ?? Date()
-
-		self.init(features: features, id: id, large: large, joinedAt: joinedAt, splash: splash,
-			unavailable: unavailable, defaultMessageNotifications: defaultMessageNotifications,
-			embedChannelId: embedChannelId, embedEnabled: embedEnabled, icon: icon, memberCount: memberCount,
-			mfaLevel: mfaLevel, name: name, ownerId: ownerId, region: region, verificationLevel: verificationLevel,
-			channels: channels, emojis: emojis, members: members, presences: presences, roles: roles,
-			voiceStates: voiceStates)
+		unavailable = guildObject.get("unavailable", or: false)
+		joinedAt = convertISO8601(string: guildObject.get("joined_at", or: "")) ?? Date()
 	}
 
 	// Used to setup initial guilds

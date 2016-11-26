@@ -16,7 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 public protocol DiscordEngineClient {
-	func handleEngineDispatch(event: DiscordDispatchEvent, data: DiscordGatewayPayloadData)
+	func handleEngineDispatch(_ data: DiscordGatewayPayload)
 	func handleEngineEvent(_ event: String, with data: [Any])
 }
 

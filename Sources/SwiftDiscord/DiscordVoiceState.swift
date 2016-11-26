@@ -26,21 +26,17 @@ public struct DiscordVoiceState {
 	public var selfDeaf: Bool
 	public var selfMute: Bool
 	public var suppress: Bool
-}
 
-extension DiscordVoiceState {
 	init(voiceStateObject: [String: Any], guildId: String) {
-		let channelId = voiceStateObject.get("channel_id", or: "")
-		let sessionId = voiceStateObject.get("session_id", or: "")
-		let userId = voiceStateObject.get("user_id", or: "")
-		let deaf = voiceStateObject.get("deaf", or: false)
-		let mute = voiceStateObject.get("mute", or: false)
-		let selfDeaf = voiceStateObject.get("self_deaf", or: false)
-		let selfMute = voiceStateObject.get("self_mute", or: false)
-		let suppress = voiceStateObject.get("suppress", or: false)
-
-		self.init(channelId: channelId, guildId: guildId, sessionId: sessionId, userId: userId, deaf: deaf, mute: mute,
-			selfDeaf: selfDeaf, selfMute: selfMute, suppress: suppress)
+		self.guildId = guildId
+		channelId = voiceStateObject.get("channel_id", or: "")
+		sessionId = voiceStateObject.get("session_id", or: "")
+		userId = voiceStateObject.get("user_id", or: "")
+		deaf = voiceStateObject.get("deaf", or: false)
+		mute = voiceStateObject.get("mute", or: false)
+		selfDeaf = voiceStateObject.get("self_deaf", or: false)
+		selfMute = voiceStateObject.get("self_mute", or: false)
+		suppress = voiceStateObject.get("suppress", or: false)
 	}
 
 	static func voiceStatesFromArray(_ voiceStateArray: [[String: Any]], guildId: String) -> [String: DiscordVoiceState] {
