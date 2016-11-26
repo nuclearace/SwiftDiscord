@@ -222,6 +222,25 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    public static func sendFile(_ file: DiscordFileUpload, content: String, with token: String, to channel: String,
+            tts: Bool, isBot bot: Bool) {
+        var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel], isBot: bot)
+
+        let (boundary, formData) = createMultipartBody(fields: [
+            "content": content,
+            "tts": String(tts)
+        ], file: file)
+
+        request.httpMethod = "POST"
+        request.httpBody = formData
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.setValue(String(formData.count), forHTTPHeaderField: "Content-Length")
+
+        let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channel])
+
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
+    }
+
     public static func triggerTyping(on channelId: String, with token: String, isBot bot: Bool) {
         var request = createRequest(with: token, for: .typing, replacing: ["channel.id": channelId], isBot: bot)
 
@@ -230,10 +249,6 @@ public extension DiscordEndpoint {
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .typing, parameters: ["channel.id": channelId])
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
-    }
-
-    public static func uploadFile() {
-
     }
 
     // Permissions

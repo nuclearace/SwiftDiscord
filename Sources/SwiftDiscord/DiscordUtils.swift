@@ -17,6 +17,18 @@
 
 import Foundation
 
+public struct DiscordFileUpload {
+    public let data: Data
+    public let filename: String
+    public let mimeType: String
+
+    public init(data: Data, filename: String, mimeType: String) {
+        self.data = data
+        self.filename = filename
+        self.mimeType = mimeType
+    }
+}
+
 #if os(macOS)
 public typealias EncoderProcess = Process
 #elseif os(Linux)
@@ -52,6 +64,25 @@ extension Dictionary {
     func get<T>(_ value: Key, or default: T) -> T {
         return self[value] as? T ?? `default`
     }
+}
+
+func createMultipartBody(fields: [String: String], file: DiscordFileUpload) -> (boundary: String, body: Data) {
+    let boundary = "Boundary-\(UUID())"
+    var body = Data()
+
+    for (field, value) in fields {
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"\(field)\"\r\n\r\n".data(using: .utf8)!)
+        body.append("\(value)\r\n".data(using: .utf8)!)
+    }
+
+    body.append("--\(boundary)\r\n".data(using: .utf8)!)
+    body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(file.filename)\"\r\n".data(using: .utf8)!)
+    body.append("Content-Type: \(file.mimeType)\r\n\r\n".data(using: .utf8)!)
+    body.append(file.data)
+    body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+
+    return (boundary, body)
 }
 
 func encodeJSON(_ object: Any) -> String? {
