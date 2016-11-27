@@ -77,21 +77,17 @@ public struct DiscordEmbed {
 
 extension DiscordEmbed.Provider {
 	init(providerObject: [String: Any]) {
-		let name = providerObject.get("name", or: "")
-		let url = URL(string: providerObject.get("url", or: "")) ?? URL(string: "http://localhost/")!
-
-		self.init(name: name, url: url)
+		name = providerObject.get("name", or: "")
+		url = URL(string: providerObject.get("url", or: "")) ?? URL(string: "http://localhost/")!
 	}
 }
 
 extension DiscordEmbed.Thumbnail {
 	init(thumbnailObject: [String: Any]) {
-		let height = thumbnailObject.get("height", or: 0)
-		let proxyUrl = URL(string: thumbnailObject.get("proxy_url", or: "")) ?? URL(string: "http://localhost/")!
-		let url = URL(string: thumbnailObject.get("url", or: "")) ?? URL(string: "http://localhost/")!
-		let width = thumbnailObject.get("width", or: 0)
-
-		self.init(height: height, proxyUrl: proxyUrl, url: url, width: width)
+		height = thumbnailObject.get("height", or: 0)
+		proxyUrl = URL(string: thumbnailObject.get("proxy_url", or: "")) ?? URL(string: "http://localhost/")!
+		url = URL(string: thumbnailObject.get("url", or: "")) ?? URL(string: "http://localhost/")!
+		width = thumbnailObject.get("width", or: 0)
 	}
 }
 
