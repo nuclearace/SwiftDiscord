@@ -25,23 +25,23 @@ public struct DiscordGuild {
 	public let splash: String
 	public let unavailable: Bool
 
+	public internal(set) var channels: [String: DiscordGuildChannel]
+	public internal(set) var emojis: [String: DiscordEmoji]
+	public internal(set) var memberCount: Int
+	public internal(set) var members: DiscordLazyDictionary<String, DiscordGuildMember>
+	public internal(set) var presences: DiscordLazyDictionary<String, DiscordPresence>
+	public internal(set) var roles: [String: DiscordRole]
+	public internal(set) var voiceStates: [String: DiscordVoiceState]
+
 	public private(set) var defaultMessageNotifications: Int
 	public private(set) var embedChannelId: String
 	public private(set) var embedEnabled: Bool
 	public private(set) var icon: String
-	public private(set) var memberCount: Int
 	public private(set) var mfaLevel: Int
 	public private(set) var name: String
 	public private(set) var ownerId: String
 	public private(set) var region: String
 	public private(set) var verificationLevel: Int
-
-	public var channels: [String: DiscordGuildChannel]
-	public var emojis: [String: DiscordEmoji]
-	public var members: DiscordLazyDictionary<String, DiscordGuildMember>
-	public var presences: DiscordLazyDictionary<String, DiscordPresence>
-	public var roles: [String: DiscordRole]
-	public var voiceStates: [String: DiscordVoiceState]
 
 	// Used to update a guild from a guildUpdate event
 	mutating func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {

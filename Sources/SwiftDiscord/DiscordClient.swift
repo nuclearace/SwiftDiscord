@@ -209,6 +209,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		DefaultDiscordLogger.Logger.verbose("Created guild member: %@", type: logType, args: guildMember)
 
 		guilds[guildId]?.members[guildMember.user.id] = guildMember
+		guilds[guildId]?.memberCount += 1
 
 		handleEvent("guildMemberAdd", with: [guildId, guildMember])
 	}
@@ -218,8 +219,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let user = data["user"] as? [String: Any], let id = user["id"] as? String else { return }
-
 		guard let removedGuildMember = guilds[guildId]?.members.removeValue(forKey: id) else { return }
+
+		guilds[guildId]?.memberCount -= 1
 
 		DefaultDiscordLogger.Logger.verbose("Removed guild member: %@", type: logType, args: removedGuildMember)
 
