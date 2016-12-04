@@ -55,7 +55,7 @@ func handleJoin() {
 }
 
 func handleLeave() {
-    client.leaveVoiceChannel(voiceChannel)
+    client.leaveVoiceChannel()
 }
 
 func handlePlay() {

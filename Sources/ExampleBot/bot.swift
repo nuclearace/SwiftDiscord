@@ -187,6 +187,8 @@ class DiscordBot {
             }
 
             client.joinVoiceChannel(channel.id)
+        } else if command == "leave" {
+            client.leaveVoiceChannel()
         } else if command == "skip" {
             if youtube.isRunning {
                 youtube.terminate()
@@ -204,7 +206,7 @@ class DiscordBot {
         let commandArgs = String(message.content.characters.dropFirst()).components(separatedBy: " ")
         let command = commandArgs[0]
 
-        handleCommand(command, with: Array(commandArgs.dropFirst()), message: message)
+        handleCommand(command.lowercased(), with: Array(commandArgs.dropFirst()), message: message)
     }
 
     private func playYoutube(link: String) -> String {

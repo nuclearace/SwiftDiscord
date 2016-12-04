@@ -134,17 +134,13 @@ public struct DiscordUserGuild {
 	public let icon: String
 	public let owner: Bool
 	public let permissions: Int
-}
 
-extension DiscordUserGuild {
 	init(userGuildObject: [String: Any]) {
-		let id = userGuildObject.get("id", or: "")
-		let name = userGuildObject.get("name", or: "")
-		let icon = userGuildObject.get("icon", or: "")
-		let owner = userGuildObject.get("owner", or: false)
-		let permissions = userGuildObject.get("permissions", or: 0)
-
-		self.init(id: id, name: name, icon: icon, owner: owner, permissions: permissions)
+		id = userGuildObject.get("id", or: "")
+		name = userGuildObject.get("name", or: "")
+		icon = userGuildObject.get("icon", or: "")
+		owner = userGuildObject.get("owner", or: false)
+		permissions = userGuildObject.get("permissions", or: 0)
 	}
 
 	static func userGuildsFromArray(_ guilds: [[String: Any]]) -> [String: DiscordUserGuild] {

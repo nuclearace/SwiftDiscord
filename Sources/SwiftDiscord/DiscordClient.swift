@@ -312,7 +312,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		DefaultDiscordLogger.Logger.log("Handling guild update", type: logType)
 
 		guard let guildId = data["id"] as? String else { return }
-
 		guard let updatedGuild = self.guilds[guildId]?.updateGuild(with: data) else { return }
 
 		DefaultDiscordLogger.Logger.verbose("Updated guild: %@", type: logType, args: updatedGuild)
@@ -399,18 +398,30 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 	open func handleVoiceStateUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling voice state update", type: logType)
-		DefaultDiscordLogger.Logger.verbose("Voice state: %@", type: logType, args: data)
 
-		// Only care about our state right now
-		guard data["user_id"] as? String == self.user?.id else { return }
 		guard let guildId = data["guild_id"] as? String else { return }
 
-		self.voiceState = DiscordVoiceState(voiceStateObject: data, guildId: guildId)
+		let state = DiscordVoiceState(voiceStateObject: data, guildId: guildId)
 
-		if self.joiningVoiceChannel {
-			// print("Got voice state \(data)")
-			self.startVoiceConnection()
+		DefaultDiscordLogger.Logger.verbose("Voice state: %@", type: logType, args: state)
+
+		if state.channelId == "" {
+			guilds[guildId]?.voiceStates[state.userId] = nil
+		} else {
+			guilds[guildId]?.voiceStates[state.userId] = state
 		}
+
+		if state.userId == user?.id {
+			if state.channelId == "" {
+				voiceState = nil
+			} else if joiningVoiceChannel {
+				voiceState = state
+
+				startVoiceConnection()
+			}
+		}
+
+		handleEvent("voiceStateUpdate", with: [guildId, state])
 	}
 
 	public func guildForChannel(_ channelId: String) -> DiscordGuild? {
@@ -443,24 +454,20 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         #endif
 	}
 
-	open func leaveVoiceChannel(_ channelId: String) {
+	open func leaveVoiceChannel() {
         #if !os(iOS)
-        guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
-        		channel.type == .voice else {
-        	return
-        }
+        guard let state = voiceState else { return }
 
-		self.voiceEngine?.disconnect()
-		self.voiceEngine = nil
+        self.voiceEngine?.disconnect()
+        self.voiceEngine = nil
 
-		self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
-			payload: .object([
-				"guild_id": guild.id,
-				"channel_id": NSNull(),
-				"self_mute": false,
-				"self_deaf": false
-				])
-			)
+        self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
+        	payload: .object([
+        		"guild_id": state.guildId,
+        		"channel_id": NSNull(),
+        		"self_mute": false,
+        		"self_deaf": false
+			]))
 		)
 
 		self.joiningVoiceChannel = false
