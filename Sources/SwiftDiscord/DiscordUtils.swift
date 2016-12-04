@@ -66,6 +66,28 @@ extension Dictionary {
     }
 }
 
+extension String {
+    var snakecase: String {
+        var ret = ""
+
+        for index in characters.indices {
+            let stringChar = String(self[index])
+
+            if stringChar.uppercased() == stringChar {
+                if index != startIndex {
+                    ret += "_"
+                }
+
+                ret += stringChar.lowercased()
+            } else {
+                ret += stringChar
+            }
+        }
+
+        return ret
+    }
+}
+
 func createMultipartBody(fields: [String: String], file: DiscordFileUpload) -> (boundary: String, body: Data) {
     let boundary = "Boundary-\(UUID())"
     var body = Data()

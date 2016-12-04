@@ -480,8 +480,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			payload: .object(requestObject)))
 	}
 
-	open func setPresence(_ presence: [String: Any]) {
-		engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.statusUpdate), payload: .object(presence)))
+	open func setPresence(_ presence: DiscordPresenceUpdate) {
+		engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.statusUpdate),
+			payload: .object(presence.json)))
 	}
 
 	private func startVoiceConnection() {

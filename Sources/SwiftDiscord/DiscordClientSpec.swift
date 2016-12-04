@@ -37,5 +37,5 @@ public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngi
 	func joinVoiceChannel(_ channelId: String)
 	func leaveVoiceChannel(_ channelId: String)
 	func requestAllUsers(on guildId: String)
-	func setPresence(_ presence: [String: Any])
+	func setPresence(_ presence: DiscordPresenceUpdate)
 }

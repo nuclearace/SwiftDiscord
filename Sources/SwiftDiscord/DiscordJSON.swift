@@ -50,7 +50,7 @@ extension JSONRepresentable {
             return try dict.reduce([String: Any](), {cur, keyValue in
                 var cur = cur
 
-                cur[keyValue.key] = try keyValue.value.jsonValue()
+                cur[keyValue.key.snakecase] = try keyValue.value.jsonValue()
 
                 return cur
             })
@@ -74,12 +74,12 @@ extension JSONAble {
 
         for case let (name?, value) in mirror.children {
             if let nested = value as? JSONAble {
-                json[name] = nested.json
+                json[name.snakecase] = nested.json
             } else if let sendable = value as? JSONRepresentable {
                 do {
-                    json[name] = try sendable.jsonValue()
-                } catch let err {
-                    print(err)
+                    json[name.snakecase] = try sendable.jsonValue()
+                } catch {
+                    DefaultDiscordLogger.Logger.error("Couldn't json property %@", type: "JSONAble", args: name)
                 }
             }
         }
