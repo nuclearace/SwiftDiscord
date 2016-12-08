@@ -14,7 +14,7 @@
     <a title="DiscordVoiceEncoder Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (20% documented)</p>
+        <p><a href="../index.html"> Docs</a> (21% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -292,7 +292,14 @@
         <section>
           <section class="section">
             <h1>DiscordVoiceEncoder</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">DiscordVoiceEncoder</span></code></pre>
+
+                </div>
+              </div>
+            <p>DiscordVoiceEncoder is responsible for turning raw audio data into OPUS encoded data. By default it uses ffmpeg
+to do this.</p>
 
           </section>
           <section class="section task-group-section">
@@ -311,8 +318,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The encoder process</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">encoder</span><span class="p">:</span> <span class="kt">EncoderProcess</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -330,8 +345,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>What the encoder reads from, and what a consumer writes to to have things encoded into OPUS</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">readPipe</span><span class="p">:</span> <span class="kt">Pipe</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -349,8 +372,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>What the encoder writes to, and what a consumer reads from to get OPUS encoded data</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">writePipe</span><span class="p">:</span> <span class="kt">Pipe</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -368,8 +399,17 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>readPipe: What the encoder reads from, and what we write to to have things encoded into OPUS
-writePipe: What the encoder writes to, and what we read from to get OPUS encoded data</p>
+                        <p>The main initializer.</p>
+
+<ul>
+<li>Parameters:
+
+<ul>
+<li>encoder: The encoder process</li>
+<li>readPipe: What the encoder reads from, and what a consumer writes to to have things encoded into OPUS</li>
+<li>writePipe: What the encoder writes to, and what a consumer reads from to get OPUS encoded data</li>
+</ul></li>
+</ul>
 
                       </div>
                       <div class="declaration">
@@ -379,6 +419,52 @@ writePipe: What the encoder writes to, and what we read from to get OPUS encoded
                           <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">encoder</span><span class="p">:</span> <span class="kt">EncoderProcess</span><span class="p">,</span> <span class="nv">readPipe</span><span class="p">:</span> <span class="kt">Pipe</span><span class="p">,</span> <span class="nv">writePipe</span><span class="p">:</span> <span class="kt">Pipe</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>encoder</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The encoder process</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>readPipe</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>What the encoder reads from, and what a consumer writes to to have things encoded into OPUS</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>writePipe</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>What the encoder writes to, and what a consumer reads from to get OPUS encoded data</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -396,8 +482,16 @@ writePipe: What the encoder writes to, and what we read from to get OPUS encoded
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>A convenience intializer that sets up a ffmpeg process to do encoding.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -470,8 +564,46 @@ This should cause ffmpeg to get an EOF on input, which will cause it to close on
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>An async read from the encoder. When there is available data, then callback is called.</p>
 
+<ul>
+<li>Parameters:
+
+<ul>
+<li>callback: A callback that will be called when there is available data, or when the encoder is done.
+        First parameter is a Bool indicating whether the encoder is done.
+        Second is the OPUS encoded data in an array.</li>
+</ul></li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">read</span><span class="p">(</span><span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Bool</span><span class="p">,</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A callback that will be called when there is available data, or when the encoder is done. First parameter is a Bool indicating whether the encoder is done. Second is the OPUS encoded data in an array.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -489,8 +621,58 @@ This should cause ffmpeg to get an EOF on input, which will cause it to close on
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>An async write to the encoder.</p>
 
+<ul>
+<li>Parameters:
+
+<ul>
+<li>_ Raw audio data that should be turned into OPUS encoded data.</li>
+<li>doneHandler: An optional handler that will be called when we are done writing.</li>
+</ul></li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">write</span><span class="p">(</span><span class="n">_</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">,</span> <span class="nv">doneHandler</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>_</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Raw audio data that should be turned into OPUS encoded data.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>doneHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional handler that will be called when we are done writing.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>

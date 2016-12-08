@@ -17,12 +17,21 @@
 
 #if !os(iOS)
 
-import Foundation
 import Dispatch
+import Foundation
 
+/**
+	DiscordVoiceEncoder is responsible for turning raw audio data into OPUS encoded data. By default it uses ffmpeg
+	to do this.
+*/
 public class DiscordVoiceEncoder {
+	/// The encoder process
 	public let encoder: EncoderProcess
+
+	/// What the encoder reads from, and what a consumer writes to to have things encoded into OPUS
 	public let readPipe: Pipe
+
+	/// What the encoder writes to, and what a consumer reads from to get OPUS encoded data
 	public let writePipe: Pipe
 
 	private let readQueue = DispatchQueue(label: "discordVoiceEncoder.readQueue")
@@ -30,8 +39,14 @@ public class DiscordVoiceEncoder {
 
 	private var closed = false
 
-	/// readPipe: What the encoder reads from, and what we write to to have things encoded into OPUS
-	/// writePipe: What the encoder writes to, and what we read from to get OPUS encoded data
+	/**
+		The main initializer.
+
+		- Parameters:
+			- encoder: The encoder process
+			- readPipe: What the encoder reads from, and what a consumer writes to to have things encoded into OPUS
+			- writePipe: What the encoder writes to, and what a consumer reads from to get OPUS encoded data
+	*/
 	public init(encoder: EncoderProcess, readPipe: Pipe, writePipe: Pipe) {
 		self.encoder = encoder
 		self.readPipe = readPipe
@@ -40,6 +55,9 @@ public class DiscordVoiceEncoder {
 		self.encoder.launch()
 	}
 
+	/**
+		A convenience intializer that sets up a ffmpeg process to do encoding.
+	*/
 	public convenience init() {
 		let ffmpeg = EncoderProcess()
 		let writePipe = Pipe()
@@ -95,6 +113,14 @@ public class DiscordVoiceEncoder {
 		close(readPipe.fileHandleForWriting.fileDescriptor)
 	}
 
+	/**
+		An async read from the encoder. When there is available data, then callback is called.
+
+		- Parameters:
+			- callback: A callback that will be called when there is available data, or when the encoder is done.
+						First parameter is a Bool indicating whether the encoder is done.
+						Second is the OPUS encoded data in an array.
+	*/
 	public func read(callback: @escaping (Bool, [UInt8]) -> Void) {
 		guard !closed else { return callback(true, []) }
 
@@ -115,6 +141,13 @@ public class DiscordVoiceEncoder {
 		}
 	}
 
+	/**
+		An async write to the encoder.
+
+		- Parameters:
+			- _ Raw audio data that should be turned into OPUS encoded data.
+			- doneHandler: An optional handler that will be called when we are done writing.
+	*/
 	public func write(_ data: Data, doneHandler: (() -> Void)? = nil) {
 		guard !closed else { return }
 
