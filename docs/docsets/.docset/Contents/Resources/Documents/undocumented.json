@@ -2668,20 +2668,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordLazyDictionary.swift",
-      "line": 126,
-      "symbol": "DiscordLazyDictionary.first",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordLazyDictionary.swift",
-      "line": 220,
-      "symbol": "DiscordLazyDictionary.removeValue(forKey:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordLogger.swift",
       "line": null,
       "symbol": "DiscordLogger",
