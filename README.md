@@ -34,6 +34,9 @@ You'll then want to remove all target dependencies and linked libraries except f
 
 See Sources/Runner for a basic example
 
+[Docs](https://nuclearace.github.io/SwiftDiscord/index.html)
+============================================================
+
 Why no CocoaPods?
 =================
 I hate CocoaPods and the Swift Package Manager makes it easy to do system modules.
