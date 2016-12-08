@@ -229,13 +229,12 @@ public enum DiscordEndpoint : String {
 	/**
 		Helper method that creates the basic request for an endpoint.
 
-		- Parameters:
-			- with: A DiscordToken that will be used for authentication
-			- for: The endpoint this request is for
-			- replacing: A dictionary that will be used to fill in the endpoint's url
-			- getParams: An optional dictionary of get parameters.
+		- parameter with: A DiscordToken that will be used for authentication
+		- parameter for: The endpoint this request is for
+		- parameter replacing: A dictionary that will be used to fill in the endpoint's url
+		- parameter getParams: An optional dictionary of get parameters.
 
-		- Returns: a URLRequest that can be further customized
+		- returns: a URLRequest that can be further customized
 	*/
 	public static func createRequest(with token: DiscordToken, for endpoint: DiscordEndpoint,
 		replacing: [String: String], getParams: [String: String]? = nil) -> URLRequest {
