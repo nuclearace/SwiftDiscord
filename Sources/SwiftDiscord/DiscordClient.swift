@@ -144,7 +144,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles channel creates from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -164,7 +164,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles channel deletes from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -185,7 +185,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles channel updates from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -241,7 +241,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles an engine event. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- _: The engine event
@@ -254,7 +254,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles guild creates from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -274,7 +274,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles guild deletes from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -294,7 +294,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles guild emoji updates from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -317,7 +317,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles guild member adds from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -340,7 +340,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles guild member removes from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -365,7 +365,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles guild member updates from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -388,7 +388,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles guild members chunks from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -419,7 +419,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles guild role creates from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -442,7 +442,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles guild role removes from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -463,7 +463,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles guild member updates from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -487,7 +487,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles guild updates from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -506,7 +506,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles message creates from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -524,7 +524,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles presence updates from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -554,7 +554,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles the ready event from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -598,7 +598,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles voice server updates from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
@@ -618,7 +618,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Handles voice state updates from Discord. You shouldn't need to call this method directly.
 
-		Override to provide addition custmization around this event.
+		Override to provide additional custmization around this event.
 
 		- Parameters:
 			- with: The data from the event
