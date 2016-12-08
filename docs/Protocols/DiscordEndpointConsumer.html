@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>DiscordEndpointConsumer Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/DiscordEndpointConsumer" class="dashAnchor"></a>
+    <a title="DiscordEndpointConsumer Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a> (12% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html"> Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        DiscordEndpointConsumer Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordClient.html">DiscordClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordEngine.html">DiscordEngine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordLazyValue.html">DiscordLazyValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordChannelType.html">DiscordChannelType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordClientOption.html">DiscordClientOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordGameType.html">DiscordGameType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordGatewayCode.html">DiscordGatewayCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordGatewayPayloadData.html">DiscordGatewayPayloadData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordLogLevel.html">DiscordLogLevel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordNormalGatewayCode.html">DiscordNormalGatewayCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordOAuthEndpoint.html">DiscordOAuthEndpoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordPermission.html">DiscordPermission</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordPermissionOverwriteType.html">DiscordPermissionOverwriteType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordPresenceStatus.html">DiscordPresenceStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordVoiceGatewayCode.html">DiscordVoiceGatewayCode</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/EncoderProcess.html">EncoderProcess</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi1aFTOS_17DiscordPermissionS0__Si">&amp;(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi1aFTSiOS_17DiscordPermission_Si">&amp;(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi3allFTSiSi_Si">&amp;&lt;&lt;(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi2aeFTRSiOS_17DiscordPermission_T_">&amp;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi2eeFTOS_19DiscordClientOptionS0__Sb">==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi1oFTOS_17DiscordPermissionS0__Si">|(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi1oFTSiOS_17DiscordPermission_Si">|(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi2oeFTRSiOS_17DiscordPermission_T_">|=(_:_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordClientSpec.html">DiscordClientSpec</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordDispatchEventHandler.html">DiscordDispatchEventHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordEndpointConsumer.html">DiscordEndpointConsumer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordEngineClient.html">DiscordEngineClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordEngineHeartbeatable.html">DiscordEngineHeartbeatable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordEngineSpec.html">DiscordEngineSpec</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordLogger.html">DiscordLogger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordVoiceEngineClient.html">DiscordVoiceEngineClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordVoiceEngineSpec.html">DiscordVoiceEngineSpec</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordAttachment.html">DiscordAttachment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordDMChannel.html">DiscordDMChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed.html">DiscordEmbed</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Provider.html">– Provider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Thumbnail.html">– Thumbnail</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmoji.html">DiscordEmoji</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/CreateInvite.html">– CreateInvite</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/GetMessage.html">– GetMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/GuildCreateChannel.html">– GuildCreateChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/GuildGetMembers.html">– GuildGetMembers</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/ModifyChannel.html">– ModifyChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/ModifyGuild.html">– ModifyGuild</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordFileUpload.html">DiscordFileUpload</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordGame.html">DiscordGame</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordGuild.html">DiscordGuild</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordInvite.html">DiscordInvite</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordInviteChannel.html">DiscordInviteChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordInviteGuild.html">DiscordInviteGuild</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordLazyDictionaryIndex.html">DiscordLazyDictionaryIndex</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordMessage.html">DiscordMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordPresence.html">DiscordPresence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordPresenceUpdate.html">DiscordPresenceUpdate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordRole.html">DiscordRole</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordToken.html">DiscordToken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordUser.html">DiscordUser</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordUserGuild.html">DiscordUserGuild</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>DiscordEndpointConsumer</h1>
+            <p>Undocumented</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer12acceptInviteFSST_"></a>
+                    <a name="//apple_ref/swift/Method/acceptInvite(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer12acceptInviteFSST_">acceptInvite(_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer16addPinnedMessageFTSS2onSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/addPinnedMessage(_:on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer16addPinnedMessageFTSS2onSS_T_">addPinnedMessage(_:on:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer18bulkDeleteMessagesFTGSaSS_2onSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/bulkDeleteMessages(_:on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer18bulkDeleteMessagesFTGSaSS_2onSS_T_">bulkDeleteMessages(_:on:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer8createDMFT4withSS8callbackFGSqVS_16DiscordDMChannel_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/createDM(with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer8createDMFT4withSS8callbackFGSqVS_16DiscordDMChannel_T__T_">createDM(with:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer12createInviteFT3forSS7optionsGSaOVS_22DiscordEndpointOptions12CreateInvite_8callbackFGSqVS_13DiscordInvite_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/createInvite(for:options:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer12createInviteFT3forSS7optionsGSaOVS_22DiscordEndpointOptions12CreateInvite_8callbackFGSqVS_13DiscordInvite_T__T_">createInvite(for:options:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer18createGuildChannelFT2onSS7optionsGSaOVS_22DiscordEndpointOptions18GuildCreateChannel__T_"></a>
+                    <a name="//apple_ref/swift/Method/createGuildChannel(on:options:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer18createGuildChannelFT2onSS7optionsGSaOVS_22DiscordEndpointOptions18GuildCreateChannel__T_">createGuildChannel(on:options:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer15createGuildRoleFT2onSS8callbackFGSqVS_11DiscordRole_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/createGuildRole(on:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer15createGuildRoleFT2onSS8callbackFGSqVS_11DiscordRole_T__T_">createGuildRole(on:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteChannelFSST_"></a>
+                    <a name="//apple_ref/swift/Method/deleteChannel(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteChannelFSST_">deleteChannel(_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer23deleteChannelPermissionFTSS2onSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteChannelPermission(_:on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer23deleteChannelPermissionFTSS2onSS_T_">deleteChannelPermission(_:on:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11deleteGuildFSST_"></a>
+                    <a name="//apple_ref/swift/Method/deleteGuild(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11deleteGuildFSST_">deleteGuild(_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteMessageFTSS2onSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteMessage(_:on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteMessageFTSS2onSS_T_">deleteMessage(_:on:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer19deletePinnedMessageFTSS2onSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/deletePinnedMessage(_:on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer19deletePinnedMessageFTSS2onSS_T_">deletePinnedMessage(_:on:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11editMessageFTSS2onSS7contentSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/editMessage(_:on:content:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11editMessageFTSS2onSS7contentSS_T_">editMessage(_:on:content:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer21editChannelPermissionFTVS_26DiscordPermissionOverwrite2onSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/editChannelPermission(_:on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer21editChannelPermissionFTVS_26DiscordPermissionOverwrite2onSS_T_">editChannelPermission(_:on:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer9getBotURLFT4withGSaOS_17DiscordPermission__GSqV10Foundation3URL_"></a>
+                    <a name="//apple_ref/swift/Method/getBotURL(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer9getBotURLFT4withGSaOS_17DiscordPermission__GSqV10Foundation3URL_">getBotURL(with:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer6getDMsFT8callbackFGVs10DictionarySSVS_16DiscordDMChannel_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getDMs(callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer6getDMsFT8callbackFGVs10DictionarySSVS_16DiscordDMChannel_T__T_">getDMs(callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer10getChannelFTSS8callbackFGSqVS_19DiscordGuildChannel_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getChannel(_:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer10getChannelFTSS8callbackFGSqVS_19DiscordGuildChannel_T__T_">getChannel(_:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer12getGuildBansFT3forSS8callbackFGSaVS_11DiscordUser_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getGuildBans(for:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer12getGuildBansFT3forSS8callbackFGSaVS_11DiscordUser_T__T_">getGuildBans(for:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer16getGuildChannelsFTSS8callbackFGSaVS_19DiscordGuildChannel_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getGuildChannels(_:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer16getGuildChannelsFTSS8callbackFGSaVS_19DiscordGuildChannel_T__T_">getGuildChannels(_:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer14getGuildMemberFT2bySS2onSS8callbackFGSqVS_18DiscordGuildMember_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getGuildMember(by:on:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer14getGuildMemberFT2bySS2onSS8callbackFGSqVS_18DiscordGuildMember_T__T_">getGuildMember(by:on:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer15getGuildMembersFT2onSS7optionsGSaOVS_22DiscordEndpointOptions15GuildGetMembers_8callbackFGSaVS_18DiscordGuildMember_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getGuildMembers(on:options:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer15getGuildMembersFT2onSS7optionsGSaOVS_22DiscordEndpointOptions15GuildGetMembers_8callbackFGSaVS_18DiscordGuildMember_T__T_">getGuildMembers(on:options:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer9getGuildsFT8callbackFGVs10DictionarySSVS_16DiscordUserGuild_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getGuilds(callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer9getGuildsFT8callbackFGVs10DictionarySSVS_16DiscordUserGuild_T__T_">getGuilds(callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13getGuildRolesFT3forSS8callbackFGSaVS_11DiscordRole_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getGuildRoles(for:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13getGuildRolesFT3forSS8callbackFGSaVS_11DiscordRole_T__T_">getGuildRoles(for:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer9getInviteFTSS8callbackFGSqVS_13DiscordInvite_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getInvite(_:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer9getInviteFTSS8callbackFGSqVS_13DiscordInvite_T__T_">getInvite(_:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer10getInvitesFT3forSS8callbackFGSaVS_13DiscordInvite_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getInvites(for:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer10getInvitesFT3forSS8callbackFGSaVS_13DiscordInvite_T__T_">getInvites(for:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11getMessagesFT3forSS7optionsGSaOVS_22DiscordEndpointOptions10GetMessage_8callbackFGSaVS_14DiscordMessage_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getMessages(for:options:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11getMessagesFT3forSS7optionsGSaOVS_22DiscordEndpointOptions10GetMessage_8callbackFGSaVS_14DiscordMessage_T__T_">getMessages(for:options:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer17getPinnedMessagesFT3forSS8callbackFGSaVS_14DiscordMessage_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getPinnedMessages(for:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer17getPinnedMessagesFT3forSS8callbackFGSaVS_14DiscordMessage_T__T_">getPinnedMessages(for:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer8guildBanFT6userIdSS2onSS17deleteMessageDaysSi_T_"></a>
+                    <a name="//apple_ref/swift/Method/guildBan(userId:on:deleteMessageDays:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer8guildBanFT6userIdSS2onSS17deleteMessageDaysSi_T_">guildBan(userId:on:deleteMessageDays:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13modifyChannelFTSS7optionsGSaOVS_22DiscordEndpointOptions13ModifyChannel__T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyChannel(_:options:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13modifyChannelFTSS7optionsGSaOVS_22DiscordEndpointOptions13ModifyChannel__T_">modifyChannel(_:options:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11modifyGuildFTSS7optionsGSaOVS_22DiscordEndpointOptions11ModifyGuild__T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuild(_:options:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11modifyGuildFTSS7optionsGSaOVS_22DiscordEndpointOptions11ModifyGuild__T_">modifyGuild(_:options:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer15modifyGuildRoleFTVS_11DiscordRole2onSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuildRole(_:on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer15modifyGuildRoleFTVS_11DiscordRole2onSS_T_">modifyGuildRole(_:on:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer14removeGuildBanFT3forSS2onSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/removeGuildBan(for:on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer14removeGuildBanFT3forSS2onSS_T_">removeGuildBan(for:on:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer15removeGuildRoleFTSS2onSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/removeGuildRole(_:on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer15removeGuildRoleFTSS2onSS_T_">removeGuildRole(_:on:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer26modifyGuildChannelPositionFT2onSS9channelIdSS8positionSi_T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuildChannelPosition(on:channelId:position:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer26modifyGuildChannelPositionFT2onSS9channelIdSS8positionSi_T_">modifyGuildChannelPosition(on:channelId:position:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11sendMessageFTSS2toSS3ttsSb_T_"></a>
+                    <a name="//apple_ref/swift/Method/sendMessage(_:to:tts:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11sendMessageFTSS2toSS3ttsSb_T_">sendMessage(_:to:tts:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer8sendFileFTVS_17DiscordFileUpload7contentSS2toSS3ttsSb_T_"></a>
+                    <a name="//apple_ref/swift/Method/sendFile(_:content:to:tts:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer8sendFileFTVS_17DiscordFileUpload7contentSS2toSS3ttsSb_T_">sendFile(_:content:to:tts:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13triggerTypingFT2onSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/triggerTyping(on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13triggerTypingFT2onSS_T_">triggerTyping(on:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-08)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
