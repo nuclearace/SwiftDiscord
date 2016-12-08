@@ -18,10 +18,10 @@
 import Foundation
 
 public extension DiscordEndpoint {
-    public static func acceptInvite(_ invite: String, with token: String, isBot bot: Bool) {
+    public static func acceptInvite(_ invite: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .invites, replacing: [
             "invite.code": invite,
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "POST"
 
@@ -30,11 +30,11 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
-    public static func getInvite(_ invite: String, with token: String, isBot bot: Bool,
+    public static func getInvite(_ invite: String, with token: DiscordToken,
             callback: @escaping (DiscordInvite?) -> Void) {
         var request = createRequest(with: token, for: .invites, replacing: [
             "invite.code": invite,
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "GET"
 

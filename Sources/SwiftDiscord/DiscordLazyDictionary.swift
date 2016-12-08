@@ -84,9 +84,9 @@ public struct DiscordLazyDictionaryIndex<K: Hashable, V> : Comparable {
 }
 
 /** A value-lazy dictionary
- 
+
  To store a lazy value into the dictionary:
- 
+
  ```
  var dict = [2: 4] as DiscordLazyDictionary
 
@@ -213,13 +213,7 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
     }
 
     public mutating func removeValue(forKey key: Key) -> Value? {
-        guard let lazyValue = backingDictionary[key] else { return nil }
-
-        let value = lazyValue.value
-
-        backingDictionary[key] = nil
-
-        return value
+        return backingDictionary.removeValue(forKey: key)?.value
     }
 
     public func suffix(from start: Index) -> SubSequence {

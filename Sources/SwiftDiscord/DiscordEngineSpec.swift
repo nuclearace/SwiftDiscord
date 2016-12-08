@@ -46,6 +46,8 @@ public extension DiscordEngineSpec {
 			return
 		}
 
+		DefaultDiscordLogger.Logger.debug("Sending ws: %@", type: engineType, args: payloadString)
+
 		#if !os(Linux)
 		websocket?.write(string: payloadString)
 		#else

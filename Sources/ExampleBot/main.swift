@@ -18,8 +18,9 @@
 import CoreFoundation
 import Dispatch
 import Foundation
+import struct SwiftDiscord.DiscordToken
 
-let token = ""
+let token = "Bot mysupersecretbottoken" as DiscordToken
 
 let queue = DispatchQueue(label: "Async Read")
 let bot = DiscordBot(token: token)

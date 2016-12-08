@@ -15,31 +15,38 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-public enum DiscordGameType {
+public enum DiscordGameType : Int, JSONRepresentable {
 	case game
-	case stream(String)
+	case stream
 
-	init(int: Int, url: String?) {
-		if int == 0 {
-			self = .game
-		} else if int == 1 && url != nil {
-			self = .stream(url!)
-		} else {
-			self = .game
+	func jsonValue() -> JSONRepresentable {
+		switch self {
+		case .game:
+			return 0
+		case .stream:
+			return 1
 		}
 	}
 }
 
-public struct DiscordGame {
+public struct DiscordGame : JSONAble {
 	public let name: String
 	public let type: DiscordGameType
+	public let url: String?
+
+	public init(name: String, type: DiscordGameType, url: String? = nil) {
+		self.name = name
+		self.type = type
+		self.url = url
+	}
 
 	public init?(gameObject: [String: Any]?) {
 		guard let game = gameObject else { return nil }
 		guard let name = game["name"] as? String else { return nil }
 
 		self.name = name
-		self.type = DiscordGameType(int: game.get("type", or: 0), url: game["url"] as? String)
+		self.type = DiscordGameType(rawValue: game.get("type", or: 0)) ?? .game
+		self.url = game["url"] as? String
 	}
 }
 
@@ -100,5 +107,15 @@ public struct DiscordPresence {
 		}
 
 		return presences
+	}
+}
+
+public struct DiscordPresenceUpdate : JSONAble {
+	public let idleSince: Int?
+	public let game: DiscordGame?
+
+	public init(idleSince: Int?, game: DiscordGame?) {
+		self.idleSince = idleSince
+		self.game = game
 	}
 }

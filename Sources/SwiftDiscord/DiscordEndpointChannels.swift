@@ -18,9 +18,9 @@
 import Foundation
 
 public extension DiscordEndpoint {
-    public static func getChannel(_ channelId: String, with token: String, isBot bot: Bool,
+    public static func getChannel(_ channelId: String, with token: DiscordToken,
             callback: @escaping (DiscordGuildChannel?) -> Void) {
-        var request = createRequest(with: token, for: .channel, replacing: ["channel.id": channelId], isBot: bot)
+        var request = createRequest(with: token, for: .channel, replacing: ["channel.id": channelId])
 
         request.httpMethod = "GET"
 
@@ -44,10 +44,10 @@ public extension DiscordEndpoint {
         })
     }
 
-    public static func deleteChannel(_ channelId: String, with token: String, isBot bot: Bool) {
+    public static func deleteChannel(_ channelId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .channel, replacing: [
             "channel.id": channelId,
-            ], isBot: bot)
+            ])
 
         request.httpMethod = "DELETE"
 
@@ -57,7 +57,7 @@ public extension DiscordEndpoint {
     }
 
     public static func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel],
-            with token: String, isBot bot: Bool) {
+            with token: DiscordToken) {
         var modifyJSON: [String: Any] = [:]
 
         for option in options {
@@ -81,7 +81,7 @@ public extension DiscordEndpoint {
 
         var request = createRequest(with: token, for: .channel, replacing: [
             "channel.id": channelId
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "PATCH"
         request.httpBody = contentData
@@ -94,11 +94,10 @@ public extension DiscordEndpoint {
     }
 
     // Messages
-    public static func bulkDeleteMessages(_ messages: [String], on channelId: String, with token: String,
-            isBot bot: Bool) {
+    public static func bulkDeleteMessages(_ messages: [String], on channelId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .bulkMessageDelete, replacing: [
             "channel.id": channelId
-            ], isBot: bot)
+        ])
 
         let editObject = [
             "messages": messages
@@ -118,11 +117,11 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
-    public static func deleteMessage(_ messageId: String, on channelId: String, with token: String, isBot bot: Bool) {
+    public static func deleteMessage(_ messageId: String, on channelId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .channelMessage, replacing: [
             "channel.id": channelId,
             "message.id": messageId
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "DELETE"
 
@@ -131,12 +130,12 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
-    public static func editMessage(_ messageId: String, on channelId: String, content: String, with token: String,
-            isBot bot: Bool) {
+    public static func editMessage(_ messageId: String, on channelId: String, content: String,
+            with token: DiscordToken) {
         var request = createRequest(with: token, for: .channelMessage, replacing: [
             "channel.id": channelId,
             "message.id": messageId
-            ], isBot: bot)
+        ])
 
         let editObject = [
             "content": content
@@ -156,9 +155,8 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
-    public static func getMessages(for channel: String, with token: String,
-            options: [DiscordEndpointOptions.GetMessage], isBot bot: Bool,
-            callback: @escaping ([DiscordMessage]) -> Void) {
+    public static func getMessages(for channel: String, with token: DiscordToken,
+            options: [DiscordEndpointOptions.GetMessage], callback: @escaping ([DiscordMessage]) -> Void) {
         var getParams: [String: String] = [:]
 
         for option in options {
@@ -174,7 +172,7 @@ public extension DiscordEndpoint {
             }
         }
 
-        var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel], isBot: bot,
+        var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel],
             getParams: getParams)
 
         request.httpMethod = "GET"
@@ -199,8 +197,7 @@ public extension DiscordEndpoint {
         })
     }
 
-    public static func sendMessage(_ content: String, with token: String, to channel: String, tts: Bool,
-            isBot bot: Bool) {
+    public static func sendMessage(_ content: String, with token: DiscordToken, to channel: String, tts: Bool) {
         let messageObject: [String: Any] = [
             "content": content,
             "tts": tts
@@ -210,7 +207,7 @@ public extension DiscordEndpoint {
             return
         }
 
-        var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel], isBot: bot)
+        var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel])
 
         request.httpMethod = "POST"
         request.httpBody = contentData
@@ -222,9 +219,9 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
-    public static func sendFile(_ file: DiscordFileUpload, content: String, with token: String, to channel: String,
-            tts: Bool, isBot bot: Bool) {
-        var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel], isBot: bot)
+    public static func sendFile(_ file: DiscordFileUpload, content: String, with token: DiscordToken,
+            to channel: String, tts: Bool) {
+        var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel])
 
         let (boundary, formData) = createMultipartBody(fields: [
             "content": content,
@@ -241,8 +238,8 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
-    public static func triggerTyping(on channelId: String, with token: String, isBot bot: Bool) {
-        var request = createRequest(with: token, for: .typing, replacing: ["channel.id": channelId], isBot: bot)
+    public static func triggerTyping(on channelId: String, with token: DiscordToken) {
+        var request = createRequest(with: token, for: .typing, replacing: ["channel.id": channelId])
 
         request.httpMethod = "POST"
 
@@ -252,12 +249,11 @@ public extension DiscordEndpoint {
     }
 
     // Permissions
-    public static func deleteChannelPermission(_ overwriteId: String, on channelId: String, with token: String,
-            isBot bot: Bool) {
+    public static func deleteChannelPermission(_ overwriteId: String, on channelId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .channelPermission, replacing: [
             "channel.id": channelId,
             "overwrite.id": overwriteId
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "DELETE"
 
@@ -267,7 +263,7 @@ public extension DiscordEndpoint {
     }
 
     public static func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String,
-            with token: String, isBot bot: Bool) {
+            with token: DiscordToken) {
         let overwriteJSON = permissionOverwrite.json
 
         guard let contentData = encodeJSON(overwriteJSON)?.data(using: .utf8, allowLossyConversion: false) else {
@@ -277,7 +273,7 @@ public extension DiscordEndpoint {
         var request = createRequest(with: token, for: .channelPermission, replacing: [
             "channel.id": channelId,
             "overwrite.id": permissionOverwrite.id
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "PUT"
         request.httpBody = contentData
@@ -291,7 +287,7 @@ public extension DiscordEndpoint {
 
     // Invites
     public static func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
-            with token: String, isBot bot: Bool, callback: @escaping (DiscordInvite?) -> Void) {
+            with token: DiscordToken, callback: @escaping (DiscordInvite?) -> Void) {
         var inviteJSON: [String: Any] = [:]
 
         for option in options {
@@ -313,7 +309,7 @@ public extension DiscordEndpoint {
 
         var request = createRequest(with: token, for: .channelInvites, replacing: [
             "channel.id": channelId
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "POST"
         request.httpBody = contentData
@@ -340,11 +336,11 @@ public extension DiscordEndpoint {
         })
     }
 
-    public static func getInvites(for channelId: String, with token: String, isBot bot: Bool,
+    public static func getInvites(for channelId: String, with token: DiscordToken,
             callback: @escaping ([DiscordInvite]) -> Void) {
         var request = createRequest(with: token, for: .channelInvites, replacing: [
             "channel.id": channelId
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "GET"
 
@@ -369,12 +365,11 @@ public extension DiscordEndpoint {
     }
 
     // Pinned Messages
-    public static func addPinnedMessage(_ messageId: String, on channelId: String, with token: String,
-            isBot bot: Bool) {
+    public static func addPinnedMessage(_ messageId: String, on channelId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .pinnedMessage, replacing: [
             "channel.id": channelId,
             "message.id": messageId
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "PUT"
 
@@ -383,12 +378,11 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
-    public static func deletePinnedMessage(_ messageId: String, on channelId: String, with token: String,
-            isBot bot: Bool) {
+    public static func deletePinnedMessage(_ messageId: String, on channelId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .pinnedMessage, replacing: [
             "channel.id": channelId,
             "message.id": messageId
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "DELETE"
 
@@ -397,9 +391,9 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
-    public static func getPinnedMessages(for channelId: String, with token: String, isBot bot: Bool,
+    public static func getPinnedMessages(for channelId: String, with token: DiscordToken,
             callback: @escaping ([DiscordMessage]) -> Void) {
-        var request = createRequest(with: token, for: .pins, replacing: ["channel.id": channelId], isBot: bot)
+        var request = createRequest(with: token, for: .pins, replacing: ["channel.id": channelId])
 
         request.httpMethod = "GET"
 

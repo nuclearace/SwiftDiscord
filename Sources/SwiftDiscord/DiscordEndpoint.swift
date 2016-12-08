@@ -126,20 +126,12 @@ public enum DiscordEndpoint : String {
 		return DiscordEndpoint.baseURL.rawValue + rawValue
 	}
 
-	public static func createRequest(with token: String, for endpoint: DiscordEndpoint,
-		replacing: [String: String], isBot bot: Bool, getParams: [String: String]? = nil) -> URLRequest {
+	public static func createRequest(with token: DiscordToken, for endpoint: DiscordEndpoint,
+		replacing: [String: String], getParams: [String: String]? = nil) -> URLRequest {
 
 		var request = URLRequest(url: endpoint.createURL(replacing: replacing, getParams: getParams ?? [:]))
 
-		let tokenValue: String
-
-		if bot {
-			tokenValue = "Bot \(token)"
-		} else {
-			tokenValue = token
-		}
-
-		request.setValue(tokenValue, forHTTPHeaderField: "Authorization")
+		request.setValue(token.token, forHTTPHeaderField: "Authorization")
 
 		return request
 	}

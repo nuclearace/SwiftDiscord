@@ -1,15 +1,31 @@
+// The MIT License (MIT)
+// Copyright (c) 2016 Erik Little
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without
+// limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+// Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+// BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+// EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+// ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+// DEALINGS IN THE SOFTWARE.
+
 import Foundation
 
 public extension DiscordEndpoint {
-    public static func createDM(with: String, user: String, with token: String, isBot bot: Bool,
+    public static func createDM(with: String, user: String, with token: DiscordToken,
             callback: @escaping (DiscordDMChannel?) -> Void) {
-
         guard let contentData = encodeJSON(["recipient_id": with])?.data(using: .utf8, allowLossyConversion: false)
                 else {
             return
         }
 
-        var request = createRequest(with: token, for: .userChannels, replacing: ["me": user], isBot: bot)
+        var request = createRequest(with: token, for: .userChannels, replacing: ["me": user])
 
         request.httpMethod = "POST"
         request.httpBody = contentData
@@ -36,9 +52,9 @@ public extension DiscordEndpoint {
         })
     }
 
-    public static func getDMs(user: String, with token: String, isBot bot: Bool,
+    public static func getDMs(user: String, with token: DiscordToken,
             callback: @escaping ([String: DiscordDMChannel]) -> Void) {
-        var request = createRequest(with: token, for: .userChannels, replacing: ["me": user], isBot: bot)
+        var request = createRequest(with: token, for: .userChannels, replacing: ["me": user])
 
         request.httpMethod = "GET"
 
@@ -62,9 +78,9 @@ public extension DiscordEndpoint {
         })
     }
 
-    public static func getGuilds(user: String, with token: String, isBot bot: Bool,
+    public static func getGuilds(user: String, with token: DiscordToken,
             callback: @escaping ([String: DiscordUserGuild]) -> Void) {
-        var request = createRequest(with: token, for: .userGuilds, replacing: ["me": user], isBot: bot)
+        var request = createRequest(with: token, for: .userGuilds, replacing: ["me": user])
 
         request.httpMethod = "GET"
 

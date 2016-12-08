@@ -55,7 +55,7 @@ func handleJoin() {
 }
 
 func handleLeave() {
-    client.leaveVoiceChannel(voiceChannel)
+    client.leaveVoiceChannel()
 }
 
 func handlePlay() {
@@ -353,14 +353,7 @@ func readAsync() {
         } else if input.hasPrefix("game") {
             let game = input.components(separatedBy: " ").dropFirst().joined()
 
-            client.setPresence([
-                "idle_since": NSNull(),
-                "game": [
-                    "name": game,
-                    "type": NSNull(),
-                    "url": NSNull()
-                ]
-            ])
+            client.setPresence(DiscordPresenceUpdate(idleSince: nil, game: DiscordGame(name: game, type: .game)))
         } else if input.hasPrefix("guild") {
             let guildId = input.components(separatedBy: " ").dropFirst().first!
 
