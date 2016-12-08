@@ -2669,49 +2669,14 @@
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordLazyDictionary.swift",
-      "line": null,
-      "symbol": "DiscordLazyValue",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordLazyDictionary.swift",
-      "line": 25,
-      "symbol": "DiscordLazyValue",
-      "symbol_kind": "source.lang.swift.decl.class",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordLazyDictionary.swift",
-      "line": 30,
-      "symbol": "DiscordLazyValue.value",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordLazyDictionary.swift",
-      "line": 50,
-      "symbol": "DiscordLazyValue.lazy(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordLazyDictionary.swift",
-      "line": 54,
-      "symbol": "DiscordLazyValue.real(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordLazyDictionary.swift",
-      "line": 121,
+      "line": 126,
       "symbol": "DiscordLazyDictionary.first",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordLazyDictionary.swift",
-      "line": 215,
+      "line": 220,
       "symbol": "DiscordLazyDictionary.removeValue(forKey:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"

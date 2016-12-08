@@ -22,11 +22,13 @@
 // This works around that by changing the storing of the lazy computation/value to be a reference type, so that the
 // backing dictionary of DiscordLazyDictionary is not mutating itself, but the lazy values are.
 // This also seems to have a lower memory footprint, for some reason.
+/// The backing class DiscordLazyDictionary's lazy values.
 public class DiscordLazyValue<V> {
     fileprivate var real: V?
 
     private var future: (() -> V)!
 
+    /// The value this objects holds. Forces evaluation.
     public var value: V {
         if let real = real {
             return real
@@ -47,16 +49,19 @@ public class DiscordLazyValue<V> {
         self.future = nil
     }
 
+    /// Creates a DiscordLazyValue whose value hasn't been computed yet.
     public static func lazy(_ future: @escaping () -> V) -> DiscordLazyValue {
         return DiscordLazyValue(future: future)
     }
 
+    /// Creates a DiscordLazyValue whose value has been computed.
     public static func real(_ real: V) -> DiscordLazyValue {
         return DiscordLazyValue(real: real)
     }
 }
 
 extension DiscordLazyValue : CustomStringConvertible {
+    /// The descripton of the DiscordLazyValue. Does not evaluate if it hasn't been already.
     public var description: String {
         let value: String
 
