@@ -155,6 +155,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
 	/**
 		Creates the handshake object that Discord expects. You shouldn't need to call this directly.
+
+		Override if you need to customize the handshake object.
 	*/
 	open func createHandshakeObject() -> [String: Any] {
 		return [
