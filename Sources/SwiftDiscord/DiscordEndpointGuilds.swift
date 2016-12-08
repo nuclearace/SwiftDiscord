@@ -22,10 +22,10 @@
 // TODO Guild batch modify roles
 public extension DiscordEndpoint {
     // TODO create guild
-    public static func deleteGuild(_ guildId: String, with token: String, isBot bot: Bool) {
+    public static func deleteGuild(_ guildId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .guilds, replacing: [
             "guild.id": guildId,
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "DELETE"
 
@@ -35,7 +35,7 @@ public extension DiscordEndpoint {
     }
 
     public static func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild],
-            with token: String, isBot bot: Bool) {
+            with token: DiscordToken) {
         var modifyJSON: [String: Any] = [:]
 
         for option in options {
@@ -67,7 +67,7 @@ public extension DiscordEndpoint {
 
         var request = createRequest(with: token, for: .guilds, replacing: [
             "guild.id": guildId
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "PATCH"
         request.httpBody = contentData
@@ -81,7 +81,7 @@ public extension DiscordEndpoint {
 
     // Guild Channels
     public static func createGuildChannel(_ guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel],
-            with token: String, isBot bot: Bool) {
+            with token: DiscordToken) {
         var createJSON: [String: Any] = [:]
 
         for option in options {
@@ -105,7 +105,7 @@ public extension DiscordEndpoint {
 
         var request = createRequest(with: token, for: .guildChannels, replacing: [
             "guild.id": guildId
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "POST"
         request.httpBody = contentData
@@ -117,9 +117,9 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
-    public static func getGuildChannels(_ guildId: String, with token: String, isBot bot: Bool,
+    public static func getGuildChannels(_ guildId: String, with token: DiscordToken,
             callback: @escaping ([DiscordGuildChannel]) -> Void) {
-        var request = createRequest(with: token, for: .guildChannels, replacing: ["guild.id": guildId], isBot: bot)
+        var request = createRequest(with: token, for: .guildChannels, replacing: ["guild.id": guildId])
 
         request.httpMethod = "GET"
 
@@ -144,7 +144,7 @@ public extension DiscordEndpoint {
     }
 
     public static func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int,
-            with token: String, isBot bot: Bool) {
+            with token: DiscordToken) {
         let modifyJSON: [String: Any] = [
             "id": channelId,
             "position": position
@@ -156,7 +156,7 @@ public extension DiscordEndpoint {
 
         var request = createRequest(with: token, for: .guildChannels, replacing: [
             "guild.id": guildId
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "PATCH"
         request.httpBody = contentData
@@ -169,12 +169,12 @@ public extension DiscordEndpoint {
     }
 
     // Guild Members
-    public static func getGuildMember(by id: String, on guildId: String, with token: String, isBot bot: Bool,
+    public static func getGuildMember(by id: String, on guildId: String, with token: DiscordToken,
         callback: @escaping (DiscordGuildMember?) -> Void) {
         var request = createRequest(with: token, for: .guildMember, replacing: [
             "guild.id": guildId,
             "user.id": id
-        ], isBot: bot)
+        ])
 
         request.httpMethod = "GET"
 
@@ -199,7 +199,7 @@ public extension DiscordEndpoint {
     }
 
     public static func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
-            with token: String, isBot bot: Bool, callback: @escaping ([DiscordGuildMember]) -> Void) {
+            with token: DiscordToken, callback: @escaping ([DiscordGuildMember]) -> Void) {
         var getParams: [String: String] = [:]
 
         for option in options {
@@ -211,7 +211,7 @@ public extension DiscordEndpoint {
             }
         }
 
-        var request = createRequest(with: token, for: .guildMembers, replacing: ["guild.id": guildId], isBot: bot,
+        var request = createRequest(with: token, for: .guildMembers, replacing: ["guild.id": guildId],
             getParams: getParams)
 
         request.httpMethod = "GET"
@@ -239,9 +239,9 @@ public extension DiscordEndpoint {
     }
 
     // Guild Bans
-    public static func getGuildBans(for guildId: String, with token: String, isBot bot: Bool,
+    public static func getGuildBans(for guildId: String, with token: DiscordToken,
             callback: @escaping ([DiscordUser]) -> Void) {
-        var request = createRequest(with: token, for: .guildBans, replacing: ["guild.id": guildId], isBot: bot)
+        var request = createRequest(with: token, for: .guildBans, replacing: ["guild.id": guildId])
 
         request.httpMethod = "GET"
 
@@ -265,14 +265,13 @@ public extension DiscordEndpoint {
         })
     }
 
-    public static func guildBan(userId: String, on guildId: String, deleteMessageDays: Int, with token: String,
-            isBot bot: Bool) {
+    public static func guildBan(userId: String, on guildId: String, deleteMessageDays: Int, with token: DiscordToken) {
         let banJSON = ["delete-message-days": deleteMessageDays]
 
         var request = createRequest(with: token, for: .guildBanUser, replacing: [
             "guild.id": guildId,
             "user.id": userId
-            ], isBot: bot)
+        ])
 
         guard let contentData = encodeJSON(banJSON)?.data(using: .utf8, allowLossyConversion: false) else {
             return
@@ -288,11 +287,11 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
-    public static func removeGuildBan(for userId: String, on guildId: String, with token: String, isBot bot: Bool) {
+    public static func removeGuildBan(for userId: String, on guildId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .guildBanUser, replacing: [
             "guild.id": guildId,
             "user.id": userId
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "DELETE"
 
@@ -302,9 +301,9 @@ public extension DiscordEndpoint {
     }
 
     // Guild Roles
-    public static func createGuildRole(on guildId: String, with token: String, isBot bot: Bool,
+    public static func createGuildRole(on guildId: String, with token: DiscordToken,
             callback: @escaping (DiscordRole?) -> Void) {
-          var request = createRequest(with: token, for: .guildRoles, replacing: ["guild.id": guildId], isBot: bot)
+          var request = createRequest(with: token, for: .guildRoles, replacing: ["guild.id": guildId])
 
           request.httpMethod = "POST"
 
@@ -328,9 +327,9 @@ public extension DiscordEndpoint {
           })
     }
 
-    public static func getGuildRoles(for guildId: String, with token: String, isBot bot: Bool,
+    public static func getGuildRoles(for guildId: String, with token: DiscordToken,
             callback: @escaping ([DiscordRole]) -> Void) {
-          var request = createRequest(with: token, for: .guildRoles, replacing: ["guild.id": guildId], isBot: bot)
+          var request = createRequest(with: token, for: .guildRoles, replacing: ["guild.id": guildId])
 
           request.httpMethod = "GET"
 
@@ -354,13 +353,13 @@ public extension DiscordEndpoint {
           })
     }
 
-    public static func modifyGuildRole(_ role: DiscordRole, on guildId: String, with token: String, isBot bot: Bool) {
+    public static func modifyGuildRole(_ role: DiscordRole, on guildId: String, with token: DiscordToken) {
         let roleJSON = role.json
 
         var request = createRequest(with: token, for: .guildRole, replacing: [
             "guild.id": guildId,
             "role.id": role.id
-            ], isBot: bot)
+        ])
 
         guard let contentData = encodeJSON(roleJSON)?.data(using: .utf8, allowLossyConversion: false) else {
             return
@@ -376,11 +375,11 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
-    public static func removeGuildRole(_ roleId: String, on guildId: String, with token: String, isBot bot: Bool) {
+    public static func removeGuildRole(_ roleId: String, on guildId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .guildRole, replacing: [
             "guild.id": guildId,
             "role.id": roleId
-            ], isBot: bot)
+        ])
 
         request.httpMethod = "DELETE"
 

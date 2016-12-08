@@ -122,7 +122,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
 	open func createHandshakeObject() -> [String: Any] {
 		return [
-			"token": client!.token,
+			"token": client!.token.token,
 			"properties": [
 				"$os": "macOS",
 				"$browser": "SwiftDiscord",

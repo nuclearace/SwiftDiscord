@@ -15,43 +15,34 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-import Foundation
-#if !os(Linux)
-import Starscream
-#else
-import WebSockets
-#endif
+public struct DiscordToken : ExpressibleByStringLiteral {
+    public typealias StringLiteralType = String
+    public typealias ExtendedGraphemeClusterLiteralType = String.ExtendedGraphemeClusterLiteralType
+    public typealias UnicodeScalarLiteralType = String.UnicodeScalarLiteralType
 
-public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable {
-	weak var client: DiscordClientSpec? { get }
+    public let token: String
 
-	var connectURL: String { get }
-	var engineType: String { get }
-	var lastSequenceNumber: Int { get }
-	var websocket: WebSocket? { get }
+    public var isBot: Bool {
+        return token.hasPrefix("Bot")
+    }
 
-	init(client: DiscordClientSpec)
+    public var isBearer: Bool {
+        return token.hasPrefix("Bearer")
+    }
 
-	func connect()
-	func error(message: String)
-	func disconnect()
-	func sendGatewayPayload(_ payload: DiscordGatewayPayload)
-}
+    public var isUser: Bool {
+        return !(isBot || isBearer)
+    }
 
-public extension DiscordEngineSpec {
-	func sendGatewayPayload(_ payload: DiscordGatewayPayload) {
-		guard let payloadString = payload.createPayloadString() else {
-			error(message: "Could not create payload string")
+    public init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
+        token = String(unicodeScalarLiteral: value)
+    }
 
-			return
-		}
+    public init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
+        token = String(extendedGraphemeClusterLiteral: value)
+    }
 
-		DefaultDiscordLogger.Logger.debug("Sending ws: %@", type: engineType, args: payloadString)
-
-		#if !os(Linux)
-		websocket?.write(string: payloadString)
-		#else
-		try? websocket?.send(payloadString)
-		#endif
-	}
+    public init(stringLiteral value: StringLiteralType) {
+        token = value
+    }
 }

@@ -19,7 +19,7 @@ import Foundation
 import Dispatch
 
 open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, DiscordEndpointConsumer {
-	public let token: String
+	public let token: DiscordToken
 
 	public var engine: DiscordEngineSpec?
 	public var handleQueue = DispatchQueue.main
@@ -27,12 +27,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	public var voiceEngine: DiscordVoiceEngineSpec?
     #endif
 	public var onVoiceData: (DiscordVoiceData) -> Void = {_ in }
-
-	public var isBot: Bool {
-		guard let user = self.user else { return false }
-
-		return user.bot
-	}
 
 	public private(set) var connected = false
 	public private(set) var guilds = [String: DiscordGuild]()
@@ -50,7 +44,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	private var joiningVoiceChannel = false
 	private var voiceServerInformation: [String: Any]?
 
-	public required init(token: String, configuration: [DiscordClientOption] = []) {
+	public required init(token: DiscordToken, configuration: [DiscordClientOption] = []) {
 		self.token = token
 
 		for config in configuration {

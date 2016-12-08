@@ -28,7 +28,7 @@ class DiscordBot {
     private var playingYoutube = false
     private var youtube = EncoderProcess()
 
-    init(token: String) {
+    init(token: DiscordToken) {
         client = DiscordClient(token: token, configuration: [.log(.verbose)])
 
         attachHandlers()

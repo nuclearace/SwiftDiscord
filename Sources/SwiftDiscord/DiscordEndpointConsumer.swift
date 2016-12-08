@@ -62,64 +62,64 @@ public protocol DiscordEndpointConsumer : DiscordClientSpec {
 
 public extension DiscordEndpointConsumer {
     public func acceptInvite(_ invite: String) {
-        DiscordEndpoint.acceptInvite(invite, with: token, isBot: isBot)
+        DiscordEndpoint.acceptInvite(invite, with: token)
     }
 
     public func addPinnedMessage(_ messageId: String, on channelId: String) {
-        DiscordEndpoint.addPinnedMessage(messageId, on: channelId, with: token, isBot: isBot)
+        DiscordEndpoint.addPinnedMessage(messageId, on: channelId, with: token)
     }
 
     public func bulkDeleteMessages(_ messages: [String], on channelId: String) {
-        DiscordEndpoint.bulkDeleteMessages(messages, on: channelId, with: token, isBot: isBot)
+        DiscordEndpoint.bulkDeleteMessages(messages, on: channelId, with: token)
     }
 
     public func createDM(with: String, callback: @escaping (DiscordDMChannel?) -> Void) {
-        DiscordEndpoint.createDM(with: with, user: user!.id, with: token, isBot: isBot, callback: callback)
+        DiscordEndpoint.createDM(with: with, user: user!.id, with: token, callback: callback)
     }
 
     public func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
             callback: @escaping (DiscordInvite?) -> Void) {
-        DiscordEndpoint.createInvite(for: channelId, options: options, with: token, isBot: isBot, callback: callback)
+        DiscordEndpoint.createInvite(for: channelId, options: options, with: token, callback: callback)
     }
 
     public func createGuildChannel(on guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel]) {
-        DiscordEndpoint.createGuildChannel(guildId, options: options, with: token, isBot: isBot)
+        DiscordEndpoint.createGuildChannel(guildId, options: options, with: token)
     }
 
     public func createGuildRole(on guildId: String, callback: @escaping (DiscordRole?) -> Void) {
-        DiscordEndpoint.createGuildRole(on: guildId, with: token, isBot: isBot, callback: callback)
+        DiscordEndpoint.createGuildRole(on: guildId, with: token, callback: callback)
     }
 
     public func deleteChannel(_ channelId: String) {
-        DiscordEndpoint.deleteChannel(channelId, with: token, isBot: isBot)
+        DiscordEndpoint.deleteChannel(channelId, with: token)
     }
 
     public func deleteChannelPermission(_ overwriteId: String, on channelId: String) {
-        DiscordEndpoint.deleteChannelPermission(overwriteId, on: channelId, with: token, isBot: isBot)
+        DiscordEndpoint.deleteChannelPermission(overwriteId, on: channelId, with: token)
     }
 
     public func deleteGuild(_ guildId: String) {
-        DiscordEndpoint.deleteGuild(guildId, with: token, isBot: isBot)
+        DiscordEndpoint.deleteGuild(guildId, with: token)
     }
 
     public func deleteMessage(_ messageId: String, on channelId: String) {
-        DiscordEndpoint.deleteMessage(messageId, on: channelId, with: token, isBot: isBot)
+        DiscordEndpoint.deleteMessage(messageId, on: channelId, with: token)
     }
 
     public func deletePinnedMessage(_ messageId: String, on channelId: String) {
-        DiscordEndpoint.deletePinnedMessage(messageId, on: channelId, with: token, isBot: isBot)
+        DiscordEndpoint.deletePinnedMessage(messageId, on: channelId, with: token)
     }
 
     public func editMessage(_ messageId: String, on channelId: String, content: String) {
-        DiscordEndpoint.editMessage(messageId, on: channelId, content: content, with: token, isBot: isBot)
+        DiscordEndpoint.editMessage(messageId, on: channelId, content: content, with: token)
     }
 
     public func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String) {
-        DiscordEndpoint.editChannelPermission(permissionOverwrite, on: channelId, with: token, isBot: isBot)
+        DiscordEndpoint.editChannelPermission(permissionOverwrite, on: channelId, with: token)
     }
 
     public func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> Void) {
-        DiscordEndpoint.getChannel(channelId, with: token, isBot: isBot, callback: callback)
+        DiscordEndpoint.getChannel(channelId, with: token, callback: callback)
     }
 
     public func getBotURL(with permissions: [DiscordPermission]) -> URL? {
@@ -129,92 +129,91 @@ public extension DiscordEndpointConsumer {
     }
 
     public func getDMs(callback: @escaping ([String: DiscordDMChannel]) -> Void) {
-        DiscordEndpoint.getDMs(user: user!.id, with: token, isBot: isBot, callback: callback)
+        DiscordEndpoint.getDMs(user: user!.id, with: token, callback: callback)
     }
 
     public func getGuildBans(for guildId: String, callback: @escaping ([DiscordUser]) -> Void) {
-        DiscordEndpoint.getGuildBans(for: guildId, with: token, isBot: isBot, callback: callback)
+        DiscordEndpoint.getGuildBans(for: guildId, with: token, callback: callback)
     }
 
     public func getGuildChannels(_ guildId: String, callback: @escaping ([DiscordGuildChannel]) -> Void) {
-        DiscordEndpoint.getGuildChannels(guildId, with: token, isBot: isBot, callback: callback)
+        DiscordEndpoint.getGuildChannels(guildId, with: token, callback: callback)
     }
 
     public func getGuildMember(by id: String, on guildId: String, callback: @escaping (DiscordGuildMember?) -> Void) {
-        DiscordEndpoint.getGuildMember(by: id, on: guildId, with: token, isBot: isBot, callback: callback)
+        DiscordEndpoint.getGuildMember(by: id, on: guildId, with: token, callback: callback)
     }
 
     public func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
             callback: @escaping ([DiscordGuildMember]) -> Void) {
-        DiscordEndpoint.getGuildMembers(on: guildId, options: options, with: token, isBot: isBot, callback: callback)
+        DiscordEndpoint.getGuildMembers(on: guildId, options: options, with: token, callback: callback)
     }
 
     public func getGuilds(callback: @escaping ([String: DiscordUserGuild]) -> Void) {
-        DiscordEndpoint.getGuilds(user: user!.id, with: token, isBot: isBot, callback: callback)
+        DiscordEndpoint.getGuilds(user: user!.id, with: token, callback: callback)
     }
 
     public func getGuildRoles(for guildId: String, callback: @escaping ([DiscordRole]) -> Void) {
-        DiscordEndpoint.getGuildRoles(for: guildId, with: token, isBot: isBot, callback: callback)
+        DiscordEndpoint.getGuildRoles(for: guildId, with: token, callback: callback)
     }
 
     public func getInvite(_ invite: String, callback: @escaping (DiscordInvite?) -> Void) {
-        DiscordEndpoint.getInvite(invite, with: token, isBot: isBot, callback: callback)
+        DiscordEndpoint.getInvite(invite, with: token, callback: callback)
     }
 
     public func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void) {
-        return DiscordEndpoint.getInvites(for: channelId, with: token, isBot: isBot, callback: callback)
+        return DiscordEndpoint.getInvites(for: channelId, with: token, callback: callback)
     }
 
     public func getMessages(for channelId: String, options: [DiscordEndpointOptions.GetMessage] = [],
             callback: @escaping ([DiscordMessage]) -> Void) {
-        DiscordEndpoint.getMessages(for: channelId, with: token, options: options, isBot: isBot, callback: callback)
+        DiscordEndpoint.getMessages(for: channelId, with: token, options: options, callback: callback)
     }
 
     public func guildBan(userId: String, on guildId: String, deleteMessageDays: Int = 7) {
-        DiscordEndpoint.guildBan(userId: userId, on: guildId, deleteMessageDays: deleteMessageDays, with: token,
-            isBot: isBot)
+        DiscordEndpoint.guildBan(userId: userId, on: guildId, deleteMessageDays: deleteMessageDays, with: token)
     }
 
     public func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void) {
-        DiscordEndpoint.getPinnedMessages(for: channelId, with: token, isBot: isBot, callback: callback)
+        DiscordEndpoint.getPinnedMessages(for: channelId, with: token, callback: callback)
     }
 
     public func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel]) {
-        DiscordEndpoint.modifyChannel(channelId, options: options, with: token, isBot: isBot)
+        DiscordEndpoint.modifyChannel(channelId, options: options, with: token)
     }
 
     public func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild]) {
-        DiscordEndpoint.modifyGuild(guildId, options: options, with: token, isBot: isBot)
+        DiscordEndpoint.modifyGuild(guildId, options: options, with: token)
     }
 
     public func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int) {
         DiscordEndpoint.modifyGuildChannelPosition(on: guildId, channelId: channelId, position: position,
-            with: token, isBot: isBot)
+            with: token)
     }
 
     public func modifyGuildRole(_ role: DiscordRole, on guildId: String) {
-        DiscordEndpoint.modifyGuildRole(role, on: guildId, with: token, isBot: isBot)
+        DiscordEndpoint.modifyGuildRole(role, on: guildId, with: token)
     }
 
     public func removeGuildBan(for userId: String, on guildId: String) {
-        DiscordEndpoint.removeGuildBan(for: userId, on: guildId, with: token, isBot: isBot)
+        DiscordEndpoint.removeGuildBan(for: userId, on: guildId, with: token)
     }
 
     public func removeGuildRole(_ roleId: String, on guildId: String) {
-        DiscordEndpoint.removeGuildRole(roleId, on: guildId, with: token, isBot: isBot)
+        DiscordEndpoint.removeGuildRole(roleId, on: guildId, with: token)
     }
 
     public func sendMessage(_ message: String, to channelId: String, tts: Bool = false) {
         guard connected else { return }
 
-        DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts, isBot: isBot)
+        DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts)
     }
 
     public func sendFile(_ file: DiscordFileUpload, content: String, to channelId: String, tts: Bool = false) {
-        DiscordEndpoint.sendFile(file, content: content, with: token, to: channelId, tts: tts, isBot: isBot)
+        DiscordEndpoint.sendFile(file, content: content, with: token, to: channelId, tts: tts)
     }
 
     public func triggerTyping(on channelId: String) {
-        DiscordEndpoint.triggerTyping(on: channelId, with: token, isBot: isBot)
+        DiscordEndpoint.triggerTyping(on: channelId, with: token)
     }
 }
