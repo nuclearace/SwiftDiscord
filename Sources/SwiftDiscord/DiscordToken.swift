@@ -15,12 +15,16 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-public struct DiscordToken : ExpressibleByStringLiteral {
+public struct DiscordToken : ExpressibleByStringLiteral, CustomStringConvertible {
     public typealias StringLiteralType = String
     public typealias ExtendedGraphemeClusterLiteralType = String.ExtendedGraphemeClusterLiteralType
     public typealias UnicodeScalarLiteralType = String.UnicodeScalarLiteralType
 
     public let token: String
+
+    public var description: String {
+        return token
+    }
 
     public var isBot: Bool {
         return token.hasPrefix("Bot")
