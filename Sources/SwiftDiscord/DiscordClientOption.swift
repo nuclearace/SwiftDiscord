@@ -18,11 +18,19 @@
 import Dispatch
 import Foundation
 
+/// A enum representing a configuration option.
 public enum DiscordClientOption : CustomStringConvertible, Equatable {
+    /// The dispatch queue that events should be handled on.
+    /// This is also the queue that properties should be read from.
     case handleQueue(DispatchQueue)
+
+    /// The log level for the logger.
     case log(DiscordLogLevel)
+
+    /// Used to set a custom logger
     case logger(DiscordLogger)
 
+    /// - Returns: A description of this option
     public var description: String {
         let description: String
 
@@ -36,6 +44,8 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
     }
 }
 
+/// Compares two DiscordClientOption's descriptions.
+/// - Returns: true if they are the same
 public func ==(lhs: DiscordClientOption, rhs: DiscordClientOption) -> Bool {
     return lhs.description == rhs.description
 }
