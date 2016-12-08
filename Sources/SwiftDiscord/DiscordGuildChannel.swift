@@ -15,23 +15,50 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+/// Represents the type of guild channel.
 public enum DiscordChannelType : String {
+	/// A text channel.
 	case text = "text"
+
+	/// A voice channel
 	case voice = "voice"
 }
 
+/// Represents a guild channel.
 public struct DiscordGuildChannel {
+	/// The snowflake id of the channel.
 	public let id: String
+
+	/// Whether this is a private channel. Should always be false for GuildChannels.
 	public let isPrivate = false
+
+	/// The snowflake id of the guild this channel is on.
 	public let guildId: String
+
+	/// What type of channel this is.
 	public let type: DiscordChannelType
 
+	/// The bitrate of this channel, if this is a voice channel.
 	public var bitrate: Int?
+
+	/// The last message received on this channel.
+	///
+	/// **NOTE** Currently is not being updated.
 	public var lastMessageId: String?
+
+	/// The name of this channel.
 	public var name: String
+
+	/// The permissions specifics to this channel.
 	public var permissionOverwrites: [String: DiscordPermissionOverwrite]
+
+	/// The position of this channel. Mostly for UI purpose.
 	public var position: Int
+
+	/// The topic of this channel, if this is a text channel.
 	public var topic: String?
+
+	/// The user limit of this channel, if this is a voice channel.
 	public var userLimit: Int?
 
 	init(guildChannelObject: [String: Any]) {
