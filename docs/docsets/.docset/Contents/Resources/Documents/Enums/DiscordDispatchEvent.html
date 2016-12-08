@@ -14,7 +14,7 @@
     <a title="DiscordDispatchEvent Enum Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (24% documented)</p>
+        <p><a href="../index.html"> Docs</a> (28% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -292,7 +292,16 @@
         <section>
           <section class="section">
             <h1>DiscordDispatchEvent</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DiscordDispatchEvent</span> <span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                </div>
+              </div>
+            <p>An enum that represents the dispatch events Discord sends.</p>
+
+<p>If one of these events is handled specifically by the client then it will be turned into an event with the form
+<code>myEventName</code>. If it is not handled, then the associated enum string will be the event name.</p>
 
           </section>
           <section class="section task-group-section">
@@ -311,8 +320,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Ready (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">ready</span> <span class="o">=</span> <span class="s">"READY"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -334,8 +351,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Message Create (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">messageCreate</span> <span class="o">=</span> <span class="s">"MESSAGE_CREATE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -357,8 +382,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Message Delete (Not handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">messageDelete</span> <span class="o">=</span> <span class="s">"MESSAGE_DELETE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -380,8 +413,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Message Delete Bulk (Not handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">messageDeleteBulk</span> <span class="o">=</span> <span class="s">"MESSAGE_DELETE_BULK"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -403,8 +444,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Message Reaction Add (Not handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">messageReactionAdd</span> <span class="o">=</span> <span class="s">"MESSAGE_REACTION_ADD"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -426,8 +475,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Message Reaction Remove (Not handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">messageReactionRemove</span> <span class="o">=</span> <span class="s">"MESSAGE_REACTION_REMOVE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -449,8 +506,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Message Update (Not handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">messageUpdate</span> <span class="o">=</span> <span class="s">"MESSAGE_UPDATE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -472,8 +537,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Guild Ban Add (Not handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildBanAdd</span> <span class="o">=</span> <span class="s">"GUILD_BAN_ADD"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -495,8 +568,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Guild Ban Remove (Not handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildBanRemove</span> <span class="o">=</span> <span class="s">"GUILD_BAN_REMOVE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -518,8 +599,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Guild Create (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildCreate</span> <span class="o">=</span> <span class="s">"GUILD_CREATE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -541,8 +630,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>GuildDelete (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildDelete</span> <span class="o">=</span> <span class="s">"GUILD_DELETE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -564,8 +661,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Guild Emojis Update (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildEmojisUpdate</span> <span class="o">=</span> <span class="s">"GUILD_EMOJIS_UPDATE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -587,8 +692,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Guild Integrations Update (Not handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildIntegrationsUpdate</span> <span class="o">=</span> <span class="s">"GUILD_INTEGRATIONS_UPDATE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -610,8 +723,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Guild Member Add (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildMemberAdd</span> <span class="o">=</span> <span class="s">"GUILD_MEMBER_ADD"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -633,8 +754,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Guild Member Remove (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildMemberRemove</span> <span class="o">=</span> <span class="s">"GUILD_MEMBER_REMOVE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -656,8 +785,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Guild Member Update (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildMemberUpdate</span> <span class="o">=</span> <span class="s">"GUILD_MEMBER_UPDATE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -679,8 +816,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Guild Members Chunk (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildMembersChunk</span> <span class="o">=</span> <span class="s">"GUILD_MEMBERS_CHUNK"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -702,8 +847,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Guild Role Create (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildRoleCreate</span> <span class="o">=</span> <span class="s">"GUILD_ROLE_CREATE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -725,8 +878,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Guild Role Delete (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildRoleDelete</span> <span class="o">=</span> <span class="s">"GUILD_ROLE_DELETE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -748,8 +909,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Guild Role Update (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildRoleUpdate</span> <span class="o">=</span> <span class="s">"GUILD_ROLE_UPDATE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -771,8 +940,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Guild Update (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildUpdate</span> <span class="o">=</span> <span class="s">"GUILD_UPDATE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -794,8 +971,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Channel Create (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">channelCreate</span> <span class="o">=</span> <span class="s">"CHANNEL_CREATE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -817,8 +1002,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Channel Delete (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">channelDelete</span> <span class="o">=</span> <span class="s">"CHANNEL_DELETE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -840,8 +1033,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Channel Update (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">channelUpdate</span> <span class="o">=</span> <span class="s">"CHANNEL_UPDATE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -863,8 +1064,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Voice Server Update (Handled but no event emitted)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">voiceServerUpdate</span> <span class="o">=</span> <span class="s">"VOICE_SERVER_UPDATE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -886,8 +1095,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Voice State Update (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">voiceStateUpdate</span> <span class="o">=</span> <span class="s">"VOICE_STATE_UPDATE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -909,8 +1126,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Presence Update (Handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">presenceUpdate</span> <span class="o">=</span> <span class="s">"PRESENCE_UPDATE"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -932,8 +1157,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Typing Start (Not handled)</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">typingStart</span> <span class="o">=</span> <span class="s">"TYPING_START"</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>

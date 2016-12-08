@@ -15,43 +15,102 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+/**
+	An enum that represents the dispatch events Discord sends.
+
+	If one of these events is handled specifically by the client then it will be turned into an event with the form
+	`myEventName`. If it is not handled, then the associated enum string will be the event name.
+*/
 public enum DiscordDispatchEvent : String {
+	/// Ready (Handled)
 	case ready = "READY"
 
 	// Messaging
+
+	/// Message Create (Handled)
 	case messageCreate = "MESSAGE_CREATE"
+
+	/// Message Delete (Not handled)
 	case messageDelete = "MESSAGE_DELETE"
+
+	/// Message Delete Bulk (Not handled)
 	case messageDeleteBulk = "MESSAGE_DELETE_BULK"
+
+	/// Message Reaction Add (Not handled)
 	case messageReactionAdd = "MESSAGE_REACTION_ADD"
+
+	/// Message Reaction Remove (Not handled)
 	case messageReactionRemove = "MESSAGE_REACTION_REMOVE"
+
+	/// Message Update (Not handled)
 	case messageUpdate = "MESSAGE_UPDATE"
 
 	// Guilds
+
+	/// Guild Ban Add (Not handled)
 	case guildBanAdd = "GUILD_BAN_ADD"
+
+	/// Guild Ban Remove (Not handled)
 	case guildBanRemove = "GUILD_BAN_REMOVE"
+
+	/// Guild Create (Handled)
 	case guildCreate = "GUILD_CREATE"
+
+	/// GuildDelete (Handled)
 	case guildDelete = "GUILD_DELETE"
+
+	/// Guild Emojis Update (Handled)
 	case guildEmojisUpdate = "GUILD_EMOJIS_UPDATE"
+
+	/// Guild Integrations Update (Not handled)
 	case guildIntegrationsUpdate = "GUILD_INTEGRATIONS_UPDATE"
+
+	/// Guild Member Add (Handled)
 	case guildMemberAdd = "GUILD_MEMBER_ADD"
+
+	/// Guild Member Remove (Handled)
 	case guildMemberRemove = "GUILD_MEMBER_REMOVE"
+
+	/// Guild Member Update (Handled)
 	case guildMemberUpdate = "GUILD_MEMBER_UPDATE"
+
+	/// Guild Members Chunk (Handled)
 	case guildMembersChunk = "GUILD_MEMBERS_CHUNK"
+
+	/// Guild Role Create (Handled)
 	case guildRoleCreate = "GUILD_ROLE_CREATE"
+
+	/// Guild Role Delete (Handled)
 	case guildRoleDelete = "GUILD_ROLE_DELETE"
+
+	/// Guild Role Update (Handled)
 	case guildRoleUpdate = "GUILD_ROLE_UPDATE"
+
+	/// Guild Update (Handled)
 	case guildUpdate = "GUILD_UPDATE"
 
 	// Channels
+
+	/// Channel Create (Handled)
 	case channelCreate = "CHANNEL_CREATE"
+
+	/// Channel Delete (Handled)
 	case channelDelete = "CHANNEL_DELETE"
+
+	/// Channel Update (Handled)
 	case channelUpdate = "CHANNEL_UPDATE"
 
 	// Voice
+
+	/// Voice Server Update (Handled but no event emitted)
 	case voiceServerUpdate = "VOICE_SERVER_UPDATE"
+
+	/// Voice State Update (Handled)
 	case voiceStateUpdate = "VOICE_STATE_UPDATE"
 
+	/// Presence Update (Handled)
 	case presenceUpdate = "PRESENCE_UPDATE"
 
+	/// Typing Start (Not handled)
 	case typingStart = "TYPING_START"
 }
