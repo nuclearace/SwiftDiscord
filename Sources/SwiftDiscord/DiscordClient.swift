@@ -63,9 +63,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	private var voiceServerInformation: [String: Any]?
 
 	/**
-		- Parameters:
-			- token: The discord token of the user
-			- configuration: An array of DiscordClientOption that can be used to customize the client
+		- parameter token: The discord token of the user
+		- parameter configuration: An array of DiscordClientOption that can be used to customize the client
 
 	*/
 	public required init(token: DiscordToken, configuration: [DiscordClientOption] = []) {
@@ -133,9 +132,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Adds event handlers to the client.
 
-		- Parameters:
-			- _: The event to listen for
-			- callback: The callback that will be executed when this event is fired
+		- parameter event: The event to listen for
+		- parameter callback: The callback that will be executed when this event is fired
 	*/
 	open func on(_ event: String, callback: @escaping ([Any]) -> Void) {
 		handlers[event] = DiscordEventHandler(event: event, callback: callback)
@@ -146,8 +144,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleChannelCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling channel create", type: logType)
@@ -166,8 +163,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleChannelDelete(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling channel delete", type: logType)
@@ -187,8 +183,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleChannelUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling channel update", type: logType)
@@ -208,9 +203,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide custom event handling functionality.
 
-		- Parameters:
-			- _: The event being fired
-			- with: The data from the event
+		- parameter event: The event being fired
+		- parameter with: The data from the event
 	*/
 	open func handleEvent(_ event: String, with data: [Any]) {
 		handleQueue.async {
@@ -223,8 +217,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide custom engine dispatch functionality.
 
-		- Parameters:
-			- _: A DiscordGatewayPayload containing the dispatch information.
+		- parameter payload: A DiscordGatewayPayload containing the dispatch information.
 	*/
 	open func handleEngineDispatch(_ payload: DiscordGatewayPayload) {
 		guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
@@ -243,9 +236,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- _: The engine event
-			- with: The data from the event
+		- parameter event: The engine event
+		- parameter with: The data from the event
 	*/
 	open func handleEngineEvent(_ event: String, with data: [Any]) {
 		handleEvent(event, with: data)
@@ -256,8 +248,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleGuildCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild create", type: logType)
@@ -276,8 +267,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleGuildDelete(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild delete", type: logType)
@@ -296,8 +286,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleGuildEmojiUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild emoji update", type: logType)
@@ -319,8 +308,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleGuildMemberAdd(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild member add", type: logType)
@@ -342,8 +330,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleGuildMemberRemove(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild member remove", type: logType)
@@ -367,8 +354,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleGuildMemberUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild member update", type: logType)
@@ -390,8 +376,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleGuildMembersChunk(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild members chunk", type: logType)
@@ -421,8 +406,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleGuildRoleCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild role create", type: logType)
@@ -444,8 +428,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleGuildRoleRemove(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild role remove", type: logType)
@@ -465,8 +448,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleGuildRoleUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild role update", type: logType)
@@ -489,8 +471,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleGuildUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild update", type: logType)
@@ -508,8 +489,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleMessageCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling message create", type: logType)
@@ -526,8 +506,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handlePresenceUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.debug("Handling presence update", type: logType)
@@ -556,8 +535,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleReady(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling ready", type: logType)
@@ -600,8 +578,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleVoiceServerUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling voice server update", type: logType)
@@ -620,8 +597,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		- Parameters:
-			- with: The data from the event
+		- parameter with: The data from the event
 	*/
 	open func handleVoiceStateUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling voice state update", type: logType)
@@ -654,10 +630,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Gets the DiscordGuild for a Channel snowflake.
 
-		- Parameters:
-			- _: A channel snowflake
+		- parameter channelId: A channel snowflake
 
-		- Returns: An optional containing a DiscordGuild if one was found.
+		- returns: An optional containing a DiscordGuild if one was found.
 	*/
 	public func guildForChannel(_ channelId: String) -> DiscordGuild? {
 		return guilds.filter({ return $0.1.channels[channelId] != nil }).map({ $0.1 }).first
@@ -666,8 +641,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Joins a voice channel. A `voiceEngine.ready` event will be fired when the client has joined the channel.
 
-		- Parameters:
-			- _: The snowflake of the voice channel you would like to join
+		- parameter channelId: The snowflake of the voice channel you would like to join
 
 	*/
 	open func joinVoiceChannel(_ channelId: String) {
@@ -725,8 +699,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		Requests all users from Discord for the guild specified. Use this when you need to get all users on a large
 		guild. Multiple `guildMembersChunk` will be fired.
 
-		- Parameters:
-			- on: The snowflake of the guild you wish to request all users.
+		- parameter on: The snowflake of the guild you wish to request all users.
 	*/
 	open func requestAllUsers(on guildId: String) {
 		let requestObject: [String: Any] = [
@@ -742,8 +715,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/**
 		Sets the user's presence.
 
-		- Parameters:
-			- _: The new presence object
+		- parameter presence: The new presence object
 	*/
 	open func setPresence(_ presence: DiscordPresenceUpdate) {
 		engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.statusUpdate),

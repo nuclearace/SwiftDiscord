@@ -510,14 +510,6 @@
                       <div class="abstract">
                         <p>Creates a new DiscordEngine.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>client: The DiscordClientSpec this engine should be associated with.</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -679,14 +671,6 @@
                       <div class="abstract">
                         <p>Logs that an error occured.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>message: The error message</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -736,14 +720,6 @@
 
 <p>Override this method if you need to customize payload handling.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>_: The payload object</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -760,12 +736,12 @@
                             <tr>
                               <td>
                                 <code>
-                                <em>_</em>
+                                <em>payload</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>: The payload object</p>
+                                  <p>The payload object</p>
 
                                 </div>
                               </td>
@@ -794,14 +770,6 @@ You shouldn&rsquo;t call this directly.</p>
 
 <p>Override this method if you need to customize parsing.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>_: The raw payload string</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -818,12 +786,12 @@ You shouldn&rsquo;t call this directly.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>_</em>
+                                <em>string</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>: The raw payload string</p>
+                                  <p>The raw payload string</p>
 
                                 </div>
                               </td>
@@ -906,14 +874,6 @@ You shouldn&rsquo;t call this directly.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Starts the engine&rsquo;s heartbeat. You should call this method when you know the interval that Discord expects.</p>
-
-<ul>
-<li>Parameters:
-
-<ul>
-<li>seconds: The heartbeat interval</li>
-</ul></li>
-</ul>
 
                       </div>
                       <div class="declaration">

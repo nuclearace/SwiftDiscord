@@ -566,16 +566,6 @@ This should cause ffmpeg to get an EOF on input, which will cause it to close on
                       <div class="abstract">
                         <p>An async read from the encoder. When there is available data, then callback is called.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>callback: A callback that will be called when there is available data, or when the encoder is done.
-        First parameter is a Bool indicating whether the encoder is done.
-        Second is the OPUS encoded data in an array.</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -623,15 +613,6 @@ This should cause ffmpeg to get an EOF on input, which will cause it to close on
                       <div class="abstract">
                         <p>An async write to the encoder.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>_ Raw audio data that should be turned into OPUS encoded data.</li>
-<li>doneHandler: An optional handler that will be called when we are done writing.</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -648,7 +629,7 @@ This should cause ffmpeg to get an EOF on input, which will cause it to close on
                             <tr>
                               <td>
                                 <code>
-                                <em>_</em>
+                                <em>data</em>
                                 </code>
                               </td>
                               <td>

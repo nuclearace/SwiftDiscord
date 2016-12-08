@@ -119,12 +119,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	/**
 		Constructs a new VoiceEngine
 
-		- Parameters:
-			- client: The client this engine should be associated with
-			- voiceServerInformation: The voice server information
-			- encoder: A DiscordVoiceEncoder that from a previous engine. Send if you are still encoding i.e
-						moved channels
-			- secret: The secret from a previous engine.
+		- parameter client: The client this engine should be associated with
+		- parameter voiceServerInformation: The voice server information
+		- parameter encoder: A DiscordVoiceEncoder that from a previous engine. Send if you are still encoding i.e
+					moved channels
+		- parameter secret: The secret from a previous engine.
 	*/
 	public convenience init?(client: DiscordClientSpec, voiceServerInformation: [String: Any],
 			encoder: DiscordVoiceEncoder?, secret: [UInt8]?) {
@@ -512,8 +511,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		Sends OPUS encoded voice data to Discord. Because of the assumptions built into the engine, the voice data
 		should have a max length of `defaultAudioSize`
 
-		- Parameters:
-			- _: An array of OPUS encoded voice data.
+		- parameter data: An array of OPUS encoded voice data.
 	*/
 	public func sendVoiceData(_ data: [UInt8]) {
 		udpQueue.sync {

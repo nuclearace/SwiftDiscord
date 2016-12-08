@@ -68,8 +68,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	/**
 		Creates a new DiscordEngine.
 
-		- Parameters:
-			- client: The DiscordClientSpec this engine should be associated with.
+		- parameter client: The DiscordClientSpec this engine should be associated with.
 	*/
 	public required init(client: DiscordClientSpec) {
 		self.client = client
@@ -190,8 +189,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	/**
 		Logs that an error occured.
 
-		- Parameters:
-			- message: The error message
+		- parameter message: The error message
 	*/
 	open func error(message: String) {
 		DefaultDiscordLogger.Logger.error(message, type: logType)
@@ -207,8 +205,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
 		Override this method if you need to customize payload handling.
 
-		- Parameters:
-			- _: The payload object
+		- parameter payload: The payload object
 	*/
 	open func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
 		handleQueue.async {
@@ -239,8 +236,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
 		Override this method if you need to customize parsing.
 
-		- Parameters:
-			- _: The raw payload string
+		- parameter string: The raw payload string
 	*/
 	open func parseGatewayMessage(_ string: String) {
 		guard let decoded = DiscordGatewayPayload.payloadFromString(string) else {
@@ -287,8 +283,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	/**
 		Starts the engine's heartbeat. You should call this method when you know the interval that Discord expects.
 
-		- Parameters:
-			- seconds: The heartbeat interval
+		- parameter seconds: The heartbeat interval
 	*/
 	open func startHeartbeat(seconds: Int) {
 		heartbeatInterval = seconds

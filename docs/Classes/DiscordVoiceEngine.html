@@ -619,18 +619,6 @@ packets that are sent and received.</p>
                       <div class="abstract">
                         <p>Constructs a new VoiceEngine</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>client: The client this engine should be associated with</li>
-<li>voiceServerInformation: The voice server information</li>
-<li>encoder: A DiscordVoiceEncoder that from a previous engine. Send if you are still encoding i.e
-        moved channels</li>
-<li>secret: The secret from a previous engine.</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -909,14 +897,6 @@ youtube.launch()
                         <p>Sends OPUS encoded voice data to Discord. Because of the assumptions built into the engine, the voice data
 should have a max length of <code><a href="../Global Variables.html#/s:v12SwiftDiscord16defaultAudioSizeSi">defaultAudioSize</a></code></p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>_: An array of OPUS encoded voice data.</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -933,12 +913,12 @@ should have a max length of <code><a href="../Global Variables.html#/s:v12SwiftD
                             <tr>
                               <td>
                                 <code>
-                                <em>_</em>
+                                <em>data</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>: An array of OPUS encoded voice data.</p>
+                                  <p>An array of OPUS encoded voice data.</p>
 
                                 </div>
                               </td>

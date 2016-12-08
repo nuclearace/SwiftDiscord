@@ -588,15 +588,7 @@ made on this queue, as this is the queue where modifications on them are made.</
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <ul>
-<li>Parameters:
-
-<ul>
-<li>token: The discord token of the user</li>
-<li>configuration: An array of DiscordClientOption that can be used to customize the client</li>
-</ul></li>
-</ul>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -743,15 +735,6 @@ with the client.</p>
                       <div class="abstract">
                         <p>Adds event handlers to the client.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>_: The event to listen for</li>
-<li>callback: The callback that will be executed when this event is fired</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -768,12 +751,12 @@ with the client.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>_</em>
+                                <em>event</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>: The event to listen for</p>
+                                  <p>The event to listen for</p>
 
                                 </div>
                               </td>
@@ -813,14 +796,6 @@ with the client.</p>
                         <p>Handles channel creates from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
-
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
 
                       </div>
                       <div class="declaration">
@@ -871,14 +846,6 @@ with the client.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -927,14 +894,6 @@ with the client.</p>
                         <p>Handles channel updates from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
-
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
 
                       </div>
                       <div class="declaration">
@@ -986,15 +945,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
 
 <p>Override to provide custom event handling functionality.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>_: The event being fired</li>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1011,12 +961,12 @@ You shouldn&rsquo;t need to call this event directly.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>_</em>
+                                <em>event</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>: The event being fired</p>
+                                  <p>The event being fired</p>
 
                                 </div>
                               </td>
@@ -1057,14 +1007,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
 
 <p>Override to provide custom engine dispatch functionality.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>_: A DiscordGatewayPayload containing the dispatch information.</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1081,12 +1023,12 @@ You shouldn&rsquo;t need to call this event directly.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>_</em>
+                                <em>payload</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>: A DiscordGatewayPayload containing the dispatch information.</p>
+                                  <p>A DiscordGatewayPayload containing the dispatch information.</p>
 
                                 </div>
                               </td>
@@ -1114,15 +1056,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>_: The engine event</li>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1139,12 +1072,12 @@ You shouldn&rsquo;t need to call this event directly.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>_</em>
+                                <em>event</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>: The engine event</p>
+                                  <p>The engine event</p>
 
                                 </div>
                               </td>
@@ -1184,14 +1117,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
                         <p>Handles guild creates from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
-
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
 
                       </div>
                       <div class="declaration">
@@ -1242,14 +1167,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1298,14 +1215,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
                         <p>Handles guild emoji updates from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
-
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
 
                       </div>
                       <div class="declaration">
@@ -1356,14 +1265,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1412,14 +1313,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
                         <p>Handles guild member removes from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
-
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
 
                       </div>
                       <div class="declaration">
@@ -1470,14 +1363,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1526,14 +1411,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
                         <p>Handles guild members chunks from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
-
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
 
                       </div>
                       <div class="declaration">
@@ -1584,14 +1461,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1640,14 +1509,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
                         <p>Handles guild role removes from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
-
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
 
                       </div>
                       <div class="declaration">
@@ -1698,14 +1559,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1754,14 +1607,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
                         <p>Handles guild updates from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
-
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
 
                       </div>
                       <div class="declaration">
@@ -1812,14 +1657,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1869,14 +1706,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1925,14 +1754,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
                         <p>Handles the ready event from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
-
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
 
                       </div>
                       <div class="declaration">
@@ -2010,14 +1831,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2067,14 +1880,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>with: The data from the event</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2122,17 +1927,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
                       <div class="abstract">
                         <p>Gets the DiscordGuild for a Channel snowflake.</p>
 
-<p><li><p>Parameters:</p></p>
-
-<p><ul>
-<li>_: A channel snowflake</li>
-</ul></li>
-<div class="aside aside-returns">
-    <p class="aside-title">Returns</p>
-    <p>An optional containing a DiscordGuild if one was found.</p></p>
-
-<p></div></p>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2149,12 +1943,12 @@ You shouldn&rsquo;t need to call this event directly.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>_</em>
+                                <em>channelId</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>: A channel snowflake</p>
+                                  <p>A channel snowflake</p>
 
                                 </div>
                               </td>
@@ -2185,14 +1979,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
                       <div class="abstract">
                         <p>Joins a voice channel. A <code>voiceEngine.ready</code> event will be fired when the client has joined the channel.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>_: The snowflake of the voice channel you would like to join</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2209,12 +1995,12 @@ You shouldn&rsquo;t need to call this event directly.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>_</em>
+                                <em>channelId</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>: The snowflake of the voice channel you would like to join</p>
+                                  <p>The snowflake of the voice channel you would like to join</p>
 
                                 </div>
                               </td>
@@ -2268,14 +2054,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
                         <p>Requests all users from Discord for the guild specified. Use this when you need to get all users on a large
 guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>on: The snowflake of the guild you wish to request all users.</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2323,14 +2101,6 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                       <div class="abstract">
                         <p>Sets the user&rsquo;s presence.</p>
 
-<ul>
-<li>Parameters:
-
-<ul>
-<li>_: The new presence object</li>
-</ul></li>
-</ul>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2347,12 +2117,12 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>_</em>
+                                <em>presence</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>: The new presence object</p>
+                                  <p>The new presence object</p>
 
                                 </div>
                               </td>

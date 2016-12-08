@@ -116,8 +116,7 @@ public class DiscordVoiceEncoder {
 	/**
 		An async read from the encoder. When there is available data, then callback is called.
 
-		- Parameters:
-			- callback: A callback that will be called when there is available data, or when the encoder is done.
+		- parameter callback: A callback that will be called when there is available data, or when the encoder is done.
 						First parameter is a Bool indicating whether the encoder is done.
 						Second is the OPUS encoded data in an array.
 	*/
@@ -144,9 +143,8 @@ public class DiscordVoiceEncoder {
 	/**
 		An async write to the encoder.
 
-		- Parameters:
-			- _ Raw audio data that should be turned into OPUS encoded data.
-			- doneHandler: An optional handler that will be called when we are done writing.
+		- parameter data: Raw audio data that should be turned into OPUS encoded data.
+		- parameter doneHandler: An optional handler that will be called when we are done writing.
 	*/
 	public func write(_ data: Data, doneHandler: (() -> Void)? = nil) {
 		guard !closed else { return }
