@@ -19,7 +19,8 @@ import Foundation
 
 #if !os(iOS)
 
-let defaultAudioSize = 320
+/// The default (max) audio packet size.
+public let defaultAudioSize = 320
 
 public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
 	var encoder: DiscordVoiceEncoder? { get }

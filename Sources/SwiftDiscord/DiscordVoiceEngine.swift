@@ -15,6 +15,8 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+/// A named tuple that contains the RTP header and voice data from a voice packet.
+/// The voice data is OPUS encoded.
 public typealias DiscordVoiceData = (rtpHeader: [UInt8], voiceData: [UInt8])
 
 #if !os(iOS)
@@ -33,23 +35,48 @@ enum DiscordVoiceEngineError : Error {
 	case ipExtraction
 }
 
+/**
+	A subclass of DiscordEngine that provides functionality for voice communication.
+
+	Discord uses encrypted OPUS encoded voice packets. The engine is responsible for encyrpting/decrypting voice
+	packets that are sent and received.
+*/
 public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
+	/// The voice url
 	public override var connectURL: String {
 		return "wss://" + endpoint.components(separatedBy: ":")[0]
 	}
 
+	/// The type of DiscordEngine this is. Used to correctly fire engine events.
 	public override var engineType: String {
 		return "voiceEngine"
 	}
 
+	/// Whether this engine is connected
 	public private(set) var connected = false
+
+	/// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data
 	public private(set) var encoder: DiscordVoiceEncoder?
+
+	/// The raw voice endpoint gotten from Discord
 	public private(set) var endpoint: String!
+
+	/// The modes that are available for communication. Only xsalsa20_poly1305 is supported currently
 	public private(set) var modes = [String]()
+
+	/// The secret key used for encryption
 	public private(set) var secret: [UInt8]!
+
+	/// Our SSRC
 	public private(set) var ssrc: UInt32 = 0
+
+	/// The UDP socket that is used to send/receive voice data
 	public private(set) var udpSocket: UDPClient?
+
+	/// Our UDP port
 	public private(set) var udpPort = -1
+
+	/// Information about the voice server we are connected to
 	public private(set) var voiceServerInformation: [String: Any]!
 
 	override var logType: String {
@@ -89,6 +116,16 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	private var startTime = 0
 
+	/**
+		Constructs a new VoiceEngine
+
+		- Parameters:
+			- client: The client this engine should be associated with
+			- voiceServerInformation: The voice server information
+			- encoder: A DiscordVoiceEncoder that from a previous engine. Send if you are still encoding i.e
+						moved channels
+			- secret: The secret from a previous engine.
+	*/
 	public convenience init?(client: DiscordClientSpec, voiceServerInformation: [String: Any],
 			encoder: DiscordVoiceEncoder?, secret: [UInt8]?) {
 		self.init(client: client)
@@ -139,6 +176,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		makeEncoder = true
 	}
 
+	/**
+		Creates the handshake object that Discord expects. You shouldn't need to call this directly.
+	*/
 	public override func createHandshakeObject() -> [String: Any] {
 		DefaultDiscordLogger.Logger.log("Creating handshakeObject", type: logType)
 
@@ -209,6 +249,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			voiceData: Array(UnsafeBufferPointer<UInt8>(start: unencrypted, count: audioSize))))
 	}
 
+	/**
+		Disconnects the voice engine.
+	*/
 	public override func disconnect() {
 		DefaultDiscordLogger.Logger.log("Disconnecting VoiceEngine", type: logType)
 
@@ -321,6 +364,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		self.secret = secret.map({ UInt8($0) })
 	}
 
+	/**
+		Parses a gateway message. You shouldn't need to call this directly.
+	*/
 	public override func parseGatewayMessage(_ string: String) {
 		guard let decoded = DiscordGatewayPayload.payloadFromString(string, fromGateway: false) else {
 			DefaultDiscordLogger.Logger.log("Got unknown payload %@", type: logType, args: string)
@@ -385,10 +431,35 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		}
 	}
 
+	/**
+		Used to request a new `FileHandle` that can be used to write directly to the encoder. Which will in turn be
+		sent to Discord.
+
+		Example using youtube-dl to play music:
+
+		```
+		youtube = EncoderProcess()
+		youtube.launchPath = "/usr/local/bin/youtube-dl"
+		youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
+		youtube.standardOutput = client.voiceEngine!.requestFileHandleForWriting()!
+
+		youtube.terminationHandler = {[weak self] process in
+		    print("yt died")
+		    self?.client.voiceEngine?.encoder?.finishEncodingAndClose()
+		}
+
+		youtube.launch()
+		```
+
+		- Returns: An optional containing a FileHandle that can be written to, or nil if there is no encoder.
+	*/
 	public func requestFileHandleForWriting() -> FileHandle? {
 		return encoder?.readPipe.fileHandleForWriting
 	}
 
+	/**
+		Stops encoding and requests a new encoder. A `voiceEngine.ready` event will be fired when the encoder is ready.
+	*/
 	public func requestNewEncoder() {
 		createEncoder()
 	}
@@ -423,6 +494,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		readSocket()
 	}
 
+	/**
+		Sends a voice heartbeat to Discord. You shouldn't need to call this directly.
+	*/
 	public override func sendHeartbeat() {
 		guard !closed else { return }
 
@@ -433,6 +507,13 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		heartbeatQueue.asyncAfter(deadline: time) {[weak self] in self?.sendHeartbeat() }
 	}
 
+	/**
+		Sends OPUS encoded voice data to Discord. Because of the assumptions built into the engine, the voice data
+		should have a max length of `defaultAudioSize`
+
+		- Parameters:
+			- _: An array of OPUS encoded voice data.
+	*/
 	public func sendVoiceData(_ data: [UInt8]) {
 		udpQueue.sync {
 			guard let udpSocket = self.udpSocket, data.count <= defaultAudioSize else { return }
@@ -461,6 +542,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		}
 	}
 
+	/**
+		Starts the handshake with the Discord voice server. You shouldn't need to call this directly.
+	*/
 	public override func startHandshake() {
 		guard client != nil else { return }
 

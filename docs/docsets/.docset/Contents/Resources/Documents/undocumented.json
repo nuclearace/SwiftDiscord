@@ -3837,153 +3837,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 36,
-      "symbol": "DiscordVoiceEngine",
-      "symbol_kind": "source.lang.swift.decl.class",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 37,
-      "symbol": "DiscordVoiceEngine.connectURL",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 41,
-      "symbol": "DiscordVoiceEngine.engineType",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 45,
-      "symbol": "DiscordVoiceEngine.connected",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 46,
-      "symbol": "DiscordVoiceEngine.encoder",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 47,
-      "symbol": "DiscordVoiceEngine.endpoint",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 48,
-      "symbol": "DiscordVoiceEngine.modes",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 49,
-      "symbol": "DiscordVoiceEngine.secret",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 50,
-      "symbol": "DiscordVoiceEngine.ssrc",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 51,
-      "symbol": "DiscordVoiceEngine.udpSocket",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 52,
-      "symbol": "DiscordVoiceEngine.udpPort",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 53,
-      "symbol": "DiscordVoiceEngine.voiceServerInformation",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 92,
-      "symbol": "DiscordVoiceEngine.init(client:voiceServerInformation:encoder:secret:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 142,
-      "symbol": "DiscordVoiceEngine.createHandshakeObject()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 212,
-      "symbol": "DiscordVoiceEngine.disconnect()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 324,
-      "symbol": "DiscordVoiceEngine.parseGatewayMessage(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 388,
-      "symbol": "DiscordVoiceEngine.requestFileHandleForWriting()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 392,
-      "symbol": "DiscordVoiceEngine.requestNewEncoder()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 426,
-      "symbol": "DiscordVoiceEngine.sendHeartbeat()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 436,
-      "symbol": "DiscordVoiceEngine.sendVoiceData(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngine.swift",
-      "line": 464,
-      "symbol": "DiscordVoiceEngine.startHandshake()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineClient.swift",
       "line": 20,
       "symbol": "DiscordVoiceEngineClient",
@@ -4013,56 +3866,56 @@
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 24,
+      "line": 25,
       "symbol": "DiscordVoiceEngineSpec",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 25,
+      "line": 26,
       "symbol": "DiscordVoiceEngineSpec.encoder",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 26,
+      "line": 27,
       "symbol": "DiscordVoiceEngineSpec.secret",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 28,
+      "line": 29,
       "symbol": "DiscordVoiceEngineSpec.requestFileHandleForWriting()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 29,
+      "line": 30,
       "symbol": "DiscordVoiceEngineSpec.requestNewEncoder()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 30,
+      "line": 31,
       "symbol": "DiscordVoiceEngineSpec.send(_:doneHandler:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 31,
+      "line": 32,
       "symbol": "DiscordVoiceEngineSpec.sendVoiceData(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 35,
+      "line": 36,
       "symbol": "DiscordVoiceEngineSpec.send(_:doneHandler:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"

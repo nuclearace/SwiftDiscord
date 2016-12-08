@@ -14,7 +14,7 @@
     <a title="DiscordVoiceEngine Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (12% documented)</p>
+        <p><a href="../index.html"> Docs</a> (15% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -44,6 +44,14 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Global Variables.html">Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v12SwiftDiscord16defaultAudioSizeSi">defaultAudioSize</a>
               </li>
             </ul>
           </li>
@@ -267,13 +275,30 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Typealiases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12SwiftDiscord16DiscordVoiceData">DiscordVoiceData</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
         <section>
           <section class="section">
             <h1>DiscordVoiceEngine</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">DiscordVoiceEngine</span> <span class="p">:</span> <span class="kt"><a href="../Classes/DiscordEngine.html">DiscordEngine</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/DiscordVoiceEngineSpec.html">DiscordVoiceEngineSpec</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>A subclass of DiscordEngine that provides functionality for voice communication.</p>
+
+<p>Discord uses encrypted OPUS encoded voice packets. The engine is responsible for encyrpting/decrypting voice
+packets that are sent and received.</p>
 
           </section>
           <section class="section task-group-section">
@@ -292,8 +317,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The voice url</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">connectURL</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -311,8 +344,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The type of DiscordEngine this is. Used to correctly fire engine events.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">engineType</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -330,8 +371,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Whether this engine is connected</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">connected</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -349,8 +398,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">encoder</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a></span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -368,8 +425,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The raw voice endpoint gotten from Discord</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">endpoint</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -387,8 +452,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The modes that are available for communication. Only xsalsa20_poly1305 is supported currently</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">modes</span> <span class="o">=</span> <span class="p">[</span><span class="kt">String</span><span class="p">]()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -406,8 +479,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The secret key used for encryption</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">secret</span><span class="p">:</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">]</span><span class="o">!</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -425,8 +506,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Our SSRC</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">ssrc</span><span class="p">:</span> <span class="kt">UInt32</span> <span class="o">=</span> <span class="mi">0</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -444,8 +533,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The UDP socket that is used to send/receive voice data</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">udpSocket</span><span class="p">:</span> <span class="kt">UDPClient</span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -463,8 +560,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Our UDP port</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">udpPort</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -482,8 +587,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Information about the voice server we are connected to</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">voiceServerInformation</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]</span><span class="o">!</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -501,8 +614,88 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Constructs a new VoiceEngine</p>
 
+<ul>
+<li>Parameters:
+
+<ul>
+<li>client: The client this engine should be associated with</li>
+<li>voiceServerInformation: The voice server information</li>
+<li>encoder: A DiscordVoiceEncoder that from a previous engine. Send if you are still encoding i.e
+        moved channels</li>
+<li>secret: The secret from a previous engine.</li>
+</ul></li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">?(</span><span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordClientSpec.html">DiscordClientSpec</a></span><span class="p">,</span> <span class="nv">voiceServerInformation</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">],</span>
+			<span class="nv">encoder</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a></span><span class="p">?,</span> <span class="nv">secret</span><span class="p">:</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">]?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client this engine should be associated with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>voiceServerInformation</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The voice server information</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>encoder</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A DiscordVoiceEncoder that from a previous engine. Send if you are still encoding i.e moved channels</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>secret</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The secret from a previous engine.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -520,8 +713,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Creates the handshake object that Discord expects. You shouldn&rsquo;t need to call this directly.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">createHandshakeObject</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -539,8 +740,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Disconnects the voice engine.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">disconnect</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -558,8 +767,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Parses a gateway message. You shouldn&rsquo;t need to call this directly.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">parseGatewayMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">string</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -577,7 +794,42 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Used to request a new <code>FileHandle</code> that can be used to write directly to the encoder. Which will in turn be
+sent to Discord.</p>
+
+<p>Example using youtube-dl to play music:</p>
+
+<pre class="highlight plaintext"><code>youtube = EncoderProcess()
+youtube.launchPath = "/usr/local/bin/youtube-dl"
+youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
+youtube.standardOutput = client.voiceEngine!.requestFileHandleForWriting()!
+
+youtube.terminationHandler = {[weak self] process in
+    print("yt died")
+    self?.client.voiceEngine?.encoder?.finishEncodingAndClose()
+}
+
+youtube.launch()
+</code></pre>
+
+<div class="aside aside-returns">
+    <p class="aside-title">Returns</p>
+    An optional containing a FileHandle that can be written to, or nil if there is no encoder.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestFileHandleForWriting</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">FileHandle</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An optional containing a FileHandle that can be written to, or nil if there is no encoder.</p>
 
                       </div>
                     </section>
@@ -596,8 +848,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Stops encoding and requests a new encoder. A <code>voiceEngine.ready</code> event will be fired when the encoder is ready.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestNewEncoder</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -615,8 +875,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Sends a voice heartbeat to Discord. You shouldn&rsquo;t need to call this directly.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">sendHeartbeat</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -634,8 +902,45 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Sends OPUS encoded voice data to Discord. Because of the assumptions built into the engine, the voice data
+should have a max length of <code><a href="../Global Variables.html#/s:v12SwiftDiscord16defaultAudioSizeSi">defaultAudioSize</a></code></p>
 
+<ul>
+<li>Parameters:
+
+<ul>
+<li>_: An array of OPUS encoded voice data.</li>
+</ul></li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">sendVoiceData</span><span class="p">(</span><span class="n">_</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>_</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>: An array of OPUS encoded voice data.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -653,8 +958,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Starts the handshake with the Discord voice server. You shouldn&rsquo;t need to call this directly.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">startHandshake</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
