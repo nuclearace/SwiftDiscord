@@ -17,11 +17,11 @@
 
 import Foundation
 
-protocol DiscordEngineGatewayHandling : DiscordEngineSpec, DiscordEngineHeartbeatable {
+public protocol DiscordEngineGatewayHandling : DiscordEngineSpec, DiscordEngineHeartbeatable {
 	func handleDispatch(_ payload: DiscordGatewayPayload)
 }
 
-extension DiscordEngineGatewayHandling {
+public extension DiscordEngineGatewayHandling {
 	func handleDispatch(_ payload: DiscordGatewayPayload) {
 		client?.handleEngineDispatch(payload)
 	}

@@ -23,21 +23,38 @@ import WebSockets
 #endif
 import Dispatch
 
+/**
+	The base class for Discord WebSocket communications.
+*/
 open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, DiscordEngineHeartbeatable {
+	/// The url for the gateway.
 	open var connectURL: String {
 		return DiscordEndpointGateway.gatewayURL
 	}
 
+	/// The type of DiscordEngineSpec. Used to correctly fire events.
 	open var engineType: String {
 		return "engine"
 	}
 
-	public internal(set) var heartbeatInterval = 0 // Only touch on handleQueue
+	// Only touch on handleQueue
+	/// The interval (in seconds) to send heartbeats.
+	public internal(set) var heartbeatInterval = 0
+
+	/// The underlying WebSocket.
+	///
+	/// On Linux this is a WebSockets.WebSocket. While on macOS/iOS this is a Starscream.WebSocket
 	public internal(set) var websocket: WebSocket?
 
+	/// The client that this engine is associated with.
 	public private(set) weak var client: DiscordClientSpec?
+
+	/// The dispatch queue that heartbeats are sent on.
 	public private(set) var heartbeatQueue = DispatchQueue(label: "discordEngine.heartbeatQueue")
-	public private(set) var lastSequenceNumber = -1 // Only touch on handleQueue
+
+	// Only touch on handleQueue
+	/// The last sequence number received. Will be used for session resumes.
+	public private(set) var lastSequenceNumber = -1
 
 	let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
 	let handleQueue = DispatchQueue(label: "discordEngine.handleQueue")
@@ -48,10 +65,23 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
 	private var closed = false
 
+	/**
+		Creates a new DiscordEngine.
+
+		- Parameters:
+			- client: The DiscordClientSpec this engine should be associated with.
+	*/
 	public required init(client: DiscordClientSpec) {
 		self.client = client
 	}
 
+	/**
+		Attaches the WebSocket handlers that listen for text/connects/disconnects/etc
+
+		Override if you need to provide custom handlers.
+
+		Note: You should handle both WebSockets.WebSocket and Starscream.WebSocket handlers.
+	*/
 	open func attachWebSocketHandlers() {
 		#if !os(Linux)
 		websocket?.onConnect = {[weak self] in
@@ -98,6 +128,9 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		#endif
 	}
 
+	/**
+		Starts the connection to the Discord gateway.
+	*/
 	open func connect() {
 		DefaultDiscordLogger.Logger.log("Connecting to %@", type: logType, args: connectURL)
 		DefaultDiscordLogger.Logger.log("Attaching WebSocket", type: logType)
@@ -120,6 +153,9 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		#endif
 	}
 
+	/**
+		Creates the handshake object that Discord expects. You shouldn't need to call this directly.
+	*/
 	open func createHandshakeObject() -> [String: Any] {
 		return [
 			"token": client!.token.token,
@@ -136,6 +172,9 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		]
 	}
 
+	/**
+		Disconnects the engine. An `engine.disconnect` is fired on disconnection.
+	*/
 	open func disconnect() {
 		DefaultDiscordLogger.Logger.log("Disconnecting", type: logType)
 
@@ -146,6 +185,12 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		#endif
 	}
 
+	/**
+		Logs that an error occured.
+
+		- Parameters:
+			- message: The error message
+	*/
 	open func error(message: String) {
 		DefaultDiscordLogger.Logger.error(message, type: logType)
 	}
@@ -155,6 +200,14 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		closed = true
 	}
 
+	/**
+		Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
+
+		Override this method if you need to customize payload handling.
+
+		- Parameters:
+			- _: The payload object
+	*/
 	open func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
 		handleQueue.async {
 			self._handleGatewayPayload(payload)
@@ -178,6 +231,15 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		}
 	}
 
+	/**
+		Parses a raw message from the WebSocket. This is the entry point for all Discord events.
+		You shouldn't call this directly.
+
+		Override this method if you need to customize parsing.
+
+		- Parameters:
+			- _: The raw payload string
+	*/
 	open func parseGatewayMessage(_ string: String) {
 		guard let decoded = DiscordGatewayPayload.payloadFromString(string) else {
 			error(message: "Got unknown payload \(string)")
@@ -188,6 +250,11 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		handleGatewayPayload(decoded)
 	}
 
+	/**
+		Sends a heartbeat to Discord. You shouldn't need to call this directly.
+
+		Override this method if you need to customize heartbeats.
+	*/
 	open func sendHeartbeat() {
 		guard !closed else { return }
 
@@ -200,6 +267,11 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		heartbeatQueue.asyncAfter(deadline: time) {[weak self] in self?.sendHeartbeat() }
 	}
 
+	/**
+		Starts the handshake with the Discord server. You shouldn't need to call this directly.
+
+		Override this method if you need to customize the handshake process.
+	*/
 	open func startHandshake() {
 		guard client != nil else {
 			error(message: "Client nil before handshaked")
@@ -210,6 +282,12 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.identify), payload: .object(createHandshakeObject())))
 	}
 
+	/**
+		Starts the engine's heartbeat. You should call this method when you know the interval that Discord expects.
+
+		- Parameters:
+			- seconds: The heartbeat interval
+	*/
 	open func startHeartbeat(seconds: Int) {
 		heartbeatInterval = seconds
 

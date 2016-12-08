@@ -365,7 +365,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	/**
-		Parses a gateway message. You shouldn't need to call this directly.
+		Parses a raw message from the WebSocket. This is the entry point for voice events.
+		You shouldn't call this directly.
 	*/
 	public override func parseGatewayMessage(_ string: String) {
 		guard let decoded = DiscordGatewayPayload.payloadFromString(string, fromGateway: false) else {
