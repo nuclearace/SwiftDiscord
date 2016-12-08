@@ -13,7 +13,7 @@
     <a title="Enums  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html"> Docs</a> (28% documented)</p>
+        <p><a href="index.html"> Docs</a> (37% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -377,9 +377,25 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This enum controls the interface with the Discord REST API.</p>
+
+<p>It defines several endpoint cases which are then used by the various static methods defined on this enum.
+The cases themselves are of little use.</p>
+
+<p>The methods all take a <code><a href="Structs/DiscordToken.html">DiscordToken</a></code> which is used for authentication with the REST API.
+GET methods also take a callback.</p>
+
+<p>All requests through this enum are rate limited.</p>
 
                         <a href="Enums/DiscordEndpoint.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DiscordEndpoint</span> <span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
