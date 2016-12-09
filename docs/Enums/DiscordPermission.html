@@ -14,7 +14,7 @@
     <a title="DiscordPermission Enum Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (51% documented)</p>
+        <p><a href="../index.html"> Docs</a> (57% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -292,7 +292,13 @@
         <section>
           <section class="section">
             <h1>DiscordPermission</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DiscordPermission</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                </div>
+              </div>
+            <p>Represents a Discord Permission. Calculating Permissions involves bitwise operations.</p>
 
           </section>
           <section class="section task-group-section">
@@ -311,8 +317,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The none permission. Mathmatical.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="k">none</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -334,8 +348,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can create invites.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">createInstantInvite</span> <span class="o">=</span> <span class="mh">0x00000001</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -357,8 +379,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can kick members.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">kickMembers</span> <span class="o">=</span> <span class="mh">0x00000002</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -380,8 +410,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can ban members.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">banMembers</span> <span class="o">=</span> <span class="mh">0x00000004</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -403,8 +441,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user is an admin.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">administrator</span> <span class="o">=</span> <span class="mh">0x00000008</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -426,8 +472,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can manage channels.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">manageChannels</span> <span class="o">=</span> <span class="mh">0x00000010</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -449,8 +503,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can manage the guild.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">manageGuild</span> <span class="o">=</span> <span class="mh">0x00000020</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -472,8 +534,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can add reactions.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">addReactions</span> <span class="o">=</span> <span class="mh">0x00000040</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -495,8 +565,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can read messages.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">readMessages</span> <span class="o">=</span> <span class="mh">0x00000400</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -518,8 +596,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can send messages.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">sendMessages</span> <span class="o">=</span> <span class="mh">0x00000800</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -541,8 +627,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can send tts messages.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">sendTTSMessages</span> <span class="o">=</span> <span class="mh">0x00001000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -564,8 +658,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can manage messages.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">manageMessages</span> <span class="o">=</span> <span class="mh">0x00002000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -587,8 +689,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can embed links.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">embedLinks</span> <span class="o">=</span> <span class="mh">0x00004000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -610,8 +720,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can attach files.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">attachFiles</span> <span class="o">=</span> <span class="mh">0x00008000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -633,8 +751,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user read the message history.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">readMessageHistory</span> <span class="o">=</span> <span class="mh">0x00010000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -656,8 +782,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can mention everyone.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">mentionEveryone</span> <span class="o">=</span> <span class="mh">0x00020000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -679,8 +813,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can can add external emojis.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">useExternalEmojis</span> <span class="o">=</span> <span class="mh">0x00040000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -702,8 +844,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can connect to a voice channel.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">connect</span> <span class="o">=</span> <span class="mh">0x00100000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -725,8 +875,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can speak on a voice channel.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">speak</span> <span class="o">=</span> <span class="mh">0x00200000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -748,8 +906,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can mute members.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">muteMembers</span> <span class="o">=</span> <span class="mh">0x00400000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -771,8 +937,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can deafen members.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">deafenMembers</span> <span class="o">=</span> <span class="mh">0x00800000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -794,8 +968,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can move members.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">moveMembers</span> <span class="o">=</span> <span class="mh">0x01000000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -817,8 +999,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can use VAD.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">useVAD</span> <span class="o">=</span> <span class="mh">0x02000000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -840,8 +1030,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can change their nickname.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">changeNickname</span> <span class="o">=</span> <span class="mh">0x04000000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -863,8 +1061,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can manage nicknames.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">manageNicknames</span> <span class="o">=</span> <span class="mh">0x08000000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -886,8 +1092,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This user can manage roles.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">manageRoles</span> <span class="o">=</span> <span class="mh">0x10000000</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>

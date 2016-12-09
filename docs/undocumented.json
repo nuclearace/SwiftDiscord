@@ -1668,296 +1668,44 @@
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 18,
-      "symbol": "DiscordPermission",
-      "symbol_kind": "source.lang.swift.decl.enum",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 19,
-      "symbol": "DiscordPermission.none",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 20,
-      "symbol": "DiscordPermission.createInstantInvite",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 21,
-      "symbol": "DiscordPermission.kickMembers",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 22,
-      "symbol": "DiscordPermission.banMembers",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 23,
-      "symbol": "DiscordPermission.administrator",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 24,
-      "symbol": "DiscordPermission.manageChannels",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 25,
-      "symbol": "DiscordPermission.manageGuild",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 26,
-      "symbol": "DiscordPermission.addReactions",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 27,
-      "symbol": "DiscordPermission.readMessages",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 28,
-      "symbol": "DiscordPermission.sendMessages",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 29,
-      "symbol": "DiscordPermission.sendTTSMessages",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 30,
-      "symbol": "DiscordPermission.manageMessages",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 31,
-      "symbol": "DiscordPermission.embedLinks",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 32,
-      "symbol": "DiscordPermission.attachFiles",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 33,
-      "symbol": "DiscordPermission.readMessageHistory",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 34,
-      "symbol": "DiscordPermission.mentionEveryone",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 35,
-      "symbol": "DiscordPermission.useExternalEmojis",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 36,
-      "symbol": "DiscordPermission.connect",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 37,
-      "symbol": "DiscordPermission.speak",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 38,
-      "symbol": "DiscordPermission.muteMembers",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 39,
-      "symbol": "DiscordPermission.deafenMembers",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 40,
-      "symbol": "DiscordPermission.moveMembers",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 41,
-      "symbol": "DiscordPermission.useVAD",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 42,
-      "symbol": "DiscordPermission.changeNickname",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 43,
-      "symbol": "DiscordPermission.manageNicknames",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 44,
-      "symbol": "DiscordPermission.manageRoles",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 47,
+      "line": 74,
       "symbol": "|(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 51,
+      "line": 78,
       "symbol": "&(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 55,
+      "line": 82,
       "symbol": "|(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 59,
+      "line": 86,
       "symbol": "&(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 63,
+      "line": 90,
       "symbol": "|=(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 67,
+      "line": 94,
       "symbol": "&=(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 71,
-      "symbol": "DiscordPermissionOverwriteType",
-      "symbol_kind": "source.lang.swift.decl.enum",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 72,
-      "symbol": "DiscordPermissionOverwriteType.role",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 73,
-      "symbol": "DiscordPermissionOverwriteType.member",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 80,
-      "symbol": "DiscordPermissionOverwrite",
-      "symbol_kind": "source.lang.swift.decl.struct",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 81,
-      "symbol": "DiscordPermissionOverwrite.id",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 82,
-      "symbol": "DiscordPermissionOverwrite.type",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 84,
-      "symbol": "DiscordPermissionOverwrite.allow",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 85,
-      "symbol": "DiscordPermissionOverwrite.deny",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
-      "line": 87,
-      "symbol": "DiscordPermissionOverwrite.init(id:type:allow:deny:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {

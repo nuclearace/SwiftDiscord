@@ -14,7 +14,7 @@
     <a title="DiscordPermissionOverwrite Struct Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (51% documented)</p>
+        <p><a href="../index.html"> Docs</a> (57% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -292,7 +292,15 @@
         <section>
           <section class="section">
             <h1>DiscordPermissionOverwrite</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordPermissionOverwrite</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
+
+                </div>
+              </div>
+            <p>Represents a permission overwrite for a channel.</p>
+
+<p>The <code>allow</code> and <code>deny</code> properties are bit fields.</p>
 
           </section>
           <section class="section task-group-section">
@@ -311,8 +319,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The snowflake id of this permission overwrite.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -330,8 +346,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The type of this overwrite.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordPermissionOverwriteType.html">DiscordPermissionOverwriteType</a></span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -349,8 +373,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The permissions that this overwrite is allowed to use.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">allow</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -368,8 +400,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The permissions that this overwrite is not allowed to use.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">deny</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -387,8 +427,75 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Creates a new DiscordPermissionOverwrite</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordPermissionOverwriteType.html">DiscordPermissionOverwriteType</a></span><span class="p">,</span> <span class="nv">allow</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">deny</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>id</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of this overwrite</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The type of this overwrite</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>allow</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The permissions allowed</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>deny</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The permissions denied</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
