@@ -15,8 +15,12 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+/// Represents a game type.
 public enum DiscordGameType : Int, JSONRepresentable {
+	/// A regular game.
 	case game
+
+	/// A stream.
 	case stream
 
 	func jsonValue() -> JSONRepresentable {
@@ -29,17 +33,38 @@ public enum DiscordGameType : Int, JSONRepresentable {
 	}
 }
 
+/// Represents a game
 public struct DiscordGame : JSONAble {
+	/// The name of the game.
 	public let name: String
+
+	/// The type of the game.
 	public let type: DiscordGameType
+
+	/// The url of the stream, if a stream.
 	public let url: String?
 
+	/**
+		Creates a new DiscordGame.
+
+		- parameter name: The name of the game
+		- parameter type: The type of the game
+		- parameter url: The url of the stream, if a stream
+	*/
 	public init(name: String, type: DiscordGameType, url: String? = nil) {
 		self.name = name
 		self.type = type
 		self.url = url
 	}
 
+
+	/**
+		Creates a new DiscordGame from a json object.
+
+		Can fail if no game object was given.
+
+		- parameter gameObject: The json game
+	*/
 	public init?(gameObject: [String: Any]?) {
 		guard let game = gameObject else { return nil }
 		guard let name = game["name"] as? String else { return nil }
@@ -50,19 +75,36 @@ public struct DiscordGame : JSONAble {
 	}
 }
 
+/// Represents a presence status.
 public enum DiscordPresenceStatus : String {
+	/// User is idle.
 	case idle = "idle"
+
+	/// User is offline or hidden.
 	case offline = "offline"
+
+	/// User is online.
 	case online = "online"
 }
 
+/// Represents a presence.
 public struct DiscordPresence {
+	/// The snowflake of the guild this presence belongs on.
 	public let guildId: String
+
+	/// The user associated with this presence.
 	public let user: DiscordUser
 
+	/// The game this user is playing, if they are playing a game.
 	public var game: DiscordGame?
+
+	/// This user's nick on this guild.
 	public var nick: String
+
+	/// The roles?
 	public var roles: [String]
+
+	/// The status of this user.
 	public var status: DiscordPresenceStatus
 
 	init(presenceObject: [String: Any], guildId: String) {
@@ -110,10 +152,21 @@ public struct DiscordPresence {
 	}
 }
 
+
+/// Used to send updates to Discord about our presence.
 public struct DiscordPresenceUpdate : JSONAble {
+	/// The time we've been idle for. Nil if not idle
 	public let idleSince: Int?
+
+	/// The game we are currently playing. Nil if not playing a game.
 	public let game: DiscordGame?
 
+	/**
+		Creates a new DiscordPresenceUpdate
+
+		- parameter idleSince: The time we've been idle for. Nil if not idle
+		- parameter game: The game we are currently playing. Nil if not playing a game.
+	*/
 	public init(idleSince: Int?, game: DiscordGame?) {
 		self.idleSince = idleSince
 		self.game = game
