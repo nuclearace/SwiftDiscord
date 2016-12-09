@@ -20,6 +20,14 @@ import Foundation
 public extension DiscordEndpoint {
     // MARK: Users
 
+    /**
+        Creates a direct message channel with a user.
+
+        - parameter with: The user that the channel will be opened with's snowflake id
+        - parameter user: Our snowflake id
+        - parameter with: The token to authenticate to Discord with
+        - parameter callback: The callback function. Takes an optional `DiscordDMChannel`
+    */
     public static func createDM(with: String, user: String, with token: DiscordToken,
             callback: @escaping (DiscordDMChannel?) -> Void) {
         guard let contentData = encodeJSON(["recipient_id": with])?.data(using: .utf8, allowLossyConversion: false)
@@ -54,6 +62,14 @@ public extension DiscordEndpoint {
         })
     }
 
+    /**
+        Gets the direct message channels for a user.
+
+        - parameter user: Our snowflake id
+        - parameter with: The token to authenticate to Discord with
+        - parameter callback: The callback function, taking a dictionary of `DiscordDMChannel` associated by
+                              the recipient's id
+    */
     public static func getDMs(user: String, with token: DiscordToken,
             callback: @escaping ([String: DiscordDMChannel]) -> Void) {
         var request = createRequest(with: token, for: .userChannels, replacing: ["me": user])
@@ -80,6 +96,13 @@ public extension DiscordEndpoint {
         })
     }
 
+    /**
+        Gets guilds the user is in.
+
+        - parameter user: Our snowflake id
+        - parameter with: The token to authenticate to Discord with
+        - parameter callback: The callback function, taking a dictionary of `DiscordUserGuild` associated by guild id
+    */
     public static func getGuilds(user: String, with token: DiscordToken,
             callback: @escaping ([String: DiscordUserGuild]) -> Void) {
         var request = createRequest(with: token, for: .userGuilds, replacing: ["me": user])
