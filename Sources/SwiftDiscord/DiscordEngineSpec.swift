@@ -22,23 +22,64 @@ import Starscream
 import WebSockets
 #endif
 
+/// Declares that a type will be an Engine for the Discord Gateway.
 public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable {
+	// MARK: Properties
+
+	/// A reference to the client this engine is associated with.
 	weak var client: DiscordClientSpec? { get }
 
+	/// The url to connect to.
 	var connectURL: String { get }
+
+	/// The type of engine. Used to correctly fire events.
 	var engineType: String { get }
+
+	/// The last received sequence number. Used for resume/reconnect.
 	var lastSequenceNumber: Int { get }
+
+	/// A reference to the underlying WebSocket. This is a WebSockets.Websocket on Linux and Starscream.WebSocket on
+	/// macOS/iOS
 	var websocket: WebSocket? { get }
 
+	// MARK: Initializers
+
+	/**
+		The main initializer.
+
+		- parameter client: The client this engine should be associated with.
+	*/
 	init(client: DiscordClientSpec)
 
+	// MARK: Methods
+
+	/**
+		Starts the connection to the Discord gateway.
+	*/
 	func connect()
-	func error(message: String)
+
+	/**
+		Disconnects the engine. An `engine.disconnect` is fired on disconnection.
+	*/
 	func disconnect()
+
+	/**
+		Logs that an error occured.
+
+		- parameter message: The error message
+	*/
+	func error(message: String)
+
+	/**
+		Sends a gateway payload to Discord.
+
+		- parameters payload: The payload object.
+	*/
 	func sendGatewayPayload(_ payload: DiscordGatewayPayload)
 }
 
 public extension DiscordEngineSpec {
+	/// Default Implementation.
 	func sendGatewayPayload(_ payload: DiscordGatewayPayload) {
 		guard let payloadString = payload.createPayloadString() else {
 			error(message: "Could not create payload string")
