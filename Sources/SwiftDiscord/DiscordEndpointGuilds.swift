@@ -386,6 +386,7 @@ public extension DiscordEndpoint {
 
         - parameter on: The snowflake id of the guild
         - parameter with: The token to authenticate to Discord with
+        - parameter callback: The callback function, taking an optional `DiscordRole`
     */
     public static func createGuildRole(on guildId: String, with token: DiscordToken,
             callback: @escaping (DiscordRole?) -> Void) {
