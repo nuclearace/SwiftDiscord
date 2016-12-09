@@ -17,9 +17,15 @@
 
 import Foundation
 
+/// Holds a gateway payload, based on its type.
 public enum DiscordGatewayPayloadData {
+	/// Payload is a json object.
 	case object([String: Any])
+
+	/// Payload is an integer.
 	case integer(Int)
+
+	/// Payload is null.
 	case null
 
 	var value: Any {
@@ -51,12 +57,28 @@ extension DiscordGatewayPayloadData {
 	}
 }
 
+/// Represents a gateway payload. This is lowest level of the Discord API.
 public struct DiscordGatewayPayload {
+	/// The payload code.
 	public let code: DiscordGatewayCode
+
+	/// The payload data.
 	public let payload: DiscordGatewayPayloadData
+
+	/// The sequence number of this dispatch.
 	public let sequenceNumber: Int?
+
+	/// The name of this dispatch.
 	public let name: String?
 
+	/**
+		Creates a new DiscordGatewayPayload.
+
+		- parameter code: The code of this payload
+		- parameter payload: The data of this payload
+		- parameter sequenceNumber: An optional sequence number for this dispatch
+		- parameter name: The name of this dispatch
+	*/
 	public init(code: DiscordGatewayCode, payload: DiscordGatewayPayloadData, sequenceNumber: Int? = nil,
 		name: String? = nil) {
 		self.code = code
