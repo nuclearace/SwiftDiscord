@@ -15,8 +15,12 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+/// Top-level enum for gateway codes.
 public enum DiscordGatewayCode {
+	/// Gateway code is a DiscordNormalGatewayCode.
 	case gateway(DiscordNormalGatewayCode)
+
+	/// Gateway code is a DiscordVoiceGatewayCode.
 	case voice(DiscordVoiceGatewayCode)
 
 	var rawCode: Int {
@@ -29,26 +33,46 @@ public enum DiscordGatewayCode {
 	}
 }
 
+/// Represents a regular gateway code
 public enum DiscordNormalGatewayCode : Int {
+	/// Dispatch.
 	case dispatch
+	/// Heartbeat.
 	case heartbeat
+	/// Identify.
 	case identify
+	/// Status Update.
 	case statusUpdate
+	/// Voice Status Update.
 	case voiceStatusUpdate
+	/// Voice Server Ping.
 	case voiceServerPing
+	/// Resume.
 	case resume
+	/// Reconnect.
 	case reconnect
+	/// Request Guild Members.
 	case requestGuildMembers
+	/// Invalid Session.
 	case invalidSession
+	/// Hello.
 	case hello
+	/// HeartbeatAck
 	case heartbeatAck
 }
 
+/// Represents a voice gateway code
 public enum DiscordVoiceGatewayCode : Int {
+	/// Identify.
 	case identify
+	/// Select Protocol.
 	case selectProtocol
+	/// Ready.
 	case ready
+	/// Heartbeat.
 	case heartbeat
+	/// Session Description.
 	case sessionDescription
+	/// Speaking.
 	case speaking
 }
