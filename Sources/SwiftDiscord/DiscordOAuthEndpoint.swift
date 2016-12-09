@@ -17,8 +17,11 @@
 
 import Foundation
 
+/// Represents the Discord OAuth endpoint.
 public enum DiscordOAuthEndpoint : String {
+    /// The base OAuth endpoint.
     case baseURL = "https://discordapp.com/api/oauth2/authorize"
+    /// The bot endpoint.
     case bot = "bot"
 
     private func createURL(getParams: [String: String]) -> URL {
@@ -34,12 +37,18 @@ public enum DiscordOAuthEndpoint : String {
         return com.url!
     }
 
+    /**
+        Creates a url that can be used to authorize a bot.
+
+        - parameter for: The snowflake id of the bot user
+        - parameter with: An array of `DiscordPermission` that this bot should have
+    */
     public static func createBotAddURL(for user: DiscordUser, with permissions: [DiscordPermission]) -> URL? {
         guard user.bot else { return nil }
 
         return DiscordOAuthEndpoint.bot.createURL(getParams: [
-                "permissions": String(permissions.reduce(0, |)),
-                "client_id": user.id
-            ])
+            "permissions": String(permissions.reduce(0, |)),
+            "client_id": user.id
+        ])
     }
 }

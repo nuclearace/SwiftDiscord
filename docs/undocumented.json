@@ -1667,34 +1667,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordOAuthEndpoint.swift",
-      "line": 20,
-      "symbol": "DiscordOAuthEndpoint",
-      "symbol_kind": "source.lang.swift.decl.enum",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordOAuthEndpoint.swift",
-      "line": 21,
-      "symbol": "DiscordOAuthEndpoint.baseURL",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordOAuthEndpoint.swift",
-      "line": 22,
-      "symbol": "DiscordOAuthEndpoint.bot",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordOAuthEndpoint.swift",
-      "line": 37,
-      "symbol": "DiscordOAuthEndpoint.createBotAddURL(for:with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordPermission.swift",
       "line": 18,
       "symbol": "DiscordPermission",
