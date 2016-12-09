@@ -17,53 +17,58 @@
 
 import Foundation
 
+/// Represents the level of verbosity for the logger.
 public enum DiscordLogLevel {
-    /// Log nothing
+    /// Log nothing.
     case none
-    /// Log connecting, disconnecting, events (but not content), etc
+    /// Log connecting, disconnecting, events (but not content), etc.
     case info
-    /// Log content of events
+    /// Log content of events.
     case verbose
-    /// Log everything
+    /// Log everything.
     case debug
 }
 
 public protocol DiscordLogger {
-    /// Whether to log or not
+    /// Whether to log or not.
     var level: DiscordLogLevel { get set }
 
-    /// Normal log messages
+    /// Normal log messages.
     func log(_ message: String, type: String, args: Any...)
 
-    /// More info on log messages
+    /// More info on log messages.
     func verbose(_ message: String, type: String, args: Any...)
 
-    /// Debug messages
+    /// Debug messages.
     func debug(_ message: String, type: String, args: Any...)
 
-    /// Error Messages
+    /// Error Messages.
     func error(_ message: String, type: String, args: Any...)
 }
 
 public extension DiscordLogger {
+    /// Normal log messages.
     func log(_ message: String, type: String, args: Any...) {
         guard level == .info || level == .verbose || level == .debug else { return }
 
         abstractLog("LOG", message: message, type: type, args: args)
     }
 
+    /// More info on log messages.
     func verbose(_ message: String, type: String, args: Any...) {
         guard level == .verbose || level == .debug else { return }
 
         abstractLog("VERBOSE", message: message, type: type, args: args)
     }
 
+    /// Debug messages.
     func debug(_ message: String, type: String, args: Any...) {
         guard level == .debug else { return }
 
         abstractLog("DEBUG", message: message, type: type, args: args)
     }
 
+    /// Error Messages.
     func error(_ message: String, type: String, args: Any...) {
         abstractLog("ERROR", message: message, type: type, args: args)
     }
