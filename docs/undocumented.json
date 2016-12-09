@@ -1,1216 +1,1195 @@
 {
   "warnings": [
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
       "line": 1,
       "symbol": "DiscordDMChannel",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
       "line": 2,
       "symbol": "DiscordDMChannel.id",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
       "line": 3,
       "symbol": "DiscordDMChannel.isPrivate",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
       "line": 4,
       "symbol": "DiscordDMChannel.recipient",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
       "line": 6,
       "symbol": "DiscordDMChannel.lastMessageId",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEmoji.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEmoji.swift",
       "line": 18,
       "symbol": "DiscordEmoji",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEmoji.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEmoji.swift",
       "line": 19,
       "symbol": "DiscordEmoji.id",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEmoji.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEmoji.swift",
       "line": 20,
       "symbol": "DiscordEmoji.managed",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEmoji.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEmoji.swift",
       "line": 21,
       "symbol": "DiscordEmoji.name",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEmoji.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEmoji.swift",
       "line": 22,
       "symbol": "DiscordEmoji.requireColons",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEmoji.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEmoji.swift",
       "line": 23,
       "symbol": "DiscordEmoji.roles",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineClient.swift",
-      "line": 18,
-      "symbol": "DiscordEngineClient",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineClient.swift",
-      "line": 19,
-      "symbol": "DiscordEngineClient.handleEngineDispatch(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineClient.swift",
-      "line": 20,
-      "symbol": "DiscordEngineClient.handleEngineEvent(_:with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineGatewayHandling.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineGatewayHandling.swift",
       "line": null,
       "symbol": "DiscordEngineGatewayHandling",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineGatewayHandling.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineGatewayHandling.swift",
       "line": 20,
       "symbol": "DiscordEngineGatewayHandling",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineGatewayHandling.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineGatewayHandling.swift",
       "line": 21,
       "symbol": "DiscordEngineGatewayHandling.handleDispatch(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineGatewayHandling.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineGatewayHandling.swift",
       "line": 25,
       "symbol": "DiscordEngineGatewayHandling.handleDispatch(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
       "line": 21,
       "symbol": "DiscordEngineHeartbeatable",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
       "line": 22,
       "symbol": "DiscordEngineHeartbeatable.heartbeatInterval",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
       "line": 23,
       "symbol": "DiscordEngineHeartbeatable.heartbeatQueue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
       "line": 25,
       "symbol": "DiscordEngineHeartbeatable.startHeartbeat(seconds:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
       "line": 26,
       "symbol": "DiscordEngineHeartbeatable.sendHeartbeat()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
       "line": null,
       "symbol": "DiscordEngineSpec",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
       "line": 25,
       "symbol": "DiscordEngineSpec",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
       "line": 26,
       "symbol": "DiscordEngineSpec.client",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
       "line": 28,
       "symbol": "DiscordEngineSpec.connectURL",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
       "line": 29,
       "symbol": "DiscordEngineSpec.engineType",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
       "line": 30,
       "symbol": "DiscordEngineSpec.lastSequenceNumber",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
       "line": 31,
       "symbol": "DiscordEngineSpec.websocket",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
       "line": 33,
       "symbol": "DiscordEngineSpec.init(client:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
       "line": 35,
       "symbol": "DiscordEngineSpec.connect()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
       "line": 36,
       "symbol": "DiscordEngineSpec.error(message:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
       "line": 37,
       "symbol": "DiscordEngineSpec.disconnect()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
       "line": 38,
       "symbol": "DiscordEngineSpec.sendGatewayPayload(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
       "line": 42,
       "symbol": "DiscordEngineSpec.sendGatewayPayload(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 20,
       "symbol": "DiscordGuild",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 21,
       "symbol": "DiscordGuild.features",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 22,
       "symbol": "DiscordGuild.id",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 23,
       "symbol": "DiscordGuild.large",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 24,
       "symbol": "DiscordGuild.joinedAt",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 25,
       "symbol": "DiscordGuild.splash",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 26,
       "symbol": "DiscordGuild.unavailable",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 28,
       "symbol": "DiscordGuild.channels",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 29,
       "symbol": "DiscordGuild.emojis",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 30,
       "symbol": "DiscordGuild.memberCount",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 31,
       "symbol": "DiscordGuild.members",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 32,
       "symbol": "DiscordGuild.presences",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 33,
       "symbol": "DiscordGuild.roles",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 34,
       "symbol": "DiscordGuild.voiceStates",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 36,
       "symbol": "DiscordGuild.defaultMessageNotifications",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 37,
       "symbol": "DiscordGuild.embedChannelId",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 38,
       "symbol": "DiscordGuild.embedEnabled",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 39,
       "symbol": "DiscordGuild.icon",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 40,
       "symbol": "DiscordGuild.mfaLevel",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 41,
       "symbol": "DiscordGuild.name",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 42,
       "symbol": "DiscordGuild.ownerId",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 43,
       "symbol": "DiscordGuild.region",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 44,
       "symbol": "DiscordGuild.verificationLevel",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 131,
       "symbol": "DiscordUserGuild",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 132,
       "symbol": "DiscordUserGuild.id",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 133,
       "symbol": "DiscordUserGuild.name",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 134,
       "symbol": "DiscordUserGuild.icon",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 135,
       "symbol": "DiscordUserGuild.owner",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuild.swift",
       "line": 136,
       "symbol": "DiscordUserGuild.permissions",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuildMember.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuildMember.swift",
       "line": 20,
       "symbol": "DiscordGuildMember",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuildMember.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuildMember.swift",
       "line": 21,
       "symbol": "DiscordGuildMember.user",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuildMember.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuildMember.swift",
       "line": 22,
       "symbol": "DiscordGuildMember.joinedAt",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuildMember.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuildMember.swift",
       "line": 24,
       "symbol": "DiscordGuildMember.deaf",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuildMember.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuildMember.swift",
       "line": 25,
       "symbol": "DiscordGuildMember.mute",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuildMember.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuildMember.swift",
       "line": 26,
       "symbol": "DiscordGuildMember.nick",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordGuildMember.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordGuildMember.swift",
       "line": 27,
       "symbol": "DiscordGuildMember.roles",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
       "line": 20,
       "symbol": "DiscordInvite",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
       "line": 21,
       "symbol": "DiscordInvite.code",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
       "line": 22,
       "symbol": "DiscordInvite.guild",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
       "line": 23,
       "symbol": "DiscordInvite.channel",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
       "line": 36,
       "symbol": "DiscordInviteGuild",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
       "line": 37,
       "symbol": "DiscordInviteGuild.id",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
       "line": 38,
       "symbol": "DiscordInviteGuild.name",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
       "line": 39,
       "symbol": "DiscordInviteGuild.splashHash",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
       "line": 48,
       "symbol": "DiscordInviteChannel",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
       "line": 49,
       "symbol": "DiscordInviteChannel.id",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
       "line": 50,
       "symbol": "DiscordInviteChannel.name",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordInvite.swift",
       "line": 51,
       "symbol": "DiscordInviteChannel.type",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordLogger.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordLogger.swift",
       "line": null,
       "symbol": "DiscordLogger",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordLogger.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordLogger.swift",
       "line": 32,
       "symbol": "DiscordLogger",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 20,
       "symbol": "DiscordAttachment",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 21,
       "symbol": "DiscordAttachment.id",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 22,
       "symbol": "DiscordAttachment.filename",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 23,
       "symbol": "DiscordAttachment.height",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 24,
       "symbol": "DiscordAttachment.proxyUrl",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 25,
       "symbol": "DiscordAttachment.size",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 26,
       "symbol": "DiscordAttachment.url",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 27,
       "symbol": "DiscordAttachment.width",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 44,
       "symbol": "DiscordEmbed",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 45,
       "symbol": "DiscordEmbed.Provider",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 46,
       "symbol": "DiscordEmbed.Provider.name",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 47,
       "symbol": "DiscordEmbed.Provider.url",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 50,
       "symbol": "DiscordEmbed.Thumbnail",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 51,
       "symbol": "DiscordEmbed.Thumbnail.height",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 52,
       "symbol": "DiscordEmbed.Thumbnail.proxyUrl",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 53,
       "symbol": "DiscordEmbed.Thumbnail.url",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 54,
       "symbol": "DiscordEmbed.Thumbnail.width",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 57,
       "symbol": "DiscordEmbed.description",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 58,
       "symbol": "DiscordEmbed.provider",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 59,
       "symbol": "DiscordEmbed.thumbnail",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 60,
       "symbol": "DiscordEmbed.title",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 61,
       "symbol": "DiscordEmbed.type",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 62,
       "symbol": "DiscordEmbed.url",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 94,
       "symbol": "DiscordMessage",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 95,
       "symbol": "DiscordMessage.attachments",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 96,
       "symbol": "DiscordMessage.author",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 97,
       "symbol": "DiscordMessage.channelId",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 98,
       "symbol": "DiscordMessage.content",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 99,
       "symbol": "DiscordMessage.editedTimestamp",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 100,
       "symbol": "DiscordMessage.embeds",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 101,
       "symbol": "DiscordMessage.id",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 102,
       "symbol": "DiscordMessage.mentionEveryone",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 103,
       "symbol": "DiscordMessage.mentionRoles",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 104,
       "symbol": "DiscordMessage.mentions",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 105,
       "symbol": "DiscordMessage.timestamp",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 106,
       "symbol": "DiscordMessage.tts",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
       "line": 18,
       "symbol": "DiscordRole",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
       "line": 19,
       "symbol": "DiscordRole.id",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
       "line": 21,
       "symbol": "DiscordRole.color",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
       "line": 22,
       "symbol": "DiscordRole.hoist",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
       "line": 23,
       "symbol": "DiscordRole.managed",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
       "line": 24,
       "symbol": "DiscordRole.mentionable",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
       "line": 25,
       "symbol": "DiscordRole.name",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
       "line": 26,
       "symbol": "DiscordRole.permissions",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordRole.swift",
       "line": 27,
       "symbol": "DiscordRole.position",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordToken.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordToken.swift",
       "line": 18,
       "symbol": "DiscordToken",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordToken.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordToken.swift",
       "line": 23,
       "symbol": "DiscordToken.token",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordToken.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordToken.swift",
       "line": 29,
       "symbol": "DiscordToken.isBot",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordToken.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordToken.swift",
       "line": 33,
       "symbol": "DiscordToken.isBearer",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordToken.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordToken.swift",
       "line": 37,
       "symbol": "DiscordToken.isUser",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
       "line": 18,
       "symbol": "DiscordUser",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
       "line": 19,
       "symbol": "DiscordUser.avatar",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
       "line": 20,
       "symbol": "DiscordUser.bot",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
       "line": 21,
       "symbol": "DiscordUser.discriminator",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
       "line": 22,
       "symbol": "DiscordUser.email",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
       "line": 23,
       "symbol": "DiscordUser.id",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
       "line": 24,
       "symbol": "DiscordUser.mfaEnabled",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
       "line": 25,
       "symbol": "DiscordUser.username",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUser.swift",
       "line": 26,
       "symbol": "DiscordUser.verified",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUtils.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUtils.swift",
       "line": 20,
       "symbol": "DiscordFileUpload",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUtils.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUtils.swift",
       "line": 21,
       "symbol": "DiscordFileUpload.data",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUtils.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUtils.swift",
       "line": 22,
       "symbol": "DiscordFileUpload.filename",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUtils.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUtils.swift",
       "line": 23,
       "symbol": "DiscordFileUpload.mimeType",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUtils.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUtils.swift",
       "line": 25,
       "symbol": "DiscordFileUpload.init(data:filename:mimeType:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUtils.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordUtils.swift",
       "line": 47,
       "symbol": "&<<(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineClient.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineClient.swift",
       "line": 20,
       "symbol": "DiscordVoiceEngineClient",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineClient.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineClient.swift",
       "line": 21,
       "symbol": "DiscordVoiceEngineClient.onVoiceData",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineClient.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineClient.swift",
       "line": 23,
       "symbol": "DiscordVoiceEngineClient.handleVoiceData(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
       "line": null,
       "symbol": "DiscordVoiceEngineSpec",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
       "line": 25,
       "symbol": "DiscordVoiceEngineSpec",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
       "line": 26,
       "symbol": "DiscordVoiceEngineSpec.encoder",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
       "line": 27,
       "symbol": "DiscordVoiceEngineSpec.secret",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
       "line": 29,
       "symbol": "DiscordVoiceEngineSpec.requestFileHandleForWriting()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
       "line": 30,
       "symbol": "DiscordVoiceEngineSpec.requestNewEncoder()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
       "line": 31,
       "symbol": "DiscordVoiceEngineSpec.send(_:doneHandler:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
       "line": 32,
       "symbol": "DiscordVoiceEngineSpec.sendVoiceData(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
       "line": 36,
       "symbol": "DiscordVoiceEngineSpec.send(_:doneHandler:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
       "line": 18,
       "symbol": "DiscordVoiceState",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
       "line": 19,
       "symbol": "DiscordVoiceState.channelId",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
       "line": 20,
       "symbol": "DiscordVoiceState.guildId",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
       "line": 21,
       "symbol": "DiscordVoiceState.sessionId",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
       "line": 22,
       "symbol": "DiscordVoiceState.userId",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
       "line": 24,
       "symbol": "DiscordVoiceState.deaf",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
       "line": 25,
       "symbol": "DiscordVoiceState.mute",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
       "line": 26,
       "symbol": "DiscordVoiceState.selfDeaf",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
       "line": 27,
       "symbol": "DiscordVoiceState.selfMute",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
+      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
       "line": 28,
       "symbol": "DiscordVoiceState.suppress",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     }
   ],
-  "source_directory": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord"
+  "source_directory": "/Users/erik.little/Projects/SwiftDiscord"
 }

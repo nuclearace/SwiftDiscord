@@ -15,12 +15,26 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+/// Declares a type will be a client of a DiscordEngine.
 public protocol DiscordEngineClient {
+    /**
+        Handles engine dispatch events.
+
+        - parameter data: The event data
+    */
 	func handleEngineDispatch(_ data: DiscordGatewayPayload)
+
+    /**
+        Handles engine events.
+
+        - parameter event: The event name
+        - parameter with: The event data
+    */
 	func handleEngineEvent(_ event: String, with data: [Any])
 }
 
-extension DiscordEngineClient {
+public extension DiscordEngineClient {
+    /// Default implementation.
 	func handleEngineEvent(_ event: String, with data: [Any]) {
 		print("Got engine event \(event) with \(data)")
 	}
