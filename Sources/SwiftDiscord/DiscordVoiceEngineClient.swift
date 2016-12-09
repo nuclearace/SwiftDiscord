@@ -17,8 +17,19 @@
 
 import Foundation
 
+/// Declares that a type will be a client for a voice engine.
 public protocol DiscordVoiceEngineClient {
+    // MARK: Properties
+
+    /// A function that will be used to customize what happens to the voice data.
     var onVoiceData: (DiscordVoiceData) -> Void { get set }
 
+    // MARK: Methods
+
+    /**
+        Handles received voice data from a voice engine.
+
+        - parameter data: The voice data that was received
+    */
     func handleVoiceData(_ data: DiscordVoiceData)
 }

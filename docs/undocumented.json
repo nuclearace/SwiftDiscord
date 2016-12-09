@@ -869,27 +869,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineClient.swift",
-      "line": 20,
-      "symbol": "DiscordVoiceEngineClient",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineClient.swift",
-      "line": 21,
-      "symbol": "DiscordVoiceEngineClient.onVoiceData",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineClient.swift",
-      "line": 23,
-      "symbol": "DiscordVoiceEngineClient.handleVoiceData(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
       "line": null,
       "symbol": "DiscordVoiceEngineSpec",
