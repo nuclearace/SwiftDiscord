@@ -471,7 +471,7 @@ public extension DiscordEndpoint {
 
     // Pinned Messages
     /**
-        Adds a pinned message
+        Adds a pinned message.
 
         - parameter messageId: The message that is to be pinned's snowflake id
         - parameter on: The channel that we are adding on
@@ -491,7 +491,7 @@ public extension DiscordEndpoint {
     }
 
     /**
-        Unpins a message
+        Unpins a message.
 
         - parameter messageId: The message that is to be unpinned's snowflake id
         - parameter on: The channel that we are unpinning on

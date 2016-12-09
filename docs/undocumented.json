@@ -988,20 +988,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointInvites.swift",
-      "line": 23,
-      "symbol": "DiscordEndpoint.acceptInvite(_:with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointInvites.swift",
-      "line": 35,
-      "symbol": "DiscordEndpoint.getInvite(_:with:callback:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointUser.swift",
       "line": 23,
       "symbol": "DiscordEndpoint.createDM(with:user:with:callback:)",

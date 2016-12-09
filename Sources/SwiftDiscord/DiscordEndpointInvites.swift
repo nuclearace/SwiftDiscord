@@ -20,6 +20,12 @@ import Foundation
 public extension DiscordEndpoint {
     // MARK: Invites
 
+    /**
+        Accepts an invite.
+
+        - parameter invite: The invite code to accept
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func acceptInvite(_ invite: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .invites, replacing: [
             "invite.code": invite,
@@ -32,6 +38,13 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    /**
+        Gets an invite.
+
+        - parameter invite: The invite code to accept
+        - parameter with: The token to authenticate to Discord with
+        - parameter callback: The callback function, takes an optional `DiscordInvite`
+    */
     public static func getInvite(_ invite: String, with token: DiscordToken,
             callback: @escaping (DiscordInvite?) -> Void) {
         var request = createRequest(with: token, for: .invites, replacing: [
