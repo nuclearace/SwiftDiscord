@@ -27,6 +27,8 @@ import Dispatch
 	The base class for Discord WebSocket communications.
 */
 open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, DiscordEngineHeartbeatable {
+	// MARK: Properties
+
 	/// The url for the gateway.
 	open var connectURL: String {
 		return DiscordEndpointGateway.gatewayURL
@@ -65,6 +67,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
 	private var closed = false
 
+	// MARK: Initializers
+
 	/**
 		Creates a new DiscordEngine.
 
@@ -73,6 +77,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	public required init(client: DiscordClientSpec) {
 		self.client = client
 	}
+
+	// MARK: Methods
 
 	/**
 		Attaches the WebSocket handlers that listen for text/connects/disconnects/etc

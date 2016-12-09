@@ -42,6 +42,8 @@ enum DiscordVoiceEngineError : Error {
 	packets that are sent and received.
 */
 public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
+	// MARK: Properties
+
 	/// The voice url
 	public override var connectURL: String {
 		return "wss://" + endpoint.components(separatedBy: ":")[0]
@@ -116,6 +118,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	private var startTime = 0
 
+	// MARK: Initializers
+
 	/**
 		Constructs a new VoiceEngine
 
@@ -147,6 +151,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	deinit {
 		disconnect()
 	}
+
+	// MARK: Methods
 
 	private func audioSleep(_ count: Int) {
 		let inner = (startTime + count * 20) - currentUnixTime
@@ -451,7 +457,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		youtube.launch()
 		```
 
-		- Returns: An optional containing a FileHandle that can be written to, or nil if there is no encoder.
+		- returns: An optional containing a FileHandle that can be written to, or nil if there is no encoder.
 	*/
 	public func requestFileHandleForWriting() -> FileHandle? {
 		return encoder?.readPipe.fileHandleForWriting

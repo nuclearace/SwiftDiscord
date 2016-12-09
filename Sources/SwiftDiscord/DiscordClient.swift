@@ -20,6 +20,8 @@ import Dispatch
 
 ///The base class for SwiftDiscord. Most interaction with Discord will be done through this class.
 open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, DiscordEndpointConsumer {
+	// MARK: Properties
+
 	/// The Discord JWT token.
 	public let token: DiscordToken
 
@@ -62,6 +64,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	private var joiningVoiceChannel = false
 	private var voiceServerInformation: [String: Any]?
 
+	// MARK: Initializers
+
 	/**
 		- parameter token: The discord token of the user
 		- parameter configuration: An array of DiscordClientOption that can be used to customize the client
@@ -81,6 +85,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			}
 		}
 	}
+
+	// MARK: Methods
 
 	/**
 		Attaches the DiscordEngine.
