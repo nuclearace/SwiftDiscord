@@ -78,41 +78,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
-      "line": 21,
-      "symbol": "DiscordEngineHeartbeatable",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
-      "line": 22,
-      "symbol": "DiscordEngineHeartbeatable.heartbeatInterval",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
-      "line": 23,
-      "symbol": "DiscordEngineHeartbeatable.heartbeatQueue",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
-      "line": 25,
-      "symbol": "DiscordEngineHeartbeatable.startHeartbeat(seconds:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
-      "line": 26,
-      "symbol": "DiscordEngineHeartbeatable.sendHeartbeat()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineSpec.swift",
       "line": null,
       "symbol": "DiscordEngineSpec",

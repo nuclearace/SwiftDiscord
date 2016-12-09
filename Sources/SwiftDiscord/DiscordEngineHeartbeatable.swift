@@ -18,10 +18,27 @@
 import Foundation
 import Dispatch
 
+/// Declares that a type will send heartbeats to a Discord gateway.
 public protocol DiscordEngineHeartbeatable {
+    // MARK: Properties
+
+    /// The number of seconds between heartbeats.
 	var heartbeatInterval: Int { get }
+
+    /// The `DispatchQueue` that the heartbeats are sent on.
 	var heartbeatQueue: DispatchQueue { get }
 
+    // MARK: Methods
+
+    /**
+        Starts sending heartbeats. After calling this heartbeating should be automatic.
+
+        - parameter seconds: The number of seconds between heartbeats
+    */
 	func startHeartbeat(seconds: Int)
+
+    /**
+        Sends a heartbeat to the gateway. This should be called from a timer/dispatch.after.
+    */
 	func sendHeartbeat()
 }
