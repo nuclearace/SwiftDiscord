@@ -24,6 +24,13 @@ public extension DiscordEndpoint {
     // MARK: Guilds
 
     // TODO create guild
+
+    /**
+        Deletes the specified guild.
+
+        - parameter guildId: The snowflake id of the guild
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func deleteGuild(_ guildId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .guilds, replacing: [
             "guild.id": guildId,
@@ -36,6 +43,13 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    /**
+        Modifies the specified guild.
+
+        - parameter guildId: The snowflake id of the guild
+        - parameter options: An array of `DiscordEndpointOptions.ModifyGuild` options
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild],
             with token: DiscordToken) {
         var modifyJSON: [String: Any] = [:]
@@ -82,6 +96,14 @@ public extension DiscordEndpoint {
     }
 
     // Guild Channels
+
+    /**
+        Creates a guild channel.
+
+        - parameter guildId: The snowflake id of the guild
+        - parameter options: An array of `DiscordEndpointOptions.GuildCreateChannel` options
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func createGuildChannel(_ guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel],
             with token: DiscordToken) {
         var createJSON: [String: Any] = [:]
@@ -119,6 +141,13 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    /**
+        Gets the channels on a guild.
+
+        - parameter guildId: The snowflake id of the guild
+        - parameter with: The token to authenticate to Discord with
+        - parameter callback: The callback function, taking an array of `DiscordGuildChannel`
+    */
     public static func getGuildChannels(_ guildId: String, with token: DiscordToken,
             callback: @escaping ([DiscordGuildChannel]) -> Void) {
         var request = createRequest(with: token, for: .guildChannels, replacing: ["guild.id": guildId])
@@ -145,6 +174,14 @@ public extension DiscordEndpoint {
         })
     }
 
+    /**
+        Modifies the position of a channel.
+
+        - parameter on: The snowflake id of the guild
+        - parameter channelId: The snowflake id of the channel
+        - parameter position: The new position of the channel
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int,
             with token: DiscordToken) {
         let modifyJSON: [String: Any] = [
@@ -171,6 +208,15 @@ public extension DiscordEndpoint {
     }
 
     // Guild Members
+
+    /**
+        Gets the specified guild member.
+
+        - parameter by: The snowflake id of the member
+        - parameter on: The snowflake id of the guild
+        - parameter with: The token to authenticate to Discord with
+        - parameter callback: The callback function containing an optional `DiscordGuildMember`
+    */
     public static func getGuildMember(by id: String, on guildId: String, with token: DiscordToken,
         callback: @escaping (DiscordGuildMember?) -> Void) {
         var request = createRequest(with: token, for: .guildMember, replacing: [
@@ -200,6 +246,14 @@ public extension DiscordEndpoint {
         })
     }
 
+    /**
+        Gets the members on a guild.
+
+        - parameter on: The snowflake id of the guild
+        - parameter options: An array of `DiscordEndpointOptions.GuildGetMembers` options
+        - parameter with: The token to authenticate to Discord with
+        - parameter callback: The callback function, taking an array of `DiscordGuildMember`
+    */
     public static func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
             with token: DiscordToken, callback: @escaping ([DiscordGuildMember]) -> Void) {
         var getParams: [String: String] = [:]
@@ -241,6 +295,14 @@ public extension DiscordEndpoint {
     }
 
     // Guild Bans
+
+    /**
+        Gets the bans on a guild.
+
+        - parameter for: The snowflake id of the guild
+        - parameter with: The token to authenticate to Discord with
+        - parameter callback: The callback function, taking an array of `DiscordUser`
+    */
     public static func getGuildBans(for guildId: String, with token: DiscordToken,
             callback: @escaping ([DiscordUser]) -> Void) {
         var request = createRequest(with: token, for: .guildBans, replacing: ["guild.id": guildId])
@@ -267,6 +329,14 @@ public extension DiscordEndpoint {
         })
     }
 
+    /**
+        Creates a guild ban.
+
+        - parameter userId: The snowflake id of the user
+        - parameter on: The snowflake id of the guild
+        - parameter deleteMessageDays: The number of days to delete this user's messages
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func guildBan(userId: String, on guildId: String, deleteMessageDays: Int, with token: DiscordToken) {
         let banJSON = ["delete-message-days": deleteMessageDays]
 
@@ -289,6 +359,13 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    /**
+        Removes a guild ban.
+
+        - parameter for: The snowflake id of the user
+        - parameter on: The snowflake id of the guild
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func removeGuildBan(for userId: String, on guildId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .guildBanUser, replacing: [
             "guild.id": guildId,
@@ -303,6 +380,13 @@ public extension DiscordEndpoint {
     }
 
     // Guild Roles
+
+    /**
+        Creates a role on a guild.
+
+        - parameter on: The snowflake id of the guild
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func createGuildRole(on guildId: String, with token: DiscordToken,
             callback: @escaping (DiscordRole?) -> Void) {
           var request = createRequest(with: token, for: .guildRoles, replacing: ["guild.id": guildId])
@@ -329,6 +413,13 @@ public extension DiscordEndpoint {
           })
     }
 
+    /**
+        Gets the roles on a guild.
+
+        - parameter for: The snowflake id of the guild
+        - parameter with: The token to authenticate to Discord with
+        - parameter callback: The callback function, taking an array of `DiscordRole`
+    */
     public static func getGuildRoles(for guildId: String, with token: DiscordToken,
             callback: @escaping ([DiscordRole]) -> Void) {
           var request = createRequest(with: token, for: .guildRoles, replacing: ["guild.id": guildId])
@@ -355,6 +446,13 @@ public extension DiscordEndpoint {
           })
     }
 
+    /**
+        Edits the specified role.
+
+        - parameter permissionOverwrite: The new DiscordRole
+        - parameter on: The guild that we are editing on
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func modifyGuildRole(_ role: DiscordRole, on guildId: String, with token: DiscordToken) {
         let roleJSON = role.json
 
@@ -377,6 +475,13 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    /**
+        Removes a guild role.
+
+        - parameter roleId: The snowflake id of the role
+        - parameter on: The snowflake id of the guild
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func removeGuildRole(_ roleId: String, on guildId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .guildRole, replacing: [
             "guild.id": guildId,
