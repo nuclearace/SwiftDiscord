@@ -358,125 +358,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 21,
-      "symbol": "DiscordEndpoint.getChannel(_:with:callback:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 47,
-      "symbol": "DiscordEndpoint.deleteChannel(_:with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 59,
-      "symbol": "DiscordEndpoint.modifyChannel(_:options:with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 97,
-      "symbol": "DiscordEndpoint.bulkDeleteMessages(_:on:with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 120,
-      "symbol": "DiscordEndpoint.deleteMessage(_:on:with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 133,
-      "symbol": "DiscordEndpoint.editMessage(_:on:content:with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 158,
-      "symbol": "DiscordEndpoint.getMessages(for:with:options:callback:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 200,
-      "symbol": "DiscordEndpoint.sendMessage(_:with:to:tts:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 222,
-      "symbol": "DiscordEndpoint.sendFile(_:content:with:to:tts:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 241,
-      "symbol": "DiscordEndpoint.triggerTyping(on:with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 252,
-      "symbol": "DiscordEndpoint.deleteChannelPermission(_:on:with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 265,
-      "symbol": "DiscordEndpoint.editChannelPermission(_:on:with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 289,
-      "symbol": "DiscordEndpoint.createInvite(for:options:with:callback:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 339,
-      "symbol": "DiscordEndpoint.getInvites(for:with:callback:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 368,
-      "symbol": "DiscordEndpoint.addPinnedMessage(_:on:with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 381,
-      "symbol": "DiscordEndpoint.deletePinnedMessage(_:on:with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointChannels.swift",
-      "line": 394,
-      "symbol": "DiscordEndpoint.getPinnedMessages(for:with:callback:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointConsumer.swift",
       "line": null,
       "symbol": "DiscordEndpointConsumer",
@@ -1010,133 +891,133 @@
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointGuilds.swift",
-      "line": 25,
+      "line": 27,
       "symbol": "DiscordEndpoint.deleteGuild(_:with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointGuilds.swift",
-      "line": 37,
+      "line": 39,
       "symbol": "DiscordEndpoint.modifyGuild(_:options:with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointGuilds.swift",
-      "line": 83,
+      "line": 85,
       "symbol": "DiscordEndpoint.createGuildChannel(_:options:with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointGuilds.swift",
-      "line": 120,
+      "line": 122,
       "symbol": "DiscordEndpoint.getGuildChannels(_:with:callback:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointGuilds.swift",
-      "line": 146,
+      "line": 148,
       "symbol": "DiscordEndpoint.modifyGuildChannelPosition(on:channelId:position:with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointGuilds.swift",
-      "line": 172,
+      "line": 174,
       "symbol": "DiscordEndpoint.getGuildMember(by:on:with:callback:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointGuilds.swift",
-      "line": 201,
+      "line": 203,
       "symbol": "DiscordEndpoint.getGuildMembers(on:options:with:callback:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointGuilds.swift",
-      "line": 242,
+      "line": 244,
       "symbol": "DiscordEndpoint.getGuildBans(for:with:callback:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointGuilds.swift",
-      "line": 268,
+      "line": 270,
       "symbol": "DiscordEndpoint.guildBan(userId:on:deleteMessageDays:with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointGuilds.swift",
-      "line": 290,
+      "line": 292,
       "symbol": "DiscordEndpoint.removeGuildBan(for:on:with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointGuilds.swift",
-      "line": 304,
+      "line": 306,
       "symbol": "DiscordEndpoint.createGuildRole(on:with:callback:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointGuilds.swift",
-      "line": 330,
+      "line": 332,
       "symbol": "DiscordEndpoint.getGuildRoles(for:with:callback:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointGuilds.swift",
-      "line": 356,
+      "line": 358,
       "symbol": "DiscordEndpoint.modifyGuildRole(_:on:with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointGuilds.swift",
-      "line": 378,
+      "line": 380,
       "symbol": "DiscordEndpoint.removeGuildRole(_:on:with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointInvites.swift",
-      "line": 21,
+      "line": 23,
       "symbol": "DiscordEndpoint.acceptInvite(_:with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointInvites.swift",
-      "line": 33,
+      "line": 35,
       "symbol": "DiscordEndpoint.getInvite(_:with:callback:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointUser.swift",
-      "line": 21,
+      "line": 23,
       "symbol": "DiscordEndpoint.createDM(with:user:with:callback:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointUser.swift",
-      "line": 55,
+      "line": 57,
       "symbol": "DiscordEndpoint.getDMs(user:with:callback:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordEndpointUser.swift",
-      "line": 81,
+      "line": 83,
       "symbol": "DiscordEndpoint.getGuilds(user:with:callback:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"

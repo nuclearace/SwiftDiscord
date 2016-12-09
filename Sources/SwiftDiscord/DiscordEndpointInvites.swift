@@ -18,6 +18,8 @@
 import Foundation
 
 public extension DiscordEndpoint {
+    // MARK: Invites
+
     public static func acceptInvite(_ invite: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .invites, replacing: [
             "invite.code": invite,

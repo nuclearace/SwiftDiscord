@@ -18,6 +18,8 @@
 import Foundation
 
 public extension DiscordEndpoint {
+    // MARK: Users
+
     public static func createDM(with: String, user: String, with token: DiscordToken,
             callback: @escaping (DiscordDMChannel?) -> Void) {
         guard let contentData = encodeJSON(["recipient_id": with])?.data(using: .utf8, allowLossyConversion: false)

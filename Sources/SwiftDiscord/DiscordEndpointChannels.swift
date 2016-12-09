@@ -18,6 +18,15 @@
 import Foundation
 
 public extension DiscordEndpoint {
+    // MARK: Channels
+
+    /**
+        Gets the specified channel.
+
+        - parameter channelId: The snowflake id of the channel
+        - parameter with: The token to authenticate to Discord with
+        - parameter callback: The callback function containing an optional `DiscordGuildChannel`
+    */
     public static func getChannel(_ channelId: String, with token: DiscordToken,
             callback: @escaping (DiscordGuildChannel?) -> Void) {
         var request = createRequest(with: token, for: .channel, replacing: ["channel.id": channelId])
@@ -44,6 +53,12 @@ public extension DiscordEndpoint {
         })
     }
 
+    /**
+        Deletes the specified channel.
+
+        - parameter channelId: The snowflake id of the channel
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func deleteChannel(_ channelId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .channel, replacing: [
             "channel.id": channelId,
@@ -56,6 +71,13 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    /**
+        Modifies the specified channel.
+
+        - parameter channelId: The snowflake id of the channel
+        - parameter options: An array of `DiscordEndpointOptions.ModifyChannel` options
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel],
             with token: DiscordToken) {
         var modifyJSON: [String: Any] = [:]
@@ -94,6 +116,14 @@ public extension DiscordEndpoint {
     }
 
     // Messages
+
+    /**
+        Deletes a bunch of messages at once.
+
+        - parameter messages: An array of message snowflake ids that are to be deleted
+        - parameter on: The channel that we are deleting on
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func bulkDeleteMessages(_ messages: [String], on channelId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .bulkMessageDelete, replacing: [
             "channel.id": channelId
@@ -117,6 +147,13 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    /**
+        Deletes a single message
+
+        - parameter messageId: The message that is to be deleted's snowflake id
+        - parameter on: The channel that we are deleting on
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func deleteMessage(_ messageId: String, on channelId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .channelMessage, replacing: [
             "channel.id": channelId,
@@ -130,6 +167,14 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    /**
+        Edits a message
+
+        - parameter messageId: The message that is to be edited's snowflake id
+        - parameter on: The channel that we are editing on
+        - parameter content: The new content of the message
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func editMessage(_ messageId: String, on channelId: String, content: String,
             with token: DiscordToken) {
         var request = createRequest(with: token, for: .channelMessage, replacing: [
@@ -155,6 +200,14 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    /**
+        Gets a group of messages according to the specified options.
+
+        - parameter for: The channel that we are getting on
+        - parameter with: The token to authenticate to Discord with
+        - parameter options: An array of `DiscordEndpointOptions.GetMessage` options
+        - parameter callback: The callback function, taking an array of `DiscordMessages`
+    */
     public static func getMessages(for channel: String, with token: DiscordToken,
             options: [DiscordEndpointOptions.GetMessage], callback: @escaping ([DiscordMessage]) -> Void) {
         var getParams: [String: String] = [:]
@@ -197,6 +250,14 @@ public extension DiscordEndpoint {
         })
     }
 
+    /**
+        Sends a message to the specified channel.
+
+        - parameter content: The content of the message
+        - parameter with: The token to authenticate to Discord with
+        - parameter to: The snowflake id of the channel to send to
+        - parameter tts: Whether this message should be read a text-to-speech message
+    */
     public static func sendMessage(_ content: String, with token: DiscordToken, to channel: String, tts: Bool) {
         let messageObject: [String: Any] = [
             "content": content,
@@ -219,6 +280,15 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    /**
+        Sends a file with an optional message to the specified channel.
+
+        - parameter file: The file to send
+        - parameter content: The content of the message
+        - parameter with: The token to authenticate to Discord with
+        - parameter to: The snowflake id of the channel to send to
+        - parameter tts: Whether this message should be read a text-to-speech message
+    */
     public static func sendFile(_ file: DiscordFileUpload, content: String, with token: DiscordToken,
             to channel: String, tts: Bool) {
         var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel])
@@ -238,6 +308,12 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    /**
+        Triggers typing on the specified channel.
+
+        - parameter on: The snowflake id of the channel to send to
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func triggerTyping(on channelId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .typing, replacing: ["channel.id": channelId])
 
@@ -249,6 +325,13 @@ public extension DiscordEndpoint {
     }
 
     // Permissions
+    /**
+        Deletes a channel permission
+
+        - parameter overwriteId: The permission overwrite that is to be deleted's snowflake id
+        - parameter on: The channel that we are deleting on
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func deleteChannelPermission(_ overwriteId: String, on channelId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .channelPermission, replacing: [
             "channel.id": channelId,
@@ -262,6 +345,13 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    /**
+        Edits the specified permission overwrite.
+
+        - parameter permissionOverwrite: The new DiscordPermissionOverwrite
+        - parameter on: The channel that we are editing on
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String,
             with token: DiscordToken) {
         let overwriteJSON = permissionOverwrite.json
@@ -286,6 +376,14 @@ public extension DiscordEndpoint {
     }
 
     // Invites
+    /**
+        Creates an invite for a channel/guild.
+
+        - parameter for: The channel that we are creating for
+        - parameter options: An array of `DiscordEndpointOptions.CreateInvite` options
+        - parameter with: The token to authenticate to Discord with
+        - parameter callback: The callback function. Takes an optional `DiscordInvite`
+    */
     public static func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
             with token: DiscordToken, callback: @escaping (DiscordInvite?) -> Void) {
         var inviteJSON: [String: Any] = [:]
@@ -336,6 +434,13 @@ public extension DiscordEndpoint {
         })
     }
 
+    /**
+        Gets the invites for a channel.
+
+        - parameter for: The channel that we are getting on
+        - parameter with: The token to authenticate to Discord with
+        - parameter callback: The callback function, taking an array of `DiscordInvite`
+    */
     public static func getInvites(for channelId: String, with token: DiscordToken,
             callback: @escaping ([DiscordInvite]) -> Void) {
         var request = createRequest(with: token, for: .channelInvites, replacing: [
@@ -365,6 +470,13 @@ public extension DiscordEndpoint {
     }
 
     // Pinned Messages
+    /**
+        Adds a pinned message
+
+        - parameter messageId: The message that is to be pinned's snowflake id
+        - parameter on: The channel that we are adding on
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func addPinnedMessage(_ messageId: String, on channelId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .pinnedMessage, replacing: [
             "channel.id": channelId,
@@ -378,6 +490,13 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    /**
+        Unpins a message
+
+        - parameter messageId: The message that is to be unpinned's snowflake id
+        - parameter on: The channel that we are unpinning on
+        - parameter with: The token to authenticate to Discord with
+    */
     public static func deletePinnedMessage(_ messageId: String, on channelId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .pinnedMessage, replacing: [
             "channel.id": channelId,
@@ -391,6 +510,13 @@ public extension DiscordEndpoint {
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
     }
 
+    /**
+        Gets the pinned messages for a channel.
+
+        - parameter for: The channel that we are getting the pinned messages for
+        - parameter with: The token to authenticate to Discord with
+        - parameter callback: The callback function, taking an array of `DiscordMessages`
+    */
     public static func getPinnedMessages(for channelId: String, with token: DiscordToken,
             callback: @escaping ([DiscordMessage]) -> Void) {
         var request = createRequest(with: token, for: .pins, replacing: ["channel.id": channelId])

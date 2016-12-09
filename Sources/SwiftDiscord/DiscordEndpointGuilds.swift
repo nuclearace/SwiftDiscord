@@ -21,6 +21,8 @@
 // TODO Guild embeds
 // TODO Guild batch modify roles
 public extension DiscordEndpoint {
+    // MARK: Guilds
+
     // TODO create guild
     public static func deleteGuild(_ guildId: String, with token: DiscordToken) {
         var request = createRequest(with: token, for: .guilds, replacing: [
