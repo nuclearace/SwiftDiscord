@@ -642,7 +642,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		Joins a voice channel. A `voiceEngine.ready` event will be fired when the client has joined the channel.
 
 		- parameter channelId: The snowflake of the voice channel you would like to join
-
 	*/
 	open func joinVoiceChannel(_ channelId: String) {
         #if !os(iOS)

@@ -18,23 +18,91 @@
 import Foundation
 import Dispatch
 
+/// Protocol that abstracts a DiscordClient
 public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngineClient {
+	/// Whether or not this client is connected.
 	var connected: Bool { get }
+
+	/// The guilds that this user is in.
 	var guilds: [String: DiscordGuild] { get }
+
+	/// The queue that callbacks are called on. In addition, any reads from any properties of DiscordClient should be
+	/// made on this queue, as this is the queue where modifications on them are made.
 	var handleQueue: DispatchQueue { get set }
-	var relationships: [[String: Any]] { get } // TODO make this a [DiscordRelationship]
+
+	/// The relationships this user has. Only valid for non-bot users.
+	var relationships: [[String: Any]] { get }
+
+	/// The Discord JWT token.
 	var token: DiscordToken { get }
+
+	/// The DiscordUser this client is connected to.
 	var user: DiscordUser? { get }
+
+	/// The voice state for this user, if they are in a voice channel.
 	var voiceState: DiscordVoiceState? { get }
 
+	/**
+		- parameter token: The discord token of the user
+		- parameter configuration: An array of DiscordClientOption that can be used to customize the client
+
+	*/
 	init(token: DiscordToken, configuration: [DiscordClientOption])
 
+	/**
+		Begins the connection to Discord. Once this is called, wait for a `connect` event before trying to interact
+		with the client.
+	*/
 	func connect()
+
+	/**
+		Disconnects from Discord. A `disconnect` event is fired when the client has successfully disconnected.
+	*/
 	func disconnect()
+
+	/**
+		Adds event handlers to the client.
+
+		- parameter event: The event to listen for
+		- parameter callback: The callback that will be executed when this event is fired
+	*/
 	func on(_ event: String, callback: @escaping ([Any]) -> Void)
+
+	/**
+		The main event handle method. Calls the associated event handler.
+		You shouldn't need to call this event directly.
+
+		Override to provide custom event handling functionality.
+
+		- parameter event: The event being fired
+		- parameter with: The data from the event
+	*/
 	func handleEvent(_ event: String, with data: [Any])
+
+	/**
+		Joins a voice channel. A `voiceEngine.ready` event will be fired when the client has joined the channel.
+
+		- parameter channelId: The snowflake of the voice channel you would like to join
+	*/
 	func joinVoiceChannel(_ channelId: String)
+
+	/**
+		Leaves the currently connected voice channel.
+	*/
 	func leaveVoiceChannel()
+
+	/**
+		Requests all users from Discord for the guild specified. Use this when you need to get all users on a large
+		guild. Multiple `guildMembersChunk` will be fired.
+
+		- parameter on: The snowflake of the guild you wish to request all users.
+	*/
 	func requestAllUsers(on guildId: String)
+
+	/**
+		Sets the user's presence.
+
+		- parameter presence: The new presence object
+	*/
 	func setPresence(_ presence: DiscordPresenceUpdate)
 }
