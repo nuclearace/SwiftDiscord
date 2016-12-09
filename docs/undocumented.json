@@ -78,34 +78,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineGatewayHandling.swift",
-      "line": null,
-      "symbol": "DiscordEngineGatewayHandling",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineGatewayHandling.swift",
-      "line": 20,
-      "symbol": "DiscordEngineGatewayHandling",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineGatewayHandling.swift",
-      "line": 21,
-      "symbol": "DiscordEngineGatewayHandling.handleDispatch(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineGatewayHandling.swift",
-      "line": 25,
-      "symbol": "DiscordEngineGatewayHandling.handleDispatch(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordEngineHeartbeatable.swift",
       "line": 21,
       "symbol": "DiscordEngineHeartbeatable",

@@ -17,11 +17,18 @@
 
 import Foundation
 
+/// Declares that a type will handle gateway dispatches.
 public protocol DiscordEngineGatewayHandling : DiscordEngineSpec, DiscordEngineHeartbeatable {
+    /**
+        Handles a dispatch payload.
+
+        - parameter payload: The dispatch payload
+    */
 	func handleDispatch(_ payload: DiscordGatewayPayload)
 }
 
 public extension DiscordEngineGatewayHandling {
+    /// Default implementation
 	func handleDispatch(_ payload: DiscordGatewayPayload) {
 		client?.handleEngineDispatch(payload)
 	}
