@@ -25,6 +25,8 @@ import Foundation
 	to do this.
 */
 public class DiscordVoiceEncoder {
+	// MARK: Properties
+
 	/// The encoder process
 	public let encoder: EncoderProcess
 
@@ -39,13 +41,14 @@ public class DiscordVoiceEncoder {
 
 	private var closed = false
 
+	// MARK: Initializers
+
 	/**
 		The main initializer.
 
-		- Parameters:
-			- encoder: The encoder process
-			- readPipe: What the encoder reads from, and what a consumer writes to to have things encoded into OPUS
-			- writePipe: What the encoder writes to, and what a consumer reads from to get OPUS encoded data
+		- parameter encoder: The encoder process
+		- parameter readPipe: What the encoder reads from, and what a consumer writes to to have things encoded into OPUS
+		- parameter writePipe: What the encoder writes to, and what a consumer reads from to get OPUS encoded data
 	*/
 	public init(encoder: EncoderProcess, readPipe: Pipe, writePipe: Pipe) {
 		self.encoder = encoder
@@ -89,6 +92,8 @@ public class DiscordVoiceEncoder {
 
 		closeEncoder()
 	}
+
+	// MARK: Methods
 
 	/// Abrubtly halts encoding and kills the encoder
 	public func closeEncoder() {
