@@ -20,6 +20,8 @@ import Dispatch
 
 /// Protocol that abstracts a DiscordClient
 public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngineClient {
+	// MARK: Properties
+
 	/// Whether or not this client is connected.
 	var connected: Bool { get }
 
@@ -42,12 +44,16 @@ public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngi
 	/// The voice state for this user, if they are in a voice channel.
 	var voiceState: DiscordVoiceState? { get }
 
+	// MARK: Initializers
+
 	/**
 		- parameter token: The discord token of the user
 		- parameter configuration: An array of DiscordClientOption that can be used to customize the client
 
 	*/
 	init(token: DiscordToken, configuration: [DiscordClientOption])
+
+	// MARK: Methods
 
 	/**
 		Begins the connection to Discord. Once this is called, wait for a `connect` event before trying to interact
