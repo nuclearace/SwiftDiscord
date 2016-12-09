@@ -14,7 +14,7 @@
     <a title="DiscordDispatchEventHandler Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (60% documented)</p>
+        <p><a href="../index.html"> Docs</a> (63% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -292,7 +292,13 @@
         <section>
           <section class="section">
             <h1>DiscordDispatchEventHandler</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordDispatchEventHandler</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordClientSpec.html">DiscordClientSpec</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>Protocol that declares a type will handle Discord dispatch events.</p>
 
           </section>
           <section class="section task-group-section">
@@ -311,8 +317,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Handles channel creates from Discord.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleChannelCreate</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -330,8 +364,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Handles channel deletes from Discord.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleChannelDelete</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -349,8 +411,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Handles channel updates from Discord.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleChannelUpdate</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -371,165 +461,54 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Handles a dispatch event. This will call one of the other handle methods or the standard event handler.</p>
 
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
-                        <p>Undocumented</p>
+                        <p>Handles a dispatch event. This will call one of the other handle methods or the standard event handler.</p>
 
                       </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler22handleGuildEmojiUpdateFT4withGVs10DictionarySSP___T_"></a>
-                    <a name="//apple_ref/swift/Method/handleGuildEmojiUpdate(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler22handleGuildEmojiUpdateFT4withGVs10DictionarySSP___T_">handleGuildEmojiUpdate(with:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleDispatch</span><span class="p">(</span><span class="nv">event</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a></span><span class="p">,</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordGatewayPayloadData.html">DiscordGatewayPayloadData</a></span><span class="p">)</span></code></pre>
 
+                        </div>
                       </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler20handleGuildMemberAddFT4withGVs10DictionarySSP___T_"></a>
-                    <a name="//apple_ref/swift/Method/handleGuildMemberAdd(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler20handleGuildMemberAddFT4withGVs10DictionarySSP___T_">handleGuildMemberAdd(with:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>event</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The dispatch event</p>
 
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler23handleGuildMemberRemoveFT4withGVs10DictionarySSP___T_"></a>
-                    <a name="//apple_ref/swift/Method/handleGuildMemberRemove(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler23handleGuildMemberRemoveFT4withGVs10DictionarySSP___T_">handleGuildMemberRemove(with:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The dispatch event’s data</p>
 
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler23handleGuildMemberUpdateFT4withGVs10DictionarySSP___T_"></a>
-                    <a name="//apple_ref/swift/Method/handleGuildMemberUpdate(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler23handleGuildMemberUpdateFT4withGVs10DictionarySSP___T_">handleGuildMemberUpdate(with:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler23handleGuildMembersChunkFT4withGVs10DictionarySSP___T_"></a>
-                    <a name="//apple_ref/swift/Method/handleGuildMembersChunk(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler23handleGuildMembersChunkFT4withGVs10DictionarySSP___T_">handleGuildMembersChunk(with:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler21handleGuildRoleCreateFT4withGVs10DictionarySSP___T_"></a>
-                    <a name="//apple_ref/swift/Method/handleGuildRoleCreate(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler21handleGuildRoleCreateFT4withGVs10DictionarySSP___T_">handleGuildRoleCreate(with:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler21handleGuildRoleRemoveFT4withGVs10DictionarySSP___T_"></a>
-                    <a name="//apple_ref/swift/Method/handleGuildRoleRemove(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler21handleGuildRoleRemoveFT4withGVs10DictionarySSP___T_">handleGuildRoleRemove(with:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler21handleGuildRoleUpdateFT4withGVs10DictionarySSP___T_"></a>
-                    <a name="//apple_ref/swift/Method/handleGuildRoleUpdate(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler21handleGuildRoleUpdateFT4withGVs10DictionarySSP___T_">handleGuildRoleUpdate(with:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -547,8 +526,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Handles guild creates from Discord.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleGuildCreate</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -566,8 +573,412 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Handles guild deletes from Discord.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleGuildDelete</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler22handleGuildEmojiUpdateFT4withGVs10DictionarySSP___T_"></a>
+                    <a name="//apple_ref/swift/Method/handleGuildEmojiUpdate(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler22handleGuildEmojiUpdateFT4withGVs10DictionarySSP___T_">handleGuildEmojiUpdate(with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Handles guild emoji updates from Discord.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleGuildEmojiUpdate</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler20handleGuildMemberAddFT4withGVs10DictionarySSP___T_"></a>
+                    <a name="//apple_ref/swift/Method/handleGuildMemberAdd(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler20handleGuildMemberAddFT4withGVs10DictionarySSP___T_">handleGuildMemberAdd(with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Handles guild member adds from Discord.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleGuildMemberAdd</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler23handleGuildMemberRemoveFT4withGVs10DictionarySSP___T_"></a>
+                    <a name="//apple_ref/swift/Method/handleGuildMemberRemove(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler23handleGuildMemberRemoveFT4withGVs10DictionarySSP___T_">handleGuildMemberRemove(with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Handles guild member removes from Discord.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleGuildMemberRemove</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler23handleGuildMemberUpdateFT4withGVs10DictionarySSP___T_"></a>
+                    <a name="//apple_ref/swift/Method/handleGuildMemberUpdate(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler23handleGuildMemberUpdateFT4withGVs10DictionarySSP___T_">handleGuildMemberUpdate(with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Handles guild member updates from Discord.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleGuildMemberUpdate</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler23handleGuildMembersChunkFT4withGVs10DictionarySSP___T_"></a>
+                    <a name="//apple_ref/swift/Method/handleGuildMembersChunk(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler23handleGuildMembersChunkFT4withGVs10DictionarySSP___T_">handleGuildMembersChunk(with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Handles guild members chunks from Discord.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleGuildMembersChunk</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler21handleGuildRoleCreateFT4withGVs10DictionarySSP___T_"></a>
+                    <a name="//apple_ref/swift/Method/handleGuildRoleCreate(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler21handleGuildRoleCreateFT4withGVs10DictionarySSP___T_">handleGuildRoleCreate(with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Handles guild role creates from Discord.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleGuildRoleCreate</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler21handleGuildRoleRemoveFT4withGVs10DictionarySSP___T_"></a>
+                    <a name="//apple_ref/swift/Method/handleGuildRoleRemove(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler21handleGuildRoleRemoveFT4withGVs10DictionarySSP___T_">handleGuildRoleRemove(with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Handles guild role removes from Discord.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleGuildRoleRemove</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord27DiscordDispatchEventHandler21handleGuildRoleUpdateFT4withGVs10DictionarySSP___T_"></a>
+                    <a name="//apple_ref/swift/Method/handleGuildRoleUpdate(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordDispatchEventHandler21handleGuildRoleUpdateFT4withGVs10DictionarySSP___T_">handleGuildRoleUpdate(with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Handles guild member updates from Discord.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleGuildRoleUpdate</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -585,8 +996,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Handles guild updates from Discord.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleGuildUpdate</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -604,8 +1043,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Handles message creates from Discord.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleMessageCreate</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -623,8 +1090,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Handles presence updates from Discord.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handlePresenceUpdate</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -642,8 +1137,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Handles the ready event from Discord.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleReady</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -661,8 +1184,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Handles voice server updates from Discord.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleVoiceServerUpdate</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -680,8 +1231,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Handles voice state updates from Discord.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">handleVoiceStateUpdate</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
