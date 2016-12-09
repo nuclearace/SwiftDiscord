@@ -71,26 +71,76 @@ public enum DiscordPermission : Int {
 	case manageRoles = 0x10000000
 }
 
+/**
+	Helper operator for permission math.
+
+	- parameter lhs: a DiscordPermission
+	- parameter rhs: a DiscordPermission
+
+	- returns: the or of the two permissiosn
+*/
 public func |(lhs: DiscordPermission, rhs: DiscordPermission) -> Int {
 	return lhs.rawValue | rhs.rawValue
 }
 
+/**
+	Helper operator for permission math.
+
+	- parameter lhs: a DiscordPermission
+	- parameter rhs: a DiscordPermission
+
+	- returns: the and of the two permissiosn
+*/
 public func &(lhs: DiscordPermission, rhs: DiscordPermission) -> Int {
 	return lhs.rawValue & rhs.rawValue
 }
 
+/**
+	Helper operator for permission math.
+
+	- parameter lhs: an int
+	- parameter rhs: a DiscordPermission
+
+	- returns: the or of the two permissiosn
+*/
 public func |(lhs: Int, rhs: DiscordPermission) -> Int {
 	return lhs | rhs.rawValue
 }
 
+/**
+	Helper operator for permission math.
+
+	- parameter lhs: an Int
+	- parameter rhs: a DiscordPermission
+
+	- returns: the and of the two permissiosn
+*/
 public func &(lhs: Int, rhs: DiscordPermission) -> Int {
 	return lhs & rhs.rawValue
 }
 
+/**
+	Helper operator for permission math.
+
+	Ors the two permissions and assigns the result to `lhs`.
+
+	- parameter lhs: a DiscordPermission
+	- parameter rhs: a DiscordPermission
+
+	- returns: the or of the two permissiosn
+*/
 public func |=(lhs: inout Int, rhs: DiscordPermission) {
 	lhs |= rhs.rawValue
 }
 
+/**
+	Helper operator for permission math.
+
+	Ands the two permissions and assigns the result to `lhs`.
+
+	- parameter lhs: a DiscordPermission
+	- parameter rhs: a DiscordPermission
+*/
 public func &=(lhs: inout Int, rhs: DiscordPermission) {
 	lhs &= rhs.rawValue
 }
