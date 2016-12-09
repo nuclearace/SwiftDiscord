@@ -14,7 +14,7 @@
     <a title="DiscordVoiceEngineSpec Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (79% documented)</p>
+        <p><a href="../index.html"> Docs</a> (80% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -292,11 +292,24 @@
         <section>
           <section class="section">
             <h1>DiscordVoiceEngineSpec</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordVoiceEngineSpec</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordEngineSpec.html">DiscordEngineSpec</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>Declares that a type will be a voice engine.</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Properties"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <a href="#/Properties">
+                  <h3 class="section-name">Properties</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
@@ -311,8 +324,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">encoder</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a></span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -330,12 +351,31 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The secret key used for encryption</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">secret</span><span class="p">:</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">]</span><span class="o">!</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Methods"></a>
+                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
+                <a href="#/Methods">
+                  <h3 class="section-name">Methods</h3>
+                </a>
+              </div>
+              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -349,7 +389,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Used to request a new <code>FileHandle</code> that can be used to write directly to the encoder. Which will in turn be
+sent to Discord.</p>
+
+<p>Example using youtube-dl to play music:</p>
+
+<pre class="highlight plaintext"><code>youtube = EncoderProcess()
+youtube.launchPath = "/usr/local/bin/youtube-dl"
+youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
+youtube.standardOutput = client.voiceEngine!.requestFileHandleForWriting()!
+
+youtube.terminationHandler = {[weak self] process in
+    print("yt died")
+    self?.client.voiceEngine?.encoder?.finishEncodingAndClose()
+}
+
+youtube.launch()
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">requestFileHandleForWriting</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">FileHandle</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An optional containing a FileHandle that can be written to, or nil if there is no encoder.</p>
 
                       </div>
                     </section>
@@ -368,8 +437,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Stops encoding and requests a new encoder. A <code>voiceEngine.ready</code> event will be fired when the encoder is ready.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">requestNewEncoder</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -390,13 +467,54 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>An async write to the encoder.</p>
 
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
-                        <p>Undocumented</p>
+                        <p>Default implementation.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">send</span><span class="p">(</span><span class="n">_</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">,</span> <span class="nv">doneHandler</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Raw audio data that should be turned into OPUS encoded data.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>doneHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional handler that will be called when we are done writing.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -414,8 +532,37 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Sends OPUS encoded voice data to Discord. Because of the assumptions built into the engine, the voice data
+should have a max length of <code><a href="../Global Variables.html#/s:v12SwiftDiscord16defaultAudioSizeSi">defaultAudioSize</a></code></p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">sendVoiceData</span><span class="p">(</span><span class="n">_</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of OPUS encoded voice data.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>

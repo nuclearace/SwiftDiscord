@@ -22,17 +22,66 @@ import Foundation
 /// The default (max) audio packet size.
 public let defaultAudioSize = 320
 
+/// Declares that a type will be a voice engine.
 public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
+    // MARK: Properties
+
+    /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data
 	var encoder: DiscordVoiceEncoder? { get }
+
+    /// The secret key used for encryption
 	var secret: [UInt8]! { get }
 
+    // MARK: Methods
+
+    /**
+        Used to request a new `FileHandle` that can be used to write directly to the encoder. Which will in turn be
+        sent to Discord.
+
+        Example using youtube-dl to play music:
+
+        ```
+        youtube = EncoderProcess()
+        youtube.launchPath = "/usr/local/bin/youtube-dl"
+        youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
+        youtube.standardOutput = client.voiceEngine!.requestFileHandleForWriting()!
+
+        youtube.terminationHandler = {[weak self] process in
+            print("yt died")
+            self?.client.voiceEngine?.encoder?.finishEncodingAndClose()
+        }
+
+        youtube.launch()
+        ```
+
+        - returns: An optional containing a FileHandle that can be written to, or nil if there is no encoder.
+    */
     func requestFileHandleForWriting() -> FileHandle?
+
+    /**
+        Stops encoding and requests a new encoder. A `voiceEngine.ready` event will be fired when the encoder is ready.
+    */
     func requestNewEncoder()
+
+    /**
+        An async write to the encoder.
+
+        - parameter data: Raw audio data that should be turned into OPUS encoded data.
+        - parameter doneHandler: An optional handler that will be called when we are done writing.
+    */
     func send(_ data: Data, doneHandler: (() -> Void)?)
+
+    /**
+        Sends OPUS encoded voice data to Discord. Because of the assumptions built into the engine, the voice data
+        should have a max length of `defaultAudioSize`
+
+        - parameter data: An array of OPUS encoded voice data.
+    */
     func sendVoiceData(_ data: [UInt8])
 }
 
 public extension DiscordVoiceEngineSpec {
+    /// Default implementation.
     public func send(_ data: Data, doneHandler: (() -> Void)? = nil) {
         encoder?.write(data, doneHandler: doneHandler)
     }

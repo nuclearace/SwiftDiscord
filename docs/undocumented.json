@@ -869,69 +869,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": null,
-      "symbol": "DiscordVoiceEngineSpec",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 25,
-      "symbol": "DiscordVoiceEngineSpec",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 26,
-      "symbol": "DiscordVoiceEngineSpec.encoder",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 27,
-      "symbol": "DiscordVoiceEngineSpec.secret",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 29,
-      "symbol": "DiscordVoiceEngineSpec.requestFileHandleForWriting()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 30,
-      "symbol": "DiscordVoiceEngineSpec.requestNewEncoder()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 31,
-      "symbol": "DiscordVoiceEngineSpec.send(_:doneHandler:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 32,
-      "symbol": "DiscordVoiceEngineSpec.sendVoiceData(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceEngineSpec.swift",
-      "line": 36,
-      "symbol": "DiscordVoiceEngineSpec.send(_:doneHandler:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
       "line": 18,
       "symbol": "DiscordVoiceState",
