@@ -17,13 +17,29 @@
 
 import Foundation
 
+/// Represents an attachment.
 public struct DiscordAttachment {
+	// MARK: Properties
+
+	/// The snowflake id of this attachment.
 	public let id: String
+
+	/// The name of the file.
 	public let filename: String
+
+	/// The height, if this is an image.
 	public let height: Int?
+
+	/// The proxy url for this attachment.
 	public let proxyUrl: URL
+
+	/// The size of this attachment.
 	public let size: Int
+
+	/// The url of this attachment.
 	public let url: URL
+
+	/// The width, if this is an image.
 	public let width: Int?
 
 	init(attachmentObject: [String: Any]) {
@@ -41,24 +57,56 @@ public struct DiscordAttachment {
 	}
 }
 
+/// Represents an embeded entity.
 public struct DiscordEmbed {
+	// MARK: Nested Types
+
+	/// Represents what is providing the content of an embed.
 	public struct Provider {
+		// MARK: Properties
+
+		/// The name of this provider.
 		public let name: String
+
+		/// The url of this provider.
 		public let url: URL
 	}
 
+	/// Represents the thumbnail of an embed.
 	public struct Thumbnail {
+		// MARK: Properties
+
+		/// The height of this image.
 		public let height: Int
+
+		/// The proxy url for this image.
 		public let proxyUrl: URL
+
+		/// The url for this image.
 		public let url: URL
+
+		/// The width of this image.
 		public let width: Int
 	}
 
+	// MARK: Properties
+
+	/// The description of this embed.
 	public let description: String
+
+	/// The provider of this embed.
 	public let provider: Provider
+
+	/// The thumbnail of this embed.
 	public let thumbnail: Thumbnail
+
+	/// The title of this embed.
 	public let title: String
+
+	/// The type of this embed.
 	public let type: String
+
+	/// The url of this embed.
 	public let url: URL
 
 	init(embedObject: [String: Any]) {
@@ -91,18 +139,44 @@ extension DiscordEmbed.Thumbnail {
 	}
 }
 
+/// Represents a Discord chat message.
 public struct DiscordMessage {
+	// MARK: Properties
+
+	/// The attachments included in this message.
 	public let attachments: [DiscordAttachment]
+
+	/// Who sent this message.
 	public let author: DiscordUser
+
+	/// The snowflake id of the channel this message is on.
 	public let channelId: String
+
+	/// The content of this message.
 	public let content: String
+
+	/// When this message was last edited.
 	public let editedTimestamp: Date
+
+	/// The embeds that are in this message.
 	public let embeds: [DiscordEmbed]
+
+	/// The snowflake id of this message.
 	public let id: String
+
+	/// Whether or not this message mentioned everyone.
 	public let mentionEveryone: Bool
+
+	/// List of snowflake ids of roles that were mentioned in this message.
 	public let mentionRoles: [String]
+
+	/// List of users that were mentioned in this message.
 	public let mentions: [DiscordUser]
+
+	/// The timestamp of this message.
 	public let timestamp: Date
+
+	/// Whether or not this message should be read by a screen reader.
 	public let tts: Bool
 
 	init(messageObject: [String: Any]) {
