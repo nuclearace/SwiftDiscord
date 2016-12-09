@@ -29,6 +29,7 @@ public enum DiscordLogLevel {
     case debug
 }
 
+/// Declares that a type will act as a logger.
 public protocol DiscordLogger {
     /// Whether to log or not.
     var level: DiscordLogLevel { get set }

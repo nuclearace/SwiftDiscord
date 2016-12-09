@@ -414,20 +414,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordLogger.swift",
-      "line": null,
-      "symbol": "DiscordLogger",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordLogger.swift",
-      "line": 32,
-      "symbol": "DiscordLogger",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/erik.little/Projects/SwiftDiscord/Sources/SwiftDiscord/DiscordMessage.swift",
       "line": 20,
       "symbol": "DiscordAttachment",
