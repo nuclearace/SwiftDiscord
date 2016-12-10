@@ -41,6 +41,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/// The queue that callbacks are called on. In addition, any reads from any properties of DiscordClient should be
 	/// made on this queue, as this is the queue where modifications on them are made.
 	public var handleQueue = DispatchQueue.main
+
     #if !os(iOS)
     /// The DiscordVoiceEngine that is used for voice.
 	public var voiceEngine: DiscordVoiceEngineSpec?
@@ -126,7 +127,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		engine?.connect()
 	}
-
 
 	/**
 		Disconnects from Discord. A `disconnect` event is fired when the client has successfully disconnected.
@@ -304,7 +304,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			payload: .object(presence.json)))
 	}
 
-	fileprivate func startVoiceConnection() {
+	private func startVoiceConnection() {
         #if !os(iOS)
 		// We need both to start the connection
 		guard voiceState != nil && voiceServerInformation != nil else {

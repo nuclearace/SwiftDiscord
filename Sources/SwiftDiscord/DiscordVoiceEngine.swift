@@ -412,10 +412,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		    }
 
 		    this.sendVoiceData(data)
-
-		    this.sequenceNum = this.sequenceNum &+ 1
-		    this.timestamp = this.timestamp &+ 960
-
 		    this.audioSleep(count)
 		    this.readData(count + 1)
 		}
@@ -544,6 +540,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             }
 
 		}
+
+		sequenceNum = sequenceNum &+ 1
+		timestamp = timestamp &+ 960
 	}
 
 	/**
