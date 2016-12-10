@@ -2,19 +2,19 @@
 
 A Discord API client for Swift.
 
-Features:
+- Features:
   - Sending and receiving voice
   - macOS and iOS support (iOS currently does not support voice)
   - Bot and User account support (OAuth coming soon)
   - REST API separate from client. You can use the REST API separately to build your own client if you wish.
 
-Requirements:
+- Requirements:
   - ffmpeg installed via Homebrew (Make sure it is installed with opus support)
   - libsodium also installed via Homebrew.
   - Swift 3
 
 
-Installing:
+- Installing:
  - Create your Swift Package Manager project
  - Add `.Package(url: "https://github.com/nuclearace/SwiftDiscord", majorVersion: 0, minor: 3)` to your dependencies in Package.swift
  - Add `import SwiftDiscord` to files you wish to use the module in.
@@ -36,6 +36,11 @@ See Sources/Runner for a basic example
 
 [Docs](https://nuclearace.github.io/SwiftDiscord/index.html)
 ============================================================
+Docs are generated with [jazzy](https://github.com/realm/jazzy) using the magical command:
+
+`jazzy --xcodebuild-arguments -project,SwiftDiscord.xcodeproj/,-scheme,SwiftDiscord`
+
+*Must have setup an Xcode project*
 
 Why no CocoaPods?
 =================
