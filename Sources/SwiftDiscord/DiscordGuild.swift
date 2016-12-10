@@ -17,30 +17,78 @@
 
 import Foundation
 
+/// Represents a Guild.
 public struct DiscordGuild {
-	public let features: [Any] // TODO figure out what features are
+	// MARK: Properties
+
+	// TODO figure out what features are
+	/// The guild's features.
+	public let features: [Any]
+
+	/// The snowflake id of the guild.
 	public let id: String
+
+	/// Whether or not this a "large" guild.
 	public let large: Bool
+
+	/// The date the user joined the guild.
 	public let joinedAt: Date
+
+	/// The base64 encoded splash image.
 	public let splash: String
+
+	/// Whether this guild is unavaiable.
 	public let unavailable: Bool
 
+	/// A dictionary of this guild's channels. The key is the snowflake id of the channel.
 	public internal(set) var channels: [String: DiscordGuildChannel]
+
+	/// A dictionary of this guild's emojis. The key is the snowflake id of the emoji.
 	public internal(set) var emojis: [String: DiscordEmoji]
+
+	/// The number of members in this guild.
+	///
+	/// *This number might not be the actual number of users in the `members` field.*
 	public internal(set) var memberCount: Int
+
+	/// A `DiscordLazyDictionary` of guild members. The key is the snowflake id of the user.
 	public internal(set) var members: DiscordLazyDictionary<String, DiscordGuildMember>
+
+	/// A `DiscordLazyDictionary` of presences. The key is the snowflake id of the user.
 	public internal(set) var presences: DiscordLazyDictionary<String, DiscordPresence>
+
+	/// A dictionary of this guild's roles. The key is the snowflake id of the role.
 	public internal(set) var roles: [String: DiscordRole]
+
+	/// A dictionary of this guild's current voice states. The key is the snowflake id of the user for this voice
+	/// state.
 	public internal(set) var voiceStates: [String: DiscordVoiceState]
 
+	/// The default message notification setting.
 	public private(set) var defaultMessageNotifications: Int
+
+	/// The snowflake id of the embed channel for this guild.
 	public private(set) var embedChannelId: String
+
+	/// Whether this guild has embed enabled.
 	public private(set) var embedEnabled: Bool
+
+	/// The base64 encoded icon image for this guild.
 	public private(set) var icon: String
+
+	/// The multi-factor authentication level for this guild.
 	public private(set) var mfaLevel: Int
+
+	/// The name of this guild.
 	public private(set) var name: String
+
+	/// The snowflake id of this guild's owner.
 	public private(set) var ownerId: String
+
+	/// The region this guild is in.
 	public private(set) var region: String
+
+	/// The verification level a member of this guild must have to join.
 	public private(set) var verificationLevel: Int
 
 	// Used to update a guild from a guildUpdate event
@@ -128,11 +176,23 @@ public struct DiscordGuild {
 	}
 }
 
+/// Represents a user guild.
 public struct DiscordUserGuild {
+	// MARK: Properties
+
+	/// The snowflake id of the guild.
 	public let id: String
+
+	/// The name of the guild.
 	public let name: String
+
+	/// The base64 encoded icon of the guild.
 	public let icon: String
+
+	/// Whether the user is the owner of the guild.
 	public let owner: Bool
+
+	/// Bitwise of the user's enabled/disabled permissions.
 	public let permissions: Int
 
 	init(userGuildObject: [String: Any]) {
