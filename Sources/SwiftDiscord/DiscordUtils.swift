@@ -17,11 +17,28 @@
 
 import Foundation
 
+/// Represents a file to be uploaded to Discord.
 public struct DiscordFileUpload {
+    // MARK: Properties
+
+    /// The file data.
     public let data: Data
+
+    /// The filename.
     public let filename: String
+
+    /// The mime type.
     public let mimeType: String
 
+    // MARK: Initializers
+
+    /**
+        Constructs a new DiscordFileUpload.
+
+        - parameter data: The file data
+        - parameter filename: The filename
+        - parameter mimeType: The mime type
+    */
     public init(data: Data, filename: String, mimeType: String) {
         self.data = data
         self.filename = filename
