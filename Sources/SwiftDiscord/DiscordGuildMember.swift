@@ -17,13 +17,26 @@
 
 import Foundation
 
+/// Represents a guild member.
 public struct DiscordGuildMember {
+	// MARK: Properties
+
+	/// The user object for this member.
 	public let user: DiscordUser
+
+	/// The date this user joined the guild.
 	public let joinedAt: Date
 
+	/// Whether this user has been deafened.
 	public var deaf: Bool
+
+	/// Whether this user has been muted.
 	public var mute: Bool
+
+	/// This user's nickname, if they have one.
 	public var nick: String?
+
+	/// An array of role snowflake ids that this user has.
 	public var roles: [String]
 
 	init(guildMemberObject: [String: Any]) {
