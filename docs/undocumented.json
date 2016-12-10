@@ -1,40 +1,6 @@
 {
   "warnings": [
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
-      "line": 1,
-      "symbol": "DiscordDMChannel",
-      "symbol_kind": "source.lang.swift.decl.struct",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
-      "line": 2,
-      "symbol": "DiscordDMChannel.id",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
-      "line": 3,
-      "symbol": "DiscordDMChannel.isPrivate",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
-      "line": 4,
-      "symbol": "DiscordDMChannel.recipient",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordDMChannel.swift",
-      "line": 6,
-      "symbol": "DiscordDMChannel.lastMessageId",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    }
+
   ],
   "source_directory": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord"
 }
