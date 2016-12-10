@@ -50,29 +50,30 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	public var onVoiceData: (DiscordVoiceData) -> Void = {_ in }
 
 	/// Whether or not this client is connected.
-	public private(set) var connected = false
+	public fileprivate(set) var connected = false
 
 	/// The guilds that this user is in.
-	public private(set) var guilds = [String: DiscordGuild]()
+	public fileprivate(set) var guilds = [String: DiscordGuild]()
 
 	/// The relationships this user has. Only valid for non-bot users.
-	public private(set) var relationships = [[String: Any]]()
+	public fileprivate(set) var relationships = [[String: Any]]()
 
 	/// The DiscordUser this client is connected to.
-	public private(set) var user: DiscordUser?
+	public fileprivate(set) var user: DiscordUser?
 
 	/// The voice state for this user, if they are in a voice channel.
-	public private(set) var voiceState: DiscordVoiceState?
+	public fileprivate(set) var voiceState: DiscordVoiceState?
 
 	// crunchQueue should be used for tasks would block the handleQueue for too long
 	// DO NOT TOUCH ANY PROPERTIES WHILE ON THIS QUEUE. REENTER THE HANDLEQUEUE
-	private let crunchQueue = DispatchQueue(label: "crunchQueue")
-	private let logType = "DiscordClient"
-	private let voiceQueue = DispatchQueue(label: "voiceQueue")
+	fileprivate let crunchQueue = DispatchQueue(label: "crunchQueue")
+	fileprivate let logType = "DiscordClient"
+	fileprivate let voiceQueue = DispatchQueue(label: "voiceQueue")
+
+	fileprivate var joiningVoiceChannel = false
+	fileprivate var voiceServerInformation: [String: Any]?
 
 	private var handlers = [String: DiscordEventHandler]()
-	private var joiningVoiceChannel = false
-	private var voiceServerInformation: [String: Any]?
 
 	// MARK: Initializers
 
@@ -156,64 +157,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	/**
-		Handles channel creates from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleChannelCreate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling channel create", type: logType)
-
-		let channel = DiscordGuildChannel(guildChannelObject: data)
-
-		DefaultDiscordLogger.Logger.verbose("Created channel: %@", type: logType, args: channel)
-
-		guilds[channel.guildId]?.channels[channel.id] = channel
-
-		handleEvent("channelCreate", with: [channel.guildId, channel])
-	}
-
-	/**
-		Handles channel deletes from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleChannelDelete(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling channel delete", type: logType)
-
-		guard let guildId = data["guild_id"] as? String else { return }
-		guard let channelId = data["id"] as? String else { return }
-
-		guard let removedChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) else { return }
-
-		DefaultDiscordLogger.Logger.verbose("Removed channel: %@", type: logType, args: removedChannel)
-
-		handleEvent("channelDelete", with: [guildId, removedChannel])
-	}
-
-	/**
-		Handles channel updates from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleChannelUpdate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling channel update", type: logType)
-
-		let channel = DiscordGuildChannel(guildChannelObject: data)
-
-		DefaultDiscordLogger.Logger.verbose("Updated channel: %@", type: logType, args: channel)
-
-		guilds[channel.guildId]?.channels[channel.id] = channel
-
-		handleEvent("channelUpdate", with: [channel.guildId, channel])
-	}
-
-	/**
 		The main event handle method. Calls the associated event handler.
 		You shouldn't need to call this event directly.
 
@@ -260,387 +203,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	/**
-		Handles guild creates from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleGuildCreate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling guild create", type: logType)
-
-		let guild = DiscordGuild(guildObject: data)
-
-		DefaultDiscordLogger.Logger.verbose("Created guild: %@", type: self.logType, args: guild)
-
-		guilds[guild.id] = guild
-
-		handleEvent("guildCreate", with: [guild.id, guild])
-	}
-
-	/**
-		Handles guild deletes from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleGuildDelete(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling guild delete", type: logType)
-
-		guard let guildId = data["id"] as? String else { return }
-
-		guard let removedGuild = guilds.removeValue(forKey: guildId) else { return }
-
-		DefaultDiscordLogger.Logger.verbose("Removed guild: %@", type: logType, args: removedGuild)
-
-		handleEvent("guildDelete", with: [guildId, removedGuild])
-	}
-
-	/**
-		Handles guild emoji updates from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleGuildEmojiUpdate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling guild emoji update", type: logType)
-
-		guard let guildId = data["guild_id"] as? String else { return }
-		guard let emojis = data["emojis"] as? [[String: Any]] else { return }
-
-		let discordEmojis = DiscordEmoji.emojisFromArray(emojis)
-
-		DefaultDiscordLogger.Logger.verbose("Created guild emojis: %@", type: logType, args: discordEmojis)
-
-		guilds[guildId]?.emojis = discordEmojis
-
-		handleEvent("guildEmojisUpdate", with: [guildId, discordEmojis])
-	}
-
-	/**
-		Handles guild member adds from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleGuildMemberAdd(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling guild member add", type: logType)
-
-		guard let guildId = data["guild_id"] as? String else { return }
-
-		let guildMember = DiscordGuildMember(guildMemberObject: data)
-
-		DefaultDiscordLogger.Logger.verbose("Created guild member: %@", type: logType, args: guildMember)
-
-		guilds[guildId]?.members[guildMember.user.id] = guildMember
-		guilds[guildId]?.memberCount += 1
-
-		handleEvent("guildMemberAdd", with: [guildId, guildMember])
-	}
-
-	/**
-		Handles guild member removes from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleGuildMemberRemove(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling guild member remove", type: logType)
-
-		guard let guildId = data["guild_id"] as? String else { return }
-		guard let user = data["user"] as? [String: Any], let id = user["id"] as? String else { return }
-
-		guilds[guildId]?.memberCount -= 1
-
-		if let removedGuildMember = guilds[guildId]?.members.removeValue(forKey: id) {
-			DefaultDiscordLogger.Logger.verbose("Removed guild member: %@", type: logType, args: removedGuildMember)
-
-			handleEvent("guildMemberRemove", with: [guildId, removedGuildMember])
-		} else {
-			handleEvent("guildMemberRemove", with: [guildId, data])
-		}
-	}
-
-	/**
-		Handles guild member updates from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleGuildMemberUpdate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling guild member update", type: logType)
-
-		guard let guildId = data["guild_id"] as? String else { return }
-		guard let user = data["user"] as? [String: Any], let roles = data["roles"] as? [String],
-			let id = user["id"] as? String else { return }
-
-		guilds[guildId]?.members[id]?.roles = roles
-
-		// DefaultDiscordLogger.Logger.verbose("Updated guild member: %@", type: logType,
-		// 	args: guilds[guildId]?.members[id])
-
-		handleEvent("guildMemberUpdate", with: [guildId, user, roles])
-	}
-
-	/**
-		Handles guild members chunks from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleGuildMembersChunk(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling guild members chunk", type: logType)
-
-		guard let guildId = data["guild_id"] as? String else { return }
-		guard let members = data["members"] as? [[String: Any]] else { return }
-
-		crunchQueue.async {
-			let guildMembers = DiscordGuildMember.guildMembersFromArray(members)
-
-			self.handleQueue.async {
-				guard var guild = self.guilds[guildId] else { return }
-
-				for (memberId, member) in guildMembers {
-					guild.members[memberId] = member
-				}
-
-				self.guilds[guildId] = guild
-
-				self.handleEvent("guildMembersChunk", with: [guildId, guildMembers])
-			}
-		}
-	}
-
-	/**
-		Handles guild role creates from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleGuildRoleCreate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling guild role create", type: logType)
-
-		guard let guildId = data["guild_id"] as? String else { return }
-		guard let roleObject = data["role"] as? [String: Any] else { return }
-
-		let role = DiscordRole(roleObject: roleObject)
-
-		DefaultDiscordLogger.Logger.verbose("Created role: %@", type: logType, args: role)
-
-		guilds[guildId]?.roles[role.id] = role
-
-		handleEvent("guildRoleCreate", with: [guildId, role])
-	}
-
-	/**
-		Handles guild role removes from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleGuildRoleRemove(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling guild role remove", type: logType)
-
-		guard let guildId = data["guild_id"] as? String else { return }
-		guard let roleId = data["role_id"] as? String else { return }
-
-		guard let removedRole = guilds[guildId]?.roles.removeValue(forKey: roleId) else { return }
-
-		DefaultDiscordLogger.Logger.verbose("Removed role: %@", type: logType, args: removedRole)
-
-		handleEvent("guildRoleRemove", with: [guildId, removedRole])
-	}
-
-	/**
-		Handles guild member updates from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleGuildRoleUpdate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling guild role update", type: logType)
-
-		// Functionally the same as adding
-		guard let guildId = data["guild_id"] as? String else { return }
-		guard let roleObject = data["role"] as? [String: Any] else { return }
-
-		let role = DiscordRole(roleObject: roleObject)
-
-		DefaultDiscordLogger.Logger.verbose("Updated role: %@", type: logType, args: role)
-
-		guilds[guildId]?.roles[role.id] = role
-
-		handleEvent("guildRoleUpdate", with: [guildId, role])
-	}
-
-	/**
-		Handles guild updates from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleGuildUpdate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling guild update", type: logType)
-
-		guard let guildId = data["id"] as? String else { return }
-		guard let updatedGuild = self.guilds[guildId]?.updateGuild(with: data) else { return }
-
-		DefaultDiscordLogger.Logger.verbose("Updated guild: %@", type: logType, args: updatedGuild)
-
-		handleEvent("guildUpdate", with: [guildId, updatedGuild])
-	}
-
-	/**
-		Handles message creates from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleMessageCreate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling message create", type: logType)
-
-		let message = DiscordMessage(messageObject: data)
-
-		DefaultDiscordLogger.Logger.verbose("Message: %@", type: logType, args: message)
-
-		handleEvent("messageCreate", with: [message])
-	}
-
-	/**
-		Handles presence updates from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handlePresenceUpdate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.debug("Handling presence update", type: logType)
-
-		guard let guildId = data["guild_id"] as? String else { return }
-		guard let user = data["user"] as? [String: Any] else { return }
-		guard let userId = user["id"] as? String else { return }
-
-		var presence = guilds[guildId]?.presences[userId]
-
-		if presence != nil {
-			presence!.updatePresence(presenceObject: data)
-		} else {
-			presence = DiscordPresence(presenceObject: data, guildId: guildId)
-		}
-
-		DefaultDiscordLogger.Logger.debug("Updated presence: %@", type: logType, args: presence!)
-
-		guilds[guildId]?.presences[userId] = presence!
-
-		handleEvent("presenceUpdate", with: [guildId, presence!])
-	}
-
-	/**
-		Handles the ready event from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleReady(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling ready", type: logType)
-
-		guard let milliseconds = data["heartbeat_interval"] as? Int else {
-			handleEvent("disconnect", with: ["Failed to get heartbeat"])
-
-			return
-		}
-
-		engine?.startHeartbeat(seconds: milliseconds / 1000)
-
-		if let user = data["user"] as? [String: Any] {
-			self.user = DiscordUser(userObject: user)
-		}
-
-		if let guilds = data["guilds"] as? [[String: Any]] {
-			self.guilds = DiscordGuild.guildsFromArray(guilds)
-		}
-
-		if let relationships = data["relationships"] as? [[String: Any]] {
-			self.relationships = relationships
-		}
-
-		connected = true
-		handleEvent("connect", with: [data])
-	}
-
-	/**
 		Handles voice data received from the VoiceEngine
 	*/
 	open func handleVoiceData(_ data: DiscordVoiceData) {
 		voiceQueue.async {
 			self.onVoiceData(data)
 		}
-	}
-
-	/**
-		Handles voice server updates from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleVoiceServerUpdate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling voice server update", type: logType)
-		DefaultDiscordLogger.Logger.verbose("Voice server update: %@", type: logType, args: data)
-
-		self.voiceServerInformation = data
-
-		if self.joiningVoiceChannel {
-			// print("got voice server \(data)")
-			self.startVoiceConnection()
-		}
-	}
-
-	/**
-		Handles voice state updates from Discord. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter with: The data from the event
-	*/
-	open func handleVoiceStateUpdate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.log("Handling voice state update", type: logType)
-
-		guard let guildId = data["guild_id"] as? String else { return }
-
-		let state = DiscordVoiceState(voiceStateObject: data, guildId: guildId)
-
-		DefaultDiscordLogger.Logger.verbose("Voice state: %@", type: logType, args: state)
-
-		if state.channelId == "" {
-			guilds[guildId]?.voiceStates[state.userId] = nil
-		} else {
-			guilds[guildId]?.voiceStates[state.userId] = state
-		}
-
-		if state.userId == user?.id {
-			if state.channelId == "" {
-				voiceState = nil
-			} else if joiningVoiceChannel {
-				voiceState = state
-
-				startVoiceConnection()
-			}
-		}
-
-		handleEvent("voiceStateUpdate", with: [guildId, state])
 	}
 
 	/**
@@ -737,7 +305,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			payload: .object(presence.json)))
 	}
 
-	private func startVoiceConnection() {
+	fileprivate func startVoiceConnection() {
         #if !os(iOS)
 		// We need both to start the connection
 		guard voiceState != nil && voiceServerInformation != nil else {
@@ -754,5 +322,442 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         #else
         print("Only available on macOS and Linux")
         #endif
+	}
+}
+
+public extension DiscordClient {
+	// MARK: DiscordDispatchEventHandler Conformance
+
+	/**
+		Handles channel creates from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleChannelCreate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling channel create", type: logType)
+
+		let channel = DiscordGuildChannel(guildChannelObject: data)
+
+		DefaultDiscordLogger.Logger.verbose("Created channel: %@", type: logType, args: channel)
+
+		guilds[channel.guildId]?.channels[channel.id] = channel
+
+		handleEvent("channelCreate", with: [channel.guildId, channel])
+	}
+
+	/**
+		Handles channel deletes from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleChannelDelete(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling channel delete", type: logType)
+
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let channelId = data["id"] as? String else { return }
+
+		guard let removedChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) else { return }
+
+		DefaultDiscordLogger.Logger.verbose("Removed channel: %@", type: logType, args: removedChannel)
+
+		handleEvent("channelDelete", with: [guildId, removedChannel])
+	}
+
+	/**
+		Handles channel updates from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleChannelUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling channel update", type: logType)
+
+		let channel = DiscordGuildChannel(guildChannelObject: data)
+
+		DefaultDiscordLogger.Logger.verbose("Updated channel: %@", type: logType, args: channel)
+
+		guilds[channel.guildId]?.channels[channel.id] = channel
+
+		handleEvent("channelUpdate", with: [channel.guildId, channel])
+	}
+
+	/**
+		Handles guild creates from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleGuildCreate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild create", type: logType)
+
+		let guild = DiscordGuild(guildObject: data)
+
+		DefaultDiscordLogger.Logger.verbose("Created guild: %@", type: self.logType, args: guild)
+
+		guilds[guild.id] = guild
+
+		handleEvent("guildCreate", with: [guild.id, guild])
+	}
+
+	/**
+		Handles guild deletes from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleGuildDelete(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild delete", type: logType)
+
+		guard let guildId = data["id"] as? String else { return }
+
+		guard let removedGuild = guilds.removeValue(forKey: guildId) else { return }
+
+		DefaultDiscordLogger.Logger.verbose("Removed guild: %@", type: logType, args: removedGuild)
+
+		handleEvent("guildDelete", with: [guildId, removedGuild])
+	}
+
+	/**
+		Handles guild emoji updates from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleGuildEmojiUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild emoji update", type: logType)
+
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let emojis = data["emojis"] as? [[String: Any]] else { return }
+
+		let discordEmojis = DiscordEmoji.emojisFromArray(emojis)
+
+		DefaultDiscordLogger.Logger.verbose("Created guild emojis: %@", type: logType, args: discordEmojis)
+
+		guilds[guildId]?.emojis = discordEmojis
+
+		handleEvent("guildEmojisUpdate", with: [guildId, discordEmojis])
+	}
+
+	/**
+		Handles guild member adds from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleGuildMemberAdd(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild member add", type: logType)
+
+		guard let guildId = data["guild_id"] as? String else { return }
+
+		let guildMember = DiscordGuildMember(guildMemberObject: data)
+
+		DefaultDiscordLogger.Logger.verbose("Created guild member: %@", type: logType, args: guildMember)
+
+		guilds[guildId]?.members[guildMember.user.id] = guildMember
+		guilds[guildId]?.memberCount += 1
+
+		handleEvent("guildMemberAdd", with: [guildId, guildMember])
+	}
+
+	/**
+		Handles guild member removes from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleGuildMemberRemove(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild member remove", type: logType)
+
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let user = data["user"] as? [String: Any], let id = user["id"] as? String else { return }
+
+		guilds[guildId]?.memberCount -= 1
+
+		if let removedGuildMember = guilds[guildId]?.members.removeValue(forKey: id) {
+			DefaultDiscordLogger.Logger.verbose("Removed guild member: %@", type: logType, args: removedGuildMember)
+
+			handleEvent("guildMemberRemove", with: [guildId, removedGuildMember])
+		} else {
+			handleEvent("guildMemberRemove", with: [guildId, data])
+		}
+	}
+
+	/**
+		Handles guild member updates from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleGuildMemberUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild member update", type: logType)
+
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let user = data["user"] as? [String: Any], let roles = data["roles"] as? [String],
+			let id = user["id"] as? String else { return }
+
+		guilds[guildId]?.members[id]?.roles = roles
+
+		// DefaultDiscordLogger.Logger.verbose("Updated guild member: %@", type: logType,
+		// 	args: guilds[guildId]?.members[id])
+
+		handleEvent("guildMemberUpdate", with: [guildId, user, roles])
+	}
+
+	/**
+		Handles guild members chunks from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleGuildMembersChunk(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild members chunk", type: logType)
+
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let members = data["members"] as? [[String: Any]] else { return }
+
+		crunchQueue.async {
+			let guildMembers = DiscordGuildMember.guildMembersFromArray(members)
+
+			self.handleQueue.async {
+				guard var guild = self.guilds[guildId] else { return }
+
+				for (memberId, member) in guildMembers {
+					guild.members[memberId] = member
+				}
+
+				self.guilds[guildId] = guild
+
+				self.handleEvent("guildMembersChunk", with: [guildId, guildMembers])
+			}
+		}
+	}
+
+	/**
+		Handles guild role creates from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleGuildRoleCreate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild role create", type: logType)
+
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let roleObject = data["role"] as? [String: Any] else { return }
+
+		let role = DiscordRole(roleObject: roleObject)
+
+		DefaultDiscordLogger.Logger.verbose("Created role: %@", type: logType, args: role)
+
+		guilds[guildId]?.roles[role.id] = role
+
+		handleEvent("guildRoleCreate", with: [guildId, role])
+	}
+
+	/**
+		Handles guild role removes from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleGuildRoleRemove(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild role remove", type: logType)
+
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let roleId = data["role_id"] as? String else { return }
+
+		guard let removedRole = guilds[guildId]?.roles.removeValue(forKey: roleId) else { return }
+
+		DefaultDiscordLogger.Logger.verbose("Removed role: %@", type: logType, args: removedRole)
+
+		handleEvent("guildRoleRemove", with: [guildId, removedRole])
+	}
+
+	/**
+		Handles guild member updates from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleGuildRoleUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild role update", type: logType)
+
+		// Functionally the same as adding
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let roleObject = data["role"] as? [String: Any] else { return }
+
+		let role = DiscordRole(roleObject: roleObject)
+
+		DefaultDiscordLogger.Logger.verbose("Updated role: %@", type: logType, args: role)
+
+		guilds[guildId]?.roles[role.id] = role
+
+		handleEvent("guildRoleUpdate", with: [guildId, role])
+	}
+
+	/**
+		Handles guild updates from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleGuildUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling guild update", type: logType)
+
+		guard let guildId = data["id"] as? String else { return }
+		guard let updatedGuild = self.guilds[guildId]?.updateGuild(with: data) else { return }
+
+		DefaultDiscordLogger.Logger.verbose("Updated guild: %@", type: logType, args: updatedGuild)
+
+		handleEvent("guildUpdate", with: [guildId, updatedGuild])
+	}
+
+	/**
+		Handles message creates from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleMessageCreate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling message create", type: logType)
+
+		let message = DiscordMessage(messageObject: data)
+
+		DefaultDiscordLogger.Logger.verbose("Message: %@", type: logType, args: message)
+
+		handleEvent("messageCreate", with: [message])
+	}
+
+	/**
+		Handles presence updates from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handlePresenceUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.debug("Handling presence update", type: logType)
+
+		guard let guildId = data["guild_id"] as? String else { return }
+		guard let user = data["user"] as? [String: Any] else { return }
+		guard let userId = user["id"] as? String else { return }
+
+		var presence = guilds[guildId]?.presences[userId]
+
+		if presence != nil {
+			presence!.updatePresence(presenceObject: data)
+		} else {
+			presence = DiscordPresence(presenceObject: data, guildId: guildId)
+		}
+
+		DefaultDiscordLogger.Logger.debug("Updated presence: %@", type: logType, args: presence!)
+
+		guilds[guildId]?.presences[userId] = presence!
+
+		handleEvent("presenceUpdate", with: [guildId, presence!])
+	}
+
+	/**
+		Handles the ready event from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleReady(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling ready", type: logType)
+
+		guard let milliseconds = data["heartbeat_interval"] as? Int else {
+			handleEvent("disconnect", with: ["Failed to get heartbeat"])
+
+			return
+		}
+
+		engine?.startHeartbeat(seconds: milliseconds / 1000)
+
+		if let user = data["user"] as? [String: Any] {
+			self.user = DiscordUser(userObject: user)
+		}
+
+		if let guilds = data["guilds"] as? [[String: Any]] {
+			self.guilds = DiscordGuild.guildsFromArray(guilds)
+		}
+
+		if let relationships = data["relationships"] as? [[String: Any]] {
+			self.relationships = relationships
+		}
+
+		connected = true
+		handleEvent("connect", with: [data])
+	}
+
+	/**
+		Handles voice server updates from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	public func handleVoiceServerUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling voice server update", type: logType)
+		DefaultDiscordLogger.Logger.verbose("Voice server update: %@", type: logType, args: data)
+
+		self.voiceServerInformation = data
+
+		if self.joiningVoiceChannel {
+			// print("got voice server \(data)")
+			self.startVoiceConnection()
+		}
+	}
+
+	/**
+		Handles voice state updates from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	func handleVoiceStateUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling voice state update", type: logType)
+
+		guard let guildId = data["guild_id"] as? String else { return }
+
+		let state = DiscordVoiceState(voiceStateObject: data, guildId: guildId)
+
+		DefaultDiscordLogger.Logger.verbose("Voice state: %@", type: logType, args: state)
+
+		if state.channelId == "" {
+			guilds[guildId]?.voiceStates[state.userId] = nil
+		} else {
+			guilds[guildId]?.voiceStates[state.userId] = state
+		}
+
+		if state.userId == user?.id {
+			if state.channelId == "" {
+				voiceState = nil
+			} else if joiningVoiceChannel {
+				voiceState = state
+
+				startVoiceConnection()
+			}
+		}
+
+		handleEvent("voiceStateUpdate", with: [guildId, state])
 	}
 }
