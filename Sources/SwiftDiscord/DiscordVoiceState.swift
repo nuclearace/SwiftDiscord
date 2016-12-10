@@ -15,16 +15,35 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+/// Represents a voice state.
 public struct DiscordVoiceState {
+	// MARK: Properties
+
+	/// The snowflake id of the voice channel this state belongs to.
 	public let channelId: String
+
+	/// The snowflake id of the guild this state belongs to.
 	public let guildId: String
+
+	/// The session id that this state belongs to.
 	public let sessionId: String
+
+	/// The snowflake id of the user this state is for.
 	public let userId: String
 
+	/// Whether this user is deafened.
 	public var deaf: Bool
+
+	/// Whether this user is muted.
 	public var mute: Bool
+
+	/// Whether this user has deafened themself.
 	public var selfDeaf: Bool
+
+	/// Whether this user has muted themself.
 	public var selfMute: Bool
+
+	/// Whether this user is being suppressed.
 	public var suppress: Bool
 
 	init(voiceStateObject: [String: Any], guildId: String) {
