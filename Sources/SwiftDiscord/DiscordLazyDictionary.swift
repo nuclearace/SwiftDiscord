@@ -92,7 +92,7 @@ public struct DiscordLazyDictionaryIndex<K: Hashable, V> : Comparable {
 
  To store a lazy value into the dictionary:
 
- ```
+ ```swift
  var dict = [2: 4] as DiscordLazyDictionary
 
  dict[lazy: 24] = .lazy({ 2343 + 2343 })

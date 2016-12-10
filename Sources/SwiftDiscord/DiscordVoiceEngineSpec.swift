@@ -40,14 +40,13 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
 
         Example using youtube-dl to play music:
 
-        ```
+        ```swift
         youtube = EncoderProcess()
         youtube.launchPath = "/usr/local/bin/youtube-dl"
         youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
         youtube.standardOutput = client.voiceEngine!.requestFileHandleForWriting()!
 
         youtube.terminationHandler = {[weak self] process in
-            print("yt died")
             self?.client.voiceEngine?.encoder?.finishEncodingAndClose()
         }
 

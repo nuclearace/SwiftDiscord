@@ -14,7 +14,7 @@
     <a title="DiscordVoiceEngine Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (94% documented)</p>
+        <p><a href="../index.html"> Docs</a> (96% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -820,17 +820,16 @@ sent to Discord.</p>
 
 <p>Example using youtube-dl to play music:</p>
 
-<pre class="highlight plaintext"><code>youtube = EncoderProcess()
-youtube.launchPath = "/usr/local/bin/youtube-dl"
-youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
-youtube.standardOutput = client.voiceEngine!.requestFileHandleForWriting()!
+<pre class="highlight swift"><code><span class="n">youtube</span> <span class="o">=</span> <span class="kt">EncoderProcess</span><span class="p">()</span>
+<span class="n">youtube</span><span class="o">.</span><span class="n">launchPath</span> <span class="o">=</span> <span class="s">"/usr/local/bin/youtube-dl"</span>
+<span class="n">youtube</span><span class="o">.</span><span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="s">"-f"</span><span class="p">,</span> <span class="s">"bestaudio"</span><span class="p">,</span> <span class="s">"-q"</span><span class="p">,</span> <span class="s">"-o"</span><span class="p">,</span> <span class="s">"-"</span><span class="p">,</span> <span class="n">link</span><span class="p">]</span>
+<span class="n">youtube</span><span class="o">.</span><span class="n">standardOutput</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">voiceEngine</span><span class="o">!.</span><span class="nf">requestFileHandleForWriting</span><span class="p">()</span><span class="o">!</span>
 
-youtube.terminationHandler = {[weak self] process in
-    print("yt died")
-    self?.client.voiceEngine?.encoder?.finishEncodingAndClose()
-}
+<span class="n">youtube</span><span class="o">.</span><span class="n">terminationHandler</span> <span class="o">=</span> <span class="p">{[</span><span class="k">weak</span> <span class="k">self</span><span class="p">]</span> <span class="n">process</span> <span class="k">in</span>
+    <span class="k">self</span><span class="p">?</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">voiceEngine</span><span class="p">?</span><span class="o">.</span><span class="n">encoder</span><span class="p">?</span><span class="o">.</span><span class="nf">finishEncodingAndClose</span><span class="p">()</span>
+<span class="p">}</span>
 
-youtube.launch()
+<span class="n">youtube</span><span class="o">.</span><span class="nf">launch</span><span class="p">()</span>
 </code></pre>
 
                       </div>

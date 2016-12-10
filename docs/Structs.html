@@ -13,7 +13,7 @@
     <a title="Structs  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html"> Docs</a> (94% documented)</p>
+        <p><a href="index.html"> Docs</a> (96% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -674,9 +674,9 @@
 
 <p>To store a lazy value into the dictionary:</p>
 
-<pre class="highlight plaintext"><code> var dict = [2: 4] as DiscordLazyDictionary
+<pre class="highlight swift"><code> <span class="k">var</span> <span class="nv">dict</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">:</span> <span class="mi">4</span><span class="p">]</span> <span class="k">as</span> <span class="kt">DiscordLazyDictionary</span>
 
- dict[lazy: 24] = .lazy({ 2343 + 2343 })
+ <span class="n">dict</span><span class="p">[</span><span class="nv">lazy</span><span class="p">:</span> <span class="mi">24</span><span class="p">]</span> <span class="o">=</span> <span class="o">.</span><span class="nf">lazy</span><span class="p">({</span> <span class="mi">2343</span> <span class="o">+</span> <span class="mi">2343</span> <span class="p">})</span>
 </code></pre>
 
                         <a href="Structs/DiscordLazyDictionary.html" class="slightly-smaller">See more</a>
@@ -919,9 +919,17 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Represents a Discord role.</p>
 
                         <a href="Structs/DiscordRole.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordRole</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -943,9 +951,27 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>A type that represents a Discord JWT.</p>
+
+<p>This type conforms to <code>ExpressibleByStringLiteral</code> so it can be created via string literals.</p>
+
+<p>For example:</p>
+
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">token</span> <span class="o">=</span> <span class="s">"Bot adfadf.adfdafdafdfa.afdaf"</span>
+</code></pre>
+
+<p>The <q>Bot</q> prefix indicates that this token is a bot. This must included if the token is for a bot.
+Likewise, if the token is an OAuth token, it must be preceded by <q>Bearer</q>. User tokens can omit a prefix.</p>
 
                         <a href="Structs/DiscordToken.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordToken</span> <span class="p">:</span> <span class="kt">ExpressibleByStringLiteral</span><span class="p">,</span> <span class="kt">CustomStringConvertible</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>

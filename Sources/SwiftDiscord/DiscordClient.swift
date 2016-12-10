@@ -25,7 +25,7 @@ import Dispatch
 
 	Creating a client:
 
-	```
+	```swift
 	let client = DiscordClient(token: "Bot mysupersecretbottoken", configuration: [.log(.info)])
 	```
 */

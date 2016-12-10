@@ -15,15 +15,34 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+/// Represents a Discord role.
 public struct DiscordRole : JSONAble {
+	// MARK: Properties
+
+	/// The snowflake id of the role.
 	public let id: String
 
+	/// The display color of this role.
 	public var color: Int
+
+	/// Whether this role should be hoisted.
 	public var hoist: Bool
+
+	/// Whether this role is managed.
 	public var managed: Bool
+
+	/// Whether this role is mentionable.
 	public var mentionable: Bool
+
+	/// The name of this role.
 	public var name: String
+
+	/// The permissions this role has.
+	///
+	/// *Bit field*
 	public var permissions: Int
+
+	/// The position of this role.
 	public var position: Int
 
 	init(roleObject: [String: Any]) {
