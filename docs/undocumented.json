@@ -533,13 +533,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordUtils.swift",
-      "line": 64,
-      "symbol": "&<<(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.free",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/eriklittle/Documents/iOS shit/SwiftDiscord/Sources/SwiftDiscord/DiscordVoiceState.swift",
       "line": 18,
       "symbol": "DiscordVoiceState",

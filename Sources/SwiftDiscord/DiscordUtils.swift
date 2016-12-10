@@ -61,6 +61,7 @@ public extension EncoderProcess {
 // Why does Apple not expose this?
 infix operator &<< : BitwiseShiftPrecedence
 
+/// A bitwise left shift with overflow. Not sure why apple doesn't expose this.
 public func &<<(lhs: Int, rhs: Int) -> Int {
     let bitsCount = MemoryLayout<Int>.size * 8
     let shiftCount = min(rhs, bitsCount - 1)
