@@ -18,7 +18,17 @@
 import Foundation
 import Dispatch
 
-///The base class for SwiftDiscord. Most interaction with Discord will be done through this class.
+/**
+	The base class for SwiftDiscord. Most interaction with Discord will be done through this class.
+
+	See `DiscordEndpointConsumer` for methods dealing with sending to Discord.
+
+	Creating a client:
+
+	```
+	let client = DiscordClient(token: "Bot mysupersecretbottoken", configuration: [.log(.info)])
+	```
+*/
 open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, DiscordEndpointConsumer {
 	// MARK: Properties
 
