@@ -47,11 +47,14 @@ public struct DiscordFileUpload {
 }
 
 #if os(macOS)
+/// A typealias for `Process`. Needed because `Process` on Linux is `Task`.
 public typealias EncoderProcess = Process
 #elseif os(Linux)
+/// A typealias for `Task`. Needed because `Task` on macOS is `Process`.
 public typealias EncoderProcess = Task
 
 public extension EncoderProcess {
+    /// Whether the task is running.
     var isRunning: Bool {
         return running
     }

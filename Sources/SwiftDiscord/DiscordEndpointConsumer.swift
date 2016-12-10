@@ -23,6 +23,8 @@ import Foundation
     This is where a `DiscordClient` gets the methods that interact with the REST API.
 */
 public protocol DiscordEndpointConsumer : DiscordClientSpec {
+    // MARK: Methods
+
     /**
         Accepts an invite.
 

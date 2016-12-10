@@ -24,7 +24,7 @@
     For example:
 
     ```swift
-    let token = "Bot adfadf.adfdafdafdfa.afdaf"
+    let token = "Bot adfadf.adfdafdafdfa.afdaf" as DiscordToken
     ```
 
     The "Bot" prefix indicates that this token is a bot. This must included if the token is for a bot.

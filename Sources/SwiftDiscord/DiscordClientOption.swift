@@ -30,7 +30,9 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
     /// Used to set a custom logger
     case logger(DiscordLogger)
 
-    /// - Returns: A description of this option
+    // MARK: Properties
+
+    /// - returns: A description of this option
     public var description: String {
         let description: String
 
@@ -45,7 +47,7 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
 }
 
 /// Compares two DiscordClientOption's descriptions.
-/// - Returns: true if they are the same
+/// - returns: true if they are the same
 public func ==(lhs: DiscordClientOption, rhs: DiscordClientOption) -> Bool {
     return lhs.description == rhs.description
 }

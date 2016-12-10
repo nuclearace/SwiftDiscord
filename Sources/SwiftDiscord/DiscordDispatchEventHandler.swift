@@ -17,6 +17,8 @@
 
 /// Protocol that declares a type will handle Discord dispatch events.
 public protocol DiscordDispatchEventHandler : DiscordClientSpec {
+	// MARK: Methods
+
 	/**
 		Handles channel creates from Discord.
 

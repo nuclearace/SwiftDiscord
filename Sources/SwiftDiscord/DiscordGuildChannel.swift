@@ -26,6 +26,8 @@ public enum DiscordChannelType : String {
 
 /// Represents a guild channel.
 public struct DiscordGuildChannel {
+	// MARK: Properties
+
 	/// The snowflake id of the channel.
 	public let id: String
 

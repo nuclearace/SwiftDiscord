@@ -19,6 +19,8 @@ import Foundation
 
 /// Declares that a type will handle gateway dispatches.
 public protocol DiscordEngineGatewayHandling : DiscordEngineSpec, DiscordEngineHeartbeatable {
+    // MARK: Methods
+
     /**
         Handles a dispatch payload.
 

@@ -284,6 +284,9 @@
               <li class="nav-group-task">
                 <a href="../Typealiases.html#/s:12SwiftDiscord16DiscordVoiceData">DiscordVoiceData</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12SwiftDiscord14EncoderProcess">EncoderProcess</a>
+              </li>
             </ul>
           </li>
         </ul>
@@ -683,11 +686,11 @@ made on this queue, as this is the queue where modifications on them are made.</
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Attaches the DiscordEngine.</p>
+                        <p>Attaches a <code><a href="../Classes/DiscordEngine.html">DiscordEngine</a></code>.</p>
 
 <p>You most likely won&rsquo;t need to call this method directly.</p>
 
-<p>Override this method to attach a custom engine that conforms to DiscordEngineSpec</p>
+<p>Override this method to attach a custom engine that conforms to <code><a href="../Protocols/DiscordEngineSpec.html">DiscordEngineSpec</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -819,6 +822,439 @@ with the client.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient11handleEventFTSS4withGSaP___T_"></a>
+                    <a name="//apple_ref/swift/Method/handleEvent(_:with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient11handleEventFTSS4withGSaP___T_">handleEvent(_:with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The main event handle method. Calls the associated event handler.
+You shouldn&rsquo;t need to call this event directly.</p>
+
+<p>Override to provide custom event handling functionality.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleEvent</span><span class="p">(</span><span class="n">_</span> <span class="nv">event</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>event</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The event being fired</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient20handleEngineDispatchFVS_21DiscordGatewayPayloadT_"></a>
+                    <a name="//apple_ref/swift/Method/handleEngineDispatch(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient20handleEngineDispatchFVS_21DiscordGatewayPayloadT_">handleEngineDispatch(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Handles engine dispatch events. You shouldn&rsquo;t need to call this method directly.</p>
+
+<p>Override to provide custom engine dispatch functionality.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleEngineDispatch</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>payload</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A <code>DiscordGatewayPayload</code> containing the dispatch information.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient17handleEngineEventFTSS4withGSaP___T_"></a>
+                    <a name="//apple_ref/swift/Method/handleEngineEvent(_:with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient17handleEngineEventFTSS4withGSaP___T_">handleEngineEvent(_:with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Handles an engine event. You shouldn&rsquo;t need to call this method directly.</p>
+
+<p>Override to provide additional custmization around this event.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleEngineEvent</span><span class="p">(</span><span class="n">_</span> <span class="nv">event</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>event</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The engine event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient15handleVoiceDataFT9rtpHeaderGSaVs5UInt8_9voiceDataGSaS1___T_"></a>
+                    <a name="//apple_ref/swift/Method/handleVoiceData(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient15handleVoiceDataFT9rtpHeaderGSaVs5UInt8_9voiceDataGSaS1___T_">handleVoiceData(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Handles voice data received from the VoiceEngine</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleVoiceData</span><span class="p">(</span><span class="n">_</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord16DiscordVoiceData">DiscordVoiceData</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient15guildForChannelFSSGSqVS_12DiscordGuild_"></a>
+                    <a name="//apple_ref/swift/Method/guildForChannel(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient15guildForChannelFSSGSqVS_12DiscordGuild_">guildForChannel(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Gets the <code><a href="../Structs/DiscordGuild.html">DiscordGuild</a></code> for a channel snowflake.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">guildForChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/DiscordGuild.html">DiscordGuild</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>channelId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A channel snowflake</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An optional containing a <code><a href="../Structs/DiscordGuild.html">DiscordGuild</a></code> if one was found.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient16joinVoiceChannelFSST_"></a>
+                    <a name="//apple_ref/swift/Method/joinVoiceChannel(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient16joinVoiceChannelFSST_">joinVoiceChannel(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Joins a voice channel. A <code>voiceEngine.ready</code> event will be fired when the client has joined the channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">joinVoiceChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>channelId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake of the voice channel you would like to join</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient17leaveVoiceChannelFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/leaveVoiceChannel()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient17leaveVoiceChannelFT_T_">leaveVoiceChannel()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Leaves the currently connected voice channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">leaveVoiceChannel</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient15requestAllUsersFT2onSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/requestAllUsers(on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient15requestAllUsersFT2onSS_T_">requestAllUsers(on:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Requests all users from Discord for the guild specified. Use this when you need to get all users on a large
+guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">requestAllUsers</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake of the guild you wish to request all users.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient11setPresenceFVS_21DiscordPresenceUpdateT_"></a>
+                    <a name="//apple_ref/swift/Method/setPresence(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient11setPresenceFVS_21DiscordPresenceUpdateT_">setPresence(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sets the user&rsquo;s presence.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">setPresence</span><span class="p">(</span><span class="n">_</span> <span class="nv">presence</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordPresenceUpdate.html">DiscordPresenceUpdate</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>presence</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The new presence object</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/DiscordDispatchEventHandler%20Conformance"></a>
+                <a name="//apple_ref/swift/Section/DiscordDispatchEventHandler Conformance" class="dashAnchor"></a>
+                <a href="#/DiscordDispatchEventHandler%20Conformance">
+                  <h3 class="section-name">DiscordDispatchEventHandler Conformance</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:FC12SwiftDiscord13DiscordClient19handleChannelCreateFT4withGVs10DictionarySSP___T_"></a>
                     <a name="//apple_ref/swift/Method/handleChannelCreate(with:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient19handleChannelCreateFT4withGVs10DictionarySSP___T_">handleChannelCreate(with:)</a>
@@ -944,180 +1380,6 @@ with the client.</p>
                         <h4>Parameters</h4>
                         <table class="graybox">
                           <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>with</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The data from the event</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient11handleEventFTSS4withGSaP___T_"></a>
-                    <a name="//apple_ref/swift/Method/handleEvent(_:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient11handleEventFTSS4withGSaP___T_">handleEvent(_:with:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The main event handle method. Calls the associated event handler.
-You shouldn&rsquo;t need to call this event directly.</p>
-
-<p>Override to provide custom event handling functionality.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleEvent</span><span class="p">(</span><span class="n">_</span> <span class="nv">event</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">])</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>event</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The event being fired</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>with</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The data from the event</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient20handleEngineDispatchFVS_21DiscordGatewayPayloadT_"></a>
-                    <a name="//apple_ref/swift/Method/handleEngineDispatch(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient20handleEngineDispatchFVS_21DiscordGatewayPayloadT_">handleEngineDispatch(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Handles engine dispatch events. You shouldn&rsquo;t need to call this method directly.</p>
-
-<p>Override to provide custom engine dispatch functionality.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleEngineDispatch</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>payload</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A DiscordGatewayPayload containing the dispatch information.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient17handleEngineEventFTSS4withGSaP___T_"></a>
-                    <a name="//apple_ref/swift/Method/handleEngineEvent(_:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient17handleEngineEventFTSS4withGSaP___T_">handleEngineEvent(_:with:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Handles an engine event. You shouldn&rsquo;t need to call this method directly.</p>
-
-<p>Override to provide additional custmization around this event.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleEngineEvent</span><span class="p">(</span><span class="n">_</span> <span class="nv">event</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">])</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>event</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The engine event</p>
-
-                                </div>
-                              </td>
-                            </tr>
                             <tr>
                               <td>
                                 <code>
@@ -1826,33 +2088,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient15handleVoiceDataFT9rtpHeaderGSaVs5UInt8_9voiceDataGSaS1___T_"></a>
-                    <a name="//apple_ref/swift/Method/handleVoiceData(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient15handleVoiceDataFT9rtpHeaderGSaVs5UInt8_9voiceDataGSaS1___T_">handleVoiceData(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Handles voice data received from the VoiceEngine</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleVoiceData</span><span class="p">(</span><span class="n">_</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord16DiscordVoiceData">DiscordVoiceData</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:FC12SwiftDiscord13DiscordClient23handleVoiceServerUpdateFT4withGVs10DictionarySSP___T_"></a>
                     <a name="//apple_ref/swift/Method/handleVoiceServerUpdate(with:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient23handleVoiceServerUpdateFT4withGVs10DictionarySSP___T_">handleVoiceServerUpdate(with:)</a>
@@ -1938,227 +2173,6 @@ You shouldn&rsquo;t need to call this event directly.</p>
                               <td>
                                 <div>
                                   <p>The data from the event</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient15guildForChannelFSSGSqVS_12DiscordGuild_"></a>
-                    <a name="//apple_ref/swift/Method/guildForChannel(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient15guildForChannelFSSGSqVS_12DiscordGuild_">guildForChannel(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Gets the DiscordGuild for a Channel snowflake.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">guildForChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/DiscordGuild.html">DiscordGuild</a></span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>channelId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A channel snowflake</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>An optional containing a DiscordGuild if one was found.</p>
-
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient16joinVoiceChannelFSST_"></a>
-                    <a name="//apple_ref/swift/Method/joinVoiceChannel(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient16joinVoiceChannelFSST_">joinVoiceChannel(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Joins a voice channel. A <code>voiceEngine.ready</code> event will be fired when the client has joined the channel.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">joinVoiceChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>channelId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The snowflake of the voice channel you would like to join</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient17leaveVoiceChannelFT_T_"></a>
-                    <a name="//apple_ref/swift/Method/leaveVoiceChannel()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient17leaveVoiceChannelFT_T_">leaveVoiceChannel()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Leaves the currently connected voice channel.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">leaveVoiceChannel</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient15requestAllUsersFT2onSS_T_"></a>
-                    <a name="//apple_ref/swift/Method/requestAllUsers(on:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient15requestAllUsersFT2onSS_T_">requestAllUsers(on:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Requests all users from Discord for the guild specified. Use this when you need to get all users on a large
-guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">requestAllUsers</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>on</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The snowflake of the guild you wish to request all users.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient11setPresenceFVS_21DiscordPresenceUpdateT_"></a>
-                    <a name="//apple_ref/swift/Method/setPresence(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient11setPresenceFVS_21DiscordPresenceUpdateT_">setPresence(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Sets the user&rsquo;s presence.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">setPresence</span><span class="p">(</span><span class="n">_</span> <span class="nv">presence</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordPresenceUpdate.html">DiscordPresenceUpdate</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>presence</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The new presence object</p>
 
                                 </div>
                               </td>

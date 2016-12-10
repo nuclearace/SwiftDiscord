@@ -17,6 +17,8 @@
 
 /// Declares a type will be a client of a DiscordEngine.
 public protocol DiscordEngineClient {
+    // MARK: Methods
+
     /**
         Handles engine dispatch events.
 

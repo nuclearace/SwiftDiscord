@@ -99,11 +99,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	// MARK: Methods
 
 	/**
-		Attaches the DiscordEngine.
+		Attaches a `DiscordEngine`.
 
 		You most likely won't need to call this method directly.
 
-		Override this method to attach a custom engine that conforms to DiscordEngineSpec
+		Override this method to attach a custom engine that conforms to `DiscordEngineSpec`.
 	*/
 	open func attachEngine() {
 		DefaultDiscordLogger.Logger.log("Attaching engine", type: logType)
@@ -154,6 +154,176 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	open func on(_ event: String, callback: @escaping ([Any]) -> Void) {
 		handlers[event] = DiscordEventHandler(event: event, callback: callback)
 	}
+
+	/**
+		The main event handle method. Calls the associated event handler.
+		You shouldn't need to call this event directly.
+
+		Override to provide custom event handling functionality.
+
+		- parameter event: The event being fired
+		- parameter with: The data from the event
+	*/
+	open func handleEvent(_ event: String, with data: [Any]) {
+		handleQueue.async {
+			self.handlers[event]?.executeCallback(with: data)
+		}
+	}
+
+	/**
+		Handles engine dispatch events. You shouldn't need to call this method directly.
+
+		Override to provide custom engine dispatch functionality.
+
+		- parameter payload: A `DiscordGatewayPayload` containing the dispatch information.
+	*/
+	open func handleEngineDispatch(_ payload: DiscordGatewayPayload) {
+		guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
+			DefaultDiscordLogger.Logger.error("Could not create dispatch event %@", type: logType, args: payload)
+
+			return
+		}
+
+		handleQueue.async {
+			self.handleDispatch(event: event, data: payload.payload)
+		}
+	}
+
+	/**
+		Handles an engine event. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter event: The engine event
+		- parameter with: The data from the event
+	*/
+	open func handleEngineEvent(_ event: String, with data: [Any]) {
+		handleEvent(event, with: data)
+	}
+
+	/**
+		Handles voice data received from the VoiceEngine
+	*/
+	open func handleVoiceData(_ data: DiscordVoiceData) {
+		voiceQueue.async {
+			self.onVoiceData(data)
+		}
+	}
+
+	/**
+		Gets the `DiscordGuild` for a channel snowflake.
+
+		- parameter channelId: A channel snowflake
+
+		- returns: An optional containing a `DiscordGuild` if one was found.
+	*/
+	public func guildForChannel(_ channelId: String) -> DiscordGuild? {
+		return guilds.filter({ return $0.1.channels[channelId] != nil }).map({ $0.1 }).first
+	}
+
+	/**
+		Joins a voice channel. A `voiceEngine.ready` event will be fired when the client has joined the channel.
+
+		- parameter channelId: The snowflake of the voice channel you would like to join
+	*/
+	open func joinVoiceChannel(_ channelId: String) {
+        #if !os(iOS)
+		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
+				channel.type == .voice else {
+
+			return
+		}
+
+		DefaultDiscordLogger.Logger.log("Joining voice channel: %@", type: self.logType, args: channel)
+
+		self.joiningVoiceChannel = true
+
+		self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
+			payload: .object([
+				"guild_id": guild.id,
+				"channel_id": channel.id,
+				"self_mute": false,
+				"self_deaf": false
+				])
+			)
+		)
+        #else
+        print("Only available on macOS and Linux")
+        #endif
+	}
+
+	/**
+		Leaves the currently connected voice channel.
+	*/
+	open func leaveVoiceChannel() {
+        #if !os(iOS)
+        guard let state = voiceState else { return }
+
+        self.voiceEngine?.disconnect()
+        self.voiceEngine = nil
+
+        self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
+        	payload: .object([
+        		"guild_id": state.guildId,
+        		"channel_id": NSNull(),
+        		"self_mute": false,
+        		"self_deaf": false
+			]))
+		)
+
+		self.joiningVoiceChannel = false
+        #else
+        print("Only available on macOS and Linux")
+        #endif
+	}
+
+	/**
+		Requests all users from Discord for the guild specified. Use this when you need to get all users on a large
+		guild. Multiple `guildMembersChunk` will be fired.
+
+		- parameter on: The snowflake of the guild you wish to request all users.
+	*/
+	open func requestAllUsers(on guildId: String) {
+		let requestObject: [String: Any] = [
+			"guild_id": guildId,
+			"query": "",
+			"limit": 0
+		]
+
+		engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.requestGuildMembers),
+			payload: .object(requestObject)))
+	}
+
+	/**
+		Sets the user's presence.
+
+		- parameter presence: The new presence object
+	*/
+	open func setPresence(_ presence: DiscordPresenceUpdate) {
+		engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.statusUpdate),
+			payload: .object(presence.json)))
+	}
+
+	fileprivate func startVoiceConnection() {
+        #if !os(iOS)
+		// We need both to start the connection
+		guard voiceState != nil && voiceServerInformation != nil else {
+			return
+		}
+
+		// Reuse a previous engine's encoder if possible
+		voiceEngine = DiscordVoiceEngine(client: self, voiceServerInformation: voiceServerInformation!,
+			encoder: voiceEngine?.encoder, secret: voiceEngine?.secret)
+
+		DefaultDiscordLogger.Logger.log("Connecting voice engine", type: logType)
+
+		voiceEngine?.connect()
+        #else
+        print("Only available on macOS and Linux")
+        #endif
+	}
+
+	// MARK: DiscordDispatchEventHandler Conformance
 
 	/**
 		Handles channel creates from Discord. You shouldn't need to call this method directly.
@@ -211,52 +381,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		guilds[channel.guildId]?.channels[channel.id] = channel
 
 		handleEvent("channelUpdate", with: [channel.guildId, channel])
-	}
-
-	/**
-		The main event handle method. Calls the associated event handler.
-		You shouldn't need to call this event directly.
-
-		Override to provide custom event handling functionality.
-
-		- parameter event: The event being fired
-		- parameter with: The data from the event
-	*/
-	open func handleEvent(_ event: String, with data: [Any]) {
-		handleQueue.async {
-			self.handlers[event]?.executeCallback(with: data)
-		}
-	}
-
-	/**
-		Handles engine dispatch events. You shouldn't need to call this method directly.
-
-		Override to provide custom engine dispatch functionality.
-
-		- parameter payload: A DiscordGatewayPayload containing the dispatch information.
-	*/
-	open func handleEngineDispatch(_ payload: DiscordGatewayPayload) {
-		guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
-			DefaultDiscordLogger.Logger.error("Could not create dispatch event %@", type: logType, args: payload)
-
-			return
-		}
-
-		handleQueue.async {
-			self.handleDispatch(event: event, data: payload.payload)
-		}
-	}
-
-	/**
-		Handles an engine event. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter event: The engine event
-		- parameter with: The data from the event
-	*/
-	open func handleEngineEvent(_ event: String, with data: [Any]) {
-		handleEvent(event, with: data)
 	}
 
 	/**
@@ -581,15 +705,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	/**
-		Handles voice data received from the VoiceEngine
-	*/
-	open func handleVoiceData(_ data: DiscordVoiceData) {
-		voiceQueue.async {
-			self.onVoiceData(data)
-		}
-	}
-
-	/**
 		Handles voice server updates from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
@@ -641,118 +756,5 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		}
 
 		handleEvent("voiceStateUpdate", with: [guildId, state])
-	}
-
-	/**
-		Gets the DiscordGuild for a Channel snowflake.
-
-		- parameter channelId: A channel snowflake
-
-		- returns: An optional containing a DiscordGuild if one was found.
-	*/
-	public func guildForChannel(_ channelId: String) -> DiscordGuild? {
-		return guilds.filter({ return $0.1.channels[channelId] != nil }).map({ $0.1 }).first
-	}
-
-	/**
-		Joins a voice channel. A `voiceEngine.ready` event will be fired when the client has joined the channel.
-
-		- parameter channelId: The snowflake of the voice channel you would like to join
-	*/
-	open func joinVoiceChannel(_ channelId: String) {
-        #if !os(iOS)
-		guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
-				channel.type == .voice else {
-
-			return
-		}
-
-		DefaultDiscordLogger.Logger.log("Joining voice channel: %@", type: self.logType, args: channel)
-
-		self.joiningVoiceChannel = true
-
-		self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
-			payload: .object([
-				"guild_id": guild.id,
-				"channel_id": channel.id,
-				"self_mute": false,
-				"self_deaf": false
-				])
-			)
-		)
-        #else
-        print("Only available on macOS and Linux")
-        #endif
-	}
-
-	/**
-		Leaves the currently connected voice channel.
-	*/
-	open func leaveVoiceChannel() {
-        #if !os(iOS)
-        guard let state = voiceState else { return }
-
-        self.voiceEngine?.disconnect()
-        self.voiceEngine = nil
-
-        self.engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
-        	payload: .object([
-        		"guild_id": state.guildId,
-        		"channel_id": NSNull(),
-        		"self_mute": false,
-        		"self_deaf": false
-			]))
-		)
-
-		self.joiningVoiceChannel = false
-        #else
-        print("Only available on macOS and Linux")
-        #endif
-	}
-
-	/**
-		Requests all users from Discord for the guild specified. Use this when you need to get all users on a large
-		guild. Multiple `guildMembersChunk` will be fired.
-
-		- parameter on: The snowflake of the guild you wish to request all users.
-	*/
-	open func requestAllUsers(on guildId: String) {
-		let requestObject: [String: Any] = [
-			"guild_id": guildId,
-			"query": "",
-			"limit": 0
-		]
-
-		engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.requestGuildMembers),
-			payload: .object(requestObject)))
-	}
-
-	/**
-		Sets the user's presence.
-
-		- parameter presence: The new presence object
-	*/
-	open func setPresence(_ presence: DiscordPresenceUpdate) {
-		engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.statusUpdate),
-			payload: .object(presence.json)))
-	}
-
-	private func startVoiceConnection() {
-        #if !os(iOS)
-		// We need both to start the connection
-		guard voiceState != nil && voiceServerInformation != nil else {
-			return
-		}
-
-		// Reuse a previous engine's encoder if possible
-		voiceEngine = DiscordVoiceEngine(client: self, voiceServerInformation: voiceServerInformation!,
-			encoder: voiceEngine?.encoder, secret: voiceEngine?.secret)
-
-		DefaultDiscordLogger.Logger.log("Connecting voice engine", type: logType)
-
-		voiceEngine?.connect()
-        #else
-        print("Only available on macOS and Linux")
-        #endif
 	}
 }
