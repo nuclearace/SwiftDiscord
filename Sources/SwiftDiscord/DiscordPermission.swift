@@ -161,6 +161,8 @@ public enum DiscordPermissionOverwriteType : String, JSONRepresentable {
 ///
 /// The `allow` and `deny` properties are bit fields.
 public struct DiscordPermissionOverwrite : JSONAble {
+	// MARK: Properties
+
 	/// The snowflake id of this permission overwrite.
 	public let id: String
 
@@ -172,6 +174,8 @@ public struct DiscordPermissionOverwrite : JSONAble {
 
 	/// The permissions that this overwrite is not allowed to use.
 	public var deny: Int
+
+	// MARK: Initializers
 
 	/**
 		Creates a new DiscordPermissionOverwrite
