@@ -24,6 +24,8 @@ public enum DiscordOAuthEndpoint : String {
     /// The bot endpoint.
     case bot = "bot"
 
+    // MARK: Methods
+
     private func createURL(getParams: [String: String]) -> URL {
         var params = getParams
 

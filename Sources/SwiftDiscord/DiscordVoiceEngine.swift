@@ -36,7 +36,7 @@ enum DiscordVoiceEngineError : Error {
 }
 
 /**
-	A subclass of DiscordEngine that provides functionality for voice communication.
+	A subclass of `DiscordEngine` that provides functionality for voice communication.
 
 	Discord uses encrypted OPUS encoded voice packets. The engine is responsible for encyrpting/decrypting voice
 	packets that are sent and received.
@@ -49,7 +49,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		return "wss://" + endpoint.components(separatedBy: ":")[0]
 	}
 
-	/// The type of DiscordEngine this is. Used to correctly fire engine events.
+	/// The type of `DiscordEngine` this is. Used to correctly fire engine events.
 	public override var engineType: String {
 		return "voiceEngine"
 	}

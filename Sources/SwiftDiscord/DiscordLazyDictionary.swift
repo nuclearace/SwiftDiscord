@@ -99,6 +99,8 @@ public struct DiscordLazyDictionaryIndex<K: Hashable, V> : Comparable {
  ```
  */
 public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLiteral, Collection {
+    // MARK: Typealiases/Subscripts
+
     /// The key type.
     public typealias Key = K
 
@@ -114,29 +116,31 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
     /// The subsequence type.
     public typealias SubSequence =  Dictionary<Key, Value>.SubSequence
 
+    // MARK: Properties
+
     fileprivate var backingDictionary = [K: DiscordLazyValue<V>]()
 
-    /// - Returns: The start index
+    /// - returns: The start index
     public var startIndex: Index {
         return DiscordLazyDictionaryIndex<Key, Value>(backingIndex: backingDictionary.startIndex)
     }
 
-    /// - Returns: The end index
+    /// - returns: The end index
     public var endIndex: Index {
         return DiscordLazyDictionaryIndex<Key, Value>(backingIndex: backingDictionary.endIndex)
     }
 
-    /// - Returns: a Bool indicating whether this dictionary is empty
+    /// - returns: A Bool indicating whether this dictionary is empty
     public var isEmpty: Bool {
         return backingDictionary.isEmpty
     }
 
-    /// - Returns: the number of stored key/value pairs
+    /// - returns: The number of stored key/value pairs
     public var count: Int {
         return backingDictionary.count
     }
 
-    /// - Returns: The first key/value pair stored in the dictionary.
+    /// - returns: The first key/value pair stored in the dictionary.
     public var first: (Key, Value)? {
         guard let firstValue = backingDictionary.first else { return nil }
 
@@ -147,7 +151,7 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         Used to get/set the value stored at `key`. This will force evaluation if the value hasn't been computed yet.
         Can be used to set an already computed value.
 
-        - Returns: An optional containing the value at `key`, or nil if that key is not in the dictionary
+        - returns: An optional containing the value at `key`, or nil if that key is not in the dictionary
     */
     public subscript(key: Key) -> Value? {
         get {
@@ -169,7 +173,7 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         Used to get/set the DiscordLazyValue stored at `key`.
         Can be used to set a lazy value.
 
-        - Returns: An optional containing the DiscordLazyValue at `key`, or nil if that key is not in the dictionary
+        - returns: An optional containing the DiscordLazyValue at `key`, or nil if that key is not in the dictionary
     */
     public subscript(lazy key: Key) -> DiscordLazyValue<V>? {
         get {
@@ -184,7 +188,7 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
     /**
         Used to get the key/value pair stored at `position`.
 
-        - Returns: An optional containing the key/value pair at `key`, or nil if that key is not in the dictionary
+        - returns: An optional containing the key/value pair at `key`, or nil if that key is not in the dictionary
     */
     public subscript(position: Index) -> Iterator.Element {
         let backingValues = backingDictionary[position.backingIndex]
@@ -193,7 +197,7 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
     }
 
     /**
-        - Returns: A slice of dictionary with `bounds`
+        - returns: A slice of dictionary with `bounds`
     */
     public subscript(bounds: Range<Index>) -> SubSequence {
         var base = [Key: Value]()
@@ -206,6 +210,13 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         return Slice(base: base, bounds: base.startIndex..<base.endIndex)
     }
 
+    // MARK: Initializers
+
+    /**
+        ExpressibleByDictionaryLiteral conformance.
+
+        - parameter dictionaryLiteral: Array of key/value pairs.
+    */
     public init(dictionaryLiteral elements: (Key, Value)...) {
         backingDictionary = [Key: DiscordLazyValue<Value>]()
 
@@ -214,8 +225,12 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         }
     }
 
+    // MARK: Methods
+
     /**
         Creates an iterator for this dictionary. Forces evaulation of all elements.
+
+        - returns: An iterator for this collection.
     */
     public func makeIterator() -> Iterator {
         var dict = [Key: Value]()
@@ -228,20 +243,18 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
     }
 
     /**
-        - Parameters:
-            - after: The index for which we want the successor to
+        - parameter after: The index for which we want the successor to
 
-        - Returns: The index after the specified index.
+        - returns: The index after the specified index.
     */
     public func index(after i: Index) -> Index {
         return DiscordLazyDictionaryIndex(backingIndex: backingDictionary.index(after: i.backingIndex))
     }
 
     /**
-        - Paramters:
-            - upTo: the end index for this slice
+        - parameter upTo: the end index for this slice
 
-        - Returns: A slice of dictionary up to `upTo`
+        - returns: A slice of dictionary up to `upTo`
     */
     public func prefix(upTo end: Index) -> SubSequence {
         var base = [Key: Value]()
@@ -255,10 +268,9 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
     }
 
     /**
-        - Paramters:
-            - through: the through index for this slice
+        - parameter through: the through index for this slice
 
-        - Returns: A slice of dictionary through `upTo`
+        - returns: A slice of dictionary through `upTo`
     */
     public func prefix(through position: Index) -> SubSequence {
         var base = [Key: Value]()
@@ -272,20 +284,18 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
     }
 
     /**
-        - Paramters:
-            - forKey: the key for the value being removed
+        - parameter forKey: the key for the value being removed
 
-        - Returns: an optional containing the value stored at `key`, or nil if key wasn't stored in this dictionary
+        - returns: an optional containing the value stored at `key`, or nil if key wasn't stored in this dictionary
     */
     public mutating func removeValue(forKey key: Key) -> Value? {
         return backingDictionary.removeValue(forKey: key)?.value
     }
 
     /**
-        - Paramters:
-            - from: the from index for this slice
+        - parameter from: the from index for this slice
 
-        - Returns: A slice of dictionary from `from`
+        - returns: A slice of dictionary from `from`
     */
     public func suffix(from start: Index) -> SubSequence {
         var base = [Key: Value]()
@@ -299,8 +309,9 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
     }
 }
 
-/// CustomStringConvertible conformance
 extension DiscordLazyDictionary : CustomStringConvertible {
+    // MARK: CustomStringConvertible conformance
+
     /// A description of this dictionary
     public var description: String {
         return "DiscordLazyDictionary<\(Key.self), \(Value.self)>(\(backingDictionary))"

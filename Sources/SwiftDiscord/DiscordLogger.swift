@@ -31,8 +31,12 @@ public enum DiscordLogLevel {
 
 /// Declares that a type will act as a logger.
 public protocol DiscordLogger {
+    // MARK: Properties
+
     /// Whether to log or not.
     var level: DiscordLogLevel { get set }
+
+    // MARK: Methods
 
     /// Normal log messages.
     func log(_ message: String, type: String, args: Any...)

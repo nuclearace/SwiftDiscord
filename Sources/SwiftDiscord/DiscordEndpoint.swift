@@ -226,6 +226,8 @@ public enum DiscordEndpoint : String {
 		return DiscordEndpoint.baseURL.rawValue + rawValue
 	}
 
+	// MARK: Methods
+
 	/**
 		Helper method that creates the basic request for an endpoint.
 

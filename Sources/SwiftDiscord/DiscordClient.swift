@@ -99,11 +99,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	// MARK: Methods
 
 	/**
-		Attaches the DiscordEngine.
+		Attaches a `DiscordEngine`.
 
 		You most likely won't need to call this method directly.
 
-		Override this method to attach a custom engine that conforms to DiscordEngineSpec
+		Override this method to attach a custom engine that conforms to `DiscordEngineSpec`.
 	*/
 	open func attachEngine() {
 		DefaultDiscordLogger.Logger.log("Attaching engine", type: logType)
@@ -175,7 +175,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide custom engine dispatch functionality.
 
-		- parameter payload: A DiscordGatewayPayload containing the dispatch information.
+		- parameter payload: A `DiscordGatewayPayload` containing the dispatch information.
 	*/
 	open func handleEngineDispatch(_ payload: DiscordGatewayPayload) {
 		guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
@@ -211,11 +211,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	/**
-		Gets the DiscordGuild for a Channel snowflake.
+		Gets the `DiscordGuild` for a channel snowflake.
 
 		- parameter channelId: A channel snowflake
 
-		- returns: An optional containing a DiscordGuild if one was found.
+		- returns: An optional containing a `DiscordGuild` if one was found.
 	*/
 	public func guildForChannel(_ channelId: String) -> DiscordGuild? {
 		return guilds.filter({ return $0.1.channels[channelId] != nil }).map({ $0.1 }).first
