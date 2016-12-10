@@ -34,10 +34,3 @@ public protocol DiscordEngineClient {
     */
 	func handleEngineEvent(_ event: String, with data: [Any])
 }
-
-public extension DiscordEngineClient {
-    /// Default implementation.
-	func handleEngineEvent(_ event: String, with data: [Any]) {
-		print("Got engine event \(event) with \(data)")
-	}
-}

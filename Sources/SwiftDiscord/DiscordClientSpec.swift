@@ -97,3 +97,11 @@ public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngi
 	*/
 	func setPresence(_ presence: DiscordPresenceUpdate)
 }
+
+/// Declares that a type will be able to reference a DiscordClient from within itself.
+public protocol DiscordClientHolder {
+	// MARK: Properties
+
+	/// A reference to the client.
+	weak var client: DiscordClient? { get set }
+}

@@ -276,10 +276,10 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         Modifies the position of a channel.
 
         - parameter on: The snowflake id of the guild
-        - parameter channelId: The snowflake id of the channel
-        - parameter position: The new position of the channel
+        - parameter channelPositions: An array of channels that should be reordered. Should contain a dictionary
+                                      in the form `["id": channelId, "position": position]`
     */
-    func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int)
+    func modifyGuildChannelPositions(on guildId: String, channelPositions: [[String: Any]])
 
     /**
         Edits the specified role.
@@ -489,8 +489,8 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    public func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int) {
-        DiscordEndpoint.modifyGuildChannelPosition(on: guildId, channelId: channelId, position: position,
+    public func modifyGuildChannelPositions(on guildId: String, channelPositions: [[String: Any]]) {
+        DiscordEndpoint.modifyGuildChannelPositions(on: guildId, channelPositions: channelPositions,
             with: token)
     }
 

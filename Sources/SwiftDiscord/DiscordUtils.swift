@@ -149,19 +149,9 @@ func decodeJSON(_ string: String) -> JSON? {
 }
 
 func convertISO8601(string: String) -> Date? {
-	#if !os(Linux)
-    if #available(macOS 10.12, iOS 10, *) {
-        let formatter = ISO8601DateFormatter()
+    let RFC3339DateFormatter = DateFormatter()
 
-        formatter.formatOptions = .withFullDate
+    RFC3339DateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"
 
-        return formatter.date(from: string)
-    }
-    #endif
-
-	let RFC3339DateFormatter = DateFormatter()
-
-	RFC3339DateFormatter.dateFormat = "YYYY-MM-DD'T'HH:mm:ss.SSSSSS+HH:mm"
-
-	return RFC3339DateFormatter.date(from: string)
+    return RFC3339DateFormatter.date(from: string)
 }

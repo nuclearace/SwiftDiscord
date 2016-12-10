@@ -18,7 +18,7 @@
 import Foundation
 
 /// Represents a Guild.
-public struct DiscordGuild {
+public struct DiscordGuild : DiscordClientHolder {
 	// MARK: Properties
 
 	// TODO figure out what features are
@@ -39,6 +39,9 @@ public struct DiscordGuild {
 
 	/// Whether this guild is unavaiable.
 	public let unavailable: Bool
+
+	/// Reference to the client.
+	public weak var client: DiscordClient?
 
 	/// A dictionary of this guild's channels. The key is the snowflake id of the channel.
 	public internal(set) var channels: [String: DiscordGuildChannel]
@@ -136,8 +139,9 @@ public struct DiscordGuild {
 		return self
 	}
 
-	init(guildObject: [String: Any]) {
-		channels = DiscordGuildChannel.guildChannelsFromArray(guildObject.get("channels", or: [[String: Any]]()))
+	init(guildObject: [String: Any], client: DiscordClient?) {
+		channels = DiscordGuildChannel.guildChannelsFromArray(guildObject.get("channels", or: [[String: Any]]()),
+			client: client)
 		defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
 		embedEnabled = guildObject.get("embed_enabled", or: false)
 		embedChannelId = guildObject.get("embed_channel_id", or: "")
@@ -160,14 +164,15 @@ public struct DiscordGuild {
 			guildId: id)
 		unavailable = guildObject.get("unavailable", or: false)
 		joinedAt = convertISO8601(string: guildObject.get("joined_at", or: "")) ?? Date()
+		self.client = client
 	}
 
 	// Used to setup initial guilds
-	static func guildsFromArray(_ guilds: [[String: Any]]) -> [String: DiscordGuild] {
+	static func guildsFromArray(_ guilds: [[String: Any]], client: DiscordClient? = nil) -> [String: DiscordGuild] {
 		var guildDictionary = [String: DiscordGuild]()
 
 		for guildObject in guilds {
-			let guild = DiscordGuild(guildObject: guildObject)
+			let guild = DiscordGuild(guildObject: guildObject, client: client)
 
 			guildDictionary[guild.id] = guild
 		}

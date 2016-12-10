@@ -32,7 +32,7 @@ class DiscordBot {
     private var youtubeQueue = [QueuedVideo]()
 
     init(token: DiscordToken) {
-        client = DiscordClient(token: token, configuration: [.log(.verbose)])
+        client = DiscordClient(token: token, configuration: [.log(.debug)])
 
         attachHandlers()
     }
@@ -79,7 +79,7 @@ class DiscordBot {
         }
     }
 
-    func brutalizeImage(options: [String], channelId: String) {
+    func brutalizeImage(options: [String], channel: DiscordChannel) {
         #if os(macOS)
         let args = options.map(BrutalArg.init)
         var imagePath: String!
@@ -95,27 +95,26 @@ class DiscordBot {
         }
 
         guard imagePath != nil else {
-            client.sendMessage("Missing image url", to: channelId)
+            channel.sendMessage("Missing image url")
 
             return
         }
 
         guard let request = createGetRequest(for: imagePath) else {
-            client.sendMessage("Invalid url", to: channelId)
+            channel.sendMessage("Invalid url")
 
             return
         }
 
-        getRequestData(for: request) {[weak self] data in
-            guard let this = self else { return }
+        getRequestData(for: request) {data in
             guard let data = data else {
-                this.client.sendMessage("Something went wrong with the request", to: channelId)
+                channel.sendMessage("Something went wrong with the request")
 
                 return
             }
 
             guard let brutalizer = ImageBrutalizer(data: data) else {
-                this.client.sendMessage("Invalid image", to: channelId)
+                channel.sendMessage("Invalid image")
 
                 return
             }
@@ -125,16 +124,16 @@ class DiscordBot {
             }
 
             guard let outputData = brutalizer.outputData else {
-                this.client.sendMessage("Something went wrong brutalizing the image", to: channelId)
+                channel.sendMessage("Something went wrong brutalizing the image")
 
                 return
             }
 
-            this.client.sendFile(DiscordFileUpload(data: outputData, filename: "brutalized.png", mimeType: "image/png"),
-                content: "Brutalized:", to: channelId)
+            channel.sendFile(DiscordFileUpload(data: outputData, filename: "brutalized.png", mimeType: "image/png"),
+                content: "Brutalized:")
         }
         #else
-        client.sendMessage("Not available on Linux", to: channelId)
+        channel.sendMessage("Not available on Linux")
         #endif
     }
 
@@ -183,19 +182,18 @@ class DiscordBot {
         if command == "myroles" {
             let roles = getRolesForUser(message.author, on: message.channelId)
 
-            client.sendMessage("Your roles: \(roles.map({ $0.name }))", to: message.channelId)
+            message.channel?.sendMessage("Your roles: \(roles.map({ $0.name }))")
         } else if command == "yt", arguments.count == 1 {
-            client.sendMessage(playYoutube(channelId: message.channelId, link: arguments[0]), to: message.channelId)
+            message.channel?.sendMessage(playYoutube(channelId: message.channelId, link: arguments[0]))
         } else if command == "join" && arguments.count == 1 {
             guard let channel = findChannelFromName(arguments[0], in: client.guildForChannel(message.channelId)) else {
-                client.sendMessage("That doesn't look like a channel in this guild.",
-                    to: message.channelId)
+                message.channel?.sendMessage("That doesn't look like a channel in this guild.")
 
                 return
             }
 
             guard channel.type == .voice else {
-                client.sendMessage("That's not a voice channel.", to: message.channelId)
+                message.channel?.sendMessage("That's not a voice channel.")
 
                 return
             }
@@ -210,7 +208,9 @@ class DiscordBot {
 
             client.voiceEngine?.requestNewEncoder()
         } else if command == "brutal" {
-            brutalizeImage(options: arguments, channelId: message.channelId)
+            brutalizeImage(options: arguments, channel: message.channel!)
+        } else if command == "topic" && arguments.count != 0 {
+            message.channel?.modifyChannel(options: [.topic(arguments.joined(separator: " "))])
         }
     }
 

@@ -27,6 +27,13 @@ public protocol DiscordEngineGatewayHandling : DiscordEngineSpec, DiscordEngineH
         - parameter payload: The dispatch payload
     */
 	func handleDispatch(_ payload: DiscordGatewayPayload)
+
+    /**
+        Handles the hello event.
+
+        - parameter payload: The dispatch payload
+    */
+    func handleHello(_ payload: DiscordGatewayPayload)
 }
 
 public extension DiscordEngineGatewayHandling {
@@ -34,4 +41,14 @@ public extension DiscordEngineGatewayHandling {
 	func handleDispatch(_ payload: DiscordGatewayPayload) {
 		client?.handleEngineDispatch(payload)
 	}
+
+    /// Default implementation
+    func handleHello(_ payload: DiscordGatewayPayload) {
+        guard case let .object(eventData) = payload.payload else { fatalError("Got bad hello payload") }
+        guard let milliseconds = eventData["heartbeat_interval"] as? Int else {
+            fatalError("Got bad heartbeat interval")
+        }
+
+        startHeartbeat(seconds: milliseconds / 1000)
+    }
 }

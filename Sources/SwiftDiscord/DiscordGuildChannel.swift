@@ -15,17 +15,8 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/// Represents the type of guild channel.
-public enum DiscordChannelType : String {
-	/// A text channel.
-	case text = "text"
-
-	/// A voice channel
-	case voice = "voice"
-}
-
 /// Represents a guild channel.
-public struct DiscordGuildChannel {
+public struct DiscordGuildChannel : DiscordChannel {
 	// MARK: Properties
 
 	/// The snowflake id of the channel.
@@ -42,6 +33,9 @@ public struct DiscordGuildChannel {
 
 	/// The bitrate of this channel, if this is a voice channel.
 	public var bitrate: Int?
+
+	/// Reference to the client.
+	public weak var client: DiscordClient?
 
 	/// The last message received on this channel.
 	///
@@ -63,10 +57,10 @@ public struct DiscordGuildChannel {
 	/// The user limit of this channel, if this is a voice channel.
 	public var userLimit: Int?
 
-	init(guildChannelObject: [String: Any]) {
+	init(guildChannelObject: [String: Any], client: DiscordClient? = nil) {
 		id = guildChannelObject.get("id", or: "")
 		guildId = guildChannelObject.get("guild_id", or: "")
-		type = DiscordChannelType(rawValue: guildChannelObject.get("type", or: "")) ?? .text
+		type = DiscordChannelType(rawValue: guildChannelObject.get("type", or: 0)) ?? .text
 		bitrate = guildChannelObject.get("bitrate", or: nil) as Int?
 		lastMessageId = guildChannelObject.get("last_message_id", or: nil) as String?
 		name = guildChannelObject.get("name", or: "")
@@ -75,13 +69,15 @@ public struct DiscordGuildChannel {
 		position = guildChannelObject.get("position", or: 0)
 		topic = guildChannelObject.get("topic", or: nil) as String?
 		userLimit = guildChannelObject.get("user_limit", or: nil) as Int?
+		self.client = client
 	}
 
-	static func guildChannelsFromArray(_ guildChannelArray: [[String: Any]]) -> [String: DiscordGuildChannel] {
+	static func guildChannelsFromArray(_ guildChannelArray: [[String: Any]], client: DiscordClient? = nil)
+			-> [String: DiscordGuildChannel] {
 		var guildChannels = [String: DiscordGuildChannel]()
 
 		for guildChannelObject in guildChannelArray {
-			let guildChannel = DiscordGuildChannel(guildChannelObject: guildChannelObject)
+			let guildChannel = DiscordGuildChannel(guildChannelObject: guildChannelObject, client: client)
 
 			guildChannels[guildChannel.id] = guildChannel
 		}
