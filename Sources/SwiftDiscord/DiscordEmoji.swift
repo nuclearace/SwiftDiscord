@@ -15,11 +15,23 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+/// Represents an Emoji.
 public struct DiscordEmoji {
+	// MARK: Properties
+
+	/// The snowflake id of the emoji.
 	public let id: String
+
+	/// Whether this is a managed emoji.
 	public let managed: Bool
+
+	/// The name of the emoji.
 	public let name: String
+
+	/// Whether this emoji requires colons.
 	public let requireColons: Bool
+
+	/// An array of role snowflake ids this emoji is active for.
 	public let roles: [String]
 
 	init(emojiObject: [String: Any]) {
