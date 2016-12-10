@@ -50,30 +50,29 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	public var onVoiceData: (DiscordVoiceData) -> Void = {_ in }
 
 	/// Whether or not this client is connected.
-	public fileprivate(set) var connected = false
+	public private(set) var connected = false
 
 	/// The guilds that this user is in.
-	public fileprivate(set) var guilds = [String: DiscordGuild]()
+	public private(set) var guilds = [String: DiscordGuild]()
 
 	/// The relationships this user has. Only valid for non-bot users.
-	public fileprivate(set) var relationships = [[String: Any]]()
+	public private(set) var relationships = [[String: Any]]()
 
 	/// The DiscordUser this client is connected to.
-	public fileprivate(set) var user: DiscordUser?
+	public private(set) var user: DiscordUser?
 
 	/// The voice state for this user, if they are in a voice channel.
-	public fileprivate(set) var voiceState: DiscordVoiceState?
+	public private(set) var voiceState: DiscordVoiceState?
 
 	// crunchQueue should be used for tasks would block the handleQueue for too long
 	// DO NOT TOUCH ANY PROPERTIES WHILE ON THIS QUEUE. REENTER THE HANDLEQUEUE
-	fileprivate let crunchQueue = DispatchQueue(label: "crunchQueue")
-	fileprivate let logType = "DiscordClient"
-	fileprivate let voiceQueue = DispatchQueue(label: "voiceQueue")
-
-	fileprivate var joiningVoiceChannel = false
-	fileprivate var voiceServerInformation: [String: Any]?
+	private let crunchQueue = DispatchQueue(label: "crunchQueue")
+	private let logType = "DiscordClient"
+	private let voiceQueue = DispatchQueue(label: "voiceQueue")
 
 	private var handlers = [String: DiscordEventHandler]()
+	private var joiningVoiceChannel = false
+	private var voiceServerInformation: [String: Any]?
 
 	// MARK: Initializers
 
@@ -323,9 +322,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         print("Only available on macOS and Linux")
         #endif
 	}
-}
 
-public extension DiscordClient {
 	// MARK: DiscordDispatchEventHandler Conformance
 
 	/**
@@ -335,7 +332,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleChannelCreate(with data: [String: Any]) {
+	open func handleChannelCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling channel create", type: logType)
 
 		let channel = DiscordGuildChannel(guildChannelObject: data)
@@ -354,7 +351,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleChannelDelete(with data: [String: Any]) {
+	open func handleChannelDelete(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling channel delete", type: logType)
 
 		guard let guildId = data["guild_id"] as? String else { return }
@@ -374,7 +371,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleChannelUpdate(with data: [String: Any]) {
+	open func handleChannelUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling channel update", type: logType)
 
 		let channel = DiscordGuildChannel(guildChannelObject: data)
@@ -393,7 +390,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleGuildCreate(with data: [String: Any]) {
+	open func handleGuildCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild create", type: logType)
 
 		let guild = DiscordGuild(guildObject: data)
@@ -412,7 +409,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleGuildDelete(with data: [String: Any]) {
+	open func handleGuildDelete(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild delete", type: logType)
 
 		guard let guildId = data["id"] as? String else { return }
@@ -431,7 +428,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleGuildEmojiUpdate(with data: [String: Any]) {
+	open func handleGuildEmojiUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild emoji update", type: logType)
 
 		guard let guildId = data["guild_id"] as? String else { return }
@@ -453,7 +450,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleGuildMemberAdd(with data: [String: Any]) {
+	open func handleGuildMemberAdd(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild member add", type: logType)
 
 		guard let guildId = data["guild_id"] as? String else { return }
@@ -475,7 +472,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleGuildMemberRemove(with data: [String: Any]) {
+	open func handleGuildMemberRemove(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild member remove", type: logType)
 
 		guard let guildId = data["guild_id"] as? String else { return }
@@ -499,7 +496,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleGuildMemberUpdate(with data: [String: Any]) {
+	open func handleGuildMemberUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild member update", type: logType)
 
 		guard let guildId = data["guild_id"] as? String else { return }
@@ -521,7 +518,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleGuildMembersChunk(with data: [String: Any]) {
+	open func handleGuildMembersChunk(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild members chunk", type: logType)
 
 		guard let guildId = data["guild_id"] as? String else { return }
@@ -551,7 +548,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleGuildRoleCreate(with data: [String: Any]) {
+	open func handleGuildRoleCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild role create", type: logType)
 
 		guard let guildId = data["guild_id"] as? String else { return }
@@ -573,7 +570,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleGuildRoleRemove(with data: [String: Any]) {
+	open func handleGuildRoleRemove(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild role remove", type: logType)
 
 		guard let guildId = data["guild_id"] as? String else { return }
@@ -593,7 +590,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleGuildRoleUpdate(with data: [String: Any]) {
+	open func handleGuildRoleUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild role update", type: logType)
 
 		// Functionally the same as adding
@@ -616,7 +613,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleGuildUpdate(with data: [String: Any]) {
+	open func handleGuildUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild update", type: logType)
 
 		guard let guildId = data["id"] as? String else { return }
@@ -634,7 +631,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleMessageCreate(with data: [String: Any]) {
+	open func handleMessageCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling message create", type: logType)
 
 		let message = DiscordMessage(messageObject: data)
@@ -651,7 +648,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handlePresenceUpdate(with data: [String: Any]) {
+	open func handlePresenceUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.debug("Handling presence update", type: logType)
 
 		guard let guildId = data["guild_id"] as? String else { return }
@@ -680,7 +677,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleReady(with data: [String: Any]) {
+	open func handleReady(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling ready", type: logType)
 
 		guard let milliseconds = data["heartbeat_interval"] as? Int else {
@@ -714,7 +711,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	public func handleVoiceServerUpdate(with data: [String: Any]) {
+	open func handleVoiceServerUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling voice server update", type: logType)
 		DefaultDiscordLogger.Logger.verbose("Voice server update: %@", type: logType, args: data)
 
@@ -733,7 +730,7 @@ public extension DiscordClient {
 
 		- parameter with: The data from the event
 	*/
-	func handleVoiceStateUpdate(with data: [String: Any]) {
+	open func handleVoiceStateUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling voice state update", type: logType)
 
 		guard let guildId = data["guild_id"] as? String else { return }
