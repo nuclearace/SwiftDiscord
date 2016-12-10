@@ -22,7 +22,7 @@ import Foundation
 
     This is where a `DiscordClient` gets the methods that interact with the REST API.
 */
-public protocol DiscordEndpointConsumer : DiscordClientSpec {
+public protocol DiscordEndpointConsumer : DiscordUserActor {
     // MARK: Methods
 
     /**
@@ -511,8 +511,6 @@ public extension DiscordEndpointConsumer {
 
     /// Default implementation
     public func sendMessage(_ message: String, to channelId: String, tts: Bool = false) {
-        guard connected else { return }
-
         DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts)
     }
 

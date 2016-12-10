@@ -167,6 +167,9 @@
                 <a href="../Protocols/DiscordLogger.html">DiscordLogger</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/DiscordUserActor.html">DiscordUserActor</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/DiscordVoiceEngineClient.html">DiscordVoiceEngineClient</a>
               </li>
               <li class="nav-group-task">
@@ -297,7 +300,7 @@
             <h1>DiscordClientSpec</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordClientSpec</span> <span class="p">:</span> <span class="kd">class</span><span class="p">,</span> <span class="kt"><a href="../Protocols/DiscordEngineClient.html">DiscordEngineClient</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/DiscordVoiceEngineClient.html">DiscordVoiceEngineClient</a></span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordClientSpec</span> <span class="p">:</span> <span class="kd">class</span><span class="p">,</span> <span class="kt"><a href="../Protocols/DiscordEngineClient.html">DiscordEngineClient</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/DiscordVoiceEngineClient.html">DiscordVoiceEngineClient</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/DiscordUserActor.html">DiscordUserActor</a></span></code></pre>
 
                 </div>
               </div>
@@ -344,33 +347,6 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vP12SwiftDiscord17DiscordClientSpec6guildsGVs10DictionarySSVS_12DiscordGuild_"></a>
-                    <a name="//apple_ref/swift/Property/guilds" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vP12SwiftDiscord17DiscordClientSpec6guildsGVs10DictionarySSVS_12DiscordGuild_">guilds</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The guilds that this user is in.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">guilds</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGuild.html">DiscordGuild</a></span><span class="p">]</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:vP12SwiftDiscord17DiscordClientSpec11handleQueueCSo13DispatchQueue"></a>
                     <a name="//apple_ref/swift/Property/handleQueue" class="dashAnchor"></a>
                     <a class="token" href="#/s:vP12SwiftDiscord17DiscordClientSpec11handleQueueCSo13DispatchQueue">handleQueue</a>
@@ -390,114 +366,6 @@ made on this queue, as this is the queue where modifications on them are made.</
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="k">var</span> <span class="nv">handleQueue</span><span class="p">:</span> <span class="kt">DispatchQueue</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vP12SwiftDiscord17DiscordClientSpec13relationshipsGSaGVs10DictionarySSP___"></a>
-                    <a name="//apple_ref/swift/Property/relationships" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vP12SwiftDiscord17DiscordClientSpec13relationshipsGSaGVs10DictionarySSP___">relationships</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The relationships this user has. Only valid for non-bot users.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">relationships</span><span class="p">:</span> <span class="p">[[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]]</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vP12SwiftDiscord17DiscordClientSpec5tokenVS_12DiscordToken"></a>
-                    <a name="//apple_ref/swift/Property/token" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vP12SwiftDiscord17DiscordClientSpec5tokenVS_12DiscordToken">token</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The Discord JWT token.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vP12SwiftDiscord17DiscordClientSpec4userGSqVS_11DiscordUser_"></a>
-                    <a name="//apple_ref/swift/Property/user" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vP12SwiftDiscord17DiscordClientSpec4userGSqVS_11DiscordUser_">user</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The DiscordUser this client is connected to.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">user</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordUser.html">DiscordUser</a></span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vP12SwiftDiscord17DiscordClientSpec10voiceStateGSqVS_17DiscordVoiceState_"></a>
-                    <a name="//apple_ref/swift/Property/voiceState" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vP12SwiftDiscord17DiscordClientSpec10voiceStateGSqVS_17DiscordVoiceState_">voiceState</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The voice state for this user, if they are in a voice channel.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">voiceState</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>

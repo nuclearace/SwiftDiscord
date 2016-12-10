@@ -166,6 +166,9 @@
                 <a href="Protocols/DiscordLogger.html">DiscordLogger</a>
               </li>
               <li class="nav-group-task">
+                <a href="Protocols/DiscordUserActor.html">DiscordUserActor</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/DiscordVoiceEngineClient.html">DiscordVoiceEngineClient</a>
               </li>
               <li class="nav-group-task">
@@ -321,7 +324,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordClientSpec</span> <span class="p">:</span> <span class="kd">class</span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordEngineClient.html">DiscordEngineClient</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordVoiceEngineClient.html">DiscordVoiceEngineClient</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordClientSpec</span> <span class="p">:</span> <span class="kd">class</span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordEngineClient.html">DiscordEngineClient</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordVoiceEngineClient.html">DiscordVoiceEngineClient</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordUserActor.html">DiscordUserActor</a></span></code></pre>
 
                         </div>
                       </div>
@@ -387,7 +390,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordEndpointConsumer</span> <span class="p">:</span> <span class="kt"><a href="Protocols/DiscordClientSpec.html">DiscordClientSpec</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordEndpointConsumer</span> <span class="p">:</span> <span class="kt"><a href="Protocols/DiscordUserActor.html">DiscordUserActor</a></span></code></pre>
 
                         </div>
                       </div>
@@ -548,6 +551,38 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordLogger</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:P12SwiftDiscord16DiscordUserActor"></a>
+                    <a name="//apple_ref/swift/Protocol/DiscordUserActor" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P12SwiftDiscord16DiscordUserActor">DiscordUserActor</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Declares that a type will act as a Discord user.</p>
+
+                        <a href="Protocols/DiscordUserActor.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordUserActor</span></code></pre>
 
                         </div>
                       </div>

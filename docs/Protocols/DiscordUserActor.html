@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DiscordNormalGatewayCode Enum Reference</title>
+    <title>DiscordUserActor Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Enum/DiscordNormalGatewayCode" class="dashAnchor"></a>
-    <a title="DiscordNormalGatewayCode Enum Reference"></a>
+    <a name="//apple_ref/swift/Protocol/DiscordUserActor" class="dashAnchor"></a>
+    <a title="DiscordUserActor Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        DiscordNormalGatewayCode Enum Reference
+        DiscordUserActor Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -297,25 +297,32 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>DiscordNormalGatewayCode</h1>
+            <h1>DiscordUserActor</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DiscordNormalGatewayCode</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordUserActor</span></code></pre>
 
                 </div>
               </div>
-            <p>Represents a regular gateway code</p>
+            <p>Declares that a type will act as a Discord user.</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Properties"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <a href="#/Properties">
+                  <h3 class="section-name">Properties</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwiftDiscord24DiscordNormalGatewayCode8dispatchFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/dispatch" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord24DiscordNormalGatewayCode8dispatchFMS0_S0_">dispatch</a>
+                    <a name="/s:vP12SwiftDiscord16DiscordUserActor6guildsGVs10DictionarySSVS_12DiscordGuild_"></a>
+                    <a name="//apple_ref/swift/Property/guilds" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP12SwiftDiscord16DiscordUserActor6guildsGVs10DictionarySSVS_12DiscordGuild_">guilds</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -323,30 +330,26 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Dispatch.</p>
+                        <p>The guilds that this user is in.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">dispatch</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">guilds</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGuild.html">DiscordGuild</a></span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwiftDiscord24DiscordNormalGatewayCode9heartbeatFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/heartbeat" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord24DiscordNormalGatewayCode9heartbeatFMS0_S0_">heartbeat</a>
+                    <a name="/s:vP12SwiftDiscord16DiscordUserActor13relationshipsGSaGVs10DictionarySSP___"></a>
+                    <a name="//apple_ref/swift/Property/relationships" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP12SwiftDiscord16DiscordUserActor13relationshipsGSaGVs10DictionarySSP___">relationships</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -354,30 +357,26 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Heartbeat.</p>
+                        <p>The relationships this user has. Only valid for non-bot users.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">heartbeat</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">relationships</span><span class="p">:</span> <span class="p">[[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]]</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwiftDiscord24DiscordNormalGatewayCode8identifyFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/identify" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord24DiscordNormalGatewayCode8identifyFMS0_S0_">identify</a>
+                    <a name="/s:vP12SwiftDiscord16DiscordUserActor5tokenVS_12DiscordToken"></a>
+                    <a name="//apple_ref/swift/Property/token" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP12SwiftDiscord16DiscordUserActor5tokenVS_12DiscordToken">token</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -385,30 +384,26 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Identify.</p>
+                        <p>The Discord JWT for the user.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">identify</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwiftDiscord24DiscordNormalGatewayCode12statusUpdateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/statusUpdate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord24DiscordNormalGatewayCode12statusUpdateFMS0_S0_">statusUpdate</a>
+                    <a name="/s:vP12SwiftDiscord16DiscordUserActor4userGSqVS_11DiscordUser_"></a>
+                    <a name="//apple_ref/swift/Property/user" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP12SwiftDiscord16DiscordUserActor4userGSqVS_11DiscordUser_">user</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -416,30 +411,26 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Status Update.</p>
+                        <p>The DiscordUser.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">statusUpdate</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">user</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordUser.html">DiscordUser</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwiftDiscord24DiscordNormalGatewayCode17voiceStatusUpdateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/voiceStatusUpdate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord24DiscordNormalGatewayCode17voiceStatusUpdateFMS0_S0_">voiceStatusUpdate</a>
+                    <a name="/s:vP12SwiftDiscord16DiscordUserActor10voiceStateGSqVS_17DiscordVoiceState_"></a>
+                    <a name="//apple_ref/swift/Property/voiceState" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP12SwiftDiscord16DiscordUserActor10voiceStateGSqVS_17DiscordVoiceState_">voiceState</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -447,231 +438,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Voice Status Update.</p>
+                        <p>The voice state for this user, if they are in a voice channel.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">voiceStatusUpdate</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord24DiscordNormalGatewayCode15voiceServerPingFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/voiceServerPing" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord24DiscordNormalGatewayCode15voiceServerPingFMS0_S0_">voiceServerPing</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Voice Server Ping.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">voiceServerPing</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord24DiscordNormalGatewayCode6resumeFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/resume" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord24DiscordNormalGatewayCode6resumeFMS0_S0_">resume</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Resume.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">resume</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord24DiscordNormalGatewayCode9reconnectFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/reconnect" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord24DiscordNormalGatewayCode9reconnectFMS0_S0_">reconnect</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Reconnect.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">reconnect</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord24DiscordNormalGatewayCode19requestGuildMembersFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/requestGuildMembers" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord24DiscordNormalGatewayCode19requestGuildMembersFMS0_S0_">requestGuildMembers</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Request Guild Members.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">requestGuildMembers</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord24DiscordNormalGatewayCode14invalidSessionFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/invalidSession" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord24DiscordNormalGatewayCode14invalidSessionFMS0_S0_">invalidSession</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Invalid Session.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">invalidSession</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord24DiscordNormalGatewayCode5helloFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/hello" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord24DiscordNormalGatewayCode5helloFMS0_S0_">hello</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Hello.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">hello</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord24DiscordNormalGatewayCode12heartbeatAckFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/heartbeatAck" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord24DiscordNormalGatewayCode12heartbeatAckFMS0_S0_">heartbeatAck</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>HeartbeatAck</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">heartbeatAck</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">voiceState</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
