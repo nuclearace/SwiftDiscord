@@ -21,12 +21,15 @@ import SwiftDiscord
 import ImageBrutalizer
 #endif
 
+typealias QueuedVideo = (link: String, channel: String)
+
 class DiscordBot {
     let client: DiscordClient
 
     private var inVoiceChannel = false
     private var playingYoutube = false
     private var youtube = EncoderProcess()
+    private var youtubeQueue = [QueuedVideo]()
 
     init(token: DiscordToken) {
         client = DiscordClient(token: token, configuration: [.log(.verbose)])
@@ -54,9 +57,20 @@ class DiscordBot {
         }
 
         client.on("voiceEngine.ready") {[weak self] data in
+            guard let this = self else { return }
+
             print("voice engine ready")
-            self?.inVoiceChannel = true
-            self?.playingYoutube = false
+
+            this.inVoiceChannel = true
+            this.playingYoutube = false
+
+            guard !this.youtubeQueue.isEmpty else { return }
+
+            let video = this.youtubeQueue.remove(at: 0)
+
+            this.client.sendMessage("Playing \(video.link)", to: video.channel)
+
+            _ = this.playYoutube(channelId: video.channel, link: video.link)
         }
 
         client.on("voiceEngine.disconnect") {[weak self] data in
@@ -171,7 +185,7 @@ class DiscordBot {
 
             client.sendMessage("Your roles: \(roles.map({ $0.name }))", to: message.channelId)
         } else if command == "yt", arguments.count == 1 {
-            client.sendMessage(playYoutube(link: arguments[0]), to: message.channelId)
+            client.sendMessage(playYoutube(channelId: message.channelId, link: arguments[0]), to: message.channelId)
         } else if command == "join" && arguments.count == 1 {
             guard let channel = findChannelFromName(arguments[0], in: client.guildForChannel(message.channelId)) else {
                 client.sendMessage("That doesn't look like a channel in this guild.",
@@ -209,9 +223,12 @@ class DiscordBot {
         handleCommand(command.lowercased(), with: Array(commandArgs.dropFirst()), message: message)
     }
 
-    private func playYoutube(link: String) -> String {
-        guard !playingYoutube && inVoiceChannel else {
-            return "Already playing something, and queueing isn't implemented yet. Or not in voice channel"
+    private func playYoutube(channelId: String, link: String) -> String {
+        guard inVoiceChannel else { return "Not in voice channel" }
+        guard !playingYoutube else {
+            youtubeQueue.append((link, channelId))
+
+            return "Video Queued. \(youtubeQueue.count) videos in queue"
         }
 
         playingYoutube = true
@@ -228,7 +245,7 @@ class DiscordBot {
 
         youtube.launch()
 
-        return "Playing"
+        return "Playing \(link)"
     }
 }
 
