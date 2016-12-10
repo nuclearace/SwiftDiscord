@@ -35,6 +35,8 @@ public enum DiscordGameType : Int, JSONRepresentable {
 
 /// Represents a game
 public struct DiscordGame : JSONAble {
+	// MARK: Properties
+
 	/// The name of the game.
 	public let name: String
 
@@ -43,6 +45,8 @@ public struct DiscordGame : JSONAble {
 
 	/// The url of the stream, if a stream.
 	public let url: String?
+
+	// MARK: Initializers
 
 	/**
 		Creates a new DiscordGame.
@@ -89,6 +93,8 @@ public enum DiscordPresenceStatus : String {
 
 /// Represents a presence.
 public struct DiscordPresence {
+	// MARK: Properties
+
 	/// The snowflake of the guild this presence belongs on.
 	public let guildId: String
 
@@ -155,11 +161,15 @@ public struct DiscordPresence {
 
 /// Used to send updates to Discord about our presence.
 public struct DiscordPresenceUpdate : JSONAble {
+	// MARK: Properties
+
 	/// The time we've been idle for. Nil if not idle
 	public let idleSince: Int?
 
 	/// The game we are currently playing. Nil if not playing a game.
 	public let game: DiscordGame?
+
+	// MARK: Initializers
 
 	/**
 		Creates a new DiscordPresenceUpdate
