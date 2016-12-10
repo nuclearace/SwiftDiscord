@@ -17,9 +17,18 @@
 
 // TODO Meta object
 
+
+/// Represents a generic invite object.
 public struct DiscordInvite {
+    // MARK: Properties
+
+    /// The invite code.
     public let code: String
+
+    /// The guild this invite is for.
     public let guild: DiscordInviteGuild
+
+    /// The channel this invite is for.
     public let channel: DiscordInviteChannel
 
     init(inviteObject: [String: Any]) {
@@ -33,9 +42,17 @@ public struct DiscordInvite {
     }
 }
 
+/// Represents an invite to a guild.
 public struct DiscordInviteGuild {
+    // MARK: Properties
+
+    /// The snowflake id of the guild this invite is for.
     public let id: String
+
+    /// The name of the guild this invite is for.
     public let name: String
+
+    /// The splash of this guild.
     public let splashHash: String
 
     init(inviteGuildObject: [String: Any]) {
@@ -45,9 +62,17 @@ public struct DiscordInviteGuild {
     }
 }
 
+/// Represents an invite to a channel.
 public struct DiscordInviteChannel {
+    // MARK: Properties
+
+    /// The snowflake id of the channel this invite is for.
     public let id: String
+
+    /// The name of the channel this invite is for.
     public let name: String
+
+    /// The type of channel this invite is for.
     public let type: DiscordChannelType
 
     init(inviteChannelObject: [String: Any]) {
