@@ -54,6 +54,16 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		return "voiceEngine"
 	}
 
+	/// Creates the handshake object that Discord expects.
+	public override var handshakeObject: [String: Any] {
+		return [
+			"session_id": client!.voiceState!.sessionId,
+			"server_id": client!.voiceState!.guildId,
+			"user_id": client!.user!.id,
+			"token": voiceServerInformation["token"] as! String
+		]
+	}
+
 	/// Whether this engine is connected
 	public private(set) var connected = false
 
@@ -179,20 +189,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		// Reenable automatic encoder creation
 		makeEncoder = true
-	}
-
-	/**
-		Creates the handshake object that Discord expects. You shouldn't need to call this directly.
-	*/
-	public override func createHandshakeObject() -> [String: Any] {
-		DefaultDiscordLogger.Logger.log("Creating handshakeObject", type: logType)
-
-		return [
-			"session_id": client!.voiceState!.sessionId,
-			"server_id": client!.voiceState!.guildId,
-			"user_id": client!.user!.id,
-			"token": voiceServerInformation["token"] as! String
-		]
 	}
 
 	private func createRTPHeader() -> [UInt8] {
@@ -510,7 +506,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	/**
 		Sends OPUS encoded voice data to Discord. Because of the assumptions built into the engine, the voice data
-		should have a max length of `defaultAudioSize`
+		should have a max length of `defaultAudioSize`.
 
 		- parameter data: An array of OPUS encoded voice data.
 	*/
@@ -553,9 +549,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		DefaultDiscordLogger.Logger.log("Starting voice handshake", type: logType)
 
-		let handshakeEventData = createHandshakeObject()
-
-		sendGatewayPayload(DiscordGatewayPayload(code: .voice(.identify), payload: .object(handshakeEventData)))
+		sendGatewayPayload(DiscordGatewayPayload(code: .voice(.identify), payload: .object(handshakeObject)))
 	}
 
 	private func startUDP() {

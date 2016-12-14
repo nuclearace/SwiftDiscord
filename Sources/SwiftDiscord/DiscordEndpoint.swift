@@ -144,7 +144,7 @@ public struct DiscordEndpointOptions {
 */
 public enum DiscordEndpoint : String {
 	/// The base url for the Discord REST API.
-	case baseURL = "https://discordapp.com/api"
+	case baseURL = "https://discordapp.com/api/v6"
 
 	/* Channels */
 	/// The base channel endpoint.

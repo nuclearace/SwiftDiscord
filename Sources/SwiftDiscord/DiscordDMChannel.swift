@@ -16,7 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a direct message channel with another user.
-public struct DiscordDMChannel {
+public struct DiscordDMChannel : DiscordChannel {
     // MARK: Properties
 
     /// The snowflake id of the channel.
@@ -28,13 +28,27 @@ public struct DiscordDMChannel {
     /// The user this channel is with.
     public let recipient: DiscordUser
 
+    /// A DiscordDMChannel should always be a direct channel
+    public let type = DiscordChannelType.direct
+
+    /// Reference to the client.
+    public weak var client: DiscordClient?
+
     /// The snowflake id of the last received message on this channel.
     public var lastMessageId: String
+
 
     init(dmObject: [String: Any]) {
         recipient = DiscordUser(userObject: dmObject.get("recipient", or: [String: Any]()))
         id = dmObject.get("id", or: "")
         lastMessageId = dmObject.get("lastMessageId", or: "")
+    }
+
+    init(dmReadyObject: [String: Any], client: DiscordClient? = nil) {
+        recipient = DiscordUser(userObject: dmReadyObject.get("recipients", or: [[String: Any]]())[0])
+        id = dmReadyObject.get("id", or: "")
+        lastMessageId = dmReadyObject.get("lastMessageId", or: "")
+        self.client = client
     }
 
     static func DMsfromArray(_ dmArray: [[String: Any]]) -> [String: DiscordDMChannel] {
@@ -47,5 +61,39 @@ public struct DiscordDMChannel {
         }
 
         return dms
+    }
+}
+
+/// Represents a direct message channel with a group of users.
+public struct DiscordGroupDMChannel : DiscordChannel {
+    // MARK: Properties
+
+    /// The snowflake id of the channel.
+    public let id: String
+
+    /// Whether this channel is private. Should always be true for DMChannels
+    public let isPrivate = true
+
+    /// The users in this channel.
+    public let recipients: [DiscordUser]
+
+    /// A DiscordGroupDMChannel should always be a direct channel
+    public let type = DiscordChannelType.groupDM
+
+    /// Reference to the client.
+    public weak var client: DiscordClient?
+
+    /// The snowflake id of the last received message on this channel.
+    public var lastMessageId: String
+
+    /// The name of this group dm.
+    public var name: String?
+
+    init(dmReadyObject: [String: Any], client: DiscordClient? = nil) {
+        recipients = dmReadyObject.get("recipients", or: [[String: Any]]()).map(DiscordUser.init)
+        id = dmReadyObject.get("id", or: "")
+        lastMessageId = dmReadyObject.get("lastMessageId", or: "")
+        name = dmReadyObject["name"] as? String
+        self.client = client
     }
 }

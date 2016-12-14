@@ -264,6 +264,9 @@ public extension DiscordEndpoint {
             "tts": tts
         ]
 
+        DefaultDiscordLogger.Logger.log("Sending message to: %@", type: "DiscordEndpointChannels", args: channel)
+        DefaultDiscordLogger.Logger.verbose("Message: %@", type: "DiscordEndpointChannels", args: content)
+
         guard let contentData = encodeJSON(messageObject)?.data(using: .utf8, allowLossyConversion: false) else {
             return
         }

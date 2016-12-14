@@ -78,6 +78,6 @@ public struct DiscordInviteChannel {
     init(inviteChannelObject: [String: Any]) {
         id = inviteChannelObject.get("id", or: "")
         name = inviteChannelObject.get("name", or: "")
-        type = DiscordChannelType(rawValue: inviteChannelObject.get("type", or: "")) ?? .text
+        type = DiscordChannelType(rawValue: inviteChannelObject.get("type", or: 0)) ?? .text
     }
 }

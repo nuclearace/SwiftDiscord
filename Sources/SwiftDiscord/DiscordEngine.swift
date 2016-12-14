@@ -31,12 +31,30 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
 	/// The url for the gateway.
 	open var connectURL: String {
-		return DiscordEndpointGateway.gatewayURL
+		return DiscordEndpointGateway.gatewayURL + "/?v=6"
 	}
 
 	/// The type of DiscordEngineSpec. Used to correctly fire events.
 	open var engineType: String {
 		return "engine"
+	}
+
+	/// Creates the handshake object that Discord expects.
+	/// Override if you need to customize the handshake object.
+	open var handshakeObject: [String: Any] {
+		return [
+			"token": client!.token.token,
+			"properties": [
+				"$os": "macOS",
+				"$browser": "SwiftDiscord",
+				"$device": "SwiftDiscord",
+				"$referrer": "",
+				"$referring_domain": ""
+			],
+			"compress": false,
+			"large_threshold": 250,
+			// "shard": [1, 10]
+		]
 	}
 
 	// Only touch on handleQueue
@@ -159,27 +177,6 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	}
 
 	/**
-		Creates the handshake object that Discord expects. You shouldn't need to call this directly.
-
-		Override if you need to customize the handshake object.
-	*/
-	open func createHandshakeObject() -> [String: Any] {
-		return [
-			"token": client!.token.token,
-			"properties": [
-				"$os": "macOS",
-				"$browser": "SwiftDiscord",
-				"$device": "SwiftDiscord",
-				"$referrer": "",
-				"$referring_domain": ""
-			],
-			"compress": false,
-			"large_threshold": 250,
-			// "shard": [1, 10]
-		]
-	}
-
-	/**
 		Disconnects the engine. An `engine.disconnect` is fired on disconnection.
 	*/
 	open func disconnect() {
@@ -231,6 +228,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		switch gatewayCode {
 		case .dispatch:
 			handleDispatch(payload)
+		case .hello:
+			handleHello(payload)
 		default:
 			error(message: "Unhandled payload: \(payload.code)")
 		}
@@ -283,7 +282,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			return
 		}
 
-		sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.identify), payload: .object(createHandshakeObject())))
+		sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.identify), payload: .object(handshakeObject)))
 	}
 
 	/**

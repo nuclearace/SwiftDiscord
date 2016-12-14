@@ -175,21 +175,17 @@ public extension DiscordEndpoint {
     }
 
     /**
-        Modifies the position of a channel.
+        Modifies the positions of channels.
 
         - parameter on: The snowflake id of the guild
-        - parameter channelId: The snowflake id of the channel
-        - parameter position: The new position of the channel
+        - parameter channelPositions: An array of channels that should be reordered. Should contain a dictionary
+                                      in the form `["id": channelId, "position": position]`
         - parameter with: The token to authenticate to Discord with
     */
-    public static func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int,
+    public static func modifyGuildChannelPositions(on guildId: String, channelPositions: [[String: Any]],
             with token: DiscordToken) {
-        let modifyJSON: [String: Any] = [
-            "id": channelId,
-            "position": position
-        ]
 
-        guard let contentData = encodeJSON(modifyJSON)?.data(using: .utf8, allowLossyConversion: false) else {
+        guard let contentData = encodeJSON(channelPositions)?.data(using: .utf8, allowLossyConversion: false) else {
             return
         }
 
