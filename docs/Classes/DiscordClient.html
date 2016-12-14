@@ -143,6 +143,12 @@
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Protocols/DiscordChannel.html">DiscordChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordClientHolder.html">DiscordClientHolder</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/DiscordClientSpec.html">DiscordClientSpec</a>
               </li>
               <li class="nav-group-task">
@@ -229,6 +235,9 @@
                 <a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/DiscordGroupDMChannel.html">DiscordGroupDMChannel</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/DiscordGuild.html">DiscordGuild</a>
               </li>
               <li class="nav-group-task">
@@ -263,6 +272,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordPresenceUpdate.html">DiscordPresenceUpdate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordReaction.html">DiscordReaction</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordRole.html">DiscordRole</a>
@@ -481,6 +493,33 @@ made on this queue, as this is the queue where modifications on them are made.</
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">connected</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord13DiscordClient14directChannelsGVs10DictionarySSPS_14DiscordChannel__"></a>
+                    <a name="//apple_ref/swift/Property/directChannels" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient14directChannelsGVs10DictionarySSPS_14DiscordChannel__">directChannels</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The direct message channels this user is in.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">directChannels</span> <span class="o">=</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></span><span class="p">]()</span></code></pre>
 
                         </div>
                       </div>
@@ -758,6 +797,58 @@ with the client.</p>
                           <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">disconnect</span><span class="p">()</span></code></pre>
 
                         </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient11findChannelFT6fromIdSS_GSqPS_14DiscordChannel__"></a>
+                    <a name="//apple_ref/swift/Method/findChannel(fromId:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient11findChannelFT6fromIdSS_GSqPS_14DiscordChannel__">findChannel(fromId:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Finds a channel by its snowflake.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">findChannel</span><span class="p">(</span><span class="n">fromId</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fromId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A channel snowflake</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An optional containing a <code><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></code> if one was found.</p>
+
                       </div>
                     </section>
                   </div>
@@ -2191,7 +2282,7 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-10)</p>
+          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-14)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

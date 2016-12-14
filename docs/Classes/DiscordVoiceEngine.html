@@ -143,6 +143,12 @@
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Protocols/DiscordChannel.html">DiscordChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordClientHolder.html">DiscordClientHolder</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/DiscordClientSpec.html">DiscordClientSpec</a>
               </li>
               <li class="nav-group-task">
@@ -229,6 +235,9 @@
                 <a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/DiscordGroupDMChannel.html">DiscordGroupDMChannel</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/DiscordGuild.html">DiscordGuild</a>
               </li>
               <li class="nav-group-task">
@@ -263,6 +272,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordPresenceUpdate.html">DiscordPresenceUpdate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordReaction.html">DiscordReaction</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordRole.html">DiscordRole</a>
@@ -368,6 +380,33 @@ packets that are sent and received.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">engineType</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord18DiscordVoiceEngine15handshakeObjectGVs10DictionarySSP__"></a>
+                    <a name="//apple_ref/swift/Property/handshakeObject" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord18DiscordVoiceEngine15handshakeObjectGVs10DictionarySSP__">handshakeObject</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates the handshake object that Discord expects.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">handshakeObject</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -729,33 +768,6 @@ packets that are sent and received.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC12SwiftDiscord18DiscordVoiceEngine21createHandshakeObjectFT_GVs10DictionarySSP__"></a>
-                    <a name="//apple_ref/swift/Method/createHandshakeObject()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord18DiscordVoiceEngine21createHandshakeObjectFT_GVs10DictionarySSP__">createHandshakeObject()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Creates the handshake object that Discord expects. You shouldn&rsquo;t need to call this directly.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">createHandshakeObject</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:FC12SwiftDiscord18DiscordVoiceEngine10disconnectFT_T_"></a>
                     <a name="//apple_ref/swift/Method/disconnect()" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC12SwiftDiscord18DiscordVoiceEngine10disconnectFT_T_">disconnect()</a>
@@ -923,7 +935,7 @@ sent to Discord.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Sends OPUS encoded voice data to Discord. Because of the assumptions built into the engine, the voice data
-should have a max length of <code><a href="../Global Variables.html#/s:v12SwiftDiscord16defaultAudioSizeSi">defaultAudioSize</a></code></p>
+should have a max length of <code><a href="../Global Variables.html#/s:v12SwiftDiscord16defaultAudioSizeSi">defaultAudioSize</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -989,7 +1001,7 @@ should have a max length of <code><a href="../Global Variables.html#/s:v12SwiftD
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-10)</p>
+          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-14)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
