@@ -15,6 +15,8 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import class Dispatch.DispatchSemaphore
+
 /// Represents the type of a channel.
 public enum DiscordChannelType : Int {
     /// A text channel.
@@ -53,6 +55,32 @@ public extension DiscordChannel {
         guard let client = self.client else { return }
 
         client.deleteMessage(message.id, on: id)
+    }
+
+    /**
+        Gets the pinned messages for this channel.
+
+        **NOTE**: This is a blocking method. If you need an async method, use the `.getPinnedMessages` from
+        `DiscordEndpointConsumer` which is available on `DiscordClient`.
+
+        - returns: An Array of pinned messages
+    */
+    func getPinnedMessages() -> [DiscordMessage] {
+        guard let client = self.client else { return [] }
+
+        let lock = DispatchSemaphore(value: 0)
+
+        var messages: [DiscordMessage]!
+
+        client.getPinnedMessages(for: id) {pins in
+            messages = pins
+
+            lock.signal()
+        }
+
+        lock.wait()
+
+        return messages
     }
 
     /**
