@@ -4,3 +4,4 @@
 /*.xcodeproj
 build/
 docs/docsets/
+docs/undocumented.json
