@@ -239,6 +239,13 @@ public struct DiscordMessage : DiscordClientHolder {
 		self.client = client
 	}
 
+	/**
+		Deletes this message from Discord.
+	*/
+	public func delete() {
+		channel?.deleteMessage(self)
+	}
+
 	static func messagesFromArray(_ array: [[String: Any]]) -> [DiscordMessage] {
 		return array.map({ DiscordMessage(messageObject: $0, client: nil) })
 	}

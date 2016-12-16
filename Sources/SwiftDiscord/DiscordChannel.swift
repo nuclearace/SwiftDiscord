@@ -45,6 +45,17 @@ public extension DiscordChannel {
     // MARK: Methods
 
     /**
+        Deletes a message from this channel.
+
+        - parameter message: The message to delete
+    */
+    func deleteMessage(_ message: DiscordMessage) {
+        guard let client = self.client else { return }
+
+        client.deleteMessage(message.id, on: id)
+    }
+
+    /**
         Modifies this channel with `options`.
 
         - parameter options: An array of `DiscordEndpointOptions.ModifyChannel`
