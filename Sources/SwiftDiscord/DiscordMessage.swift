@@ -239,6 +239,8 @@ public struct DiscordMessage : DiscordClientHolder {
 		self.client = client
 	}
 
+	// MARK: Methods
+
 	/**
 		Deletes this message from Discord.
 	*/

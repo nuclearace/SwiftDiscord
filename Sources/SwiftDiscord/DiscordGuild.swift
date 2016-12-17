@@ -126,6 +126,18 @@ public struct DiscordGuild : DiscordClientHolder {
 	// MARK: Methods
 
 	/**
+		Bans this user from the guild.
+
+		- parameter member: The member to ban
+		- parameter deleteMessageDays: The number of days going back to delete messages. Defaults to 7
+	*/
+	public func ban(_ member: DiscordGuildMember, deleteMessageDays: Int = 7) {
+		guard let client = self.client else { return }
+
+		client.guildBan(userId: member.user.id, on: id, deleteMessageDays: deleteMessageDays)
+	}
+
+	/**
 		Creates a channel on this guild with `options`. The channel will not be immediately available; wait for a
 		channel create event.
 
