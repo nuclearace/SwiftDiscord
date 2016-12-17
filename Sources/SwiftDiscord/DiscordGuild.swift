@@ -94,8 +94,38 @@ public struct DiscordGuild : DiscordClientHolder {
 	/// The verification level a member of this guild must have to join.
 	public private(set) var verificationLevel: Int
 
+	init(guildObject: [String: Any], client: DiscordClient?) {
+		channels = DiscordGuildChannel.guildChannelsFromArray(guildObject.get("channels", or: [[String: Any]]()),
+			client: client)
+		defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
+		embedEnabled = guildObject.get("embed_enabled", or: false)
+		embedChannelId = guildObject.get("embed_channel_id", or: "")
+		emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: [[String: Any]]()))
+		features = guildObject.get("features", or: [Any]())
+		icon = guildObject.get("icon", or: "")
+		id = guildObject.get("id", or: "")
+		large = guildObject.get("large", or: false)
+		memberCount = guildObject.get("member_count", or: 0)
+		members = DiscordGuildMember.guildMembersFromArray(guildObject.get("members", or: [[String: Any]]()))
+		mfaLevel = guildObject.get("mfa_level", or: -1)
+		name = guildObject.get("name", or: "")
+		ownerId = guildObject.get("owner_id", or: "")
+		presences = DiscordPresence.presencesFromArray(guildObject.get("presences", or: [[String: Any]]()), guildId: id)
+		region = guildObject.get("region", or: "")
+		roles = DiscordRole.rolesFromArray(guildObject.get("roles", or: [[String: Any]]()))
+		splash = guildObject.get("splash", or: "")
+		verificationLevel = guildObject.get("verification_level", or: -1)
+		voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject.get("voice_states", or: [[String: Any]]()),
+			guildId: id)
+		unavailable = guildObject.get("unavailable", or: false)
+		joinedAt = convertISO8601(string: guildObject.get("joined_at", or: "")) ?? Date()
+		self.client = client
+	}
+
+	// MARK: Methods
+
 	/**
-		Creates a channel on this guild with `options`. The channel will not be immediately available, wait for a
+		Creates a channel on this guild with `options`. The channel will not be immediately available; wait for a
 		channel create event.
 
 		- parameter with: The options for this new channel
@@ -151,34 +181,6 @@ public struct DiscordGuild : DiscordClientHolder {
 		}
 
 		return self
-	}
-
-	init(guildObject: [String: Any], client: DiscordClient?) {
-		channels = DiscordGuildChannel.guildChannelsFromArray(guildObject.get("channels", or: [[String: Any]]()),
-			client: client)
-		defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
-		embedEnabled = guildObject.get("embed_enabled", or: false)
-		embedChannelId = guildObject.get("embed_channel_id", or: "")
-		emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: [[String: Any]]()))
-		features = guildObject.get("features", or: [Any]())
-		icon = guildObject.get("icon", or: "")
-		id = guildObject.get("id", or: "")
-		large = guildObject.get("large", or: false)
-		memberCount = guildObject.get("member_count", or: 0)
-		members = DiscordGuildMember.guildMembersFromArray(guildObject.get("members", or: [[String: Any]]()))
-		mfaLevel = guildObject.get("mfa_level", or: -1)
-		name = guildObject.get("name", or: "")
-		ownerId = guildObject.get("owner_id", or: "")
-		presences = DiscordPresence.presencesFromArray(guildObject.get("presences", or: [[String: Any]]()), guildId: id)
-		region = guildObject.get("region", or: "")
-		roles = DiscordRole.rolesFromArray(guildObject.get("roles", or: [[String: Any]]()))
-		splash = guildObject.get("splash", or: "")
-		verificationLevel = guildObject.get("verification_level", or: -1)
-		voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject.get("voice_states", or: [[String: Any]]()),
-			guildId: id)
-		unavailable = guildObject.get("unavailable", or: false)
-		joinedAt = convertISO8601(string: guildObject.get("joined_at", or: "")) ?? Date()
-		self.client = client
 	}
 
 	// Used to setup initial guilds
