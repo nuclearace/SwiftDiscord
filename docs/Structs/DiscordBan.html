@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DiscordPermissionOverwrite Struct Reference</title>
+    <title>DiscordBan Struct Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/DiscordPermissionOverwrite" class="dashAnchor"></a>
-    <a title="DiscordPermissionOverwrite Struct Reference"></a>
+    <a name="//apple_ref/swift/Struct/DiscordBan" class="dashAnchor"></a>
+    <a title="DiscordBan Struct Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        DiscordPermissionOverwrite Struct Reference
+        DiscordBan Struct Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -312,16 +312,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>DiscordPermissionOverwrite</h1>
+            <h1>DiscordBan</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordPermissionOverwrite</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordBan</span></code></pre>
 
                 </div>
               </div>
-            <p>Represents a permission overwrite for a channel.</p>
-
-<p>The <code>allow</code> and <code>deny</code> properties are bit fields.</p>
+            <p>Represents a ban.</p>
 
           </section>
           <section class="section task-group-section">
@@ -337,9 +335,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord26DiscordPermissionOverwrite2idSS"></a>
-                    <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord26DiscordPermissionOverwrite2idSS">id</a>
+                    <a name="/s:vV12SwiftDiscord10DiscordBan6reasonGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/reason" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord10DiscordBan6reasonGSqSS_">reason</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -347,14 +345,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The snowflake id of this permission overwrite.</p>
+                        <p>The reason this person was banned.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -364,9 +362,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord26DiscordPermissionOverwrite4typeOS_30DiscordPermissionOverwriteType"></a>
-                    <a name="//apple_ref/swift/Property/type" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord26DiscordPermissionOverwrite4typeOS_30DiscordPermissionOverwriteType">type</a>
+                    <a name="/s:vV12SwiftDiscord10DiscordBan4userVS_11DiscordUser"></a>
+                    <a name="//apple_ref/swift/Property/user" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord10DiscordBan4userVS_11DiscordUser">user</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -374,167 +372,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The type of this overwrite.</p>
+                        <p>The user who is banned.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordPermissionOverwriteType.html">DiscordPermissionOverwriteType</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">user</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordUser.html">DiscordUser</a></span></code></pre>
 
                         </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord26DiscordPermissionOverwrite5allowSi"></a>
-                    <a name="//apple_ref/swift/Property/allow" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord26DiscordPermissionOverwrite5allowSi">allow</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The permissions that this overwrite is allowed to use.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">allow</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord26DiscordPermissionOverwrite4denySi"></a>
-                    <a name="//apple_ref/swift/Property/deny" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord26DiscordPermissionOverwrite4denySi">deny</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The permissions that this overwrite is not allowed to use.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">deny</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Initializers"></a>
-                <a name="//apple_ref/swift/Section/Initializers" class="dashAnchor"></a>
-                <a href="#/Initializers">
-                  <h3 class="section-name">Initializers</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FV12SwiftDiscord26DiscordPermissionOverwritecFT2idSS4typeOS_30DiscordPermissionOverwriteType5allowSi4denySi_S0_"></a>
-                    <a name="//apple_ref/swift/Method/init(id:type:allow:deny:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FV12SwiftDiscord26DiscordPermissionOverwritecFT2idSS4typeOS_30DiscordPermissionOverwriteType5allowSi4denySi_S0_">init(id:type:allow:deny:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Creates a new DiscordPermissionOverwrite</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordPermissionOverwriteType.html">DiscordPermissionOverwriteType</a></span><span class="p">,</span> <span class="nv">allow</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">deny</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>id</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The id of this overwrite</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>type</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The type of this overwrite</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>allow</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The permissions allowed</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>deny</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The permissions denied</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
                     </section>
                   </div>
