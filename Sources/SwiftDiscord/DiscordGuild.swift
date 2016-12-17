@@ -15,6 +15,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import class Dispatch.DispatchSemaphore
 import Foundation
 
 /// Represents a Guild.
@@ -138,6 +139,44 @@ public struct DiscordGuild : DiscordClientHolder {
 		client.createGuildChannel(on: id, options: options)
 	}
 
+	/**
+		Gets the bans for this guild.
+
+		**NOTE**: This is a blocking method. If you need an async version use the `getGuildBans` method from
+		`DiscordEndpointConsumer`, which is available on `DiscordClient`.
+
+		- returns: An array of `DiscordUser`s who are banned on this guild
+	*/
+	public func getBans() -> [DiscordUser] {
+		guard let client = self.client else { return [] }
+
+		let lock = DispatchSemaphore(value: 0)
+		var bannedUsers: [DiscordUser]!
+
+		client.getGuildBans(for: id) {bans in
+			bannedUsers = bans
+
+			lock.signal()
+		}
+
+		lock.wait()
+
+		return bannedUsers
+	}
+
+	// Used to setup initial guilds
+	static func guildsFromArray(_ guilds: [[String: Any]], client: DiscordClient? = nil) -> [String: DiscordGuild] {
+		var guildDictionary = [String: DiscordGuild]()
+
+		for guildObject in guilds {
+			let guild = DiscordGuild(guildObject: guildObject, client: client)
+
+			guildDictionary[guild.id] = guild
+		}
+
+		return guildDictionary
+	}
+
 	// Used to update a guild from a guildUpdate event
 	mutating func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
 		if let defaultMessageNotifications = newGuild["default_message_notifications"] as? Int {
@@ -181,19 +220,6 @@ public struct DiscordGuild : DiscordClientHolder {
 		}
 
 		return self
-	}
-
-	// Used to setup initial guilds
-	static func guildsFromArray(_ guilds: [[String: Any]], client: DiscordClient? = nil) -> [String: DiscordGuild] {
-		var guildDictionary = [String: DiscordGuild]()
-
-		for guildObject in guilds {
-			let guild = DiscordGuild(guildObject: guildObject, client: client)
-
-			guildDictionary[guild.id] = guild
-		}
-
-		return guildDictionary
 	}
 }
 
