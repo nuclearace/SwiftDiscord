@@ -299,10 +299,10 @@ public extension DiscordEndpoint {
 
         - parameter for: The snowflake id of the guild
         - parameter with: The token to authenticate to Discord with
-        - parameter callback: The callback function, taking an array of `DiscordUser`
+        - parameter callback: The callback function, taking an array of `DiscordBan`
     */
     public static func getGuildBans(for guildId: String, with token: DiscordToken,
-            callback: @escaping ([DiscordUser]) -> Void) {
+            callback: @escaping ([DiscordBan]) -> Void) {
         var request = createRequest(with: token, for: .guildBans, replacing: ["guild.id": guildId])
 
         request.httpMethod = "GET"
@@ -317,13 +317,15 @@ public extension DiscordEndpoint {
             }
 
             guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                case let .array(users) = json else {
+                case let .array(bans) = json else {
                     callback([])
 
                     return
             }
 
-            callback(DiscordUser.usersFromArray(users as! [[String: Any]]))
+            DefaultDiscordLogger.Logger.debug("Got guild bans %@", type: "DiscordEndpointGuild", args: bans)
+
+            callback(DiscordBan.bansFromArray(bans as! [[String: Any]]))
         })
     }
 
@@ -371,6 +373,8 @@ public extension DiscordEndpoint {
         ])
 
         request.httpMethod = "DELETE"
+
+        DefaultDiscordLogger.Logger.log("Unbanning %@ on %@", type: "DiscordEndpointGuild", args: userId, guildId)
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildBans, parameters: ["guild.id": guildId])
 

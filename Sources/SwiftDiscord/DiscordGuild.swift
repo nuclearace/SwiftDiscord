@@ -159,11 +159,11 @@ public struct DiscordGuild : DiscordClientHolder {
 
 		- returns: An array of `DiscordUser`s who are banned on this guild
 	*/
-	public func getBans() -> [DiscordUser] {
+	public func getBans() -> [DiscordBan] {
 		guard let client = self.client else { return [] }
 
 		let lock = DispatchSemaphore(value: 0)
-		var bannedUsers: [DiscordUser]!
+		var bannedUsers: [DiscordBan]!
 
 		client.getGuildBans(for: id) {bans in
 			bannedUsers = bans
@@ -232,5 +232,18 @@ public struct DiscordGuild : DiscordClientHolder {
 		}
 
 		return self
+	}
+
+	/**
+		Unbans the specified user from the guild.
+
+		- parameter user: The user to unban
+	*/
+	public func unban(_ user: DiscordUser) {
+		guard let client = self.client else { return }
+
+		DefaultDiscordLogger.Logger.log("Unbanning user %@ on %@", type: "DiscordGuild", args: user, id)
+
+		client.removeGuildBan(for: user.id, on: id)
 	}
 }

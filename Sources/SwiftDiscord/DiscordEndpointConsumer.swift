@@ -166,9 +166,9 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         Gets the bans on a guild.
 
         - parameter for: The snowflake id of the guild
-        - parameter callback: The callback function, taking an array of `DiscordUser`
+        - parameter callback: The callback function, taking an array of `DiscordBan`
     */
-    func getGuildBans(for guildId: String, callback: @escaping ([DiscordUser]) -> Void)
+    func getGuildBans(for guildId: String, callback: @escaping ([DiscordBan]) -> Void)
 
     /**
         Gets the channels on a guild.
@@ -422,7 +422,7 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    public func getGuildBans(for guildId: String, callback: @escaping ([DiscordUser]) -> Void) {
+    public func getGuildBans(for guildId: String, callback: @escaping ([DiscordBan]) -> Void) {
         DiscordEndpoint.getGuildBans(for: guildId, with: token, callback: callback)
     }
 
