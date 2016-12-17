@@ -94,6 +94,20 @@ public struct DiscordGuild : DiscordClientHolder {
 	/// The verification level a member of this guild must have to join.
 	public private(set) var verificationLevel: Int
 
+	/**
+		Creates a channel on this guild with `options`. The channel will not be immediately available, wait for a
+		channel create event.
+
+		- parameter with: The options for this new channel
+	*/
+	public func createChannel(with options: [DiscordEndpointOptions.GuildCreateChannel]) {
+		guard let client = self.client else { return }
+
+		DefaultDiscordLogger.Logger.log("Creating guild channel on %@", type: "DiscordGuild", args: id)
+
+		client.createGuildChannel(on: id, options: options)
+	}
+
 	// Used to update a guild from a guildUpdate event
 	mutating func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
 		if let defaultMessageNotifications = newGuild["default_message_notifications"] as? Int {

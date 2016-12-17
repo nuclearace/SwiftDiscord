@@ -44,6 +44,13 @@ public protocol DiscordChannel : DiscordClientHolder {
 }
 
 public extension DiscordChannel {
+    // MARK: Properties
+
+    /// - returns: The guild that this channel is associated with. Or nil if this channel has no guild.
+    var guild: DiscordGuild? {
+        return client?.guildForChannel(id)
+    }
+
     // MARK: Methods
 
     /**
@@ -117,6 +124,15 @@ public extension DiscordChannel {
         guard let client = self.client, type != .voice else { return }
 
         client.sendMessage(content, to: id, tts: tts)
+    }
+
+    /**
+        Sends that this user is typing on this channel.
+    */
+    func triggerTyping() {
+        guard let client = self.client else { return }
+
+        client.triggerTyping(on: id)
     }
 }
 

@@ -136,6 +136,8 @@ public extension DiscordEndpoint {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
 
+        DefaultDiscordLogger.Logger.log("Creating guild channel on %@", type: "DiscordEndpointGuild", args: guildId)
+
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildChannels, parameters: ["guild.id": guildId])
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })

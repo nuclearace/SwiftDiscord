@@ -156,6 +156,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	*/
 	public func findChannel(fromId channelId: String) -> DiscordChannel? {
 		if let channel = channelCache[channelId] {
+			DefaultDiscordLogger.Logger.debug("Got cached channel %@", type: logType, args: channel)
+
 			return channel
 		}
 
@@ -165,9 +167,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			guard cur == nil else { return cur }
 
 		    return channel.id == channelId ? channel : nil
-		}) else { return nil }
+		}) else {
+			DefaultDiscordLogger.Logger.debug("Couldn't find channel: %@", type: logType, args: channelId)
+
+			return nil
+		}
 
 		channelCache[channel.id] = channel
+
+		DefaultDiscordLogger.Logger.debug("Found channel %@", type: logType, args: channel)
 
 		return channel
 	}
