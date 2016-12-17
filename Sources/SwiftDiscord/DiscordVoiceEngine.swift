@@ -192,44 +192,17 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private func createRTPHeader() -> [UInt8] {
-		func resetByteNumber(_ byteNumber: inout Int,  _ i: Int) {
-			if i == 1 || i == 5 {
-				byteNumber = 0
-			} else {
-				byteNumber += 1
-			}
-		}
+		defer { header.deallocate() }
 
-		var rtpHeader = [UInt8](repeating: 0x00, count: 12)
-		var byteNumber = 0
-		var currentHeaderIndex = 2
+		let header = UnsafeMutableRawBufferPointer.allocate(count: 12)
 
-		rtpHeader[0] = 0x80
-		rtpHeader[1] = 0x78
+		header.storeBytes(of: 0x80, as: UInt8.self)
+		header.storeBytes(of: 0x78, toByteOffset: 1, as: UInt8.self)
+		header.storeBytes(of: sequenceNum.bigEndian, toByteOffset: 2, as: UInt16.self)
+		header.storeBytes(of: timestamp.bigEndian, toByteOffset: 4, as: UInt32.self)
+		header.storeBytes(of: ssrc.bigEndian, toByteOffset: 8, as: UInt32.self)
 
-		let sequenceBigEndian = sequenceNum.bigEndian
-		let ssrcBigEndian = ssrc.bigEndian
-		let timestampBigEndian = timestamp.bigEndian
-
-		for i in 0..<10 {
-			if i < 2 {
-				rtpHeader[currentHeaderIndex] = UInt8((Int(sequenceBigEndian) >> (8 * byteNumber)) & 0xFF)
-
-				resetByteNumber(&byteNumber, i)
-			} else if i < 6 {
-				rtpHeader[currentHeaderIndex] = UInt8((Int(timestampBigEndian) >> (8 * byteNumber)) & 0xFF)
-
-				resetByteNumber(&byteNumber, i)
-			} else {
-				rtpHeader[currentHeaderIndex] = UInt8((Int(ssrcBigEndian) >> (8 * byteNumber)) & 0xFF)
-
-				byteNumber += 1
-			}
-
-            currentHeaderIndex += 1
-		}
-
-		return rtpHeader
+		return Array(header)
 	}
 
 	private func decryptVoiceData(_ data: Data) {

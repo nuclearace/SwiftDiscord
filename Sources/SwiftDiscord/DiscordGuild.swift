@@ -190,7 +190,7 @@ public struct DiscordGuild : DiscordClientHolder {
 	}
 
 	/**
-		Modifies this guild with options.
+		Modifies this guild with `options`.
 
 		- parameter options: An array of options to change
 	*/
