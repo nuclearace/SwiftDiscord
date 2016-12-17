@@ -189,6 +189,17 @@ public struct DiscordGuild : DiscordClientHolder {
 		return guildDictionary
 	}
 
+	/**
+		Modifies this guild with options.
+
+		- parameter options: An array of options to change
+	*/
+	public func modifyGuild(options: [DiscordEndpointOptions.ModifyGuild]) {
+		guard let client = self.client else { return }
+
+		client.modifyGuild(id, options: options)
+	}
+
 	// Used to update a guild from a guildUpdate event
 	mutating func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
 		if let defaultMessageNotifications = newGuild["default_message_notifications"] as? Int {
