@@ -161,15 +161,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			return channel
 		}
 
-		let allChannels = guilds.flatMap({ $0.value.channels.map({ $0.value }) }) + directChannels.map({ $0.value })
+		let channel: DiscordChannel
 
-		guard let channel = allChannels.reduce(DiscordChannel?.none, {cur, channel in
-			guard cur == nil else { return cur }
-
-		    return channel.id == channelId ? channel : nil
-		}) else {
-			DefaultDiscordLogger.Logger.debug("Couldn't find channel: %@", type: logType, args: channelId)
-
+		if let guild = guildForChannel(channelId), let guildChannel = guild.channels[channelId] {
+			channel = guildChannel
+		} else if let dmChannel = directChannels[channelId] {
+			channel = dmChannel
+		} else {
 			return nil
 		}
 
