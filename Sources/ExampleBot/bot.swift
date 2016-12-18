@@ -21,6 +21,8 @@ import SwiftDiscord
 import ImageBrutalizer
 #endif
 
+let ignoreGuilds = ["81384788765712384"]
+
 typealias QueuedVideo = (link: String, channel: String)
 
 class DiscordBot {
@@ -178,6 +180,12 @@ class DiscordBot {
 
     private func handleCommand(_ command: String, with arguments: [String], message: DiscordMessage) {
         print("got command \(command)")
+
+        if let guild = message.channel?.guild, ignoreGuilds.contains(guild.id) {
+            print("Ignoring this guild")
+
+            return
+        }
 
         if command == "myroles" {
             let roles = getRolesForUser(message.author, on: message.channelId)

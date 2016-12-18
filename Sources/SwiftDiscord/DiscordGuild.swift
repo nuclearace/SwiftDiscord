@@ -19,7 +19,7 @@ import class Dispatch.DispatchSemaphore
 import Foundation
 
 /// Represents a Guild.
-public struct DiscordGuild : DiscordClientHolder {
+public final class DiscordGuild : DiscordClientHolder {
 	// MARK: Properties
 
 	// TODO figure out what features are
@@ -201,7 +201,7 @@ public struct DiscordGuild : DiscordClientHolder {
 	}
 
 	// Used to update a guild from a guildUpdate event
-	mutating func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
+	func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
 		if let defaultMessageNotifications = newGuild["default_message_notifications"] as? Int {
 			self.defaultMessageNotifications = defaultMessageNotifications
 		}

@@ -574,13 +574,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			let guildMembers = DiscordGuildMember.guildMembersFromArray(members)
 
 			self.handleQueue.async {
-				guard var guild = self.guilds[guildId] else { return }
+				guard let guild = self.guilds[guildId] else { return }
 
 				for (memberId, member) in guildMembers {
 					guild.members[memberId] = member
 				}
-
-				self.guilds[guildId] = guild
 
 				self.handleEvent("guildMembersChunk", with: [guildId, guildMembers])
 			}
