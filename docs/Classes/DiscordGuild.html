@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DiscordDispatchEvent Enum Reference</title>
+    <title>DiscordGuild Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Enum/DiscordDispatchEvent" class="dashAnchor"></a>
-    <a title="DiscordDispatchEvent Enum Reference"></a>
+    <a name="//apple_ref/swift/Class/DiscordGuild" class="dashAnchor"></a>
+    <a title="DiscordGuild Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        DiscordDispatchEvent Enum Reference
+        DiscordGuild Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -312,28 +312,32 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>DiscordDispatchEvent</h1>
+            <h1>DiscordGuild</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DiscordDispatchEvent</span> <span class="p">:</span> <span class="kt">String</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">DiscordGuild</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordClientHolder.html">DiscordClientHolder</a></span></code></pre>
 
                 </div>
               </div>
-            <p>An enum that represents the dispatch events Discord sends.</p>
-
-<p>If one of these events is handled specifically by the client then it will be turned into an event with the form
-<code>myEventName</code>. If it is not handled, then the associated enum string will be the event name.</p>
+            <p>Represents a Guild.</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Properties"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <a href="#/Properties">
+                  <h3 class="section-name">Properties</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent5readyFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/ready" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent5readyFMS0_S0_">ready</a>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild8featuresGSaP__"></a>
+                    <a name="//apple_ref/swift/Property/features" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild8featuresGSaP__">features</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -341,14 +345,611 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Ready (Handled)</p>
+                        <p>The guild&rsquo;s features.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">ready</span> <span class="o">=</span> <span class="s">"READY"</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">features</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild2idSS"></a>
+                    <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild2idSS">id</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The snowflake id of the guild.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild5largeSb"></a>
+                    <a name="//apple_ref/swift/Property/large" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild5largeSb">large</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether or not this a <q>large</q> guild.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">large</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild8joinedAtV10Foundation4Date"></a>
+                    <a name="//apple_ref/swift/Property/joinedAt" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild8joinedAtV10Foundation4Date">joinedAt</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The date the user joined the guild.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">joinedAt</span><span class="p">:</span> <span class="kt">Date</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild6splashSS"></a>
+                    <a name="//apple_ref/swift/Property/splash" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild6splashSS">splash</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The base64 encoded splash image.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">splash</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild11unavailableSb"></a>
+                    <a name="//apple_ref/swift/Property/unavailable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild11unavailableSb">unavailable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether this guild is unavaiable.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">unavailable</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild6clientXwGSqCS_13DiscordClient_"></a>
+                    <a name="//apple_ref/swift/Property/client" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild6clientXwGSqCS_13DiscordClient_">client</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Reference to the client.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild8channelsGVs10DictionarySSVS_19DiscordGuildChannel_"></a>
+                    <a name="//apple_ref/swift/Property/channels" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild8channelsGVs10DictionarySSVS_19DiscordGuildChannel_">channels</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A dictionary of this guild&rsquo;s channels. The key is the snowflake id of the channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">channels</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild6emojisGVs10DictionarySSVS_12DiscordEmoji_"></a>
+                    <a name="//apple_ref/swift/Property/emojis" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild6emojisGVs10DictionarySSVS_12DiscordEmoji_">emojis</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A dictionary of this guild&rsquo;s emojis. The key is the snowflake id of the emoji.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">emojis</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmoji.html">DiscordEmoji</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild11memberCountSi"></a>
+                    <a name="//apple_ref/swift/Property/memberCount" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild11memberCountSi">memberCount</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The number of members in this guild.</p>
+
+<p><em>This number might not be the actual number of users in the <code><a href="../Classes/DiscordGuild.html#/s:vC12SwiftDiscord12DiscordGuild7membersGVS_21DiscordLazyDictionarySSVS_18DiscordGuildMember_">members</a></code> field.</em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">memberCount</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild7membersGVS_21DiscordLazyDictionarySSVS_18DiscordGuildMember_"></a>
+                    <a name="//apple_ref/swift/Property/members" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild7membersGVS_21DiscordLazyDictionarySSVS_18DiscordGuildMember_">members</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A <code><a href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a></code> of guild members. The key is the snowflake id of the user.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">members</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild9presencesGVS_21DiscordLazyDictionarySSVS_15DiscordPresence_"></a>
+                    <a name="//apple_ref/swift/Property/presences" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild9presencesGVS_21DiscordLazyDictionarySSVS_15DiscordPresence_">presences</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A <code><a href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a></code> of presences. The key is the snowflake id of the user.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">presences</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="../Structs/DiscordPresence.html">DiscordPresence</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild5rolesGVs10DictionarySSVS_11DiscordRole_"></a>
+                    <a name="//apple_ref/swift/Property/roles" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild5rolesGVs10DictionarySSVS_11DiscordRole_">roles</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A dictionary of this guild&rsquo;s roles. The key is the snowflake id of the role.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">roles</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild11voiceStatesGVs10DictionarySSVS_17DiscordVoiceState_"></a>
+                    <a name="//apple_ref/swift/Property/voiceStates" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild11voiceStatesGVs10DictionarySSVS_17DiscordVoiceState_">voiceStates</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A dictionary of this guild&rsquo;s current voice states. The key is the snowflake id of the user for this voice
+state.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">voiceStates</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild27defaultMessageNotificationsSi"></a>
+                    <a name="//apple_ref/swift/Property/defaultMessageNotifications" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild27defaultMessageNotificationsSi">defaultMessageNotifications</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The default message notification setting.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">defaultMessageNotifications</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild14embedChannelIdSS"></a>
+                    <a name="//apple_ref/swift/Property/embedChannelId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild14embedChannelIdSS">embedChannelId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The snowflake id of the embed channel for this guild.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">embedChannelId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild12embedEnabledSb"></a>
+                    <a name="//apple_ref/swift/Property/embedEnabled" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild12embedEnabledSb">embedEnabled</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether this guild has embed enabled.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">embedEnabled</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild4iconSS"></a>
+                    <a name="//apple_ref/swift/Property/icon" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild4iconSS">icon</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The base64 encoded icon image for this guild.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">icon</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild8mfaLevelSi"></a>
+                    <a name="//apple_ref/swift/Property/mfaLevel" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild8mfaLevelSi">mfaLevel</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The multi-factor authentication level for this guild.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">mfaLevel</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild4nameSS"></a>
+                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild4nameSS">name</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The name of this guild.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild7ownerIdSS"></a>
+                    <a name="//apple_ref/swift/Property/ownerId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild7ownerIdSS">ownerId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The snowflake id of this guild&rsquo;s owner.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">ownerId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild6regionSS"></a>
+                    <a name="//apple_ref/swift/Property/region" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild6regionSS">region</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The region this guild is in.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">region</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord12DiscordGuild17verificationLevelSi"></a>
+                    <a name="//apple_ref/swift/Property/verificationLevel" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord12DiscordGuild17verificationLevelSi">verificationLevel</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The verification level a member of this guild must have to join.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">verificationLevel</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
@@ -358,13 +959,20 @@
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Methods"></a>
+                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
+                <a href="#/Methods">
+                  <h3 class="section-name">Methods</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent13messageCreateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/messageCreate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent13messageCreateFMS0_S0_">messageCreate</a>
+                    <a name="/s:FC12SwiftDiscord12DiscordGuild3banFTVS_18DiscordGuildMember17deleteMessageDaysSi_T_"></a>
+                    <a name="//apple_ref/swift/Method/ban(_:deleteMessageDays:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord12DiscordGuild3banFTVS_18DiscordGuildMember17deleteMessageDaysSi_T_">ban(_:deleteMessageDays:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -372,30 +980,59 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Message Create (Handled)</p>
+                        <p>Bans this user from the guild.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">messageCreate</span> <span class="o">=</span> <span class="s">"MESSAGE_CREATE"</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">ban</span><span class="p">(</span><span class="n">_</span> <span class="nv">member</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="p">,</span> <span class="nv">deleteMessageDays</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">7</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>member</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The member to ban</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>deleteMessageDays</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The number of days going back to delete messages. Defaults to 7</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent13messageDeleteFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/messageDelete" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent13messageDeleteFMS0_S0_">messageDelete</a>
+                    <a name="/s:FC12SwiftDiscord12DiscordGuild13createChannelFT4withGSaOVS_22DiscordEndpointOptions18GuildCreateChannel__T_"></a>
+                    <a name="//apple_ref/swift/Method/createChannel(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord12DiscordGuild13createChannelFT4withGSaOVS_22DiscordEndpointOptions18GuildCreateChannel__T_">createChannel(with:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -403,30 +1040,47 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Message Delete (Not handled)</p>
+                        <p>Creates a channel on this guild with <code>options</code>. The channel will not be immediately available; wait for a
+channel create event.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">messageDelete</span> <span class="o">=</span> <span class="s">"MESSAGE_DELETE"</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">createChannel</span><span class="p">(</span><span class="n">with</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">GuildCreateChannel</span><span class="p">])</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The options for this new channel</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent17messageDeleteBulkFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/messageDeleteBulk" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent17messageDeleteBulkFMS0_S0_">messageDeleteBulk</a>
+                    <a name="/s:FC12SwiftDiscord12DiscordGuild7getBansFT_GSaVS_10DiscordBan_"></a>
+                    <a name="//apple_ref/swift/Method/getBans()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord12DiscordGuild7getBansFT_GSaVS_10DiscordBan_">getBans()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -434,30 +1088,34 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Message Delete Bulk (Not handled)</p>
+                        <p>Gets the bans for this guild.</p>
+
+<p><strong>NOTE</strong>: This is a blocking method. If you need an async version use the <code>getGuildBans</code> method from
+<code><a href="../Protocols/DiscordEndpointConsumer.html">DiscordEndpointConsumer</a></code>, which is available on <code><a href="../Classes/DiscordClient.html">DiscordClient</a></code>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">messageDeleteBulk</span> <span class="o">=</span> <span class="s">"MESSAGE_DELETE_BULK"</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">getBans</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordBan.html">DiscordBan</a></span><span class="p">]</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An array of <code><a href="../Structs/DiscordUser.html">DiscordUser</a></code>s who are banned on this guild</p>
+
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent18messageReactionAddFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/messageReactionAdd" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent18messageReactionAddFMS0_S0_">messageReactionAdd</a>
+                    <a name="/s:FC12SwiftDiscord12DiscordGuild11modifyGuildFT7optionsGSaOVS_22DiscordEndpointOptions11ModifyGuild__T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuild(options:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord12DiscordGuild11modifyGuildFT7optionsGSaOVS_22DiscordEndpointOptions11ModifyGuild__T_">modifyGuild(options:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -465,30 +1123,46 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Message Reaction Add (Not handled)</p>
+                        <p>Modifies this guild with <code>options</code>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">messageReactionAdd</span> <span class="o">=</span> <span class="s">"MESSAGE_REACTION_ADD"</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">modifyGuild</span><span class="p">(</span><span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">ModifyGuild</span><span class="p">])</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of options to change</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent21messageReactionRemoveFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/messageReactionRemove" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent21messageReactionRemoveFMS0_S0_">messageReactionRemove</a>
+                    <a name="/s:FC12SwiftDiscord12DiscordGuild5unbanFVS_11DiscordUserT_"></a>
+                    <a name="//apple_ref/swift/Method/unban(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord12DiscordGuild5unbanFVS_11DiscordUserT_">unban(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -496,698 +1170,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Message Reaction Remove (Not handled)</p>
+                        <p>Unbans the specified user from the guild.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">messageReactionRemove</span> <span class="o">=</span> <span class="s">"MESSAGE_REACTION_REMOVE"</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">unban</span><span class="p">(</span><span class="n">_</span> <span class="nv">user</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordUser.html">DiscordUser</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent13messageUpdateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/messageUpdate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent13messageUpdateFMS0_S0_">messageUpdate</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Message Update (Not handled)</p>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>user</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The user to unban</p>
 
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">messageUpdate</span> <span class="o">=</span> <span class="s">"MESSAGE_UPDATE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent11guildBanAddFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/guildBanAdd" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent11guildBanAddFMS0_S0_">guildBanAdd</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild Ban Add (Not handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildBanAdd</span> <span class="o">=</span> <span class="s">"GUILD_BAN_ADD"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent14guildBanRemoveFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/guildBanRemove" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent14guildBanRemoveFMS0_S0_">guildBanRemove</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild Ban Remove (Not handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildBanRemove</span> <span class="o">=</span> <span class="s">"GUILD_BAN_REMOVE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent11guildCreateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/guildCreate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent11guildCreateFMS0_S0_">guildCreate</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild Create (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildCreate</span> <span class="o">=</span> <span class="s">"GUILD_CREATE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent11guildDeleteFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/guildDelete" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent11guildDeleteFMS0_S0_">guildDelete</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>GuildDelete (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildDelete</span> <span class="o">=</span> <span class="s">"GUILD_DELETE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent17guildEmojisUpdateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/guildEmojisUpdate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent17guildEmojisUpdateFMS0_S0_">guildEmojisUpdate</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild Emojis Update (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildEmojisUpdate</span> <span class="o">=</span> <span class="s">"GUILD_EMOJIS_UPDATE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent23guildIntegrationsUpdateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/guildIntegrationsUpdate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent23guildIntegrationsUpdateFMS0_S0_">guildIntegrationsUpdate</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild Integrations Update (Not handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildIntegrationsUpdate</span> <span class="o">=</span> <span class="s">"GUILD_INTEGRATIONS_UPDATE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent14guildMemberAddFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/guildMemberAdd" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent14guildMemberAddFMS0_S0_">guildMemberAdd</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild Member Add (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildMemberAdd</span> <span class="o">=</span> <span class="s">"GUILD_MEMBER_ADD"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent17guildMemberRemoveFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/guildMemberRemove" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent17guildMemberRemoveFMS0_S0_">guildMemberRemove</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild Member Remove (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildMemberRemove</span> <span class="o">=</span> <span class="s">"GUILD_MEMBER_REMOVE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent17guildMemberUpdateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/guildMemberUpdate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent17guildMemberUpdateFMS0_S0_">guildMemberUpdate</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild Member Update (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildMemberUpdate</span> <span class="o">=</span> <span class="s">"GUILD_MEMBER_UPDATE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent17guildMembersChunkFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/guildMembersChunk" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent17guildMembersChunkFMS0_S0_">guildMembersChunk</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild Members Chunk (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildMembersChunk</span> <span class="o">=</span> <span class="s">"GUILD_MEMBERS_CHUNK"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent15guildRoleCreateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/guildRoleCreate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent15guildRoleCreateFMS0_S0_">guildRoleCreate</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild Role Create (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildRoleCreate</span> <span class="o">=</span> <span class="s">"GUILD_ROLE_CREATE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent15guildRoleDeleteFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/guildRoleDelete" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent15guildRoleDeleteFMS0_S0_">guildRoleDelete</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild Role Delete (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildRoleDelete</span> <span class="o">=</span> <span class="s">"GUILD_ROLE_DELETE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent15guildRoleUpdateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/guildRoleUpdate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent15guildRoleUpdateFMS0_S0_">guildRoleUpdate</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild Role Update (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildRoleUpdate</span> <span class="o">=</span> <span class="s">"GUILD_ROLE_UPDATE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent11guildUpdateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/guildUpdate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent11guildUpdateFMS0_S0_">guildUpdate</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild Update (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">guildUpdate</span> <span class="o">=</span> <span class="s">"GUILD_UPDATE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent13channelCreateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/channelCreate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent13channelCreateFMS0_S0_">channelCreate</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Channel Create (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">channelCreate</span> <span class="o">=</span> <span class="s">"CHANNEL_CREATE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent13channelDeleteFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/channelDelete" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent13channelDeleteFMS0_S0_">channelDelete</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Channel Delete (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">channelDelete</span> <span class="o">=</span> <span class="s">"CHANNEL_DELETE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent13channelUpdateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/channelUpdate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent13channelUpdateFMS0_S0_">channelUpdate</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Channel Update (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">channelUpdate</span> <span class="o">=</span> <span class="s">"CHANNEL_UPDATE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent17voiceServerUpdateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/voiceServerUpdate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent17voiceServerUpdateFMS0_S0_">voiceServerUpdate</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Voice Server Update (Handled but no event emitted)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">voiceServerUpdate</span> <span class="o">=</span> <span class="s">"VOICE_SERVER_UPDATE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent16voiceStateUpdateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/voiceStateUpdate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent16voiceStateUpdateFMS0_S0_">voiceStateUpdate</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Voice State Update (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">voiceStateUpdate</span> <span class="o">=</span> <span class="s">"VOICE_STATE_UPDATE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent14presenceUpdateFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/presenceUpdate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent14presenceUpdateFMS0_S0_">presenceUpdate</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Presence Update (Handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">presenceUpdate</span> <span class="o">=</span> <span class="s">"PRESENCE_UPDATE"</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FO12SwiftDiscord20DiscordDispatchEvent11typingStartFMS0_S0_"></a>
-                    <a name="//apple_ref/swift/Element/typingStart" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FO12SwiftDiscord20DiscordDispatchEvent11typingStartFMS0_S0_">typingStart</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Typing Start (Not handled)</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">typingStart</span> <span class="o">=</span> <span class="s">"TYPING_START"</span></code></pre>
-
-                        </div>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
