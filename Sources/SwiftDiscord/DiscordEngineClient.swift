@@ -33,4 +33,9 @@ public protocol DiscordEngineClient {
         - parameter with: The event data
     */
 	func handleEngineEvent(_ event: String, with data: [Any])
+
+    /**
+        Tells the client they should invalidate their session id.
+    */
+    func invalidateSession()
 }

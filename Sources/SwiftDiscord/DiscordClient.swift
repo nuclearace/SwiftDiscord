@@ -50,6 +50,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// A callback function to listen for voice packets.
 	public var onVoiceData: (DiscordVoiceData) -> Void = {_ in }
 
+	/// Whether this client tries to resume a previously established session.
+	public var resume = true
+
 	/// Whether or not this client is connected.
 	public private(set) var connected = false
 
@@ -61,6 +64,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 	/// The relationships this user has. Only valid for non-bot users.
 	public private(set) var relationships = [[String: Any]]()
+
+	/// The current session id.
+	public private(set) var sessionId: String?
 
 	/// The DiscordUser this client is connected to.
 	public private(set) var user: DiscordUser?
@@ -77,6 +83,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	private var channelCache = [String: DiscordChannel]()
 	private var handlers = [String: DiscordEventHandler]()
 	private var joiningVoiceChannel = false
+	private var resuming = false
 	private var voiceServerInformation: [String: Any]?
 
 	// MARK: Initializers
@@ -97,6 +104,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 				DefaultDiscordLogger.Logger.level = level
 			case let .logger(logger):
 				DefaultDiscordLogger.Logger = logger
+			case let .resume(resume):
+				self.resume = resume
 			}
 		}
 	}
@@ -116,7 +125,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		engine = DiscordEngine(client: self)
 
 		on("engine.disconnect") {[weak self] data in
-			self?.handleEvent("disconnect", with: data)
+			guard let this = self else { return }
+
+			this.connected = false
+
+			this.handleQueue.async {
+				this.handleEngineDisconnect(data)
+			}
 		}
 	}
 
@@ -134,11 +149,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 	/**
 		Disconnects from Discord. A `disconnect` event is fired when the client has successfully disconnected.
+
+		Calling this method turns off automatic resuming, set `resume` to `true` before calling `connect()` again.
 	*/
 	open func disconnect() {
 		DefaultDiscordLogger.Logger.log("Disconnecting", type: logType)
 
 		connected = false
+		resume = false
+		resuming = false
 
 		engine?.disconnect()
 
@@ -206,6 +225,22 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	/**
+		Called after the client receives a disconnect event from the engine. This method decides whether to initate a
+		resume, or to emit a disconnect event.
+
+		- parameter disconnectData: The data from the disconnect event
+	*/
+	open func handleEngineDisconnect(_ disconnectData: [Any]) {
+		guard resume else {
+			handleEvent("disconnect", with: disconnectData)
+
+			return
+		}
+
+		resumeGateway()
+	}
+
+	/**
 		Handles engine dispatch events. You shouldn't need to call this method directly.
 
 		Override to provide custom engine dispatch functionality.
@@ -238,10 +273,25 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 	/**
 		Handles voice data received from the VoiceEngine
+
+		- paramter data: A DiscordVoiceData tuple
 	*/
 	open func handleVoiceData(_ data: DiscordVoiceData) {
 		voiceQueue.async {
 			self.onVoiceData(data)
+		}
+	}
+
+	/**
+	    Invalides the current session id.
+	*/
+	open func invalidateSession() {
+		DefaultDiscordLogger.Logger.log("Invalidating the current session", type: logType)
+
+		// The engine is telling us this session isn't valid anymore, clear it and stop resuming.
+		handleQueue.sync {
+			self.sessionId = nil
+			self.resuming = false
 		}
 	}
 
@@ -327,6 +377,37 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		engine?.sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.requestGuildMembers),
 			payload: .object(requestObject)))
+	}
+
+	/**
+		Tries to resume a disconnected gateway connection.
+	*/
+	open func resumeGateway() {
+		guard sessionId != nil, resume else { return }
+		guard !resuming else {
+			DefaultDiscordLogger.Logger.debug("Already trying to resume, ignoring", type: logType)
+
+			return
+		}
+
+		DefaultDiscordLogger.Logger.log("Trying to resume gateway session", type: logType)
+
+		resuming = true
+
+		_resumeGateway(wait: 0)
+	}
+
+	private func _resumeGateway(wait: Int) {
+		handleQueue.asyncAfter(deadline: DispatchTime.now() + Double(wait)) {[weak self] in
+			guard let this = self, !this.connected, this.resuming else { return }
+
+			DefaultDiscordLogger.Logger.debug("Calling engine connect for gateway resume with wait: %@",
+				type: this.logType, args: wait)
+
+			this.engine?.connect()
+
+			this._resumeGateway(wait: wait + 10)
+		}
 	}
 
 	/**
@@ -739,8 +820,33 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			self.directChannels = privateChannelsFromArray(privateChannels)
 		}
 
+		if let sessionId = data["session_id"] as? String {
+			DefaultDiscordLogger.Logger.log("Got sessionId: %@", type: logType, args: sessionId)
+
+			self.sessionId = sessionId
+		}
+
 		connected = true
+		resuming = false
 		handleEvent("connect", with: [data])
+	}
+
+
+	/**
+		Handles the resumed event from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	open func handleResumed(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Resumed gateway session", type: logType)
+
+		resuming = false
+		connected = true
+
+		// Start the engine's heartbeat again
+		engine?.sendHeartbeat()
 	}
 
 	/**

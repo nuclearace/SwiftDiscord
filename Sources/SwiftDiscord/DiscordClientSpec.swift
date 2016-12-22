@@ -29,6 +29,9 @@ public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngi
 	/// made on this queue, as this is the queue where modifications on them are made.
 	var handleQueue: DispatchQueue { get set }
 
+	/// The current session id.
+	var sessionId: String? { get }
+
 	// MARK: Initializers
 
 	/**

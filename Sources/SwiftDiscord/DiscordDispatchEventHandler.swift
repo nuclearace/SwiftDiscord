@@ -147,6 +147,13 @@ public protocol DiscordDispatchEventHandler : DiscordClientSpec {
 	func handleReady(with data: [String: Any])
 
 	/**
+		Handles the resumed event from Discord.
+
+		- parameter with: The data from the event
+	*/
+	func handleResumed(with data: [String: Any])
+
+	/**
 		Handles voice server updates from Discord.
 
 		- parameter with: The data from the event
@@ -196,6 +203,7 @@ public extension DiscordDispatchEventHandler {
 		case .voiceServerUpdate:	handleVoiceServerUpdate(with: eventData)
 		case .voiceStateUpdate:		handleVoiceStateUpdate(with: eventData)
 		case .ready:				handleReady(with: eventData)
+		case .resumed:				handleResumed(with: eventData)
 		default:					handleEvent(event.rawValue, with: [eventData])
 		}
 	}

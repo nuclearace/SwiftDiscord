@@ -15,6 +15,8 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Foundation
+
 /// Top-level enum for gateway codes.
 public enum DiscordGatewayCode {
 	/// Gateway code is a DiscordNormalGatewayCode.
@@ -75,4 +77,54 @@ public enum DiscordVoiceGatewayCode : Int {
 	case sessionDescription
 	/// Speaking.
 	case speaking
+}
+
+/// Represents the reason a gateway was closed.
+public enum DiscordGatewayCloseReason : Int {
+	/// We don't quite know why the gateway closed.
+	case unknown = 0
+
+	/// The gateway closed because the network dropped.
+	case noNetwork = 50
+
+	/// The gateway closed from a normal WebSocket close event.
+	case normal = 1000
+
+	/// Something went wrong, but we aren't quite sure either.
+	case unknownError = 4000
+
+	/// Discord got an opcode is doesn't recognize.
+	case unkownOpcode = 4001
+
+	/// We sent a payload Discord doesn't know what to do with.
+	case decodeError = 4002
+
+	/// We tried to send stuff before we were authenticated.
+	case notAuthenticated = 4003
+
+	/// We failed to authenticate with Discord.
+	case authenticationFailed = 4004
+
+	/// We tried to authenticate twice.
+	case alreadyAuthenticated = 4005
+
+	/// We sent a bad sequence number when trying to resume.
+	case invalidSequence = 4007
+
+	/// We sent messages too fast.
+	case rateLimited = 4008
+
+	/// Our session timed out.
+	case sessionTimeout = 4009
+
+	/// We sent an invalid shard when identifing.
+	case invalidShard = 4010
+
+	// MARK: Initializers
+
+	init?(error: NSError?) {
+		guard let code = error?.code else { return nil }
+
+		self.init(rawValue: code)
+	}
 }
