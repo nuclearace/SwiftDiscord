@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DiscordRole Struct Reference</title>
+    <title>DiscordGatewayCloseReason Enum Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/DiscordRole" class="dashAnchor"></a>
-    <a title="DiscordRole Struct Reference"></a>
+    <a name="//apple_ref/swift/Enum/DiscordGatewayCloseReason" class="dashAnchor"></a>
+    <a title="DiscordGatewayCloseReason Enum Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        DiscordRole Struct Reference
+        DiscordGatewayCloseReason Enum Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -315,32 +315,25 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>DiscordRole</h1>
+            <h1>DiscordGatewayCloseReason</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordRole</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DiscordGatewayCloseReason</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                 </div>
               </div>
-            <p>Represents a Discord role.</p>
+            <p>Represents the reason a gateway was closed.</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Properties"></a>
-                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
-                <a href="#/Properties">
-                  <h3 class="section-name">Properties</h3>
-                </a>
-              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole2idSS"></a>
-                    <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole2idSS">id</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason7unknownFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/unknown" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason7unknownFMS0_S0_">unknown</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -348,26 +341,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The snowflake id of the role.</p>
+                        <p>We don&rsquo;t quite know why the gateway closed.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">unknown</span> <span class="o">=</span> <span class="mi">0</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole5colorSi"></a>
-                    <a name="//apple_ref/swift/Property/color" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole5colorSi">color</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason9noNetworkFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/noNetwork" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason9noNetworkFMS0_S0_">noNetwork</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -375,26 +372,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The display color of this role.</p>
+                        <p>The gateway closed because the network dropped.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">color</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">noNetwork</span> <span class="o">=</span> <span class="mi">50</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole5hoistSb"></a>
-                    <a name="//apple_ref/swift/Property/hoist" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole5hoistSb">hoist</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason6normalFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/normal" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason6normalFMS0_S0_">normal</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -402,26 +403,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Whether this role should be hoisted.</p>
+                        <p>The gateway closed from a normal WebSocket close event.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">hoist</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">normal</span> <span class="o">=</span> <span class="mi">1000</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole7managedSb"></a>
-                    <a name="//apple_ref/swift/Property/managed" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole7managedSb">managed</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason12unknownErrorFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/unknownError" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason12unknownErrorFMS0_S0_">unknownError</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -429,26 +434,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Whether this role is managed.</p>
+                        <p>Something went wrong, but we aren&rsquo;t quite sure either.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">managed</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">unknownError</span> <span class="o">=</span> <span class="mi">4000</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole11mentionableSb"></a>
-                    <a name="//apple_ref/swift/Property/mentionable" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole11mentionableSb">mentionable</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason12unkownOpcodeFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/unkownOpcode" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason12unkownOpcodeFMS0_S0_">unkownOpcode</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -456,26 +465,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Whether this role is mentionable.</p>
+                        <p>Discord got an opcode is doesn&rsquo;t recognize.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">mentionable</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">unkownOpcode</span> <span class="o">=</span> <span class="mi">4001</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole4nameSS"></a>
-                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole4nameSS">name</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason11decodeErrorFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/decodeError" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason11decodeErrorFMS0_S0_">decodeError</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -483,26 +496,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The name of this role.</p>
+                        <p>We sent a payload Discord doesn&rsquo;t know what to do with.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">decodeError</span> <span class="o">=</span> <span class="mi">4002</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole11permissionsSi"></a>
-                    <a name="//apple_ref/swift/Property/permissions" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole11permissionsSi">permissions</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason16notAuthenticatedFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/notAuthenticated" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason16notAuthenticatedFMS0_S0_">notAuthenticated</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -510,28 +527,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The permissions this role has.</p>
-
-<p><em>Bit field</em></p>
+                        <p>We tried to send stuff before we were authenticated.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">permissions</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">notAuthenticated</span> <span class="o">=</span> <span class="mi">4003</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole8positionSi"></a>
-                    <a name="//apple_ref/swift/Property/position" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole8positionSi">position</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason20authenticationFailedFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/authenticationFailed" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason20authenticationFailedFMS0_S0_">authenticationFailed</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -539,14 +558,169 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The position of this role.</p>
+                        <p>We failed to authenticate with Discord.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">position</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">authenticationFailed</span> <span class="o">=</span> <span class="mi">4004</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason20alreadyAuthenticatedFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/alreadyAuthenticated" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason20alreadyAuthenticatedFMS0_S0_">alreadyAuthenticated</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>We tried to authenticate twice.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">alreadyAuthenticated</span> <span class="o">=</span> <span class="mi">4005</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason15invalidSequenceFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/invalidSequence" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason15invalidSequenceFMS0_S0_">invalidSequence</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>We sent a bad sequence number when trying to resume.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">invalidSequence</span> <span class="o">=</span> <span class="mi">4007</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason11rateLimitedFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/rateLimited" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason11rateLimitedFMS0_S0_">rateLimited</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>We sent messages too fast.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">rateLimited</span> <span class="o">=</span> <span class="mi">4008</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason14sessionTimeoutFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/sessionTimeout" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason14sessionTimeoutFMS0_S0_">sessionTimeout</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Our session timed out.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">sessionTimeout</span> <span class="o">=</span> <span class="mi">4009</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason12invalidShardFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/invalidShard" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason12invalidShardFMS0_S0_">invalidShard</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>We sent an invalid shard when identifing.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">invalidShard</span> <span class="o">=</span> <span class="mi">4010</span></code></pre>
 
                         </div>
                       </div>

@@ -77,6 +77,9 @@
                 <a href="../Enums/DiscordGameType.html">DiscordGameType</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Enums/DiscordGatewayCloseReason.html">DiscordGatewayCloseReason</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Enums/DiscordGatewayCode.html">DiscordGatewayCode</a>
               </li>
               <li class="nav-group-task">
@@ -478,6 +481,33 @@ made on this queue, as this is the queue where modifications on them are made.</
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:vC12SwiftDiscord13DiscordClient6resumeSb"></a>
+                    <a name="//apple_ref/swift/Property/resume" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient6resumeSb">resume</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether this client tries to resume a previously established session.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">resume</span> <span class="o">=</span> <span class="kc">true</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:vC12SwiftDiscord13DiscordClient9connectedSb"></a>
                     <a name="//apple_ref/swift/Property/connected" class="dashAnchor"></a>
                     <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient9connectedSb">connected</a>
@@ -577,6 +607,33 @@ made on this queue, as this is the queue where modifications on them are made.</
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">relationships</span> <span class="o">=</span> <span class="p">[[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]]()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord13DiscordClient9sessionIdGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/sessionId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient9sessionIdGSqSS_">sessionId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The current session id.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">sessionId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -792,6 +849,8 @@ with the client.</p>
                       <div class="abstract">
                         <p>Disconnects from Discord. A <code>disconnect</code> event is fired when the client has successfully disconnected.</p>
 
+<p>Calling this method turns off automatic resuming, set <code><a href="../Classes/DiscordClient.html#/s:vC12SwiftDiscord13DiscordClient6resumeSb">resume</a></code> to <code>true</code> before calling <code><a href="../Classes/DiscordClient.html#/s:FC12SwiftDiscord13DiscordClient7connectFT_T_">connect()</a></code> again.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -982,6 +1041,54 @@ You shouldn&rsquo;t need to call this event directly.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient22handleEngineDisconnectFGSaP__T_"></a>
+                    <a name="//apple_ref/swift/Method/handleEngineDisconnect(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient22handleEngineDisconnectFGSaP__T_">handleEngineDisconnect(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called after the client receives a disconnect event from the engine. This method decides whether to initate a
+resume, or to emit a disconnect event.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleEngineDisconnect</span><span class="p">(</span><span class="n">_</span> <span class="nv">disconnectData</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>disconnectData</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the disconnect event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:FC12SwiftDiscord13DiscordClient20handleEngineDispatchFVS_21DiscordGatewayPayloadT_"></a>
                     <a name="//apple_ref/swift/Method/handleEngineDispatch(_:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient20handleEngineDispatchFVS_21DiscordGatewayPayloadT_">handleEngineDispatch(_:)</a>
@@ -1105,12 +1212,43 @@ You shouldn&rsquo;t need to call this event directly.</p>
                       <div class="abstract">
                         <p>Handles voice data received from the VoiceEngine</p>
 
+<ul>
+<li>paramter data: A DiscordVoiceData tuple</li>
+</ul>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleVoiceData</span><span class="p">(</span><span class="n">_</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord16DiscordVoiceData">DiscordVoiceData</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient17invalidateSessionFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/invalidateSession()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient17invalidateSessionFT_T_">invalidateSession()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Invalides the current session id.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">invalidateSession</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1287,6 +1425,33 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                             </tr>
                           </tbody>
                         </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient13resumeGatewayFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/resumeGateway()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient13resumeGatewayFT_T_">resumeGateway()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Tries to resume a disconnected gateway connection.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">resumeGateway</span><span class="p">()</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -2185,6 +2350,55 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient13handleResumedFT4withGVs10DictionarySSP___T_"></a>
+                    <a name="//apple_ref/swift/Method/handleResumed(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient13handleResumedFT4withGVs10DictionarySSP___T_">handleResumed(with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Handles the resumed event from Discord. You shouldn&rsquo;t need to call this method directly.</p>
+
+<p>Override to provide additional custmization around this event.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleResumed</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data from the event</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:FC12SwiftDiscord13DiscordClient23handleVoiceServerUpdateFT4withGVs10DictionarySSP___T_"></a>
                     <a name="//apple_ref/swift/Method/handleVoiceServerUpdate(with:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient23handleVoiceServerUpdateFT4withGVs10DictionarySSP___T_">handleVoiceServerUpdate(with:)</a>
@@ -2285,7 +2499,7 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-18)</p>
+          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-22)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
