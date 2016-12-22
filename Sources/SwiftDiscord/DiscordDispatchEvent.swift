@@ -25,6 +25,9 @@ public enum DiscordDispatchEvent : String {
 	/// Ready (Handled)
 	case ready = "READY"
 
+	/// Resumed (Handled)
+	case resumed = "RESUMED"
+
 	// Messaging
 
 	/// Message Create (Handled)

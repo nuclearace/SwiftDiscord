@@ -57,6 +57,16 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		]
 	}
 
+	/// Creates the resume object that Discord expects.
+	/// Override if you need to customize the resume object.
+	open var resumeObject: [String: Any] {
+		return [
+			"token": client!.token.token,
+			"session_id": client!.sessionId!,
+			"seq": lastSequenceNumber
+		]
+	}
+
 	// Only touch on handleQueue
 	/// The interval (in seconds) to send heartbeats.
 	public internal(set) var heartbeatInterval = 0
@@ -84,6 +94,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	}
 
 	private var closed = false
+	private var connectUUID = UUID()
 
 	// MARK: Initializers
 
@@ -112,6 +123,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
 			DefaultDiscordLogger.Logger.log("WebSocket Connected", type: this.logType)
 
+			this.connectUUID = UUID()
+
 			this.startHandshake()
 			// this.client?.handleEngineEvent("engine.connect", with: [])
 		}
@@ -122,7 +135,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			DefaultDiscordLogger.Logger.log("WebSocket disconnected %@",
 				type: this.logType, args: String(describing: err))
 
-			this.handleClose()
+			this.handleClose(reason: err)
 		}
 
 		websocket?.onText = {[weak self] string in
@@ -158,6 +171,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		DefaultDiscordLogger.Logger.log("Connecting to %@", type: logType, args: connectURL)
 		DefaultDiscordLogger.Logger.log("Attaching WebSocket", type: logType)
 
+		closed = false
+
 		#if !os(Linux)
 		websocket = WebSocket(url: URL(string: connectURL)!)
 		websocket?.callbackQueue = parseQueue
@@ -166,12 +181,14 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		websocket?.connect()
 		#else
 		try? WebSocket.background(to: connectURL) {[weak self] ws in
+			guard let this = self else { return }
 			DefaultDiscordLogger.Logger.log("Websocket connected", type: "DiscordEngine")
 
-			self?.websocket = ws
+			this.websocket = ws
+			this.connectUUID = UUID()
 
-			self?.attachWebSocketHandlers()
-			self?.startHandshake()
+			this.attachWebSocketHandlers()
+			this.startHandshake()
 		}
 		#endif
 	}
@@ -198,8 +215,15 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		DefaultDiscordLogger.Logger.error(message, type: logType)
 	}
 
-	private func handleClose() {
-		client?.handleEngineEvent("\(engineType).disconnect", with: [])
+	private func handleClose(reason: NSError? = nil) {
+		let closeReason = DiscordGatewayCloseReason(error: reason) ?? .unknown
+
+		if closeReason == .sessionTimeout {
+			// Tell the client to clear their session id
+			client?.invalidateSession()
+		}
+
+		client?.handleEngineEvent("\(engineType).disconnect", with: [closeReason])
 		closed = true
 	}
 
@@ -230,6 +254,11 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			handleDispatch(payload)
 		case .hello:
 			handleHello(payload)
+		case .invalidSession:
+			DefaultDiscordLogger.Logger.log("Invalid session received. Telling client to invalidate the session",
+				type: logType)
+			client?.invalidateSession()
+			startHandshake()
 		default:
 			error(message: "Unhandled payload: \(payload.code)")
 		}
@@ -267,7 +296,11 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
 		let time = DispatchTime.now() + Double(heartbeatInterval)
 
-		heartbeatQueue.asyncAfter(deadline: time) {[weak self] in self?.sendHeartbeat() }
+		heartbeatQueue.asyncAfter(deadline: time) {[weak self, uuid = connectUUID] in
+			guard let this = self, uuid == this.connectUUID else { return }
+
+			this.sendHeartbeat()
+		}
 	}
 
 	/**
@@ -282,7 +315,15 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			return
 		}
 
-		sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.identify), payload: .object(handshakeObject)))
+		if client!.sessionId != nil {
+			DefaultDiscordLogger.Logger.log("Sending resume", type: logType)
+
+			sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.resume), payload: .object(resumeObject)))
+		} else {
+			DefaultDiscordLogger.Logger.log("Sending handshake", type: logType)
+
+			sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.identify), payload: .object(handshakeObject)))
+		}
 	}
 
 	/**
