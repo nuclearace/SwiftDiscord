@@ -125,7 +125,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	private var timestamp = arc4random()
     #else
     private var sequenceNum = UInt16(random() >> 16)
-    private var timestamp = random()
+    private var timestamp = UInt32(random())
     #endif
 
 	private var startTime = 0
