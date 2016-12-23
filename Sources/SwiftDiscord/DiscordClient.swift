@@ -286,7 +286,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	    Invalides the current session id.
 	*/
 	open func invalidateSession() {
-		DefaultDiscordLogger.Logger.log("Invalidating the current session", type: logType)
+		DefaultDiscordLogger.Logger.debug("Invalidating the current session", type: logType)
 
 		// The engine is telling us this session isn't valid anymore, clear it and stop resuming.
 		handleQueue.sync {

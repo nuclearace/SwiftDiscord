@@ -255,7 +255,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		case .hello:
 			handleHello(payload)
 		case .invalidSession:
-			DefaultDiscordLogger.Logger.log("Invalid session received. Telling client to invalidate the session",
+			DefaultDiscordLogger.Logger.debug("Invalid session received. Telling client to invalidate the session",
 				type: logType)
 			client?.invalidateSession()
 			startHandshake()
