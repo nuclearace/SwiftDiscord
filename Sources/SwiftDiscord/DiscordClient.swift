@@ -129,9 +129,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 			this.connected = false
 
-			this.handleQueue.async {
-				this.handleEngineDisconnect(data)
-			}
+			this.handleEngineDisconnect(data)
 		}
 	}
 
@@ -408,7 +406,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 			this.engine?.connect()
 
-			this._resumeGateway(wait: wait + 10)
+			this._resumeGateway(wait: 10)
 		}
 	}
 
