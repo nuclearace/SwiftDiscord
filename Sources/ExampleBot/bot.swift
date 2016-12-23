@@ -193,8 +193,9 @@ class DiscordBot {
             message.channel?.sendMessage("Your roles: \(roles.map({ $0.name }))")
         } else if command == "yt", arguments.count == 1 {
             message.channel?.sendMessage(playYoutube(channelId: message.channelId, link: arguments[0]))
-        } else if command == "join" && arguments.count == 1 {
-            guard let channel = findChannelFromName(arguments[0], in: client.guildForChannel(message.channelId)) else {
+        } else if command == "join" && arguments.count > 0 {
+            guard let channel = findChannelFromName(arguments.joined(separator: " "),
+                    in: client.guildForChannel(message.channelId)) else {
                 message.channel?.sendMessage("That doesn't look like a channel in this guild.")
 
                 return
@@ -253,7 +254,7 @@ class DiscordBot {
 
         youtube.launch()
 
-        return "Playing \(link)"
+        return "Playing"
     }
 }
 

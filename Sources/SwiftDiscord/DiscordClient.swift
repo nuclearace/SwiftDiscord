@@ -394,6 +394,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		resuming = true
 
+		handleEvent("resumeStart", with: [])
+
 		_resumeGateway(wait: 0)
 	}
 
@@ -847,6 +849,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		// Start the engine's heartbeat again
 		engine?.sendHeartbeat()
+
+		handleEvent("resumed", with: [])
 	}
 
 	/**
