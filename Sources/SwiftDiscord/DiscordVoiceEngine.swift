@@ -241,6 +241,23 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		encoder = nil
 	}
 
+	private func createVoicePacket(_ data: [UInt8]) -> [UInt8] {
+		defer { free(encrypted) }
+
+		let audioSize = Int(crypto_secretbox_MACBYTES) + defaultAudioSize
+		let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
+		let rtpHeader = createRTPHeader()
+		let enryptedCount = Int(crypto_secretbox_MACBYTES) + data.count
+		var nonce = rtpHeader + padding
+		var buf = data
+
+		_ = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &secret!)
+
+		let encryptedBytes = Array(UnsafeBufferPointer(start: encrypted, count: enryptedCount))
+
+		return rtpHeader + encryptedBytes
+	}
+
 	private func extractIPAndPort(from bytes: [UInt8]) throws -> (String, Int) {
 		DefaultDiscordLogger.Logger.debug("Extracting ip and port from %@", type: logType, args: bytes)
 
@@ -486,32 +503,18 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	public func sendVoiceData(_ data: [UInt8]) {
 		udpQueue.sync {
 			guard let udpSocket = self.udpSocket, data.count <= defaultAudioSize else { return }
-			defer { free(encrypted) }
 
 			DefaultDiscordLogger.Logger.debug("Should send voice data: %@ bytes", type: self.logType, args: data.count)
 
-            var buf = data
-
-            let audioSize = Int(crypto_secretbox_MACBYTES) + defaultAudioSize
-            let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
-            let rtpHeader = self.createRTPHeader()
-            let enryptedCount = Int(crypto_secretbox_MACBYTES) + data.count
-            var nonce = rtpHeader + self.padding
-
-            _ = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &self.secret!)
-
-            let encryptedBytes = Array(UnsafeBufferPointer<UInt8>(start: encrypted, count: enryptedCount))
-
             do {
-            	try udpSocket.send(bytes: rtpHeader + encryptedBytes)
+            	try udpSocket.send(bytes: self.createVoicePacket(data))
             } catch {
             	self.error(message: "Failed sending voice packet")
             }
 
+            self.sequenceNum = self.sequenceNum &+ 1
+            self.timestamp = self.timestamp &+ 960
 		}
-
-		sequenceNum = sequenceNum &+ 1
-		timestamp = timestamp &+ 960
 	}
 
 	/**
