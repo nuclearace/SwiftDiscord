@@ -73,7 +73,7 @@ public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable {
 	/**
 		Sends a gateway payload to Discord.
 
-		- parameters payload: The payload object.
+		- parameter payload: The payload object.
 	*/
 	func sendGatewayPayload(_ payload: DiscordGatewayPayload)
 }

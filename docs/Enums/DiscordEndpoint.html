@@ -37,6 +37,9 @@
                 <a href="../Classes/DiscordEngine.html">DiscordEngine</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/DiscordGuild.html">DiscordGuild</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/DiscordLazyValue.html">DiscordLazyValue</a>
               </li>
               <li class="nav-group-task">
@@ -72,6 +75,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/DiscordGameType.html">DiscordGameType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordGatewayCloseReason.html">DiscordGatewayCloseReason</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/DiscordGatewayCode.html">DiscordGatewayCode</a>
@@ -143,6 +149,12 @@
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Protocols/DiscordChannel.html">DiscordChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordClientHolder.html">DiscordClientHolder</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/DiscordClientSpec.html">DiscordClientSpec</a>
               </li>
               <li class="nav-group-task">
@@ -167,6 +179,9 @@
                 <a href="../Protocols/DiscordLogger.html">DiscordLogger</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/DiscordUserActor.html">DiscordUserActor</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/DiscordVoiceEngineClient.html">DiscordVoiceEngineClient</a>
               </li>
               <li class="nav-group-task">
@@ -179,6 +194,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Structs/DiscordAttachment.html">DiscordAttachment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordBan.html">DiscordBan</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordDMChannel.html">DiscordDMChannel</a>
@@ -226,7 +244,7 @@
                 <a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordGuild.html">DiscordGuild</a>
+                <a href="../Structs/DiscordGroupDMChannel.html">DiscordGroupDMChannel</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a>
@@ -260,6 +278,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordPresenceUpdate.html">DiscordPresenceUpdate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordReaction.html">DiscordReaction</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordRole.html">DiscordRole</a>
@@ -335,7 +356,7 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">case</span> <span class="n">baseURL</span> <span class="o">=</span> <span class="s">"https://discordapp.com/api"</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">baseURL</span> <span class="o">=</span> <span class="s">"https://discordapp.com/api/v6"</span></code></pre>
 
                         </div>
                       </div>
@@ -2705,9 +2726,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint26modifyGuildChannelPositionFT2onSS9channelIdSS8positionSi4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyGuildChannelPosition(on:channelId:position:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint26modifyGuildChannelPositionFT2onSS9channelIdSS8positionSi4withVS_12DiscordToken_T_">modifyGuildChannelPosition(on:channelId:position:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint27modifyGuildChannelPositionsFT2onSS16channelPositionsGSaGVs10DictionarySSP___4withVS_12DiscordToken_T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuildChannelPositions(on:channelPositions:with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint27modifyGuildChannelPositionsFT2onSS16channelPositionsGSaGVs10DictionarySSP___4withVS_12DiscordToken_T_">modifyGuildChannelPositions(on:channelPositions:with:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2715,14 +2736,14 @@ GET methods also take a callback.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Modifies the position of a channel.</p>
+                        <p>Modifies the positions of channels.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyGuildChannelPosition</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">position</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyGuildChannelPositions</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">channelPositions</span><span class="p">:</span> <span class="p">[[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]],</span>
             <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
 
                         </div>
@@ -2747,25 +2768,12 @@ GET methods also take a callback.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>channelId</em>
+                                <em>channelPositions</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The snowflake id of the channel</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>position</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The new position of the channel</p>
+                                  <p>An array of channels that should be reordered. Should contain a dictionary in the form <code>[&quot;id&quot;: channelId, &quot;position&quot;: position]</code></p>
 
                                 </div>
                               </td>
@@ -2966,9 +2974,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint12getGuildBansFT3forSS4withVS_12DiscordToken8callbackFGSaVS_11DiscordUser_T__T_"></a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint12getGuildBansFT3forSS4withVS_12DiscordToken8callbackFGSaVS_10DiscordBan_T__T_"></a>
                     <a name="//apple_ref/swift/Method/getGuildBans(for:with:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint12getGuildBansFT3forSS4withVS_12DiscordToken8callbackFGSaVS_11DiscordUser_T__T_">getGuildBans(for:with:callback:)</a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint12getGuildBansFT3forSS4withVS_12DiscordToken8callbackFGSaVS_10DiscordBan_T__T_">getGuildBans(for:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2984,7 +2992,7 @@ GET methods also take a callback.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getGuildBans</span><span class="p">(</span><span class="k">for</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-            <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordUser.html">DiscordUser</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+            <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordBan.html">DiscordBan</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -3026,7 +3034,7 @@ GET methods also take a callback.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The callback function, taking an array of <code>DiscordUser</code></p>
+                                  <p>The callback function, taking an array of <code>DiscordBan</code></p>
 
                                 </div>
                               </td>
@@ -3886,7 +3894,7 @@ GET methods also take a callback.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-10)</p>
+          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-22)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

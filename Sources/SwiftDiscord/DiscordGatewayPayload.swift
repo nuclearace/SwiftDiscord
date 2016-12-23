@@ -41,18 +41,16 @@ public enum DiscordGatewayPayloadData {
 }
 
 extension DiscordGatewayPayloadData {
-	static func dataFromDictionary(_ data: Any?) -> DiscordGatewayPayloadData? {
-		guard let data = data else { return nil }
+	static func dataFromDictionary(_ data: Any?) -> DiscordGatewayPayloadData {
+		guard let data = data else { return .null }
 
 		switch data {
 		case let object as [String: Any]:
 			return .object(object)
 		case let integer as Int:
 			return .integer(integer)
-		case is NSNull:
-			return .null
 		default:
-			return nil
+			return .null
 		}
 	}
 }
@@ -111,12 +109,10 @@ extension DiscordGatewayPayload {
 			return nil
 		}
 
-		guard let op = dictionary["op"] as? Int,
-			let payload = DiscordGatewayPayloadData.dataFromDictionary(dictionary["d"]) else {
-				return nil
-		}
+		guard let op = dictionary["op"] as? Int else { return nil }
 
 		let code: DiscordGatewayCode
+		let payload = DiscordGatewayPayloadData.dataFromDictionary(dictionary["d"])
 
 		if fromGateway, let gatewayCode = DiscordNormalGatewayCode(rawValue: op) {
 			code = .gateway(gatewayCode)

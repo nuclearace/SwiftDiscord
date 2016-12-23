@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DiscordRole Struct Reference</title>
+    <title>DiscordChannel Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/DiscordRole" class="dashAnchor"></a>
-    <a title="DiscordRole Struct Reference"></a>
+    <a name="//apple_ref/swift/Protocol/DiscordChannel" class="dashAnchor"></a>
+    <a title="DiscordChannel Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        DiscordRole Struct Reference
+        DiscordChannel Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -315,14 +315,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>DiscordRole</h1>
+            <h1>DiscordChannel</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordRole</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordChannel</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordClientHolder.html">DiscordClientHolder</a></span></code></pre>
 
                 </div>
               </div>
-            <p>Represents a Discord role.</p>
+            <p>Protocol that declares a type will be a Discord channel.</p>
 
           </section>
           <section class="section task-group-section">
@@ -338,9 +338,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole2idSS"></a>
+                    <a name="/s:vP12SwiftDiscord14DiscordChannel2idSS"></a>
                     <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole2idSS">id</a>
+                    <a class="token" href="#/s:vP12SwiftDiscord14DiscordChannel2idSS">id</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -348,14 +348,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The snowflake id of the role.</p>
+                        <p>The id of the channel.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -365,9 +365,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole5colorSi"></a>
-                    <a name="//apple_ref/swift/Property/color" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole5colorSi">color</a>
+                    <a name="/s:vP12SwiftDiscord14DiscordChannel4typeOS_18DiscordChannelType"></a>
+                    <a name="//apple_ref/swift/Property/type" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP12SwiftDiscord14DiscordChannel4typeOS_18DiscordChannelType">type</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -375,16 +375,122 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The display color of this role.</p>
+                        <p>The type of the channel</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">color</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordChannelType.html">DiscordChannelType</a></span></code></pre>
 
                         </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Properties2"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <a href="#/Properties2">
+                  <h3 class="section-name">Properties</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vE12SwiftDiscordPS_14DiscordChannel5guildGSqCS_12DiscordGuild_"></a>
+                    <a name="//apple_ref/swift/Property/guild" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vE12SwiftDiscordPS_14DiscordChannel5guildGSqCS_12DiscordGuild_">guild</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">guild</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The guild that this channel is associated with. Or nil if this channel has no guild.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Methods"></a>
+                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
+                <a href="#/Methods">
+                  <h3 class="section-name">Methods</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FE12SwiftDiscordPS_14DiscordChannel13deleteMessageFVS_14DiscordMessageT_"></a>
+                    <a name="//apple_ref/swift/Method/deleteMessage(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FE12SwiftDiscordPS_14DiscordChannel13deleteMessageFVS_14DiscordMessageT_">deleteMessage(_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Deletes a message from this channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">message</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>message</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The message to delete</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -392,26 +498,37 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole5hoistSb"></a>
-                    <a name="//apple_ref/swift/Property/hoist" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole5hoistSb">hoist</a>
+                    <a name="/s:FE12SwiftDiscordPS_14DiscordChannel17getPinnedMessagesFT_GSaVS_14DiscordMessage_"></a>
+                    <a name="//apple_ref/swift/Method/getPinnedMessages()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FE12SwiftDiscordPS_14DiscordChannel17getPinnedMessagesFT_GSaVS_14DiscordMessage_">getPinnedMessages()</a>
                     </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Whether this role should be hoisted.</p>
+                        <p>Gets the pinned messages for this channel.</p>
+
+<p><strong>NOTE</strong>: This is a blocking method. If you need an async method, use the <code>.getPinnedMessages</code> from
+<code><a href="../Protocols/DiscordEndpointConsumer.html">DiscordEndpointConsumer</a></code> which is available on <code><a href="../Classes/DiscordClient.html">DiscordClient</a></code>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">hoist</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getPinnedMessages</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">]</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An Array of pinned messages</p>
+
                       </div>
                     </section>
                   </div>
@@ -419,26 +536,49 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole7managedSb"></a>
-                    <a name="//apple_ref/swift/Property/managed" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole7managedSb">managed</a>
+                    <a name="/s:FE12SwiftDiscordPS_14DiscordChannel13modifyChannelFT7optionsGSaOVS_22DiscordEndpointOptions13ModifyChannel__T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyChannel(options:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FE12SwiftDiscordPS_14DiscordChannel13modifyChannelFT7optionsGSaOVS_22DiscordEndpointOptions13ModifyChannel__T_">modifyChannel(options:)</a>
                     </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Whether this role is managed.</p>
+                        <p>Modifies this channel with <code>options</code>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">managed</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyChannel</span><span class="p">(</span><span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">ModifyChannel</span><span class="p">])</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of <code>DiscordEndpointOptions.ModifyChannel</code></p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -446,26 +586,75 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole11mentionableSb"></a>
-                    <a name="//apple_ref/swift/Property/mentionable" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole11mentionableSb">mentionable</a>
+                    <a name="/s:FE12SwiftDiscordPS_14DiscordChannel8sendFileFTVS_17DiscordFileUpload7contentSS3ttsSb_T_"></a>
+                    <a name="//apple_ref/swift/Method/sendFile(_:content:tts:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FE12SwiftDiscordPS_14DiscordChannel8sendFileFTVS_17DiscordFileUpload7contentSS3ttsSb_T_">sendFile(_:content:tts:)</a>
                     </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Whether this role is mentionable.</p>
+                        <p>Sends a file to this channel.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">mentionable</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">sendFile</span><span class="p">(</span><span class="n">_</span> <span class="nv">file</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordFileUpload.html">DiscordFileUpload</a></span><span class="p">,</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">""</span><span class="p">,</span> <span class="nv">tts</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>file</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A <code>DiscordFileUpload</code> to upload</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>content</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional message for this upload</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>tts</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Whether the message is TTS</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -473,26 +662,62 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole4nameSS"></a>
-                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole4nameSS">name</a>
+                    <a name="/s:FE12SwiftDiscordPS_14DiscordChannel11sendMessageFTSS3ttsSb_T_"></a>
+                    <a name="//apple_ref/swift/Method/sendMessage(_:tts:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FE12SwiftDiscordPS_14DiscordChannel11sendMessageFTSS3ttsSb_T_">sendMessage(_:tts:)</a>
                     </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The name of this role.</p>
+                        <p>Sends a message to this channel.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">sendMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">tts</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>content</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional message for this upload</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>tts</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Whether the message is TTS</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -500,53 +725,27 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole11permissionsSi"></a>
-                    <a name="//apple_ref/swift/Property/permissions" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole11permissionsSi">permissions</a>
+                    <a name="/s:FE12SwiftDiscordPS_14DiscordChannel13triggerTypingFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/triggerTyping()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FE12SwiftDiscordPS_14DiscordChannel13triggerTypingFT_T_">triggerTyping()</a>
                     </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The permissions this role has.</p>
-
-<p><em>Bit field</em></p>
+                        <p>Sends that this user is typing on this channel.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">permissions</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordRole8positionSi"></a>
-                    <a name="//apple_ref/swift/Property/position" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordRole8positionSi">position</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The position of this role.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">position</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">triggerTyping</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>

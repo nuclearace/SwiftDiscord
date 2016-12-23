@@ -15,40 +15,42 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-import Foundation
+/// Represents a user guild.
+public struct DiscordUserGuild {
+    // MARK: Properties
 
-/// Declares that a type will handle gateway dispatches.
-public protocol DiscordEngineGatewayHandling : DiscordEngineSpec, DiscordEngineHeartbeatable {
-    // MARK: Methods
+    /// The snowflake id of the guild.
+    public let id: String
 
-    /**
-        Handles a dispatch payload.
+    /// The name of the guild.
+    public let name: String
 
-        - parameter payload: The dispatch payload
-    */
-	func handleDispatch(_ payload: DiscordGatewayPayload)
+    /// The base64 encoded icon of the guild.
+    public let icon: String
 
-    /**
-        Handles the hello event.
+    /// Whether the user is the owner of the guild.
+    public let owner: Bool
 
-        - parameter payload: The dispatch payload
-    */
-    func handleHello(_ payload: DiscordGatewayPayload)
-}
+    /// Bitwise of the user's enabled/disabled permissions.
+    public let permissions: Int
 
-public extension DiscordEngineGatewayHandling {
-    /// Default implementation
-	func handleDispatch(_ payload: DiscordGatewayPayload) {
-		client?.handleEngineDispatch(payload)
-	}
+    init(userGuildObject: [String: Any]) {
+        id = userGuildObject.get("id", or: "")
+        name = userGuildObject.get("name", or: "")
+        icon = userGuildObject.get("icon", or: "")
+        owner = userGuildObject.get("owner", or: false)
+        permissions = userGuildObject.get("permissions", or: 0)
+    }
 
-    /// Default implementation
-    func handleHello(_ payload: DiscordGatewayPayload) {
-        guard case let .object(eventData) = payload.payload else { fatalError("Got bad hello payload") }
-        guard let milliseconds = eventData["heartbeat_interval"] as? Int else {
-            fatalError("Got bad heartbeat interval")
+    static func userGuildsFromArray(_ guilds: [[String: Any]]) -> [String: DiscordUserGuild] {
+        var userGuildDictionary = [String: DiscordUserGuild]()
+
+        for guildObject in guilds {
+            let guild = DiscordUserGuild(userGuildObject: guildObject)
+
+            userGuildDictionary[guild.id] = guild
         }
 
-        startHeartbeat(seconds: milliseconds / 1000)
+        return userGuildDictionary
     }
 }

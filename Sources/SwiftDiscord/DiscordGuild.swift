@@ -15,10 +15,11 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import class Dispatch.DispatchSemaphore
 import Foundation
 
 /// Represents a Guild.
-public struct DiscordGuild {
+public final class DiscordGuild : DiscordClientHolder {
 	// MARK: Properties
 
 	// TODO figure out what features are
@@ -39,6 +40,9 @@ public struct DiscordGuild {
 
 	/// Whether this guild is unavaiable.
 	public let unavailable: Bool
+
+	/// Reference to the client.
+	public weak var client: DiscordClient?
 
 	/// A dictionary of this guild's channels. The key is the snowflake id of the channel.
 	public internal(set) var channels: [String: DiscordGuildChannel]
@@ -91,8 +95,113 @@ public struct DiscordGuild {
 	/// The verification level a member of this guild must have to join.
 	public private(set) var verificationLevel: Int
 
+	init(guildObject: [String: Any], client: DiscordClient?) {
+		channels = DiscordGuildChannel.guildChannelsFromArray(guildObject.get("channels", or: [[String: Any]]()),
+			client: client)
+		defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
+		embedEnabled = guildObject.get("embed_enabled", or: false)
+		embedChannelId = guildObject.get("embed_channel_id", or: "")
+		emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: [[String: Any]]()))
+		features = guildObject.get("features", or: [Any]())
+		icon = guildObject.get("icon", or: "")
+		id = guildObject.get("id", or: "")
+		large = guildObject.get("large", or: false)
+		memberCount = guildObject.get("member_count", or: 0)
+		members = DiscordGuildMember.guildMembersFromArray(guildObject.get("members", or: [[String: Any]]()))
+		mfaLevel = guildObject.get("mfa_level", or: -1)
+		name = guildObject.get("name", or: "")
+		ownerId = guildObject.get("owner_id", or: "")
+		presences = DiscordPresence.presencesFromArray(guildObject.get("presences", or: [[String: Any]]()), guildId: id)
+		region = guildObject.get("region", or: "")
+		roles = DiscordRole.rolesFromArray(guildObject.get("roles", or: [[String: Any]]()))
+		splash = guildObject.get("splash", or: "")
+		verificationLevel = guildObject.get("verification_level", or: -1)
+		voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject.get("voice_states", or: [[String: Any]]()),
+			guildId: id)
+		unavailable = guildObject.get("unavailable", or: false)
+		joinedAt = convertISO8601(string: guildObject.get("joined_at", or: "")) ?? Date()
+		self.client = client
+	}
+
+	// MARK: Methods
+
+	/**
+		Bans this user from the guild.
+
+		- parameter member: The member to ban
+		- parameter deleteMessageDays: The number of days going back to delete messages. Defaults to 7
+	*/
+	public func ban(_ member: DiscordGuildMember, deleteMessageDays: Int = 7) {
+		guard let client = self.client else { return }
+
+		client.guildBan(userId: member.user.id, on: id, deleteMessageDays: deleteMessageDays)
+	}
+
+	/**
+		Creates a channel on this guild with `options`. The channel will not be immediately available; wait for a
+		channel create event.
+
+		- parameter with: The options for this new channel
+	*/
+	public func createChannel(with options: [DiscordEndpointOptions.GuildCreateChannel]) {
+		guard let client = self.client else { return }
+
+		DefaultDiscordLogger.Logger.log("Creating guild channel on %@", type: "DiscordGuild", args: id)
+
+		client.createGuildChannel(on: id, options: options)
+	}
+
+	/**
+		Gets the bans for this guild.
+
+		**NOTE**: This is a blocking method. If you need an async version use the `getGuildBans` method from
+		`DiscordEndpointConsumer`, which is available on `DiscordClient`.
+
+		- returns: An array of `DiscordUser`s who are banned on this guild
+	*/
+	public func getBans() -> [DiscordBan] {
+		guard let client = self.client else { return [] }
+
+		let lock = DispatchSemaphore(value: 0)
+		var bannedUsers: [DiscordBan]!
+
+		client.getGuildBans(for: id) {bans in
+			bannedUsers = bans
+
+			lock.signal()
+		}
+
+		lock.wait()
+
+		return bannedUsers
+	}
+
+	// Used to setup initial guilds
+	static func guildsFromArray(_ guilds: [[String: Any]], client: DiscordClient? = nil) -> [String: DiscordGuild] {
+		var guildDictionary = [String: DiscordGuild]()
+
+		for guildObject in guilds {
+			let guild = DiscordGuild(guildObject: guildObject, client: client)
+
+			guildDictionary[guild.id] = guild
+		}
+
+		return guildDictionary
+	}
+
+	/**
+		Modifies this guild with `options`.
+
+		- parameter options: An array of options to change
+	*/
+	public func modifyGuild(options: [DiscordEndpointOptions.ModifyGuild]) {
+		guard let client = self.client else { return }
+
+		client.modifyGuild(id, options: options)
+	}
+
 	// Used to update a guild from a guildUpdate event
-	mutating func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
+	func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
 		if let defaultMessageNotifications = newGuild["default_message_notifications"] as? Int {
 			self.defaultMessageNotifications = defaultMessageNotifications
 		}
@@ -136,82 +245,16 @@ public struct DiscordGuild {
 		return self
 	}
 
-	init(guildObject: [String: Any]) {
-		channels = DiscordGuildChannel.guildChannelsFromArray(guildObject.get("channels", or: [[String: Any]]()))
-		defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
-		embedEnabled = guildObject.get("embed_enabled", or: false)
-		embedChannelId = guildObject.get("embed_channel_id", or: "")
-		emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: [[String: Any]]()))
-		features = guildObject.get("features", or: [Any]())
-		icon = guildObject.get("icon", or: "")
-		id = guildObject.get("id", or: "")
-		large = guildObject.get("large", or: false)
-		memberCount = guildObject.get("member_count", or: 0)
-		members = DiscordGuildMember.guildMembersFromArray(guildObject.get("members", or: [[String: Any]]()))
-		mfaLevel = guildObject.get("mfa_level", or: -1)
-		name = guildObject.get("name", or: "")
-		ownerId = guildObject.get("owner_id", or: "")
-		presences = DiscordPresence.presencesFromArray(guildObject.get("presences", or: [[String: Any]]()), guildId: id)
-		region = guildObject.get("region", or: "")
-		roles = DiscordRole.rolesFromArray(guildObject.get("roles", or: [[String: Any]]()))
-		splash = guildObject.get("splash", or: "")
-		verificationLevel = guildObject.get("verification_level", or: -1)
-		voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject.get("voice_states", or: [[String: Any]]()),
-			guildId: id)
-		unavailable = guildObject.get("unavailable", or: false)
-		joinedAt = convertISO8601(string: guildObject.get("joined_at", or: "")) ?? Date()
-	}
+	/**
+		Unbans the specified user from the guild.
 
-	// Used to setup initial guilds
-	static func guildsFromArray(_ guilds: [[String: Any]]) -> [String: DiscordGuild] {
-		var guildDictionary = [String: DiscordGuild]()
+		- parameter user: The user to unban
+	*/
+	public func unban(_ user: DiscordUser) {
+		guard let client = self.client else { return }
 
-		for guildObject in guilds {
-			let guild = DiscordGuild(guildObject: guildObject)
+		DefaultDiscordLogger.Logger.log("Unbanning user %@ on %@", type: "DiscordGuild", args: user, id)
 
-			guildDictionary[guild.id] = guild
-		}
-
-		return guildDictionary
-	}
-}
-
-/// Represents a user guild.
-public struct DiscordUserGuild {
-	// MARK: Properties
-
-	/// The snowflake id of the guild.
-	public let id: String
-
-	/// The name of the guild.
-	public let name: String
-
-	/// The base64 encoded icon of the guild.
-	public let icon: String
-
-	/// Whether the user is the owner of the guild.
-	public let owner: Bool
-
-	/// Bitwise of the user's enabled/disabled permissions.
-	public let permissions: Int
-
-	init(userGuildObject: [String: Any]) {
-		id = userGuildObject.get("id", or: "")
-		name = userGuildObject.get("name", or: "")
-		icon = userGuildObject.get("icon", or: "")
-		owner = userGuildObject.get("owner", or: false)
-		permissions = userGuildObject.get("permissions", or: 0)
-	}
-
-	static func userGuildsFromArray(_ guilds: [[String: Any]]) -> [String: DiscordUserGuild] {
-		var userGuildDictionary = [String: DiscordUserGuild]()
-
-		for guildObject in guilds {
-			let guild = DiscordUserGuild(userGuildObject: guildObject)
-
-			userGuildDictionary[guild.id] = guild
-		}
-
-		return userGuildDictionary
+		client.removeGuildBan(for: user.id, on: id)
 	}
 }

@@ -41,6 +41,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/// The queue that callbacks are called on. In addition, any reads from any properties of DiscordClient should be
 	/// made on this queue, as this is the queue where modifications on them are made.
 	public var handleQueue = DispatchQueue.main
+
     #if !os(iOS)
     /// The DiscordVoiceEngine that is used for voice.
 	public var voiceEngine: DiscordVoiceEngineSpec?
@@ -49,14 +50,23 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// A callback function to listen for voice packets.
 	public var onVoiceData: (DiscordVoiceData) -> Void = {_ in }
 
+	/// Whether this client tries to resume a previously established session.
+	public var resume = true
+
 	/// Whether or not this client is connected.
 	public private(set) var connected = false
+
+	/// The direct message channels this user is in.
+	public private(set) var directChannels = [String: DiscordChannel]()
 
 	/// The guilds that this user is in.
 	public private(set) var guilds = [String: DiscordGuild]()
 
 	/// The relationships this user has. Only valid for non-bot users.
 	public private(set) var relationships = [[String: Any]]()
+
+	/// The current session id.
+	public private(set) var sessionId: String?
 
 	/// The DiscordUser this client is connected to.
 	public private(set) var user: DiscordUser?
@@ -70,8 +80,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	private let logType = "DiscordClient"
 	private let voiceQueue = DispatchQueue(label: "voiceQueue")
 
+	private var channelCache = [String: DiscordChannel]()
 	private var handlers = [String: DiscordEventHandler]()
 	private var joiningVoiceChannel = false
+	private var resuming = false
 	private var voiceServerInformation: [String: Any]?
 
 	// MARK: Initializers
@@ -92,6 +104,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 				DefaultDiscordLogger.Logger.level = level
 			case let .logger(logger):
 				DefaultDiscordLogger.Logger = logger
+			case let .resume(resume):
+				self.resume = resume
 			}
 		}
 	}
@@ -111,7 +125,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		engine = DiscordEngine(client: self)
 
 		on("engine.disconnect") {[weak self] data in
-			self?.handleEvent("disconnect", with: data)
+			guard let this = self else { return }
+
+			this.connected = false
+
+			this.handleEngineDisconnect(data)
 		}
 	}
 
@@ -127,20 +145,54 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		engine?.connect()
 	}
 
-
 	/**
 		Disconnects from Discord. A `disconnect` event is fired when the client has successfully disconnected.
+
+		Calling this method turns off automatic resuming, set `resume` to `true` before calling `connect()` again.
 	*/
 	open func disconnect() {
 		DefaultDiscordLogger.Logger.log("Disconnecting", type: logType)
 
 		connected = false
+		resume = false
+		resuming = false
 
 		engine?.disconnect()
 
         #if !os(iOS)
 		voiceEngine?.disconnect()
         #endif
+	}
+
+	/**
+		Finds a channel by its snowflake.
+
+		- parameter fromId: A channel snowflake
+
+		- returns: An optional containing a `DiscordChannel` if one was found.
+	*/
+	public func findChannel(fromId channelId: String) -> DiscordChannel? {
+		if let channel = channelCache[channelId] {
+			DefaultDiscordLogger.Logger.debug("Got cached channel %@", type: logType, args: channel)
+
+			return channel
+		}
+
+		let channel: DiscordChannel
+
+		if let guild = guildForChannel(channelId), let guildChannel = guild.channels[channelId] {
+			channel = guildChannel
+		} else if let dmChannel = directChannels[channelId] {
+			channel = dmChannel
+		} else {
+			return nil
+		}
+
+		channelCache[channel.id] = channel
+
+		DefaultDiscordLogger.Logger.debug("Found channel %@", type: logType, args: channel)
+
+		return channel
 	}
 
 	// Handling
@@ -168,6 +220,22 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		handleQueue.async {
 			self.handlers[event]?.executeCallback(with: data)
 		}
+	}
+
+	/**
+		Called after the client receives a disconnect event from the engine. This method decides whether to initate a
+		resume, or to emit a disconnect event.
+
+		- parameter disconnectData: The data from the disconnect event
+	*/
+	open func handleEngineDisconnect(_ disconnectData: [Any]) {
+		guard resume else {
+			handleEvent("disconnect", with: disconnectData)
+
+			return
+		}
+
+		resumeGateway()
 	}
 
 	/**
@@ -203,10 +271,25 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 	/**
 		Handles voice data received from the VoiceEngine
+
+		- paramter data: A DiscordVoiceData tuple
 	*/
 	open func handleVoiceData(_ data: DiscordVoiceData) {
 		voiceQueue.async {
 			self.onVoiceData(data)
+		}
+	}
+
+	/**
+	    Invalides the current session id.
+	*/
+	open func invalidateSession() {
+		DefaultDiscordLogger.Logger.debug("Invalidating the current session", type: logType)
+
+		// The engine is telling us this session isn't valid anymore, clear it and stop resuming.
+		handleQueue.sync {
+			self.sessionId = nil
+			self.resuming = false
 		}
 	}
 
@@ -295,6 +378,39 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	}
 
 	/**
+		Tries to resume a disconnected gateway connection.
+	*/
+	open func resumeGateway() {
+		guard sessionId != nil, resume else { return }
+		guard !resuming else {
+			DefaultDiscordLogger.Logger.debug("Already trying to resume, ignoring", type: logType)
+
+			return
+		}
+
+		DefaultDiscordLogger.Logger.log("Trying to resume gateway session", type: logType)
+
+		resuming = true
+
+		handleEvent("resumeStart", with: [])
+
+		_resumeGateway(wait: 0)
+	}
+
+	private func _resumeGateway(wait: Int) {
+		handleQueue.asyncAfter(deadline: DispatchTime.now() + Double(wait)) {[weak self] in
+			guard let this = self, !this.connected, this.resuming else { return }
+
+			DefaultDiscordLogger.Logger.debug("Calling engine connect for gateway resume with wait: %@",
+				type: this.logType, args: wait)
+
+			this.engine?.connect()
+
+			this._resumeGateway(wait: 10)
+		}
+	}
+
+	/**
 		Sets the user's presence.
 
 		- parameter presence: The new presence object
@@ -304,7 +420,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			payload: .object(presence.json)))
 	}
 
-	fileprivate func startVoiceConnection() {
+	private func startVoiceConnection() {
         #if !os(iOS)
 		// We need both to start the connection
 		guard voiceState != nil && voiceServerInformation != nil else {
@@ -335,13 +451,24 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	open func handleChannelCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling channel create", type: logType)
 
-		let channel = DiscordGuildChannel(guildChannelObject: data)
+		guard var channel = channelFromObject(data) else { return }
+
+		channel.client = self
+
+		switch channel {
+		case let guildChannel as DiscordGuildChannel:
+			guilds[guildChannel.guildId]?.channels[guildChannel.id] = guildChannel
+		case is DiscordDMChannel:
+			fallthrough
+		case is DiscordGroupDMChannel:
+			directChannels[channel.id] = channel
+		default:
+			break
+		}
 
 		DefaultDiscordLogger.Logger.verbose("Created channel: %@", type: logType, args: channel)
 
-		guilds[channel.guildId]?.channels[channel.id] = channel
-
-		handleEvent("channelCreate", with: [channel.guildId, channel])
+		handleEvent("channelCreate", with: [channel])
 	}
 
 	/**
@@ -356,8 +483,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let channelId = data["id"] as? String else { return }
-
 		guard let removedChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) else { return }
+
+		channelCache.removeValue(forKey: removedChannel.id)
 
 		DefaultDiscordLogger.Logger.verbose("Removed channel: %@", type: logType, args: removedChannel)
 
@@ -374,11 +502,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	open func handleChannelUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling channel update", type: logType)
 
-		let channel = DiscordGuildChannel(guildChannelObject: data)
+		let channel = DiscordGuildChannel(guildChannelObject: data, client: self)
 
 		DefaultDiscordLogger.Logger.verbose("Updated channel: %@", type: logType, args: channel)
 
 		guilds[channel.guildId]?.channels[channel.id] = channel
+
+		channelCache.removeValue(forKey: channel.id)
 
 		handleEvent("channelUpdate", with: [channel.guildId, channel])
 	}
@@ -393,7 +523,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	open func handleGuildCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild create", type: logType)
 
-		let guild = DiscordGuild(guildObject: data)
+		let guild = DiscordGuild(guildObject: data, client: self)
 
 		DefaultDiscordLogger.Logger.verbose("Created guild: %@", type: self.logType, args: guild)
 
@@ -413,7 +543,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		DefaultDiscordLogger.Logger.log("Handling guild delete", type: logType)
 
 		guard let guildId = data["id"] as? String else { return }
-
 		guard let removedGuild = guilds.removeValue(forKey: guildId) else { return }
 
 		DefaultDiscordLogger.Logger.verbose("Removed guild: %@", type: logType, args: removedGuild)
@@ -500,15 +629,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		DefaultDiscordLogger.Logger.log("Handling guild member update", type: logType)
 
 		guard let guildId = data["guild_id"] as? String else { return }
-		guard let user = data["user"] as? [String: Any], let roles = data["roles"] as? [String],
-			let id = user["id"] as? String else { return }
+		guard let user = data["user"] as? [String: Any], let id = user["id"] as? String else { return }
 
-		guilds[guildId]?.members[id]?.roles = roles
+		guilds[guildId]?.members[id]?.updateMember(data)
 
-		// DefaultDiscordLogger.Logger.verbose("Updated guild member: %@", type: logType,
-		// 	args: guilds[guildId]?.members[id])
+		DefaultDiscordLogger.Logger.verbose("Updated guild member: %@", type: logType, args: id)
 
-		handleEvent("guildMemberUpdate", with: [guildId, user, roles])
+		handleEvent("guildMemberUpdate", with: [guildId, id])
 	}
 
 	/**
@@ -528,13 +655,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			let guildMembers = DiscordGuildMember.guildMembersFromArray(members)
 
 			self.handleQueue.async {
-				guard var guild = self.guilds[guildId] else { return }
+				guard let guild = self.guilds[guildId] else { return }
 
 				for (memberId, member) in guildMembers {
 					guild.members[memberId] = member
 				}
-
-				self.guilds[guildId] = guild
 
 				self.handleEvent("guildMembersChunk", with: [guildId, guildMembers])
 			}
@@ -575,7 +700,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let roleId = data["role_id"] as? String else { return }
-
 		guard let removedRole = guilds[guildId]?.roles.removeValue(forKey: roleId) else { return }
 
 		DefaultDiscordLogger.Logger.verbose("Removed role: %@", type: logType, args: removedRole)
@@ -634,7 +758,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	open func handleMessageCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling message create", type: logType)
 
-		let message = DiscordMessage(messageObject: data)
+		let message = DiscordMessage(messageObject: data, client: self)
 
 		DefaultDiscordLogger.Logger.verbose("Message: %@", type: logType, args: message)
 
@@ -649,7 +773,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		- parameter with: The data from the event
 	*/
 	open func handlePresenceUpdate(with data: [String: Any]) {
-		DefaultDiscordLogger.Logger.debug("Handling presence update", type: logType)
+		// DefaultDiscordLogger.Logger.debug("Handling presence update", type: logType)
 
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let user = data["user"] as? [String: Any] else { return }
@@ -663,7 +787,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			presence = DiscordPresence(presenceObject: data, guildId: guildId)
 		}
 
-		DefaultDiscordLogger.Logger.debug("Updated presence: %@", type: logType, args: presence!)
+		// DefaultDiscordLogger.Logger.debug("Updated presence: %@", type: logType, args: presence!)
 
 		guilds[guildId]?.presences[userId] = presence!
 
@@ -680,28 +804,51 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	open func handleReady(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling ready", type: logType)
 
-		guard let milliseconds = data["heartbeat_interval"] as? Int else {
-			handleEvent("disconnect", with: ["Failed to get heartbeat"])
-
-			return
-		}
-
-		engine?.startHeartbeat(seconds: milliseconds / 1000)
-
 		if let user = data["user"] as? [String: Any] {
 			self.user = DiscordUser(userObject: user)
 		}
 
 		if let guilds = data["guilds"] as? [[String: Any]] {
-			self.guilds = DiscordGuild.guildsFromArray(guilds)
+			self.guilds = DiscordGuild.guildsFromArray(guilds, client: self)
 		}
 
 		if let relationships = data["relationships"] as? [[String: Any]] {
 			self.relationships = relationships
 		}
 
+		if let privateChannels = data["private_channels"] as? [[String: Any]] {
+			self.directChannels = privateChannelsFromArray(privateChannels)
+		}
+
+		if let sessionId = data["session_id"] as? String {
+			DefaultDiscordLogger.Logger.log("Got sessionId: %@", type: logType, args: sessionId)
+
+			self.sessionId = sessionId
+		}
+
 		connected = true
+		resuming = false
 		handleEvent("connect", with: [data])
+	}
+
+
+	/**
+		Handles the resumed event from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		- parameter with: The data from the event
+	*/
+	open func handleResumed(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Resumed gateway session", type: logType)
+
+		resuming = false
+		connected = true
+
+		// Start the engine's heartbeat again
+		engine?.sendHeartbeat()
+
+		handleEvent("resumed", with: [])
 	}
 
 	/**

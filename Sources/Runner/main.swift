@@ -35,7 +35,7 @@ let voiceChannel = "201533018215677954"
 let textChannel = "232184444340011009"
 let queue = DispatchQueue(label: "Async Read")
 let writeQueue = DispatchQueue(label: "Async Write")
-let client = DiscordClient(token: "")
+let client = DiscordClient(token: "", configuration: [.log(.debug)])
 
 var youtube: EncoderProcess!
 var new = false
@@ -174,7 +174,7 @@ func handleModifyGuild() {
 }
 
 func handleGuildChannels() {
-    client.getGuildChannels("186926276592795659") {channels in
+    client.getGuildChannels("201533018215677953") {channels in
         print(channels)
     }
 }
@@ -189,7 +189,20 @@ func handleCreateChannel() {
 }
 
 func handlePosition() {
-    client.modifyGuildChannelPosition(on: "201533018215677953", channelId: "237294069968142336", position: 0)
+    client.modifyGuildChannelPositions(on: "201533018215677953", channelPositions: [
+        [
+            "id": "237294069968142336",
+            "position": 2
+        ],
+        [
+            "id": "201533018215677953",
+            "position": 1
+        ],
+        [
+            "id": "232184444340011009",
+            "position": 0
+        ]
+    ])
 }
 
 func handleGuilds() {
@@ -197,13 +210,13 @@ func handleGuilds() {
 }
 
 func handleGetMember() {
-    client.getGuildMember(by: "229316633414336512", on: "186926276592795659") {member in
+    client.getGuildMember(by: "229316633414336512", on: "201533018215677953") {member in
         print(member!)
     }
 }
 
 func handleGetMembers() {
-    client.getGuildMembers(on: "186926276592795659", options: [.limit(500)]) {members in
+    client.getGuildMembers(on: "201533018215677953", options: [.limit(500)]) {members in
         print(members)
     }
 }

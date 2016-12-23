@@ -139,8 +139,32 @@ extension DiscordEmbed.Thumbnail {
 	}
 }
 
+/// Represents a message reaction.
+public struct DiscordReaction {
+	// MARK: Properties
+
+	/// The number of times this emoji has been used to react.
+	public let count: Int
+
+	/// Whether the current user reacted with this emoji.
+	public let me: Bool
+
+	/// The emoji used to react.
+	public let emoji: DiscordEmoji
+
+	init(reactionObject: [String: Any]) {
+		count = reactionObject.get("count", or: -1)
+		me = reactionObject.get("me", or: false)
+		emoji = DiscordEmoji(emojiObject: reactionObject.get("emoji", or: [:]))
+	}
+
+	static func reactionsFromArray(_ reactionsArray: [[String: Any]]) -> [DiscordReaction] {
+		return reactionsArray.map(DiscordReaction.init)
+	}
+}
+
 /// Represents a Discord chat message.
-public struct DiscordMessage {
+public struct DiscordMessage : DiscordClientHolder {
 	// MARK: Properties
 
 	/// The attachments included in this message.
@@ -151,6 +175,9 @@ public struct DiscordMessage {
 
 	/// The snowflake id of the channel this message is on.
 	public let channelId: String
+
+	/// A reference to the client.
+	public weak var client: DiscordClient?
 
 	/// The content of this message.
 	public let content: String
@@ -173,13 +200,27 @@ public struct DiscordMessage {
 	/// List of users that were mentioned in this message.
 	public let mentions: [DiscordUser]
 
+	/// Used for validating a message was sent.
+	public let nonce: String
+
+	/// Whether this message is pinned.
+	public let pinned: Bool
+
+	/// The reactions a message has.
+	public let reactions: [DiscordReaction]
+
 	/// The timestamp of this message.
 	public let timestamp: Date
 
 	/// Whether or not this message should be read by a screen reader.
 	public let tts: Bool
 
-	init(messageObject: [String: Any]) {
+	/// The channel that this message originated from. Can return nil if the channel couldn't be found.
+	public var channel: DiscordChannel? {
+		return client?.findChannel(fromId: channelId)
+	}
+
+	init(messageObject: [String: Any], client: DiscordClient?) {
 		attachments = DiscordAttachment.attachmentsFromArray(messageObject.get("attachments", or: [[String: Any]]()))
 		author = DiscordUser(userObject: messageObject.get("author", or: [String: Any]()))
 		channelId = messageObject.get("channel_id", or: "")
@@ -189,12 +230,25 @@ public struct DiscordMessage {
 		mentionEveryone = messageObject.get("mention_everyone", or: false)
 		mentionRoles = messageObject.get("mention_roles", or: [String]())
 		mentions = DiscordUser.usersFromArray(messageObject.get("mentions", or: [[String: Any]]()))
+		nonce = messageObject.get("nonce", or: "")
+		pinned = messageObject.get("pinned", or: false)
+		reactions = DiscordReaction.reactionsFromArray(messageObject.get("reactions", or: []))
 		tts = messageObject.get("tts", or: false)
 		editedTimestamp = convertISO8601(string: messageObject.get("edited_timestamp", or: "")) ?? Date()
 		timestamp = convertISO8601(string: messageObject.get("timestamp", or: "")) ?? Date()
+		self.client = client
+	}
+
+	// MARK: Methods
+
+	/**
+		Deletes this message from Discord.
+	*/
+	public func delete() {
+		channel?.deleteMessage(self)
 	}
 
 	static func messagesFromArray(_ array: [[String: Any]]) -> [DiscordMessage] {
-		return array.map(DiscordMessage.init)
+		return array.map({ DiscordMessage(messageObject: $0, client: nil) })
 	}
 }

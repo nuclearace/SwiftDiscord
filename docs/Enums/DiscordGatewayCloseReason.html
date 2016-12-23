@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DiscordGuild Struct Reference</title>
+    <title>DiscordGatewayCloseReason Enum Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/DiscordGuild" class="dashAnchor"></a>
-    <a title="DiscordGuild Struct Reference"></a>
+    <a name="//apple_ref/swift/Enum/DiscordGatewayCloseReason" class="dashAnchor"></a>
+    <a title="DiscordGatewayCloseReason Enum Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        DiscordGuild Struct Reference
+        DiscordGatewayCloseReason Enum Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -35,6 +35,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/DiscordEngine.html">DiscordEngine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordGuild.html">DiscordGuild</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/DiscordLazyValue.html">DiscordLazyValue</a>
@@ -72,6 +75,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/DiscordGameType.html">DiscordGameType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordGatewayCloseReason.html">DiscordGatewayCloseReason</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/DiscordGatewayCode.html">DiscordGatewayCode</a>
@@ -143,6 +149,12 @@
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Protocols/DiscordChannel.html">DiscordChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordClientHolder.html">DiscordClientHolder</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/DiscordClientSpec.html">DiscordClientSpec</a>
               </li>
               <li class="nav-group-task">
@@ -167,6 +179,9 @@
                 <a href="../Protocols/DiscordLogger.html">DiscordLogger</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/DiscordUserActor.html">DiscordUserActor</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/DiscordVoiceEngineClient.html">DiscordVoiceEngineClient</a>
               </li>
               <li class="nav-group-task">
@@ -179,6 +194,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Structs/DiscordAttachment.html">DiscordAttachment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordBan.html">DiscordBan</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordDMChannel.html">DiscordDMChannel</a>
@@ -226,7 +244,7 @@
                 <a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordGuild.html">DiscordGuild</a>
+                <a href="../Structs/DiscordGroupDMChannel.html">DiscordGroupDMChannel</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a>
@@ -262,6 +280,9 @@
                 <a href="../Structs/DiscordPresenceUpdate.html">DiscordPresenceUpdate</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/DiscordReaction.html">DiscordReaction</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/DiscordRole.html">DiscordRole</a>
               </li>
               <li class="nav-group-task">
@@ -294,32 +315,25 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>DiscordGuild</h1>
+            <h1>DiscordGatewayCloseReason</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordGuild</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DiscordGatewayCloseReason</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                 </div>
               </div>
-            <p>Represents a Guild.</p>
+            <p>Represents the reason a gateway was closed.</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Properties"></a>
-                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
-                <a href="#/Properties">
-                  <h3 class="section-name">Properties</h3>
-                </a>
-              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild8featuresGSaP__"></a>
-                    <a name="//apple_ref/swift/Property/features" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild8featuresGSaP__">features</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason7unknownFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/unknown" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason7unknownFMS0_S0_">unknown</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -327,26 +341,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The guild&rsquo;s features.</p>
+                        <p>We don&rsquo;t quite know why the gateway closed.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">features</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">unknown</span> <span class="o">=</span> <span class="mi">0</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild2idSS"></a>
-                    <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild2idSS">id</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason9noNetworkFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/noNetwork" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason9noNetworkFMS0_S0_">noNetwork</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -354,26 +372,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The snowflake id of the guild.</p>
+                        <p>The gateway closed because the network dropped.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">noNetwork</span> <span class="o">=</span> <span class="mi">50</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild5largeSb"></a>
-                    <a name="//apple_ref/swift/Property/large" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild5largeSb">large</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason6normalFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/normal" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason6normalFMS0_S0_">normal</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -381,26 +403,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Whether or not this a <q>large</q> guild.</p>
+                        <p>The gateway closed from a normal WebSocket close event.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">large</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">normal</span> <span class="o">=</span> <span class="mi">1000</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild8joinedAtV10Foundation4Date"></a>
-                    <a name="//apple_ref/swift/Property/joinedAt" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild8joinedAtV10Foundation4Date">joinedAt</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason12unknownErrorFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/unknownError" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason12unknownErrorFMS0_S0_">unknownError</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -408,26 +434,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The date the user joined the guild.</p>
+                        <p>Something went wrong, but we aren&rsquo;t quite sure either.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">joinedAt</span><span class="p">:</span> <span class="kt">Date</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">unknownError</span> <span class="o">=</span> <span class="mi">4000</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild6splashSS"></a>
-                    <a name="//apple_ref/swift/Property/splash" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild6splashSS">splash</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason12unkownOpcodeFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/unkownOpcode" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason12unkownOpcodeFMS0_S0_">unkownOpcode</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -435,26 +465,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The base64 encoded splash image.</p>
+                        <p>Discord got an opcode is doesn&rsquo;t recognize.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">splash</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">unkownOpcode</span> <span class="o">=</span> <span class="mi">4001</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild11unavailableSb"></a>
-                    <a name="//apple_ref/swift/Property/unavailable" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild11unavailableSb">unavailable</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason11decodeErrorFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/decodeError" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason11decodeErrorFMS0_S0_">decodeError</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -462,26 +496,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Whether this guild is unavaiable.</p>
+                        <p>We sent a payload Discord doesn&rsquo;t know what to do with.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">unavailable</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">decodeError</span> <span class="o">=</span> <span class="mi">4002</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild8channelsGVs10DictionarySSVS_19DiscordGuildChannel_"></a>
-                    <a name="//apple_ref/swift/Property/channels" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild8channelsGVs10DictionarySSVS_19DiscordGuildChannel_">channels</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason16notAuthenticatedFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/notAuthenticated" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason16notAuthenticatedFMS0_S0_">notAuthenticated</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -489,26 +527,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A dictionary of this guild&rsquo;s channels. The key is the snowflake id of the channel.</p>
+                        <p>We tried to send stuff before we were authenticated.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">channels</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">]</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">notAuthenticated</span> <span class="o">=</span> <span class="mi">4003</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild6emojisGVs10DictionarySSVS_12DiscordEmoji_"></a>
-                    <a name="//apple_ref/swift/Property/emojis" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild6emojisGVs10DictionarySSVS_12DiscordEmoji_">emojis</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason20authenticationFailedFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/authenticationFailed" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason20authenticationFailedFMS0_S0_">authenticationFailed</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -516,26 +558,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A dictionary of this guild&rsquo;s emojis. The key is the snowflake id of the emoji.</p>
+                        <p>We failed to authenticate with Discord.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">emojis</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmoji.html">DiscordEmoji</a></span><span class="p">]</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">authenticationFailed</span> <span class="o">=</span> <span class="mi">4004</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild11memberCountSi"></a>
-                    <a name="//apple_ref/swift/Property/memberCount" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild11memberCountSi">memberCount</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason20alreadyAuthenticatedFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/alreadyAuthenticated" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason20alreadyAuthenticatedFMS0_S0_">alreadyAuthenticated</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -543,28 +589,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The number of members in this guild.</p>
-
-<p><em>This number might not be the actual number of users in the <code><a href="../Structs/DiscordGuild.html#/s:vV12SwiftDiscord12DiscordGuild7membersGVS_21DiscordLazyDictionarySSVS_18DiscordGuildMember_">members</a></code> field.</em></p>
+                        <p>We tried to authenticate twice.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">memberCount</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">alreadyAuthenticated</span> <span class="o">=</span> <span class="mi">4005</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild7membersGVS_21DiscordLazyDictionarySSVS_18DiscordGuildMember_"></a>
-                    <a name="//apple_ref/swift/Property/members" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild7membersGVS_21DiscordLazyDictionarySSVS_18DiscordGuildMember_">members</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason15invalidSequenceFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/invalidSequence" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason15invalidSequenceFMS0_S0_">invalidSequence</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -572,26 +620,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A <code><a href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a></code> of guild members. The key is the snowflake id of the user.</p>
+                        <p>We sent a bad sequence number when trying to resume.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">members</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">invalidSequence</span> <span class="o">=</span> <span class="mi">4007</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild9presencesGVS_21DiscordLazyDictionarySSVS_15DiscordPresence_"></a>
-                    <a name="//apple_ref/swift/Property/presences" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild9presencesGVS_21DiscordLazyDictionarySSVS_15DiscordPresence_">presences</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason11rateLimitedFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/rateLimited" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason11rateLimitedFMS0_S0_">rateLimited</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -599,26 +651,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A <code><a href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a></code> of presences. The key is the snowflake id of the user.</p>
+                        <p>We sent messages too fast.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">presences</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="../Structs/DiscordPresence.html">DiscordPresence</a></span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">rateLimited</span> <span class="o">=</span> <span class="mi">4008</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild5rolesGVs10DictionarySSVS_11DiscordRole_"></a>
-                    <a name="//apple_ref/swift/Property/roles" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild5rolesGVs10DictionarySSVS_11DiscordRole_">roles</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason14sessionTimeoutFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/sessionTimeout" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason14sessionTimeoutFMS0_S0_">sessionTimeout</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -626,26 +682,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A dictionary of this guild&rsquo;s roles. The key is the snowflake id of the role.</p>
+                        <p>Our session timed out.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">roles</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">]</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">sessionTimeout</span> <span class="o">=</span> <span class="mi">4009</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild11voiceStatesGVs10DictionarySSVS_17DiscordVoiceState_"></a>
-                    <a name="//apple_ref/swift/Property/voiceStates" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild11voiceStatesGVs10DictionarySSVS_17DiscordVoiceState_">voiceStates</a>
+                    <a name="/s:FO12SwiftDiscord25DiscordGatewayCloseReason12invalidShardFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/invalidShard" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FO12SwiftDiscord25DiscordGatewayCloseReason12invalidShardFMS0_S0_">invalidShard</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -653,258 +713,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A dictionary of this guild&rsquo;s current voice states. The key is the snowflake id of the user for this voice
-state.</p>
+                        <p>We sent an invalid shard when identifing.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">voiceStates</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a></span><span class="p">]</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild27defaultMessageNotificationsSi"></a>
-                    <a name="//apple_ref/swift/Property/defaultMessageNotifications" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild27defaultMessageNotificationsSi">defaultMessageNotifications</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The default message notification setting.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">defaultMessageNotifications</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild14embedChannelIdSS"></a>
-                    <a name="//apple_ref/swift/Property/embedChannelId" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild14embedChannelIdSS">embedChannelId</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The snowflake id of the embed channel for this guild.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">embedChannelId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild12embedEnabledSb"></a>
-                    <a name="//apple_ref/swift/Property/embedEnabled" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild12embedEnabledSb">embedEnabled</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Whether this guild has embed enabled.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">embedEnabled</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild4iconSS"></a>
-                    <a name="//apple_ref/swift/Property/icon" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild4iconSS">icon</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The base64 encoded icon image for this guild.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">icon</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild8mfaLevelSi"></a>
-                    <a name="//apple_ref/swift/Property/mfaLevel" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild8mfaLevelSi">mfaLevel</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The multi-factor authentication level for this guild.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">mfaLevel</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild4nameSS"></a>
-                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild4nameSS">name</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The name of this guild.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild7ownerIdSS"></a>
-                    <a name="//apple_ref/swift/Property/ownerId" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild7ownerIdSS">ownerId</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The snowflake id of this guild&rsquo;s owner.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">ownerId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild6regionSS"></a>
-                    <a name="//apple_ref/swift/Property/region" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild6regionSS">region</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The region this guild is in.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">region</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordGuild17verificationLevelSi"></a>
-                    <a name="//apple_ref/swift/Property/verificationLevel" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordGuild17verificationLevelSi">verificationLevel</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The verification level a member of this guild must have to join.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">verificationLevel</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">invalidShard</span> <span class="o">=</span> <span class="mi">4010</span></code></pre>
 
                         </div>
                       </div>
@@ -916,7 +732,7 @@ state.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-10)</p>
+          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-22)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

@@ -32,6 +32,8 @@ import Socks
 import Sodium
 
 enum DiscordVoiceEngineError : Error {
+	case decryptionError
+	case encryptionError
 	case ipExtraction
 }
 
@@ -52,6 +54,16 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	/// The type of `DiscordEngine` this is. Used to correctly fire engine events.
 	public override var engineType: String {
 		return "voiceEngine"
+	}
+
+	/// Creates the handshake object that Discord expects.
+	public override var handshakeObject: [String: Any] {
+		return [
+			"session_id": client!.voiceState!.sessionId,
+			"server_id": client!.voiceState!.guildId,
+			"user_id": client!.user!.id,
+			"token": voiceServerInformation["token"] as! String
+		]
 	}
 
 	/// Whether this engine is connected
@@ -113,7 +125,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	private var timestamp = arc4random()
     #else
     private var sequenceNum = UInt16(random() >> 16)
-    private var timestamp = random()
+    private var timestamp = UInt32(random())
     #endif
 
 	private var startTime = 0
@@ -181,62 +193,21 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		makeEncoder = true
 	}
 
-	/**
-		Creates the handshake object that Discord expects. You shouldn't need to call this directly.
-	*/
-	public override func createHandshakeObject() -> [String: Any] {
-		DefaultDiscordLogger.Logger.log("Creating handshakeObject", type: logType)
-
-		return [
-			"session_id": client!.voiceState!.sessionId,
-			"server_id": client!.voiceState!.guildId,
-			"user_id": client!.user!.id,
-			"token": voiceServerInformation["token"] as! String
-		]
-	}
-
 	private func createRTPHeader() -> [UInt8] {
-		func resetByteNumber(_ byteNumber: inout Int,  _ i: Int) {
-			if i == 1 || i == 5 {
-				byteNumber = 0
-			} else {
-				byteNumber += 1
-			}
-		}
+		defer { header.deallocate() }
 
-		var rtpHeader = [UInt8](repeating: 0x00, count: 12)
-		var byteNumber = 0
-		var currentHeaderIndex = 2
+		let header = UnsafeMutableRawBufferPointer.allocate(count: 12)
 
-		rtpHeader[0] = 0x80
-		rtpHeader[1] = 0x78
+		header.storeBytes(of: 0x80, as: UInt8.self)
+		header.storeBytes(of: 0x78, toByteOffset: 1, as: UInt8.self)
+		header.storeBytes(of: sequenceNum.bigEndian, toByteOffset: 2, as: UInt16.self)
+		header.storeBytes(of: timestamp.bigEndian, toByteOffset: 4, as: UInt32.self)
+		header.storeBytes(of: ssrc.bigEndian, toByteOffset: 8, as: UInt32.self)
 
-		let sequenceBigEndian = sequenceNum.bigEndian
-		let ssrcBigEndian = ssrc.bigEndian
-		let timestampBigEndian = timestamp.bigEndian
-
-		for i in 0..<10 {
-			if i < 2 {
-				rtpHeader[currentHeaderIndex] = UInt8((Int(sequenceBigEndian) >> (8 * byteNumber)) & 0xFF)
-
-				resetByteNumber(&byteNumber, i)
-			} else if i < 6 {
-				rtpHeader[currentHeaderIndex] = UInt8((Int(timestampBigEndian) >> (8 * byteNumber)) & 0xFF)
-
-				resetByteNumber(&byteNumber, i)
-			} else {
-				rtpHeader[currentHeaderIndex] = UInt8((Int(ssrcBigEndian) >> (8 * byteNumber)) & 0xFF)
-
-				byteNumber += 1
-			}
-
-            currentHeaderIndex += 1
-		}
-
-		return rtpHeader
+		return Array(header)
 	}
 
-	private func decryptVoiceData(_ data: Data) {
+	private func decryptVoiceData(_ data: Data) throws {
 		defer { free(unencrypted) }
 
 		let rtpHeader = Array(data.prefix(12))
@@ -248,7 +219,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &self.secret!)
 
 		// Decryption failure
-		guard success != -1 else { return }
+		guard success != -1 else { throw DiscordVoiceEngineError.decryptionError }
 
 		self.client?.handleVoiceData(DiscordVoiceData(rtpHeader: rtpHeader,
 			voiceData: Array(UnsafeBufferPointer<UInt8>(start: unencrypted, count: audioSize))))
@@ -270,6 +241,25 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		connected = false
 		encoder = nil
+	}
+
+	private func createVoicePacket(_ data: [UInt8]) throws -> [UInt8] {
+		defer { free(encrypted) }
+
+		let audioSize = Int(crypto_secretbox_MACBYTES) + defaultAudioSize
+		let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
+		let rtpHeader = createRTPHeader()
+		let enryptedCount = Int(crypto_secretbox_MACBYTES) + data.count
+		var nonce = rtpHeader + padding
+		var buf = data
+
+		let success = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &secret!)
+
+		guard success != -1 else { throw DiscordVoiceEngineError.encryptionError }
+
+		let encryptedBytes = Array(UnsafeBufferPointer(start: encrypted, count: enryptedCount))
+
+		return rtpHeader + encryptedBytes
 	}
 
 	private func extractIPAndPort(from bytes: [UInt8]) throws -> (String, Int) {
@@ -412,10 +402,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		    }
 
 		    this.sendVoiceData(data)
-
-		    this.sequenceNum = this.sequenceNum &+ 1
-		    this.timestamp = this.timestamp &+ 960
-
 		    this.audioSleep(count)
 		    this.readData(count + 1)
 		}
@@ -428,7 +414,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			do {
 				let (data, _) = try socket.receive(maxBytes: 4096)
 
-				self?.decryptVoiceData(Data(bytes: data))
+				try self?.decryptVoiceData(Data(bytes: data))
 			} catch {
 				self?.error(message: "Error reading voice data from udp socket")
 			}
@@ -514,35 +500,24 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	/**
 		Sends OPUS encoded voice data to Discord. Because of the assumptions built into the engine, the voice data
-		should have a max length of `defaultAudioSize`
+		should have a max length of `defaultAudioSize`.
 
 		- parameter data: An array of OPUS encoded voice data.
 	*/
 	public func sendVoiceData(_ data: [UInt8]) {
 		udpQueue.sync {
 			guard let udpSocket = self.udpSocket, data.count <= defaultAudioSize else { return }
-			defer { free(encrypted) }
 
 			DefaultDiscordLogger.Logger.debug("Should send voice data: %@ bytes", type: self.logType, args: data.count)
 
-            var buf = data
-
-            let audioSize = Int(crypto_secretbox_MACBYTES) + defaultAudioSize
-            let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
-            let rtpHeader = self.createRTPHeader()
-            let enryptedCount = Int(crypto_secretbox_MACBYTES) + data.count
-            var nonce = rtpHeader + self.padding
-
-            _ = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &self.secret!)
-
-            let encryptedBytes = Array(UnsafeBufferPointer<UInt8>(start: encrypted, count: enryptedCount))
-
             do {
-            	try udpSocket.send(bytes: rtpHeader + encryptedBytes)
+            	try udpSocket.send(bytes: self.createVoicePacket(data))
             } catch {
             	self.error(message: "Failed sending voice packet")
             }
 
+            self.sequenceNum = self.sequenceNum &+ 1
+            self.timestamp = self.timestamp &+ 960
 		}
 	}
 
@@ -554,9 +529,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		DefaultDiscordLogger.Logger.log("Starting voice handshake", type: logType)
 
-		let handshakeEventData = createHandshakeObject()
-
-		sendGatewayPayload(DiscordGatewayPayload(code: .voice(.identify), payload: .object(handshakeEventData)))
+		sendGatewayPayload(DiscordGatewayPayload(code: .voice(.identify), payload: .object(handshakeObject)))
 	}
 
 	private func startUDP() {

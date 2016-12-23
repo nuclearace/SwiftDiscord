@@ -69,6 +69,10 @@ public enum DiscordPermission : Int {
 	case manageNicknames = 0x08000000
 	/// This user can manage roles.
 	case manageRoles = 0x10000000
+	/// This user can manage WebHooks
+	case manageWebhooks = 0x20000000
+	/// This user can manage emojis
+	case manageEmojis = 0x40000000
 }
 
 /**
@@ -124,7 +128,7 @@ public func &(lhs: Int, rhs: DiscordPermission) -> Int {
 
 	Ors the two permissions and assigns the result to `lhs`.
 
-	- parameter lhs: a DiscordPermission
+	- parameter lhs: a Int
 	- parameter rhs: a DiscordPermission
 
 	- returns: the or of the two permissiosn
@@ -138,7 +142,7 @@ public func |=(lhs: inout Int, rhs: DiscordPermission) {
 
 	Ands the two permissions and assigns the result to `lhs`.
 
-	- parameter lhs: a DiscordPermission
+	- parameter lhs: an Int
 	- parameter rhs: a DiscordPermission
 */
 public func &=(lhs: inout Int, rhs: DiscordPermission) {
@@ -191,16 +195,12 @@ public struct DiscordPermissionOverwrite : JSONAble {
 		self.allow = allow
 		self.deny = deny
 	}
-}
 
-extension DiscordPermissionOverwrite {
 	init(permissionOverwriteObject: [String: Any]) {
-		let id = permissionOverwriteObject.get("id", or: "")
-		let type = DiscordPermissionOverwriteType(rawValue: permissionOverwriteObject.get("type", or: "")) ?? .role
-		let allow = permissionOverwriteObject.get("allow", or: 0)
-		let deny = permissionOverwriteObject.get("deny", or: 0)
-
-		self.init(id: id, type: type, allow: allow, deny: deny)
+		id = permissionOverwriteObject.get("id", or: "")
+		type = DiscordPermissionOverwriteType(rawValue: permissionOverwriteObject.get("type", or: "")) ?? .role
+		allow = permissionOverwriteObject.get("allow", or: 0)
+		deny = permissionOverwriteObject.get("deny", or: 0)
 	}
 
 	static func overwritesFromArray(_ permissionOverwritesArray: [[String: Any]]) -> [String: DiscordPermissionOverwrite] {

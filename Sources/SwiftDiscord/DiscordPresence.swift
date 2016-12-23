@@ -89,6 +89,9 @@ public enum DiscordPresenceStatus : String {
 
 	/// User is online.
 	case online = "online"
+
+	/// This user won't receive notifications.
+	case doNotDisturb = "dnd"
 }
 
 /// Represents a presence.

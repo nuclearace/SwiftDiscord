@@ -22,7 +22,7 @@ import Foundation
 
     This is where a `DiscordClient` gets the methods that interact with the REST API.
 */
-public protocol DiscordEndpointConsumer : DiscordClientSpec {
+public protocol DiscordEndpointConsumer : DiscordUserActor {
     // MARK: Methods
 
     /**
@@ -166,9 +166,9 @@ public protocol DiscordEndpointConsumer : DiscordClientSpec {
         Gets the bans on a guild.
 
         - parameter for: The snowflake id of the guild
-        - parameter callback: The callback function, taking an array of `DiscordUser`
+        - parameter callback: The callback function, taking an array of `DiscordBan`
     */
-    func getGuildBans(for guildId: String, callback: @escaping ([DiscordUser]) -> Void)
+    func getGuildBans(for guildId: String, callback: @escaping ([DiscordBan]) -> Void)
 
     /**
         Gets the channels on a guild.
@@ -276,10 +276,10 @@ public protocol DiscordEndpointConsumer : DiscordClientSpec {
         Modifies the position of a channel.
 
         - parameter on: The snowflake id of the guild
-        - parameter channelId: The snowflake id of the channel
-        - parameter position: The new position of the channel
+        - parameter channelPositions: An array of channels that should be reordered. Should contain a dictionary
+                                      in the form `["id": channelId, "position": position]`
     */
-    func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int)
+    func modifyGuildChannelPositions(on guildId: String, channelPositions: [[String: Any]])
 
     /**
         Edits the specified role.
@@ -422,7 +422,7 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    public func getGuildBans(for guildId: String, callback: @escaping ([DiscordUser]) -> Void) {
+    public func getGuildBans(for guildId: String, callback: @escaping ([DiscordBan]) -> Void) {
         DiscordEndpoint.getGuildBans(for: guildId, with: token, callback: callback)
     }
 
@@ -489,8 +489,8 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    public func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int) {
-        DiscordEndpoint.modifyGuildChannelPosition(on: guildId, channelId: channelId, position: position,
+    public func modifyGuildChannelPositions(on guildId: String, channelPositions: [[String: Any]]) {
+        DiscordEndpoint.modifyGuildChannelPositions(on: guildId, channelPositions: channelPositions,
             with: token)
     }
 
@@ -511,8 +511,6 @@ public extension DiscordEndpointConsumer {
 
     /// Default implementation
     public func sendMessage(_ message: String, to channelId: String, tts: Bool = false) {
-        guard connected else { return }
-
         DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts)
     }
 

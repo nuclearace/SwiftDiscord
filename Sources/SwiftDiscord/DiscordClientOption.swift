@@ -27,8 +27,11 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
     /// The log level for the logger.
     case log(DiscordLogLevel)
 
-    /// Used to set a custom logger
+    /// Used to set a custom logger.
     case logger(DiscordLogger)
+
+    /// Whether this client will try and resume on disconnects.
+    case resume(Bool)
 
     // MARK: Properties
 
@@ -40,6 +43,7 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
         case .handleQueue:  description = "handleQueue"
         case .log:          description = "log"
         case .logger:       description = "logger"
+        case .resume:       description = "resume"
         }
 
         return description

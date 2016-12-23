@@ -32,7 +32,7 @@ You'll then want to remove all target dependencies and linked libraries except f
 
 ** - Socks should be removed on iOS as voice is not supported on it.
 
-See Sources/Runner for a basic example
+See Sources/ExampleBot for a basic example bot.
 
 [Docs](https://nuclearace.github.io/SwiftDiscord/index.html)
 ============================================================

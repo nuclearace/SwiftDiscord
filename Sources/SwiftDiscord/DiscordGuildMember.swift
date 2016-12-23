@@ -62,4 +62,12 @@ public struct DiscordGuildMember {
 
 		return guildMembers
 	}
+
+	mutating func updateMember(_ updateObject: [String: Any]) {
+		if let roles = updateObject["roles"] as? [String] {
+			self.roles = roles
+		}
+
+		nick = updateObject["nick"] as? String
+	}
 }

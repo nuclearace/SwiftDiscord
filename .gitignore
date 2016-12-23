@@ -4,3 +4,7 @@
 /*.xcodeproj
 build/
 docs/docsets/
+docs/undocumented.json
+DiscordTest/
+DiscordTestTests/
+DiscordTestUITests/

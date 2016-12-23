@@ -136,6 +136,8 @@ public extension DiscordEndpoint {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
 
+        DefaultDiscordLogger.Logger.log("Creating guild channel on %@", type: "DiscordEndpointGuild", args: guildId)
+
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildChannels, parameters: ["guild.id": guildId])
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
@@ -175,21 +177,17 @@ public extension DiscordEndpoint {
     }
 
     /**
-        Modifies the position of a channel.
+        Modifies the positions of channels.
 
         - parameter on: The snowflake id of the guild
-        - parameter channelId: The snowflake id of the channel
-        - parameter position: The new position of the channel
+        - parameter channelPositions: An array of channels that should be reordered. Should contain a dictionary
+                                      in the form `["id": channelId, "position": position]`
         - parameter with: The token to authenticate to Discord with
     */
-    public static func modifyGuildChannelPosition(on guildId: String, channelId: String, position: Int,
+    public static func modifyGuildChannelPositions(on guildId: String, channelPositions: [[String: Any]],
             with token: DiscordToken) {
-        let modifyJSON: [String: Any] = [
-            "id": channelId,
-            "position": position
-        ]
 
-        guard let contentData = encodeJSON(modifyJSON)?.data(using: .utf8, allowLossyConversion: false) else {
+        guard let contentData = encodeJSON(channelPositions)?.data(using: .utf8, allowLossyConversion: false) else {
             return
         }
 
@@ -301,10 +299,10 @@ public extension DiscordEndpoint {
 
         - parameter for: The snowflake id of the guild
         - parameter with: The token to authenticate to Discord with
-        - parameter callback: The callback function, taking an array of `DiscordUser`
+        - parameter callback: The callback function, taking an array of `DiscordBan`
     */
     public static func getGuildBans(for guildId: String, with token: DiscordToken,
-            callback: @escaping ([DiscordUser]) -> Void) {
+            callback: @escaping ([DiscordBan]) -> Void) {
         var request = createRequest(with: token, for: .guildBans, replacing: ["guild.id": guildId])
 
         request.httpMethod = "GET"
@@ -319,13 +317,15 @@ public extension DiscordEndpoint {
             }
 
             guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                case let .array(users) = json else {
+                case let .array(bans) = json else {
                     callback([])
 
                     return
             }
 
-            callback(DiscordUser.usersFromArray(users as! [[String: Any]]))
+            DefaultDiscordLogger.Logger.debug("Got guild bans %@", type: "DiscordEndpointGuild", args: bans)
+
+            callback(DiscordBan.bansFromArray(bans as! [[String: Any]]))
         })
     }
 
@@ -373,6 +373,8 @@ public extension DiscordEndpoint {
         ])
 
         request.httpMethod = "DELETE"
+
+        DefaultDiscordLogger.Logger.log("Unbanning %@ on %@", type: "DiscordEndpointGuild", args: userId, guildId)
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildBans, parameters: ["guild.id": guildId])
 

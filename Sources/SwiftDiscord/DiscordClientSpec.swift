@@ -19,30 +19,18 @@ import Foundation
 import Dispatch
 
 /// Protocol that abstracts a DiscordClient
-public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngineClient {
+public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngineClient, DiscordUserActor {
 	// MARK: Properties
 
 	/// Whether or not this client is connected.
 	var connected: Bool { get }
 
-	/// The guilds that this user is in.
-	var guilds: [String: DiscordGuild] { get }
-
 	/// The queue that callbacks are called on. In addition, any reads from any properties of DiscordClient should be
 	/// made on this queue, as this is the queue where modifications on them are made.
 	var handleQueue: DispatchQueue { get set }
 
-	/// The relationships this user has. Only valid for non-bot users.
-	var relationships: [[String: Any]] { get }
-
-	/// The Discord JWT token.
-	var token: DiscordToken { get }
-
-	/// The DiscordUser this client is connected to.
-	var user: DiscordUser? { get }
-
-	/// The voice state for this user, if they are in a voice channel.
-	var voiceState: DiscordVoiceState? { get }
+	/// The current session id.
+	var sessionId: String? { get }
 
 	// MARK: Initializers
 
@@ -111,4 +99,12 @@ public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngi
 		- parameter presence: The new presence object
 	*/
 	func setPresence(_ presence: DiscordPresenceUpdate)
+}
+
+/// Declares that a type will be able to reference a DiscordClient from within itself.
+public protocol DiscordClientHolder {
+	// MARK: Properties
+
+	/// A reference to the client.
+	weak var client: DiscordClient? { get set }
 }

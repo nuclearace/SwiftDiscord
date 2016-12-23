@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>EncoderProcess Extension Reference</title>
+    <title>DiscordGroupDMChannel Struct Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Extension/EncoderProcess" class="dashAnchor"></a>
-    <a title="EncoderProcess Extension Reference"></a>
+    <a name="//apple_ref/swift/Struct/DiscordGroupDMChannel" class="dashAnchor"></a>
+    <a title="DiscordGroupDMChannel Struct Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        EncoderProcess Extension Reference
+        DiscordGroupDMChannel Struct Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -315,19 +315,32 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>EncoderProcess</h1>
-            <p>Undocumented</p>
+            <h1>DiscordGroupDMChannel</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordGroupDMChannel</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>Represents a direct message channel with a group of users.</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Properties"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <a href="#/Properties">
+                  <h3 class="section-name">Properties</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/"></a>
-                    <a name="//apple_ref/swift/Property/isRunning" class="dashAnchor"></a>
-                    <a class="token" href="#/">isRunning</a>
+                    <a name="/s:vV12SwiftDiscord21DiscordGroupDMChannel2idSS"></a>
+                    <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord21DiscordGroupDMChannel2idSS">id</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -335,8 +348,178 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The snowflake id of the channel.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV12SwiftDiscord21DiscordGroupDMChannel9isPrivateSb"></a>
+                    <a name="//apple_ref/swift/Property/isPrivate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord21DiscordGroupDMChannel9isPrivateSb">isPrivate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether this channel is private. Should always be true for DMChannels</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">isPrivate</span> <span class="o">=</span> <span class="kc">true</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV12SwiftDiscord21DiscordGroupDMChannel10recipientsGSaVS_11DiscordUser_"></a>
+                    <a name="//apple_ref/swift/Property/recipients" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord21DiscordGroupDMChannel10recipientsGSaVS_11DiscordUser_">recipients</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The users in this channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">recipients</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordUser.html">DiscordUser</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV12SwiftDiscord21DiscordGroupDMChannel4typeOS_18DiscordChannelType"></a>
+                    <a name="//apple_ref/swift/Property/type" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord21DiscordGroupDMChannel4typeOS_18DiscordChannelType">type</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A DiscordGroupDMChannel should always be a direct channel</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">type</span> <span class="o">=</span> <span class="kt"><a href="../Enums/DiscordChannelType.html">DiscordChannelType</a></span><span class="o">.</span><span class="n">groupDM</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV12SwiftDiscord21DiscordGroupDMChannel6clientXwGSqCS_13DiscordClient_"></a>
+                    <a name="//apple_ref/swift/Property/client" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord21DiscordGroupDMChannel6clientXwGSqCS_13DiscordClient_">client</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Reference to the client.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV12SwiftDiscord21DiscordGroupDMChannel13lastMessageIdSS"></a>
+                    <a name="//apple_ref/swift/Property/lastMessageId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord21DiscordGroupDMChannel13lastMessageIdSS">lastMessageId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The snowflake id of the last received message on this channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">lastMessageId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV12SwiftDiscord21DiscordGroupDMChannel4nameGSqSS_"></a>
+                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord21DiscordGroupDMChannel4nameGSqSS_">name</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The name of this group dm.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
