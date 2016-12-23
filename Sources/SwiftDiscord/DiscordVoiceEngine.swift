@@ -32,6 +32,8 @@ import Socks
 import Sodium
 
 enum DiscordVoiceEngineError : Error {
+	case decryptionError
+	case encryptionError
 	case ipExtraction
 }
 
@@ -205,7 +207,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		return Array(header)
 	}
 
-	private func decryptVoiceData(_ data: Data) {
+	private func decryptVoiceData(_ data: Data) throws {
 		defer { free(unencrypted) }
 
 		let rtpHeader = Array(data.prefix(12))
@@ -217,7 +219,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &self.secret!)
 
 		// Decryption failure
-		guard success != -1 else { return }
+		guard success != -1 else { throw DiscordVoiceEngineError.decryptionError }
 
 		self.client?.handleVoiceData(DiscordVoiceData(rtpHeader: rtpHeader,
 			voiceData: Array(UnsafeBufferPointer<UInt8>(start: unencrypted, count: audioSize))))
@@ -241,7 +243,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		encoder = nil
 	}
 
-	private func createVoicePacket(_ data: [UInt8]) -> [UInt8] {
+	private func createVoicePacket(_ data: [UInt8]) throws -> [UInt8] {
 		defer { free(encrypted) }
 
 		let audioSize = Int(crypto_secretbox_MACBYTES) + defaultAudioSize
@@ -251,7 +253,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		var nonce = rtpHeader + padding
 		var buf = data
 
-		_ = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &secret!)
+		let success = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &secret!)
+
+		guard success != -1 else { throw DiscordVoiceEngineError.encryptionError }
 
 		let encryptedBytes = Array(UnsafeBufferPointer(start: encrypted, count: enryptedCount))
 
@@ -410,7 +414,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			do {
 				let (data, _) = try socket.receive(maxBytes: 4096)
 
-				self?.decryptVoiceData(Data(bytes: data))
+				try self?.decryptVoiceData(Data(bytes: data))
 			} catch {
 				self?.error(message: "Error reading voice data from udp socket")
 			}
