@@ -72,6 +72,30 @@ public struct DiscordGuildChannel : DiscordChannel {
 		self.client = client
 	}
 
+	// MARK: Methods
+
+	/**
+	    Deletes a permission overwrite from this channel.
+
+	    - parameter overwrite: The permission overwrite to delete
+	*/
+	public func deletePermission(_ overwrite: DiscordPermissionOverwrite) {
+	    guard let client = self.client else { return }
+
+	    client.deleteChannelPermission(overwrite.id, on: id)
+	}
+
+	/**
+	    Edits a permission overwrite on this channel.
+
+	    - parameter overwrite: The permission overwrite to edit
+	*/
+	public func editPermission(_ overwrite: DiscordPermissionOverwrite) {
+		guard let client = self.client else { return }
+
+		client.editChannelPermission(overwrite, on: id)
+	}
+
 	static func guildChannelsFromArray(_ guildChannelArray: [[String: Any]], client: DiscordClient? = nil)
 			-> [String: DiscordGuildChannel] {
 		var guildChannels = [String: DiscordGuildChannel]()
