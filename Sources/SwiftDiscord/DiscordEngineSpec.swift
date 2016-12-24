@@ -23,7 +23,7 @@ import WebSockets
 #endif
 
 /// Declares that a type will be an Engine for the Discord Gateway.
-public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable {
+public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable, DiscordShard {
 	// MARK: Properties
 
 	/// A reference to the client this engine is associated with.
@@ -38,6 +38,9 @@ public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable {
 	/// The last received sequence number. Used for resume/reconnect.
 	var lastSequenceNumber: Int { get }
 
+	/// The session id of this engine.
+	var sessionId: String? { get set }
+
 	/// A reference to the underlying WebSocket. This is a WebSockets.Websocket on Linux and Starscream.WebSocket on
 	/// macOS/iOS
 	var websocket: WebSocket? { get }
@@ -49,7 +52,7 @@ public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable {
 
 		- parameter client: The client this engine should be associated with.
 	*/
-	init(client: DiscordClientSpec)
+	init(client: DiscordClientSpec, shardNum: Int, numShards: Int)
 
 	// MARK: Methods
 
