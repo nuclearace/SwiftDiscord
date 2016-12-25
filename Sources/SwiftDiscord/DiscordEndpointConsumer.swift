@@ -25,12 +25,7 @@ import Foundation
 public protocol DiscordEndpointConsumer : DiscordUserActor {
     // MARK: Methods
 
-    /**
-        Accepts an invite.
-
-        - parameter invite: The invite code to accept
-    */
-    func acceptInvite(_ invite: String)
+    // MARK: Channels
 
     /**
         Adds a pinned message.
@@ -49,15 +44,6 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     func bulkDeleteMessages(_ messages: [String], on channelId: String)
 
     /**
-        Creates a direct message channel with a user.
-
-        - parameter with: The user that the channel will be opened with's snowflake id
-        - parameter user: Our snowflake id
-        - parameter callback: The callback function. Takes an optional `DiscordDMChannel`
-    */
-    func createDM(with: String, callback: @escaping (DiscordDMChannel?) -> Void)
-
-    /**
         Creates an invite for a channel/guild.
 
         - parameter for: The channel that we are creating for
@@ -66,32 +52,6 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     */
     func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
         callback: @escaping (DiscordInvite?) -> Void)
-
-    /**
-        Creates a guild channel.
-
-        - parameter guildId: The snowflake id of the guild
-        - parameter options: An array of `DiscordEndpointOptions.GuildCreateChannel` options
-    */
-    func createGuildChannel(on guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel])
-
-    /**
-        Creates a role on a guild.
-
-        - parameter on: The snowflake id of the guild
-        - parameter callback: The callback function, taking an optional `DiscordRole`
-    */
-    func createGuildRole(on guildId: String, callback: @escaping (DiscordRole?) -> Void)
-
-    /**
-        Creates a webhook for a given channel.
-
-        - parameter forChannel: The channel to create the webhook for
-        - parameter options: The options for this webhook
-        - parameter callback: A callback that returns the webhook created, if successful.
-    */
-    func createWebhook(forChannel channelId: String, options: [DiscordEndpointOptions.WebhookOption],
-        callback: @escaping (DiscordWebhook?) -> Void)
 
     /**
         Deletes the specified channel.
@@ -107,13 +67,6 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter on: The channel that we are deleting on
     */
     func deleteChannelPermission(_ overwriteId: String, on channelId: String)
-
-    /**
-        Deletes the specified guild.
-
-        - parameter guildId: The snowflake id of the guild
-    */
-    func deleteGuild(_ guildId: String)
 
     /**
         Deletes a single message
@@ -132,12 +85,12 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     func deletePinnedMessage(_ messageId: String, on channelId: String)
 
     /**
-        Deletes a webhook. The user must be the owner of the webhook.
+        Gets the specified channel.
 
-        - parameter webhookId: The id of the webhook
-        - paramter callback: An optional callback function that indicates whether the delete was successful
+        - parameter channelId: The snowflake id of the channel
+        - parameter callback: The callback function containing an optional `DiscordGuildChannel`
     */
-    func deleteWebhook(_ webhookId: String, callback: ((Bool) -> Void)?)
+    func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> Void)
 
     /**
         Edits a message
@@ -157,28 +110,89 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String)
 
     /**
-        Creates a url that can be used to authorize a bot.
+        Gets the invites for a channel.
 
-        - parameter with: An array of `DiscordPermission` that this bot should have
+        - parameter for: The channel that we are getting on
+        - parameter callback: The callback function, taking an array of `DiscordInvite`
     */
-    func getBotURL(with permissions: [DiscordPermission]) -> URL?
+    func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void)
 
     /**
-        Gets the direct message channels for a user.
+        Gets a group of messages according to the specified options.
 
-        - parameter user: Our snowflake id
-        - parameter callback: The callback function, taking a dictionary of `DiscordDMChannel` associated by
-                              the recipient's id
+        - parameter for: The channel that we are getting on
+        - parameter options: An array of `DiscordEndpointOptions.GetMessage` options
+        - parameter callback: The callback function, taking an array of `DiscordMessages`
     */
-    func getDMs(callback: @escaping ([String: DiscordDMChannel]) -> Void)
+    func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage],
+        callback: @escaping ([DiscordMessage]) -> Void)
 
     /**
-        Gets the specified channel.
+        Modifies the specified channel.
 
         - parameter channelId: The snowflake id of the channel
-        - parameter callback: The callback function containing an optional `DiscordGuildChannel`
+        - parameter options: An array of `DiscordEndpointOptions.ModifyChannel` options
     */
-    func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> Void)
+    func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel])
+
+    /**
+        Gets the pinned messages for a channel.
+
+        - parameter for: The channel that we are getting the pinned messages for
+        - parameter callback: The callback function, taking an array of `DiscordMessages`
+    */
+    func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void)
+
+    /**
+        Sends a message to the specified channel.
+
+        - parameter content: The content of the message
+        - parameter to: The snowflake id of the channel to send to
+        - parameter tts: Whether this message should be read a text-to-speech message
+    */
+    func sendMessage(_ message: String, to channelId: String, tts: Bool)
+
+    /**
+        Sends a file with an optional message to the specified channel.
+
+        - parameter file: The file to send
+        - parameter content: The content of the message
+        - parameter to: The snowflake id of the channel to send to
+        - parameter tts: Whether this message should be read a text-to-speech message
+    */
+    func sendFile(_ file: DiscordFileUpload, content: String, to channelId: String, tts: Bool)
+
+    /**
+        Triggers typing on the specified channel.
+
+        - parameter on: The snowflake id of the channel to send to
+    */
+    func triggerTyping(on channelId: String)
+
+    // MARK: Guilds
+
+    /**
+        Creates a guild channel.
+
+        - parameter guildId: The snowflake id of the guild
+        - parameter options: An array of `DiscordEndpointOptions.GuildCreateChannel` options
+    */
+    func createGuildChannel(on guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel])
+
+    /**
+        Creates a role on a guild.
+
+        - parameter on: The snowflake id of the guild
+        - parameter callback: The callback function, taking an optional `DiscordRole`
+    */
+    func createGuildRole(on guildId: String, callback: @escaping (DiscordRole?) -> Void)
+
+    /**
+        Deletes the specified guild.
+
+        - parameter guildId: The snowflake id of the guild
+    */
+    func deleteGuild(_ guildId: String)
 
     /**
         Gets the bans on a guild.
@@ -216,78 +230,12 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         callback: @escaping ([DiscordGuildMember]) -> Void)
 
     /**
-        Gets guilds the user is in.
-
-        - parameter user: Our snowflake id
-        - parameter callback: The callback function, taking a dictionary of `DiscordUserGuild` associated by guild id
-    */
-    func getGuilds(callback: @escaping ([String: DiscordUserGuild]) -> Void)
-
-    /**
         Gets the roles on a guild.
 
         - parameter for: The snowflake id of the guild
         - parameter callback: The callback function, taking an array of `DiscordRole`
     */
     func getGuildRoles(for guildId: String, callback: @escaping ([DiscordRole]) -> Void)
-
-    /**
-        Gets an invite.
-
-        - parameter invite: The invite code to accept
-        - parameter callback: The callback function, takes an optional `DiscordInvite`
-    */
-    func getInvite(_ invite: String, callback: @escaping (DiscordInvite?) -> Void)
-
-    /**
-        Gets the invites for a channel.
-
-        - parameter for: The channel that we are getting on
-        - parameter callback: The callback function, taking an array of `DiscordInvite`
-    */
-    func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void)
-
-    /**
-        Gets a group of messages according to the specified options.
-
-        - parameter for: The channel that we are getting on
-        - parameter options: An array of `DiscordEndpointOptions.GetMessage` options
-        - parameter callback: The callback function, taking an array of `DiscordMessages`
-    */
-    func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage],
-        callback: @escaping ([DiscordMessage]) -> Void)
-
-    /**
-        Gets the pinned messages for a channel.
-
-        - parameter for: The channel that we are getting the pinned messages for
-        - parameter callback: The callback function, taking an array of `DiscordMessages`
-    */
-    func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void)
-
-    /**
-        Gets the specified webhook.
-
-        - parameter webhookId: The snowflake id of the webhook
-        - parameter callback: The callback function containing an optional `DiscordToken`
-    */
-    func getWebhook(_ webhookId: String, callback: @escaping (DiscordWebhook?) -> Void)
-
-    /**
-        Gets the webhooks for a specified channel.
-
-        - parameter forChannel: The snowflake id of the channel.
-        - parameter callback: The callback function taking an array of `DiscordWebhook`s
-    */
-    func getWebhooks(forChannel channelId: String, callback: @escaping ([DiscordWebhook]) -> Void)
-
-    /**
-        Gets the webhooks for a specified guild.
-
-        - parameter forGuild: The snowflake id of the guild.
-        - parameter callback: The callback function taking an array of `DiscordWebhook`s
-    */
-    func getWebhooks(forGuild guildId: String, callback: @escaping ([DiscordWebhook]) -> Void)
 
     /**
         Creates a guild ban.
@@ -297,14 +245,6 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter deleteMessageDays: The number of days to delete this user's messages
     */
     func guildBan(userId: String, on guildId: String, deleteMessageDays: Int)
-
-    /**
-        Modifies the specified channel.
-
-        - parameter channelId: The snowflake id of the channel
-        - parameter options: An array of `DiscordEndpointOptions.ModifyChannel` options
-    */
-    func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel])
 
     /**
         Modifies the specified guild.
@@ -332,16 +272,6 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     func modifyGuildRole(_ role: DiscordRole, on guildId: String)
 
     /**
-        Modifies a webhook.
-
-        - parameter webhookId: The webhook to modify
-        - parameter options: The options for this webhook
-        - parameter callback: A callback that returns the updated webhook, if successful.
-    */
-    func modifyWebhook(_ webhookId: String, options: [DiscordEndpointOptions.WebhookOption],
-        callback: @escaping (DiscordWebhook?) -> Void)
-
-    /**
         Removes a guild ban.
 
         - parameter for: The snowflake id of the user
@@ -357,31 +287,113 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     */
     func removeGuildRole(_ roleId: String, on guildId: String)
 
-    /**
-        Sends a message to the specified channel.
-
-        - parameter content: The content of the message
-        - parameter to: The snowflake id of the channel to send to
-        - parameter tts: Whether this message should be read a text-to-speech message
-    */
-    func sendMessage(_ message: String, to channelId: String, tts: Bool)
+    // MARK: Webhooks
 
     /**
-        Sends a file with an optional message to the specified channel.
+        Creates a webhook for a given channel.
 
-        - parameter file: The file to send
-        - parameter content: The content of the message
-        - parameter to: The snowflake id of the channel to send to
-        - parameter tts: Whether this message should be read a text-to-speech message
+        - parameter forChannel: The channel to create the webhook for
+        - parameter options: The options for this webhook
+        - parameter callback: A callback that returns the webhook created, if successful.
     */
-    func sendFile(_ file: DiscordFileUpload, content: String, to channelId: String, tts: Bool)
+    func createWebhook(forChannel channelId: String, options: [DiscordEndpointOptions.WebhookOption],
+        callback: @escaping (DiscordWebhook?) -> Void)
 
     /**
-        Triggers typing on the specified channel.
+        Deletes a webhook. The user must be the owner of the webhook.
 
-        - parameter on: The snowflake id of the channel to send to
+        - parameter webhookId: The id of the webhook
+        - paramter callback: An optional callback function that indicates whether the delete was successful
     */
-    func triggerTyping(on channelId: String)
+    func deleteWebhook(_ webhookId: String, callback: ((Bool) -> Void)?)
+
+    /**
+        Gets the specified webhook.
+
+        - parameter webhookId: The snowflake id of the webhook
+        - parameter callback: The callback function containing an optional `DiscordToken`
+    */
+    func getWebhook(_ webhookId: String, callback: @escaping (DiscordWebhook?) -> Void)
+
+    /**
+        Gets the webhooks for a specified channel.
+
+        - parameter forChannel: The snowflake id of the channel.
+        - parameter callback: The callback function taking an array of `DiscordWebhook`s
+    */
+    func getWebhooks(forChannel channelId: String, callback: @escaping ([DiscordWebhook]) -> Void)
+
+    /**
+        Gets the webhooks for a specified guild.
+
+        - parameter forGuild: The snowflake id of the guild.
+        - parameter callback: The callback function taking an array of `DiscordWebhook`s
+    */
+    func getWebhooks(forGuild guildId: String, callback: @escaping ([DiscordWebhook]) -> Void)
+
+    /**
+        Modifies a webhook.
+
+        - parameter webhookId: The webhook to modify
+        - parameter options: The options for this webhook
+        - parameter callback: A callback that returns the updated webhook, if successful.
+    */
+    func modifyWebhook(_ webhookId: String, options: [DiscordEndpointOptions.WebhookOption],
+        callback: @escaping (DiscordWebhook?) -> Void)
+
+    // MARK: Invites
+
+    /**
+        Accepts an invite.
+
+        - parameter invite: The invite code to accept
+    */
+    func acceptInvite(_ invite: String)
+
+    /**
+        Gets an invite.
+
+        - parameter invite: The invite code to accept
+        - parameter callback: The callback function, takes an optional `DiscordInvite`
+    */
+    func getInvite(_ invite: String, callback: @escaping (DiscordInvite?) -> Void)
+
+    // MARK: Users
+
+    /**
+        Creates a direct message channel with a user.
+
+        - parameter with: The user that the channel will be opened with's snowflake id
+        - parameter user: Our snowflake id
+        - parameter callback: The callback function. Takes an optional `DiscordDMChannel`
+    */
+    func createDM(with: String, callback: @escaping (DiscordDMChannel?) -> Void)
+
+    /**
+        Gets the direct message channels for a user.
+
+        - parameter user: Our snowflake id
+        - parameter callback: The callback function, taking a dictionary of `DiscordDMChannel` associated by
+                              the recipient's id
+    */
+    func getDMs(callback: @escaping ([String: DiscordDMChannel]) -> Void)
+
+    /**
+        Gets guilds the user is in.
+
+        - parameter user: Our snowflake id
+        - parameter callback: The callback function, taking a dictionary of `DiscordUserGuild` associated by guild id
+    */
+    func getGuilds(callback: @escaping ([String: DiscordUserGuild]) -> Void)
+
+    // MARK: Misc
+
+    /**
+        Creates a url that can be used to authorize a bot.
+
+        - parameter with: An array of `DiscordPermission` that this bot should have
+    */
+    func getBotURL(with permissions: [DiscordPermission]) -> URL?
 }
 
 public extension DiscordEndpointConsumer {
