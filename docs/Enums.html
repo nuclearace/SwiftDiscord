@@ -248,6 +248,9 @@
                 <a href="Structs/DiscordEndpointOptions/ModifyGuild.html">– ModifyGuild</a>
               </li>
               <li class="nav-group-task">
+                <a href="Structs/DiscordEndpointOptions/WebhookOption.html">– WebhookOption</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/DiscordFileUpload.html">DiscordFileUpload</a>
               </li>
               <li class="nav-group-task">
@@ -310,6 +313,9 @@
               <li class="nav-group-task">
                 <a href="Structs/DiscordVoiceState.html">DiscordVoiceState</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Structs/DiscordWebhook.html">DiscordWebhook</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -357,6 +363,46 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DiscordChannelType</span> <span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:O12SwiftDiscord15DiscordEndpoint"></a>
+                    <a name="//apple_ref/swift/Enum/DiscordEndpoint" class="dashAnchor"></a>
+                    <a class="token" href="#/s:O12SwiftDiscord15DiscordEndpoint">DiscordEndpoint</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This enum controls the interface with the Discord REST API.</p>
+
+<p>It defines several endpoint cases which are then used by the various static methods defined on this enum.
+The cases themselves are of little use.</p>
+
+<p>The methods all take a <code><a href="Structs/DiscordToken.html">DiscordToken</a></code> which is used for authentication with the REST API.
+GET methods also take a callback.</p>
+
+<p>All requests through this enum are rate limited.</p>
+
+                        <a href="Enums/DiscordEndpoint.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DiscordEndpoint</span> <span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -424,46 +470,6 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DiscordDispatchEvent</span> <span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:O12SwiftDiscord15DiscordEndpoint"></a>
-                    <a name="//apple_ref/swift/Enum/DiscordEndpoint" class="dashAnchor"></a>
-                    <a class="token" href="#/s:O12SwiftDiscord15DiscordEndpoint">DiscordEndpoint</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>This enum controls the interface with the Discord REST API.</p>
-
-<p>It defines several endpoint cases which are then used by the various static methods defined on this enum.
-The cases themselves are of little use.</p>
-
-<p>The methods all take a <code><a href="Structs/DiscordToken.html">DiscordToken</a></code> which is used for authentication with the REST API.
-GET methods also take a callback.</p>
-
-<p>All requests through this enum are rate limited.</p>
-
-                        <a href="Enums/DiscordEndpoint.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DiscordEndpoint</span> <span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>

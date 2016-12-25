@@ -74,7 +74,6 @@ public extension DiscordEndpoint {
         })
     }
 
-
     /**
         Deletes the specified webhook.
 
