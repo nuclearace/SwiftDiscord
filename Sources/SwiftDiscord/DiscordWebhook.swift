@@ -17,6 +17,7 @@
 
 import Foundation
 
+/// Represents a webhook.
 public struct DiscordWebhook {
     // MARK: Properties
 
