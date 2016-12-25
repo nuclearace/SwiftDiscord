@@ -116,4 +116,9 @@ public enum DiscordDispatchEvent : String {
 
 	/// Typing Start (Not handled)
 	case typingStart = "TYPING_START"
+
+	// Webhooks
+
+	/// Webhooks Update (Not handled)
+	case webhooksUpdate = "WEBHOOKS_UPDATE"
 }
