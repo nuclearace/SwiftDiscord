@@ -127,6 +127,15 @@ public struct DiscordEndpointOptions {
 		/// The required verification level of this guild.
 		case verificationLevel(Int)
 	}
+
+	/// The options for creating/editing a webhook.
+	public enum WebhookOption {
+		/// The name of the webhook
+		case name(String)
+
+		/// The avatar of the webhook. A base64 128x128 jpeg image.
+		case avatar(String)
+	}
 }
 
 // TODO Group DM
@@ -183,6 +192,10 @@ public enum DiscordEndpoint : String {
 
 	/// The channel pinned message endpoint.
 	case pinnedMessage = "/channels/channel.id/pins/message.id"
+
+	// Webhooks
+	/// The channel webhooks endpoint.
+	case channelWebhooks = "/channels/channel.id/webhooks"
 	/* End channels */
 
 	/* Guilds */
@@ -213,6 +226,10 @@ public enum DiscordEndpoint : String {
 
 	/// The guild role endpoint.
 	case guildRole = "/guilds/guild.id/roles/role.id"
+
+	// Webhooks
+	/// The guilds webhooks endpoint.
+	case guildWebhooks = "/guilds/guild.id/webhooks"
 	/* End Guilds */
 
 	/* User */
@@ -221,6 +238,20 @@ public enum DiscordEndpoint : String {
 
 	/// The user guilds endpoint.
 	case userGuilds = "/users/me/guilds"
+
+	/* Webhooks */
+	/// The single webhook endpoint.
+	case webhook = "/webhooks/webhook.id"
+
+	/// The single webhook with token endpoint.
+	case webhookWithToken = "/webhooks/webhook.id/webhook.token"
+
+	/// A slack compatible webhook.
+	case webhookSlack = "/webhooks/webhook.id/webhook.token/slack"
+
+	/// A GitHub compatible webhook.
+	case webhookGithub = "/webhooks/webhook.id/webhook.token/github"
+	/* End Webhooks */
 
 	var combined: String {
 		return DiscordEndpoint.baseURL.rawValue + rawValue

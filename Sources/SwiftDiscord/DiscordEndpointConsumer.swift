@@ -84,6 +84,16 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     func createGuildRole(on guildId: String, callback: @escaping (DiscordRole?) -> Void)
 
     /**
+        Creates a webhook for a given channel.
+
+        - parameter forChannel: The channel to create the webhook for
+        - parameter options: The options for this webhook
+        - parameter callback: A callback that returns the webhook created, if successful.
+    */
+    func createWebhook(forChannel channelId: String, options: [DiscordEndpointOptions.WebhookOption],
+        callback: @escaping (DiscordWebhook?) -> Void)
+
+    /**
         Deletes the specified channel.
 
         - parameter channelId: The snowflake id of the channel
@@ -120,6 +130,14 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter on: The channel that we are unpinning on
     */
     func deletePinnedMessage(_ messageId: String, on channelId: String)
+
+    /**
+        Deletes a webhook. The user must be the owner of the webhook.
+
+        - parameter webhookId: The id of the webhook
+        - paramter callback: An optional callback function that indicates whether the delete was successful
+    */
+    func deleteWebhook(_ webhookId: String, callback: ((Bool) -> Void)?)
 
     /**
         Edits a message
@@ -248,6 +266,30 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void)
 
     /**
+        Gets the specified webhook.
+
+        - parameter webhookId: The snowflake id of the webhook
+        - parameter callback: The callback function containing an optional `DiscordToken`
+    */
+    func getWebhook(_ webhookId: String, callback: @escaping (DiscordWebhook?) -> Void)
+
+    /**
+        Gets the webhooks for a specified channel.
+
+        - parameter forChannel: The snowflake id of the channel.
+        - parameter callback: The callback function taking an array of `DiscordWebhook`s
+    */
+    func getWebhooks(forChannel channelId: String, callback: @escaping ([DiscordWebhook]) -> Void)
+
+    /**
+        Gets the webhooks for a specified guild.
+
+        - parameter forGuild: The snowflake id of the guild.
+        - parameter callback: The callback function taking an array of `DiscordWebhook`s
+    */
+    func getWebhooks(forGuild guildId: String, callback: @escaping ([DiscordWebhook]) -> Void)
+
+    /**
         Creates a guild ban.
 
         - parameter userId: The snowflake id of the user
@@ -288,6 +330,16 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter on: The guild that we are editing on
     */
     func modifyGuildRole(_ role: DiscordRole, on guildId: String)
+
+    /**
+        Modifies a webhook.
+
+        - parameter webhookId: The webhook to modify
+        - parameter options: The options for this webhook
+        - parameter callback: A callback that returns the updated webhook, if successful.
+    */
+    func modifyWebhook(_ webhookId: String, options: [DiscordEndpointOptions.WebhookOption],
+        callback: @escaping (DiscordWebhook?) -> Void)
 
     /**
         Removes a guild ban.
@@ -370,6 +422,12 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
+    func createWebhook(forChannel channelId: String, options: [DiscordEndpointOptions.WebhookOption],
+            callback: @escaping (DiscordWebhook?) -> Void = {_ in }) {
+        DiscordEndpoint.createWebhook(forChannel: channelId, with: token, options: options, callback: callback)
+    }
+
+    /// Default implementation
     public func deleteChannel(_ channelId: String) {
         DiscordEndpoint.deleteChannel(channelId, with: token)
     }
@@ -392,6 +450,11 @@ public extension DiscordEndpointConsumer {
     /// Default implementation
     public func deletePinnedMessage(_ messageId: String, on channelId: String) {
         DiscordEndpoint.deletePinnedMessage(messageId, on: channelId, with: token)
+    }
+
+    /// Default implementation
+    public func deleteWebhook(_ webhookId: String, callback: ((Bool) -> Void)? = nil) {
+        DiscordEndpoint.deleteWebhook(webhookId, with: token, callback: callback)
     }
 
     /// Default implementation
@@ -469,6 +532,21 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
+    public func getWebhook(_ webhookId: String, callback: @escaping (DiscordWebhook?) -> Void) {
+        DiscordEndpoint.getWebhook(webhookId, with: token, callback: callback)
+    }
+
+    /// Default implementation
+    public func getWebhooks(forChannel channelId: String, callback: @escaping ([DiscordWebhook]) -> Void) {
+        DiscordEndpoint.getWebhooks(forChannel: channelId, with: token, callback: callback)
+    }
+
+    /// Default implementation
+    public func getWebhooks(forGuild guildId: String, callback: @escaping ([DiscordWebhook]) -> Void) {
+        DiscordEndpoint.getWebhooks(forGuild: guildId, with: token, callback: callback)
+    }
+
+    /// Default implementation
     public func guildBan(userId: String, on guildId: String, deleteMessageDays: Int = 7) {
         DiscordEndpoint.guildBan(userId: userId, on: guildId, deleteMessageDays: deleteMessageDays, with: token)
     }
@@ -497,6 +575,12 @@ public extension DiscordEndpointConsumer {
     /// Default implementation
     public func modifyGuildRole(_ role: DiscordRole, on guildId: String) {
         DiscordEndpoint.modifyGuildRole(role, on: guildId, with: token)
+    }
+
+    /// Default implementation
+    func modifyWebhook(_ webhookId: String, options: [DiscordEndpointOptions.WebhookOption],
+            callback: @escaping (DiscordWebhook?) -> Void = {_ in }) {
+        DiscordEndpoint.modifyWebhook(webhookId, with: token, options: options, callback: callback)
     }
 
     /// Default implementation
