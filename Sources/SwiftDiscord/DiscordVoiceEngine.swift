@@ -233,12 +233,17 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		super.disconnect()
 
+		closeOutEngine()
+	}
+
+	private func closeOutEngine() {
 		do {
 			try udpSocket?.close()
 		} catch {
 			self.error(message: "Error trying to close voice engine udp socket")
 		}
 
+		closed = true
 		connected = false
 		encoder = nil
 	}
@@ -296,6 +301,17 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 				self.disconnect()
 			}
 		}
+	}
+
+	/**
+		Handles a close from the WebSocket.
+
+		- parameter reason: The reason the socket closed.
+	*/
+	public override func handleClose(reason: NSError? = nil) {
+		DefaultDiscordLogger.Logger.log("Voice engine closed", type: logType)
+
+		closeOutEngine()
 	}
 
 	private func handleDoneReading() {

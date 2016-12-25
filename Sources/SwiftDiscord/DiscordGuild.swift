@@ -19,7 +19,7 @@ import class Dispatch.DispatchSemaphore
 import Foundation
 
 /// Represents a Guild.
-public final class DiscordGuild : DiscordClientHolder {
+public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 	// MARK: Properties
 
 	// TODO figure out what features are
@@ -40,6 +40,11 @@ public final class DiscordGuild : DiscordClientHolder {
 
 	/// Whether this guild is unavaiable.
 	public let unavailable: Bool
+
+	/// - returns: A description of this guild
+	public var description: String {
+		return "DiscordGuild(name: \(name))"
+	}
 
 	/// Reference to the client.
 	public weak var client: DiscordClient?
@@ -243,6 +248,10 @@ public final class DiscordGuild : DiscordClientHolder {
 		}
 
 		return self
+	}
+
+	func shardNumber(assuming numOfShards: Int) -> Int {
+		return (Int(id)! >> 22) % numOfShards
 	}
 
 	/**

@@ -23,7 +23,7 @@ import WebSockets
 #endif
 
 /// Declares that a type will be an Engine for the Discord Gateway.
-public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable {
+public protocol DiscordEngineSpec : class, DiscordShard, DiscordEngineHeartbeatable {
 	// MARK: Properties
 
 	/// A reference to the client this engine is associated with.
@@ -38,6 +38,9 @@ public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable {
 	/// The last received sequence number. Used for resume/reconnect.
 	var lastSequenceNumber: Int { get }
 
+	/// The session id of this engine.
+	var sessionId: String? { get set }
+
 	/// A reference to the underlying WebSocket. This is a WebSockets.Websocket on Linux and Starscream.WebSocket on
 	/// macOS/iOS
 	var websocket: WebSocket? { get }
@@ -49,19 +52,9 @@ public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable {
 
 		- parameter client: The client this engine should be associated with.
 	*/
-	init(client: DiscordClientSpec)
+	init(client: DiscordClientSpec, shardNum: Int, numShards: Int)
 
 	// MARK: Methods
-
-	/**
-		Starts the connection to the Discord gateway.
-	*/
-	func connect()
-
-	/**
-		Disconnects the engine. An `engine.disconnect` is fired on disconnection.
-	*/
-	func disconnect()
 
 	/**
 		Logs that an error occured.
@@ -69,13 +62,6 @@ public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable {
 		- parameter message: The error message
 	*/
 	func error(message: String)
-
-	/**
-		Sends a gateway payload to Discord.
-
-		- parameter payload: The payload object.
-	*/
-	func sendGatewayPayload(_ payload: DiscordGatewayPayload)
 }
 
 public extension DiscordEngineSpec {

@@ -30,8 +30,8 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
     /// Used to set a custom logger.
     case logger(DiscordLogger)
 
-    /// Whether this client will try and resume on disconnects.
-    case resume(Bool)
+    /// The number of shards this client should spawn. Defaults to 1.
+    case shards(Int)
 
     // MARK: Properties
 
@@ -43,7 +43,7 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
         case .handleQueue:  description = "handleQueue"
         case .log:          description = "log"
         case .logger:       description = "logger"
-        case .resume:       description = "resume"
+        case .shards:       description = "shards"
         }
 
         return description

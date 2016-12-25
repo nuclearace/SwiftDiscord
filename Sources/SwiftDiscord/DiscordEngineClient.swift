@@ -24,7 +24,7 @@ public protocol DiscordEngineClient {
 
         - parameter data: The event data
     */
-	func handleEngineDispatch(_ data: DiscordGatewayPayload)
+	func handleEngineDispatch(_ event: DiscordDispatchEvent, with payload: DiscordGatewayPayload)
 
     /**
         Handles engine events.
@@ -33,9 +33,4 @@ public protocol DiscordEngineClient {
         - parameter with: The event data
     */
 	func handleEngineEvent(_ event: String, with data: [Any])
-
-    /**
-        Tells the client they should invalidate their session id.
-    */
-    func invalidateSession()
 }
