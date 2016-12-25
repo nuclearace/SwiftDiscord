@@ -279,15 +279,14 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		let shardNum = guild.shardNumber(assuming: shards)
 
-		self.shardManager[shardNum].sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
+		self.shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
 			payload: .object([
 				"guild_id": guild.id,
 				"channel_id": channel.id,
 				"self_mute": false,
 				"self_deaf": false
 				])
-			)
-		)
+			), onShard: shardNum)
         #else
         print("Only available on macOS and Linux")
         #endif
@@ -305,14 +304,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         guard let shardNum = joinedVoiceChannel?.guild?.shardNumber(assuming: shards) else { return }
 
-        self.shardManager[shardNum].sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
+        self.shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
         	payload: .object([
         		"guild_id": state.guildId,
         		"channel_id": NSNull(),
         		"self_mute": false,
         		"self_deaf": false
-			]))
-		)
+			])), onShard: shardNum)
 
 		self.joiningVoiceChannel = false
         #else
@@ -335,8 +333,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		guard let shardNum = guilds[guildId]?.shardNumber(assuming: shards) else { return }
 
-		shardManager[shardNum].sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.requestGuildMembers),
-			payload: .object(requestObject)))
+		shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.requestGuildMembers),
+			payload: .object(requestObject)), onShard: shardNum)
 	}
 
 	/**
@@ -345,8 +343,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		- parameter presence: The new presence object
 	*/
 	open func setPresence(_ presence: DiscordPresenceUpdate) {
-		shardManager[0].sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.statusUpdate),
-			payload: .object(presence.json)))
+		shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.statusUpdate),
+			payload: .object(presence.json)), onShard: 0)
 	}
 
 	private func startVoiceConnection() {

@@ -18,7 +18,8 @@
 import Dispatch
 import Foundation
 
-/// Protocol that represents a sharded gateway connection.
+/// Protocol that represents a sharded gateway connection. This is the top-level protocol for `DiscordEngineSpec` and
+/// `DiscordEngine`
 public protocol DiscordShard {
     // MARK: Properties
 
@@ -30,6 +31,25 @@ public protocol DiscordShard {
 
     /// This shard's number.
     var shardNum: Int { get }
+
+    // MARK: Methods
+
+    /**
+        Starts the connection to the Discord gateway.
+    */
+    func connect()
+
+    /**
+        Disconnects the engine. An `engine.disconnect` is fired on disconnection.
+    */
+    func disconnect()
+
+    /**
+        Sends a gateway payload to Discord.
+
+        - parameter payload: The payload object.
+    */
+    func sendGatewayPayload(_ payload: DiscordGatewayPayload)
 }
 
 /**
@@ -41,12 +61,12 @@ public class DiscordShardManager {
     // MARK: Properties
 
     /// - returns: The `n`th shard.
-    public subscript(n: Int) -> DiscordEngineSpec {
+    public subscript(n: Int) -> DiscordShard {
         return shards[n]
     }
 
     /// The individual shards.
-    public var shards = [DiscordEngineSpec]()
+    public var shards = [DiscordShard]()
 
     private weak var client: DiscordClientSpec?
     private var closed = false
@@ -87,6 +107,16 @@ public class DiscordShardManager {
         for shard in shards {
             shard.disconnect()
         }
+    }
+
+    /**
+        Sends a payload on the specified shard.
+
+        - parameter payload: The payload to send.
+        - parameter onShard: The shard to send the payload on.
+    */
+    public func sendPayload(_ payload: DiscordGatewayPayload, onShard shard: Int) {
+        self[shard].sendGatewayPayload(payload)
     }
 
     /**

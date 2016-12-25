@@ -23,7 +23,7 @@ import WebSockets
 #endif
 
 /// Declares that a type will be an Engine for the Discord Gateway.
-public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable, DiscordShard {
+public protocol DiscordEngineSpec : class, DiscordShard, DiscordEngineHeartbeatable {
 	// MARK: Properties
 
 	/// A reference to the client this engine is associated with.
@@ -57,28 +57,11 @@ public protocol DiscordEngineSpec : class, DiscordEngineHeartbeatable, DiscordSh
 	// MARK: Methods
 
 	/**
-		Starts the connection to the Discord gateway.
-	*/
-	func connect()
-
-	/**
-		Disconnects the engine. An `engine.disconnect` is fired on disconnection.
-	*/
-	func disconnect()
-
-	/**
 		Logs that an error occured.
 
 		- parameter message: The error message
 	*/
 	func error(message: String)
-
-	/**
-		Sends a gateway payload to Discord.
-
-		- parameter payload: The payload object.
-	*/
-	func sendGatewayPayload(_ payload: DiscordGatewayPayload)
 }
 
 public extension DiscordEngineSpec {
