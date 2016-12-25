@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DiscordUser Struct Reference</title>
+    <title>DiscordShard Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/DiscordUser" class="dashAnchor"></a>
-    <a title="DiscordUser Struct Reference"></a>
+    <a name="//apple_ref/swift/Protocol/DiscordShard" class="dashAnchor"></a>
+    <a title="DiscordShard Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        DiscordUser Struct Reference
+        DiscordShard Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -321,14 +321,15 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>DiscordUser</h1>
+            <h1>DiscordShard</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordUser</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordShard</span></code></pre>
 
                 </div>
               </div>
-            <p>Represents a Discord user.</p>
+            <p>Protocol that represents a sharded gateway connection. This is the top-level protocol for <code><a href="../Protocols/DiscordEngineSpec.html">DiscordEngineSpec</a></code> and
+<code><a href="../Classes/DiscordEngine.html">DiscordEngine</a></code></p>
 
           </section>
           <section class="section task-group-section">
@@ -344,9 +345,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordUser6avatarSS"></a>
-                    <a name="//apple_ref/swift/Property/avatar" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordUser6avatarSS">avatar</a>
+                    <a name="/s:vP12SwiftDiscord12DiscordShard7managerXwGSqCS_19DiscordShardManager_"></a>
+                    <a name="//apple_ref/swift/Property/manager" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP12SwiftDiscord12DiscordShard7managerXwGSqCS_19DiscordShardManager_">manager</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -354,14 +355,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The base64 encoded avatar of this user.</p>
+                        <p>A reference to the manager</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">avatar</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="k">weak</span> <span class="k">var</span> <span class="nv">manager</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordShardManager.html">DiscordShardManager</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -371,9 +372,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordUser3botSb"></a>
-                    <a name="//apple_ref/swift/Property/bot" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordUser3botSb">bot</a>
+                    <a name="/s:vP12SwiftDiscord12DiscordShard9numShardsSi"></a>
+                    <a name="//apple_ref/swift/Property/numShards" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP12SwiftDiscord12DiscordShard9numShardsSi">numShards</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -381,14 +382,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Whether this user is a bot.</p>
+                        <p>The total number of shards.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">bot</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">numShards</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
@@ -398,9 +399,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordUser13discriminatorSS"></a>
-                    <a name="//apple_ref/swift/Property/discriminator" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordUser13discriminatorSS">discriminator</a>
+                    <a name="/s:vP12SwiftDiscord12DiscordShard8shardNumSi"></a>
+                    <a name="//apple_ref/swift/Property/shardNum" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP12SwiftDiscord12DiscordShard8shardNumSi">shardNum</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -408,14 +409,52 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>This user&rsquo;s discriminator.</p>
+                        <p>This shard&rsquo;s number.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">discriminator</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">shardNum</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Methods"></a>
+                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
+                <a href="#/Methods">
+                  <h3 class="section-name">Methods</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord12DiscordShard7connectFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/connect()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord12DiscordShard7connectFT_T_">connect()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Starts the connection to the Discord gateway.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">connect</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -425,9 +464,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordUser5emailSS"></a>
-                    <a name="//apple_ref/swift/Property/email" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordUser5emailSS">email</a>
+                    <a name="/s:FP12SwiftDiscord12DiscordShard10disconnectFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/disconnect()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord12DiscordShard10disconnectFT_T_">disconnect()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -435,14 +474,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The user&rsquo;s email. Only availabe if we are the user.</p>
+                        <p>Disconnects the engine. An <code>engine.disconnect</code> is fired on disconnection.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">email</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">disconnect</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -452,9 +491,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordUser2idSS"></a>
-                    <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordUser2idSS">id</a>
+                    <a name="/s:FP12SwiftDiscord12DiscordShard18sendGatewayPayloadFVS_21DiscordGatewayPayloadT_"></a>
+                    <a name="//apple_ref/swift/Method/sendGatewayPayload(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord12DiscordShard18sendGatewayPayloadFVS_21DiscordGatewayPayloadT_">sendGatewayPayload(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -462,97 +501,36 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The snowflake id of the user.</p>
+                        <p>Sends a gateway payload to Discord.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">sendGatewayPayload</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordUser10mfaEnabledSb"></a>
-                    <a name="//apple_ref/swift/Property/mfaEnabled" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordUser10mfaEnabledSb">mfaEnabled</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Whether this user has multi-factor authentication enabled.</p>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>payload</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The payload object.</p>
 
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">mfaEnabled</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordUser8usernameSS"></a>
-                    <a name="//apple_ref/swift/Property/username" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordUser8usernameSS">username</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>This user&rsquo;s username.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">username</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord11DiscordUser8verifiedSb"></a>
-                    <a name="//apple_ref/swift/Property/verified" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord11DiscordUser8verifiedSb">verified</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Whether this user is verified.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">verified</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
-
-                        </div>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
