@@ -32,13 +32,16 @@ You'll then want to remove all target dependencies and linked libraries except f
 
 ** - Socks should be removed on iOS as voice is not supported on it.
 
-See Sources/ExampleBot for a basic example bot.
+Usage
+=====
+
+Checkout the [getting started](./getting-started.html) page for a quickstart guide.
 
 [Docs](https://nuclearace.github.io/SwiftDiscord/index.html)
 ============================================================
 Docs are generated with [jazzy](https://github.com/realm/jazzy) using the magical command:
 
-`jazzy --xcodebuild-arguments -project,SwiftDiscord.xcodeproj/,-scheme,SwiftDiscord`
+`jazzy --xcodebuild-arguments -project,SwiftDiscord.xcodeproj/,-scheme,SwiftDiscord --documentation=UsageDocs/*.md`
 
 *Must have setup an Xcode project*
 
