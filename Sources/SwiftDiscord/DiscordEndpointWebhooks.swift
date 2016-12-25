@@ -57,20 +57,13 @@ public extension DiscordEndpoint {
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .channelWebhooks, parameters: ["channel.id": channelId])
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            guard let data = data, response?.statusCode == 200 else {
+            guard case let .object(webhook)? = self.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
 
                 return
             }
 
-            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                case let .dictionary(webhookId) = json else {
-                    callback(nil)
-
-                    return
-            }
-
-            callback(DiscordWebhook(webhookObject: webhookId))
+            callback(DiscordWebhook(webhookObject: webhook))
         })
     }
 
@@ -111,20 +104,13 @@ public extension DiscordEndpoint {
         DefaultDiscordLogger.Logger.debug("Getting webhook: %@", type: "DiscordEndpointWebhooks", args: webhookId)
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            guard let data = data, response?.statusCode == 200 else {
+            guard case let .object(webhook)? = self.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
 
                 return
             }
 
-            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                case let .dictionary(webhookId) = json else {
-                    callback(nil)
-
-                    return
-            }
-
-            callback(DiscordWebhook(webhookObject: webhookId))
+            callback(DiscordWebhook(webhookObject: webhook))
         })
     }
 
@@ -183,17 +169,10 @@ public extension DiscordEndpoint {
             args: guildId)
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            guard let data = data, response?.statusCode == 200 else {
+            guard case let .array(webhooks)? = self.jsonFromResponse(data: data, response: response) else {
                 callback([])
 
                 return
-            }
-
-            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                case let .array(webhooks) = json else {
-                    callback([])
-
-                    return
             }
 
             callback(DiscordWebhook.webhooksFromArray(webhooks as! [[String: Any]]))
@@ -238,20 +217,13 @@ public extension DiscordEndpoint {
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .webhook, parameters: ["webhook.id": webhookId])
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            guard let data = data, response?.statusCode == 200 else {
+            guard case let .object(webhook)? = self.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
 
                 return
             }
 
-            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                case let .dictionary(webhookId) = json else {
-                    callback(nil)
-
-                    return
-            }
-
-            callback(DiscordWebhook(webhookObject: webhookId))
+            callback(DiscordWebhook(webhookObject: webhook))
         })
     }
 }

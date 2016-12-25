@@ -25,8 +25,9 @@ public extension DiscordEndpoint {
 
         - parameter invite: The invite code to accept
         - parameter with: The token to authenticate to Discord with
+        - parameter callback: An optional callback containing the accepted invite, if successful
     */
-    public static func acceptInvite(_ invite: String, with token: DiscordToken) {
+    public static func acceptInvite(_ invite: String, with token: DiscordToken, callback: ((DiscordInvite?) -> Void)?) {
         var request = createRequest(with: token, for: .invites, replacing: [
             "invite.code": invite,
         ])
@@ -35,7 +36,42 @@ public extension DiscordEndpoint {
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .invites, parameters: ["invite.code": invite])
 
-        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            guard case let .object(invite)? = self.jsonFromResponse(data: data, response: response) else {
+                callback?(nil)
+
+                return
+            }
+
+            callback?(DiscordInvite(inviteObject: invite))
+        })
+    }
+
+    /**
+        Deletes an invite.
+
+        - parameter invite: The invite code to delete
+        - parameter with: The token to authenticate to Discord with
+        - parameter callback: An optional callback containing the deleted invite, if successful
+    */
+    public static func deleteInvite(_ invite: String, with token: DiscordToken, callback: ((DiscordInvite?) -> Void)?) {
+        var request = createRequest(with: token, for: .invites, replacing: [
+            "invite.code": invite,
+        ])
+
+        request.httpMethod = "DELETE"
+
+        let rateLimiterKey = DiscordRateLimitKey(endpoint: .invites, parameters: ["invite.code": invite])
+
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            guard case let .object(invite)? = self.jsonFromResponse(data: data, response: response) else {
+                callback?(nil)
+
+                return
+            }
+
+            callback?(DiscordInvite(inviteObject: invite))
+        })
     }
 
     /**
@@ -56,17 +92,10 @@ public extension DiscordEndpoint {
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .invites, parameters: ["invite.code": invite])
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            guard let data = data, response?.statusCode == 200 else {
+            guard case let .object(invite)? = self.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
 
                 return
-            }
-
-            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                case let .dictionary(invite) = json else {
-                    callback(nil)
-
-                    return
             }
 
             callback(DiscordInvite(inviteObject: invite))

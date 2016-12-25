@@ -150,6 +150,9 @@ public struct DiscordEndpointOptions {
 	GET methods also take a callback.
 
 	All requests through this enum are rate limited.
+
+	**NOTE**: Callbacks from methods on this enum are *NOT* executed on the client's handleQueue. So it is important
+	that if you make modifications to the client inside of a callback, you first dispatch back on the handleQueue.
 */
 public enum DiscordEndpoint : String {
 	/// The base url for the Discord REST API.
@@ -291,5 +294,14 @@ public enum DiscordEndpoint : String {
 		com.queryItems = getParams.map({ URLQueryItem(name: $0.key, value: $0.value) })
 
 		return com.url!
+	}
+
+	static func jsonFromResponse(data: Data?, response: HTTPURLResponse?) -> JSON? {
+		guard let data = data, let response = response, (response.statusCode == 200 || response.statusCode == 201),
+				let stringData = String(data: data, encoding: .utf8) else {
+			return nil
+		}
+
+		return decodeJSON(stringData)
 	}
 }

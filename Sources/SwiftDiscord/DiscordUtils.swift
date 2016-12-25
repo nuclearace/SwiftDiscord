@@ -140,7 +140,7 @@ func decodeJSON(_ string: String) -> JSON? {
 
 	switch json {
 	case let dictionary as [String: Any]:
-		return .dictionary(dictionary)
+		return .object(dictionary)
 	case let array as [Any]:
 		return .array(array)
 	default:
