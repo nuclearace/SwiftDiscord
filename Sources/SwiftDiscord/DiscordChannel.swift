@@ -180,10 +180,11 @@ func channelFromObject(_ object: [String: Any]) -> DiscordChannel? {
     }
 }
 
-func privateChannelsFromArray(_ channels: [[String: Any]]) -> [String: DiscordChannel] {
+func privateChannelsFromArray(_ channels: [[String: Any]], client: DiscordClient) -> [String: DiscordChannel] {
     var channelDict = [String: DiscordChannel]()
 
-    for case let channel? in channels.map(channelFromObject) {
+    for case var channel? in channels.map(channelFromObject) {
+        channel.client = client
         channelDict[channel.id] = channel
     }
 

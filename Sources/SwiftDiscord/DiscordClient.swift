@@ -175,6 +175,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		} else if let dmChannel = directChannels[channelId] {
 			channel = dmChannel
 		} else {
+			DefaultDiscordLogger.Logger.debug("Couldn't find channel %@", type: logType, args: channelId)
+
 			return nil
 		}
 
@@ -746,7 +748,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		}
 
 		if let privateChannels = data["private_channels"] as? [[String: Any]] {
-			for (id, channel) in privateChannelsFromArray(privateChannels) {
+			for (id, channel) in privateChannelsFromArray(privateChannels, client: self) {
 				self.directChannels.updateValue(channel, forKey: id)
 			}
 		}
