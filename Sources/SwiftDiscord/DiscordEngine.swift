@@ -293,6 +293,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			handleHello(payload)
 		case .invalidSession:
 			handleInvalidSession()
+		case .heartbeatAck:
+			DefaultDiscordLogger.Logger.debug("Got heartback ack", type: logType)
 		default:
 			error(message: "Unhandled payload: \(payload.code)")
 		}
