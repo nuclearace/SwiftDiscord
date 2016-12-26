@@ -50,6 +50,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// A callback function to listen for voice packets.
 	public var onVoiceData: (DiscordVoiceData) -> Void = {_ in }
 
+	/// Whether large guilds should have their users fetched as soon as they are created.
+	public var fillLargeGuilds = false
+
+	/// Whether we should query the API for users who aren't in the guild
+	public var fillUsers = false
+
 	/// Whether how many shards this client should spawn. Default is one.
 	public var shards = 1
 
@@ -104,6 +110,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 				DefaultDiscordLogger.Logger = logger
 			case let .shards(shards):
 				self.shards = shards
+			case .fillLargeGuilds:
+				fillLargeGuilds = true
+			case .fillUsers:
+				fillUsers = true
 			}
 		}
 
@@ -459,6 +469,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		guilds[guild.id] = guild
 
 		handleEvent("guildCreate", with: [guild.id, guild])
+
+		guard fillLargeGuilds && guild.large else { return }
+
+		// Fill this guild with users immediately
+		DefaultDiscordLogger.Logger.verbose("Fill large guild with all users", type: logType)
+
+		requestAllUsers(on: guild.id)
 	}
 
 	/**
@@ -704,7 +721,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	open func handlePresenceUpdate(with data: [String: Any]) {
 		// DefaultDiscordLogger.Logger.debug("Handling presence update", type: logType)
 
-		guard let guildId = data["guild_id"] as? String else { return }
+		guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
 		guard let user = data["user"] as? [String: Any] else { return }
 		guard let userId = user["id"] as? String else { return }
 
@@ -718,9 +735,22 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		// DefaultDiscordLogger.Logger.debug("Updated presence: %@", type: logType, args: presence!)
 
-		guilds[guildId]?.presences[userId] = presence!
+		guild.presences[userId] = presence!
 
 		handleEvent("presenceUpdate", with: [guildId, presence!])
+
+		guard guild.members[userId] == nil && fillUsers else { return }
+
+		// Client wants us to fetch new users
+		DefaultDiscordLogger.Logger.debug("Should get member; pull from the API", type: logType)
+
+		DispatchQueue.global().async {
+			guard let member = guild.getGuildMember(userId) else { return }
+
+			self.handleQueue.async {
+				guild.members[userId] = member
+			}
+		}
 	}
 
 	/**

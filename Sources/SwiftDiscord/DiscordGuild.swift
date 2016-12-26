@@ -181,6 +181,34 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 		return bannedUsers
 	}
 
+	/**
+		Gets a guild member by their user id.
+
+		**NOTE**: This is a blocking method. If you need an async version user the `getGuildMember` method from
+		`DiscordEndpointConsumer`, which is available on `DiscordClient`.
+
+		- parameter userId: The user id of the member to get
+		- returns: The guild member, if one was found
+	*/
+	public func getGuildMember(_ userId: String) -> DiscordGuildMember? {
+		guard let client = self.client else { return nil }
+
+		let lock = DispatchSemaphore(value: 0)
+		var guildMember: DiscordGuildMember?
+
+		client.getGuildMember(by: userId, on: id) {member in
+			DefaultDiscordLogger.Logger.debug("Got member: %@", type: "DiscordGuild", args: userId)
+
+			guildMember = member
+
+			lock.signal()
+		}
+
+		lock.wait()
+
+		return guildMember
+	}
+
 	// Used to setup initial guilds
 	static func guildsFromArray(_ guilds: [[String: Any]], client: DiscordClient? = nil) -> [String: DiscordGuild] {
 		var guildDictionary = [String: DiscordGuild]()
