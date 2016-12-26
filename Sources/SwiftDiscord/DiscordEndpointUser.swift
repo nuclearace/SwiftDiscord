@@ -45,17 +45,10 @@ public extension DiscordEndpoint {
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .userChannels, parameters: ["me": user])
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            guard let data = data, response?.statusCode == 200 else {
+            guard case let .object(channel)? = self.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
 
                 return
-            }
-
-            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                case let .dictionary(channel) = json else {
-                    callback(nil)
-
-                    return
             }
 
             callback(DiscordDMChannel(dmObject: channel))
@@ -79,17 +72,10 @@ public extension DiscordEndpoint {
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .userChannels, parameters: ["me": user])
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            guard let data = data, response?.statusCode == 200 else {
+            guard case let .array(channels)? = self.jsonFromResponse(data: data, response: response) else {
                 callback([:])
 
                 return
-            }
-
-            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                case let .array(channels) = json else {
-                    callback([:])
-
-                    return
             }
 
             DefaultDiscordLogger.Logger.debug("Got DMChannels: %@", type: "DiscordEndpointUser", args: channels)
@@ -114,17 +100,10 @@ public extension DiscordEndpoint {
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .userGuilds, parameters: ["me": user])
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            guard let data = data, response?.statusCode == 200 else {
+            guard case let .array(guilds)? = self.jsonFromResponse(data: data, response: response) else {
                 callback([:])
 
                 return
-            }
-
-            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                case let .array(guilds) = json else {
-                    callback([:])
-
-                    return
             }
 
             callback(DiscordUserGuild.userGuildsFromArray(guilds as! [[String: Any]]))

@@ -112,7 +112,7 @@ public struct DiscordGatewayPayload {
 
 extension DiscordGatewayPayload {
 	static func payloadFromString(_ string: String, fromGateway: Bool = true) -> DiscordGatewayPayload? {
-		guard let decodedJSON = decodeJSON(string), case let JSON.dictionary(dictionary) = decodedJSON else {
+		guard let decodedJSON = decodeJSON(string), case let JSON.object(dictionary) = decodedJSON else {
 			return nil
 		}
 

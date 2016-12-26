@@ -30,8 +30,9 @@ public extension DiscordEndpoint {
 
         - parameter guildId: The snowflake id of the guild
         - parameter with: The token to authenticate to Discord with
+        - parameter callback: An optional callback containing the deleted guild, if successful.
     */
-    public static func deleteGuild(_ guildId: String, with token: DiscordToken) {
+    public static func deleteGuild(_ guildId: String, with token: DiscordToken, callback: ((DiscordGuild?) -> Void)?) {
         var request = createRequest(with: token, for: .guilds, replacing: [
             "guild.id": guildId,
         ])
@@ -40,7 +41,15 @@ public extension DiscordEndpoint {
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guilds, parameters: ["guild.id": guildId])
 
-        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            guard case let .object(guild)? = self.jsonFromResponse(data: data, response: response) else {
+                callback?(nil)
+
+                return
+            }
+
+            callback?(DiscordGuild(guildObject: guild, client: nil))
+        })
     }
 
     /**
@@ -49,9 +58,10 @@ public extension DiscordEndpoint {
         - parameter guildId: The snowflake id of the guild
         - parameter options: An array of `DiscordEndpointOptions.ModifyGuild` options
         - parameter with: The token to authenticate to Discord with
+        - parameter callback: An optional callback containing the modified guild, if successful.
     */
     public static func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild],
-            with token: DiscordToken) {
+            with token: DiscordToken, callback: ((DiscordGuild?) -> Void)?) {
         var modifyJSON: [String: Any] = [:]
 
         for option in options {
@@ -92,7 +102,15 @@ public extension DiscordEndpoint {
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guilds, parameters: ["guild.id": guildId])
 
-        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            guard case let .object(guild)? = self.jsonFromResponse(data: data, response: response) else {
+                callback?(nil)
+
+                return
+            }
+
+            callback?(DiscordGuild(guildObject: guild, client: nil))
+        })
     }
 
     // Guild Channels
@@ -103,9 +121,11 @@ public extension DiscordEndpoint {
         - parameter guildId: The snowflake id of the guild
         - parameter options: An array of `DiscordEndpointOptions.GuildCreateChannel` options
         - parameter with: The token to authenticate to Discord with
+        - parameter callback: An optional callback containing the new channel, if successful.
+
     */
     public static func createGuildChannel(_ guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel],
-            with token: DiscordToken) {
+            with token: DiscordToken, callback: ((DiscordGuildChannel?) -> Void)?) {
         var createJSON: [String: Any] = [:]
 
         for option in options {
@@ -140,7 +160,15 @@ public extension DiscordEndpoint {
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildChannels, parameters: ["guild.id": guildId])
 
-        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            guard case let .object(channel)? = self.jsonFromResponse(data: data, response: response) else {
+                callback?(nil)
+
+                return
+            }
+
+            callback?(DiscordGuildChannel(guildChannelObject: channel))
+        })
     }
 
     /**
@@ -159,17 +187,10 @@ public extension DiscordEndpoint {
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildChannels, parameters: ["guild.id": guildId])
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            guard let data = data, response?.statusCode == 200 else {
+            guard case let .array(channels)? = self.jsonFromResponse(data: data, response: response) else {
                 callback([])
 
                 return
-            }
-
-            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                case let .array(channels) = json else {
-                    callback([])
-
-                    return
             }
 
             callback(DiscordGuildChannel.guildChannelsFromArray(channels as! [[String: Any]]).map({ $0.value }))
@@ -183,10 +204,10 @@ public extension DiscordEndpoint {
         - parameter channelPositions: An array of channels that should be reordered. Should contain a dictionary
                                       in the form `["id": channelId, "position": position]`
         - parameter with: The token to authenticate to Discord with
+        - parameter callback: An optional callback containing the modified channels, if successful.
     */
     public static func modifyGuildChannelPositions(on guildId: String, channelPositions: [[String: Any]],
-            with token: DiscordToken) {
-
+            with token: DiscordToken, callback: (([DiscordGuildChannel]) -> Void)?) {
         guard let contentData = encodeJSON(channelPositions)?.data(using: .utf8, allowLossyConversion: false) else {
             return
         }
@@ -202,7 +223,15 @@ public extension DiscordEndpoint {
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildChannels, parameters: ["guild.id": guildId])
 
-        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            guard case let .array(channels)? = self.jsonFromResponse(data: data, response: response) else {
+                callback?([])
+
+                return
+            }
+
+            callback?(DiscordGuildChannel.guildChannelsFromArray(channels as! [[String: Any]]).map({ $0.value }))
+        })
     }
 
     // Guild Members
@@ -227,17 +256,10 @@ public extension DiscordEndpoint {
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildMembers, parameters: ["guild.id": guildId])
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            guard let data = data, response?.statusCode == 200 else {
+            guard case let .object(member)? = self.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
 
                 return
-            }
-
-            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                case let .dictionary(member) = json else {
-                    callback(nil)
-
-                    return
             }
 
             callback(DiscordGuildMember(guildMemberObject: member))
@@ -273,17 +295,10 @@ public extension DiscordEndpoint {
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildMembers, parameters: ["guild.id": guildId])
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            guard let data = data, response?.statusCode == 200 else {
+            guard case let .array(members)? = self.jsonFromResponse(data: data, response: response) else {
                 callback([])
 
                 return
-            }
-
-            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                case let .array(members) = json else {
-                    callback([])
-
-                    return
             }
 
             let guildMembers = DiscordGuildMember.guildMembersFromArray(members as! [[String: Any]])
@@ -310,17 +325,10 @@ public extension DiscordEndpoint {
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildBans, parameters: ["guild.id": guildId])
 
         DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            guard let data = data, response?.statusCode == 200 else {
+            guard case let .array(bans)? = self.jsonFromResponse(data: data, response: response) else {
                 callback([])
 
                 return
-            }
-
-            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                case let .array(bans) = json else {
-                    callback([])
-
-                    return
             }
 
             DefaultDiscordLogger.Logger.debug("Got guild bans %@", type: "DiscordEndpointGuild", args: bans)
@@ -336,8 +344,10 @@ public extension DiscordEndpoint {
         - parameter on: The snowflake id of the guild
         - parameter deleteMessageDays: The number of days to delete this user's messages
         - parameter with: The token to authenticate to Discord with
+        - parameter callback: An optional callback indicating whether the ban was successful.
     */
-    public static func guildBan(userId: String, on guildId: String, deleteMessageDays: Int, with token: DiscordToken) {
+    public static func guildBan(userId: String, on guildId: String, deleteMessageDays: Int, with token: DiscordToken,
+            callback: ((Bool) -> Void)?) {
         let banJSON = ["delete-message-days": deleteMessageDays]
 
         var request = createRequest(with: token, for: .guildBanUser, replacing: [
@@ -356,7 +366,9 @@ public extension DiscordEndpoint {
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildBans, parameters: ["guild.id": guildId])
 
-        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            callback?(response?.statusCode == 204)
+        })
     }
 
     /**
@@ -365,8 +377,10 @@ public extension DiscordEndpoint {
         - parameter for: The snowflake id of the user
         - parameter on: The snowflake id of the guild
         - parameter with: The token to authenticate to Discord with
+        - parameter callback: An optional callback indicating whether the ban was successfully removed.
     */
-    public static func removeGuildBan(for userId: String, on guildId: String, with token: DiscordToken) {
+    public static func removeGuildBan(for userId: String, on guildId: String, with token: DiscordToken,
+            callback: ((Bool) -> Void)?) {
         var request = createRequest(with: token, for: .guildBanUser, replacing: [
             "guild.id": guildId,
             "user.id": userId
@@ -378,7 +392,9 @@ public extension DiscordEndpoint {
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildBans, parameters: ["guild.id": guildId])
 
-        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            callback?(response?.statusCode == 204)
+        })
     }
 
     // Guild Roles
@@ -392,28 +408,21 @@ public extension DiscordEndpoint {
     */
     public static func createGuildRole(on guildId: String, with token: DiscordToken,
             callback: @escaping (DiscordRole?) -> Void) {
-          var request = createRequest(with: token, for: .guildRoles, replacing: ["guild.id": guildId])
+        var request = createRequest(with: token, for: .guildRoles, replacing: ["guild.id": guildId])
 
-          request.httpMethod = "POST"
+        request.httpMethod = "POST"
 
-          let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildRoles, parameters: ["guild.id": guildId])
+        let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildRoles, parameters: ["guild.id": guildId])
 
-          DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-              guard let data = data, response?.statusCode == 200 || response?.statusCode == 201 else {
-                  callback(nil)
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            guard case let .object(role)? = self.jsonFromResponse(data: data, response: response) else {
+                callback(nil)
 
-                  return
-              }
+                return
+            }
 
-              guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                  case let .dictionary(role) = json else {
-                      callback(nil)
-
-                      return
-              }
-
-              callback(DiscordRole(roleObject: role))
-          })
+            callback(DiscordRole(roleObject: role))
+        })
     }
 
     /**
@@ -425,28 +434,21 @@ public extension DiscordEndpoint {
     */
     public static func getGuildRoles(for guildId: String, with token: DiscordToken,
             callback: @escaping ([DiscordRole]) -> Void) {
-          var request = createRequest(with: token, for: .guildRoles, replacing: ["guild.id": guildId])
+        var request = createRequest(with: token, for: .guildRoles, replacing: ["guild.id": guildId])
 
-          request.httpMethod = "GET"
+        request.httpMethod = "GET"
 
-          let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildRoles, parameters: ["guild.id": guildId])
+        let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildRoles, parameters: ["guild.id": guildId])
 
-          DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-              guard let data = data, response?.statusCode == 200 else {
-                  callback([])
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            guard case let .array(roles)? = self.jsonFromResponse(data: data, response: response) else {
+                callback([])
 
-                  return
-              }
+                return
+            }
 
-              guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
-                  case let .array(roles) = json else {
-                      callback([])
-
-                      return
-              }
-
-              callback(DiscordRole.rolesFromArray(roles as! [[String: Any]]).map({ $0.value }))
-          })
+            callback(DiscordRole.rolesFromArray(roles as! [[String: Any]]).map({ $0.value }))
+        })
     }
 
     /**
@@ -455,8 +457,10 @@ public extension DiscordEndpoint {
         - parameter permissionOverwrite: The new DiscordRole
         - parameter on: The guild that we are editing on
         - parameter with: The token to authenticate to Discord with
+        - parameter callback: An optional callback containing the modified role, if successful.
     */
-    public static func modifyGuildRole(_ role: DiscordRole, on guildId: String, with token: DiscordToken) {
+    public static func modifyGuildRole(_ role: DiscordRole, on guildId: String, with token: DiscordToken,
+            callback: ((DiscordRole?) -> Void)?) {
         let roleJSON = role.json
 
         var request = createRequest(with: token, for: .guildRole, replacing: [
@@ -475,7 +479,15 @@ public extension DiscordEndpoint {
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildRoles, parameters: ["guild.id": guildId])
 
-        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            guard case let .object(role)? = self.jsonFromResponse(data: data, response: response) else {
+                callback?(nil)
+
+                return
+            }
+
+            callback?(DiscordRole(roleObject: role))
+        })
     }
 
     /**
@@ -484,8 +496,10 @@ public extension DiscordEndpoint {
         - parameter roleId: The snowflake id of the role
         - parameter on: The snowflake id of the guild
         - parameter with: The token to authenticate to Discord with
+        - parameter callback: An optional callback containing the deleted role, if successful.
     */
-    public static func removeGuildRole(_ roleId: String, on guildId: String, with token: DiscordToken) {
+    public static func removeGuildRole(_ roleId: String, on guildId: String, with token: DiscordToken,
+            callback: ((DiscordRole?) -> Void)?) {
         var request = createRequest(with: token, for: .guildRole, replacing: [
             "guild.id": guildId,
             "role.id": roleId
@@ -495,6 +509,14 @@ public extension DiscordEndpoint {
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildRoles, parameters: ["guild.id": guildId])
 
-        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in })
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            guard case let .object(role)? = self.jsonFromResponse(data: data, response: response) else {
+                callback?(nil)
+
+                return
+            }
+
+            callback?(DiscordRole(roleObject: role))
+        })
     }
 }
