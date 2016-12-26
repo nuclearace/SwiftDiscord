@@ -352,6 +352,9 @@ GET methods also take a callback.</p>
 
 <p>All requests through this enum are rate limited.</p>
 
+<p><strong>NOTE</strong>: Callbacks from methods on this enum are <em>NOT</em> executed on the client&rsquo;s handleQueue. So it is important
+that if you make modifications to the client inside of a callback, you first dispatch back on the handleQueue.</p>
+
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -1882,9 +1885,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint13deleteChannelFTSS4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/deleteChannel(_:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint13deleteChannelFTSS4withVS_12DiscordToken_T_">deleteChannel(_:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint13deleteChannelFTSS4withVS_12DiscordToken8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteChannel(_:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint13deleteChannelFTSS4withVS_12DiscordToken8callbackGSqFSbT___T_">deleteChannel(_:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1899,7 +1902,7 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -1933,6 +1936,19 @@ GET methods also take a callback.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the channel was deleted.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -1942,9 +1958,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint13modifyChannelFTSS7optionsGSaOVS_22DiscordEndpointOptions13ModifyChannel_4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyChannel(_:options:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint13modifyChannelFTSS7optionsGSaOVS_22DiscordEndpointOptions13ModifyChannel_4withVS_12DiscordToken_T_">modifyChannel(_:options:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint13modifyChannelFTSS7optionsGSaOVS_22DiscordEndpointOptions13ModifyChannel_4withVS_12DiscordToken8callbackGSqFGSqVS_19DiscordGuildChannel_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyChannel(_:options:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint13modifyChannelFTSS7optionsGSaOVS_22DiscordEndpointOptions13ModifyChannel_4withVS_12DiscordToken8callbackGSqFGSqVS_19DiscordGuildChannel_T___T_">modifyChannel(_:options:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1960,7 +1976,7 @@ GET methods also take a callback.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">ModifyChannel</span><span class="p">],</span>
-            <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+            <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2007,6 +2023,19 @@ GET methods also take a callback.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the edited channel, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -2016,9 +2045,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint18bulkDeleteMessagesFTGSaSS_2onSS4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/bulkDeleteMessages(_:on:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint18bulkDeleteMessagesFTGSaSS_2onSS4withVS_12DiscordToken_T_">bulkDeleteMessages(_:on:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint18bulkDeleteMessagesFTGSaSS_2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/bulkDeleteMessages(_:on:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint18bulkDeleteMessagesFTGSaSS_2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_">bulkDeleteMessages(_:on:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2033,7 +2062,8 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">bulkDeleteMessages</span><span class="p">(</span><span class="n">_</span> <span class="nv">messages</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">bulkDeleteMessages</span><span class="p">(</span><span class="n">_</span> <span class="nv">messages</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
+            <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2080,6 +2110,19 @@ GET methods also take a callback.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the messages were deleted.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -2089,9 +2132,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint13deleteMessageFTSS2onSS4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/deleteMessage(_:on:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint13deleteMessageFTSS2onSS4withVS_12DiscordToken_T_">deleteMessage(_:on:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint13deleteMessageFTSS2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteMessage(_:on:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint13deleteMessageFTSS2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_">deleteMessage(_:on:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2106,7 +2149,8 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
+            <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2153,6 +2197,19 @@ GET methods also take a callback.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the message was deleted.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -2162,9 +2219,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint11editMessageFTSS2onSS7contentSS4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/editMessage(_:on:content:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint11editMessageFTSS2onSS7contentSS4withVS_12DiscordToken_T_">editMessage(_:on:content:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint11editMessageFTSS2onSS7contentSS4withVS_12DiscordToken8callbackGSqFGSqVS_14DiscordMessage_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/editMessage(_:on:content:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint11editMessageFTSS2onSS7contentSS4withVS_12DiscordToken8callbackGSqFGSqVS_14DiscordMessage_T___T_">editMessage(_:on:content:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2180,7 +2237,7 @@ GET methods also take a callback.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">editMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
-            <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+            <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2236,6 +2293,19 @@ GET methods also take a callback.</p>
                               <td>
                                 <div>
                                   <p>The token to authenticate to Discord with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the edited message, if successful</p>
 
                                 </div>
                               </td>
@@ -2336,9 +2406,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint11sendMessageFTSS4withVS_12DiscordToken2toSS3ttsSb_T_"></a>
-                    <a name="//apple_ref/swift/Method/sendMessage(_:with:to:tts:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint11sendMessageFTSS4withVS_12DiscordToken2toSS3ttsSb_T_">sendMessage(_:with:to:tts:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint11sendMessageFTSS4withVS_12DiscordToken2toSS3ttsSb8callbackGSqFGSqVS_14DiscordMessage_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/sendMessage(_:with:to:tts:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint11sendMessageFTSS4withVS_12DiscordToken2toSS3ttsSb8callbackGSqFGSqVS_14DiscordMessage_T___T_">sendMessage(_:with:to:tts:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2353,7 +2423,8 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">sendMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="n">to</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">tts</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">sendMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="n">to</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">tts</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span>
+            <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2413,6 +2484,19 @@ GET methods also take a callback.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the message, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -2422,9 +2506,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint8sendFileFTVS_17DiscordFileUpload7contentSS4withVS_12DiscordToken2toSS3ttsSb_T_"></a>
-                    <a name="//apple_ref/swift/Method/sendFile(_:content:with:to:tts:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint8sendFileFTVS_17DiscordFileUpload7contentSS4withVS_12DiscordToken2toSS3ttsSb_T_">sendFile(_:content:with:to:tts:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint8sendFileFTVS_17DiscordFileUpload7contentSS4withVS_12DiscordToken2toSS3ttsSb8callbackGSqFGSqVS_14DiscordMessage_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/sendFile(_:content:with:to:tts:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint8sendFileFTVS_17DiscordFileUpload7contentSS4withVS_12DiscordToken2toSS3ttsSb8callbackGSqFGSqVS_14DiscordMessage_T___T_">sendFile(_:content:with:to:tts:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2440,7 +2524,7 @@ GET methods also take a callback.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">sendFile</span><span class="p">(</span><span class="n">_</span> <span class="nv">file</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordFileUpload.html">DiscordFileUpload</a></span><span class="p">,</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-            <span class="n">to</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">tts</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+            <span class="n">to</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">tts</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2513,6 +2597,19 @@ GET methods also take a callback.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the message, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -2522,9 +2619,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint13triggerTypingFT2onSS4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/triggerTyping(on:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint13triggerTypingFT2onSS4withVS_12DiscordToken_T_">triggerTyping(on:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint13triggerTypingFT2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/triggerTyping(on:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint13triggerTypingFT2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_">triggerTyping(on:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2539,7 +2636,7 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">triggerTyping</span><span class="p">(</span><span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">triggerTyping</span><span class="p">(</span><span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2573,6 +2670,19 @@ GET methods also take a callback.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether typing was triggered.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -2582,9 +2692,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint23deleteChannelPermissionFTSS2onSS4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/deleteChannelPermission(_:on:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint23deleteChannelPermissionFTSS2onSS4withVS_12DiscordToken_T_">deleteChannelPermission(_:on:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint23deleteChannelPermissionFTSS2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteChannelPermission(_:on:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint23deleteChannelPermissionFTSS2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_">deleteChannelPermission(_:on:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2599,7 +2709,8 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteChannelPermission</span><span class="p">(</span><span class="n">_</span> <span class="nv">overwriteId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteChannelPermission</span><span class="p">(</span><span class="n">_</span> <span class="nv">overwriteId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
+            <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2646,6 +2757,19 @@ GET methods also take a callback.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the permission was deleted.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -2655,9 +2779,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint21editChannelPermissionFTVS_26DiscordPermissionOverwrite2onSS4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/editChannelPermission(_:on:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint21editChannelPermissionFTVS_26DiscordPermissionOverwrite2onSS4withVS_12DiscordToken_T_">editChannelPermission(_:on:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint21editChannelPermissionFTVS_26DiscordPermissionOverwrite2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/editChannelPermission(_:on:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint21editChannelPermissionFTVS_26DiscordPermissionOverwrite2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_">editChannelPermission(_:on:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2673,7 +2797,7 @@ GET methods also take a callback.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">editChannelPermission</span><span class="p">(</span><span class="n">_</span> <span class="nv">permissionOverwrite</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
-            <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+            <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2716,6 +2840,19 @@ GET methods also take a callback.</p>
                               <td>
                                 <div>
                                   <p>The token to authenticate to Discord with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the edit was successful.</p>
 
                                 </div>
                               </td>
@@ -2890,9 +3027,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint16addPinnedMessageFTSS2onSS4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/addPinnedMessage(_:on:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint16addPinnedMessageFTSS2onSS4withVS_12DiscordToken_T_">addPinnedMessage(_:on:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint16addPinnedMessageFTSS2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/addPinnedMessage(_:on:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint16addPinnedMessageFTSS2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_">addPinnedMessage(_:on:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2907,7 +3044,8 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">addPinnedMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">addPinnedMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
+            <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2954,6 +3092,19 @@ GET methods also take a callback.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the pinned message was added.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -2963,9 +3114,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint19deletePinnedMessageFTSS2onSS4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/deletePinnedMessage(_:on:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint19deletePinnedMessageFTSS2onSS4withVS_12DiscordToken_T_">deletePinnedMessage(_:on:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint19deletePinnedMessageFTSS2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/deletePinnedMessage(_:on:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint19deletePinnedMessageFTSS2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_">deletePinnedMessage(_:on:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2980,7 +3131,8 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deletePinnedMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deletePinnedMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
+            <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3023,6 +3175,19 @@ GET methods also take a callback.</p>
                               <td>
                                 <div>
                                   <p>The token to authenticate to Discord with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the message was unpinned.</p>
 
                                 </div>
                               </td>
@@ -3121,9 +3286,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint11deleteGuildFTSS4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/deleteGuild(_:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint11deleteGuildFTSS4withVS_12DiscordToken_T_">deleteGuild(_:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint11deleteGuildFTSS4withVS_12DiscordToken8callbackGSqFGSqCS_12DiscordGuild_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteGuild(_:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint11deleteGuildFTSS4withVS_12DiscordToken8callbackGSqFGSqCS_12DiscordGuild_T___T_">deleteGuild(_:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3138,7 +3303,7 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteGuild</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteGuild</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3172,6 +3337,19 @@ GET methods also take a callback.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the deleted guild, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -3181,9 +3359,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint11modifyGuildFTSS7optionsGSaOVS_22DiscordEndpointOptions11ModifyGuild_4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyGuild(_:options:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint11modifyGuildFTSS7optionsGSaOVS_22DiscordEndpointOptions11ModifyGuild_4withVS_12DiscordToken_T_">modifyGuild(_:options:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint11modifyGuildFTSS7optionsGSaOVS_22DiscordEndpointOptions11ModifyGuild_4withVS_12DiscordToken8callbackGSqFGSqCS_12DiscordGuild_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuild(_:options:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint11modifyGuildFTSS7optionsGSaOVS_22DiscordEndpointOptions11ModifyGuild_4withVS_12DiscordToken8callbackGSqFGSqCS_12DiscordGuild_T___T_">modifyGuild(_:options:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3199,7 +3377,7 @@ GET methods also take a callback.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyGuild</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">ModifyGuild</span><span class="p">],</span>
-            <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+            <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3246,6 +3424,19 @@ GET methods also take a callback.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the modified guild, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -3255,9 +3446,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint18createGuildChannelFTSS7optionsGSaOVS_22DiscordEndpointOptions18GuildCreateChannel_4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/createGuildChannel(_:options:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint18createGuildChannelFTSS7optionsGSaOVS_22DiscordEndpointOptions18GuildCreateChannel_4withVS_12DiscordToken_T_">createGuildChannel(_:options:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint18createGuildChannelFTSS7optionsGSaOVS_22DiscordEndpointOptions18GuildCreateChannel_4withVS_12DiscordToken8callbackGSqFGSqVS_19DiscordGuildChannel_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/createGuildChannel(_:options:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint18createGuildChannelFTSS7optionsGSaOVS_22DiscordEndpointOptions18GuildCreateChannel_4withVS_12DiscordToken8callbackGSqFGSqVS_19DiscordGuildChannel_T___T_">createGuildChannel(_:options:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3273,7 +3464,7 @@ GET methods also take a callback.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">createGuildChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">GuildCreateChannel</span><span class="p">],</span>
-            <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+            <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3316,6 +3507,19 @@ GET methods also take a callback.</p>
                               <td>
                                 <div>
                                   <p>The token to authenticate to Discord with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the new channel, if successful.</p>
 
                                 </div>
                               </td>
@@ -3403,9 +3607,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint27modifyGuildChannelPositionsFT2onSS16channelPositionsGSaGVs10DictionarySSP___4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyGuildChannelPositions(on:channelPositions:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint27modifyGuildChannelPositionsFT2onSS16channelPositionsGSaGVs10DictionarySSP___4withVS_12DiscordToken_T_">modifyGuildChannelPositions(on:channelPositions:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint27modifyGuildChannelPositionsFT2onSS16channelPositionsGSaGVs10DictionarySSP___4withVS_12DiscordToken8callbackGSqFGSaVS_19DiscordGuildChannel_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuildChannelPositions(on:channelPositions:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint27modifyGuildChannelPositionsFT2onSS16channelPositionsGSaGVs10DictionarySSP___4withVS_12DiscordToken8callbackGSqFGSaVS_19DiscordGuildChannel_T___T_">modifyGuildChannelPositions(on:channelPositions:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3421,7 +3625,7 @@ GET methods also take a callback.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyGuildChannelPositions</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">channelPositions</span><span class="p">:</span> <span class="p">[[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]],</span>
-            <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+            <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">(([</span><span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3464,6 +3668,19 @@ GET methods also take a callback.</p>
                               <td>
                                 <div>
                                   <p>The token to authenticate to Discord with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the modified channels, if successful.</p>
 
                                 </div>
                               </td>
@@ -3725,9 +3942,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint8guildBanFT6userIdSS2onSS17deleteMessageDaysSi4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/guildBan(userId:on:deleteMessageDays:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint8guildBanFT6userIdSS2onSS17deleteMessageDaysSi4withVS_12DiscordToken_T_">guildBan(userId:on:deleteMessageDays:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint8guildBanFT6userIdSS2onSS17deleteMessageDaysSi4withVS_12DiscordToken8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/guildBan(userId:on:deleteMessageDays:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint8guildBanFT6userIdSS2onSS17deleteMessageDaysSi4withVS_12DiscordToken8callbackGSqFSbT___T_">guildBan(userId:on:deleteMessageDays:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3742,7 +3959,8 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">guildBan</span><span class="p">(</span><span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">deleteMessageDays</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">guildBan</span><span class="p">(</span><span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">deleteMessageDays</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
+            <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3802,6 +4020,19 @@ GET methods also take a callback.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the ban was successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -3811,9 +4042,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint14removeGuildBanFT3forSS2onSS4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/removeGuildBan(for:on:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint14removeGuildBanFT3forSS2onSS4withVS_12DiscordToken_T_">removeGuildBan(for:on:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint14removeGuildBanFT3forSS2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/removeGuildBan(for:on:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint14removeGuildBanFT3forSS2onSS4withVS_12DiscordToken8callbackGSqFSbT___T_">removeGuildBan(for:on:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3828,7 +4059,8 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">removeGuildBan</span><span class="p">(</span><span class="k">for</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">removeGuildBan</span><span class="p">(</span><span class="k">for</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
+            <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3871,6 +4103,19 @@ GET methods also take a callback.</p>
                               <td>
                                 <div>
                                   <p>The token to authenticate to Discord with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the ban was successfully removed.</p>
 
                                 </div>
                               </td>
@@ -4032,9 +4277,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint15modifyGuildRoleFTVS_11DiscordRole2onSS4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyGuildRole(_:on:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint15modifyGuildRoleFTVS_11DiscordRole2onSS4withVS_12DiscordToken_T_">modifyGuildRole(_:on:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint15modifyGuildRoleFTVS_11DiscordRole2onSS4withVS_12DiscordToken8callbackGSqFGSqS1__T___T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuildRole(_:on:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint15modifyGuildRoleFTVS_11DiscordRole2onSS4withVS_12DiscordToken8callbackGSqFGSqS1__T___T_">modifyGuildRole(_:on:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -4049,7 +4294,8 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">role</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">role</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
+            <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -4096,6 +4342,19 @@ GET methods also take a callback.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the modified role, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -4105,9 +4364,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint15removeGuildRoleFTSS2onSS4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/removeGuildRole(_:on:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint15removeGuildRoleFTSS2onSS4withVS_12DiscordToken_T_">removeGuildRole(_:on:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint15removeGuildRoleFTSS2onSS4withVS_12DiscordToken8callbackGSqFGSqVS_11DiscordRole_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/removeGuildRole(_:on:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint15removeGuildRoleFTSS2onSS4withVS_12DiscordToken8callbackGSqFGSqVS_11DiscordRole_T___T_">removeGuildRole(_:on:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -4122,7 +4381,8 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">removeGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">removeGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
+            <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -4169,6 +4429,19 @@ GET methods also take a callback.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the deleted role, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -4189,9 +4462,9 @@ GET methods also take a callback.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint12acceptInviteFTSS4withVS_12DiscordToken_T_"></a>
-                    <a name="//apple_ref/swift/Method/acceptInvite(_:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint12acceptInviteFTSS4withVS_12DiscordToken_T_">acceptInvite(_:with:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint12acceptInviteFTSS4withVS_12DiscordToken8callbackGSqFGSqVS_13DiscordInvite_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/acceptInvite(_:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint12acceptInviteFTSS4withVS_12DiscordToken8callbackGSqFGSqVS_13DiscordInvite_T___T_">acceptInvite(_:with:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -4206,7 +4479,7 @@ GET methods also take a callback.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">acceptInvite</span><span class="p">(</span><span class="n">_</span> <span class="nv">invite</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">acceptInvite</span><span class="p">(</span><span class="n">_</span> <span class="nv">invite</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -4236,6 +4509,92 @@ GET methods also take a callback.</p>
                               <td>
                                 <div>
                                   <p>The token to authenticate to Discord with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the accepted invite, if successful</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint12deleteInviteFTSS4withVS_12DiscordToken8callbackGSqFGSqVS_13DiscordInvite_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteInvite(_:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint12deleteInviteFTSS4withVS_12DiscordToken8callbackGSqFGSqVS_13DiscordInvite_T___T_">deleteInvite(_:with:callback:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Deletes an invite.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteInvite</span><span class="p">(</span><span class="n">_</span> <span class="nv">invite</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>invite</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The invite code to delete</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The token to authenticate to Discord with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the deleted invite, if successful</p>
 
                                 </div>
                               </td>
@@ -4571,7 +4930,7 @@ GET methods also take a callback.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-25)</p>
+          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-26)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

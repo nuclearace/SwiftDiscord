@@ -346,6 +346,9 @@
 
 <p>This is where a <code><a href="../Classes/DiscordClient.html">DiscordClient</a></code> gets the methods that interact with the REST API.</p>
 
+<p><strong>NOTE</strong>: Callbacks from the default implementations are <em>NOT</em> executed on the client&rsquo;s handleQueue. So it is important
+that if you make modifications to the client inside of a callback, you first dispatch back on the handleQueue.</p>
+
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -360,9 +363,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer16addPinnedMessageFTSS2onSS_T_"></a>
-                    <a name="//apple_ref/swift/Method/addPinnedMessage(_:on:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer16addPinnedMessageFTSS2onSS_T_">addPinnedMessage(_:on:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer16addPinnedMessageFTSS2onSS8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/addPinnedMessage(_:on:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer16addPinnedMessageFTSS2onSS8callbackGSqFSbT___T_">addPinnedMessage(_:on:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -385,7 +388,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">addPinnedMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">addPinnedMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -419,6 +422,19 @@
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the pinned message was added.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -428,9 +444,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer18bulkDeleteMessagesFTGSaSS_2onSS_T_"></a>
-                    <a name="//apple_ref/swift/Method/bulkDeleteMessages(_:on:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer18bulkDeleteMessagesFTGSaSS_2onSS_T_">bulkDeleteMessages(_:on:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer18bulkDeleteMessagesFTGSaSS_2onSS8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/bulkDeleteMessages(_:on:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer18bulkDeleteMessagesFTGSaSS_2onSS8callbackGSqFSbT___T_">bulkDeleteMessages(_:on:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -453,7 +469,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">bulkDeleteMessages</span><span class="p">(</span><span class="n">_</span> <span class="nv">messages</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">bulkDeleteMessages</span><span class="p">(</span><span class="n">_</span> <span class="nv">messages</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -483,6 +499,19 @@
                               <td>
                                 <div>
                                   <p>The channel that we are deleting on</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the messages were deleted.</p>
 
                                 </div>
                               </td>
@@ -577,9 +606,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteChannelFSST_"></a>
-                    <a name="//apple_ref/swift/Method/deleteChannel(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteChannelFSST_">deleteChannel(_:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteChannelFTSS8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteChannel(_:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteChannelFTSS8callbackGSqFSbT___T_">deleteChannel(_:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -602,7 +631,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -623,6 +652,19 @@
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the channel was deleted.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -632,9 +674,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer23deleteChannelPermissionFTSS2onSS_T_"></a>
-                    <a name="//apple_ref/swift/Method/deleteChannelPermission(_:on:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer23deleteChannelPermissionFTSS2onSS_T_">deleteChannelPermission(_:on:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer23deleteChannelPermissionFTSS2onSS8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteChannelPermission(_:on:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer23deleteChannelPermissionFTSS2onSS8callbackGSqFSbT___T_">deleteChannelPermission(_:on:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -657,7 +699,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteChannelPermission</span><span class="p">(</span><span class="n">_</span> <span class="nv">overwriteId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteChannelPermission</span><span class="p">(</span><span class="n">_</span> <span class="nv">overwriteId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -691,6 +733,19 @@
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the permission was deleted.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -700,9 +755,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteMessageFTSS2onSS_T_"></a>
-                    <a name="//apple_ref/swift/Method/deleteMessage(_:on:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteMessageFTSS2onSS_T_">deleteMessage(_:on:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteMessageFTSS2onSS8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteMessage(_:on:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteMessageFTSS2onSS8callbackGSqFSbT___T_">deleteMessage(_:on:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -725,7 +780,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -759,6 +814,19 @@
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the message was deleted.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -768,9 +836,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer19deletePinnedMessageFTSS2onSS_T_"></a>
-                    <a name="//apple_ref/swift/Method/deletePinnedMessage(_:on:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer19deletePinnedMessageFTSS2onSS_T_">deletePinnedMessage(_:on:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer19deletePinnedMessageFTSS2onSS8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/deletePinnedMessage(_:on:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer19deletePinnedMessageFTSS2onSS8callbackGSqFSbT___T_">deletePinnedMessage(_:on:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -793,7 +861,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deletePinnedMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deletePinnedMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -823,6 +891,19 @@
                               <td>
                                 <div>
                                   <p>The channel that we are unpinning on</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the message was unpinned.</p>
 
                                 </div>
                               </td>
@@ -904,9 +985,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11editMessageFTSS2onSS7contentSS_T_"></a>
-                    <a name="//apple_ref/swift/Method/editMessage(_:on:content:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11editMessageFTSS2onSS7contentSS_T_">editMessage(_:on:content:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11editMessageFTSS2onSS7contentSS8callbackGSqFGSqVS_14DiscordMessage_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/editMessage(_:on:content:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11editMessageFTSS2onSS7contentSS8callbackGSqFGSqVS_14DiscordMessage_T___T_">editMessage(_:on:content:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -929,7 +1010,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">editMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">editMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -976,6 +1057,19 @@
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the edited message, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -985,9 +1079,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer21editChannelPermissionFTVS_26DiscordPermissionOverwrite2onSS_T_"></a>
-                    <a name="//apple_ref/swift/Method/editChannelPermission(_:on:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer21editChannelPermissionFTVS_26DiscordPermissionOverwrite2onSS_T_">editChannelPermission(_:on:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer21editChannelPermissionFTVS_26DiscordPermissionOverwrite2onSS8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/editChannelPermission(_:on:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer21editChannelPermissionFTVS_26DiscordPermissionOverwrite2onSS8callbackGSqFSbT___T_">editChannelPermission(_:on:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -1010,7 +1104,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">editChannelPermission</span><span class="p">(</span><span class="n">_</span> <span class="nv">permissionOverwrite</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">editChannelPermission</span><span class="p">(</span><span class="n">_</span> <span class="nv">permissionOverwrite</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -1040,6 +1134,19 @@
                               <td>
                                 <div>
                                   <p>The channel that we are editing on</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the edit was successful.</p>
 
                                 </div>
                               </td>
@@ -1202,9 +1309,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13modifyChannelFTSS7optionsGSaOVS_22DiscordEndpointOptions13ModifyChannel__T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyChannel(_:options:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13modifyChannelFTSS7optionsGSaOVS_22DiscordEndpointOptions13ModifyChannel__T_">modifyChannel(_:options:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13modifyChannelFTSS7optionsGSaOVS_22DiscordEndpointOptions13ModifyChannel_8callbackGSqFGSqVS_19DiscordGuildChannel_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyChannel(_:options:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13modifyChannelFTSS7optionsGSaOVS_22DiscordEndpointOptions13ModifyChannel_8callbackGSqFGSqVS_19DiscordGuildChannel_T___T_">modifyChannel(_:options:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -1227,7 +1334,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">ModifyChannel</span><span class="p">])</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">ModifyChannel</span><span class="p">],</span></code></pre>
 
                         </div>
                       </div>
@@ -1257,6 +1364,19 @@
                               <td>
                                 <div>
                                   <p>An array of <code>DiscordEndpointOptions.ModifyChannel</code> options</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the edited guild channel, if successful.</p>
 
                                 </div>
                               </td>
@@ -1338,9 +1458,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11sendMessageFTSS2toSS3ttsSb_T_"></a>
-                    <a name="//apple_ref/swift/Method/sendMessage(_:to:tts:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11sendMessageFTSS2toSS3ttsSb_T_">sendMessage(_:to:tts:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11sendMessageFTSS2toSS3ttsSb8callbackGSqFGSqVS_14DiscordMessage_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/sendMessage(_:to:tts:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11sendMessageFTSS2toSS3ttsSb8callbackGSqFGSqVS_14DiscordMessage_T___T_">sendMessage(_:to:tts:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -1363,7 +1483,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">sendMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">message</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">to</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">tts</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">sendMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">message</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">to</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">tts</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -1410,6 +1530,19 @@
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the message, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -1419,9 +1552,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer8sendFileFTVS_17DiscordFileUpload7contentSS2toSS3ttsSb_T_"></a>
-                    <a name="//apple_ref/swift/Method/sendFile(_:content:to:tts:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer8sendFileFTVS_17DiscordFileUpload7contentSS2toSS3ttsSb_T_">sendFile(_:content:to:tts:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer8sendFileFTVS_17DiscordFileUpload7contentSS2toSS3ttsSb8callbackGSqFGSqVS_14DiscordMessage_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/sendFile(_:content:to:tts:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer8sendFileFTVS_17DiscordFileUpload7contentSS2toSS3ttsSb8callbackGSqFGSqVS_14DiscordMessage_T___T_">sendFile(_:content:to:tts:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -1444,7 +1577,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">sendFile</span><span class="p">(</span><span class="n">_</span> <span class="nv">file</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordFileUpload.html">DiscordFileUpload</a></span><span class="p">,</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">to</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">tts</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">sendFile</span><span class="p">(</span><span class="n">_</span> <span class="nv">file</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordFileUpload.html">DiscordFileUpload</a></span><span class="p">,</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">to</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">tts</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -1504,6 +1637,19 @@
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the message, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -1513,9 +1659,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13triggerTypingFT2onSS_T_"></a>
-                    <a name="//apple_ref/swift/Method/triggerTyping(on:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13triggerTypingFT2onSS_T_">triggerTyping(on:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13triggerTypingFT2onSS8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/triggerTyping(on:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13triggerTypingFT2onSS8callbackGSqFSbT___T_">triggerTyping(on:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -1538,7 +1684,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">triggerTyping</span><span class="p">(</span><span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">triggerTyping</span><span class="p">(</span><span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -1555,6 +1701,19 @@
                               <td>
                                 <div>
                                   <p>The snowflake id of the channel to send to</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether typing was triggered.</p>
 
                                 </div>
                               </td>
@@ -1579,9 +1738,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer18createGuildChannelFT2onSS7optionsGSaOVS_22DiscordEndpointOptions18GuildCreateChannel__T_"></a>
-                    <a name="//apple_ref/swift/Method/createGuildChannel(on:options:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer18createGuildChannelFT2onSS7optionsGSaOVS_22DiscordEndpointOptions18GuildCreateChannel__T_">createGuildChannel(on:options:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer18createGuildChannelFT2onSS7optionsGSaOVS_22DiscordEndpointOptions18GuildCreateChannel_8callbackGSqFGSqVS_19DiscordGuildChannel_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/createGuildChannel(on:options:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer18createGuildChannelFT2onSS7optionsGSaOVS_22DiscordEndpointOptions18GuildCreateChannel_8callbackGSqFGSqVS_19DiscordGuildChannel_T___T_">createGuildChannel(on:options:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -1604,7 +1763,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">createGuildChannel</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">GuildCreateChannel</span><span class="p">])</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">createGuildChannel</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">GuildCreateChannel</span><span class="p">],</span></code></pre>
 
                         </div>
                       </div>
@@ -1634,6 +1793,19 @@
                               <td>
                                 <div>
                                   <p>An array of <code>DiscordEndpointOptions.GuildCreateChannel</code> options</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the new channel, if successful.</p>
 
                                 </div>
                               </td>
@@ -1715,9 +1887,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11deleteGuildFSST_"></a>
-                    <a name="//apple_ref/swift/Method/deleteGuild(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11deleteGuildFSST_">deleteGuild(_:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11deleteGuildFTSS8callbackGSqFGSqCS_12DiscordGuild_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteGuild(_:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11deleteGuildFTSS8callbackGSqFGSqCS_12DiscordGuild_T___T_">deleteGuild(_:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -1740,7 +1912,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteGuild</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteGuild</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -1757,6 +1929,19 @@
                               <td>
                                 <div>
                                   <p>The snowflake id of the guild</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the deleted guild, if successful.</p>
 
                                 </div>
                               </td>
@@ -2136,9 +2321,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer8guildBanFT6userIdSS2onSS17deleteMessageDaysSi_T_"></a>
-                    <a name="//apple_ref/swift/Method/guildBan(userId:on:deleteMessageDays:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer8guildBanFT6userIdSS2onSS17deleteMessageDaysSi_T_">guildBan(userId:on:deleteMessageDays:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer8guildBanFT6userIdSS2onSS17deleteMessageDaysSi8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/guildBan(userId:on:deleteMessageDays:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer8guildBanFT6userIdSS2onSS17deleteMessageDaysSi8callbackGSqFSbT___T_">guildBan(userId:on:deleteMessageDays:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -2161,7 +2346,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">guildBan</span><span class="p">(</span><span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">deleteMessageDays</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">guildBan</span><span class="p">(</span><span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">deleteMessageDays</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2208,6 +2393,19 @@
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the ban was successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -2217,9 +2415,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11modifyGuildFTSS7optionsGSaOVS_22DiscordEndpointOptions11ModifyGuild__T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyGuild(_:options:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11modifyGuildFTSS7optionsGSaOVS_22DiscordEndpointOptions11ModifyGuild__T_">modifyGuild(_:options:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11modifyGuildFTSS7optionsGSaOVS_22DiscordEndpointOptions11ModifyGuild_8callbackGSqFGSqCS_12DiscordGuild_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuild(_:options:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11modifyGuildFTSS7optionsGSaOVS_22DiscordEndpointOptions11ModifyGuild_8callbackGSqFGSqCS_12DiscordGuild_T___T_">modifyGuild(_:options:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -2242,7 +2440,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuild</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">ModifyGuild</span><span class="p">])</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuild</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">ModifyGuild</span><span class="p">],</span></code></pre>
 
                         </div>
                       </div>
@@ -2276,6 +2474,19 @@
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the modified guild, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -2285,9 +2496,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer27modifyGuildChannelPositionsFT2onSS16channelPositionsGSaGVs10DictionarySSP____T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyGuildChannelPositions(on:channelPositions:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer27modifyGuildChannelPositionsFT2onSS16channelPositionsGSaGVs10DictionarySSP____T_">modifyGuildChannelPositions(on:channelPositions:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer27modifyGuildChannelPositionsFT2onSS16channelPositionsGSaGVs10DictionarySSP___8callbackGSqFGSaVS_19DiscordGuildChannel_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuildChannelPositions(on:channelPositions:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer27modifyGuildChannelPositionsFT2onSS16channelPositionsGSaGVs10DictionarySSP___8callbackGSqFGSaVS_19DiscordGuildChannel_T___T_">modifyGuildChannelPositions(on:channelPositions:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -2310,7 +2521,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuildChannelPositions</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">channelPositions</span><span class="p">:</span> <span class="p">[[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]])</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuildChannelPositions</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">channelPositions</span><span class="p">:</span> <span class="p">[[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]],</span></code></pre>
 
                         </div>
                       </div>
@@ -2344,6 +2555,19 @@
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the modified channels, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -2353,9 +2577,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer15modifyGuildRoleFTVS_11DiscordRole2onSS_T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyGuildRole(_:on:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer15modifyGuildRoleFTVS_11DiscordRole2onSS_T_">modifyGuildRole(_:on:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer15modifyGuildRoleFTVS_11DiscordRole2onSS8callbackGSqFGSqS1__T___T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuildRole(_:on:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer15modifyGuildRoleFTVS_11DiscordRole2onSS8callbackGSqFGSqS1__T___T_">modifyGuildRole(_:on:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -2378,7 +2602,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">role</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">role</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2412,6 +2636,19 @@
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the modified role, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -2421,9 +2658,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer14removeGuildBanFT3forSS2onSS_T_"></a>
-                    <a name="//apple_ref/swift/Method/removeGuildBan(for:on:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer14removeGuildBanFT3forSS2onSS_T_">removeGuildBan(for:on:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer14removeGuildBanFT3forSS2onSS8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/removeGuildBan(for:on:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer14removeGuildBanFT3forSS2onSS8callbackGSqFSbT___T_">removeGuildBan(for:on:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -2446,7 +2683,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">removeGuildBan</span><span class="p">(</span><span class="k">for</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">removeGuildBan</span><span class="p">(</span><span class="k">for</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2480,6 +2717,19 @@
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the ban was successfully removed.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -2489,9 +2739,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer15removeGuildRoleFTSS2onSS_T_"></a>
-                    <a name="//apple_ref/swift/Method/removeGuildRole(_:on:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer15removeGuildRoleFTSS2onSS_T_">removeGuildRole(_:on:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer15removeGuildRoleFTSS2onSS8callbackGSqFGSqVS_11DiscordRole_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/removeGuildRole(_:on:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer15removeGuildRoleFTSS2onSS8callbackGSqFGSqVS_11DiscordRole_T___T_">removeGuildRole(_:on:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -2514,7 +2764,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">removeGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">removeGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2544,6 +2794,19 @@
                               <td>
                                 <div>
                                   <p>The snowflake id of the guild</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the removed role, if successful.</p>
 
                                 </div>
                               </td>
@@ -3004,9 +3267,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer12acceptInviteFSST_"></a>
-                    <a name="//apple_ref/swift/Method/acceptInvite(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer12acceptInviteFSST_">acceptInvite(_:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer12acceptInviteFTSS8callbackGSqFGSqVS_13DiscordInvite_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/acceptInvite(_:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer12acceptInviteFTSS8callbackGSqFGSqVS_13DiscordInvite_T___T_">acceptInvite(_:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -3029,7 +3292,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">acceptInvite</span><span class="p">(</span><span class="n">_</span> <span class="nv">invite</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">acceptInvite</span><span class="p">(</span><span class="n">_</span> <span class="nv">invite</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3046,6 +3309,87 @@
                               <td>
                                 <div>
                                   <p>The invite code to accept</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the accepted invite, if successful</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer12deleteInviteFTSS8callbackGSqFGSqVS_13DiscordInvite_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteInvite(_:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer12deleteInviteFTSS8callbackGSqFGSqVS_13DiscordInvite_T___T_">deleteInvite(_:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Deletes an invite.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default implementation</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteInvite</span><span class="p">(</span><span class="n">_</span> <span class="nv">invite</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>invite</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The invite code to delete</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the deleted invite, if successful</p>
 
                                 </div>
                               </td>
@@ -3423,7 +3767,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-25)</p>
+          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-26)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
