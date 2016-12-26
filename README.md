@@ -36,7 +36,7 @@ You'll then want to remove all target dependencies and linked libraries except f
 Usage
 =====
 
-Checkout the [getting started](./getting-started.html) page for a quickstart guide.
+Checkout the [getting started](https://nuclearace.github.io/SwiftDiscord/getting-started.html) page for a quickstart guide.
 
 [Docs](https://nuclearace.github.io/SwiftDiscord/index.html)
 ============================================================
