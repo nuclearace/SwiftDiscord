@@ -473,7 +473,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		guard fillLargeGuilds && guild.large else { return }
 
 		// Fill this guild with users immediately
-		DefaultDiscordLogger.Logger.verbose("Fill large guild with all users", type: logType)
+		DefaultDiscordLogger.Logger.debug("Fill large guild %@ with all users", type: logType, args: guild.id)
 
 		requestAllUsers(on: guild.id)
 	}
