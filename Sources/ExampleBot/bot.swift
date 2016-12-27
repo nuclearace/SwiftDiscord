@@ -21,20 +21,22 @@ import SwiftDiscord
 import ImageBrutalizer
 #endif
 
+// Data
 let ignoreGuilds = ["81384788765712384"]
+let fortuneExists = FileManager.default.fileExists(atPath: "/usr/local/bin/fortune")
 
 typealias QueuedVideo = (link: String, channel: String)
 
 class DiscordBot {
     let client: DiscordClient
 
-    private var inVoiceChannel = false
-    private var playingYoutube = false
-    private var youtube = EncoderProcess()
-    private var youtubeQueue = [QueuedVideo]()
+    fileprivate var inVoiceChannel = false
+    fileprivate var playingYoutube = false
+    fileprivate var youtube = EncoderProcess()
+    fileprivate var youtubeQueue = [QueuedVideo]()
 
     init(token: DiscordToken) {
-        client = DiscordClient(token: token, configuration: [.log(.verbose)])
+        client = DiscordClient(token: token, configuration: [.log(.verbose), .shards(1), .fillUsers])
 
         attachHandlers()
     }
@@ -50,6 +52,7 @@ class DiscordBot {
 
         client.on("disconnect") {data in
             print("bot disconnected")
+            exit(0)
         }
 
         client.on("messageCreate") {[weak self] data in
@@ -147,7 +150,7 @@ class DiscordBot {
         client.disconnect()
     }
 
-    private func findChannelFromName(_ name: String, in guild: DiscordGuild? = nil) -> DiscordGuildChannel? {
+    func findChannelFromName(_ name: String, in guild: DiscordGuild? = nil) -> DiscordGuildChannel? {
         // We have a guild to narrow the search
         if guild != nil, let channels = client.guilds[guild!.id]?.channels {
             return channels.filter({ $0.value.name == name }).map({ $0.1 }).first
@@ -164,7 +167,7 @@ class DiscordBot {
         }).first
     }
 
-    private func getRolesForUser(_ user: DiscordUser, on channelId: String) -> [DiscordRole] {
+    func getRolesForUser(_ user: DiscordUser, on channelId: String) -> [DiscordRole] {
         for (_, guild) in client.guilds where guild.channels[channelId] != nil {
             guard let userInGuild = guild.members[user.id] else {
                 print("This user doesn't seem to be in the guild?")
@@ -178,51 +181,6 @@ class DiscordBot {
         return []
     }
 
-    private func handleCommand(_ command: String, with arguments: [String], message: DiscordMessage) {
-        print("got command \(command)")
-
-        if let guild = message.channel?.guild, ignoreGuilds.contains(guild.id) {
-            print("Ignoring this guild")
-
-            return
-        }
-
-        if command == "myroles" {
-            let roles = getRolesForUser(message.author, on: message.channelId)
-
-            message.channel?.sendMessage("Your roles: \(roles.map({ $0.name }))")
-        } else if command == "yt", arguments.count == 1 {
-            message.channel?.sendMessage(playYoutube(channelId: message.channelId, link: arguments[0]))
-        } else if command == "join" && arguments.count > 0 {
-            guard let channel = findChannelFromName(arguments.joined(separator: " "),
-                    in: client.guildForChannel(message.channelId)) else {
-                message.channel?.sendMessage("That doesn't look like a channel in this guild.")
-
-                return
-            }
-
-            guard channel.type == .voice else {
-                message.channel?.sendMessage("That's not a voice channel.")
-
-                return
-            }
-
-            client.joinVoiceChannel(channel.id)
-        } else if command == "leave" {
-            client.leaveVoiceChannel()
-        } else if command == "skip" {
-            if youtube.isRunning {
-                youtube.terminate()
-            }
-
-            client.voiceEngine?.requestNewEncoder()
-        } else if command == "brutal" {
-            brutalizeImage(options: arguments, channel: message.channel!)
-        } else if command == "topic" && arguments.count != 0 {
-            message.channel?.modifyChannel(options: [.topic(arguments.joined(separator: " "))])
-        }
-    }
-
     private func handleMessage(_ message: DiscordMessage) {
         guard message.content.hasPrefix("$") else { return }
 
@@ -232,7 +190,7 @@ class DiscordBot {
         handleCommand(command.lowercased(), with: Array(commandArgs.dropFirst()), message: message)
     }
 
-    private func playYoutube(channelId: String, link: String) -> String {
+    func playYoutube(channelId: String, link: String) -> String {
         guard inVoiceChannel else { return "Not in voice channel" }
         guard !playingYoutube else {
             youtubeQueue.append((link, channelId))
@@ -258,25 +216,108 @@ class DiscordBot {
     }
 }
 
-private func createGetRequest(for string: String) -> URLRequest? {
-    guard let url = URL(string: string) else { return nil }
+extension DiscordBot : CommandHandler {
+    func handleBrutal(with arguments: [String], message: DiscordMessage) {
+        brutalizeImage(options: arguments, channel: message.channel!)
+    }
 
-    var request = URLRequest(url: url)
+    func handleCommand(_ command: String, with arguments: [String], message: DiscordMessage) {
+        print("got command \(command)")
 
-    request.httpMethod = "GET"
-
-    return request
-}
-
-private func getRequestData(for request: URLRequest, callback: @escaping (Data?) -> Void) {
-    URLSession.shared.dataTask(with: request) {data, response, error in
-        guard data != nil, error == nil, let response = response as? HTTPURLResponse,
-                response.statusCode == 200 else {
-            callback(nil)
+        if let guild = message.channel?.guild, ignoreGuilds.contains(guild.id) {
+            print("Ignoring this guild")
 
             return
         }
 
-        callback(data!)
-    }.resume()
+        guard let command = Command(rawValue: command.lowercased()) else { return }
+
+        switch command {
+        case .roles:
+            handleMyRoles(with: arguments, message: message)
+        case .join where arguments.count > 0:
+            handleJoin(with: arguments, message: message)
+        case .leave:
+            handleLeave(with: arguments, message: message)
+        case .youtube where arguments.count == 1:
+            handleYoutube(with: arguments, message: message)
+        case .fortune:
+            handleFortune(with: arguments, message: message)
+        case .skip:
+            handleSkip(with: arguments, message: message)
+        case .brutal where arguments.count > 0:
+            handleBrutal(with: arguments, message: message)
+        case .topic where arguments.count > 0:
+            handleTopic(with: arguments, message: message)
+        default:
+            print("Bad command \(command)")
+        }
+    }
+
+    func handleFortune(with arguments: [String], message: DiscordMessage) {
+        guard fortuneExists else {
+            message.channel?.sendMessage("This bot doesn't have fortune installed")
+
+            return
+        }
+
+        let fortune = EncoderProcess()
+        let pipe = Pipe()
+
+        fortune.launchPath = "/usr/local/bin/fortune"
+        fortune.arguments = ["-o"]
+        fortune.standardOutput = pipe
+        fortune.terminationHandler = {process in
+            guard let fortune = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) else {
+                return
+            }
+
+            message.channel?.sendMessage(fortune)
+        }
+
+        fortune.launch()
+    }
+
+    func handleJoin(with arguments: [String], message: DiscordMessage) {
+        guard let channel = findChannelFromName(arguments.joined(separator: " "),
+                in: client.guildForChannel(message.channelId)) else {
+            message.channel?.sendMessage("That doesn't look like a channel in this guild.")
+
+            return
+        }
+
+        guard channel.type == .voice else {
+            message.channel?.sendMessage("That's not a voice channel.")
+
+            return
+        }
+
+        client.joinVoiceChannel(channel.id)
+    }
+
+    func handleLeave(with arguments: [String], message: DiscordMessage) {
+        client.leaveVoiceChannel()
+    }
+
+    func handleMyRoles(with arguments: [String], message: DiscordMessage) {
+        let roles = getRolesForUser(message.author, on: message.channelId)
+
+        message.channel?.sendMessage("Your roles: \(roles.map({ $0.name }))")
+    }
+
+    func handleSkip(with arguments: [String], message: DiscordMessage) {
+        if youtube.isRunning {
+            youtube.terminate()
+        }
+
+        client.voiceEngine?.requestNewEncoder()
+    }
+
+    func handleTopic(with arguments: [String], message: DiscordMessage) {
+        message.channel?.modifyChannel(options: [.topic(arguments.joined(separator: " "))])
+    }
+
+    func handleYoutube(with arguments: [String], message: DiscordMessage) {
+        message.channel?.sendMessage(playYoutube(channelId: message.channelId, link: arguments[0]))
+    }
 }
