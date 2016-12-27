@@ -58,11 +58,29 @@ public struct DiscordAttachment {
 }
 
 /// Represents an embeded entity.
-public struct DiscordEmbed {
+public struct DiscordEmbed : JSONAble {
 	// MARK: Nested Types
 
+	/// Represents an Embed's fields.
+	public struct Field : JSONAble {
+		/// The name of the field.
+		public let name: String
+
+		/// The value of the field.
+		public let value: String
+
+		/// Whether this field should be inlined
+		public let inline: Bool
+
+		public init(name: String, value: String, inline: Bool) {
+			self.name = name
+			self.value = value
+			self.inline = inline
+		}
+	}
+
 	/// Represents what is providing the content of an embed.
-	public struct Provider {
+	public struct Provider : JSONAble {
 		// MARK: Properties
 
 		/// The name of this provider.
@@ -73,7 +91,7 @@ public struct DiscordEmbed {
 	}
 
 	/// Represents the thumbnail of an embed.
-	public struct Thumbnail {
+	public struct Thumbnail : JSONAble {
 		// MARK: Properties
 
 		/// The height of this image.
@@ -95,10 +113,10 @@ public struct DiscordEmbed {
 	public let description: String
 
 	/// The provider of this embed.
-	public let provider: Provider
+	public let provider: Provider?
 
 	/// The thumbnail of this embed.
-	public let thumbnail: Thumbnail
+	public let thumbnail: Thumbnail?
 
 	/// The title of this embed.
 	public let title: String
@@ -107,15 +125,28 @@ public struct DiscordEmbed {
 	public let type: String
 
 	/// The url of this embed.
-	public let url: URL
+	public let url: URL?
+
+	/// The embed's fields
+	public var fields = [Field]()
+
+	public init(title: String, description: String, url: URL? = nil, thumbnail: Thumbnail? = nil) {
+		self.title = title
+		self.description = description
+		self.provider = nil
+		self.thumbnail = thumbnail
+		self.type = "rich"
+		self.url = url
+	}
 
 	init(embedObject: [String: Any]) {
 		description = embedObject.get("description", or: "")
-		provider = Provider(providerObject: embedObject.get("provider", or: [String: Any]()))
-		thumbnail = Thumbnail(thumbnailObject: embedObject.get("provider", or: [String: Any]()))
+		provider = Provider(providerObject: embedObject.get("provider", or: nil))
+		thumbnail = Thumbnail(thumbnailObject: embedObject.get("provider", or: nil))
 		title = embedObject.get("title", or: "")
 		type = embedObject.get("type", or: "")
-		url = URL(string: embedObject.get("url", or: "")) ?? URL(string: "http://localhost/")!
+		url = URL(string: embedObject.get("url", or: ""))
+		fields = Field.fieldsFromArray(embedObject.get("fields", or: []))
 	}
 
 	static func embedsFromArray(_ embedsArray: [[String: Any]]) -> [DiscordEmbed] {
@@ -123,15 +154,31 @@ public struct DiscordEmbed {
 	}
 }
 
+extension DiscordEmbed.Field {
+	init(fieldObject: [String: Any]) {
+		name = fieldObject.get("name", or: "")
+		value = fieldObject.get("value", or: "")
+		inline = fieldObject.get("inline", or: false)
+	}
+
+	static func fieldsFromArray(_ fieldArray: [[String: Any]]) -> [DiscordEmbed.Field] {
+		return fieldArray.map(DiscordEmbed.Field.init(fieldObject:))
+	}
+}
+
 extension DiscordEmbed.Provider {
-	init(providerObject: [String: Any]) {
+	init?(providerObject: [String: Any]?) {
+		guard let providerObject = providerObject else { return nil }
+
 		name = providerObject.get("name", or: "")
 		url = URL(string: providerObject.get("url", or: "")) ?? URL(string: "http://localhost/")!
 	}
 }
 
 extension DiscordEmbed.Thumbnail {
-	init(thumbnailObject: [String: Any]) {
+	init?(thumbnailObject: [String: Any]?) {
+		guard let thumbnailObject = thumbnailObject else { return nil }
+
 		height = thumbnailObject.get("height", or: 0)
 		proxyUrl = URL(string: thumbnailObject.get("proxy_url", or: "")) ?? URL(string: "http://localhost/")!
 		url = URL(string: thumbnailObject.get("url", or: "")) ?? URL(string: "http://localhost/")!

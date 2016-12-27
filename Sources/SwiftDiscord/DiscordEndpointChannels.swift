@@ -268,22 +268,23 @@ public extension DiscordEndpoint {
     /**
         Sends a message to the specified channel.
 
-        - parameter content: The content of the message
-        - parameter with: The token to authenticate to Discord with
-        - parameter to: The snowflake id of the channel to send to
-        - parameter tts: Whether this message should be read a text-to-speech message
+        - parameter content: The content of the message.
+        - parameter with: The token to authenticate to Discord with.
+        - parameter to: The snowflake id of the channel to send to.
+        - parameter tts: Whether this message should be read a text-to-speech message.
+        - parameter embed: An optional embed for this message.
         - parameter callback: An optional callback containing the message, if successful.
-
     */
     public static func sendMessage(_ content: String, with token: DiscordToken, to channel: String, tts: Bool,
-            callback: ((DiscordMessage?) -> Void)?) {
+            embed: DiscordEmbed?, callback: ((DiscordMessage?) -> Void)?) {
         let messageObject: [String: Any] = [
             "content": content,
-            "tts": tts
+            "tts": tts,
+            "embed": embed?.json ?? [:]
         ]
 
         DefaultDiscordLogger.Logger.log("Sending message to: %@", type: "DiscordEndpointChannels", args: channel)
-        DefaultDiscordLogger.Logger.verbose("Message: %@", type: "DiscordEndpointChannels", args: content)
+        DefaultDiscordLogger.Logger.verbose("Message: %@", type: "DiscordEndpointChannels", args: messageObject)
 
         guard let contentData = encodeJSON(messageObject)?.data(using: .utf8, allowLossyConversion: false) else {
             return

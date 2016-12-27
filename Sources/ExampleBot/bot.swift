@@ -24,6 +24,7 @@ let machTaskBasicInfoCount = MemoryLayout<mach_task_basic_info_data_t>.size / Me
 #endif
 
 let ignoreGuilds = ["81384788765712384"]
+let userOverrides = ["104753987663712256"]
 let fortuneExists = FileManager.default.fileExists(atPath: "/usr/local/bin/fortune")
 
 typealias QueuedVideo = (link: String, channel: String)
@@ -260,7 +261,8 @@ extension DiscordBot : CommandHandler {
     func handleCommand(_ command: String, with arguments: [String], message: DiscordMessage) {
         print("got command \(command)")
 
-        if let guild = message.channel?.guild, ignoreGuilds.contains(guild.id) {
+        if let guild = message.channel?.guild, ignoreGuilds.contains(guild.id),
+                !userOverrides.contains(message.author.id) {
             print("Ignoring this guild")
 
             return
@@ -352,7 +354,7 @@ extension DiscordBot : CommandHandler {
     }
 
     func handleStats(with arguments: [String], message: DiscordMessage) {
-        message.channel?.sendMessage(createFormatMessage(withStats: calculateStats()))
+        message.channel?.sendMessage("", embed: createFormatMessage(withStats: calculateStats()))
     }
 
     func handleTopic(with arguments: [String], message: DiscordMessage) {

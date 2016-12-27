@@ -16,27 +16,31 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+import SwiftDiscord
 
-func createFormatMessage(withStats stats: [String: Any]) -> String {
-    var statContent = ""
-
+func createFormatMessage(withStats stats: [String: Any]) -> DiscordEmbed {
+    let guilds = stats["numberOfGuilds"] as! Int
     let textChannels = stats["numberOfTextChannels"] as! Int
     let voiceChannels = stats["numberOfVoiceChannels"] as! Int
+    let numberOfLoadedUsers = stats["numberOfLoadedUsers"] as! Int
+    let totalNumberOfUsers = stats["totalNumberOfUsers"] as! Int
 
-    statContent += "Name: \(stats["name"] as! String)\n------------------\n"
-    statContent += "Number of guilds: \(stats["numberOfGuilds"] as! Int)\n\n"
-    statContent += "Text channels: \(textChannels)\t\t\t\t\t"
-    statContent += "Voice channels: \(voiceChannels)\n"
-    statContent += "-------------------------------------------------------\n"
-    statContent += "Total: \(textChannels + voiceChannels)\n\n"
-    statContent += "Loaded Users: \(stats["numberOfLoadedUsers"] as! Int)\n"
-    statContent += "Total Users: \(stats["totalNumberOfUsers"] as! Int)"
+    var embed = DiscordEmbed(title: stats["name"] as! String, description: "")
+
+    let fieldMaker = DiscordEmbed.Field.init(name:value:inline:)
+
+    embed.fields.append(fieldMaker("Guilds", String(guilds), false))
+    embed.fields.append(fieldMaker("Text Channels", String(textChannels), true))
+    embed.fields.append(fieldMaker("Voice Channels", String(voiceChannels), true))
+    embed.fields.append(fieldMaker("Total Channels", String(voiceChannels + textChannels), true))
+    embed.fields.append(fieldMaker("Loaded Users", String(numberOfLoadedUsers), true))
+    embed.fields.append(fieldMaker("Total Users", String(totalNumberOfUsers),true))
 
     if let memory = stats["memory"] as? Double {
-        statContent += "\nMemory: \(memory) MB"
+        embed.fields.append(fieldMaker("Memory", "\(memory) MB", true))
     }
 
-    return "```${content}```".replacingOccurrences(of: "${content}", with: statContent)
+    return embed
 }
 
 func createGetRequest(for string: String) -> URLRequest? {

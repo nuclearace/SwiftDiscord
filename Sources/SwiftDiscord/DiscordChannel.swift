@@ -141,11 +141,12 @@ public extension DiscordChannel {
 
         - parameter content: An optional message for this upload
         - parameter tts: Whether the message is TTS
+        - parameter embed: An optional embed for this message
     */
-    public func sendMessage(_ content: String, tts: Bool = false) {
+    public func sendMessage(_ content: String, tts: Bool = false, embed: DiscordEmbed? = nil) {
         guard let client = self.client, type != .voice else { return }
 
-        client.sendMessage(content, to: id, tts: tts)
+        client.sendMessage(content, to: id, tts: tts, embed: embed)
     }
 
     /**

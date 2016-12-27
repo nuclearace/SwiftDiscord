@@ -161,9 +161,11 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter content: The content of the message
         - parameter to: The snowflake id of the channel to send to
         - parameter tts: Whether this message should be read a text-to-speech message
+        - parameter embed: An optional embed for this message.
         - parameter callback: An optional callback containing the message, if successful.
     */
-    func sendMessage(_ message: String, to channelId: String, tts: Bool, callback: ((DiscordMessage?) -> Void)?)
+    func sendMessage(_ message: String, to channelId: String, tts: Bool, embed: DiscordEmbed?,
+        callback: ((DiscordMessage?) -> Void)?)
 
     /**
         Sends a file with an optional message to the specified channel.
@@ -656,8 +658,8 @@ public extension DiscordEndpointConsumer {
 
     /// Default implementation
     public func sendMessage(_ message: String, to channelId: String, tts: Bool = false,
-            callback: ((DiscordMessage?) -> Void)? = nil) {
-        DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts, callback: callback)
+            embed: DiscordEmbed? = nil, callback: ((DiscordMessage?) -> Void)? = nil) {
+        DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts, embed: embed, callback: callback)
     }
 
     /// Default implementation
