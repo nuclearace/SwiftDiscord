@@ -56,7 +56,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/// Whether we should query the API for users who aren't in the guild
 	public var fillUsers = false
 
-	/// Whether how many shards this client should spawn. Default is one.
+	/// How many shards this client should spawn. Default is one.
 	public var shards = 1
 
 	/// Whether or not this client is connected.
