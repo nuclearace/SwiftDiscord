@@ -25,6 +25,7 @@ enum Command : String {
     case leave = "leave"
     case roles = "myroles"
     case skip = "skip"
+    case stats = "stats"
     case topic = "topic"
     case youtube = "yt"
 }

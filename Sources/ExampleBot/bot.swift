@@ -19,9 +19,10 @@ import Foundation
 import SwiftDiscord
 #if os(macOS)
 import ImageBrutalizer
+
+let machTaskBasicInfoCount = MemoryLayout<mach_task_basic_info_data_t>.size / MemoryLayout<natural_t>.size
 #endif
 
-// Data
 let ignoreGuilds = ["81384788765712384"]
 let fortuneExists = FileManager.default.fileExists(atPath: "/usr/local/bin/fortune")
 
@@ -142,6 +143,41 @@ class DiscordBot {
         #endif
     }
 
+    func calculateStats() -> [String: Any] {
+        var stats = [String: Any]()
+
+        let guilds = client.guilds.map({ $0.value })
+        let channels = client.guilds.flatMap({ $0.value.channels.map({ $0.value }) })
+        let username = client.user!.username
+        let guildNumber = guilds.count
+        let numberOfTextChannels = channels.filter({ $0.type == .text }).count
+        let numberOfVoiceChannels = channels.count - numberOfTextChannels
+        let numberOfLoadedUsers = guilds.reduce(0, { $0 + $1.members.count })
+        let totalUsers = guilds.reduce(0, { $0 + $1.memberCount })
+
+        stats["name"] = username
+        stats["numberOfGuilds"] = guildNumber
+        stats["numberOfTextChannels"] = numberOfTextChannels
+        stats["numberOfVoiceChannels"] = numberOfVoiceChannels
+        stats["numberOfLoadedUsers"] = numberOfLoadedUsers
+        stats["totalNumberOfUsers"] =  totalUsers
+
+        #if os(macOS)
+        let name = mach_task_self_
+        let flavor = task_flavor_t(MACH_TASK_BASIC_INFO)
+        var size = mach_msg_type_number_t(machTaskBasicInfoCount)
+        let infoPointer = UnsafeMutablePointer<mach_task_basic_info>.allocate(capacity: 1)
+
+        task_info(name, flavor, unsafeBitCast(infoPointer, to: task_info_t!.self), &size)
+
+        stats["memory"] = Double(infoPointer.pointee.resident_size) / 10e5
+
+        infoPointer.deallocate(capacity: 1)
+        #endif
+
+        return stats
+    }
+
     func connect() {
         client.connect()
     }
@@ -249,6 +285,8 @@ extension DiscordBot : CommandHandler {
             handleBrutal(with: arguments, message: message)
         case .topic where arguments.count > 0:
             handleTopic(with: arguments, message: message)
+        case .stats:
+            handleStats(with: arguments, message: message)
         default:
             print("Bad command \(command)")
         }
@@ -311,6 +349,10 @@ extension DiscordBot : CommandHandler {
         }
 
         client.voiceEngine?.requestNewEncoder()
+    }
+
+    func handleStats(with arguments: [String], message: DiscordMessage) {
+        message.channel?.sendMessage(createFormatMessage(withStats: calculateStats()))
     }
 
     func handleTopic(with arguments: [String], message: DiscordMessage) {

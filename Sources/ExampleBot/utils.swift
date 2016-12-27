@@ -17,6 +17,28 @@
 
 import Foundation
 
+func createFormatMessage(withStats stats: [String: Any]) -> String {
+    var statContent = ""
+
+    let textChannels = stats["numberOfTextChannels"] as! Int
+    let voiceChannels = stats["numberOfVoiceChannels"] as! Int
+
+    statContent += "Name: \(stats["name"] as! String)\n------------------\n"
+    statContent += "Number of guilds: \(stats["numberOfGuilds"] as! Int)\n\n"
+    statContent += "Text channels: \(textChannels)\t\t\t\t\t"
+    statContent += "Voice channels: \(voiceChannels)\n"
+    statContent += "-------------------------------------------------------\n"
+    statContent += "Total: \(textChannels + voiceChannels)\n\n"
+    statContent += "Loaded Users: \(stats["numberOfLoadedUsers"] as! Int)\n"
+    statContent += "Total Users: \(stats["totalNumberOfUsers"] as! Int)"
+
+    if let memory = stats["memory"] as? Double {
+        statContent += "\nMemory: \(memory) MB"
+    }
+
+    return "```${content}```".replacingOccurrences(of: "${content}", with: statContent)
+}
+
 func createGetRequest(for string: String) -> URLRequest? {
     guard let url = URL(string: string) else { return nil }
 
