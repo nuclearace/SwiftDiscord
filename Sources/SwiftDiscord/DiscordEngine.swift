@@ -299,7 +299,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		case .invalidSession:
 			handleInvalidSession()
 		case .heartbeat:
-			sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.heartbeatAck),
+			sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.heartbeat),
 				payload: .integer(1)))
 		case .heartbeatAck:
 			DefaultDiscordLogger.Logger.debug("Got heartback ack", type: logType)
