@@ -219,6 +219,15 @@
                 <a href="../Structs/DiscordEmbed.html">DiscordEmbed</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Author.html">– Author</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Field.html">– Field</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Footer.html">– Footer</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/DiscordEmbed/Provider.html">– Provider</a>
               </li>
               <li class="nav-group-task">
@@ -2406,9 +2415,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint11sendMessageFTSS4withVS_12DiscordToken2toSS3ttsSb8callbackGSqFGSqVS_14DiscordMessage_T___T_"></a>
-                    <a name="//apple_ref/swift/Method/sendMessage(_:with:to:tts:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint11sendMessageFTSS4withVS_12DiscordToken2toSS3ttsSb8callbackGSqFGSqVS_14DiscordMessage_T___T_">sendMessage(_:with:to:tts:callback:)</a>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint11sendMessageFTSS4withVS_12DiscordToken2toSS3ttsSb5embedGSqVS_12DiscordEmbed_8callbackGSqFGSqVS_14DiscordMessage_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/sendMessage(_:with:to:tts:embed:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint11sendMessageFTSS4withVS_12DiscordToken2toSS3ttsSb5embedGSqVS_12DiscordEmbed_8callbackGSqFGSqVS_14DiscordMessage_T___T_">sendMessage(_:with:to:tts:embed:callback:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2424,7 +2433,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">sendMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="n">to</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">tts</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span>
-            <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+            <span class="nv">embed</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed.html">DiscordEmbed</a></span><span class="p">?,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2440,7 +2449,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The content of the message</p>
+                                  <p>The content of the message.</p>
 
                                 </div>
                               </td>
@@ -2453,7 +2462,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The token to authenticate to Discord with</p>
+                                  <p>The token to authenticate to Discord with.</p>
 
                                 </div>
                               </td>
@@ -2466,7 +2475,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The snowflake id of the channel to send to</p>
+                                  <p>The snowflake id of the channel to send to.</p>
 
                                 </div>
                               </td>
@@ -2479,7 +2488,20 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>Whether this message should be read a text-to-speech message</p>
+                                  <p>Whether this message should be read a text-to-speech message.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>embed</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional embed for this message.</p>
 
                                 </div>
                               </td>
@@ -4930,7 +4952,7 @@ that if you make modifications to the client inside of a callback, you first dis
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-26)</p>
+          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-28)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
