@@ -34,6 +34,7 @@ typealias QueuedVideo = (link: String, channel: String)
 
 class DiscordBot {
     let client: DiscordClient
+    let startTime = Date()
 
     fileprivate var inVoiceChannel = false
     fileprivate var playingYoutube = false
@@ -167,6 +168,7 @@ class DiscordBot {
         stats["numberOfLoadedUsers"] = numberOfLoadedUsers
         stats["totalNumberOfUsers"] =  totalUsers
         stats["shards"] = shards
+        stats["uptime"] = Date().timeIntervalSince(startTime)
 
         #if os(macOS)
         let name = mach_task_self_

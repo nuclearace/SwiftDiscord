@@ -19,6 +19,21 @@ import Foundation
 import SwiftDiscord
 
 func createFormatMessage(withStats stats: [String: Any]) -> DiscordEmbed {
+    func uptimeString(fromSeconds seconds: Double) -> String {
+        var timeString = ""
+        var time = Int(seconds)
+
+        if time >= 3600 {
+            timeString += "Hours: \(time / 3600) "
+            time %= 3600
+        }
+
+        timeString += "Minutes: \(time / 60) "
+        timeString += "Seconds: \(time % 60)"
+
+        return timeString
+    }
+
     let guilds = stats["numberOfGuilds"] as! Int
     let textChannels = stats["numberOfTextChannels"] as! Int
     let voiceChannels = stats["numberOfVoiceChannels"] as! Int
@@ -26,6 +41,7 @@ func createFormatMessage(withStats stats: [String: Any]) -> DiscordEmbed {
     let totalNumberOfUsers = stats["totalNumberOfUsers"] as! Int
     let shards = stats["shards"] as! Int
     let fieldMaker = DiscordEmbed.Field.init(name:value:inline:)
+    let uptime = stats["uptime"] as! Double
 
     var embed = DiscordEmbed(title: "\(stats["name"] as! String)'s stats",
                              description: "[Source](\(sourceUrl.absoluteString))",
@@ -45,6 +61,8 @@ func createFormatMessage(withStats stats: [String: Any]) -> DiscordEmbed {
     if let memory = stats["memory"] as? Double {
         embed.fields.append(fieldMaker("Memory", "\(memory) MB", true))
     }
+
+    embed.fields.append(fieldMaker("Uptime", "\(uptimeString(fromSeconds: uptime))", true))
 
     return embed
 }
