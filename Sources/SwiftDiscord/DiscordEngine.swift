@@ -199,7 +199,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		#else
 		try? WebSocket.background(to: connectURL) {[weak self] ws in
 			guard let this = self else { return }
-			DefaultDiscordLogger.Logger.log("Websocket connected, shard: ", type: "DiscordEngine", args: shardNum)
+			DefaultDiscordLogger.Logger.log("Websocket connected, shard: ", type: "DiscordEngine", args: this.shardNum)
 
 			this.websocket = ws
 			this.connectUUID = UUID()
