@@ -61,6 +61,37 @@ public struct DiscordAttachment {
 public struct DiscordEmbed : JSONAble {
 	// MARK: Nested Types
 
+	/// Represents an Embed's author.
+	public struct Author : JSONAble {
+		// MARK: Properties
+
+		/// The name for this author.
+		public let name: String?
+
+		/// The icon for this url.
+		public let iconUrl: URL?
+
+		/// The proxy url for the icon.
+		public let proxyUrl: URL?
+
+		/// The url of this author.
+		public let url: URL?
+
+		/**
+			Creates an Author object.
+
+			- parameter name: The name of this author.
+			- parameter iconUrl: The iconUrl for this author's icon.
+			- parameter url: The url for this author.
+		*/
+		public init(name: String?, iconUrl: URL?, url: URL?) {
+			self.name = name
+			self.iconUrl = iconUrl
+			self.url = url
+			self.proxyUrl = nil
+		}
+	}
+
 	/// Represents an Embed's fields.
 	public struct Field : JSONAble {
 		// MARK: Properties
@@ -124,7 +155,7 @@ public struct DiscordEmbed : JSONAble {
 		public let name: String
 
 		/// The url of this provider.
-		public let url: URL
+		public let url: URL?
 	}
 
 	/// Represents the thumbnail of an embed.
@@ -145,6 +176,9 @@ public struct DiscordEmbed : JSONAble {
 	}
 
 	// MARK: Properties
+
+	/// The author of this embed.
+	public let author: Author?
 
 	/// The color of this embed.
 	public let color: Int?
@@ -178,16 +212,25 @@ public struct DiscordEmbed : JSONAble {
 	/**
 		Creates an Embed object.
 
+		`Field`s can be added after intialization.
+
 		- parameter title: The title of this embed.
 		- parameter description: The description of this embed.
+		- parameter author: The author of this embed.
 		- parameter url: The url for this embed, if there is one.
 		- parameter thumbnail: The thumbnail of this embed, if there is one.
 		- parameter color: The color of this embed.
 		- parameter footer: The footer for this embed, if there is one.
 	*/
-	public init(title: String, description: String, url: URL? = nil, thumbnail: Thumbnail? = nil, color: Int? = nil,
-			footer: Footer? = nil) {
+	public init(title: String,
+				description: String,
+				author: Author? = nil,
+				url: URL? = nil,
+				thumbnail: Thumbnail? = nil,
+				color: Int? = nil,
+				footer: Footer? = nil) {
 		self.title = title
+		self.author = author
 		self.description = description
 		self.provider = nil
 		self.thumbnail = thumbnail
@@ -198,6 +241,7 @@ public struct DiscordEmbed : JSONAble {
 	}
 
 	init(embedObject: [String: Any]) {
+		author = Author(authorObject: embedObject.get("author", or: nil))
 		description = embedObject.get("description", or: "")
 		provider = Provider(providerObject: embedObject.get("provider", or: nil))
 		thumbnail = Thumbnail(thumbnailObject: embedObject.get("provider", or: nil))
@@ -226,6 +270,17 @@ extension DiscordEmbed.Field {
 	}
 }
 
+extension DiscordEmbed.Author {
+	init?(authorObject: [String: Any]?) {
+		guard let authorObject = authorObject else { return nil }
+
+		name = authorObject.get("name", or: "")
+		iconUrl = URL(string: authorObject.get("icon_url", or: ""))
+		proxyUrl = URL(string: authorObject.get("proxy_icon_url", or: ""))
+		url = URL(string: authorObject.get("url", or: ""))
+	}
+}
+
 extension DiscordEmbed.Footer {
 	init?(footerObject: [String: Any]?) {
 		guard let footerObject = footerObject else { return nil }
@@ -241,7 +296,7 @@ extension DiscordEmbed.Provider {
 		guard let providerObject = providerObject else { return nil }
 
 		name = providerObject.get("name", or: "")
-		url = URL(string: providerObject.get("url", or: "")) ?? URL(string: "http://localhost/")!
+		url = URL(string: providerObject.get("url", or: ""))
 	}
 }
 

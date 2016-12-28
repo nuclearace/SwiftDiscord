@@ -27,7 +27,12 @@ func createFormatMessage(withStats stats: [String: Any]) -> DiscordEmbed {
     let shards = stats["shards"] as! Int
     let fieldMaker = DiscordEmbed.Field.init(name:value:inline:)
 
-    var embed = DiscordEmbed(title: stats["name"] as! String, description: "", color: 0xF07F07)
+    var embed = DiscordEmbed(title: "\(stats["name"] as! String)'s stats",
+                             description: "[Source](\(sourceUrl.absoluteString))",
+                             author: DiscordEmbed.Author(name: "nuclearace",
+                                                         iconUrl: authorImage,
+                                                         url: authorUrl),
+                             color: 0xF07F07)
 
     embed.fields.append(fieldMaker("Guilds", String(guilds), false))
     embed.fields.append(fieldMaker("Text Channels", String(textChannels), true))
