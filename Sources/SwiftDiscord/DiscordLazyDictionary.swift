@@ -235,7 +235,7 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         - returns: A `Bool` indicating whether `key` is being stored.
     */
     public func contains(_ key: Key) -> Bool {
-        return backingDictionary.contains(where: { $0.key == key })
+        return backingDictionary[key] != nil
     }
 
     /**
