@@ -53,8 +53,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/// Whether large guilds should have their users fetched as soon as they are created.
 	public var fillLargeGuilds = false
 
-	/// Whether we should query the API for users who aren't in the guild
+	/// Whether the client should query the API for users who aren't in the guild
 	public var fillUsers = false
+
+	/// Whether the client should remove users from guilds when they go offline.
+	public var pruneUsers = false
 
 	/// How many shards this client should spawn. Default is one.
 	public var shards = 1
@@ -114,6 +117,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 				fillLargeGuilds = true
 			case .fillUsers:
 				fillUsers = true
+			case .pruneUsers:
+				pruneUsers = true
 			}
 		}
 
@@ -719,6 +724,27 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		- parameter with: The data from the event
 	*/
 	open func handlePresenceUpdate(with data: [String: Any]) {
+		func handlePresence(_ presence: DiscordPresence, guild: DiscordGuild) {
+			let userId = presence.user.id
+
+			if pruneUsers && presence.status == .offline {
+				DefaultDiscordLogger.Logger.debug("Pruning guild member %@ on %@", type: logType,
+					args: userId, guild.id)
+
+				guild.members[userId] = nil
+				guild.presences[userId] = nil
+			} else if fillUsers && !guild.members.contains(userId) {
+				DefaultDiscordLogger.Logger.debug("Should get member %@; pull from the API", type: logType,
+					args: userId)
+
+				guild.members[lazy: userId] = .lazy({[weak guild] in
+					guard let guild = guild else { return DiscordGuildMember(guildMemberObject: [:]) }
+
+					return guild.getGuildMember(userId) ?? DiscordGuildMember(guildMemberObject: [:])
+				})
+			}
+		}
+
 		// DefaultDiscordLogger.Logger.debug("Handling presence update", type: logType)
 
 		guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
@@ -739,18 +765,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		handleEvent("presenceUpdate", with: [guildId, presence!])
 
-		guard guild.members[userId] == nil && fillUsers else { return }
+		guard pruneUsers || fillUsers else { return }
 
-		// Client wants us to fetch new users
-		DefaultDiscordLogger.Logger.debug("Should get member; pull from the API", type: logType)
-
-		DispatchQueue.global().async {
-			guard let member = guild.getGuildMember(userId) else { return }
-
-			self.handleQueue.async {
-				guild.members[userId] = member
-			}
-		}
+		handlePresence(presence!, guild: guild)
 	}
 
 	/**

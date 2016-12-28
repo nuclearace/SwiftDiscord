@@ -42,7 +42,7 @@ class DiscordBot {
     fileprivate var youtubeQueue = [QueuedVideo]()
 
     init(token: DiscordToken) {
-        client = DiscordClient(token: token, configuration: [.log(.verbose), .shards(2), .fillUsers])
+        client = DiscordClient(token: token, configuration: [.log(.verbose), .shards(2), .fillUsers, .pruneUsers])
 
         attachHandlers()
     }

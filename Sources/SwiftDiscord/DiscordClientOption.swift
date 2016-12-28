@@ -37,6 +37,10 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
     /// Used to set a custom logger.
     case logger(DiscordLogger)
 
+    /// If this option is given, the client will automatically unload users who go offline. This can save some memory.
+    /// However this means that invsible users will also be pruned.
+    case pruneUsers
+
     /// The number of shards this client should spawn. Defaults to 1.
     case shards(Int)
 
@@ -53,6 +57,7 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
         case .log:              description = "log"
         case .logger:           description = "logger"
         case .shards:           description = "shards"
+        case .pruneUsers:       description = "pruneUsers"
         }
 
         return description
