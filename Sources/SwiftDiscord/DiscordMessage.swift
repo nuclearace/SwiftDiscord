@@ -63,6 +63,8 @@ public struct DiscordEmbed : JSONAble {
 
 	/// Represents an Embed's fields.
 	public struct Field : JSONAble {
+		// MARK: Properties
+
 		/// The name of the field.
 		public let name: String
 
@@ -72,10 +74,45 @@ public struct DiscordEmbed : JSONAble {
 		/// Whether this field should be inlined
 		public let inline: Bool
 
+		// MARK: Initializers
+
+		/**
+			Creates a Field object.
+
+			- parameter name: The name of this field.
+			- parameter value: The value of this field.
+			- parameter inline: Whether this field can be inlined.
+		*/
 		public init(name: String, value: String, inline: Bool) {
 			self.name = name
 			self.value = value
 			self.inline = inline
+		}
+	}
+
+	/// Represents an Embed's footer.
+	public struct Footer : JSONAble {
+		// MARK: Properties
+
+		/// The text for this footer.
+		public let text: String?
+
+		/// The icon for this url.
+		public let iconUrl: URL?
+
+		/// The proxy url for the icon.
+		public let proxyUrl: URL?
+
+		/**
+			Creates a Footer object.
+
+			- parameter text: The text of this field.
+			- parameter iconUrl: The iconUrl of this field.
+		*/
+		public init(text: String?, iconUrl: URL?) {
+			self.text = text
+			self.iconUrl = iconUrl
+			self.proxyUrl = nil
 		}
 	}
 
@@ -109,8 +146,14 @@ public struct DiscordEmbed : JSONAble {
 
 	// MARK: Properties
 
+	/// The color of this embed.
+	public let color: Int?
+
 	/// The description of this embed.
 	public let description: String
+
+	/// The footer for this embed.
+	public let footer: Footer?
 
 	/// The provider of this embed.
 	public let provider: Provider?
@@ -130,13 +173,28 @@ public struct DiscordEmbed : JSONAble {
 	/// The embed's fields
 	public var fields = [Field]()
 
-	public init(title: String, description: String, url: URL? = nil, thumbnail: Thumbnail? = nil) {
+	// MARK: Initializers
+
+	/**
+		Creates an Embed object.
+
+		- parameter title: The title of this embed.
+		- parameter description: The description of this embed.
+		- parameter url: The url for this embed, if there is one.
+		- parameter thumbnail: The thumbnail of this embed, if there is one.
+		- parameter color: The color of this embed.
+		- parameter footer: The footer for this embed, if there is one.
+	*/
+	public init(title: String, description: String, url: URL? = nil, thumbnail: Thumbnail? = nil, color: Int? = nil,
+			footer: Footer? = nil) {
 		self.title = title
 		self.description = description
 		self.provider = nil
 		self.thumbnail = thumbnail
 		self.type = "rich"
 		self.url = url
+		self.color = color
+		self.footer = footer
 	}
 
 	init(embedObject: [String: Any]) {
@@ -147,6 +205,8 @@ public struct DiscordEmbed : JSONAble {
 		type = embedObject.get("type", or: "")
 		url = URL(string: embedObject.get("url", or: ""))
 		fields = Field.fieldsFromArray(embedObject.get("fields", or: []))
+		color = embedObject.get("color", or: nil)
+		footer = Footer(footerObject: embedObject.get("footer", or: nil))
 	}
 
 	static func embedsFromArray(_ embedsArray: [[String: Any]]) -> [DiscordEmbed] {
@@ -163,6 +223,16 @@ extension DiscordEmbed.Field {
 
 	static func fieldsFromArray(_ fieldArray: [[String: Any]]) -> [DiscordEmbed.Field] {
 		return fieldArray.map(DiscordEmbed.Field.init(fieldObject:))
+	}
+}
+
+extension DiscordEmbed.Footer {
+	init?(footerObject: [String: Any]?) {
+		guard let footerObject = footerObject else { return nil }
+
+		text = footerObject.get("text", or: "")
+		iconUrl = URL(string: footerObject.get("iconUrl", or: ""))
+		proxyUrl = URL(string: footerObject.get("proxy_icon_url", or: ""))
 	}
 }
 

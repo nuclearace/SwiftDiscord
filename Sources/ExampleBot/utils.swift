@@ -24,17 +24,18 @@ func createFormatMessage(withStats stats: [String: Any]) -> DiscordEmbed {
     let voiceChannels = stats["numberOfVoiceChannels"] as! Int
     let numberOfLoadedUsers = stats["numberOfLoadedUsers"] as! Int
     let totalNumberOfUsers = stats["totalNumberOfUsers"] as! Int
-
-    var embed = DiscordEmbed(title: stats["name"] as! String, description: "")
-
+    let shards = stats["shards"] as! Int
     let fieldMaker = DiscordEmbed.Field.init(name:value:inline:)
+
+    var embed = DiscordEmbed(title: stats["name"] as! String, description: "", color: 0xF07F07)
 
     embed.fields.append(fieldMaker("Guilds", String(guilds), false))
     embed.fields.append(fieldMaker("Text Channels", String(textChannels), true))
     embed.fields.append(fieldMaker("Voice Channels", String(voiceChannels), true))
     embed.fields.append(fieldMaker("Total Channels", String(voiceChannels + textChannels), true))
     embed.fields.append(fieldMaker("Loaded Users", String(numberOfLoadedUsers), true))
-    embed.fields.append(fieldMaker("Total Users", String(totalNumberOfUsers),true))
+    embed.fields.append(fieldMaker("Total Users", String(totalNumberOfUsers), true))
+    embed.fields.append(fieldMaker("Shards", String(shards), true))
 
     if let memory = stats["memory"] as? Double {
         embed.fields.append(fieldMaker("Memory", "\(memory) MB", true))

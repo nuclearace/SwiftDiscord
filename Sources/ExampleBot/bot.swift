@@ -38,7 +38,7 @@ class DiscordBot {
     fileprivate var youtubeQueue = [QueuedVideo]()
 
     init(token: DiscordToken) {
-        client = DiscordClient(token: token, configuration: [.log(.verbose), .shards(1), .fillUsers])
+        client = DiscordClient(token: token, configuration: [.log(.verbose), .shards(2), .fillUsers])
 
         attachHandlers()
     }
@@ -155,6 +155,7 @@ class DiscordBot {
         let numberOfVoiceChannels = channels.count - numberOfTextChannels
         let numberOfLoadedUsers = guilds.reduce(0, { $0 + $1.members.count })
         let totalUsers = guilds.reduce(0, { $0 + $1.memberCount })
+        let shards = client.shards
 
         stats["name"] = username
         stats["numberOfGuilds"] = guildNumber
@@ -162,6 +163,7 @@ class DiscordBot {
         stats["numberOfVoiceChannels"] = numberOfVoiceChannels
         stats["numberOfLoadedUsers"] = numberOfLoadedUsers
         stats["totalNumberOfUsers"] =  totalUsers
+        stats["shards"] = shards
 
         #if os(macOS)
         let name = mach_task_self_
