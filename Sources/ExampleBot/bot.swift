@@ -211,6 +211,31 @@ class DiscordBot {
         }).first
     }
 
+    func getFortune() -> String {
+        guard fortuneExists else {
+            return "This bot doesn't have fortune installed"
+        }
+
+        let fortune = EncoderProcess()
+        let pipe = Pipe()
+        var saying: String!
+
+        fortune.launchPath = "/usr/local/bin/fortune"
+        fortune.standardOutput = pipe
+        fortune.terminationHandler = {process in
+            guard let fortune = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) else {
+                return
+            }
+
+            saying = fortune
+        }
+
+        fortune.launch()
+        fortune.waitUntilExit()
+
+        return saying
+    }
+
     func getRolesForUser(_ user: DiscordUser, on channelId: String) -> [DiscordRole] {
         for (_, guild) in client.guilds where guild.channels[channelId] != nil {
             guard let userInGuild = guild.members[user.id] else {
@@ -302,27 +327,7 @@ extension DiscordBot : CommandHandler {
     }
 
     func handleFortune(with arguments: [String], message: DiscordMessage) {
-        guard fortuneExists else {
-            message.channel?.sendMessage("This bot doesn't have fortune installed")
-
-            return
-        }
-
-        let fortune = EncoderProcess()
-        let pipe = Pipe()
-
-        fortune.launchPath = "/usr/local/bin/fortune"
-        fortune.arguments = ["-o"]
-        fortune.standardOutput = pipe
-        fortune.terminationHandler = {process in
-            guard let fortune = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) else {
-                return
-            }
-
-            message.channel?.sendMessage(fortune)
-        }
-
-        fortune.launch()
+        message.channel?.sendMessage(getFortune())
     }
 
     func handleJoin(with arguments: [String], message: DiscordMessage) {

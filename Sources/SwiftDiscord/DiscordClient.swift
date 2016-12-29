@@ -111,7 +111,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 				DefaultDiscordLogger.Logger.level = level
 			case let .logger(logger):
 				DefaultDiscordLogger.Logger = logger
-			case let .shards(shards):
+			case let .shards(shards) where shards > 0:
 				self.shards = shards
 			case .fillLargeGuilds:
 				fillLargeGuilds = true
@@ -119,6 +119,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 				fillUsers = true
 			case .pruneUsers:
 				pruneUsers = true
+			default:
+				continue
 			}
 		}
 
@@ -745,8 +747,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			}
 		}
 
-		// DefaultDiscordLogger.Logger.debug("Handling presence update", type: logType)
-
 		guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
 		guard let user = data["user"] as? [String: Any] else { return }
 		guard let userId = user["id"] as? String else { return }
@@ -759,7 +759,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			presence = DiscordPresence(presenceObject: data, guildId: guildId)
 		}
 
-		// DefaultDiscordLogger.Logger.debug("Updated presence: %@", type: logType, args: presence!)
+		DefaultDiscordLogger.Logger.debug("Updated presence: %@", type: logType, args: presence!)
 
 		guild.presences[userId] = presence!
 
