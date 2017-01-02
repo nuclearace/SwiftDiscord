@@ -31,6 +31,9 @@
             <a href="../Guides.html">Guides</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../events.html">Events</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../getting-started.html">Getting Started</a>
               </li>
             </ul>
@@ -1481,6 +1484,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>channelCreate</code> event with a single data item of type <code><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></code>, which is the created channel.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1529,6 +1534,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles channel deletes from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>channelDelete</code> event with a single data item of type <code><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></code>, which is the deleted channel.</p>
 
                       </div>
                       <div class="declaration">
@@ -1579,6 +1586,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>channelUpdate</code> event with a single data item of type <code><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></code>, which is the updated channel.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1627,6 +1636,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles guild creates from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>guildCreate</code> event with a single data item of type <code><a href="../Classes/DiscordGuild.html">DiscordGuild</a></code>, which is the created guild.</p>
 
                       </div>
                       <div class="declaration">
@@ -1677,6 +1688,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>guildDelete</code> event with a single data item of type <code><a href="../Classes/DiscordGuild.html">DiscordGuild</a></code>, which is the deleted guild.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1725,6 +1738,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles guild emoji updates from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>guildEmojisUpdate</code> event with two data items, the first is a dictionary of <code><a href="../Structs/DiscordEmoji.html">DiscordEmoji</a></code> indexed by
+their ids, and the second is the id of the guild that the emoji belong to.</p>
 
                       </div>
                       <div class="declaration">
@@ -1775,6 +1791,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>guildMemberAdd</code> event with two data items, the first is the <code><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></code> of the added member,
+the second is the id of the guild this member was added to.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1823,6 +1842,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles guild member removes from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>guildMemberRemove</code> event with two data items, the first is the <code><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></code> of the removed
+member, the second is the id of the guild this member was removed from.</p>
 
                       </div>
                       <div class="declaration">
@@ -1873,6 +1895,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>guildMemberUpdate</code> event with two data items, the first is the id of the updated member,
+the second is the id of the guild this member was updated on.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1921,6 +1946,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles guild members chunks from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>guildMembersChunk</code> event with two data items, the first is a dictionary of <code><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></code>
+indexed by their id, the second is the id of the guild for this chunk.</p>
 
                       </div>
                       <div class="declaration">
@@ -1971,6 +1999,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>guildRoleCreate</code> event with two data items, the first is the <code><a href="../Structs/DiscordRole.html">DiscordRole</a></code> that was created, the
+second is the id of the guild this was created on.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2019,6 +2050,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles guild role removes from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>guildRoleRemove</code> event with two data items, the first is the <code><a href="../Structs/DiscordRole.html">DiscordRole</a></code> that was removed, the
+second is the id of the guild this was removed from.</p>
 
                       </div>
                       <div class="declaration">
@@ -2069,6 +2103,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>guildRoleUpdate</code> event with two data items, the first is the <code><a href="../Structs/DiscordRole.html">DiscordRole</a></code> that was updated, the
+second is the id of the guild this was updated on.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2117,6 +2154,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles guild updates from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>guildUpdate</code> event with one data item, the <code><a href="../Classes/DiscordGuild.html">DiscordGuild</a></code> that was updated.</p>
 
                       </div>
                       <div class="declaration">
@@ -2167,6 +2206,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>messageCreate</code> event with one data item, the <code><a href="../Structs/DiscordMessage.html">DiscordMessage</a></code> that was created.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2216,6 +2257,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>presenceUpdate</code> event with one data item, the <code><a href="../Structs/DiscordPresence.html">DiscordPresence</a></code> that was updated.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2264,6 +2307,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles the ready event from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>ready</code> event with one data item, the raw <code>[String: Any]</code> for the event.</p>
 
                       </div>
                       <div class="declaration">
@@ -2363,6 +2408,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>voiceStateUpdate</code> event with one data item, the <code><a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a></code>.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2400,7 +2447,7 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-28)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-02)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

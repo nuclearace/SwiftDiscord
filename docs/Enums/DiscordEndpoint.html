@@ -31,6 +31,9 @@
             <a href="../Guides.html">Guides</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../events.html">Events</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../getting-started.html">Getting Started</a>
               </li>
             </ul>
@@ -1331,477 +1334,6 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Return Value</h4>
                         <p>a URLRequest that can be further customized</p>
 
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Webhooks"></a>
-                <a name="//apple_ref/swift/Section/Webhooks" class="dashAnchor"></a>
-                <a href="#/Webhooks">
-                  <h3 class="section-name">Webhooks</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint13createWebhookFT10forChannelSS4withVS_12DiscordToken7optionsGSaOVS_22DiscordEndpointOptions13WebhookOption_8callbackFGSqVS_14DiscordWebhook_T__T_"></a>
-                    <a name="//apple_ref/swift/Method/createWebhook(forChannel:with:options:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint13createWebhookFT10forChannelSS4withVS_12DiscordToken7optionsGSaOVS_22DiscordEndpointOptions13WebhookOption_8callbackFGSqVS_14DiscordWebhook_T__T_">createWebhook(forChannel:with:options:callback:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Creates a webhook for a given channel.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">createWebhook</span><span class="p">(</span><span class="n">forChannel</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-            <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">WebhookOption</span><span class="p">],</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>forChannel</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The channel to create the webhook for</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>with</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The token to authenticate to Discord with</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>options</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The options for this webhook</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>callback</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A callback that returns the webhook created, if successful.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint13deleteWebhookFTSS4withVS_12DiscordToken8callbackGSqFSbT___T_"></a>
-                    <a name="//apple_ref/swift/Method/deleteWebhook(_:with:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint13deleteWebhookFTSS4withVS_12DiscordToken8callbackGSqFSbT___T_">deleteWebhook(_:with:callback:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Deletes the specified webhook.</p>
-
-<ul>
-<li>paramter callback: An optional callback indicating whether the delete was successful</li>
-</ul>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>channelId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The snowflake id of the channel</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>with</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The token to authenticate to Discord with</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint10getWebhookFTSS4withVS_12DiscordToken8callbackFGSqVS_14DiscordWebhook_T__T_"></a>
-                    <a name="//apple_ref/swift/Method/getWebhook(_:with:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint10getWebhookFTSS4withVS_12DiscordToken8callbackFGSqVS_14DiscordWebhook_T__T_">getWebhook(_:with:callback:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Gets the specified webhook.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-            <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>webhookId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The snowflake id of the webhook</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>with</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The token to authenticate to Discord with</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>callback</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The callback function taking an optional <code>DiscordWebhook</code></p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint11getWebhooksFT10forChannelSS4withVS_12DiscordToken8callbackFGSaVS_14DiscordWebhook_T__T_"></a>
-                    <a name="//apple_ref/swift/Method/getWebhooks(forChannel:with:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint11getWebhooksFT10forChannelSS4withVS_12DiscordToken8callbackFGSaVS_14DiscordWebhook_T__T_">getWebhooks(forChannel:with:callback:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Gets the webhooks for a specified channel.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getWebhooks</span><span class="p">(</span><span class="n">forChannel</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-            <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>forChannel</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The snowflake id of the channel.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>with</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The token to authenticate to Discord with</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>callback</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The callback function taking an array of <code>DiscordWebhook</code>s</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint11getWebhooksFT8forGuildSS4withVS_12DiscordToken8callbackFGSaVS_14DiscordWebhook_T__T_"></a>
-                    <a name="//apple_ref/swift/Method/getWebhooks(forGuild:with:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint11getWebhooksFT8forGuildSS4withVS_12DiscordToken8callbackFGSaVS_14DiscordWebhook_T__T_">getWebhooks(forGuild:with:callback:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Gets the webhooks for a specified guild.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getWebhooks</span><span class="p">(</span><span class="n">forGuild</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-            <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>forGuild</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The snowflake id of the guild.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>with</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The token to authenticate to Discord with</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>callback</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The callback function taking an array of <code>DiscordWebhook</code>s</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint13modifyWebhookFTSS4withVS_12DiscordToken7optionsGSaOVS_22DiscordEndpointOptions13WebhookOption_8callbackFGSqVS_14DiscordWebhook_T__T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyWebhook(_:with:options:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint13modifyWebhookFTSS4withVS_12DiscordToken7optionsGSaOVS_22DiscordEndpointOptions13WebhookOption_8callbackFGSqVS_14DiscordWebhook_T__T_">modifyWebhook(_:with:options:callback:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Modifies a webhook.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-            <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">WebhookOption</span><span class="p">],</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>forChannel</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The channel to create the webhook for</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>with</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The token to authenticate to Discord with</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>options</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The options for this webhook</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>callback</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A callback that returns the updated webhook, if successful.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
                     </section>
                   </div>
@@ -4949,10 +4481,481 @@ that if you make modifications to the client inside of a callback, you first dis
                 </li>
               </ul>
             </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Webhooks"></a>
+                <a name="//apple_ref/swift/Section/Webhooks" class="dashAnchor"></a>
+                <a href="#/Webhooks">
+                  <h3 class="section-name">Webhooks</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint13createWebhookFT10forChannelSS4withVS_12DiscordToken7optionsGSaOVS_22DiscordEndpointOptions13WebhookOption_8callbackFGSqVS_14DiscordWebhook_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/createWebhook(forChannel:with:options:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint13createWebhookFT10forChannelSS4withVS_12DiscordToken7optionsGSaOVS_22DiscordEndpointOptions13WebhookOption_8callbackFGSqVS_14DiscordWebhook_T__T_">createWebhook(forChannel:with:options:callback:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a webhook for a given channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">createWebhook</span><span class="p">(</span><span class="n">forChannel</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
+            <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">WebhookOption</span><span class="p">],</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>forChannel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel to create the webhook for</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The token to authenticate to Discord with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The options for this webhook</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A callback that returns the webhook created, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint13deleteWebhookFTSS4withVS_12DiscordToken8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteWebhook(_:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint13deleteWebhookFTSS4withVS_12DiscordToken8callbackGSqFSbT___T_">deleteWebhook(_:with:callback:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Deletes the specified webhook.</p>
+
+<ul>
+<li>paramter callback: An optional callback indicating whether the delete was successful</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>channelId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the channel</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The token to authenticate to Discord with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint10getWebhookFTSS4withVS_12DiscordToken8callbackFGSqVS_14DiscordWebhook_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getWebhook(_:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint10getWebhookFTSS4withVS_12DiscordToken8callbackFGSqVS_14DiscordWebhook_T__T_">getWebhook(_:with:callback:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Gets the specified webhook.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
+            <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>webhookId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the webhook</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The token to authenticate to Discord with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function taking an optional <code>DiscordWebhook</code></p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint11getWebhooksFT10forChannelSS4withVS_12DiscordToken8callbackFGSaVS_14DiscordWebhook_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getWebhooks(forChannel:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint11getWebhooksFT10forChannelSS4withVS_12DiscordToken8callbackFGSaVS_14DiscordWebhook_T__T_">getWebhooks(forChannel:with:callback:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Gets the webhooks for a specified channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getWebhooks</span><span class="p">(</span><span class="n">forChannel</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
+            <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>forChannel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the channel.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The token to authenticate to Discord with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function taking an array of <code>DiscordWebhook</code>s</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint11getWebhooksFT8forGuildSS4withVS_12DiscordToken8callbackFGSaVS_14DiscordWebhook_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getWebhooks(forGuild:with:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint11getWebhooksFT8forGuildSS4withVS_12DiscordToken8callbackFGSaVS_14DiscordWebhook_T__T_">getWebhooks(forGuild:with:callback:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Gets the webhooks for a specified guild.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getWebhooks</span><span class="p">(</span><span class="n">forGuild</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
+            <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>forGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The token to authenticate to Discord with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function taking an array of <code>DiscordWebhook</code>s</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFO12SwiftDiscord15DiscordEndpoint13modifyWebhookFTSS4withVS_12DiscordToken7optionsGSaOVS_22DiscordEndpointOptions13WebhookOption_8callbackFGSqVS_14DiscordWebhook_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyWebhook(_:with:options:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFO12SwiftDiscord15DiscordEndpoint13modifyWebhookFTSS4withVS_12DiscordToken7optionsGSaOVS_22DiscordEndpointOptions13WebhookOption_8callbackFGSqVS_14DiscordWebhook_T__T_">modifyWebhook(_:with:options:callback:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Modifies a webhook.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
+            <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">WebhookOption</span><span class="p">],</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>forChannel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel to create the webhook for</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The token to authenticate to Discord with</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The options for this webhook</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A callback that returns the updated webhook, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-28)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-02)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
