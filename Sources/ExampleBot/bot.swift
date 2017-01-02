@@ -17,6 +17,7 @@
 
 import Foundation
 import SwiftDiscord
+import SwiftRateLimiter
 #if os(macOS)
 import ImageBrutalizer
 
@@ -36,13 +37,16 @@ class DiscordBot {
     let client: DiscordClient
     let startTime = Date()
 
+    fileprivate let weatherLimiter = RateLimiter(tokensPerInterval: 10, interval: "minute")
     fileprivate var inVoiceChannel = false
     fileprivate var playingYoutube = false
     fileprivate var youtube = EncoderProcess()
     fileprivate var youtubeQueue = [QueuedVideo]()
 
+    var weather = ""
+
     init(token: DiscordToken) {
-        client = DiscordClient(token: token, configuration: [.log(.verbose), .shards(2), .fillUsers, .pruneUsers])
+        client = DiscordClient(token: token, configuration: [.log(.verbose), .shards(1), .fillUsers, .pruneUsers])
 
         attachHandlers()
     }
@@ -321,6 +325,8 @@ extension DiscordBot : CommandHandler {
             handleTopic(with: arguments, message: message)
         case .stats:
             handleStats(with: arguments, message: message)
+        case .weather where arguments.count > 0:
+            handleWeather(with: arguments, message: message)
         default:
             print("Bad command \(command)")
         }
@@ -371,6 +377,20 @@ extension DiscordBot : CommandHandler {
 
     func handleTopic(with arguments: [String], message: DiscordMessage) {
         message.channel?.modifyChannel(options: [.topic(arguments.joined(separator: " "))])
+    }
+
+    func handleWeather(with arguments: [String], message: DiscordMessage) {
+        weatherLimiter.removeTokens(1) {[weak self] err, tokens in
+            guard let this = self else { return }
+            guard let weatherData = getWeatherData(forLocation: arguments.joined(separator: " "), withApiKey: this.weather),
+                  let embed = createWeatherEmbed(withWeatherData: weatherData) else {
+                message.channel?.sendMessage("Something went wrong with getting the weather data")
+
+                return
+            }
+
+            message.channel?.sendMessage("", embed: embed)
+        }
     }
 
     func handleYoutube(with arguments: [String], message: DiscordMessage) {

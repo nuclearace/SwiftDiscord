@@ -15,6 +15,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Dispatch
 import Foundation
 import SwiftDiscord
 
@@ -67,6 +68,50 @@ func createFormatMessage(withStats stats: [String: Any]) -> DiscordEmbed {
     return embed
 }
 
+func createWeatherEmbed(withWeatherData data: [String: Any]) -> DiscordEmbed? {
+    guard let displayLocation = data["display_location"] as? [String: Any],
+          let fullName = displayLocation["full"] as? String, let observationTime = data["observation_time"] as? String
+          else {
+        return nil
+    }
+
+    var embed = DiscordEmbed(title: "Current Conditions for \(fullName)",
+                             description: observationTime,
+                             color: 0xF07F07)
+
+    let fieldMaker = DiscordEmbed.Field.init(name:value:inline:)
+
+    if let weather = data["weather"] as? String {
+        embed.fields.append(fieldMaker("Weather", weather, false))
+    }
+
+    if let feelsLike = data["feelslike_string"] as? String {
+        embed.fields.append(fieldMaker("Feels like", feelsLike, true))
+    }
+
+    if let temp = data["temperature_string"] as? String {
+        embed.fields.append(fieldMaker("Temperature", temp, true))
+    }
+
+    if let dewPoint = data["dewpoint_string"] as? String {
+        embed.fields.append(fieldMaker("Dew point", dewPoint, true))
+    }
+
+    if let precipToday = data["precip_today_string"] as? String {
+        embed.fields.append(fieldMaker("Precipitation today", precipToday, true))
+    }
+
+    if let winds = data["wind_string"] as? String {
+        embed.fields.append(fieldMaker("Wind", winds, true))
+    }
+
+    if let visibilityMi = data["visibility_mi"] as? String, let visibilityKh = data["visibility_km"] as? String {
+        embed.fields.append(fieldMaker("Visibility", "\(visibilityMi) MI (\(visibilityKh) KM)", true))
+    }
+
+    return embed
+}
+
 func createGetRequest(for string: String) -> URLRequest? {
     guard let url = URL(string: string) else { return nil }
 
@@ -88,4 +133,35 @@ func getRequestData(for request: URLRequest, callback: @escaping (Data?) -> Void
 
         callback(data!)
     }.resume()
+}
+
+func getWeatherData(forLocation location: String, withApiKey apiKey: String) -> [String: Any]? {
+    let escapedLocation = location.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+    let stringUrl = "https://api.wunderground.com/api/\(apiKey)/conditions/q/\(escapedLocation).json"
+
+    guard let request = createGetRequest(for: stringUrl) else {
+        return nil
+    }
+
+    let lock = DispatchSemaphore(value: 0)
+    var weatherData: [String: Any]?
+
+    getRequestData(for: request) {data in
+        guard let data = data else {
+            lock.signal()
+
+            return
+        }
+
+        guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) else { return }
+
+        weatherData = (json as? [String: Any])?["current_observation"] as? [String: Any]
+
+        lock.signal()
+
+    }
+
+    lock.wait()
+
+    return weatherData
 }

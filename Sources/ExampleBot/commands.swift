@@ -28,6 +28,7 @@ enum Command : String {
     case stats = "stats"
     case topic = "topic"
     case youtube = "yt"
+    case weather = "weather"
 }
 
 protocol CommandHandler {
