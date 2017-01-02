@@ -68,6 +68,38 @@ func createFormatMessage(withStats stats: [String: Any]) -> DiscordEmbed {
     return embed
 }
 
+func createForecastEmbed(withForecastData data: [String: Any], tomorrow: Bool) -> DiscordEmbed? {
+    guard let forecastData = data["forecast"] as? [String: Any] else { return nil }
+    guard let current = data["current_observation"] as? [String: Any],
+          let displayLocation = current["display_location"] as? [String: Any],
+          let full = displayLocation["full"] as? String else {
+        return nil
+    }
+    guard let textForecasts = forecastData["txt_forecast"] as? [String: Any] else { return nil }
+    guard let forecasts = textForecasts["forecastday"] as? [[String: Any]] else { return nil }
+
+    let days = Array(forecasts[tomorrow ? 2...3 : 0...1])
+    let day = days[0]
+    let night = days[1]
+
+    var embed = DiscordEmbed(title: "Forecast for \(full)",
+                             description: "",
+                             color: 0xF07F07)
+
+    let fieldMaker = DiscordEmbed.Field.init(name:value:inline:)
+
+    embed.fields.append(fieldMaker(day["title"] as! String + " Fahrenheit masterrace",
+        day["fcttext"] as! String, false))
+    embed.fields.append(fieldMaker(night["title"] as! String + " Fahrenheit masterrace",
+        night["fcttext"] as! String, false))
+    embed.fields.append(fieldMaker(day["title"] as! String + " Metric plebrace",
+        day["fcttext_metric"] as! String, false))
+    embed.fields.append(fieldMaker(night["title"] as! String + " Metric plebrace",
+        night["fcttext_metric"] as! String, false))
+
+    return embed
+}
+
 func createWeatherEmbed(withWeatherData data: [String: Any]) -> DiscordEmbed? {
     guard let displayLocation = data["display_location"] as? [String: Any],
           let fullName = displayLocation["full"] as? String, let observationTime = data["observation_time"] as? String
@@ -135,16 +167,29 @@ func getRequestData(for request: URLRequest, callback: @escaping (Data?) -> Void
     }.resume()
 }
 
+func getForecastData(forLocation location: String, withApiKey apiKey: String) -> [String: Any]? {
+    let escapedLocation = location.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+    let stringUrl = "https://api.wunderground.com/api/\(apiKey)/conditions/forecast/q/\(escapedLocation).json"
+    let weatherUndergroundData = getWeatherUndergroundData(withURL: stringUrl) as? [String: Any]
+
+    return weatherUndergroundData
+}
+
 func getWeatherData(forLocation location: String, withApiKey apiKey: String) -> [String: Any]? {
     let escapedLocation = location.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
     let stringUrl = "https://api.wunderground.com/api/\(apiKey)/conditions/q/\(escapedLocation).json"
+    let weatherUndergroundData = getWeatherUndergroundData(withURL: stringUrl) as? [String: Any]
 
-    guard let request = createGetRequest(for: stringUrl) else {
+    return weatherUndergroundData?["current_observation"] as? [String: Any]
+}
+
+func getWeatherUndergroundData(withURL url: String) -> Any? {
+    guard let request = createGetRequest(for: url) else {
         return nil
     }
 
     let lock = DispatchSemaphore(value: 0)
-    var weatherData: [String: Any]?
+    var weatherData: Any?
 
     getRequestData(for: request) {data in
         guard let data = data else {
@@ -153,12 +198,15 @@ func getWeatherData(forLocation location: String, withApiKey apiKey: String) -> 
             return
         }
 
-        guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) else { return }
+        guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) else {
+            lock.signal()
 
-        weatherData = (json as? [String: Any])?["current_observation"] as? [String: Any]
+            return
+        }
+
+        weatherData = json
 
         lock.signal()
-
     }
 
     lock.wait()

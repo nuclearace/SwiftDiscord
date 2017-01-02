@@ -20,6 +20,7 @@ import SwiftDiscord
 
 enum Command : String {
     case brutal = "brutal"
+    case forecast = "forecast"
     case fortune = "fortune"
     case join = "join"
     case leave = "leave"

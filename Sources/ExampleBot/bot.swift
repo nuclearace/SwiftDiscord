@@ -46,7 +46,7 @@ class DiscordBot {
     var weather = ""
 
     init(token: DiscordToken) {
-        client = DiscordClient(token: token, configuration: [.log(.verbose), .shards(1), .fillUsers, .pruneUsers])
+        client = DiscordClient(token: token, configuration: [.log(.verbose), .shards(2), .fillUsers, .pruneUsers])
 
         attachHandlers()
     }
@@ -327,6 +327,8 @@ extension DiscordBot : CommandHandler {
             handleStats(with: arguments, message: message)
         case .weather where arguments.count > 0:
             handleWeather(with: arguments, message: message)
+        case .forecast where arguments.count > 0:
+            handleForecast(with: arguments, message: message)
         default:
             print("Bad command \(command)")
         }
@@ -355,6 +357,29 @@ extension DiscordBot : CommandHandler {
 
     func handleLeave(with arguments: [String], message: DiscordMessage) {
         client.leaveVoiceChannel()
+    }
+
+    func handleForecast(with arguments: [String], message: DiscordMessage) {
+        let tomorrow = arguments.last == "tomorrow"
+        let location: String
+
+        if tomorrow {
+            location = arguments.dropLast().joined(separator: " ")
+        } else {
+            location = arguments.joined(separator: " ")
+        }
+
+        weatherLimiter.removeTokens(1) {[weak self] err, tokens in
+            guard let this = self else { return }
+            guard let forecast = getForecastData(forLocation: location, withApiKey: this.weather),
+                  let embed = createForecastEmbed(withForecastData: forecast, tomorrow: tomorrow) else {
+                message.channel?.sendMessage("Something went wrong with getting the forecast data")
+
+                return
+            }
+
+            message.channel?.sendMessage("", embed: embed)
+        }
     }
 
     func handleMyRoles(with arguments: [String], message: DiscordMessage) {
