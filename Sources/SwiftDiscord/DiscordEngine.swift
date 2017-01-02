@@ -23,6 +23,14 @@ import WebSockets
 #endif
 import Dispatch
 
+#if os(macOS)
+private let os = "macOS"
+#elseif os(iOS)
+private let os = "iOS"
+#else
+private let os = "Linux"
+#endif
+
 /**
 	The base class for Discord WebSocket communications.
 */
@@ -45,7 +53,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		var identify: [String: Any] = [
 			"token": client!.token.token,
 			"properties": [
-				"$os": "macOS",
+				"$os": os,
 				"$browser": "SwiftDiscord",
 				"$device": "SwiftDiscord",
 				"$referrer": "",
