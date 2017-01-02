@@ -392,6 +392,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
+		Emits the `channelCreate` event with a single data item of type `DiscordChannel`, which is the created channel.
+
 		- parameter with: The data from the event
 	*/
 	open func handleChannelCreate(with data: [String: Any]) {
@@ -422,6 +424,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
+		Emits the `channelDelete` event with a single data item of type `DiscordChannel`, which is the deleted channel.
+
 		- parameter with: The data from the event
 	*/
 	open func handleChannelDelete(with data: [String: Any]) {
@@ -435,13 +439,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		DefaultDiscordLogger.Logger.verbose("Removed channel: %@", type: logType, args: removedChannel)
 
-		handleEvent("channelDelete", with: [guildId, removedChannel])
+		handleEvent("channelDelete", with: [removedChannel])
 	}
 
 	/**
 		Handles channel updates from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
+
+		Emits the `channelUpdate` event with a single data item of type `DiscordChannel`, which is the updated channel.
 
 		- parameter with: The data from the event
 	*/
@@ -456,13 +462,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		channelCache.removeValue(forKey: channel.id)
 
-		handleEvent("channelUpdate", with: [channel.guildId, channel])
+		handleEvent("channelUpdate", with: [channel])
 	}
 
 	/**
 		Handles guild creates from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
+
+		Emits the `guildCreate` event with a single data item of type `DiscordGuild`, which is the created guild.
 
 		- parameter with: The data from the event
 	*/
@@ -475,7 +483,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		guilds[guild.id] = guild
 
-		handleEvent("guildCreate", with: [guild.id, guild])
+		handleEvent("guildCreate", with: [guild])
 
 		guard fillLargeGuilds && guild.large else { return }
 
@@ -490,6 +498,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
+		Emits the `guildDelete` event with a single data item of type `DiscordGuild`, which is the deleted guild.
+
 		- parameter with: The data from the event
 	*/
 	open func handleGuildDelete(with data: [String: Any]) {
@@ -500,13 +510,16 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		DefaultDiscordLogger.Logger.verbose("Removed guild: %@", type: logType, args: removedGuild)
 
-		handleEvent("guildDelete", with: [guildId, removedGuild])
+		handleEvent("guildDelete", with: [removedGuild])
 	}
 
 	/**
 		Handles guild emoji updates from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
+
+		Emits the `guildEmojisUpdate` event with two data items, the first is a dictionary of `DiscordEmoji` indexed by
+		their ids, and the second is the id of the guild that the emoji belong to.
 
 		- parameter with: The data from the event
 	*/
@@ -522,13 +535,16 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		guilds[guildId]?.emojis = discordEmojis
 
-		handleEvent("guildEmojisUpdate", with: [guildId, discordEmojis])
+		handleEvent("guildEmojisUpdate", with: [discordEmojis, guildId])
 	}
 
 	/**
 		Handles guild member adds from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
+
+		Emits the `guildMemberAdd` event with two data items, the first is the `DiscordGuildMember` of the added member,
+		the second is the id of the guild this member was added to.
 
 		- parameter with: The data from the event
 	*/
@@ -544,13 +560,16 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		guilds[guildId]?.members[guildMember.user.id] = guildMember
 		guilds[guildId]?.memberCount += 1
 
-		handleEvent("guildMemberAdd", with: [guildId, guildMember])
+		handleEvent("guildMemberAdd", with: [guildMember, guildId])
 	}
 
 	/**
 		Handles guild member removes from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
+
+		Emits the `guildMemberRemove` event with two data items, the first is the `DiscordGuildMember` of the removed
+		member, the second is the id of the guild this member was removed from.
 
 		- parameter with: The data from the event
 	*/
@@ -565,9 +584,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		if let removedGuildMember = guilds[guildId]?.members.removeValue(forKey: id) {
 			DefaultDiscordLogger.Logger.verbose("Removed guild member: %@", type: logType, args: removedGuildMember)
 
-			handleEvent("guildMemberRemove", with: [guildId, removedGuildMember])
+			handleEvent("guildMemberRemove", with: [removedGuildMember, guildId])
 		} else {
-			handleEvent("guildMemberRemove", with: [guildId, data])
+			handleEvent("guildMemberRemove", with: [data, guildId])
 		}
 	}
 
@@ -575,6 +594,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		Handles guild member updates from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
+
+		Emits the `guildMemberUpdate` event with two data items, the first is the id of the updated member,
+		the second is the id of the guild this member was updated on.
 
 		- parameter with: The data from the event
 	*/
@@ -588,13 +610,16 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		DefaultDiscordLogger.Logger.verbose("Updated guild member: %@", type: logType, args: id)
 
-		handleEvent("guildMemberUpdate", with: [guildId, id])
+		handleEvent("guildMemberUpdate", with: [id, guildId])
 	}
 
 	/**
 		Handles guild members chunks from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
+
+		Emits the `guildMembersChunk` event with two data items, the first is a dictionary of `DiscordGuildMember`
+		indexed by their id, the second is the id of the guild for this chunk.
 
 		- parameter with: The data from the event
 	*/
@@ -614,7 +639,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 					guild.members[memberId] = member
 				}
 
-				self.handleEvent("guildMembersChunk", with: [guildId, guildMembers])
+				self.handleEvent("guildMembersChunk", with: [guildMembers, guildId])
 			}
 		}
 	}
@@ -623,6 +648,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		Handles guild role creates from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
+
+		Emits the `guildRoleCreate` event with two data items, the first is the `DiscordRole` that was created, the
+		second is the id of the guild this was created on.
 
 		- parameter with: The data from the event
 	*/
@@ -638,13 +666,16 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		guilds[guildId]?.roles[role.id] = role
 
-		handleEvent("guildRoleCreate", with: [guildId, role])
+		handleEvent("guildRoleCreate", with: [role, guildId])
 	}
 
 	/**
 		Handles guild role removes from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
+
+		Emits the `guildRoleRemove` event with two data items, the first is the `DiscordRole` that was removed, the
+		second is the id of the guild this was removed from.
 
 		- parameter with: The data from the event
 	*/
@@ -657,13 +688,16 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		DefaultDiscordLogger.Logger.verbose("Removed role: %@", type: logType, args: removedRole)
 
-		handleEvent("guildRoleRemove", with: [guildId, removedRole])
+		handleEvent("guildRoleRemove", with: [removedRole, guildId])
 	}
 
 	/**
 		Handles guild member updates from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
+
+		Emits the `guildRoleUpdate` event with two data items, the first is the `DiscordRole` that was updated, the
+		second is the id of the guild this was updated on.
 
 		- parameter with: The data from the event
 	*/
@@ -680,13 +714,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		guilds[guildId]?.roles[role.id] = role
 
-		handleEvent("guildRoleUpdate", with: [guildId, role])
+		handleEvent("guildRoleUpdate", with: [role, guildId])
 	}
 
 	/**
 		Handles guild updates from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
+
+		Emits the `guildUpdate` event with one data item, the `DiscordGuild` that was updated.
 
 		- parameter with: The data from the event
 	*/
@@ -698,13 +734,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		DefaultDiscordLogger.Logger.verbose("Updated guild: %@", type: logType, args: updatedGuild)
 
-		handleEvent("guildUpdate", with: [guildId, updatedGuild])
+		handleEvent("guildUpdate", with: [updatedGuild])
 	}
 
 	/**
 		Handles message creates from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
+
+		Emits the `messageCreate` event with one data item, the `DiscordMessage` that was created.
 
 		- parameter with: The data from the event
 	*/
@@ -722,6 +760,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		Handles presence updates from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
+
+		Emits the `presenceUpdate` event with one data item, the `DiscordPresence` that was updated.
 
 		- parameter with: The data from the event
 	*/
@@ -763,7 +803,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		guild.presences[userId] = presence!
 
-		handleEvent("presenceUpdate", with: [guildId, presence!])
+		handleEvent("presenceUpdate", with: [presence!])
 
 		guard pruneUsers || fillUsers else { return }
 
@@ -774,6 +814,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		Handles the ready event from Discord. You shouldn't need to call this method directly.
 
 		Override to provide additional custmization around this event.
+
+		Emits the `ready` event with one data item, the raw `[String: Any]` for the event.
 
 		- parameter with: The data from the event
 	*/
@@ -827,6 +869,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
+		Emits the `voiceStateUpdate` event with one data item, the `DiscordVoiceState`.
+
 		- parameter with: The data from the event
 	*/
 	open func handleVoiceStateUpdate(with data: [String: Any]) {
@@ -854,6 +898,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			}
 		}
 
-		handleEvent("voiceStateUpdate", with: [guildId, state])
+		handleEvent("voiceStateUpdate", with: [state])
 	}
 }
