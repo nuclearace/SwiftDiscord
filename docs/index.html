@@ -27,6 +27,17 @@
       <nav class="sidebar">
         <ul class="nav-groups">
           <li class="nav-group-name">
+            <a href="Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="events.html">Events</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="getting-started.html">Getting Started</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
@@ -40,6 +51,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/DiscordLazyValue.html">DiscordLazyValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/DiscordShardManager.html">DiscordShardManager</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a>
@@ -178,6 +192,9 @@
                 <a href="Protocols/DiscordLogger.html">DiscordLogger</a>
               </li>
               <li class="nav-group-task">
+                <a href="Protocols/DiscordShard.html">DiscordShard</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/DiscordUserActor.html">DiscordUserActor</a>
               </li>
               <li class="nav-group-task">
@@ -202,6 +219,15 @@
               </li>
               <li class="nav-group-task">
                 <a href="Structs/DiscordEmbed.html">DiscordEmbed</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/DiscordEmbed/Author.html">– Author</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/DiscordEmbed/Field.html">– Field</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/DiscordEmbed/Footer.html">– Footer</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/DiscordEmbed/Provider.html">– Provider</a>
@@ -232,6 +258,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Structs/DiscordEndpointOptions/ModifyGuild.html">– ModifyGuild</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/DiscordEndpointOptions/WebhookOption.html">– WebhookOption</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/DiscordFileUpload.html">DiscordFileUpload</a>
@@ -296,6 +325,9 @@
               <li class="nav-group-task">
                 <a href="Structs/DiscordVoiceState.html">DiscordVoiceState</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Structs/DiscordWebhook.html">DiscordWebhook</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -323,10 +355,11 @@
 <li><p>Features:</p>
 
 <ul>
-<li>Sending and receiving voice</li>
-<li>macOS and iOS support (iOS currently does not support voice)</li>
-<li>Bot and User account support (OAuth coming soon)</li>
+<li>Sending and receiving voice.</li>
+<li>macOS and iOS support (iOS currently does not support voice).</li>
+<li>Bot and User account support (OAuth coming soon).</li>
 <li>REST API separate from client. You can use the REST API separately to build your own client if you wish.</li>
+<li>Configurable sharding.</li>
 </ul></li>
 <li><p>Requirements:</p>
 
@@ -356,13 +389,14 @@
 <p><img src="https://i.imgur.com/vhhnfJp.png" alt=""></p>
 
 <p>** - Socks should be removed on iOS as voice is not supported on it.</p>
+<a href='#usage' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='usage'>Usage</h1>
 
-<p>See Sources/ExampleBot for a basic example bot.</p>
+<p>Checkout the <a href="https://nuclearace.github.io/SwiftDiscord/getting-started.html">getting started</a> page for a quickstart guide.</p>
 <a href='#a-href-https-nuclearace-github-io-swiftdiscord-index-html-docs-a' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='a-href-https-nuclearace-github-io-swiftdiscord-index-html-docs-a'><a href="https://nuclearace.github.io/SwiftDiscord/index.html">Docs</a></h1>
 
 <p>Docs are generated with <a href="https://github.com/realm/jazzy">jazzy</a> using the magical command:</p>
 
-<p><code>jazzy --xcodebuild-arguments -project,SwiftDiscord.xcodeproj/,-scheme,SwiftDiscord</code></p>
+<p><code>jazzy --xcodebuild-arguments -project,SwiftDiscord.xcodeproj/,-scheme,SwiftDiscord --documentation=UsageDocs/*.md</code></p>
 
 <p><em>Must have setup an Xcode project</em></p>
 <a href='#why-no-cocoapods' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='why-no-cocoapods'>Why no CocoaPods?</h1>
@@ -372,7 +406,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-23)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-02)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

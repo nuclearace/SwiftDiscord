@@ -28,6 +28,17 @@
       <nav class="sidebar">
         <ul class="nav-groups">
           <li class="nav-group-name">
+            <a href="../Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../events.html">Events</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../getting-started.html">Getting Started</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="../Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
@@ -41,6 +52,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/DiscordLazyValue.html">DiscordLazyValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordShardManager.html">DiscordShardManager</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a>
@@ -179,6 +193,9 @@
                 <a href="../Protocols/DiscordLogger.html">DiscordLogger</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/DiscordShard.html">DiscordShard</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/DiscordUserActor.html">DiscordUserActor</a>
               </li>
               <li class="nav-group-task">
@@ -203,6 +220,15 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordEmbed.html">DiscordEmbed</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Author.html">– Author</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Field.html">– Field</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Footer.html">– Footer</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordEmbed/Provider.html">– Provider</a>
@@ -233,6 +259,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordEndpointOptions/ModifyGuild.html">– ModifyGuild</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/WebhookOption.html">– WebhookOption</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordFileUpload.html">DiscordFileUpload</a>
@@ -296,6 +325,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordWebhook.html">DiscordWebhook</a>
               </li>
             </ul>
           </li>
@@ -372,9 +404,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordClient6engineGSqPS_17DiscordEngineSpec__"></a>
-                    <a name="//apple_ref/swift/Property/engine" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient6engineGSqPS_17DiscordEngineSpec__">engine</a>
+                    <a name="/s:vC12SwiftDiscord13DiscordClient12shardManagerGSQCS_19DiscordShardManager_"></a>
+                    <a name="//apple_ref/swift/Property/shardManager" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient12shardManagerGSQCS_19DiscordShardManager_">shardManager</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -382,14 +414,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The main WebSocket engine used to communicate with Discord.</p>
+                        <p>The manager for this client&rsquo;s shards.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordEngineSpec.html">DiscordEngineSpec</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">shardManager</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordShardManager.html">DiscordShardManager</a></span><span class="o">!</span></code></pre>
 
                         </div>
                       </div>
@@ -481,9 +513,9 @@ made on this queue, as this is the queue where modifications on them are made.</
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordClient6resumeSb"></a>
-                    <a name="//apple_ref/swift/Property/resume" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient6resumeSb">resume</a>
+                    <a name="/s:vC12SwiftDiscord13DiscordClient15fillLargeGuildsSb"></a>
+                    <a name="//apple_ref/swift/Property/fillLargeGuilds" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient15fillLargeGuildsSb">fillLargeGuilds</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -491,14 +523,95 @@ made on this queue, as this is the queue where modifications on them are made.</
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Whether this client tries to resume a previously established session.</p>
+                        <p>Whether large guilds should have their users fetched as soon as they are created.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">resume</span> <span class="o">=</span> <span class="kc">true</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">fillLargeGuilds</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord13DiscordClient9fillUsersSb"></a>
+                    <a name="//apple_ref/swift/Property/fillUsers" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient9fillUsersSb">fillUsers</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether the client should query the API for users who aren&rsquo;t in the guild</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">fillUsers</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord13DiscordClient10pruneUsersSb"></a>
+                    <a name="//apple_ref/swift/Property/pruneUsers" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient10pruneUsersSb">pruneUsers</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether the client should remove users from guilds when they go offline.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">pruneUsers</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord13DiscordClient6shardsSi"></a>
+                    <a name="//apple_ref/swift/Property/shards" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient6shardsSi">shards</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>How many shards this client should spawn. Default is one.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">shards</span> <span class="o">=</span> <span class="mi">1</span></code></pre>
 
                         </div>
                       </div>
@@ -607,33 +720,6 @@ made on this queue, as this is the queue where modifications on them are made.</
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">relationships</span> <span class="o">=</span> <span class="p">[[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]]()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordClient9sessionIdGSqSS_"></a>
-                    <a name="//apple_ref/swift/Property/sessionId" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient9sessionIdGSqSS_">sessionId</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The current session id.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">sessionId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -778,37 +864,6 @@ made on this queue, as this is the queue where modifications on them are made.</
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient12attachEngineFT_T_"></a>
-                    <a name="//apple_ref/swift/Method/attachEngine()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient12attachEngineFT_T_">attachEngine()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Attaches a <code><a href="../Classes/DiscordEngine.html">DiscordEngine</a></code>.</p>
-
-<p>You most likely won&rsquo;t need to call this method directly.</p>
-
-<p>Override this method to attach a custom engine that conforms to <code><a href="../Protocols/DiscordEngineSpec.html">DiscordEngineSpec</a></code>.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">attachEngine</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:FC12SwiftDiscord13DiscordClient7connectFT_T_"></a>
                     <a name="//apple_ref/swift/Method/connect()" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient7connectFT_T_">connect()</a>
@@ -849,7 +904,7 @@ with the client.</p>
                       <div class="abstract">
                         <p>Disconnects from Discord. A <code>disconnect</code> event is fired when the client has successfully disconnected.</p>
 
-<p>Calling this method turns off automatic resuming, set <code><a href="../Classes/DiscordClient.html#/s:vC12SwiftDiscord13DiscordClient6resumeSb">resume</a></code> to <code>true</code> before calling <code><a href="../Classes/DiscordClient.html#/s:FC12SwiftDiscord13DiscordClient7connectFT_T_">connect()</a></code> again.</p>
+<p>Calling this method turns off automatic resuming, set <code>resume</code> to <code>true</code> before calling <code><a href="../Classes/DiscordClient.html#/s:FC12SwiftDiscord13DiscordClient7connectFT_T_">connect()</a></code> again.</p>
 
                       </div>
                       <div class="declaration">
@@ -1041,57 +1096,9 @@ You shouldn&rsquo;t need to call this event directly.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient22handleEngineDisconnectFGSaP__T_"></a>
-                    <a name="//apple_ref/swift/Method/handleEngineDisconnect(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient22handleEngineDisconnectFGSaP__T_">handleEngineDisconnect(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Called after the client receives a disconnect event from the engine. This method decides whether to initate a
-resume, or to emit a disconnect event.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleEngineDisconnect</span><span class="p">(</span><span class="n">_</span> <span class="nv">disconnectData</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">])</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>disconnectData</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The data from the disconnect event</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient20handleEngineDispatchFVS_21DiscordGatewayPayloadT_"></a>
-                    <a name="//apple_ref/swift/Method/handleEngineDispatch(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient20handleEngineDispatchFVS_21DiscordGatewayPayloadT_">handleEngineDispatch(_:)</a>
+                    <a name="/s:FC12SwiftDiscord13DiscordClient20handleEngineDispatchFTOS_20DiscordDispatchEvent4withVS_21DiscordGatewayPayload_T_"></a>
+                    <a name="//apple_ref/swift/Method/handleEngineDispatch(_:with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient20handleEngineDispatchFTOS_20DiscordDispatchEvent4withVS_21DiscordGatewayPayload_T_">handleEngineDispatch(_:with:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1108,7 +1115,7 @@ resume, or to emit a disconnect event.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleEngineDispatch</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleEngineDispatch</span><span class="p">(</span><span class="n">_</span> <span class="nv">event</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a></span><span class="p">,</span> <span class="n">with</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1222,33 +1229,6 @@ resume, or to emit a disconnect event.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleVoiceData</span><span class="p">(</span><span class="n">_</span> <span class="nv">data</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord16DiscordVoiceData">DiscordVoiceData</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient17invalidateSessionFT_T_"></a>
-                    <a name="//apple_ref/swift/Method/invalidateSession()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient17invalidateSessionFT_T_">invalidateSession()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Invalides the current session id.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">invalidateSession</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1432,33 +1412,6 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient13resumeGatewayFT_T_"></a>
-                    <a name="//apple_ref/swift/Method/resumeGateway()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient13resumeGatewayFT_T_">resumeGateway()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Tries to resume a disconnected gateway connection.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">resumeGateway</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:FC12SwiftDiscord13DiscordClient11setPresenceFVS_21DiscordPresenceUpdateT_"></a>
                     <a name="//apple_ref/swift/Method/setPresence(_:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient11setPresenceFVS_21DiscordPresenceUpdateT_">setPresence(_:)</a>
@@ -1531,6 +1484,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>channelCreate</code> event with a single data item of type <code><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></code>, which is the created channel.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1579,6 +1534,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles channel deletes from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>channelDelete</code> event with a single data item of type <code><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></code>, which is the deleted channel.</p>
 
                       </div>
                       <div class="declaration">
@@ -1629,6 +1586,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>channelUpdate</code> event with a single data item of type <code><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></code>, which is the updated channel.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1677,6 +1636,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles guild creates from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>guildCreate</code> event with a single data item of type <code><a href="../Classes/DiscordGuild.html">DiscordGuild</a></code>, which is the created guild.</p>
 
                       </div>
                       <div class="declaration">
@@ -1727,6 +1688,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>guildDelete</code> event with a single data item of type <code><a href="../Classes/DiscordGuild.html">DiscordGuild</a></code>, which is the deleted guild.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1775,6 +1738,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles guild emoji updates from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>guildEmojisUpdate</code> event with two data items, the first is a dictionary of <code><a href="../Structs/DiscordEmoji.html">DiscordEmoji</a></code> indexed by
+their ids, and the second is the id of the guild that the emoji belong to.</p>
 
                       </div>
                       <div class="declaration">
@@ -1825,6 +1791,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>guildMemberAdd</code> event with two data items, the first is the <code><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></code> of the added member,
+the second is the id of the guild this member was added to.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1873,6 +1842,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles guild member removes from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>guildMemberRemove</code> event with two data items, the first is the <code><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></code> of the removed
+member, the second is the id of the guild this member was removed from.</p>
 
                       </div>
                       <div class="declaration">
@@ -1923,6 +1895,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>guildMemberUpdate</code> event with two data items, the first is the id of the updated member,
+the second is the id of the guild this member was updated on.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1971,6 +1946,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles guild members chunks from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>guildMembersChunk</code> event with two data items, the first is a dictionary of <code><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></code>
+indexed by their id, the second is the id of the guild for this chunk.</p>
 
                       </div>
                       <div class="declaration">
@@ -2021,6 +1999,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>guildRoleCreate</code> event with two data items, the first is the <code><a href="../Structs/DiscordRole.html">DiscordRole</a></code> that was created, the
+second is the id of the guild this was created on.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2069,6 +2050,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles guild role removes from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>guildRoleRemove</code> event with two data items, the first is the <code><a href="../Structs/DiscordRole.html">DiscordRole</a></code> that was removed, the
+second is the id of the guild this was removed from.</p>
 
                       </div>
                       <div class="declaration">
@@ -2119,6 +2103,9 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>guildRoleUpdate</code> event with two data items, the first is the <code><a href="../Structs/DiscordRole.html">DiscordRole</a></code> that was updated, the
+second is the id of the guild this was updated on.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2167,6 +2154,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles guild updates from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>guildUpdate</code> event with one data item, the <code><a href="../Classes/DiscordGuild.html">DiscordGuild</a></code> that was updated.</p>
 
                       </div>
                       <div class="declaration">
@@ -2217,6 +2206,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>messageCreate</code> event with one data item, the <code><a href="../Structs/DiscordMessage.html">DiscordMessage</a></code> that was created.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2265,6 +2256,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <p>Handles presence updates from Discord. You shouldn&rsquo;t need to call this method directly.</p>
 
 <p>Override to provide additional custmization around this event.</p>
+
+<p>Emits the <code>presenceUpdate</code> event with one data item, the <code><a href="../Structs/DiscordPresence.html">DiscordPresence</a></code> that was updated.</p>
 
                       </div>
                       <div class="declaration">
@@ -2315,61 +2308,14 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>ready</code> event with one data item, the raw <code>[String: Any]</code> for the event.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleReady</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>with</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The data from the event</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClient13handleResumedFT4withGVs10DictionarySSP___T_"></a>
-                    <a name="//apple_ref/swift/Method/handleResumed(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClient13handleResumedFT4withGVs10DictionarySSP___T_">handleResumed(with:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Handles the resumed event from Discord. You shouldn&rsquo;t need to call this method directly.</p>
-
-<p>Override to provide additional custmization around this event.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleResumed</span><span class="p">(</span><span class="n">with</span> <span class="nv">data</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
 
                         </div>
                       </div>
@@ -2462,6 +2408,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
 
 <p>Override to provide additional custmization around this event.</p>
 
+<p>Emits the <code>voiceStateUpdate</code> event with one data item, the <code><a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a></code>.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2499,7 +2447,7 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-23)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-02)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

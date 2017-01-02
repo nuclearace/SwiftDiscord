@@ -19,7 +19,7 @@ import class Dispatch.DispatchSemaphore
 import Foundation
 
 /// Represents a Guild.
-public final class DiscordGuild : DiscordClientHolder {
+public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 	// MARK: Properties
 
 	// TODO figure out what features are
@@ -40,6 +40,11 @@ public final class DiscordGuild : DiscordClientHolder {
 
 	/// Whether this guild is unavaiable.
 	public let unavailable: Bool
+
+	/// - returns: A description of this guild
+	public var description: String {
+		return "DiscordGuild(name: \(name))"
+	}
 
 	/// Reference to the client.
 	public weak var client: DiscordClient?
@@ -176,6 +181,34 @@ public final class DiscordGuild : DiscordClientHolder {
 		return bannedUsers
 	}
 
+	/**
+		Gets a guild member by their user id.
+
+		**NOTE**: This is a blocking method. If you need an async version user the `getGuildMember` method from
+		`DiscordEndpointConsumer`, which is available on `DiscordClient`.
+
+		- parameter userId: The user id of the member to get
+		- returns: The guild member, if one was found
+	*/
+	public func getGuildMember(_ userId: String) -> DiscordGuildMember? {
+		guard let client = self.client else { return nil }
+
+		let lock = DispatchSemaphore(value: 0)
+		var guildMember: DiscordGuildMember?
+
+		client.getGuildMember(by: userId, on: id) {member in
+			DefaultDiscordLogger.Logger.debug("Got member: %@", type: "DiscordGuild", args: userId)
+
+			guildMember = member
+
+			lock.signal()
+		}
+
+		lock.wait()
+
+		return guildMember
+	}
+
 	// Used to setup initial guilds
 	static func guildsFromArray(_ guilds: [[String: Any]], client: DiscordClient? = nil) -> [String: DiscordGuild] {
 		var guildDictionary = [String: DiscordGuild]()
@@ -243,6 +276,10 @@ public final class DiscordGuild : DiscordClientHolder {
 		}
 
 		return self
+	}
+
+	func shardNumber(assuming numOfShards: Int) -> Int {
+		return (Int(id)! >> 22) % numOfShards
 	}
 
 	/**

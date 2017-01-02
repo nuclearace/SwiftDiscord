@@ -48,6 +48,8 @@ final class DiscordRateLimiter {
             let rateLimit = DiscordRateLimiter.shared.endpointLimits[endpointKey]!
 
             if rateLimit.atLimit {
+                DefaultDiscordLogger.Logger.debug("Hit rate limit: %@", type: "DiscordRateLimiter", args: rateLimit)
+
                 // We've hit a rate limit, enqueue this request for later
                 rateLimit.queue.append(RateLimitedRequest(request: request, callback: callback))
 
@@ -184,7 +186,7 @@ private final class DiscordRateLimit {
         scheduledReset = true
 
         queue.asyncAfter(deadline: deadlineForReset) {
-            // print("reset triggered")
+            DefaultDiscordLogger.Logger.debug("Reset triggered: %@", type: "RateLimit", args: self.endpointKey)
             self.remaining = self.limit
             self.scheduledReset = false
 
@@ -201,7 +203,8 @@ private final class DiscordRateLimit {
                 removed += 1
             } while removed < self.remaining && self.queue.count != 0
 
-            // print("sent \(removed) requests")
+            DefaultDiscordLogger.Logger.debug("Sent %@ requests for limit: %@", type: "RateLimit",
+                args: removed, self.endpointKey)
         }
     }
 

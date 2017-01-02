@@ -34,12 +34,32 @@ public protocol DiscordEngineGatewayHandling : DiscordEngineSpec, DiscordEngineH
         - parameter payload: The dispatch payload
     */
     func handleHello(_ payload: DiscordGatewayPayload)
+
+    /**
+        Handles the resumed event.
+    */
+    func handleResumed(_ payload: DiscordGatewayPayload)
 }
 
 public extension DiscordEngineGatewayHandling {
     /// Default implementation
 	func handleDispatch(_ payload: DiscordGatewayPayload) {
-		client?.handleEngineDispatch(payload)
+        guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
+            DefaultDiscordLogger.Logger.error("Could not create dispatch event %@", type: "DiscordEngineGatewayHandling",
+                args: payload)
+
+            return
+        }
+
+        if event == .ready, case let .object(payloadObject) = payload.payload,
+            let sessionId = payloadObject["session_id"] as? String {
+                manager?.signalShardConnected(shardNum: shardNum)
+                self.sessionId = sessionId
+        } else if event == .resumed {
+            handleResumed(payload)
+        }
+
+		client?.handleEngineDispatch(event, with: payload)
 	}
 
     /// Default implementation

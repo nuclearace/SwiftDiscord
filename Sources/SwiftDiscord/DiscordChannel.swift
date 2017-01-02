@@ -47,18 +47,40 @@ public extension DiscordChannel {
     // MARK: Properties
 
     /// - returns: The guild that this channel is associated with. Or nil if this channel has no guild.
-    var guild: DiscordGuild? {
+    public var guild: DiscordGuild? {
         return client?.guildForChannel(id)
     }
 
     // MARK: Methods
 
     /**
+        Pins a message to this channel.
+
+        - parameter message: The message to pin
+    */
+    public func pinMessage(_ message: DiscordMessage) {
+        guard let client = self.client else { return }
+
+        client.addPinnedMessage(message.id, on: id)
+    }
+
+    /**
+        Deletes this channel.
+    */
+    public func delete() {
+        guard let client = self.client else { return }
+
+        DefaultDiscordLogger.Logger.log("Deleting channel: %@", type: "DiscordChannel", args: id)
+
+        client.deleteChannel(id)
+    }
+
+    /**
         Deletes a message from this channel.
 
         - parameter message: The message to delete
     */
-    func deleteMessage(_ message: DiscordMessage) {
+    public func deleteMessage(_ message: DiscordMessage) {
         guard let client = self.client else { return }
 
         client.deleteMessage(message.id, on: id)
@@ -72,7 +94,7 @@ public extension DiscordChannel {
 
         - returns: An Array of pinned messages
     */
-    func getPinnedMessages() -> [DiscordMessage] {
+    public func getPinnedMessages() -> [DiscordMessage] {
         guard let client = self.client else { return [] }
 
         let lock = DispatchSemaphore(value: 0)
@@ -95,7 +117,7 @@ public extension DiscordChannel {
 
         - parameter options: An array of `DiscordEndpointOptions.ModifyChannel`
     */
-    func modifyChannel(options: [DiscordEndpointOptions.ModifyChannel]) {
+    public func modifyChannel(options: [DiscordEndpointOptions.ModifyChannel]) {
         guard let client = self.client else { return }
 
         client.modifyChannel(id, options: options)
@@ -108,7 +130,7 @@ public extension DiscordChannel {
         - parameter content: An optional message for this upload
         - parameter tts: Whether the message is TTS
     */
-    func sendFile(_ file: DiscordFileUpload, content: String = "", tts: Bool = false) {
+    public func sendFile(_ file: DiscordFileUpload, content: String = "", tts: Bool = false) {
         guard let client = self.client, type != .voice else { return }
 
         client.sendFile(file, content: content, to: id, tts: tts)
@@ -119,20 +141,32 @@ public extension DiscordChannel {
 
         - parameter content: An optional message for this upload
         - parameter tts: Whether the message is TTS
+        - parameter embed: An optional embed for this message
     */
-    func sendMessage(_ content: String, tts: Bool = false) {
+    public func sendMessage(_ content: String, tts: Bool = false, embed: DiscordEmbed? = nil) {
         guard let client = self.client, type != .voice else { return }
 
-        client.sendMessage(content, to: id, tts: tts)
+        client.sendMessage(content, to: id, tts: tts, embed: embed)
     }
 
     /**
         Sends that this user is typing on this channel.
     */
-    func triggerTyping() {
+    public func triggerTyping() {
         guard let client = self.client else { return }
 
         client.triggerTyping(on: id)
+    }
+
+    /**
+        Unpins a message from this channel.
+
+        - parameter message: The message to unpin.
+    */
+    public func unpinMessage(_ message: DiscordMessage) {
+        guard let client = self.client else { return }
+
+        client.deletePinnedMessage(message.id, on: id)
     }
 }
 
@@ -147,10 +181,11 @@ func channelFromObject(_ object: [String: Any]) -> DiscordChannel? {
     }
 }
 
-func privateChannelsFromArray(_ channels: [[String: Any]]) -> [String: DiscordChannel] {
+func privateChannelsFromArray(_ channels: [[String: Any]], client: DiscordClient) -> [String: DiscordChannel] {
     var channelDict = [String: DiscordChannel]()
 
-    for case let channel? in channels.map(channelFromObject) {
+    for case var channel? in channels.map(channelFromObject) {
+        channel.client = client
         channelDict[channel.id] = channel
     }
 

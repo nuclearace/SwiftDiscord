@@ -28,6 +28,17 @@
       <nav class="sidebar">
         <ul class="nav-groups">
           <li class="nav-group-name">
+            <a href="../Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../events.html">Events</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../getting-started.html">Getting Started</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="../Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
@@ -41,6 +52,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/DiscordLazyValue.html">DiscordLazyValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordShardManager.html">DiscordShardManager</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a>
@@ -179,6 +193,9 @@
                 <a href="../Protocols/DiscordLogger.html">DiscordLogger</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/DiscordShard.html">DiscordShard</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/DiscordUserActor.html">DiscordUserActor</a>
               </li>
               <li class="nav-group-task">
@@ -203,6 +220,15 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordEmbed.html">DiscordEmbed</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Author.html">– Author</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Field.html">– Field</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Footer.html">– Footer</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordEmbed/Provider.html">– Provider</a>
@@ -233,6 +259,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordEndpointOptions/ModifyGuild.html">– ModifyGuild</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/WebhookOption.html">– WebhookOption</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordFileUpload.html">DiscordFileUpload</a>
@@ -297,6 +326,9 @@
               <li class="nav-group-task">
                 <a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordWebhook.html">DiscordWebhook</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -318,7 +350,7 @@
             <h1>DiscordEmbed</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordEmbed</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordEmbed</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
 
                 </div>
               </div>
@@ -335,6 +367,90 @@
                 </a>
               </div>
               <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:VV12SwiftDiscord12DiscordEmbed6Author"></a>
+                    <a name="//apple_ref/swift/Struct/Author" class="dashAnchor"></a>
+                    <a class="token" href="#/s:VV12SwiftDiscord12DiscordEmbed6Author">Author</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents an Embed&rsquo;s author.</p>
+
+                        <a href="../Structs/DiscordEmbed/Author.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Author</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:VV12SwiftDiscord12DiscordEmbed5Field"></a>
+                    <a name="//apple_ref/swift/Struct/Field" class="dashAnchor"></a>
+                    <a class="token" href="#/s:VV12SwiftDiscord12DiscordEmbed5Field">Field</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents an Embed&rsquo;s fields.</p>
+
+                        <a href="../Structs/DiscordEmbed/Field.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Field</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:VV12SwiftDiscord12DiscordEmbed6Footer"></a>
+                    <a name="//apple_ref/swift/Struct/Footer" class="dashAnchor"></a>
+                    <a class="token" href="#/s:VV12SwiftDiscord12DiscordEmbed6Footer">Footer</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents an Embed&rsquo;s footer.</p>
+
+                        <a href="../Structs/DiscordEmbed/Footer.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Footer</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -356,7 +472,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Provider</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Provider</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
 
                         </div>
                       </div>
@@ -384,7 +500,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Thumbnail</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Thumbnail</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
 
                         </div>
                       </div>
@@ -402,6 +518,60 @@
                 </a>
               </div>
               <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV12SwiftDiscord12DiscordEmbed6authorGSqVS0_6Author_"></a>
+                    <a name="//apple_ref/swift/Property/author" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordEmbed6authorGSqVS0_6Author_">author</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The author of this embed.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">author</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed/Author.html">Author</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV12SwiftDiscord12DiscordEmbed5colorGSqSi_"></a>
+                    <a name="//apple_ref/swift/Property/color" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordEmbed5colorGSqSi_">color</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The color of this embed.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">color</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -432,9 +602,36 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordEmbed8providerVS0_8Provider"></a>
+                    <a name="/s:vV12SwiftDiscord12DiscordEmbed6footerGSqVS0_6Footer_"></a>
+                    <a name="//apple_ref/swift/Property/footer" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordEmbed6footerGSqVS0_6Footer_">footer</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The footer for this embed.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">footer</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed/Footer.html">Footer</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV12SwiftDiscord12DiscordEmbed8providerGSqVS0_8Provider_"></a>
                     <a name="//apple_ref/swift/Property/provider" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordEmbed8providerVS0_8Provider">provider</a>
+                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordEmbed8providerGSqVS0_8Provider_">provider</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -449,7 +646,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">provider</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed/Provider.html">Provider</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">provider</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed/Provider.html">Provider</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -459,9 +656,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordEmbed9thumbnailVS0_9Thumbnail"></a>
+                    <a name="/s:vV12SwiftDiscord12DiscordEmbed9thumbnailGSqVS0_9Thumbnail_"></a>
                     <a name="//apple_ref/swift/Property/thumbnail" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordEmbed9thumbnailVS0_9Thumbnail">thumbnail</a>
+                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordEmbed9thumbnailGSqVS0_9Thumbnail_">thumbnail</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -476,7 +673,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">thumbnail</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed/Thumbnail.html">Thumbnail</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">thumbnail</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed/Thumbnail.html">Thumbnail</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -540,9 +737,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord12DiscordEmbed3urlV10Foundation3URL"></a>
+                    <a name="/s:vV12SwiftDiscord12DiscordEmbed3urlGSqV10Foundation3URL_"></a>
                     <a name="//apple_ref/swift/Property/url" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordEmbed3urlV10Foundation3URL">url</a>
+                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordEmbed3urlGSqV10Foundation3URL_">url</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -557,9 +754,180 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?</span></code></pre>
 
                         </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV12SwiftDiscord12DiscordEmbed6fieldsGSaVS0_5Field_"></a>
+                    <a name="//apple_ref/swift/Property/fields" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordEmbed6fieldsGSaVS0_5Field_">fields</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The embed&rsquo;s fields</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">fields</span> <span class="o">=</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEmbed/Field.html">Field</a></span><span class="p">]()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Initializers"></a>
+                <a name="//apple_ref/swift/Section/Initializers" class="dashAnchor"></a>
+                <a href="#/Initializers">
+                  <h3 class="section-name">Initializers</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FV12SwiftDiscord12DiscordEmbedcFT5titleSS11descriptionSS6authorGSqVS0_6Author_3urlGSqV10Foundation3URL_9thumbnailGSqVS0_9Thumbnail_5colorGSqSi_6footerGSqVS0_6Footer__S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(title:description:author:url:thumbnail:color:footer:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FV12SwiftDiscord12DiscordEmbedcFT5titleSS11descriptionSS6authorGSqVS0_6Author_3urlGSqV10Foundation3URL_9thumbnailGSqVS0_9Thumbnail_5colorGSqSi_6footerGSqVS0_6Footer__S0_">init(title:description:author:url:thumbnail:color:footer:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an Embed object.</p>
+
+<p><code><a href="../Structs/DiscordEmbed/Field.html">Field</a></code>s can be added after intialization.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+				<span class="nv">description</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+				<span class="nv">author</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed/Author.html">Author</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+				<span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+				<span class="nv">thumbnail</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed/Thumbnail.html">Thumbnail</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+				<span class="nv">color</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+				<span class="nv">footer</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed/Footer.html">Footer</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>title</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The title of this embed.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>description</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The description of this embed.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>author</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The author of this embed.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>url</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The url for this embed, if there is one.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>thumbnail</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The thumbnail of this embed, if there is one.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>color</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The color of this embed.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>footer</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The footer for this embed, if there is one.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -569,7 +937,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2016-12-23)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-02)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

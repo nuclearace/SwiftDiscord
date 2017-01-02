@@ -20,6 +20,13 @@ import Foundation
 
 /// A enum representing a configuration option.
 public enum DiscordClientOption : CustomStringConvertible, Equatable {
+    /// This option causes the client to request all users for large guilds as soon as they are created.
+    case fillLargeGuilds
+
+    /// If a presence comes in on a large guild, and we don't have that user, setting this option
+    /// will cause the client to query the API for that user.
+    case fillUsers
+
     /// The dispatch queue that events should be handled on.
     /// This is also the queue that properties should be read from.
     case handleQueue(DispatchQueue)
@@ -30,8 +37,12 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
     /// Used to set a custom logger.
     case logger(DiscordLogger)
 
-    /// Whether this client will try and resume on disconnects.
-    case resume(Bool)
+    /// If this option is given, the client will automatically unload users who go offline. This can save some memory.
+    /// However this means that invsible users will also be pruned.
+    case pruneUsers
+
+    /// The number of shards this client should spawn. Defaults to 1.
+    case shards(Int)
 
     // MARK: Properties
 
@@ -40,10 +51,13 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
         let description: String
 
         switch self {
-        case .handleQueue:  description = "handleQueue"
-        case .log:          description = "log"
-        case .logger:       description = "logger"
-        case .resume:       description = "resume"
+        case .fillLargeGuilds:  description = "fillLargeGuilds"
+        case .fillUsers:        description = "fillUsers"
+        case .handleQueue:      description = "handleQueue"
+        case .log:              description = "log"
+        case .logger:           description = "logger"
+        case .shards:           description = "shards"
+        case .pruneUsers:       description = "pruneUsers"
         }
 
         return description

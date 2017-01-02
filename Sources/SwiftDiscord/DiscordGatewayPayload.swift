@@ -25,6 +25,9 @@ public enum DiscordGatewayPayloadData {
 	/// Payload is an integer.
 	case integer(Int)
 
+	/// The payload is a bool
+	case bool(Bool)
+
 	/// Payload is null.
 	case null
 
@@ -34,6 +37,8 @@ public enum DiscordGatewayPayloadData {
 			return object
 		case let .integer(integer):
 			return integer
+		case let .bool(bool):
+			return bool
 		case .null:
 			return NSNull()
 		}
@@ -49,6 +54,8 @@ extension DiscordGatewayPayloadData {
 			return .object(object)
 		case let integer as Int:
 			return .integer(integer)
+		case let bool as Bool:
+			return .bool(bool)
 		default:
 			return .null
 		}
@@ -105,7 +112,7 @@ public struct DiscordGatewayPayload {
 
 extension DiscordGatewayPayload {
 	static func payloadFromString(_ string: String, fromGateway: Bool = true) -> DiscordGatewayPayload? {
-		guard let decodedJSON = decodeJSON(string), case let JSON.dictionary(dictionary) = decodedJSON else {
+		guard let decodedJSON = decodeJSON(string), case let JSON.object(dictionary) = decodedJSON else {
 			return nil
 		}
 

@@ -127,6 +127,15 @@ public struct DiscordEndpointOptions {
 		/// The required verification level of this guild.
 		case verificationLevel(Int)
 	}
+
+	/// The options for creating/editing a webhook.
+	public enum WebhookOption {
+		/// The name of the webhook
+		case name(String)
+
+		/// The avatar of the webhook. A base64 128x128 jpeg image.
+		case avatar(String)
+	}
 }
 
 // TODO Group DM
@@ -141,6 +150,9 @@ public struct DiscordEndpointOptions {
 	GET methods also take a callback.
 
 	All requests through this enum are rate limited.
+
+	**NOTE**: Callbacks from methods on this enum are *NOT* executed on the client's handleQueue. So it is important
+	that if you make modifications to the client inside of a callback, you first dispatch back on the handleQueue.
 */
 public enum DiscordEndpoint : String {
 	/// The base url for the Discord REST API.
@@ -183,6 +195,10 @@ public enum DiscordEndpoint : String {
 
 	/// The channel pinned message endpoint.
 	case pinnedMessage = "/channels/channel.id/pins/message.id"
+
+	// Webhooks
+	/// The channel webhooks endpoint.
+	case channelWebhooks = "/channels/channel.id/webhooks"
 	/* End channels */
 
 	/* Guilds */
@@ -213,6 +229,10 @@ public enum DiscordEndpoint : String {
 
 	/// The guild role endpoint.
 	case guildRole = "/guilds/guild.id/roles/role.id"
+
+	// Webhooks
+	/// The guilds webhooks endpoint.
+	case guildWebhooks = "/guilds/guild.id/webhooks"
 	/* End Guilds */
 
 	/* User */
@@ -221,6 +241,20 @@ public enum DiscordEndpoint : String {
 
 	/// The user guilds endpoint.
 	case userGuilds = "/users/me/guilds"
+
+	/* Webhooks */
+	/// The single webhook endpoint.
+	case webhook = "/webhooks/webhook.id"
+
+	/// The single webhook with token endpoint.
+	case webhookWithToken = "/webhooks/webhook.id/webhook.token"
+
+	/// A slack compatible webhook.
+	case webhookSlack = "/webhooks/webhook.id/webhook.token/slack"
+
+	/// A GitHub compatible webhook.
+	case webhookGithub = "/webhooks/webhook.id/webhook.token/github"
+	/* End Webhooks */
 
 	var combined: String {
 		return DiscordEndpoint.baseURL.rawValue + rawValue
@@ -260,5 +294,14 @@ public enum DiscordEndpoint : String {
 		com.queryItems = getParams.map({ URLQueryItem(name: $0.key, value: $0.value) })
 
 		return com.url!
+	}
+
+	static func jsonFromResponse(data: Data?, response: HTTPURLResponse?) -> JSON? {
+		guard let data = data, let response = response, (response.statusCode == 200 || response.statusCode == 201),
+				let stringData = String(data: data, encoding: .utf8) else {
+			return nil
+		}
+
+		return decodeJSON(stringData)
 	}
 }

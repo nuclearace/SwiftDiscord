@@ -19,7 +19,7 @@ import Foundation
 
 enum JSON {
     case array([Any])
-    case dictionary([String: Any])
+    case object([String: Any])
 }
 
 enum JSONError : Error {
@@ -41,6 +41,12 @@ extension Int : JSONRepresentable { }
 extension NSNull : JSONRepresentable { }
 extension Optional : JSONRepresentable { }
 extension String : JSONRepresentable { }
+extension Bool : JSONRepresentable { }
+extension URL : JSONRepresentable {
+    func jsonValue() -> JSONRepresentable {
+        return absoluteString
+    }
+}
 
 extension JSONRepresentable {
     func jsonValue() throws -> JSONRepresentable {
