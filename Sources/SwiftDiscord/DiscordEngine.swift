@@ -110,6 +110,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		return "DiscordEngine"
 	}
 
+	var pongsMissed = 0
+
 	private var closed = false
 	private var connectUUID = UUID()
 	private var resuming = false
@@ -218,6 +220,12 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
 		closed = true
 
+		disconnectWebSockets()
+	}
+
+	private func disconnectWebSockets() {
+		heartbeatQueue.sync { self.pongsMissed = 0 }
+
 		#if !os(Linux)
 		websocket?.disconnect()
 		#else
@@ -241,6 +249,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	*/
 	open func handleClose(reason: NSError? = nil) {
 		let closeReason = DiscordGatewayCloseReason(error: reason) ?? .unknown
+
+		DefaultDiscordLogger.Logger.log("Disconnected, shard: %@", type: logType, args: shardNum)
 
 		if closeReason == .sessionTimeout {
 			// Tell the client to clear their session id
@@ -302,6 +312,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 			sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.heartbeat),
 				payload: .integer(1)))
 		case .heartbeatAck:
+			heartbeatQueue.sync { self.pongsMissed = 0 }
 			DefaultDiscordLogger.Logger.debug("Got heartback ack", type: logType)
 		default:
 			error(message: "Unhandled payload: \(payload.code)")
@@ -374,9 +385,17 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	*/
 	open func sendHeartbeat() {
 		guard !closed else { return }
+		guard pongsMissed < 2 else {
+			DefaultDiscordLogger.Logger.log("Too many pongs missed; closing, shard: %@", type: logType, args: shardNum)
+
+			disconnectWebSockets()
+
+			return
+		}
 
 		DefaultDiscordLogger.Logger.debug("Sending heartbeat, shard: %@", type: logType, args: shardNum)
 
+		pongsMissed += 1
 		sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
 
 		let time = DispatchTime.now() + Double(heartbeatInterval)
