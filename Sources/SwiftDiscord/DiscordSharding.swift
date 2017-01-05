@@ -107,6 +107,11 @@ public class DiscordShardManager {
         for shard in shards {
             shard.disconnect()
         }
+
+        if connectedShards != shards.count {
+            // Still connecting, say we disconnected, since we never connected to begin with
+            client?.handleEvent("shardManager.disconnect", with: [])
+        }
     }
 
     /**
