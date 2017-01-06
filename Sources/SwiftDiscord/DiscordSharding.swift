@@ -23,6 +23,9 @@ import Foundation
 public protocol DiscordShard {
     // MARK: Properties
 
+    /// Whether this shard is connected to the gateway
+    var connected: Bool { get }
+
     /// A reference to the manager
     weak var manager: DiscordShardManager? { get set }
 
