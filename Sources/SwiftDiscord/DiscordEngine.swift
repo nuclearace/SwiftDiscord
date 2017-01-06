@@ -92,6 +92,9 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	/// This engine's session id.
 	public var sessionId: String?
 
+	/// Whether this engine is connected to the gateway.
+	public internal(set) var connected = false
+
 	// Only touch on handleQueue
 	/// The interval (in seconds) to send heartbeats.
 	public internal(set) var heartbeatInterval = 0
@@ -232,8 +235,6 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	}
 
 	private func disconnectWebSockets() {
-		heartbeatQueue.sync { self.pongsMissed = 0 }
-
 		#if !os(Linux)
 		websocket?.disconnect()
 		#else
@@ -258,10 +259,12 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 	open func handleClose(reason: NSError? = nil) {
 		let closeReason = DiscordGatewayCloseReason(error: reason) ?? .unknown
 
+		connected = false
+		heartbeatQueue.sync { self.pongsMissed = 0 }
+
 		DefaultDiscordLogger.Logger.log("Disconnected, shard: %@", type: logType, args: shardNum)
 
 		if closeReason == .sessionTimeout {
-			// Tell the client to clear their session id
 			sessionId = nil
 		}
 
@@ -325,6 +328,22 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		default:
 			error(message: "Unhandled payload: \(payload.code)")
 		}
+	}
+
+	/**
+	    Handles the hello event.
+
+	    - parameter payload: The dispatch payload
+	*/
+	open func handleHello(_ payload: DiscordGatewayPayload) {
+	    guard case let .object(eventData) = payload.payload else { fatalError("Got bad hello payload") }
+	    guard let milliseconds = eventData["heartbeat_interval"] as? Int else {
+	        fatalError("Got bad heartbeat interval")
+	    }
+
+	    connected = true
+
+	    startHeartbeat(seconds: milliseconds / 1000)
 	}
 
 	/**
@@ -392,10 +411,16 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 		Override this method if you need to customize heartbeats.
 	*/
 	open func sendHeartbeat() {
-		guard !closed else { return }
+		guard connected else {
+			DefaultDiscordLogger.Logger.debug("Tried heartbeating on disconnected shard, shard: %@", type: logType, args: shardNum)
+
+			return
+		}
+
 		guard pongsMissed < 2 else {
 			DefaultDiscordLogger.Logger.log("Too many pongs missed; closing, shard: %@", type: logType, args: shardNum)
 
+			pongsMissed = 0
 			disconnectWebSockets()
 
 			return

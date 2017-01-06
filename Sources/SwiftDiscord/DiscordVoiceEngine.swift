@@ -66,9 +66,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		]
 	}
 
-	/// Whether this engine is connected
-	public private(set) var connected = false
-
 	/// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data
 	public private(set) var encoder: DiscordVoiceEncoder?
 

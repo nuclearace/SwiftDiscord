@@ -23,6 +23,9 @@ import Foundation
 public protocol DiscordShard {
     // MARK: Properties
 
+    /// Whether this shard is connected to the gateway
+    var connected: Bool { get }
+
     /// A reference to the manager
     weak var manager: DiscordShardManager? { get set }
 
@@ -68,6 +71,8 @@ public class DiscordShardManager {
     /// The individual shards.
     public var shards = [DiscordShard]()
 
+    private let shardQueue = DispatchQueue(label: "shardQueue")
+
     private weak var client: DiscordClientSpec?
     private var closed = false
     private var closedShards = 0
@@ -102,11 +107,20 @@ public class DiscordShardManager {
         Disconnects all shards.
     */
     public func disconnect() {
-        closed = true
+        func _disconnect() {
+            closed = true
 
-        for shard in shards {
-            shard.disconnect()
+            for shard in shards {
+                shard.disconnect()
+            }
+
+            if connectedShards != shards.count {
+                // Still connecting, say we disconnected, since we never connected to begin with
+                client?.handleEvent("shardManager.disconnect", with: [])
+            }
         }
+
+        shardQueue.async(execute: _disconnect)
     }
 
     /**
@@ -149,11 +163,15 @@ public class DiscordShardManager {
         - parameter shardNum: The number of the shard that disconnected.
     */
     public func signalShardConnected(shardNum: Int) {
-        connectedShards += 1
+        func _signalShardConnected() {
+            connectedShards += 1
 
-        guard connectedShards == shards.count else { return }
+            guard connectedShards == shards.count else { return }
 
-        client?.handleEvent("shardManager.connect", with: [])
+            client?.handleEvent("shardManager.connect", with: [])
+        }
+
+        shardQueue.async(execute: _signalShardConnected)
     }
 
     /**
@@ -162,10 +180,14 @@ public class DiscordShardManager {
         - parameter shardNum: The number of the shard that disconnected.
     */
     public func signalShardDisconnected(shardNum: Int) {
-        closedShards += 1
+        func _signalShardDisconnected() {
+            closedShards += 1
 
-        guard closedShards == shards.count else { return }
+            guard closedShards == shards.count else { return }
 
-        client?.handleEvent("shardManager.disconnect", with: [])
+            client?.handleEvent("shardManager.disconnect", with: [])
+        }
+
+        shardQueue.async(execute: _signalShardDisconnected)
     }
 }

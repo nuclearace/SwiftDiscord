@@ -37,6 +37,8 @@ public protocol DiscordEngineGatewayHandling : DiscordEngineSpec, DiscordEngineH
 
     /**
         Handles the resumed event.
+
+        - parameter payload: The payload for the event.
     */
     func handleResumed(_ payload: DiscordGatewayPayload)
 }
@@ -61,14 +63,4 @@ public extension DiscordEngineGatewayHandling {
 
 		client?.handleEngineDispatch(event, with: payload)
 	}
-
-    /// Default implementation
-    func handleHello(_ payload: DiscordGatewayPayload) {
-        guard case let .object(eventData) = payload.payload else { fatalError("Got bad hello payload") }
-        guard let milliseconds = eventData["heartbeat_interval"] as? Int else {
-            fatalError("Got bad heartbeat interval")
-        }
-
-        startHeartbeat(seconds: milliseconds / 1000)
-    }
 }
