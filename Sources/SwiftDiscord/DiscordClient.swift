@@ -399,9 +399,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	open func handleChannelCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling channel create", type: logType)
 
-		guard var channel = channelFromObject(data) else { return }
-
-		channel.client = self
+		guard let channel = channelFromObject(data, withClient: self) else { return }
 
 		switch channel {
 		case let guildChannel as DiscordGuildChannel:
