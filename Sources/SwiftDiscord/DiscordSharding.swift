@@ -55,12 +55,33 @@ public protocol DiscordShard {
     func sendGatewayPayload(_ payload: DiscordGatewayPayload)
 }
 
+/// The delegate for a `DiscordShardManager`.
+public protocol DiscordShardManagerDelegate : class, DiscordClientSpec {
+    // MARK: Methods
+
+    /**
+        Signals that the manager has finished connecting.
+
+        - parameter manager: The manager.
+        - parameter didConnect: Should always be true.
+    */
+    func shardManager(_ manager: DiscordShardManager, didConnect connected: Bool)
+
+    /**
+        Signals that the manager has disconnected.
+
+        - parameter manager: The manager.
+        - parameter didDisconnectWithReason: The reason the manager disconnected.
+    */
+    func shardManager(_ manager: DiscordShardManager, didDisconnectWithReason reason: String)
+}
+
 /**
     The shard manager is responsible for a client's shards. It decides when a client is considered connected.
     Connected being when all shards have recieved a ready event and are receiving events from the gateway. It also
     decides when a client has fully disconnected. Disconnected being when all shards have closed.
 */
-public class DiscordShardManager {
+public final class DiscordShardManager {
     // MARK: Properties
 
     /// - returns: The `n`th shard.
@@ -73,13 +94,13 @@ public class DiscordShardManager {
 
     private let shardQueue = DispatchQueue(label: "shardQueue")
 
-    private weak var client: DiscordClientSpec?
     private var closed = false
     private var closedShards = 0
     private var connectedShards = 0
+    private weak var delegate: DiscordShardManagerDelegate?
 
-    init(client: DiscordClientSpec) {
-        self.client = client
+    init(delegate: DiscordShardManagerDelegate) {
+        self.delegate = delegate
     }
 
     // MARK: Methods
@@ -116,7 +137,7 @@ public class DiscordShardManager {
 
             if connectedShards != shards.count {
                 // Still connecting, say we disconnected, since we never connected to begin with
-                client?.handleEvent("shardManager.disconnect", with: [])
+                delegate?.shardManager(self, didDisconnectWithReason: "Closed")
             }
         }
 
@@ -139,7 +160,7 @@ public class DiscordShardManager {
         - parameter into: The number of shards to create.
     */
     public func shatter(into numberOfShards: Int) {
-        guard let client = self.client else { return }
+        guard let delegate = self.delegate else { return }
 
         DefaultDiscordLogger.Logger.verbose("Shattering into %@ shards", type: "DiscordShardManager",
             args: numberOfShards)
@@ -149,7 +170,7 @@ public class DiscordShardManager {
         connectedShards = 0
 
         for i in 0..<numberOfShards {
-            let engine = DiscordEngine(client: client, shardNum: i, numShards: numberOfShards)
+            let engine = DiscordEngine(client: delegate, shardNum: i, numShards: numberOfShards)
 
             engine.manager = self
 
@@ -168,7 +189,7 @@ public class DiscordShardManager {
 
             guard connectedShards == shards.count else { return }
 
-            client?.handleEvent("shardManager.connect", with: [])
+            delegate?.shardManager(self, didConnect: true)
         }
 
         shardQueue.async(execute: _signalShardConnected)
@@ -185,7 +206,7 @@ public class DiscordShardManager {
 
             guard closedShards == shards.count else { return }
 
-            client?.handleEvent("shardManager.disconnect", with: [])
+            delegate?.shardManager(self, didDisconnectWithReason: "Closed")
         }
 
         shardQueue.async(execute: _signalShardDisconnected)

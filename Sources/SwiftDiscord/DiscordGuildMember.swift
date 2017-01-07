@@ -21,11 +21,14 @@ import Foundation
 public struct DiscordGuildMember {
 	// MARK: Properties
 
-	/// The user object for this member.
-	public let user: DiscordUser
+	/// The id of the guild of this user. This will not always be set.
+	public let guildId: String?
 
 	/// The date this user joined the guild.
 	public let joinedAt: Date
+
+	/// The user object for this member.
+	public let user: DiscordUser
 
 	/// Whether this user has been deafened.
 	public var deaf: Bool
@@ -40,6 +43,7 @@ public struct DiscordGuildMember {
 	public var roles: [String]
 
 	init(guildMemberObject: [String: Any]) {
+		guildId = guildMemberObject["guild_id"] as? String
 		user = DiscordUser(userObject: guildMemberObject.get("user", or: [String: Any]()))
 		deaf = guildMemberObject.get("deaf", or: false)
 		mute = guildMemberObject.get("mute", or: false)

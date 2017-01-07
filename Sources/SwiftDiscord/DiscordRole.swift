@@ -19,6 +19,9 @@
 public struct DiscordRole : JSONAble {
 	// MARK: Properties
 
+	/// The id of the guild for this role.
+	public let guildId: String
+
 	/// The snowflake id of the role.
 	public let id: String
 
@@ -46,6 +49,7 @@ public struct DiscordRole : JSONAble {
 	public var position: Int
 
 	init(roleObject: [String: Any]) {
+		guildId = roleObject.get("guild_id", or: "")
 		color = roleObject.get("color", or: 0)
 		hoist = roleObject.get("hoist", or: false)
 		id = roleObject.get("id", or: "")

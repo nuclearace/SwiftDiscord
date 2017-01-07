@@ -7,45 +7,48 @@ Once you have your token you can start writing some code.
 
 Configuring the client
 ----------------------
+_All of these steps assume you are working inside of a class that conforms to
+[DiscordClientDelegate](./Protocols/DiscordClientDelegate.html)_
+
 
 Configuring the client is straightforward. The intializer for the client takes the JWT we got in the previous step, and an optinal array of configuration options.
 
 ```swift
-let client = DiscordClient(token: "Bot myjwt.from.discord", configuration: [.log(.info)])
+self.client = DiscordClient(token: "Bot myjwt.from.discord", configuration: [.log(.info)])
+self.client.delegate = self
 ```
 
 It's important to note that we've added "Bot" in front of the token. This is tell Discord that this token represents a bot token. This is required unless the token is a user token. If the token is an OAuth token then the token should be prefaced with "Bearer". The configuration used in this example turns on the most basic logging. More about the different configurations available can be found on the [DiscordClientOption](./Enums/DiscordClientOption.html) page.
 
-Once we have the client initialized, it's time to add any handlers that we want to listen for.
+Once we have the client initialized, it's time to add any delegate methods that we want to listen for.
 
 ```swift
-client.on("connect") {data in
-    print("The client is connected")
+func client(_ client: DiscordClient, didConnect connected: Bool) {
+    print("Bot connected!")
 }
 
-client.on("messageCreate") {data in
-    guard let message = data[0] as? DiscordMessage else { return }
-
+func client(_ client: DiscordClient, didReceiveMessage message: DiscordMessage) {
     if message.content == "$mycommand" {
         message.channel?.sendMessage("I got your command")
     }
 }
+
 ```
 
-In this code we've added two event handlers. One for the `connect` event, and one for the `messageCreate` event. The `connect` event is fired once all shards have connected. It's best to wait until this event is received before trying to do anything with the client, otherwise the client might not be fully populated with Guild and Channel information.
+In this code we've added two delegate methods. The `client(_ client: DiscordClient, didConnect connected: Bool)` method is called once all shards have connected. It's best to wait until this event is received before trying to do anything with the client, otherwise the client might not be fully populated with Guild and Channel information.
 
-The `messageCreate` event is fired whenever a message is received from the gateway. The handler in this case first sanity checks that the first thing received in the handler's data is in fact a message. Once it is sure it's dealing with a message, it checks if the message's content is the command "mycommand", and if it is, sends a response to the channel that the message originated from.
+The `client(_ client: DiscordClient, didReceiveMessage message: DiscordMessage)` method is called whenever a message is received from the gateway. This particular implemenation just checks if the content of the message is a command, and if it is, sends a response.
 
 Connecting the client
 ---------------------
 
-Once we've configured our event listeners, we're ready to connect to Discord. This is as simple as:
+Once we've configured our delegate methods, we're ready to connect to Discord. This is as simple as:
 
 ```swift
 client.connect()
 ```
 
-Once the client is done connecting, our `connect` event will fire and we're good to start interacting with Discord!
+Once the client is done connecting, the connect delegate method will be called and we're good to start interacting with Discord!
 
 More detail?
 ------------

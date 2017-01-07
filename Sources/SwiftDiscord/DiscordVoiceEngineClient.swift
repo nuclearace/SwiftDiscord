@@ -32,4 +32,12 @@ public protocol DiscordVoiceEngineClient {
         - parameter data: The voice data that was received
     */
     func handleVoiceData(_ data: DiscordVoiceData)
+
+
+    /**
+        Called when the voice engine is ready.
+
+        - parameter engine: The engine that's ready.
+    */
+    func voiceEngineReady(engine: DiscordVoiceEngine)
 }

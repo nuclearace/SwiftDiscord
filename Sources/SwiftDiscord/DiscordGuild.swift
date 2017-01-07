@@ -233,6 +233,11 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 		client.modifyGuild(id, options: options)
 	}
 
+	func shardNumber(assuming numOfShards: Int) -> Int {
+		return (Int(id)! >> 22) % numOfShards
+	}
+
+
 	// Used to update a guild from a guildUpdate event
 	func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
 		if let defaultMessageNotifications = newGuild["default_message_notifications"] as? Int {
@@ -276,10 +281,6 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 		}
 
 		return self
-	}
-
-	func shardNumber(assuming numOfShards: Int) -> Int {
-		return (Int(id)! >> 22) % numOfShards
 	}
 
 	/**

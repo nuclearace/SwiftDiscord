@@ -29,11 +29,15 @@ import Dispatch
 	let client = DiscordClient(token: "Bot mysupersecretbottoken", configuration: [.log(.info)])
 	```
 */
-open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, DiscordEndpointConsumer {
+open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
+		DiscordEndpointConsumer, DiscordShardManagerDelegate {
 	// MARK: Properties
 
 	/// The Discord JWT token.
 	public let token: DiscordToken
+
+	/// The client's delegate.
+	public weak var delegate: DiscordClientDelegate?
 
 	/// The manager for this client's shards.
 	public var shardManager: DiscordShardManager!
@@ -80,14 +84,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	/// The voice state for this user, if they are in a voice channel.
 	public private(set) var voiceState: DiscordVoiceState?
 
-	// crunchQueue should be used for tasks would block the handleQueue for too long
-	// DO NOT TOUCH ANY PROPERTIES WHILE ON THIS QUEUE. REENTER THE HANDLEQUEUE
-	private let crunchQueue = DispatchQueue(label: "crunchQueue")
+	private let parseQueue = DispatchQueue(label: "parseQueue")
 	private let logType = "DiscordClient"
 	private let voiceQueue = DispatchQueue(label: "voiceQueue")
 
 	private var channelCache = [String: DiscordChannel]()
-	private var handlers = [String: DiscordEventHandler]()
 	private var joiningVoiceChannel = false
 	private var joinedVoiceChannel: DiscordGuildChannel?
 	private var voiceServerInformation: [String: Any]?
@@ -101,7 +102,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	*/
 	public required init(token: DiscordToken, configuration: [DiscordClientOption] = []) {
 		self.token = token
-		self.shardManager = DiscordShardManager(client: self)
+		self.shardManager = DiscordShardManager(delegate: self)
 
 		for config in configuration {
 			switch config {
@@ -122,22 +123,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			default:
 				continue
 			}
-		}
-
-		on("shardManager.connect") {[weak self] _ in
-			guard let this = self else { return }
-
-			this.connected = true
-
-			this.handleEngineEvent("connect", with: [])
-		}
-
-		on("shardManager.disconnect") {[weak self] _ in
-			guard let this = self else { return }
-
-			this.connected = false
-
-			this.handleEngineEvent("disconnect", with: [])
 		}
 	}
 
@@ -207,27 +192,40 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	// Handling
 
 	/**
-		Adds event handlers to the client.
+		Handles a dispatch event. This will call one of the other handle methods or the standard event handler.
 
-		- parameter event: The event to listen for
-		- parameter callback: The callback that will be executed when this event is fired
+		- parameter event: The dispatch event
+		- parameter data: The dispatch event's data
 	*/
-	open func on(_ event: String, callback: @escaping ([Any]) -> Void) {
-		handlers[event] = DiscordEventHandler(event: event, callback: callback)
-	}
+	open func handleDispatch(event: DiscordDispatchEvent, data: DiscordGatewayPayloadData) {
+		guard case let .object(eventData) = data else {
+			DefaultDiscordLogger.Logger.error("Got dispatch event without an object: %@, %@",
+				type: "DiscordDispatchEventHandler", args: event, data)
 
-	/**
-		The main event handle method. Calls the associated event handler.
-		You shouldn't need to call this event directly.
+			return
+		}
 
-		Override to provide custom event handling functionality.
-
-		- parameter event: The event being fired
-		- parameter with: The data from the event
-	*/
-	open func handleEvent(_ event: String, with data: [Any]) {
-		handleQueue.async {
-			self.handlers[event]?.executeCallback(with: data)
+		switch event {
+		case .presenceUpdate:		handlePresenceUpdate(with: eventData)
+		case .messageCreate: 		handleMessageCreate(with: eventData)
+		case .guildMemberAdd:		handleGuildMemberAdd(with: eventData)
+		case .guildMembersChunk:	handleGuildMembersChunk(with: eventData)
+		case .guildMemberUpdate:	handleGuildMemberUpdate(with: eventData)
+		case .guildMemberRemove:	handleGuildMemberRemove(with: eventData)
+		case .guildRoleCreate:		handleGuildRoleCreate(with: eventData)
+		case .guildRoleDelete:		handleGuildRoleRemove(with: eventData)
+		case .guildRoleUpdate:		handleGuildRoleUpdate(with: eventData)
+		case .guildCreate:			handleGuildCreate(with: eventData)
+		case .guildDelete:			handleGuildDelete(with: eventData)
+		case .guildUpdate:			handleGuildUpdate(with: eventData)
+		case .guildEmojisUpdate:	handleGuildEmojiUpdate(with: eventData)
+		case .channelUpdate:		handleChannelUpdate(with: eventData)
+		case .channelCreate:		handleChannelCreate(with: eventData)
+		case .channelDelete:		handleChannelDelete(with: eventData)
+		case .voiceServerUpdate:	handleVoiceServerUpdate(with: eventData)
+		case .voiceStateUpdate:		handleVoiceStateUpdate(with: eventData)
+		case .ready:				handleReady(with: eventData)
+		default:					delegate?.client(self, didNotHandleDispatchEvent: event, withData: eventData)
 		}
 	}
 
@@ -242,18 +240,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		handleQueue.async {
 			self.handleDispatch(event: event, data: payload.payload)
 		}
-	}
-
-	/**
-		Handles an engine event. You shouldn't need to call this method directly.
-
-		Override to provide additional custmization around this event.
-
-		- parameter event: The engine event
-		- parameter with: The data from the event
-	*/
-	open func handleEngineEvent(_ event: String, with data: [Any]) {
-		handleEvent(event, with: data)
 	}
 
 	/**
@@ -385,6 +371,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         #endif
 	}
 
+	open func voiceEngineReady(engine: DiscordVoiceEngine) {
+		delegate?.client(self, isReadyToSendVoiceWithEngine: engine)
+	}
+
 	// MARK: DiscordDispatchEventHandler Conformance
 
 	/**
@@ -414,7 +404,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		DefaultDiscordLogger.Logger.verbose("Created channel: %@", type: logType, args: channel)
 
-		handleEvent("channelCreate", with: [channel])
+		delegate?.client(self, didCreateChannel: channel)
 	}
 
 	/**
@@ -437,7 +427,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		DefaultDiscordLogger.Logger.verbose("Removed channel: %@", type: logType, args: removedChannel)
 
-		handleEvent("channelDelete", with: [removedChannel])
+		delegate?.client(self, didDeleteChannel: removedChannel)
 	}
 
 	/**
@@ -460,7 +450,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		channelCache.removeValue(forKey: channel.id)
 
-		handleEvent("channelUpdate", with: [channel])
+		delegate?.client(self, didUpdateChannel: channel)
 	}
 
 	/**
@@ -481,7 +471,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		guilds[guild.id] = guild
 
-		handleEvent("guildCreate", with: [guild])
+		delegate?.client(self, didCreateGuild: guild)
 
 		guard fillLargeGuilds && guild.large else { return }
 
@@ -508,7 +498,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		DefaultDiscordLogger.Logger.verbose("Removed guild: %@", type: logType, args: removedGuild)
 
-		handleEvent("guildDelete", with: [removedGuild])
+		delegate?.client(self, didDeleteGuild: removedGuild)
 	}
 
 	/**
@@ -524,16 +514,16 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	open func handleGuildEmojiUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild emoji update", type: logType)
 
-		guard let guildId = data["guild_id"] as? String else { return }
+		guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
 		guard let emojis = data["emojis"] as? [[String: Any]] else { return }
 
 		let discordEmojis = DiscordEmoji.emojisFromArray(emojis)
 
 		DefaultDiscordLogger.Logger.verbose("Created guild emojis: %@", type: logType, args: discordEmojis)
 
-		guilds[guildId]?.emojis = discordEmojis
+		guild.emojis = discordEmojis
 
-		handleEvent("guildEmojisUpdate", with: [discordEmojis, guildId])
+		delegate?.client(self, didUpdateEmojis: discordEmojis, onGuild: guild)
 	}
 
 	/**
@@ -549,16 +539,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 	open func handleGuildMemberAdd(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild member add", type: logType)
 
-		guard let guildId = data["guild_id"] as? String else { return }
-
 		let guildMember = DiscordGuildMember(guildMemberObject: data)
+		guard let guildId = guildMember.guildId else { return }
 
 		DefaultDiscordLogger.Logger.verbose("Created guild member: %@", type: logType, args: guildMember)
 
 		guilds[guildId]?.members[guildMember.user.id] = guildMember
 		guilds[guildId]?.memberCount += 1
 
-		handleEvent("guildMemberAdd", with: [guildMember, guildId])
+		delegate?.client(self, didAddGuildMember: guildMember)
 	}
 
 	/**
@@ -579,13 +568,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		guilds[guildId]?.memberCount -= 1
 
-		if let removedGuildMember = guilds[guildId]?.members.removeValue(forKey: id) {
-			DefaultDiscordLogger.Logger.verbose("Removed guild member: %@", type: logType, args: removedGuildMember)
+		guard let removedGuildMember = guilds[guildId]?.members.removeValue(forKey: id) else { return }
 
-			handleEvent("guildMemberRemove", with: [removedGuildMember, guildId])
-		} else {
-			handleEvent("guildMemberRemove", with: [data, guildId])
-		}
+		DefaultDiscordLogger.Logger.verbose("Removed guild member: %@", type: logType, args: removedGuildMember)
+
+		delegate?.client(self, didRemoveGuildMember: removedGuildMember)
 	}
 
 	/**
@@ -608,7 +595,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		DefaultDiscordLogger.Logger.verbose("Updated guild member: %@", type: logType, args: id)
 
-		handleEvent("guildMemberUpdate", with: [id, guildId])
+		guard let guildMember = guilds[guildId]?.members[id] else { return }
+
+		delegate?.client(self, didUpdateGuildMember: guildMember)
 	}
 
 	/**
@@ -627,7 +616,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 		guard let guildId = data["guild_id"] as? String else { return }
 		guard let members = data["members"] as? [[String: Any]] else { return }
 
-		crunchQueue.async {
+		parseQueue.async {
 			let guildMembers = DiscordGuildMember.guildMembersFromArray(members)
 
 			self.handleQueue.async {
@@ -637,7 +626,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 					guild.members[memberId] = member
 				}
 
-				self.handleEvent("guildMembersChunk", with: [guildMembers, guildId])
+				self.delegate?.client(self, didHandleGuildMemberChunk: guildMembers, forGuild: guild)
 			}
 		}
 	}
@@ -647,8 +636,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		Emits the `guildRoleCreate` event with two data items, the first is the `DiscordRole` that was created, the
-		second is the id of the guild this was created on.
+		Emits the `guildRoleCreate` event with one data item, the `DiscordRole` that was created
 
 		- parameter with: The data from the event
 	*/
@@ -664,7 +652,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		guilds[guildId]?.roles[role.id] = role
 
-		handleEvent("guildRoleCreate", with: [role, guildId])
+		delegate?.client(self, didCreateRole: role)
 	}
 
 	/**
@@ -672,8 +660,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		Emits the `guildRoleRemove` event with two data items, the first is the `DiscordRole` that was removed, the
-		second is the id of the guild this was removed from.
+		Emits the `guildRoleRemove` event with one data item, the `DiscordRole` that was removed.
 
 		- parameter with: The data from the event
 	*/
@@ -686,7 +673,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		DefaultDiscordLogger.Logger.verbose("Removed role: %@", type: logType, args: removedRole)
 
-		handleEvent("guildRoleRemove", with: [removedRole, guildId])
+		delegate?.client(self, didDeleteRole: removedRole)
 	}
 
 	/**
@@ -694,8 +681,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		Override to provide additional custmization around this event.
 
-		Emits the `guildRoleUpdate` event with two data items, the first is the `DiscordRole` that was updated, the
-		second is the id of the guild this was updated on.
+		Emits the `guildRoleUpdate` event with one data item, the role `DiscordRole` that was updated
 
 		- parameter with: The data from the event
 	*/
@@ -712,7 +698,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		guilds[guildId]?.roles[role.id] = role
 
-		handleEvent("guildRoleUpdate", with: [role, guildId])
+		delegate?.client(self, didUpdateRole: role)
 	}
 
 	/**
@@ -732,7 +718,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		DefaultDiscordLogger.Logger.verbose("Updated guild: %@", type: logType, args: updatedGuild)
 
-		handleEvent("guildUpdate", with: [updatedGuild])
+		delegate?.client(self, didUpdateGuild: updatedGuild)
 	}
 
 	/**
@@ -751,7 +737,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		DefaultDiscordLogger.Logger.verbose("Message: %@", type: logType, args: message)
 
-		handleEvent("messageCreate", with: [message])
+		delegate?.client(self, didReceiveMessage: message)
 	}
 
 	/**
@@ -801,7 +787,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		guild.presences[userId] = presence!
 
-		handleEvent("presenceUpdate", with: [presence!])
+		delegate?.client(self, didReceivePresenceUpdate: presence!)
 
 		guard pruneUsers || fillUsers else { return }
 
@@ -840,7 +826,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			}
 		}
 
-		handleEvent("ready", with: [data])
+		delegate?.client(self, didReceiveReady: data)
 	}
 
 	/**
@@ -896,6 +882,36 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 			}
 		}
 
-		handleEvent("voiceStateUpdate", with: [state])
+		delegate?.client(self, didReceiveVoiceStateUpdate: state)
+	}
+
+	// MARK: DiscordShardManagerDelegate conformance.
+
+	/**
+	    Signals that the manager has finished connecting.
+
+	    - parameter manager: The manager.
+	    - parameter didConnect: Should always be true.
+	*/
+	public func shardManager(_ manager: DiscordShardManager, didConnect connected: Bool) {
+		handleQueue.async {
+			self.connected = true
+
+			self.delegate?.client(self, didConnect: true)
+		}
+	}
+
+	/**
+	    Signals that the manager has disconnected.
+
+	    - parameter manager: The manager.
+	    - parameter didDisconnectWithReason: The reason the manager disconnected.
+	*/
+	public func shardManager(_ manager: DiscordShardManager, didDisconnectWithReason reason: String) {
+		handleQueue.async {
+			self.connected = false
+
+			self.delegate?.client(self, didDisconnectWithReason: "All shards closed")
+		}
 	}
 }
