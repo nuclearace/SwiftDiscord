@@ -33,7 +33,7 @@ let fortuneExists = FileManager.default.fileExists(atPath: "/usr/local/bin/fortu
 
 typealias QueuedVideo = (link: String, channel: String)
 
-class DiscordBot {
+class DiscordBot : DiscordClientDelegate {
     let client: DiscordClient
     let startTime = Date()
 
@@ -47,51 +47,32 @@ class DiscordBot {
 
     init(token: DiscordToken) {
         client = DiscordClient(token: token, configuration: [.log(.verbose), .shards(2), .fillUsers, .pruneUsers])
-
-        attachHandlers()
+        client.delegate = self
     }
 
-    func attachHandlers() {
-        client.on("connect") {[weak self] data in
-            guard let this = self else { return }
+    func client(_ client: DiscordClient, didDisconnectWithReason reason: String) {
+        print("bot disconnected")
 
-            print("Bot connected")
+        exit(0)
+    }
 
-            print(this.client.getBotURL(with: [.sendMessages, .readMessages])!)
-        }
+    func client(_ client: DiscordClient, didCreateMessage message: DiscordMessage) {
+        handleMessage(message)
+    }
 
-        client.on("disconnect") {data in
-            print("bot disconnected")
-            exit(0)
-        }
+    func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine engine: DiscordVoiceEngine) {
+        print("voice engine ready")
 
-        client.on("messageCreate") {[weak self] data in
-            guard let this = self, let message = data[0] as? DiscordMessage else { return }
+        inVoiceChannel = true
+        playingYoutube = false
 
-            this.handleMessage(message)
-        }
+        guard !youtubeQueue.isEmpty else { return }
 
-        client.on("voiceEngine.ready") {[weak self] data in
-            guard let this = self else { return }
+        let video = youtubeQueue.remove(at: 0)
 
-            print("voice engine ready")
+        client.sendMessage("Playing \(video.link)", to: video.channel)
 
-            this.inVoiceChannel = true
-            this.playingYoutube = false
-
-            guard !this.youtubeQueue.isEmpty else { return }
-
-            let video = this.youtubeQueue.remove(at: 0)
-
-            this.client.sendMessage("Playing \(video.link)", to: video.channel)
-
-            _ = this.playYoutube(channelId: video.channel, link: video.link)
-        }
-
-        client.on("voiceEngine.disconnect") {[weak self] data in
-            self?.inVoiceChannel = false
-            self?.playingYoutube = false
-        }
+        _ = playYoutube(channelId: video.channel, link: video.link)
     }
 
     func brutalizeImage(options: [String], channel: DiscordChannel) {

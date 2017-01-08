@@ -184,7 +184,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		readData(1)
 
-		client?.handleEvent("voiceEngine.ready", with: [])
+		client?.voiceEngineReady(engine: self)
 
 		// Reenable automatic encoder creation
 		makeEncoder = true

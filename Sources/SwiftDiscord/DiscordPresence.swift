@@ -108,7 +108,7 @@ public struct DiscordPresence {
 	public var game: DiscordGame?
 
 	/// This user's nick on this guild.
-	public var nick: String
+	public var nick: String?
 
 	/// The roles?
 	public var roles: [String]
@@ -120,7 +120,7 @@ public struct DiscordPresence {
 		self.guildId = guildId
 		user = DiscordUser(userObject: presenceObject.get("user", or: [String: Any]()))
 		game = DiscordGame(gameObject: presenceObject["game"] as? [String: Any])
-		nick = presenceObject.get("nick", or: "")
+		nick = presenceObject["nick"] as? String
 		status = DiscordPresenceStatus(rawValue: presenceObject.get("status", or: "")) ?? .offline
 		roles = []
 	}

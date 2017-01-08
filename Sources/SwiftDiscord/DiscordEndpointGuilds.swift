@@ -262,7 +262,7 @@ public extension DiscordEndpoint {
                 return
             }
 
-            callback(DiscordGuildMember(guildMemberObject: member))
+            callback(DiscordGuildMember(guildMemberObject: member, guildId: guildId))
         })
     }
 
@@ -301,7 +301,8 @@ public extension DiscordEndpoint {
                 return
             }
 
-            let guildMembers = DiscordGuildMember.guildMembersFromArray(members as! [[String: Any]])
+            let guildMembers = DiscordGuildMember.guildMembersFromArray(members as! [[String: Any]],
+                withGuildId: guildId)
 
             callback(guildMembers.map({ $0.1 }))
         })

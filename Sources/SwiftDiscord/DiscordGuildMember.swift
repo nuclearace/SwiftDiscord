@@ -21,11 +21,14 @@ import Foundation
 public struct DiscordGuildMember {
 	// MARK: Properties
 
-	/// The user object for this member.
-	public let user: DiscordUser
+	/// The id of the guild of this user.
+	public let guildId: String
 
 	/// The date this user joined the guild.
 	public let joinedAt: Date
+
+	/// The user object for this member.
+	public let user: DiscordUser
 
 	/// Whether this user has been deafened.
 	public var deaf: Bool
@@ -39,7 +42,8 @@ public struct DiscordGuildMember {
 	/// An array of role snowflake ids that this user has.
 	public var roles: [String]
 
-	init(guildMemberObject: [String: Any]) {
+	init(guildMemberObject: [String: Any], guildId: String) {
+		self.guildId = guildId
 		user = DiscordUser(userObject: guildMemberObject.get("user", or: [String: Any]()))
 		deaf = guildMemberObject.get("deaf", or: false)
 		mute = guildMemberObject.get("mute", or: false)
@@ -48,7 +52,7 @@ public struct DiscordGuildMember {
 		joinedAt = convertISO8601(string: guildMemberObject.get("joined_at", or: "")) ?? Date()
 	}
 
-	static func guildMembersFromArray(_ guildMembersArray: [[String: Any]])
+	static func guildMembersFromArray(_ guildMembersArray: [[String: Any]], withGuildId guildId: String)
 			-> DiscordLazyDictionary<String, DiscordGuildMember> {
 		var guildMembers = DiscordLazyDictionary<String, DiscordGuildMember>()
 
@@ -57,17 +61,19 @@ public struct DiscordGuildMember {
 				fatalError("Couldn't extract userId")
 			}
 
-			guildMembers[lazy: id] = .lazy({ DiscordGuildMember(guildMemberObject: guildMember) })
+			guildMembers[lazy: id] = .lazy({ DiscordGuildMember(guildMemberObject: guildMember, guildId: guildId) })
 		}
 
 		return guildMembers
 	}
 
-	mutating func updateMember(_ updateObject: [String: Any]) {
+	mutating func updateMember(_ updateObject: [String: Any]) -> DiscordGuildMember {
 		if let roles = updateObject["roles"] as? [String] {
 			self.roles = roles
 		}
 
 		nick = updateObject["nick"] as? String
+
+		return self
 	}
 }

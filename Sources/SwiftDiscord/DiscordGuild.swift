@@ -112,7 +112,8 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 		id = guildObject.get("id", or: "")
 		large = guildObject.get("large", or: false)
 		memberCount = guildObject.get("member_count", or: 0)
-		members = DiscordGuildMember.guildMembersFromArray(guildObject.get("members", or: [[String: Any]]()))
+		members = DiscordGuildMember.guildMembersFromArray(guildObject.get("members", or: [[String: Any]]()),
+			withGuildId: id)
 		mfaLevel = guildObject.get("mfa_level", or: -1)
 		name = guildObject.get("name", or: "")
 		ownerId = guildObject.get("owner_id", or: "")
@@ -233,6 +234,10 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 		client.modifyGuild(id, options: options)
 	}
 
+	func shardNumber(assuming numOfShards: Int) -> Int {
+		return (Int(id)! >> 22) % numOfShards
+	}
+
 	// Used to update a guild from a guildUpdate event
 	func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
 		if let defaultMessageNotifications = newGuild["default_message_notifications"] as? Int {
@@ -276,10 +281,6 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 		}
 
 		return self
-	}
-
-	func shardNumber(assuming numOfShards: Int) -> Int {
-		return (Int(id)! >> 22) % numOfShards
 	}
 
 	/**
