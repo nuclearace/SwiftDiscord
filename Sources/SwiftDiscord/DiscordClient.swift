@@ -26,8 +26,16 @@ import Dispatch
 	Creating a client:
 
 	```swift
-	let client = DiscordClient(token: "Bot mysupersecretbottoken", configuration: [.log(.info)])
+	self.client = DiscordClient(token: "Bot mysupersecretbottoken", configuration: [.log(.info)])
 	```
+
+	Once a client is created, you need to set its delegate so that you can start receiving events:
+
+	```swift
+	self.client.delegate = self
+	```
+
+	See `DiscordClientDelegate` for a list of delegate methods that can be implemented.
 */
 open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 		DiscordEndpointConsumer, DiscordShardManagerDelegate {
@@ -382,7 +390,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `channelCreate` event with a single data item of type `DiscordChannel`, which is the created channel.
+		Calls the `didCreateChannel` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -412,7 +420,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `channelDelete` event with a single data item of type `DiscordChannel`, which is the deleted channel.
+		Calls the `didDeleteChannel` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -435,7 +443,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `channelUpdate` event with a single data item of type `DiscordChannel`, which is the updated channel.
+		Calls the `didUpdateChannel` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -458,7 +466,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `guildCreate` event with a single data item of type `DiscordGuild`, which is the created guild.
+		Calls the `didCreateGuild` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -486,7 +494,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `guildDelete` event with a single data item of type `DiscordGuild`, which is the deleted guild.
+		Calls the `didDeleteGuild` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -506,8 +514,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `guildEmojisUpdate` event with two data items, the first is a dictionary of `DiscordEmoji` indexed by
-		their ids, and the second is the id of the guild that the emoji belong to.
+		Calls the `didUpdateEmojis:onGuild:` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -531,8 +538,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `guildMemberAdd` event with two data items, the first is the `DiscordGuildMember` of the added member,
-		the second is the id of the guild this member was added to.
+		Calls the `didAddGuildMember` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -555,8 +561,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `guildMemberRemove` event with two data items, the first is the `DiscordGuildMember` of the removed
-		member, the second is the id of the guild this member was removed from.
+		Calls the `didRemoveGuildMember` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -580,8 +585,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `guildMemberUpdate` event with two data items, the first is the id of the updated member,
-		the second is the id of the guild this member was updated on.
+		Calls the `didUpdateGuildMember` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -605,8 +609,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `guildMembersChunk` event with two data items, the first is a dictionary of `DiscordGuildMember`
-		indexed by their id, the second is the id of the guild for this chunk.
+		Calls the `didHandleGuildMemberChunk:forGuild:` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -636,7 +639,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `guildRoleCreate` event with one data item, the `DiscordRole` that was created
+		Calls the `didCreateRole` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -660,7 +663,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `guildRoleRemove` event with one data item, the `DiscordRole` that was removed.
+		Calls the `didDeleteRole` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -681,7 +684,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `guildRoleUpdate` event with one data item, the role `DiscordRole` that was updated
+		Calls the `didUpdateRole` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -706,7 +709,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `guildUpdate` event with one data item, the `DiscordGuild` that was updated.
+		Calls the `didUpdateGuild` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -726,7 +729,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `messageCreate` event with one data item, the `DiscordMessage` that was created.
+		Calls the `didCreateMessage` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -737,7 +740,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		DefaultDiscordLogger.Logger.verbose("Message: %@", type: logType, args: message)
 
-		delegate?.client(self, didReceiveMessage: message)
+		delegate?.client(self, didCreateMessage: message)
 	}
 
 	/**
@@ -745,7 +748,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `presenceUpdate` event with one data item, the `DiscordPresence` that was updated.
+		Calls the `didReceivePresenceUpdate` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -799,7 +802,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `ready` event with one data item, the raw `[String: Any]` for the event.
+		Calls the `didReceiveReady` delegate method.
 
 		- parameter with: The data from the event
 	*/
@@ -853,7 +856,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		Override to provide additional custmization around this event.
 
-		Emits the `voiceStateUpdate` event with one data item, the `DiscordVoiceState`.
+		Calls the `didReceiveVoiceStateUpdate` delegate method.
 
 		- parameter with: The data from the event
 	*/

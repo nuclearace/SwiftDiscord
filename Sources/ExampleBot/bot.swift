@@ -56,7 +56,7 @@ class DiscordBot : DiscordClientDelegate {
         exit(0)
     }
 
-    func client(_ client: DiscordClient, didReceiveMessage message: DiscordMessage) {
+    func client(_ client: DiscordClient, didCreateMessage message: DiscordMessage) {
         handleMessage(message)
     }
 
