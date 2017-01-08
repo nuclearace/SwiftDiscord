@@ -545,13 +545,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 	open func handleGuildMemberAdd(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild member add", type: logType)
 
-		let guildMember = DiscordGuildMember(guildMemberObject: data)
-		guard let guildId = guildMember.guildId else { return }
+		let guildMember = DiscordGuildMember(guildMemberObject: data, guildId: data["guild_id"] as! String)
+		guard let guild = guilds[guildMember.guildId] else { return }
 
 		DefaultDiscordLogger.Logger.verbose("Created guild member: %@", type: logType, args: guildMember)
 
-		guilds[guildId]?.members[guildMember.user.id] = guildMember
-		guilds[guildId]?.memberCount += 1
+		guild.members[guildMember.user.id] = guildMember
+		guild.memberCount += 1
 
 		delegate?.client(self, didAddGuildMember: guildMember)
 	}
@@ -568,12 +568,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 	open func handleGuildMemberRemove(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild member remove", type: logType)
 
-		guard let guildId = data["guild_id"] as? String else { return }
+		guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
 		guard let user = data["user"] as? [String: Any], let id = user["id"] as? String else { return }
 
-		guilds[guildId]?.memberCount -= 1
+		guild.memberCount -= 1
 
-		guard let removedGuildMember = guilds[guildId]?.members.removeValue(forKey: id) else { return }
+		guard let removedGuildMember = guild.members.removeValue(forKey: id) else { return }
 
 		DefaultDiscordLogger.Logger.verbose("Removed guild member: %@", type: logType, args: removedGuildMember)
 
@@ -592,14 +592,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 	open func handleGuildMemberUpdate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild member update", type: logType)
 
-		guard let guildId = data["guild_id"] as? String else { return }
+		guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
 		guard let user = data["user"] as? [String: Any], let id = user["id"] as? String else { return }
+		guard let guildMember = guild.members[id]?.updateMember(data) else { return }
 
-		guilds[guildId]?.members[id]?.updateMember(data)
-
-		DefaultDiscordLogger.Logger.verbose("Updated guild member: %@", type: logType, args: id)
-
-		guard let guildMember = guilds[guildId]?.members[id] else { return }
+		DefaultDiscordLogger.Logger.verbose("Updated guild member: %@", type: logType, args: guildMember)
 
 		delegate?.client(self, didUpdateGuildMember: guildMember)
 	}
@@ -620,7 +617,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 		guard let members = data["members"] as? [[String: Any]] else { return }
 
 		parseQueue.async {
-			let guildMembers = DiscordGuildMember.guildMembersFromArray(members)
+			let guildMembers = DiscordGuildMember.guildMembersFromArray(members, withGuildId: guildId)
 
 			self.handleQueue.async {
 				guard let guild = self.guilds[guildId] else { return }
@@ -646,16 +643,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 	open func handleGuildRoleCreate(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild role create", type: logType)
 
-		guard let guildId = data["guild_id"] as? String else { return }
+		guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
 		guard let roleObject = data["role"] as? [String: Any] else { return }
-
 		let role = DiscordRole(roleObject: roleObject)
 
 		DefaultDiscordLogger.Logger.verbose("Created role: %@", type: logType, args: role)
 
-		guilds[guildId]?.roles[role.id] = role
+		guild.roles[role.id] = role
 
-		delegate?.client(self, didCreateRole: role)
+		delegate?.client(self, didCreateRole: role, onGuild: guild)
 	}
 
 	/**
@@ -670,13 +666,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 	open func handleGuildRoleRemove(with data: [String: Any]) {
 		DefaultDiscordLogger.Logger.log("Handling guild role remove", type: logType)
 
-		guard let guildId = data["guild_id"] as? String else { return }
+		guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
 		guard let roleId = data["role_id"] as? String else { return }
-		guard let removedRole = guilds[guildId]?.roles.removeValue(forKey: roleId) else { return }
+		guard let removedRole = guild.roles.removeValue(forKey: roleId) else { return }
 
 		DefaultDiscordLogger.Logger.verbose("Removed role: %@", type: logType, args: removedRole)
 
-		delegate?.client(self, didDeleteRole: removedRole)
+		delegate?.client(self, didDeleteRole: removedRole, fromGuild: guild)
 	}
 
 	/**
@@ -692,16 +688,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 		DefaultDiscordLogger.Logger.log("Handling guild role update", type: logType)
 
 		// Functionally the same as adding
-		guard let guildId = data["guild_id"] as? String else { return }
+		guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
 		guard let roleObject = data["role"] as? [String: Any] else { return }
-
 		let role = DiscordRole(roleObject: roleObject)
 
 		DefaultDiscordLogger.Logger.verbose("Updated role: %@", type: logType, args: role)
 
-		guilds[guildId]?.roles[role.id] = role
+		guild.roles[role.id] = role
 
-		delegate?.client(self, didUpdateRole: role)
+		delegate?.client(self, didUpdateRole: role, onGuild: guild)
 	}
 
 	/**
@@ -767,9 +762,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 					args: userId)
 
 				guild.members[lazy: userId] = .lazy({[weak guild] in
-					guard let guild = guild else { return DiscordGuildMember(guildMemberObject: [:]) }
+					guard let guild = guild else {
+						return DiscordGuildMember(guildMemberObject: [:], guildId: "")
+					}
 
-					return guild.getGuildMember(userId) ?? DiscordGuildMember(guildMemberObject: [:])
+					return guild.getGuildMember(userId) ?? DiscordGuildMember(guildMemberObject: [:], guildId: "")
 				})
 			}
 		}

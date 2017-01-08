@@ -123,24 +123,27 @@ public protocol DiscordClientDelegate : class {
 
         - parameter client: The client that is calling.
         - parameter didCreateRole: The role that was created.
+        - parameter onGuild: The guild the role was created on.
     */
-    func client(_ client: DiscordClient, didCreateRole role: DiscordRole)
+    func client(_ client: DiscordClient, didCreateRole role: DiscordRole, onGuild guild: DiscordGuild)
 
     /**
         Called when the client deletes a role.
 
         - parameter client: The client that is calling.
         - parameter didDeleteRole: The role that was deleted.
+        - parameter fromGuild: The guild the role was deleted from.
     */
-    func client(_ client: DiscordClient, didDeleteRole role: DiscordRole)
+    func client(_ client: DiscordClient, didDeleteRole role: DiscordRole, fromGuild guild: DiscordGuild)
 
     /**
         Called when the client updates a role.
 
         - parameter client: The client that is calling.
         - parameter didUpdateRole: The role that was updated.
+        - parameter onGuild: The guild the role was updated on.
     */
-    func client(_ client: DiscordClient, didUpdateRole role: DiscordRole)
+    func client(_ client: DiscordClient, didUpdateRole role: DiscordRole, onGuild guild: DiscordGuild)
 
     /**
         Called when the client receives a message from Discord.
@@ -240,13 +243,13 @@ public extension DiscordClientDelegate {
     func client(_ client: DiscordClient, didUpdateGuildMember member: DiscordGuildMember) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didCreateRole role: DiscordRole) { }
+    func client(_ client: DiscordClient, didCreateRole role: DiscordRole, onGuild guild: DiscordGuild) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didDeleteRole role: DiscordRole) { }
+    func client(_ client: DiscordClient, didDeleteRole role: DiscordRole, fromGuild guild: DiscordGuild) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didUpdateRole role: DiscordRole) { }
+    func client(_ client: DiscordClient, didUpdateRole role: DiscordRole, onGuild guild: DiscordGuild) { }
 
     /// Default.
     func client(_ client: DiscordClient, didCreateMessage message: DiscordMessage) { }
