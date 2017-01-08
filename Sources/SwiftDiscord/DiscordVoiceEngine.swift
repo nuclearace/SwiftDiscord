@@ -312,6 +312,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	}
 
 	private func handleDoneReading() {
+		sendSpeaking(false)
+
 		// Should we make a new encoder?
 		// If no, that means a new encoder has already been requested, creating a new one could lead to a race where we
 		// get stuck in a loop of making new encoders
@@ -393,11 +395,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		    guard !done else {
 		    	DefaultDiscordLogger.Logger.debug("No data, reader probably closed", type: this.logType)
 
-		    	this.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
-		    		"speaking": false,
-		    		"delay": 0
-		    	])))
-
 		    	this.handleDoneReading()
 
 		    	return
@@ -408,10 +405,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		    if count == 1 {
 		    	this.startTime = this.currentUnixTime
 
-		    	this.sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object([
-		    		"speaking": true,
-		    		"delay": 0
-		    	])))
+		    	this.sendSpeaking(true)
 		    }
 
 		    this.sendVoiceData(data)
@@ -509,6 +503,15 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		let time = DispatchTime.now() + Double(heartbeatInterval)
 
 		heartbeatQueue.asyncAfter(deadline: time) {[weak self] in self?.sendHeartbeat() }
+	}
+
+	private func sendSpeaking(_ speaking: Bool) {
+		let speakingObject: [String: Any] = [
+			"speaking": speaking,
+			"delay": 0
+		]
+
+		sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object(speakingObject)))
 	}
 
 	/**
