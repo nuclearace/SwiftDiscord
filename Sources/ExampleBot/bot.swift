@@ -60,7 +60,7 @@ class DiscordBot : DiscordClientDelegate {
         handleMessage(message)
     }
 
-    func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine enigne: DiscordVoiceEngine) {
+    func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine engine: DiscordVoiceEngine) {
         print("voice engine ready")
 
         inVoiceChannel = true

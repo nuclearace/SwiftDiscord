@@ -172,7 +172,7 @@ public protocol DiscordClientDelegate : class {
         - parameter client: The client that is calling.
         - parameter isReadyToSendVoiceWithEngine: The encoder that will be used.
     */
-    func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine enigne: DiscordVoiceEngine)
+    func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine engine: DiscordVoiceEngine)
 
     /**
         Called when the client handles a guild member chunk.
@@ -261,7 +261,7 @@ public extension DiscordClientDelegate {
     func client(_ client: DiscordClient, didReceiveVoiceStateUpdate voiceState: DiscordVoiceState) { }
 
     /// Default.
-    func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine enigne: DiscordVoiceEngine) { }
+    func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine engine: DiscordVoiceEngine) { }
 
     /// Default.
     func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: DiscordLazyDictionary<String, DiscordGuildMember>,
