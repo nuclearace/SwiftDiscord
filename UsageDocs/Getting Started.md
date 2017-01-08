@@ -52,4 +52,4 @@ Once the client is done connecting, the connect delegate method will be called a
 
 More detail?
 ------------
-A living bot example can be found in `Sources/ExampleBot`. This bot shows more complicated interaction with client such as getting roles for a user, getting guild channels, sending files to Discord and streaming audio to Discord.
+A living bot example can be found [here](https://github.com/nuclearace/SwiftBot). This bot shows more complicated interaction with client such as getting roles for a user, getting guild channels, sending files to Discord and streaming audio to Discord.
