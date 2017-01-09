@@ -216,6 +216,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 		switch event {
 		case .presenceUpdate:		handlePresenceUpdate(with: eventData)
 		case .messageCreate: 		handleMessageCreate(with: eventData)
+		case .messageUpdate: 		handleMessageUpdate(with: eventData)
 		case .guildMemberAdd:		handleGuildMemberAdd(with: eventData)
 		case .guildMembersChunk:	handleGuildMembersChunk(with: eventData)
 		case .guildMemberUpdate:	handleGuildMemberUpdate(with: eventData)
@@ -717,6 +718,25 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 		DefaultDiscordLogger.Logger.verbose("Updated guild: %@", type: logType, args: updatedGuild)
 
 		delegate?.client(self, didUpdateGuild: updatedGuild)
+	}
+
+	/**
+		Handles message updates from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		Calls the `didUpdateMessage` delegate method.
+
+		- parameter with: The data from the event
+	*/
+	open func handleMessageUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling message update", type: logType)
+
+		let message = DiscordMessage(messageObject: data, client: self)
+
+		DefaultDiscordLogger.Logger.verbose("Message: %@", type: logType, args: message)
+
+		delegate?.client(self, didUpdateMessage: message)
 	}
 
 	/**

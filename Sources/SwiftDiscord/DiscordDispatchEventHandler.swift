@@ -133,6 +133,13 @@ public protocol DiscordDispatchEventHandler : DiscordClientSpec {
 	func handleMessageCreate(with data: [String: Any])
 
 	/**
+		Handles message updates from Discord.
+
+		- parameter with: The data from the event
+	*/
+	func handleMessageUpdate(with data: [String: Any])
+
+	/**
 		Handles presence updates from Discord.
 
 		- parameter with: The data from the event.
