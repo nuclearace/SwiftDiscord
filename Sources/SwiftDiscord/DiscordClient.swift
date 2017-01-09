@@ -755,6 +755,24 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
 		handleEvent("messageCreate", with: [message])
 	}
+	/**
+		Handles message updates from Discord. You shouldn't need to call this method directly.
+
+		Override to provide additional custmization around this event.
+
+		Emits the `messageUpdate` event with one data item, the `DiscordMessage` that was updated.
+
+		- parameter with: The data from the event
+	*/
+	open func handleMessageUpdate(with data: [String: Any]) {
+		DefaultDiscordLogger.Logger.log("Handling message create", type: logType)
+
+		let message = DiscordMessage(messageObject: data, client: self)
+
+		DefaultDiscordLogger.Logger.verbose("Message Update: %@", type: logType, args: message)
+
+		handleEvent("messageUpdate", with: [message])
+	}
 
 	/**
 		Handles presence updates from Discord. You shouldn't need to call this method directly.
