@@ -260,6 +260,9 @@ public extension DiscordClientDelegate {
     func client(_ client: DiscordClient, didUpdateRole role: DiscordRole, onGuild guild: DiscordGuild) { }
 
     /// Default.
+    func client(_ client: DiscordClient, didUpdateMessage message: DiscordMessage) { }
+
+    /// Default.
     func client(_ client: DiscordClient, didCreateMessage message: DiscordMessage) { }
 
     /// Default.
