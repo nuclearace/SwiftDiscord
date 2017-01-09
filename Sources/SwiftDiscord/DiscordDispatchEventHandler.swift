@@ -126,6 +126,13 @@ public protocol DiscordDispatchEventHandler : DiscordClientSpec {
 	func handleGuildUpdate(with data: [String: Any])
 
 	/**
+		Handles message updates from Discord.
+
+		- parameter with: The data from the event
+	*/
+	func handleMessageUpdate(with data: [String: Any])
+
+	/**
 		Handles message creates from Discord.
 
 		- parameter with: The data from the event
@@ -179,6 +186,7 @@ public extension DiscordDispatchEventHandler {
 		switch event {
 		case .presenceUpdate:		handlePresenceUpdate(with: eventData)
 		case .messageCreate: 		handleMessageCreate(with: eventData)
+		case .messageUpdate: 		handleMessageUpdate(with: eventData)
 		case .guildMemberAdd:		handleGuildMemberAdd(with: eventData)
 		case .guildMembersChunk:	handleGuildMembersChunk(with: eventData)
 		case .guildMemberUpdate:	handleGuildMemberUpdate(with: eventData)
