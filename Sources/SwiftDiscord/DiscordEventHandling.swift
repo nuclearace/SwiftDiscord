@@ -111,6 +111,14 @@ public protocol DiscordClientDelegate : class {
     func client(_ client: DiscordClient, didUpdateGuildMember member: DiscordGuildMember)
 
     /**
+        Called when the client receives a message update from Discord.
+
+        - parameter client: The client that is calling.
+        - parameter didUpdateMessage: The message that was received.
+    */
+    func client(_ client: DiscordClient, didUpdateMessage message: DiscordMessage)
+
+    /**
         Called when the client receives a message from Discord.
 
         - parameter client: The client that is calling.
@@ -250,6 +258,9 @@ public extension DiscordClientDelegate {
 
     /// Default.
     func client(_ client: DiscordClient, didUpdateRole role: DiscordRole, onGuild guild: DiscordGuild) { }
+
+    /// Default.
+    func client(_ client: DiscordClient, didUpdateMessage message: DiscordMessage) { }
 
     /// Default.
     func client(_ client: DiscordClient, didCreateMessage message: DiscordMessage) { }
