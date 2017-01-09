@@ -132,7 +132,8 @@ public class DiscordVoiceEncoder {
 			guard let fd = self?.writePipe.fileHandleForReading.fileDescriptor else { return }
 			defer { free(buf) }
 
-			let buf = UnsafeMutableRawPointer.allocate(bytes: defaultAudioSize, alignedTo: 16)
+			let buf = UnsafeMutableRawPointer.allocate(bytes: defaultAudioSize,
+				alignedTo: MemoryLayout<UInt8>.alignment)
 			let bytesRead = Foundation.read(fd, buf, defaultAudioSize)
 
 			// Error reading or done
