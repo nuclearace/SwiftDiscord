@@ -156,19 +156,20 @@ private typealias RateLimitedRequest = (request: URLRequest, callback: (Data?, H
 /// Enqueued requests are handled through limit resets. Which are told to us by Discord in the x-ratelimit-reset header.
 /// It's up to the DiscordRateLimiter to actually call the scheduleReset method.
 private final class DiscordRateLimit {
-    var endpointKey: DiscordRateLimitKey
     var limit: Int
     var remaining: Int
     var reset: Int
-    var scheduledReset = false
-
     var queue = [RateLimitedRequest]()
+
+    private let endpointKey: DiscordRateLimitKey
+
+    private var scheduledReset = false
 
     var atLimit: Bool {
         return remaining <= 0
     }
 
-    var deadlineForReset: DispatchTime {
+    private var deadlineForReset: DispatchTime {
         let seconds = reset - Int(Date().timeIntervalSince1970)
 
         guard seconds > 0 else { return DispatchTime(uptimeNanoseconds: 0) }
