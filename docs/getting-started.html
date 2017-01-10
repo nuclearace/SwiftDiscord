@@ -30,9 +30,6 @@
             <a href="Guides.html">Guides</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="events.html">Events</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="getting-started.html">Getting Started</a>
               </li>
             </ul>
@@ -165,6 +162,9 @@
                 <a href="Protocols/DiscordChannel.html">DiscordChannel</a>
               </li>
               <li class="nav-group-task">
+                <a href="Protocols/DiscordClientDelegate.html">DiscordClientDelegate</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/DiscordClientHolder.html">DiscordClientHolder</a>
               </li>
               <li class="nav-group-task">
@@ -193,6 +193,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/DiscordShard.html">DiscordShard</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/DiscordUserActor.html">DiscordUserActor</a>
@@ -354,44 +357,47 @@
 <p>Once you have your token you can start writing some code.</p>
 <a href='#configuring-the-client' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='configuring-the-client'>Configuring the client</h2>
 
+<p><em>All of these steps assume you are working inside of a class that conforms to
+<a href="./Protocols/DiscordClientDelegate.html">DiscordClientDelegate</a></em></p>
+
 <p>Configuring the client is straightforward. The intializer for the client takes the JWT we got in the previous step, and an optinal array of configuration options.</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">client</span> <span class="o">=</span> <span class="kt">DiscordClient</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="s">"Bot myjwt.from.discord"</span><span class="p">,</span> <span class="nv">configuration</span><span class="p">:</span> <span class="p">[</span><span class="o">.</span><span class="nf">log</span><span class="p">(</span><span class="o">.</span><span class="n">info</span><span class="p">)])</span>
+<pre class="highlight swift"><code><span class="k">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="kt">DiscordClient</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="s">"Bot myjwt.from.discord"</span><span class="p">,</span> <span class="nv">configuration</span><span class="p">:</span> <span class="p">[</span><span class="o">.</span><span class="nf">log</span><span class="p">(</span><span class="o">.</span><span class="n">info</span><span class="p">)])</span>
+<span class="k">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="k">self</span>
 </code></pre>
 
 <p>It&rsquo;s important to note that we&rsquo;ve added <q>Bot</q> in front of the token. This is tell Discord that this token represents a bot token. This is required unless the token is a user token. If the token is an OAuth token then the token should be prefaced with <q>Bearer</q>. The configuration used in this example turns on the most basic logging. More about the different configurations available can be found on the <a href="./Enums/DiscordClientOption.html">DiscordClientOption</a> page.</p>
 
-<p>Once we have the client initialized, it&rsquo;s time to add any handlers that we want to listen for.</p>
-<pre class="highlight swift"><code><span class="n">client</span><span class="o">.</span><span class="nf">on</span><span class="p">(</span><span class="s">"connect"</span><span class="p">)</span> <span class="p">{</span><span class="n">data</span> <span class="k">in</span>
-    <span class="nf">print</span><span class="p">(</span><span class="s">"The client is connected"</span><span class="p">)</span>
+<p>Once we have the client initialized, it&rsquo;s time to add any delegate methods that we want to listen for.</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt">DiscordClient</span><span class="p">,</span> <span class="n">didConnect</span> <span class="nv">connected</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Bot connected!"</span><span class="p">)</span>
 <span class="p">}</span>
 
-<span class="n">client</span><span class="o">.</span><span class="nf">on</span><span class="p">(</span><span class="s">"messageCreate"</span><span class="p">)</span> <span class="p">{</span><span class="n">data</span> <span class="k">in</span>
-    <span class="k">guard</span> <span class="k">let</span> <span class="nv">message</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">DiscordMessage</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
-
+<span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt">DiscordClient</span><span class="p">,</span> <span class="n">didCreateMessage</span> <span class="nv">message</span><span class="p">:</span> <span class="kt">DiscordMessage</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="s">"$mycommand"</span> <span class="p">{</span>
         <span class="n">message</span><span class="o">.</span><span class="n">channel</span><span class="p">?</span><span class="o">.</span><span class="nf">sendMessage</span><span class="p">(</span><span class="s">"I got your command"</span><span class="p">)</span>
     <span class="p">}</span>
 <span class="p">}</span>
+
 </code></pre>
 
-<p>In this code we&rsquo;ve added two event handlers. One for the <code>connect</code> event, and one for the <code>messageCreate</code> event. The <code>connect</code> event is fired once all shards have connected. It&rsquo;s best to wait until this event is received before trying to do anything with the client, otherwise the client might not be fully populated with Guild and Channel information.</p>
+<p>In this code we&rsquo;ve added two delegate methods. The <code>client(_ client: DiscordClient, didConnect connected: Bool)</code> method is called once all shards have connected. It&rsquo;s best to wait until this event is received before trying to do anything with the client, otherwise the client might not be fully populated with Guild and Channel information.</p>
 
-<p>The <code>messageCreate</code> event is fired whenever a message is received from the gateway. The handler in this case first sanity checks that the first thing received in the handler&rsquo;s data is in fact a message. Once it is sure it&rsquo;s dealing with a message, it checks if the message&rsquo;s content is the command <q>mycommand</q>, and if it is, sends a response to the channel that the message originated from.</p>
+<p>The <code>client(_ client: DiscordClient, didCreateMessage message: DiscordMessage)</code> method is called whenever a message is received from the gateway. This particular implemenation just checks if the content of the message is a command, and if it is, sends a response.</p>
 <a href='#connecting-the-client' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='connecting-the-client'>Connecting the client</h2>
 
-<p>Once we&rsquo;ve configured our event listeners, we&rsquo;re ready to connect to Discord. This is as simple as:</p>
+<p>Once we&rsquo;ve configured our delegate methods, we&rsquo;re ready to connect to Discord. This is as simple as:</p>
 <pre class="highlight swift"><code><span class="n">client</span><span class="o">.</span><span class="nf">connect</span><span class="p">()</span>
 </code></pre>
 
-<p>Once the client is done connecting, our <code>connect</code> event will fire and we&rsquo;re good to start interacting with Discord!</p>
+<p>Once the client is done connecting, the connect delegate method will be called and we&rsquo;re good to start interacting with Discord!</p>
 <a href='#more-detail' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='more-detail'>More detail?</h2>
 
-<p>A living bot example can be found in <code>Sources/ExampleBot</code>. This bot shows more complicated interaction with client such as getting roles for a user, getting guild channels, sending files to Discord and streaming audio to Discord.</p>
+<p>A living bot example can be found <a href="https://github.com/nuclearace/SwiftBot">here</a>. This bot shows more complicated interaction with client such as getting roles for a user, getting guild channels, sending files to Discord and streaming audio to Discord.</p>
 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-06)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-09)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

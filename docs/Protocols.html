@@ -30,9 +30,6 @@
             <a href="Guides.html">Guides</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="events.html">Events</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="getting-started.html">Getting Started</a>
               </li>
             </ul>
@@ -165,6 +162,9 @@
                 <a href="Protocols/DiscordChannel.html">DiscordChannel</a>
               </li>
               <li class="nav-group-task">
+                <a href="Protocols/DiscordClientDelegate.html">DiscordClientDelegate</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/DiscordClientHolder.html">DiscordClientHolder</a>
               </li>
               <li class="nav-group-task">
@@ -193,6 +193,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/DiscordShard.html">DiscordShard</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/DiscordUserActor.html">DiscordUserActor</a>
@@ -645,6 +648,39 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:P12SwiftDiscord21DiscordClientDelegate"></a>
+                    <a name="//apple_ref/swift/Protocol/DiscordClientDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P12SwiftDiscord21DiscordClientDelegate">DiscordClientDelegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Declares that a type will be a delegate for a <code><a href="Classes/DiscordClient.html">DiscordClient</a></code>. After the client handles any events,
+the corresponding delegate method will be called.</p>
+
+                        <a href="Protocols/DiscordClientDelegate.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordClientDelegate</span> <span class="p">:</span> <span class="kd">class</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:P12SwiftDiscord13DiscordLogger"></a>
                     <a name="//apple_ref/swift/Protocol/DiscordLogger" class="dashAnchor"></a>
                     <a class="token" href="#/s:P12SwiftDiscord13DiscordLogger">DiscordLogger</a>
@@ -697,6 +733,34 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordShard</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:P12SwiftDiscord27DiscordShardManagerDelegate"></a>
+                    <a name="//apple_ref/swift/Protocol/DiscordShardManagerDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P12SwiftDiscord27DiscordShardManagerDelegate">DiscordShardManagerDelegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The delegate for a <code><a href="Classes/DiscordShardManager.html">DiscordShardManager</a></code>.</p>
+
+                        <a href="Protocols/DiscordShardManagerDelegate.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordShardManagerDelegate</span> <span class="p">:</span> <span class="kd">class</span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordClientSpec.html">DiscordClientSpec</a></span></code></pre>
 
                         </div>
                       </div>
@@ -804,7 +868,7 @@ that if you make modifications to the client inside of a callback, you first dis
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-06)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-09)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

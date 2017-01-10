@@ -1,0 +1,2028 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>DiscordClientDelegate Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/DiscordClientDelegate" class="dashAnchor"></a>
+    <a title="DiscordClientDelegate Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a> (100% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html"> Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        DiscordClientDelegate Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../getting-started.html">Getting Started</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordClient.html">DiscordClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordEngine.html">DiscordEngine</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordGuild.html">DiscordGuild</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordLazyValue.html">DiscordLazyValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordShardManager.html">DiscordShardManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Global Variables.html">Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:v12SwiftDiscord16defaultAudioSizeSi">defaultAudioSize</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordChannelType.html">DiscordChannelType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordClientOption.html">DiscordClientOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordGameType.html">DiscordGameType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordGatewayCloseReason.html">DiscordGatewayCloseReason</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordGatewayCode.html">DiscordGatewayCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordGatewayPayloadData.html">DiscordGatewayPayloadData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordLogLevel.html">DiscordLogLevel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordNormalGatewayCode.html">DiscordNormalGatewayCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordOAuthEndpoint.html">DiscordOAuthEndpoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordPermission.html">DiscordPermission</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordPermissionOverwriteType.html">DiscordPermissionOverwriteType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordPresenceStatus.html">DiscordPresenceStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordVoiceGatewayCode.html">DiscordVoiceGatewayCode</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/EncoderProcess.html">EncoderProcess</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi1aFTOS_17DiscordPermissionS0__Si">&amp;(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi1aFTSiOS_17DiscordPermission_Si">&amp;(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi3allFTSiSi_Si">&amp;&lt;&lt;(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi2aeFTRSiOS_17DiscordPermission_T_">&amp;=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi2eeFTOS_19DiscordClientOptionS0__Sb">==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi1oFTOS_17DiscordPermissionS0__Si">|(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi1oFTSiOS_17DiscordPermission_Si">|(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi2oeFTRSiOS_17DiscordPermission_T_">|=(_:_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordChannel.html">DiscordChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordClientDelegate.html">DiscordClientDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordClientHolder.html">DiscordClientHolder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordClientSpec.html">DiscordClientSpec</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordDispatchEventHandler.html">DiscordDispatchEventHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordEndpointConsumer.html">DiscordEndpointConsumer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordEngineClient.html">DiscordEngineClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordEngineGatewayHandling.html">DiscordEngineGatewayHandling</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordEngineHeartbeatable.html">DiscordEngineHeartbeatable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordEngineSpec.html">DiscordEngineSpec</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordLogger.html">DiscordLogger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordShard.html">DiscordShard</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordUserActor.html">DiscordUserActor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordVoiceEngineClient.html">DiscordVoiceEngineClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordVoiceEngineSpec.html">DiscordVoiceEngineSpec</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordAttachment.html">DiscordAttachment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordBan.html">DiscordBan</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordDMChannel.html">DiscordDMChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed.html">DiscordEmbed</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Author.html">– Author</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Field.html">– Field</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Footer.html">– Footer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Provider.html">– Provider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Thumbnail.html">– Thumbnail</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmoji.html">DiscordEmoji</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/CreateInvite.html">– CreateInvite</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/GetMessage.html">– GetMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/GuildCreateChannel.html">– GuildCreateChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/GuildGetMembers.html">– GuildGetMembers</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/ModifyChannel.html">– ModifyChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/ModifyGuild.html">– ModifyGuild</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/WebhookOption.html">– WebhookOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordFileUpload.html">DiscordFileUpload</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordGame.html">DiscordGame</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordGroupDMChannel.html">DiscordGroupDMChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordInvite.html">DiscordInvite</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordInviteChannel.html">DiscordInviteChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordInviteGuild.html">DiscordInviteGuild</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordLazyDictionaryIndex.html">DiscordLazyDictionaryIndex</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordMessage.html">DiscordMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordPresence.html">DiscordPresence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordPresenceUpdate.html">DiscordPresenceUpdate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordReaction.html">DiscordReaction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordRole.html">DiscordRole</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordToken.html">DiscordToken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordUser.html">DiscordUser</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordUserGuild.html">DiscordUserGuild</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordWebhook.html">DiscordWebhook</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Typealiases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12SwiftDiscord16DiscordVoiceData">DiscordVoiceData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12SwiftDiscord14EncoderProcess">EncoderProcess</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>DiscordClientDelegate</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordClientDelegate</span> <span class="p">:</span> <span class="kd">class</span></code></pre>
+
+                </div>
+              </div>
+            <p>Declares that a type will be a delegate for a <code><a href="../Classes/DiscordClient.html">DiscordClient</a></code>. After the client handles any events,
+the corresponding delegate method will be called.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Methods"></a>
+                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
+                <a href="#/Methods">
+                  <h3 class="section-name">Methods</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient10didConnectSb_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didConnect:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient10didConnectSb_T_">client(_:didConnect:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client connects to Discord.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didConnect</span> <span class="nv">connected</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didConnect</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Should always be true.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient23didDisconnectWithReasonSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didDisconnectWithReason:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient23didDisconnectWithReasonSS_T_">client(_:didDisconnectWithReason:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client disconnects with discord.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didDisconnectWithReason</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didDisconnectWithReason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason the client disconnected.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient16didCreateChannelPS_14DiscordChannel__T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didCreateChannel:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient16didCreateChannelPS_14DiscordChannel__T_">client(_:didCreateChannel:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client creates a new channel.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didCreateChannel</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didCreateChannel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that was created.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient16didDeleteChannelPS_14DiscordChannel__T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didDeleteChannel:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient16didDeleteChannelPS_14DiscordChannel__T_">client(_:didDeleteChannel:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client deletes a channel.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didDeleteChannel</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didDeleteChannel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that was deleted.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient16didUpdateChannelPS_14DiscordChannel__T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didUpdateChannel:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient16didUpdateChannelPS_14DiscordChannel__T_">client(_:didUpdateChannel:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client updates a channel.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didUpdateChannel</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didUpdateChannel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that was updated.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient14didCreateGuildCS_12DiscordGuild_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didCreateGuild:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient14didCreateGuildCS_12DiscordGuild_T_">client(_:didCreateGuild:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client creates a new guild.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didCreateGuild</span> <span class="nv">guild</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didCreateGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild that was created.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient14didDeleteGuildCS_12DiscordGuild_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didDeleteGuild:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient14didDeleteGuildCS_12DiscordGuild_T_">client(_:didDeleteGuild:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client deletes a guild.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didDeleteGuild</span> <span class="nv">guild</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didDeleteGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild that was deleted.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient14didUpdateGuildCS_12DiscordGuild_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didUpdateGuild:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient14didUpdateGuildCS_12DiscordGuild_T_">client(_:didUpdateGuild:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client updates a guild.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didUpdateGuild</span> <span class="nv">guild</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didUpdateGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild that was updated.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient17didAddGuildMemberVS_18DiscordGuildMember_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didAddGuildMember:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient17didAddGuildMemberVS_18DiscordGuildMember_T_">client(_:didAddGuildMember:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client adds a new guild member.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didAddGuildMember</span> <span class="nv">member</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didAddGuildMember</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild member that was added.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient20didRemoveGuildMemberVS_18DiscordGuildMember_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didRemoveGuildMember:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient20didRemoveGuildMemberVS_18DiscordGuildMember_T_">client(_:didRemoveGuildMember:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client removes a guild member.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didRemoveGuildMember</span> <span class="nv">member</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didRemoveGuildMember</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild member that was removed.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient20didUpdateGuildMemberVS_18DiscordGuildMember_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didUpdateGuildMember:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient20didUpdateGuildMemberVS_18DiscordGuildMember_T_">client(_:didUpdateGuildMember:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client updates a guild member.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didUpdateGuildMember</span> <span class="nv">member</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didUpdateGuildMember</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild member that was updated.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient16didUpdateMessageVS_14DiscordMessage_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didUpdateMessage:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient16didUpdateMessageVS_14DiscordMessage_T_">client(_:didUpdateMessage:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client receives a message update from Discord.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didUpdateMessage</span> <span class="nv">message</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didUpdateMessage</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The message that was received.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient16didCreateMessageVS_14DiscordMessage_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didCreateMessage:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient16didCreateMessageVS_14DiscordMessage_T_">client(_:didCreateMessage:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client receives a message from Discord.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didCreateMessage</span> <span class="nv">message</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didCreateMessage</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The message that was received.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient13didCreateRoleVS_11DiscordRole7onGuildCS_12DiscordGuild_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didCreateRole:onGuild:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient13didCreateRoleVS_11DiscordRole7onGuildCS_12DiscordGuild_T_">client(_:didCreateRole:onGuild:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client adds a new role.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didCreateRole</span> <span class="nv">role</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">,</span> <span class="n">onGuild</span> <span class="nv">guild</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didCreateRole</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The role that was created.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>onGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild the role was created on.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient13didDeleteRoleVS_11DiscordRole9fromGuildCS_12DiscordGuild_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didDeleteRole:fromGuild:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient13didDeleteRoleVS_11DiscordRole9fromGuildCS_12DiscordGuild_T_">client(_:didDeleteRole:fromGuild:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client deletes a role.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didDeleteRole</span> <span class="nv">role</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">,</span> <span class="n">fromGuild</span> <span class="nv">guild</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didDeleteRole</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The role that was deleted.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fromGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild the role was deleted from.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient13didUpdateRoleVS_11DiscordRole7onGuildCS_12DiscordGuild_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didUpdateRole:onGuild:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient13didUpdateRoleVS_11DiscordRole7onGuildCS_12DiscordGuild_T_">client(_:didUpdateRole:onGuild:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client updates a role.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didUpdateRole</span> <span class="nv">role</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">,</span> <span class="n">onGuild</span> <span class="nv">guild</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didUpdateRole</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The role that was updated.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>onGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild the role was updated on.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient24didReceivePresenceUpdateVS_15DiscordPresence_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didReceivePresenceUpdate:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient24didReceivePresenceUpdateVS_15DiscordPresence_T_">client(_:didReceivePresenceUpdate:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client receives a message from Discord.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didReceivePresenceUpdate</span> <span class="nv">presence</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordPresence.html">DiscordPresence</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didReceivePresenceUpdate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The presence that was received.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient15didReceiveReadyGVs10DictionarySSP___T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didReceiveReady:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient15didReceiveReadyGVs10DictionarySSP___T_">client(_:didReceiveReady:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client receives a ready event.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didReceiveReady</span> <span class="nv">readyData</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didReceiveReady</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The presence that was received.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient26didReceiveVoiceStateUpdateVS_17DiscordVoiceState_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didReceiveVoiceStateUpdate:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient26didReceiveVoiceStateUpdateVS_17DiscordVoiceState_T_">client(_:didReceiveVoiceStateUpdate:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client receives a voice state update.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didReceiveVoiceStateUpdate</span> <span class="nv">voiceState</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didReceiveVoiceStateUpdate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The voice state that was received.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient28isReadyToSendVoiceWithEngineCS_18DiscordVoiceEngine_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:isReadyToSendVoiceWithEngine:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient28isReadyToSendVoiceWithEngineCS_18DiscordVoiceEngine_T_">client(_:isReadyToSendVoiceWithEngine:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client is ready to start sending voice data.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">isReadyToSendVoiceWithEngine</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>isReadyToSendVoiceWithEngine</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The encoder that will be used.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient25didHandleGuildMemberChunkGVS_21DiscordLazyDictionarySSVS_18DiscordGuildMember_8forGuildCS_12DiscordGuild_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didHandleGuildMemberChunk:forGuild:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient25didHandleGuildMemberChunkGVS_21DiscordLazyDictionarySSVS_18DiscordGuildMember_8forGuildCS_12DiscordGuild_T_">client(_:didHandleGuildMemberChunk:forGuild:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client handles a guild member chunk.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didHandleGuildMemberChunk</span> <span class="nv">chunk</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="o">&gt;</span><span class="p">,</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didHandleGuildMemberChunk</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The chunk of guild members that was handled.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>forGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild the members were added to.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient25didNotHandleDispatchEventOS_20DiscordDispatchEvent8withDataGVs10DictionarySSP___T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didNotHandleDispatchEvent:withData:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient25didNotHandleDispatchEventOS_20DiscordDispatchEvent8withDataGVs10DictionarySSP___T_">client(_:didNotHandleDispatchEvent:withData:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client does not handle a dispatch event.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didNotHandleDispatchEvent</span> <span class="nv">event</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a></span><span class="p">,</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didNotHandleDispatchEvent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The event that wasn’t handled.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>withData</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data for the event.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient15didUpdateEmojisGVs10DictionarySSVS_12DiscordEmoji_7onGuildCS_12DiscordGuild_T_"></a>
+                    <a name="//apple_ref/swift/Method/client(_:didUpdateEmojis:onGuild:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFTCS_13DiscordClient15didUpdateEmojisGVs10DictionarySSVS_12DiscordEmoji_7onGuildCS_12DiscordGuild_T_">client(_:didUpdateEmojis:onGuild:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the client updates a guild&rsquo;s emojis.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didUpdateEmojis</span> <span class="nv">emojis</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmoji.html">DiscordEmoji</a></span><span class="p">],</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didUpdateEmojis</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The chunk of guild members that was handled.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>onGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild the emojis were updated on.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-09)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
