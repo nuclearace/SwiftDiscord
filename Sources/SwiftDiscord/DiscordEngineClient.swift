@@ -25,12 +25,4 @@ public protocol DiscordEngineClient {
         - parameter data: The event data
     */
 	func handleEngineDispatch(_ event: DiscordDispatchEvent, with payload: DiscordGatewayPayload)
-
-    /**
-        Handles engine events.
-
-        - parameter event: The event name
-        - parameter with: The event data
-    */
-	func handleEngineEvent(_ event: String, with data: [Any])
 }

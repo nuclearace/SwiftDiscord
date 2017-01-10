@@ -25,6 +25,9 @@ public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngi
 	/// Whether or not this client is connected.
 	var connected: Bool { get }
 
+	/// The delegate for the client.
+	var delegate: DiscordClientDelegate? { get set }
+
 	/// The queue that callbacks are called on. In addition, any reads from any properties of DiscordClient should be
 	/// made on this queue, as this is the queue where modifications on them are made.
 	var handleQueue: DispatchQueue { get set }
@@ -32,8 +35,8 @@ public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngi
 	// MARK: Initializers
 
 	/**
-		- parameter token: The discord token of the user
-		- parameter configuration: An array of DiscordClientOption that can be used to customize the client
+		- parameter token: The discord token of the user.
+		- parameter configuration: An array of DiscordClientOption that can be used to customize the client.
 
 	*/
 	init(token: DiscordToken, configuration: [DiscordClientOption])
@@ -50,25 +53,6 @@ public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngi
 		Disconnects from Discord. A `disconnect` event is fired when the client has successfully disconnected.
 	*/
 	func disconnect()
-
-	/**
-		Adds event handlers to the client.
-
-		- parameter event: The event to listen for
-		- parameter callback: The callback that will be executed when this event is fired
-	*/
-	func on(_ event: String, callback: @escaping ([Any]) -> Void)
-
-	/**
-		The main event handle method. Calls the associated event handler.
-		You shouldn't need to call this event directly.
-
-		Override to provide custom event handling functionality.
-
-		- parameter event: The event being fired
-		- parameter with: The data from the event
-	*/
-	func handleEvent(_ event: String, with data: [Any])
 
 	/**
 		Joins a voice channel. A `voiceEngine.ready` event will be fired when the client has joined the channel.

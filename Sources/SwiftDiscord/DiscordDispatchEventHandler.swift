@@ -133,9 +133,16 @@ public protocol DiscordDispatchEventHandler : DiscordClientSpec {
 	func handleMessageCreate(with data: [String: Any])
 
 	/**
-		Handles presence updates from Discord.
+		Handles message updates from Discord.
 
 		- parameter with: The data from the event
+	*/
+	func handleMessageUpdate(with data: [String: Any])
+
+	/**
+		Handles presence updates from Discord.
+
+		- parameter with: The data from the event.
 	*/
 	func handlePresenceUpdate(with data: [String: Any])
 
@@ -159,44 +166,4 @@ public protocol DiscordDispatchEventHandler : DiscordClientSpec {
 		- parameter with: The data from the event
 	*/
 	func handleVoiceStateUpdate(with data: [String: Any])
-}
-
-public extension DiscordDispatchEventHandler {
-	/**
-		Handles a dispatch event. This will call one of the other handle methods or the standard event handler.
-
-		- parameter event: The dispatch event
-		- parameter data: The dispatch event's data
-	*/
-	func handleDispatch(event: DiscordDispatchEvent, data: DiscordGatewayPayloadData) {
-		guard case let .object(eventData) = data else {
-			DefaultDiscordLogger.Logger.error("Got dispatch event without an object: %@, %@",
-				type: "DiscordDispatchEventHandler", args: event, data)
-
-			return
-		}
-
-		switch event {
-		case .presenceUpdate:		handlePresenceUpdate(with: eventData)
-		case .messageCreate: 		handleMessageCreate(with: eventData)
-		case .guildMemberAdd:		handleGuildMemberAdd(with: eventData)
-		case .guildMembersChunk:	handleGuildMembersChunk(with: eventData)
-		case .guildMemberUpdate:	handleGuildMemberUpdate(with: eventData)
-		case .guildMemberRemove:	handleGuildMemberRemove(with: eventData)
-		case .guildRoleCreate:		handleGuildRoleCreate(with: eventData)
-		case .guildRoleDelete:		handleGuildRoleRemove(with: eventData)
-		case .guildRoleUpdate:		handleGuildRoleUpdate(with: eventData)
-		case .guildCreate:			handleGuildCreate(with: eventData)
-		case .guildDelete:			handleGuildDelete(with: eventData)
-		case .guildUpdate:			handleGuildUpdate(with: eventData)
-		case .guildEmojisUpdate:	handleGuildEmojiUpdate(with: eventData)
-		case .channelUpdate:		handleChannelUpdate(with: eventData)
-		case .channelCreate:		handleChannelCreate(with: eventData)
-		case .channelDelete:		handleChannelDelete(with: eventData)
-		case .voiceServerUpdate:	handleVoiceServerUpdate(with: eventData)
-		case .voiceStateUpdate:		handleVoiceStateUpdate(with: eventData)
-		case .ready:				handleReady(with: eventData)
-		default:					handleEvent(event.rawValue, with: [eventData])
-		}
-	}
 }

@@ -56,9 +56,10 @@ final class DiscordRateLimiter {
                 return
             }
 
-            DiscordRateLimiter.shared.endpointLimits[endpointKey]?.remaining -= 1
+            rateLimit.remaining -= 1
 
-            // print("doing request \(DiscordRateLimiter.shared.endpointLimits[endpointKey]?.remaining)")
+            DefaultDiscordLogger.Logger.debug("Doing request: %@, remaining: %@", type: "DiscordRateLimiter",
+                args: request, rateLimit.remaining)
 
             sharedSession.dataTask(with: request,
                 completionHandler: handleResponse(endpointKey, callback)).resume()
@@ -69,33 +70,35 @@ final class DiscordRateLimiter {
             @escaping (Data?, HTTPURLResponse?, Error?) -> Void) -> (Data?, URLResponse?, Error?) -> Void {
         return {data, response, error in
             limitQueue.async {
-                guard error == nil else {
-                    callback(nil, nil, error)
+                let rateLimit = DiscordRateLimiter.shared.endpointLimits[endpointKey]!
+
+                guard let response = response as? HTTPURLResponse else {
+                    // Not quite sure what happened
+                    rateLimit.scheduleReset(on: limitQueue)
+                    callback(data, nil, error)
 
                     return
                 }
 
-                guard let response = response as? HTTPURLResponse else {
-                    // Not quite sure what happened
-                    callback(data, nil, error)
+                guard error == nil else {
+                    rateLimit.scheduleReset(on: limitQueue)
+                    callback(data, response, error)
 
                     return
                 }
 
                 guard response.statusCode != 429 else {
                     // Hit rate limit
+                    rateLimit.scheduleReset(on: limitQueue)
                     callback(data, response, error)
 
                     return
                 }
 
-                let rateLimit = DiscordRateLimiter.shared.endpointLimits[endpointKey]!
-
-
                 if let limit = response.allHeaderFields["x-ratelimit-limit"],
                     let remaining = response.allHeaderFields["x-ratelimit-remaining"],
                     let reset = response.allHeaderFields["x-ratelimit-reset"] {
-                        #if os(macOS) || os(iOS)
+                        #if !os(Linux)
                         // Update the limit and attempt to schedule a limit reset
                         rateLimit.updateLimits(limit: Int(limit as! String)!,
                                                remaining: Int(remaining as! String)!,
@@ -110,8 +113,10 @@ final class DiscordRateLimiter {
                     rateLimit.scheduleReset(on: limitQueue)
                 }
 
-                // print("new limit: \(DiscordRateLimiter.shared.endpointLimits[endpointKey]?.limit)")
-                // print("new limit: \(DiscordRateLimiter.shared.endpointLimits[endpointKey]?.reset)")
+                DefaultDiscordLogger.Logger.debug("New limit: %@", type: "DiscordRateLimiter", args: rateLimit.limit)
+                DefaultDiscordLogger.Logger.debug("New remaining: %@", type: "DiscordRateLimiter",
+                    args: rateLimit.remaining)
+                DefaultDiscordLogger.Logger.debug("New reset: %@", type: "DiscordRateLimiter", args: rateLimit.reset)
 
                 callback(data, response, error)
             }
@@ -151,19 +156,20 @@ private typealias RateLimitedRequest = (request: URLRequest, callback: (Data?, H
 /// Enqueued requests are handled through limit resets. Which are told to us by Discord in the x-ratelimit-reset header.
 /// It's up to the DiscordRateLimiter to actually call the scheduleReset method.
 private final class DiscordRateLimit {
-    var endpointKey: DiscordRateLimitKey
     var limit: Int
     var remaining: Int
     var reset: Int
-    var scheduledReset = false
-
     var queue = [RateLimitedRequest]()
+
+    private let endpointKey: DiscordRateLimitKey
+
+    private var scheduledReset = false
 
     var atLimit: Bool {
         return remaining <= 0
     }
 
-    var deadlineForReset: DispatchTime {
+    private var deadlineForReset: DispatchTime {
         let seconds = reset - Int(Date().timeIntervalSince1970)
 
         guard seconds > 0 else { return DispatchTime(uptimeNanoseconds: 0) }

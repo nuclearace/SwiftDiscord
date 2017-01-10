@@ -170,22 +170,23 @@ public extension DiscordChannel {
     }
 }
 
-func channelFromObject(_ object: [String: Any]) -> DiscordChannel? {
+func channelFromObject(_ object: [String: Any], withClient client: DiscordClient) -> DiscordChannel? {
     guard let type = DiscordChannelType(rawValue: object.get("type", or: -1)) else { return nil }
 
     switch type {
     case .text:     fallthrough
-    case .voice:    return DiscordGuildChannel(guildChannelObject: object)
-    case .direct:   return DiscordDMChannel(dmReadyObject: object)
-    case .groupDM:  return DiscordGroupDMChannel(dmReadyObject: object)
+    case .voice:    return DiscordGuildChannel(guildChannelObject: object, client: client)
+    case .direct:   return DiscordDMChannel(dmReadyObject: object, client: client)
+    case .groupDM:  return DiscordGroupDMChannel(dmReadyObject: object, client: client)
     }
 }
 
 func privateChannelsFromArray(_ channels: [[String: Any]], client: DiscordClient) -> [String: DiscordChannel] {
     var channelDict = [String: DiscordChannel]()
 
-    for case var channel? in channels.map(channelFromObject) {
-        channel.client = client
+    for channel in channels {
+        guard let channel = channelFromObject(channel, withClient: client) else { continue }
+
         channelDict[channel.id] = channel
     }
 
