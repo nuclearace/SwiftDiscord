@@ -190,6 +190,17 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     // MARK: Guilds
 
     /**
+        Adds a role to a guild member.
+
+        - parameter roleId: The id of the role to add.
+        - parameter to: The id of the member to add this role to.
+        - parameter on: The id of the guild this member is on.
+        - parameter with: The token to authenticate to Discord with.
+        - parameter callback: An optional callback indicating whether the role was added successfully.
+    */
+    func addGuildMemberRole(_ roleId: String, to userId: String, on guildId: String, callback: ((Bool) -> Void)?)
+
+    /**
         Creates a guild channel.
 
         - parameter guildId: The snowflake id of the guild
@@ -443,6 +454,12 @@ public extension DiscordEndpointConsumer {
     /// Default implementation
     public func addPinnedMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> Void)? = nil) {
         DiscordEndpoint.addPinnedMessage(messageId, on: channelId, with: token, callback: callback)
+    }
+
+    /// Default implementation
+    public func addGuildMemberRole(_ roleId: String, to userId: String, on guildId: String,
+            callback: ((Bool) -> Void)?) {
+        DiscordEndpoint.addGuildMemberRole(roleId, to: userId, on: guildId, with: token, callback: callback)
     }
 
     /// Default implementation

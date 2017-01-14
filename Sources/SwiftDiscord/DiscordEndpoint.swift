@@ -216,6 +216,9 @@ public enum DiscordEndpoint : String {
 	/// The guild member endpoint.
 	case guildMember = "/guilds/guild.id/members/user.id"
 
+	/// The guild member roles enpoint.
+	case guildMemberRole = "/guilds/guild.id/members/user.id/roles/role.id"
+
 	// Guild Bans
 	/// The base guild bans endpoint.
 	case guildBans = "/guilds/guild.id/bans"
