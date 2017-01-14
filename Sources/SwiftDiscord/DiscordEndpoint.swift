@@ -36,6 +36,24 @@ public struct DiscordEndpointOptions {
 		case unique(Bool)
 	}
 
+	/// Options for creating a role. All are optional.
+	public enum CreateRole {
+		/// The color of the enum.
+		case color(Int)
+
+		/// Whether the role should be displayed separately in the sidebar.
+		case hoist(Bool)
+
+		/// Whether this role is mentionable.
+		case mentionable(Bool)
+
+		/// The name of this role.
+		case name(String)
+
+		/// The permissions this role has.
+		case permissions(Int)
+	}
+
 	/// Get message options.
 	///
 	/// after, around and before are mutually exclusive. They shouldn't be in the same get request
