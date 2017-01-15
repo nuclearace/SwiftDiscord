@@ -268,7 +268,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 		let ipData = Data(bytes: bytes.dropLast(2))
 		let portBytes = Array(bytes.suffix(from: bytes.endIndex.advanced(by: -2)))
-		let port = (Int(portBytes[0]) | Int(portBytes[1])) &<< 8
+		let port = (Int(portBytes[0]) | Int(portBytes[1])) << 8
 
 		guard let ipString = String(data: ipData, encoding: .utf8)?.replacingOccurrences(of: "\0", with: "") else {
 			throw DiscordVoiceEngineError.ipExtraction
