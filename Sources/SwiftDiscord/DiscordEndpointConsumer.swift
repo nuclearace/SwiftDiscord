@@ -321,6 +321,17 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     func removeGuildBan(for userId: String, on guildId: String, callback: ((Bool) -> Void)?)
 
     /**
+        Removes a role from a guild member.
+
+        - parameter roleId: The id of the role to add.
+        - parameter from: The id of the member to add this role to.
+        - parameter on: The id of the guild this member is on.
+        - parameter with: The token to authenticate to Discord with.
+        - parameter callback: An optional callback indicating whether the role was removed successfully.
+    */
+    func removeGuildMemberRole(_ roleId: String, from userId: String, on guildId: String, callback: ((Bool) -> Void)?)
+
+    /**
         Removes a guild role.
 
         - parameter roleId: The snowflake id of the role
@@ -493,7 +504,7 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    func createWebhook(forChannel channelId: String, options: [DiscordEndpointOptions.WebhookOption],
+    public func createWebhook(forChannel channelId: String, options: [DiscordEndpointOptions.WebhookOption],
             callback: @escaping (DiscordWebhook?) -> Void = {_ in }) {
         DiscordEndpoint.createWebhook(forChannel: channelId, with: token, options: options, callback: callback)
     }
@@ -661,7 +672,7 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    func modifyWebhook(_ webhookId: String, options: [DiscordEndpointOptions.WebhookOption],
+    public func modifyWebhook(_ webhookId: String, options: [DiscordEndpointOptions.WebhookOption],
             callback: @escaping (DiscordWebhook?) -> Void = {_ in }) {
         DiscordEndpoint.modifyWebhook(webhookId, with: token, options: options, callback: callback)
     }
@@ -669,6 +680,12 @@ public extension DiscordEndpointConsumer {
     /// Default implementation
     public func removeGuildBan(for userId: String, on guildId: String, callback: ((Bool) -> Void)? = nil) {
         DiscordEndpoint.removeGuildBan(for: userId, on: guildId, with: token, callback: callback)
+    }
+
+    /// Default implementation.
+    public func removeGuildMemberRole(_ roleId: String, from userId: String, on guildId: String,
+            callback: ((Bool) -> Void)?) {
+        DiscordEndpoint.removeGuildMemberRole(roleId, from: userId, on: guildId, with: token, callback: callback)
     }
 
     /// Default implementation
