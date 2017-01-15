@@ -137,9 +137,6 @@
                 <a href="../Functions.html#/s:F12SwiftDiscordoi1aFTSiOS_17DiscordPermission_Si">&amp;(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:F12SwiftDiscordoi3allFTSiSi_Si">&amp;&lt;&lt;(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Functions.html#/s:F12SwiftDiscordoi2aeFTRSiOS_17DiscordPermission_T_">&amp;=(_:_:)</a>
               </li>
               <li class="nav-group-task">
@@ -1766,6 +1763,113 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer18addGuildMemberRoleFTSS2toSS2onSS8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/addGuildMemberRole(_:to:on:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer18addGuildMemberRoleFTSS2toSS2onSS8callbackGSqFSbT___T_">addGuildMemberRole(_:to:on:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Adds a role to a guild member.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default implementation</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">addGuildMemberRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">to</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roleId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the role to add.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>to</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the member to add this role to.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the guild this member is on.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The token to authenticate to Discord with.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the role was added successfully.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer18createGuildChannelFT2onSS7optionsGSaOVS_22DiscordEndpointOptions18GuildCreateChannel_8callbackGSqFGSqVS_19DiscordGuildChannel_T___T_"></a>
                     <a name="//apple_ref/swift/Method/createGuildChannel(on:options:callback:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer18createGuildChannelFT2onSS7optionsGSaOVS_22DiscordEndpointOptions18GuildCreateChannel_8callbackGSqFGSqVS_19DiscordGuildChannel_T___T_">createGuildChannel(on:options:callback:)</a>
@@ -2754,6 +2858,113 @@ that if you make modifications to the client inside of a callback, you first dis
                               <td>
                                 <div>
                                   <p>An optional callback indicating whether the ban was successfully removed.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer21removeGuildMemberRoleFTSS4fromSS2onSS8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/removeGuildMemberRole(_:from:on:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer21removeGuildMemberRoleFTSS4fromSS2onSS8callbackGSqFSbT___T_">removeGuildMemberRole(_:from:on:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Removes a role from a guild member.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default implementation.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">removeGuildMemberRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">from</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roleId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the role to add.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>from</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the member to add this role to.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the guild this member is on.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The token to authenticate to Discord with.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the role was removed successfully.</p>
 
                                 </div>
                               </td>
@@ -3795,7 +4006,7 @@ that if you make modifications to the client inside of a callback, you first dis
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-09)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-15)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
