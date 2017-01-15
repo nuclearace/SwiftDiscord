@@ -424,6 +424,32 @@ public extension DiscordEndpoint {
         })
     }
 
+    /**
+        Removes a role from a guild member.
+
+        - parameter roleId: The id of the role to add.
+        - parameter from: The id of the member to add this role to.
+        - parameter on: The id of the guild this member is on.
+        - parameter with: The token to authenticate to Discord with.
+        - parameter callback: An optional callback indicating whether the role was removed successfully.
+    */
+    public static func removeGuildMemberRole(_ roleId: String, from userId: String, on guildId: String,
+            with token: DiscordToken, callback: ((Bool) -> Void)?) {
+        var request = createRequest(with: token, for: .guildMemberRole, replacing: [
+            "guild.id": guildId,
+            "user.id": userId,
+            "role.id": roleId
+        ])
+
+        request.httpMethod = "DELETE"
+
+        let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildMemberRole, parameters: ["guild.id": guildId])
+
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+           callback?(response?.statusCode == 204)
+        })
+    }
+
     // Guild Roles
 
     /**
