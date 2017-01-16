@@ -59,8 +59,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 	/// Creates the handshake object that Discord expects.
 	public override var handshakeObject: [String: Any] {
 		return [
-			"session_id": client!.voiceState!.sessionId,
-			"server_id": client!.voiceState!.guildId,
+			"session_id": voiceState.sessionId,
+			"server_id": voiceState.guildId,
 			"user_id": client!.user!.id,
 			"token": voiceServerInformation["token"] as! String
 		]
@@ -89,6 +89,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
 	/// Information about the voice server we are connected to
 	public private(set) var voiceServerInformation: [String: Any]!
+
+	/// The voice state for this engine.
+	public private(set) var voiceState: DiscordVoiceState!
 
 	override var logType: String {
 		return "DiscordVoiceEngine"
@@ -138,13 +141,14 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 		- parameter secret: The secret from a previous engine.
 	*/
 	public convenience init?(client: DiscordClientSpec, voiceServerInformation: [String: Any],
-			encoder: DiscordVoiceEncoder?, secret: [UInt8]?) {
+			voiceState: DiscordVoiceState, encoder: DiscordVoiceEncoder?, secret: [UInt8]?) {
 		self.init(client: client)
 
 		_ = sodium_init()
 
 		signal(SIGPIPE, SIG_IGN)
 
+		self.voiceState = voiceState
 		self.voiceServerInformation = voiceServerInformation
 		self.encoder = encoder
 		self.secret = secret
@@ -336,6 +340,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 			handleReady(with: payload.payload)
 		case .sessionDescription:
 			udpQueue.async { self.handleVoiceSessionDescription(with: payload.payload) }
+		case .speaking:
+				DefaultDiscordLogger.Logger.debug("Got speaking", type: logType, args: payload)
 		default:
 			DefaultDiscordLogger.Logger.debug("Unhandled voice payload %@", type: logType, args: payload)
 			break

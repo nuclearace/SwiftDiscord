@@ -55,8 +55,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 	public var handleQueue = DispatchQueue.main
 
     #if !os(iOS)
-    /// The DiscordVoiceEngine that is used for voice.
-	public var voiceEngine: DiscordVoiceEngineSpec?
+    /// The voice engines, indexed by guild id.
+	public var voiceEngines = [String: DiscordVoiceEngineSpec]()
     #endif
 
     /// A callback function to listen for voice packets.
@@ -89,17 +89,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 	/// The DiscordUser this client is connected to.
 	public private(set) var user: DiscordUser?
 
-	/// The voice state for this user, if they are in a voice channel.
-	public private(set) var voiceState: DiscordVoiceState?
+	/// The voice states for this user, if they are in any voice channels.
+	public private(set) var voiceStates = [String: DiscordVoiceState]()
 
 	private let parseQueue = DispatchQueue(label: "parseQueue")
 	private let logType = "DiscordClient"
 	private let voiceQueue = DispatchQueue(label: "voiceQueue")
 
 	private var channelCache = [String: DiscordChannel]()
-	private var joiningVoiceChannel = false
-	private var joinedVoiceChannel: DiscordGuildChannel?
-	private var voiceServerInformation: [String: Any]?
+	private var voiceServerInformations = [String: [String: Any]]()
 
 	// MARK: Initializers
 
@@ -160,7 +158,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 		shardManager.disconnect()
 
         #if !os(iOS)
-		voiceEngine?.disconnect()
+        for (_, engine) in voiceEngines {
+        	engine.disconnect()
+        }
         #endif
 	}
 
@@ -288,9 +288,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		DefaultDiscordLogger.Logger.log("Joining voice channel: %@", type: self.logType, args: channel)
 
-		self.joiningVoiceChannel = true
-		self.joinedVoiceChannel = channel
-
 		let shardNum = guild.shardNumber(assuming: shards)
 
 		self.shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
@@ -307,26 +304,32 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 	}
 
 	/**
-		Leaves the currently connected voice channel.
+		Leaves the voice channel that is associated with the guild specified.
+
+		- parameter onGuild: The snowflake of the guild that you want to leave.
 	*/
-	open func leaveVoiceChannel() {
+	open func leaveVoiceChannel(onGuild guildId: String) {
         #if !os(iOS)
-        guard let state = voiceState else { return }
+        guard voiceEngines[guildId] != nil else { return }
 
-        self.voiceEngine?.disconnect()
-        self.voiceEngine = nil
+        // Make sure the engine is cleaned up before setting it to nil
+        voiceEngines[guildId]?.disconnect()
+        voiceEngines[guildId] = nil
 
-        guard let shardNum = joinedVoiceChannel?.guild?.shardNumber(assuming: shards) else { return }
+        guard let shardNum = guilds[guildId]?.shardNumber(assuming: shards) else { return }
 
-        self.shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
+        shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
         	payload: .object([
-        		"guild_id": state.guildId,
+        		"guild_id": guildId,
         		"channel_id": NSNull(),
         		"self_mute": false,
         		"self_deaf": false
 			])), onShard: shardNum)
 
-		self.joiningVoiceChannel = false
+        for (guildId, _) in voiceEngines {
+        	startVoiceConnection(guildId)
+        }
+
         #else
         print("Only available on macOS and Linux")
         #endif
@@ -361,20 +364,21 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 			payload: .object(presence.json)), onShard: 0)
 	}
 
-	private func startVoiceConnection() {
+	private func startVoiceConnection(_ guildId: String) {
         #if !os(iOS)
 		// We need both to start the connection
-		guard voiceState != nil && voiceServerInformation != nil else {
+		guard let voiceState = voiceStates[guildId], let serverInfo = voiceServerInformations[guildId] else {
 			return
 		}
 
 		// Reuse a previous engine's encoder if possible
-		voiceEngine = DiscordVoiceEngine(client: self, voiceServerInformation: voiceServerInformation!,
-			encoder: voiceEngine?.encoder, secret: voiceEngine?.secret)
+		let previousEngine = voiceEngines[guildId]
+		voiceEngines[guildId] = DiscordVoiceEngine(client: self, voiceServerInformation: serverInfo,
+			voiceState: voiceState, encoder: previousEngine?.encoder, secret: previousEngine?.secret)
 
 		DefaultDiscordLogger.Logger.log("Connecting voice engine", type: logType)
 
-		voiceEngine?.connect()
+		voiceEngines[guildId]?.connect()
         #else
         print("Only available on macOS and Linux")
         #endif
@@ -860,12 +864,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 		DefaultDiscordLogger.Logger.log("Handling voice server update", type: logType)
 		DefaultDiscordLogger.Logger.verbose("Voice server update: %@", type: logType, args: data)
 
-		self.voiceServerInformation = data
+		guard let guildId = data["guild_id"] as? String else { return }
 
-		if self.joiningVoiceChannel {
-			// print("got voice server \(data)")
-			self.startVoiceConnection()
-		}
+		self.voiceServerInformations[guildId] = data
+
+		self.startVoiceConnection(guildId)
 	}
 
 	/**
@@ -894,11 +897,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
 		if state.userId == user?.id {
 			if state.channelId == "" {
-				voiceState = nil
-			} else if joiningVoiceChannel {
-				voiceState = state
+				voiceStates[state.guildId] = nil
+			} else {
+				voiceStates[state.guildId] = state
 
-				startVoiceConnection()
+				startVoiceConnection(state.guildId)
 			}
 		}
 

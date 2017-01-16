@@ -55,7 +55,7 @@ public protocol DiscordUserActor {
 	var user: DiscordUser? { get }
 
 	/// The voice state for this user, if they are in a voice channel.
-	var voiceState: DiscordVoiceState? { get }
+	var voiceStates: [String: DiscordVoiceState] { get }
 }
 
 /// Represents a Discord user.
