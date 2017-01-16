@@ -97,7 +97,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     private let voiceQueue = DispatchQueue(label: "voiceQueue")
 
     private var channelCache = [String: DiscordChannel]()
-    private var voiceServerInformations = [String: [String: Any]]()
+    private var voiceServerInformations = [String: DiscordVoiceServerInformation]()
 
     // MARK: Initializers
 
@@ -882,11 +882,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
         DefaultDiscordLogger.Logger.log("Handling voice server update", type: logType)
         DefaultDiscordLogger.Logger.verbose("Voice server update: %@", type: logType, args: data)
 
-        guard let guildId = data["guild_id"] as? String else { return }
+        let info = DiscordVoiceServerInformation(voiceServerInformationObject: data)
 
-        self.voiceServerInformations[guildId] = data
+        self.voiceServerInformations[info.guildId] = info
 
-        self.startVoiceConnection(guildId)
+        self.startVoiceConnection(info.guildId)
     }
 
     /**
