@@ -213,10 +213,12 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     /**
         Creates a role on a guild.
 
-        - parameter on: The snowflake id of the guild
-        - parameter callback: The callback function, taking an optional `DiscordRole`
+        - parameter on: The snowflake id of the guild.
+        - parameter withOptions: The options for the new role. Optional in the default implementation.
+        - parameter callback: The callback function, taking an optional `DiscordRole`.
     */
-    func createGuildRole(on guildId: String, callback: @escaping (DiscordRole?) -> Void)
+    func createGuildRole(on guildId: String, withOptions options: [DiscordEndpointOptions.CreateRole],
+        callback: @escaping (DiscordRole?) -> Void)
 
     /**
         Deletes the specified guild.
@@ -496,8 +498,9 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    public func createGuildRole(on guildId: String, callback: @escaping (DiscordRole?) -> Void) {
-        DiscordEndpoint.createGuildRole(on: guildId, with: token, callback: callback)
+    public func createGuildRole(on guildId: String, withOptions options: [DiscordEndpointOptions.CreateRole] = [],
+            callback: @escaping (DiscordRole?) -> Void) {
+        DiscordEndpoint.createGuildRole(on: guildId, withOptions: options, with: token, callback: callback)
     }
 
     /// Default implementation

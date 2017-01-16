@@ -26,7 +26,7 @@ public protocol DiscordEngineGatewayHandling : DiscordEngineSpec, DiscordEngineH
 
         - parameter payload: The dispatch payload
     */
-	func handleDispatch(_ payload: DiscordGatewayPayload)
+    func handleDispatch(_ payload: DiscordGatewayPayload)
 
     /**
         Handles the hello event.
@@ -45,7 +45,7 @@ public protocol DiscordEngineGatewayHandling : DiscordEngineSpec, DiscordEngineH
 
 public extension DiscordEngineGatewayHandling {
     /// Default implementation
-	func handleDispatch(_ payload: DiscordGatewayPayload) {
+    func handleDispatch(_ payload: DiscordGatewayPayload) {
         guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
             DefaultDiscordLogger.Logger.error("Could not create dispatch event %@", type: "DiscordEngineGatewayHandling",
                 args: payload)
@@ -61,6 +61,6 @@ public extension DiscordEngineGatewayHandling {
             handleResumed(payload)
         }
 
-		client?.handleEngineDispatch(event, with: payload)
-	}
+        client?.handleEngineDispatch(event, with: payload)
+    }
 }

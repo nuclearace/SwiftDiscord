@@ -456,14 +456,40 @@ public extension DiscordEndpoint {
         Creates a role on a guild.
 
         - parameter on: The snowflake id of the guild
+        - parameter withOptions: The options for this new role.
         - parameter with: The token to authenticate to Discord with
         - parameter callback: The callback function, taking an optional `DiscordRole`
     */
-    public static func createGuildRole(on guildId: String, with token: DiscordToken,
-            callback: @escaping (DiscordRole?) -> Void) {
+    public static func createGuildRole(on guildId: String, withOptions options: [DiscordEndpointOptions.CreateRole],
+            with token: DiscordToken, callback: @escaping (DiscordRole?) -> Void) {
+        var roleData: [String: Any] = [:]
+
+        for option in options {
+            switch option {
+            case let .color(color):
+                roleData["color"] = color
+            case let .hoist(hoist):
+                roleData["hoist"] = hoist
+            case let .mentionable(mentionable):
+                roleData["mentionable"] = mentionable
+            case let .name(name):
+                roleData["name"] = name
+            case let .permissions(permissions):
+                roleData["permissions"] = permissions
+            }
+        }
+
+        DefaultDiscordLogger.Logger.log("Creating a new role on %@", type: "DiscordEndpointGuild", args: guildId)
+        DefaultDiscordLogger.Logger.verbose("Role options %@", type: "DiscordEndpointGuild", args: roleData)
+
+        guard let contentData = encodeJSON(roleData)?.data(using: .utf8, allowLossyConversion: false) else {
+            return callback(nil)
+        }
+
         var request = createRequest(with: token, for: .guildRoles, replacing: ["guild.id": guildId])
 
         request.httpMethod = "POST"
+        request.httpBody = contentData
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildRoles, parameters: ["guild.id": guildId])
 

@@ -17,54 +17,54 @@
 
 /// Represents a Discord role.
 public struct DiscordRole : JSONAble {
-	// MARK: Properties
+    // MARK: Properties
 
-	/// The snowflake id of the role.
-	public let id: String
+    /// The snowflake id of the role.
+    public let id: String
 
-	/// The display color of this role.
-	public var color: Int
+    /// The display color of this role.
+    public var color: Int
 
-	/// Whether this role should be hoisted.
-	public var hoist: Bool
+    /// Whether this role should be hoisted.
+    public var hoist: Bool
 
-	/// Whether this role is managed.
-	public var managed: Bool
+    /// Whether this role is managed.
+    public var managed: Bool
 
-	/// Whether this role is mentionable.
-	public var mentionable: Bool
+    /// Whether this role is mentionable.
+    public var mentionable: Bool
 
-	/// The name of this role.
-	public var name: String
+    /// The name of this role.
+    public var name: String
 
-	/// The permissions this role has.
-	///
-	/// *Bit field*
-	public var permissions: Int
+    /// The permissions this role has.
+    ///
+    /// *Bit field*
+    public var permissions: Int
 
-	/// The position of this role.
-	public var position: Int
+    /// The position of this role.
+    public var position: Int
 
-	init(roleObject: [String: Any]) {
-		color = roleObject.get("color", or: 0)
-		hoist = roleObject.get("hoist", or: false)
-		id = roleObject.get("id", or: "")
-		managed = roleObject.get("managed", or: false)
-		mentionable = roleObject.get("mentionable", or: false)
-		name = roleObject.get("name", or: "")
-		permissions = roleObject.get("permissions", or: 0)
-		position = roleObject.get("position", or: 0)
-	}
+    init(roleObject: [String: Any]) {
+        color = roleObject.get("color", or: 0)
+        hoist = roleObject.get("hoist", or: false)
+        id = roleObject.get("id", or: "")
+        managed = roleObject.get("managed", or: false)
+        mentionable = roleObject.get("mentionable", or: false)
+        name = roleObject.get("name", or: "")
+        permissions = roleObject.get("permissions", or: 0)
+        position = roleObject.get("position", or: 0)
+    }
 
-	static func rolesFromArray(_ rolesArray: [[String: Any]]) -> [String: DiscordRole] {
-		var roles = [String: DiscordRole]()
+    static func rolesFromArray(_ rolesArray: [[String: Any]]) -> [String: DiscordRole] {
+        var roles = [String: DiscordRole]()
 
-		for role in rolesArray {
-			let role = DiscordRole(roleObject: role)
+        for role in rolesArray {
+            let role = DiscordRole(roleObject: role)
 
-			roles[role.id] = role
-		}
+            roles[role.id] = role
+        }
 
-		return roles
-	}
+        return roles
+    }
 }

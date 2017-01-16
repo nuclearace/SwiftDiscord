@@ -32,445 +32,445 @@ private let os = "Linux"
 #endif
 
 /**
-	The base class for Discord WebSocket communications.
+    The base class for Discord WebSocket communications.
 */
 open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, DiscordEngineHeartbeatable {
-	// MARK: Properties
-
-	/// The url for the gateway.
-	open var connectURL: String {
-		return DiscordEndpointGateway.gatewayURL + "/?v=6"
-	}
-
-	/// The type of DiscordEngineSpec. Used to correctly fire events.
-	open var engineType: String {
-		return "engine"
-	}
-
-	/// Creates the handshake object that Discord expects.
-	/// Override if you need to customize the handshake object.
-	open var handshakeObject: [String: Any] {
-		var identify: [String: Any] = [
-			"token": client!.token.token,
-			"properties": [
-				"$os": os,
-				"$browser": "SwiftDiscord",
-				"$device": "SwiftDiscord",
-				"$referrer": "",
-				"$referring_domain": ""
-			],
-			"compress": false,
-			"large_threshold": 250,
-		]
-
-		if numShards > 1 {
-			identify["shard"] = [shardNum, numShards]
-		}
-
-		return identify
-	}
-
-	/// Creates the resume object that Discord expects.
-	/// Override if you need to customize the resume object.
-	open var resumeObject: [String: Any] {
-		return [
-			"token": client!.token.token,
-			"session_id": sessionId!,
-			"seq": lastSequenceNumber
-		]
-	}
+    // MARK: Properties
+
+    /// The url for the gateway.
+    open var connectURL: String {
+        return DiscordEndpointGateway.gatewayURL + "/?v=6"
+    }
+
+    /// The type of DiscordEngineSpec. Used to correctly fire events.
+    open var engineType: String {
+        return "engine"
+    }
+
+    /// Creates the handshake object that Discord expects.
+    /// Override if you need to customize the handshake object.
+    open var handshakeObject: [String: Any] {
+        var identify: [String: Any] = [
+            "token": client!.token.token,
+            "properties": [
+                "$os": os,
+                "$browser": "SwiftDiscord",
+                "$device": "SwiftDiscord",
+                "$referrer": "",
+                "$referring_domain": ""
+            ],
+            "compress": false,
+            "large_threshold": 250,
+        ]
+
+        if numShards > 1 {
+            identify["shard"] = [shardNum, numShards]
+        }
+
+        return identify
+    }
+
+    /// Creates the resume object that Discord expects.
+    /// Override if you need to customize the resume object.
+    open var resumeObject: [String: Any] {
+        return [
+            "token": client!.token.token,
+            "session_id": sessionId!,
+            "seq": lastSequenceNumber
+        ]
+    }
 
-	/// The total number of shards.
-	public let numShards: Int
+    /// The total number of shards.
+    public let numShards: Int
 
-	/// The shard number of this engine.
-	public let shardNum: Int
+    /// The shard number of this engine.
+    public let shardNum: Int
 
-	/// A reference to this engine's shard manager.
-	public var manager: DiscordShardManager?
+    /// A reference to this engine's shard manager.
+    public var manager: DiscordShardManager?
 
-	/// This engine's session id.
-	public var sessionId: String?
+    /// This engine's session id.
+    public var sessionId: String?
 
-	/// Whether this engine is connected to the gateway.
-	public internal(set) var connected = false
+    /// Whether this engine is connected to the gateway.
+    public internal(set) var connected = false
 
-	// Only touch on handleQueue
-	/// The interval (in seconds) to send heartbeats.
-	public internal(set) var heartbeatInterval = 0
+    // Only touch on handleQueue
+    /// The interval (in seconds) to send heartbeats.
+    public internal(set) var heartbeatInterval = 0
 
-	/// The underlying WebSocket.
-	///
-	/// On Linux this is a WebSockets.WebSocket. While on macOS/iOS this is a Starscream.WebSocket
-	public internal(set) var websocket: WebSocket?
+    /// The underlying WebSocket.
+    ///
+    /// On Linux this is a WebSockets.WebSocket. While on macOS/iOS this is a Starscream.WebSocket
+    public internal(set) var websocket: WebSocket?
 
-	/// The client that this engine is associated with.
-	public private(set) weak var client: DiscordClientSpec?
+    /// The client that this engine is associated with.
+    public private(set) weak var client: DiscordClientSpec?
 
-	/// The dispatch queue that heartbeats are sent on.
-	public private(set) var heartbeatQueue = DispatchQueue(label: "discordEngine.heartbeatQueue")
+    /// The dispatch queue that heartbeats are sent on.
+    public private(set) var heartbeatQueue = DispatchQueue(label: "discordEngine.heartbeatQueue")
 
-	// Only touch on handleQueue
-	/// The last sequence number received. Will be used for session resumes.
-	public private(set) var lastSequenceNumber = -1
-
-	let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
-	let handleQueue = DispatchQueue(label: "discordEngine.handleQueue")
-
-	var logType: String {
-		return "DiscordEngine"
-	}
-
-	var pongsMissed = 0
-
-	private var closed = false
-	private var connectUUID = UUID()
-	private var resuming = false
-
-	// MARK: Initializers
-
-	/**
-		Creates a new DiscordEngine.
+    // Only touch on handleQueue
+    /// The last sequence number received. Will be used for session resumes.
+    public private(set) var lastSequenceNumber = -1
+
+    let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
+    let handleQueue = DispatchQueue(label: "discordEngine.handleQueue")
+
+    var logType: String {
+        return "DiscordEngine"
+    }
+
+    var pongsMissed = 0
+
+    private var closed = false
+    private var connectUUID = UUID()
+    private var resuming = false
+
+    // MARK: Initializers
+
+    /**
+        Creates a new DiscordEngine.
 
-		- parameter client: The DiscordClientSpec this engine should be associated with.
-	*/
-	public required init(client: DiscordClientSpec, shardNum: Int = 0, numShards: Int = 1) {
-		self.client = client
-		self.shardNum = shardNum
-		self.numShards = numShards
-	}
+        - parameter client: The DiscordClientSpec this engine should be associated with.
+    */
+    public required init(client: DiscordClientSpec, shardNum: Int = 0, numShards: Int = 1) {
+        self.client = client
+        self.shardNum = shardNum
+        self.numShards = numShards
+    }
 
-	// MARK: Methods
+    // MARK: Methods
 
-	/**
-		Attaches the WebSocket handlers that listen for text/connects/disconnects/etc
+    /**
+        Attaches the WebSocket handlers that listen for text/connects/disconnects/etc
 
-		Override if you need to provide custom handlers.
+        Override if you need to provide custom handlers.
 
-		Note: You should handle both WebSockets.WebSocket and Starscream.WebSocket handlers.
-	*/
-	open func attachWebSocketHandlers() {
-		#if !os(Linux)
-		websocket?.onConnect = {[weak self] in
-			guard let this = self else { return }
+        Note: You should handle both WebSockets.WebSocket and Starscream.WebSocket handlers.
+    */
+    open func attachWebSocketHandlers() {
+        #if !os(Linux)
+        websocket?.onConnect = {[weak self] in
+            guard let this = self else { return }
 
-			DefaultDiscordLogger.Logger.log("WebSocket Connected, shard: %@", type: this.logType, args: this.shardNum)
+            DefaultDiscordLogger.Logger.log("WebSocket Connected, shard: %@", type: this.logType, args: this.shardNum)
 
-			this.connectUUID = UUID()
+            this.connectUUID = UUID()
 
-			this.startHandshake()
-		}
+            this.startHandshake()
+        }
 
-		websocket?.onDisconnect = {[weak self] err in
-			guard let this = self else { return }
+        websocket?.onDisconnect = {[weak self] err in
+            guard let this = self else { return }
 
-			DefaultDiscordLogger.Logger.log("WebSocket disconnected %@, shard: %@",
-				type: this.logType, args: String(describing: err), this.shardNum)
+            DefaultDiscordLogger.Logger.log("WebSocket disconnected %@, shard: %@",
+                type: this.logType, args: String(describing: err), this.shardNum)
 
-			this.handleClose(reason: err)
-		}
+            this.handleClose(reason: err)
+        }
 
-		websocket?.onText = {[weak self] string in
-			guard let this = self else { return }
+        websocket?.onText = {[weak self] string in
+            guard let this = self else { return }
 
-			DefaultDiscordLogger.Logger.debug("Shard: %@ Got text: %@", type: this.logType, args: this.shardNum, string)
+            DefaultDiscordLogger.Logger.debug("Shard: %@ Got text: %@", type: this.logType, args: this.shardNum, string)
 
-			this.parseGatewayMessage(string)
-		}
-		#else
-		websocket?.onText = {[weak self] ws, text in
-			guard let this = self else { return }
+            this.parseGatewayMessage(string)
+        }
+        #else
+        websocket?.onText = {[weak self] ws, text in
+            guard let this = self else { return }
 
-			DefaultDiscordLogger.Logger.debug("Shard: %@, Got text: %@", type: this.logType, args: this.shardNum, text)
+            DefaultDiscordLogger.Logger.debug("Shard: %@, Got text: %@", type: this.logType, args: this.shardNum, text)
 
-			this.parseGatewayMessage(text)
-		}
+            this.parseGatewayMessage(text)
+        }
 
-		websocket?.onClose = {[weak self] _, _, _, _ in
-			guard let this = self else { return }
+        websocket?.onClose = {[weak self] _, _, _, _ in
+            guard let this = self else { return }
 
-			DefaultDiscordLogger.Logger.log("WebSocket closed, shard: ", type: this.logType, args: this.shardNum)
+            DefaultDiscordLogger.Logger.log("WebSocket closed, shard: ", type: this.logType, args: this.shardNum)
 
-			this.handleClose()
-		}
-		#endif
-	}
+            this.handleClose()
+        }
+        #endif
+    }
 
-	/**
-		Starts the connection to the Discord gateway.
-	*/
-	open func connect() {
-		DefaultDiscordLogger.Logger.log("Connecting to %@, shard: %@", type: logType, args: connectURL, shardNum)
-		DefaultDiscordLogger.Logger.log("Attaching WebSocket, shard: %@", type: logType, args: shardNum)
+    /**
+        Starts the connection to the Discord gateway.
+    */
+    open func connect() {
+        DefaultDiscordLogger.Logger.log("Connecting to %@, shard: %@", type: logType, args: connectURL, shardNum)
+        DefaultDiscordLogger.Logger.log("Attaching WebSocket, shard: %@", type: logType, args: shardNum)
 
-		#if !os(Linux)
-		websocket = WebSocket(url: URL(string: connectURL)!)
-		websocket?.callbackQueue = parseQueue
+        #if !os(Linux)
+        websocket = WebSocket(url: URL(string: connectURL)!)
+        websocket?.callbackQueue = parseQueue
 
-		attachWebSocketHandlers()
-		websocket?.connect()
-		#else
-		try? WebSocket.background(to: connectURL) {[weak self] ws in
-			guard let this = self else { return }
-			DefaultDiscordLogger.Logger.log("Websocket connected, shard: ", type: "DiscordEngine", args: this.shardNum)
+        attachWebSocketHandlers()
+        websocket?.connect()
+        #else
+        try? WebSocket.background(to: connectURL) {[weak self] ws in
+            guard let this = self else { return }
+            DefaultDiscordLogger.Logger.log("Websocket connected, shard: ", type: "DiscordEngine", args: this.shardNum)
 
-			this.websocket = ws
-			this.connectUUID = UUID()
+            this.websocket = ws
+            this.connectUUID = UUID()
 
-			this.attachWebSocketHandlers()
-			this.startHandshake()
-		}
-		#endif
-	}
-
-	/**
-		Disconnects the engine. An `engine.disconnect` is fired on disconnection.
-	*/
-	open func disconnect() {
-		DefaultDiscordLogger.Logger.log("Disconnecting, shard: %@", type: logType, args: shardNum)
-
-		closed = true
-
-		disconnectWebSockets()
-	}
-
-	private func disconnectWebSockets() {
-		#if !os(Linux)
-		websocket?.disconnect()
-		#else
-		try? websocket?.close()
-		#endif
-	}
-
-	/**
-		Logs that an error occured.
-
-		- parameter message: The error message
-	*/
-	open func error(message: String) {
-		DefaultDiscordLogger.Logger.error(message, type: logType)
-	}
-
-	/**
-		Handles a close from the WebSocket.
-
-		- parameter reason: The reason the socket closed.
-	*/
-	open func handleClose(reason: NSError? = nil) {
-		let closeReason = DiscordGatewayCloseReason(error: reason) ?? .unknown
-
-		connected = false
-		heartbeatQueue.sync { self.pongsMissed = 0 }
-
-		DefaultDiscordLogger.Logger.log("Disconnected, shard: %@", type: logType, args: shardNum)
-
-		if closeReason == .sessionTimeout {
-			sessionId = nil
-		}
-
-		guard !closed else {
-			manager?.signalShardDisconnected(shardNum: shardNum)
-
-			return
-		}
-
-		resumeGateway()
-	}
-
-	/**
-		Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
-
-		Override this method if you need to customize payload handling.
-
-		- parameter payload: The payload object
-	*/
-	open func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
-		handleQueue.async {
-			self._handleGatewayPayload(payload)
-		}
-	}
-
-	func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
-		func handleInvalidSession() {
-			if case let .bool(netsplit) = payload.payload, !netsplit {
-				DefaultDiscordLogger.Logger.error("Invalid session received. Invalidating session", type: logType)
-
-				sessionId = nil
-			} else {
-				DefaultDiscordLogger.Logger.error("Netsplit recieved, trying to resume", type: logType)
-			}
+            this.attachWebSocketHandlers()
+            this.startHandshake()
+        }
+        #endif
+    }
+
+    /**
+        Disconnects the engine. An `engine.disconnect` is fired on disconnection.
+    */
+    open func disconnect() {
+        DefaultDiscordLogger.Logger.log("Disconnecting, shard: %@", type: logType, args: shardNum)
+
+        closed = true
+
+        disconnectWebSockets()
+    }
+
+    private func disconnectWebSockets() {
+        #if !os(Linux)
+        websocket?.disconnect()
+        #else
+        try? websocket?.close()
+        #endif
+    }
+
+    /**
+        Logs that an error occured.
+
+        - parameter message: The error message
+    */
+    open func error(message: String) {
+        DefaultDiscordLogger.Logger.error(message, type: logType)
+    }
+
+    /**
+        Handles a close from the WebSocket.
+
+        - parameter reason: The reason the socket closed.
+    */
+    open func handleClose(reason: NSError? = nil) {
+        let closeReason = DiscordGatewayCloseReason(error: reason) ?? .unknown
+
+        connected = false
+        heartbeatQueue.sync { self.pongsMissed = 0 }
+
+        DefaultDiscordLogger.Logger.log("Disconnected, shard: %@", type: logType, args: shardNum)
+
+        if closeReason == .sessionTimeout {
+            sessionId = nil
+        }
+
+        guard !closed else {
+            manager?.signalShardDisconnected(shardNum: shardNum)
+
+            return
+        }
+
+        resumeGateway()
+    }
+
+    /**
+        Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
+
+        Override this method if you need to customize payload handling.
+
+        - parameter payload: The payload object
+    */
+    open func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
+        handleQueue.async {
+            self._handleGatewayPayload(payload)
+        }
+    }
+
+    func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
+        func handleInvalidSession() {
+            if case let .bool(netsplit) = payload.payload, !netsplit {
+                DefaultDiscordLogger.Logger.error("Invalid session received. Invalidating session", type: logType)
+
+                sessionId = nil
+            } else {
+                DefaultDiscordLogger.Logger.error("Netsplit recieved, trying to resume", type: logType)
+            }
 
-			resuming = false
-			startHandshake()
-		}
+            resuming = false
+            startHandshake()
+        }
 
-		if let seq = payload.sequenceNumber {
-			lastSequenceNumber = seq
-		}
+        if let seq = payload.sequenceNumber {
+            lastSequenceNumber = seq
+        }
 
-		guard case let .gateway(gatewayCode) = payload.code else {
-			fatalError("Got voice payload in non voice engine")
-		}
+        guard case let .gateway(gatewayCode) = payload.code else {
+            fatalError("Got voice payload in non voice engine")
+        }
 
-		switch gatewayCode {
-		case .dispatch:
-			handleDispatch(payload)
-		case .hello:
-			handleHello(payload)
-		case .invalidSession:
-			handleInvalidSession()
-		case .heartbeat:
-			sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.heartbeat),
-				payload: .integer(1)))
-		case .heartbeatAck:
-			heartbeatQueue.sync { self.pongsMissed = 0 }
-			DefaultDiscordLogger.Logger.debug("Got heartback ack", type: logType)
-		default:
-			error(message: "Unhandled payload: \(payload.code)")
-		}
-	}
+        switch gatewayCode {
+        case .dispatch:
+            handleDispatch(payload)
+        case .hello:
+            handleHello(payload)
+        case .invalidSession:
+            handleInvalidSession()
+        case .heartbeat:
+            sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.heartbeat),
+                payload: .integer(1)))
+        case .heartbeatAck:
+            heartbeatQueue.sync { self.pongsMissed = 0 }
+            DefaultDiscordLogger.Logger.debug("Got heartback ack", type: logType)
+        default:
+            error(message: "Unhandled payload: \(payload.code)")
+        }
+    }
 
-	/**
-	    Handles the hello event.
+    /**
+        Handles the hello event.
 
-	    - parameter payload: The dispatch payload
-	*/
-	open func handleHello(_ payload: DiscordGatewayPayload) {
-	    guard case let .object(eventData) = payload.payload else { fatalError("Got bad hello payload") }
-	    guard let milliseconds = eventData["heartbeat_interval"] as? Int else {
-	        fatalError("Got bad heartbeat interval")
-	    }
+        - parameter payload: The dispatch payload
+    */
+    open func handleHello(_ payload: DiscordGatewayPayload) {
+        guard case let .object(eventData) = payload.payload else { fatalError("Got bad hello payload") }
+        guard let milliseconds = eventData["heartbeat_interval"] as? Int else {
+            fatalError("Got bad heartbeat interval")
+        }
 
-	    connected = true
+        connected = true
 
-	    startHeartbeat(seconds: milliseconds / 1000)
-	}
+        startHeartbeat(seconds: milliseconds / 1000)
+    }
 
-	/**
-		Handles the resumed event. You shouldn't call this directly.
-	*/
-	open func handleResumed(_ payload: DiscordGatewayPayload) {
-		DefaultDiscordLogger.Logger.log("Resumed gateway session on shard: %@", type: logType, args: shardNum)
+    /**
+        Handles the resumed event. You shouldn't call this directly.
+    */
+    open func handleResumed(_ payload: DiscordGatewayPayload) {
+        DefaultDiscordLogger.Logger.log("Resumed gateway session on shard: %@", type: logType, args: shardNum)
 
-		resuming = false
+        resuming = false
 
-		sendHeartbeat()
-	}
+        sendHeartbeat()
+    }
 
-	/**
-		Parses a raw message from the WebSocket. This is the entry point for all Discord events.
-		You shouldn't call this directly.
+    /**
+        Parses a raw message from the WebSocket. This is the entry point for all Discord events.
+        You shouldn't call this directly.
 
-		Override this method if you need to customize parsing.
+        Override this method if you need to customize parsing.
 
-		- parameter string: The raw payload string
-	*/
-	open func parseGatewayMessage(_ string: String) {
-		guard let decoded = DiscordGatewayPayload.payloadFromString(string) else {
-			error(message: "Got unknown payload \(string)")
+        - parameter string: The raw payload string
+    */
+    open func parseGatewayMessage(_ string: String) {
+        guard let decoded = DiscordGatewayPayload.payloadFromString(string) else {
+            error(message: "Got unknown payload \(string)")
 
-			return
-		}
+            return
+        }
 
-		handleGatewayPayload(decoded)
-	}
+        handleGatewayPayload(decoded)
+    }
 
-	/**
-		Tries to resume a disconnected gateway connection.
-	*/
-	open func resumeGateway() {
-		guard !resuming && !closed else {
-			DefaultDiscordLogger.Logger.debug("Already trying to resume or closed, ignoring", type: logType)
+    /**
+        Tries to resume a disconnected gateway connection.
+    */
+    open func resumeGateway() {
+        guard !resuming && !closed else {
+            DefaultDiscordLogger.Logger.debug("Already trying to resume or closed, ignoring", type: logType)
 
-			return
-		}
+            return
+        }
 
-		DefaultDiscordLogger.Logger.log("Trying to resume gateway session on shard: %@", type: logType, args: shardNum)
+        DefaultDiscordLogger.Logger.log("Trying to resume gateway session on shard: %@", type: logType, args: shardNum)
 
-		resuming = true
+        resuming = true
 
-		_resumeGateway(wait: 0)
-	}
+        _resumeGateway(wait: 0)
+    }
 
-	private func _resumeGateway(wait: Int) {
-		handleQueue.asyncAfter(deadline: DispatchTime.now() + Double(wait)) {[weak self] in
-			guard let this = self, this.resuming else { return }
+    private func _resumeGateway(wait: Int) {
+        handleQueue.asyncAfter(deadline: DispatchTime.now() + Double(wait)) {[weak self] in
+            guard let this = self, this.resuming else { return }
 
-			DefaultDiscordLogger.Logger.debug("Calling engine connect for gateway resume with wait: %@",
-				type: this.logType, args: wait)
+            DefaultDiscordLogger.Logger.debug("Calling engine connect for gateway resume with wait: %@",
+                type: this.logType, args: wait)
 
-			this.connect()
+            this.connect()
 
-			this._resumeGateway(wait: 10)
-		}
-	}
+            this._resumeGateway(wait: 10)
+        }
+    }
 
-	/**
-		Sends a heartbeat to Discord. You shouldn't need to call this directly.
+    /**
+        Sends a heartbeat to Discord. You shouldn't need to call this directly.
 
-		Override this method if you need to customize heartbeats.
-	*/
-	open func sendHeartbeat() {
-		guard connected else {
-			DefaultDiscordLogger.Logger.debug("Tried heartbeating on disconnected shard, shard: %@", type: logType, args: shardNum)
+        Override this method if you need to customize heartbeats.
+    */
+    open func sendHeartbeat() {
+        guard connected else {
+            DefaultDiscordLogger.Logger.debug("Tried heartbeating on disconnected shard, shard: %@", type: logType, args: shardNum)
 
-			return
-		}
+            return
+        }
 
-		guard pongsMissed < 2 else {
-			DefaultDiscordLogger.Logger.log("Too many pongs missed; closing, shard: %@", type: logType, args: shardNum)
+        guard pongsMissed < 2 else {
+            DefaultDiscordLogger.Logger.log("Too many pongs missed; closing, shard: %@", type: logType, args: shardNum)
 
-			pongsMissed = 0
-			disconnectWebSockets()
+            pongsMissed = 0
+            disconnectWebSockets()
 
-			return
-		}
+            return
+        }
 
-		DefaultDiscordLogger.Logger.debug("Sending heartbeat, shard: %@", type: logType, args: shardNum)
+        DefaultDiscordLogger.Logger.debug("Sending heartbeat, shard: %@", type: logType, args: shardNum)
 
-		pongsMissed += 1
-		sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
+        pongsMissed += 1
+        sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
 
-		let time = DispatchTime.now() + Double(heartbeatInterval)
+        let time = DispatchTime.now() + Double(heartbeatInterval)
 
-		heartbeatQueue.asyncAfter(deadline: time) {[weak self, uuid = connectUUID] in
-			guard let this = self, uuid == this.connectUUID else { return }
+        heartbeatQueue.asyncAfter(deadline: time) {[weak self, uuid = connectUUID] in
+            guard let this = self, uuid == this.connectUUID else { return }
 
-			this.sendHeartbeat()
-		}
-	}
+            this.sendHeartbeat()
+        }
+    }
 
-	/**
-		Starts the handshake with the Discord server. You shouldn't need to call this directly.
+    /**
+        Starts the handshake with the Discord server. You shouldn't need to call this directly.
 
-		Override this method if you need to customize the handshake process.
-	*/
-	open func startHandshake() {
-		guard client != nil else {
-			error(message: "Client nil before handshaked")
+        Override this method if you need to customize the handshake process.
+    */
+    open func startHandshake() {
+        guard client != nil else {
+            error(message: "Client nil before handshaked")
 
-			return
-		}
+            return
+        }
 
-		if sessionId != nil {
-			DefaultDiscordLogger.Logger.log("Sending resume, shard: %@", type: logType, args: shardNum)
+        if sessionId != nil {
+            DefaultDiscordLogger.Logger.log("Sending resume, shard: %@", type: logType, args: shardNum)
 
-			sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.resume), payload: .object(resumeObject)))
-		} else {
-			DefaultDiscordLogger.Logger.log("Sending handshake, shard: %@", type: logType, args: shardNum)
+            sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.resume), payload: .object(resumeObject)))
+        } else {
+            DefaultDiscordLogger.Logger.log("Sending handshake, shard: %@", type: logType, args: shardNum)
 
-			sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.identify), payload: .object(handshakeObject)))
-		}
-	}
+            sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.identify), payload: .object(handshakeObject)))
+        }
+    }
 
-	/**
-		Starts the engine's heartbeat. You should call this method when you know the interval that Discord expects.
+    /**
+        Starts the engine's heartbeat. You should call this method when you know the interval that Discord expects.
 
-		- parameter seconds: The heartbeat interval
-	*/
-	open func startHeartbeat(seconds: Int) {
-		heartbeatInterval = seconds
+        - parameter seconds: The heartbeat interval
+    */
+    open func startHeartbeat(seconds: Int) {
+        heartbeatInterval = seconds
 
-		sendHeartbeat()
-	}
+        sendHeartbeat()
+    }
 }

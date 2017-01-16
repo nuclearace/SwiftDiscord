@@ -33,11 +33,17 @@ public protocol DiscordVoiceEngineClient {
     */
     func handleVoiceData(_ data: DiscordVoiceData)
 
+    /**
+        Called when the voice engine disconnects.
+
+        - parameter engine: The engine that disconnected.
+    */
+    func voiceEngineDidDisconnect(_ engine: DiscordVoiceEngine)
 
     /**
         Called when the voice engine is ready.
 
         - parameter engine: The engine that's ready.
     */
-    func voiceEngineReady(engine: DiscordVoiceEngine)
+    func voiceEngineReady(_ engine: DiscordVoiceEngine)
 }

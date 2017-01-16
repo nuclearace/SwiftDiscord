@@ -19,292 +19,310 @@ import Foundation
 
 /// A namespace struct for endpoint options.
 public struct DiscordEndpointOptions {
-	private init() {}
+    private init() {}
 
-	/// Create invite options.
-	public enum CreateInvite {
-		/// How long this invite should live.
-		case maxAge(Int)
+    /// Create invite options.
+    public enum CreateInvite {
+        /// How long this invite should live.
+        case maxAge(Int)
 
-		/// Number of uses this invite has before it becomes invalid
-		case maxUses(Int)
+        /// Number of uses this invite has before it becomes invalid
+        case maxUses(Int)
 
-		/// Whether this invite only grant temporary membership
-		case temporary(Bool)
+        /// Whether this invite only grant temporary membership
+        case temporary(Bool)
 
-		/// if true, don't try to reuse a similar invite (useful for creating many unique one time use invites)
-		case unique(Bool)
-	}
+        /// if true, don't try to reuse a similar invite (useful for creating many unique one time use invites)
+        case unique(Bool)
+    }
 
-	/// Get message options.
-	///
-	/// after, around and before are mutually exclusive. They shouldn't be in the same get request
-	public enum GetMessage {
-		/// The message to get other messages after.
-		case after(DiscordMessage)
+    /// Options for creating a role. All are optional.
+    public enum CreateRole {
+        /// The color of the enum.
+        case color(Int)
 
-		/// The message to get other messages around.
-		case around(DiscordMessage)
+        /// Whether the role should be displayed separately in the sidebar.
+        case hoist(Bool)
 
-		/// The message to get other messages before.
-		case before(DiscordMessage)
+        /// Whether this role is mentionable.
+        case mentionable(Bool)
 
-		/// The number of messages to get.
-		case limit(Int)
-	}
+        /// The name of this role.
+        case name(String)
 
-	/// Guild create channel options.
-	public enum GuildCreateChannel {
-		/// The bitrate of a voice channel.
-		case bitrate(Int)
+        /// The permissions this role has.
+        case permissions(Int)
+    }
 
-		/// The name of the channel.
-		case name(String)
+    /// Get message options.
+    ///
+    /// after, around and before are mutually exclusive. They shouldn't be in the same get request
+    public enum GetMessage {
+        /// The message to get other messages after.
+        case after(DiscordMessage)
 
-		/// An array of permissions for this channel.
-		case permissionOverwrites([DiscordPermissionOverwrite])
+        /// The message to get other messages around.
+        case around(DiscordMessage)
 
-		/// The type of this channel.
-		case type(DiscordChannelType)
+        /// The message to get other messages before.
+        case before(DiscordMessage)
 
-		/// The user limit for a voice channel
-		case userLimit(Int)
-	}
+        /// The number of messages to get.
+        case limit(Int)
+    }
 
-	/// Guild get members options.
-	public enum GuildGetMembers {
-		/// The user index to get users after (pagination).
-		case after(Int)
+    /// Guild create channel options.
+    public enum GuildCreateChannel {
+        /// The bitrate of a voice channel.
+        case bitrate(Int)
 
-		/// The number of users to get.
-		case limit(Int)
-	}
+        /// The name of the channel.
+        case name(String)
 
-	/// Modify channel options.
-	public enum ModifyChannel {
-		/// The bitrate of a voice channel.
-		case bitrate(Int)
+        /// An array of permissions for this channel.
+        case permissionOverwrites([DiscordPermissionOverwrite])
 
-		/// The name of the channel.
-		case name(String)
+        /// The type of this channel.
+        case type(DiscordChannelType)
 
-		/// The position of this channel.
-		case position(Int)
+        /// The user limit for a voice channel
+        case userLimit(Int)
+    }
 
-		/// The topic of a text channel.
-		case topic(String)
+    /// Guild get members options.
+    public enum GuildGetMembers {
+        /// The user index to get users after (pagination).
+        case after(Int)
 
-		/// The user limit of a voice channel.
-		case userLimit(Int)
-	}
+        /// The number of users to get.
+        case limit(Int)
+    }
 
-	/// Modify guild options.
-	public enum ModifyGuild {
-		/// The snowflake id of the afk channel.
-		case afkChannelId(String)
+    /// Modify channel options.
+    public enum ModifyChannel {
+        /// The bitrate of a voice channel.
+        case bitrate(Int)
 
-		/// The length of time before a user is sent to the afk channel.
-		case afkTimeout(Int)
+        /// The name of the channel.
+        case name(String)
 
-		/// The default notification setting.
-		case defaultMessageNotifications(Int)
+        /// The position of this channel.
+        case position(Int)
 
-		/// A base64 encoded string of the guild icon.
-		case icon(String)
+        /// The topic of a text channel.
+        case topic(String)
 
-		/// The name of the guild.
-		case name(String)
+        /// The user limit of a voice channel.
+        case userLimit(Int)
+    }
 
-		/// The snowflake id of the new guild owner.
-		case ownerId(String)
+    /// Modify guild options.
+    public enum ModifyGuild {
+        /// The snowflake id of the afk channel.
+        case afkChannelId(String)
 
-		/// The region this guild is in.
-		case region(String)
+        /// The length of time before a user is sent to the afk channel.
+        case afkTimeout(Int)
 
-		/// The base64 encoded splash image for this guild.
-		case splash(String)
+        /// The default notification setting.
+        case defaultMessageNotifications(Int)
 
-		/// The required verification level of this guild.
-		case verificationLevel(Int)
-	}
+        /// A base64 encoded string of the guild icon.
+        case icon(String)
 
-	/// The options for creating/editing a webhook.
-	public enum WebhookOption {
-		/// The name of the webhook
-		case name(String)
+        /// The name of the guild.
+        case name(String)
 
-		/// The avatar of the webhook. A base64 128x128 jpeg image.
-		case avatar(String)
-	}
+        /// The snowflake id of the new guild owner.
+        case ownerId(String)
+
+        /// The region this guild is in.
+        case region(String)
+
+        /// The base64 encoded splash image for this guild.
+        case splash(String)
+
+        /// The required verification level of this guild.
+        case verificationLevel(Int)
+    }
+
+    /// The options for creating/editing a webhook.
+    public enum WebhookOption {
+        /// The name of the webhook
+        case name(String)
+
+        /// The avatar of the webhook. A base64 128x128 jpeg image.
+        case avatar(String)
+    }
 }
 
 // TODO Group DM
 
 /**
-	This enum controls the interface with the Discord REST API.
+    This enum controls the interface with the Discord REST API.
 
-	It defines several endpoint cases which are then used by the various static methods defined on this enum.
-	The cases themselves are of little use.
+    It defines several endpoint cases which are then used by the various static methods defined on this enum.
+    The cases themselves are of little use.
 
-	The methods all take a `DiscordToken` which is used for authentication with the REST API.
-	GET methods also take a callback.
+    The methods all take a `DiscordToken` which is used for authentication with the REST API.
+    GET methods also take a callback.
 
-	All requests through this enum are rate limited.
+    All requests through this enum are rate limited.
 
-	**NOTE**: Callbacks from methods on this enum are *NOT* executed on the client's handleQueue. So it is important
-	that if you make modifications to the client inside of a callback, you first dispatch back on the handleQueue.
+    **NOTE**: Callbacks from methods on this enum are *NOT* executed on the client's handleQueue. So it is important
+    that if you make modifications to the client inside of a callback, you first dispatch back on the handleQueue.
 */
 public enum DiscordEndpoint : String {
-	/// The base url for the Discord REST API.
-	case baseURL = "https://discordapp.com/api/v6"
+    /// The base url for the Discord REST API.
+    case baseURL = "https://discordapp.com/api/v6"
 
-	/* Channels */
-	/// The base channel endpoint.
-	case channel = "/channels/channel.id"
+    /* Channels */
+    /// The base channel endpoint.
+    case channel = "/channels/channel.id"
 
-	// Messages
-	/// The base channel messages endpoint.
-	case messages = "/channels/channel.id/messages"
+    // Messages
+    /// The base channel messages endpoint.
+    case messages = "/channels/channel.id/messages"
 
-	/// The channel bulk delete endpoint.
-	case bulkMessageDelete = "/channels/channel.id/messages/bulk_delete"
+    /// The channel bulk delete endpoint.
+    case bulkMessageDelete = "/channels/channel.id/messages/bulk_delete"
 
-	/// The base channel message endpoint.
-	case channelMessage = "/channels/channel.id/messages/message.id"
+    /// The base channel message endpoint.
+    case channelMessage = "/channels/channel.id/messages/message.id"
 
-	/// The channel typing endpoint.
-	case typing = "/channels/channel.id/typing"
+    /// The channel typing endpoint.
+    case typing = "/channels/channel.id/typing"
 
-	// Permissions
-	/// The base channel permissions endpoint.
-	case permissions = "/channels/channel.id/permissions"
+    // Permissions
+    /// The base channel permissions endpoint.
+    case permissions = "/channels/channel.id/permissions"
 
-	/// The channel permission endpoint.
-	case channelPermission = "/channels/channel.id/permissions/overwrite.id"
+    /// The channel permission endpoint.
+    case channelPermission = "/channels/channel.id/permissions/overwrite.id"
 
-	// Invites
-	/// The base endpoint for invites.
-	case invites = "/invites/invite.code"
+    // Invites
+    /// The base endpoint for invites.
+    case invites = "/invites/invite.code"
 
-	/// The base endpoint for channel invites.
-	case channelInvites = "/channels/channel.id/invites"
+    /// The base endpoint for channel invites.
+    case channelInvites = "/channels/channel.id/invites"
 
-	// Pinned Messages
-	/// The base endpoint for pinned channel messages.
-	case pins = "/channels/channel.id/pins"
+    // Pinned Messages
+    /// The base endpoint for pinned channel messages.
+    case pins = "/channels/channel.id/pins"
 
-	/// The channel pinned message endpoint.
-	case pinnedMessage = "/channels/channel.id/pins/message.id"
+    /// The channel pinned message endpoint.
+    case pinnedMessage = "/channels/channel.id/pins/message.id"
 
-	// Webhooks
-	/// The channel webhooks endpoint.
-	case channelWebhooks = "/channels/channel.id/webhooks"
-	/* End channels */
+    // Webhooks
+    /// The channel webhooks endpoint.
+    case channelWebhooks = "/channels/channel.id/webhooks"
+    /* End channels */
 
-	/* Guilds */
-	/// The base guild endpoint.
-	case guilds = "/guilds/guild.id"
+    /* Guilds */
+    /// The base guild endpoint.
+    case guilds = "/guilds/guild.id"
 
-	// Guild Channels
-	/// The base endpoint for guild channels.
-	case guildChannels = "/guilds/guild.id/channels"
+    // Guild Channels
+    /// The base endpoint for guild channels.
+    case guildChannels = "/guilds/guild.id/channels"
 
-	// Guild Members
-	/// The base guild members endpoint.
-	case guildMembers = "/guilds/guild.id/members"
+    // Guild Members
+    /// The base guild members endpoint.
+    case guildMembers = "/guilds/guild.id/members"
 
-	/// The guild member endpoint.
-	case guildMember = "/guilds/guild.id/members/user.id"
+    /// The guild member endpoint.
+    case guildMember = "/guilds/guild.id/members/user.id"
 
-	/// The guild member roles enpoint.
-	case guildMemberRole = "/guilds/guild.id/members/user.id/roles/role.id"
+    /// The guild member roles enpoint.
+    case guildMemberRole = "/guilds/guild.id/members/user.id/roles/role.id"
 
-	// Guild Bans
-	/// The base guild bans endpoint.
-	case guildBans = "/guilds/guild.id/bans"
+    // Guild Bans
+    /// The base guild bans endpoint.
+    case guildBans = "/guilds/guild.id/bans"
 
-	/// The guild ban user endpoint.
-	case guildBanUser = "/guilds/guild.id/bans/user.id"
+    /// The guild ban user endpoint.
+    case guildBanUser = "/guilds/guild.id/bans/user.id"
 
-	// Guild Roles
-	/// The base guild roles endpoint.
-	case guildRoles = "/guilds/guild.id/roles"
+    // Guild Roles
+    /// The base guild roles endpoint.
+    case guildRoles = "/guilds/guild.id/roles"
 
-	/// The guild role endpoint.
-	case guildRole = "/guilds/guild.id/roles/role.id"
+    /// The guild role endpoint.
+    case guildRole = "/guilds/guild.id/roles/role.id"
 
-	// Webhooks
-	/// The guilds webhooks endpoint.
-	case guildWebhooks = "/guilds/guild.id/webhooks"
-	/* End Guilds */
+    // Webhooks
+    /// The guilds webhooks endpoint.
+    case guildWebhooks = "/guilds/guild.id/webhooks"
+    /* End Guilds */
 
-	/* User */
-	/// The user channels endpoint.
-	case userChannels = "/users/me/channels"
+    /* User */
+    /// The user channels endpoint.
+    case userChannels = "/users/me/channels"
 
-	/// The user guilds endpoint.
-	case userGuilds = "/users/me/guilds"
+    /// The user guilds endpoint.
+    case userGuilds = "/users/me/guilds"
 
-	/* Webhooks */
-	/// The single webhook endpoint.
-	case webhook = "/webhooks/webhook.id"
+    /* Webhooks */
+    /// The single webhook endpoint.
+    case webhook = "/webhooks/webhook.id"
 
-	/// The single webhook with token endpoint.
-	case webhookWithToken = "/webhooks/webhook.id/webhook.token"
+    /// The single webhook with token endpoint.
+    case webhookWithToken = "/webhooks/webhook.id/webhook.token"
 
-	/// A slack compatible webhook.
-	case webhookSlack = "/webhooks/webhook.id/webhook.token/slack"
+    /// A slack compatible webhook.
+    case webhookSlack = "/webhooks/webhook.id/webhook.token/slack"
 
-	/// A GitHub compatible webhook.
-	case webhookGithub = "/webhooks/webhook.id/webhook.token/github"
-	/* End Webhooks */
+    /// A GitHub compatible webhook.
+    case webhookGithub = "/webhooks/webhook.id/webhook.token/github"
+    /* End Webhooks */
 
-	var combined: String {
-		return DiscordEndpoint.baseURL.rawValue + rawValue
-	}
+    var combined: String {
+        return DiscordEndpoint.baseURL.rawValue + rawValue
+    }
 
-	// MARK: Methods
+    // MARK: Methods
 
-	/**
-		Helper method that creates the basic request for an endpoint.
+    /**
+        Helper method that creates the basic request for an endpoint.
 
-		- parameter with: A DiscordToken that will be used for authentication
-		- parameter for: The endpoint this request is for
-		- parameter replacing: A dictionary that will be used to fill in the endpoint's url
-		- parameter getParams: An optional dictionary of get parameters.
+        - parameter with: A DiscordToken that will be used for authentication
+        - parameter for: The endpoint this request is for
+        - parameter replacing: A dictionary that will be used to fill in the endpoint's url
+        - parameter getParams: An optional dictionary of get parameters.
 
-		- returns: a URLRequest that can be further customized
-	*/
-	public static func createRequest(with token: DiscordToken, for endpoint: DiscordEndpoint,
-		replacing: [String: String], getParams: [String: String]? = nil) -> URLRequest {
+        - returns: a URLRequest that can be further customized
+    */
+    public static func createRequest(with token: DiscordToken, for endpoint: DiscordEndpoint,
+        replacing: [String: String], getParams: [String: String]? = nil) -> URLRequest {
 
-		var request = URLRequest(url: endpoint.createURL(replacing: replacing, getParams: getParams ?? [:]))
+        var request = URLRequest(url: endpoint.createURL(replacing: replacing, getParams: getParams ?? [:]))
 
-		request.setValue(token.token, forHTTPHeaderField: "Authorization")
+        request.setValue(token.token, forHTTPHeaderField: "Authorization")
 
-		return request
-	}
+        return request
+    }
 
-	private func createURL(replacing: [String: String], getParams: [String: String]) -> URL {
-		var combined = self.combined
+    private func createURL(replacing: [String: String], getParams: [String: String]) -> URL {
+        var combined = self.combined
 
-		for (key, value) in replacing {
-			combined = combined.replacingOccurrences(of: key, with: value)
-		}
+        for (key, value) in replacing {
+            combined = combined.replacingOccurrences(of: key, with: value)
+        }
 
-		var com = URLComponents(url: URL(string: combined)!, resolvingAgainstBaseURL: false)!
+        var com = URLComponents(url: URL(string: combined)!, resolvingAgainstBaseURL: false)!
 
-		com.queryItems = getParams.map({ URLQueryItem(name: $0.key, value: $0.value) })
+        com.queryItems = getParams.map({ URLQueryItem(name: $0.key, value: $0.value) })
 
-		return com.url!
-	}
+        return com.url!
+    }
 
-	static func jsonFromResponse(data: Data?, response: HTTPURLResponse?) -> JSON? {
-		guard let data = data, let response = response, (response.statusCode == 200 || response.statusCode == 201),
-				let stringData = String(data: data, encoding: .utf8) else {
-			return nil
-		}
+    static func jsonFromResponse(data: Data?, response: HTTPURLResponse?) -> JSON? {
+        guard let data = data, let response = response, (response.statusCode == 200 || response.statusCode == 201),
+                let stringData = String(data: data, encoding: .utf8) else {
+            return nil
+        }
 
-		return decodeJSON(stringData)
-	}
+        return decodeJSON(stringData)
+    }
 }

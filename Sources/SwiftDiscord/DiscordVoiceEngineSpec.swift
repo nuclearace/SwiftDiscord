@@ -27,10 +27,10 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
     // MARK: Properties
 
     /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data.
-	var encoder: DiscordVoiceEncoder? { get }
+    var encoder: DiscordVoiceEncoder? { get }
 
     /// The secret key used for encryption.
-	var secret: [UInt8]! { get }
+    var secret: [UInt8]! { get }
 
     // MARK: Methods
 

@@ -23,10 +23,10 @@ public protocol DiscordEngineHeartbeatable {
     // MARK: Properties
 
     /// The number of seconds between heartbeats.
-	var heartbeatInterval: Int { get }
+    var heartbeatInterval: Int { get }
 
     /// The `DispatchQueue` that the heartbeats are sent on.
-	var heartbeatQueue: DispatchQueue { get }
+    var heartbeatQueue: DispatchQueue { get }
 
     // MARK: Methods
 
@@ -35,10 +35,10 @@ public protocol DiscordEngineHeartbeatable {
 
         - parameter seconds: The number of seconds between heartbeats
     */
-	func startHeartbeat(seconds: Int)
+    func startHeartbeat(seconds: Int)
 
     /**
         Sends a heartbeat to the gateway. This should be called from a timer/dispatch.after.
     */
-	func sendHeartbeat()
+    func sendHeartbeat()
 }

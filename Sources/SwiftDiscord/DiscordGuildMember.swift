@@ -19,61 +19,61 @@ import Foundation
 
 /// Represents a guild member.
 public struct DiscordGuildMember {
-	// MARK: Properties
+    // MARK: Properties
 
-	/// The id of the guild of this user.
-	public let guildId: String
+    /// The id of the guild of this user.
+    public let guildId: String
 
-	/// The date this user joined the guild.
-	public let joinedAt: Date
+    /// The date this user joined the guild.
+    public let joinedAt: Date
 
-	/// The user object for this member.
-	public let user: DiscordUser
+    /// The user object for this member.
+    public let user: DiscordUser
 
-	/// Whether this user has been deafened.
-	public var deaf: Bool
+    /// Whether this user has been deafened.
+    public var deaf: Bool
 
-	/// Whether this user has been muted.
-	public var mute: Bool
+    /// Whether this user has been muted.
+    public var mute: Bool
 
-	/// This user's nickname, if they have one.
-	public var nick: String?
+    /// This user's nickname, if they have one.
+    public var nick: String?
 
-	/// An array of role snowflake ids that this user has.
-	public var roles: [String]
+    /// An array of role snowflake ids that this user has.
+    public var roles: [String]
 
-	init(guildMemberObject: [String: Any], guildId: String) {
-		self.guildId = guildId
-		user = DiscordUser(userObject: guildMemberObject.get("user", or: [String: Any]()))
-		deaf = guildMemberObject.get("deaf", or: false)
-		mute = guildMemberObject.get("mute", or: false)
-		nick = guildMemberObject["nick"] as? String
-		roles = guildMemberObject.get("roles", or: [String]())
-		joinedAt = convertISO8601(string: guildMemberObject.get("joined_at", or: "")) ?? Date()
-	}
+    init(guildMemberObject: [String: Any], guildId: String) {
+        self.guildId = guildId
+        user = DiscordUser(userObject: guildMemberObject.get("user", or: [String: Any]()))
+        deaf = guildMemberObject.get("deaf", or: false)
+        mute = guildMemberObject.get("mute", or: false)
+        nick = guildMemberObject["nick"] as? String
+        roles = guildMemberObject.get("roles", or: [String]())
+        joinedAt = convertISO8601(string: guildMemberObject.get("joined_at", or: "")) ?? Date()
+    }
 
-	static func guildMembersFromArray(_ guildMembersArray: [[String: Any]], withGuildId guildId: String)
-			-> DiscordLazyDictionary<String, DiscordGuildMember> {
-		var guildMembers = DiscordLazyDictionary<String, DiscordGuildMember>()
+    static func guildMembersFromArray(_ guildMembersArray: [[String: Any]], withGuildId guildId: String)
+            -> DiscordLazyDictionary<String, DiscordGuildMember> {
+        var guildMembers = DiscordLazyDictionary<String, DiscordGuildMember>()
 
-		for guildMember in guildMembersArray {
-			guard let user = guildMember["user"] as? [String: Any], let id = user["id"] as? String else {
-				fatalError("Couldn't extract userId")
-			}
+        for guildMember in guildMembersArray {
+            guard let user = guildMember["user"] as? [String: Any], let id = user["id"] as? String else {
+                fatalError("Couldn't extract userId")
+            }
 
-			guildMembers[lazy: id] = .lazy({ DiscordGuildMember(guildMemberObject: guildMember, guildId: guildId) })
-		}
+            guildMembers[lazy: id] = .lazy({ DiscordGuildMember(guildMemberObject: guildMember, guildId: guildId) })
+        }
 
-		return guildMembers
-	}
+        return guildMembers
+    }
 
-	mutating func updateMember(_ updateObject: [String: Any]) -> DiscordGuildMember {
-		if let roles = updateObject["roles"] as? [String] {
-			self.roles = roles
-		}
+    mutating func updateMember(_ updateObject: [String: Any]) -> DiscordGuildMember {
+        if let roles = updateObject["roles"] as? [String] {
+            self.roles = roles
+        }
 
-		nick = updateObject["nick"] as? String
+        nick = updateObject["nick"] as? String
 
-		return self
-	}
+        return self
+    }
 }

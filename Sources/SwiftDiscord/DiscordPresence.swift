@@ -17,171 +17,171 @@
 
 /// Represents a game type.
 public enum DiscordGameType : Int, JSONRepresentable {
-	/// A regular game.
-	case game
+    /// A regular game.
+    case game
 
-	/// A stream.
-	case stream
+    /// A stream.
+    case stream
 
-	func jsonValue() -> JSONRepresentable {
-		switch self {
-		case .game:
-			return 0
-		case .stream:
-			return 1
-		}
-	}
+    func jsonValue() -> JSONRepresentable {
+        switch self {
+        case .game:
+            return 0
+        case .stream:
+            return 1
+        }
+    }
 }
 
 /// Represents a game
 public struct DiscordGame : JSONAble {
-	// MARK: Properties
+    // MARK: Properties
 
-	/// The name of the game.
-	public let name: String
+    /// The name of the game.
+    public let name: String
 
-	/// The type of the game.
-	public let type: DiscordGameType
+    /// The type of the game.
+    public let type: DiscordGameType
 
-	/// The url of the stream, if a stream.
-	public let url: String?
+    /// The url of the stream, if a stream.
+    public let url: String?
 
-	// MARK: Initializers
+    // MARK: Initializers
 
-	/**
-		Creates a new DiscordGame.
+    /**
+        Creates a new DiscordGame.
 
-		- parameter name: The name of the game
-		- parameter type: The type of the game
-		- parameter url: The url of the stream, if a stream
-	*/
-	public init(name: String, type: DiscordGameType, url: String? = nil) {
-		self.name = name
-		self.type = type
-		self.url = url
-	}
+        - parameter name: The name of the game
+        - parameter type: The type of the game
+        - parameter url: The url of the stream, if a stream
+    */
+    public init(name: String, type: DiscordGameType, url: String? = nil) {
+        self.name = name
+        self.type = type
+        self.url = url
+    }
 
 
-	/**
-		Creates a new DiscordGame from a json object.
+    /**
+        Creates a new DiscordGame from a json object.
 
-		Can fail if no game object was given.
+        Can fail if no game object was given.
 
-		- parameter gameObject: The json game
-	*/
-	public init?(gameObject: [String: Any]?) {
-		guard let game = gameObject else { return nil }
-		guard let name = game["name"] as? String else { return nil }
+        - parameter gameObject: The json game
+    */
+    public init?(gameObject: [String: Any]?) {
+        guard let game = gameObject else { return nil }
+        guard let name = game["name"] as? String else { return nil }
 
-		self.name = name
-		self.type = DiscordGameType(rawValue: game.get("type", or: 0)) ?? .game
-		self.url = game["url"] as? String
-	}
+        self.name = name
+        self.type = DiscordGameType(rawValue: game.get("type", or: 0)) ?? .game
+        self.url = game["url"] as? String
+    }
 }
 
 /// Represents a presence status.
 public enum DiscordPresenceStatus : String {
-	/// User is idle.
-	case idle = "idle"
+    /// User is idle.
+    case idle = "idle"
 
-	/// User is offline or hidden.
-	case offline = "offline"
+    /// User is offline or hidden.
+    case offline = "offline"
 
-	/// User is online.
-	case online = "online"
+    /// User is online.
+    case online = "online"
 
-	/// This user won't receive notifications.
-	case doNotDisturb = "dnd"
+    /// This user won't receive notifications.
+    case doNotDisturb = "dnd"
 }
 
 /// Represents a presence.
 public struct DiscordPresence {
-	// MARK: Properties
+    // MARK: Properties
 
-	/// The snowflake of the guild this presence belongs on.
-	public let guildId: String
+    /// The snowflake of the guild this presence belongs on.
+    public let guildId: String
 
-	/// The user associated with this presence.
-	public let user: DiscordUser
+    /// The user associated with this presence.
+    public let user: DiscordUser
 
-	/// The game this user is playing, if they are playing a game.
-	public var game: DiscordGame?
+    /// The game this user is playing, if they are playing a game.
+    public var game: DiscordGame?
 
-	/// This user's nick on this guild.
-	public var nick: String?
+    /// This user's nick on this guild.
+    public var nick: String?
 
-	/// The roles?
-	public var roles: [String]
+    /// The roles?
+    public var roles: [String]
 
-	/// The status of this user.
-	public var status: DiscordPresenceStatus
+    /// The status of this user.
+    public var status: DiscordPresenceStatus
 
-	init(presenceObject: [String: Any], guildId: String) {
-		self.guildId = guildId
-		user = DiscordUser(userObject: presenceObject.get("user", or: [String: Any]()))
-		game = DiscordGame(gameObject: presenceObject["game"] as? [String: Any])
-		nick = presenceObject["nick"] as? String
-		status = DiscordPresenceStatus(rawValue: presenceObject.get("status", or: "")) ?? .offline
-		roles = []
-	}
+    init(presenceObject: [String: Any], guildId: String) {
+        self.guildId = guildId
+        user = DiscordUser(userObject: presenceObject.get("user", or: [String: Any]()))
+        game = DiscordGame(gameObject: presenceObject["game"] as? [String: Any])
+        nick = presenceObject["nick"] as? String
+        status = DiscordPresenceStatus(rawValue: presenceObject.get("status", or: "")) ?? .offline
+        roles = []
+    }
 
-	mutating func updatePresence(presenceObject: [String: Any]) {
-		if let game = presenceObject["game"] as? [String: Any] {
-			self.game = DiscordGame(gameObject: game)
-		} else {
-			game = nil
-		}
+    mutating func updatePresence(presenceObject: [String: Any]) {
+        if let game = presenceObject["game"] as? [String: Any] {
+            self.game = DiscordGame(gameObject: game)
+        } else {
+            game = nil
+        }
 
-		if let nick = presenceObject["nick"] as? String {
-			self.nick = nick
-		}
+        if let nick = presenceObject["nick"] as? String {
+            self.nick = nick
+        }
 
-		if let roles = presenceObject["roles"] as? [String] {
-			self.roles = roles
-		}
+        if let roles = presenceObject["roles"] as? [String] {
+            self.roles = roles
+        }
 
-		if let status = presenceObject["status"] as? String {
-			self.status = DiscordPresenceStatus(rawValue: status) ?? .offline
-		}
-	}
+        if let status = presenceObject["status"] as? String {
+            self.status = DiscordPresenceStatus(rawValue: status) ?? .offline
+        }
+    }
 
-	static func presencesFromArray(_ presencesArray: [[String: Any]], guildId: String)
-			-> DiscordLazyDictionary<String, DiscordPresence> {
-		var presences = DiscordLazyDictionary<String, DiscordPresence>()
+    static func presencesFromArray(_ presencesArray: [[String: Any]], guildId: String)
+            -> DiscordLazyDictionary<String, DiscordPresence> {
+        var presences = DiscordLazyDictionary<String, DiscordPresence>()
 
-		for presence in presencesArray {
-			guard let user = presence["user"] as? [String: Any], let id = user["id"] as? String else {
-				fatalError("Couldn't extract userId")
-			}
+        for presence in presencesArray {
+            guard let user = presence["user"] as? [String: Any], let id = user["id"] as? String else {
+                fatalError("Couldn't extract userId")
+            }
 
-			presences[lazy: id] = .lazy({ DiscordPresence(presenceObject: presence, guildId: guildId) })
-		}
+            presences[lazy: id] = .lazy({ DiscordPresence(presenceObject: presence, guildId: guildId) })
+        }
 
-		return presences
-	}
+        return presences
+    }
 }
 
 
 /// Used to send updates to Discord about our presence.
 public struct DiscordPresenceUpdate : JSONAble {
-	// MARK: Properties
+    // MARK: Properties
 
-	/// The time we've been idle for. Nil if not idle
-	public let idleSince: Int?
+    /// The time we've been idle for. Nil if not idle
+    public let idleSince: Int?
 
-	/// The game we are currently playing. Nil if not playing a game.
-	public let game: DiscordGame?
+    /// The game we are currently playing. Nil if not playing a game.
+    public let game: DiscordGame?
 
-	// MARK: Initializers
+    // MARK: Initializers
 
-	/**
-		Creates a new DiscordPresenceUpdate
+    /**
+        Creates a new DiscordPresenceUpdate
 
-		- parameter idleSince: The time we've been idle for. Nil if not idle
-		- parameter game: The game we are currently playing. Nil if not playing a game.
-	*/
-	public init(idleSince: Int?, game: DiscordGame?) {
-		self.idleSince = idleSince
-		self.game = game
-	}
+        - parameter idleSince: The time we've been idle for. Nil if not idle
+        - parameter game: The game we are currently playing. Nil if not playing a game.
+    */
+    public init(idleSince: Int?, game: DiscordGame?) {
+        self.idleSince = idleSince
+        self.game = game
+    }
 }
