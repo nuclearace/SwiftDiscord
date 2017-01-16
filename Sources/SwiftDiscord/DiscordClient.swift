@@ -384,8 +384,26 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
         #endif
 	}
 
-	open func voiceEngineReady(engine: DiscordVoiceEngine) {
-		delegate?.client(self, isReadyToSendVoiceWithEngine: engine)
+	/**
+	    Called when the voice engine disconnects.
+
+	    - parameter engine: The engine that disconnected.
+	*/
+	open func voiceEngineDidDisconnect(_ engine: DiscordVoiceEngine) {
+		handleQueue.async {
+			self.leaveVoiceChannel(onGuild: engine.voiceState.guildId)
+		}
+	}
+
+	/**
+	    Called when the voice engine is ready.
+
+	    - parameter engine: The engine that's ready.
+	*/
+	open func voiceEngineReady(_ engine: DiscordVoiceEngine) {
+		handleQueue.async {
+			self.delegate?.client(self, isReadyToSendVoiceWithEngine: engine)
+		}
 	}
 
 	// MARK: DiscordDispatchEventHandler Conformance

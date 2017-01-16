@@ -100,6 +100,8 @@ public class DiscordVoiceEncoder {
 		defer { closed = true }
 		guard encoder.isRunning else { return }
 
+		let waiter = DispatchSemaphore(value: 0)
+
 		kill(encoder.processIdentifier, SIGKILL)
 
 		// Wait for the encoder to expire so that the pipes get closed
@@ -107,7 +109,11 @@ public class DiscordVoiceEncoder {
 		// Cancel any reading we were doing
 		close(writePipe.fileHandleForReading.fileDescriptor)
 		// Wait until a dummy block gets executed. That way any pending reads see that they are done reading
-		readQueue.sync {}
+		readQueue.async {
+			waiter.signal()
+		}
+
+		waiter.wait()
 	}
 
 	/// Call only when you know you've finished writing data, but ffmpeg is still encoding, or has data we haven't read
