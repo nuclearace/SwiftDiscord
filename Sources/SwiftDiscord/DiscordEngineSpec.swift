@@ -24,61 +24,61 @@ import WebSockets
 
 /// Declares that a type will be an Engine for the Discord Gateway.
 public protocol DiscordEngineSpec : class, DiscordShard, DiscordEngineHeartbeatable {
-	// MARK: Properties
+    // MARK: Properties
 
-	/// A reference to the client this engine is associated with.
-	weak var client: DiscordClientSpec? { get }
+    /// A reference to the client this engine is associated with.
+    weak var client: DiscordClientSpec? { get }
 
-	/// The url to connect to.
-	var connectURL: String { get }
+    /// The url to connect to.
+    var connectURL: String { get }
 
-	/// The type of engine. Used to correctly fire events.
-	var engineType: String { get }
+    /// The type of engine. Used to correctly fire events.
+    var engineType: String { get }
 
-	/// The last received sequence number. Used for resume/reconnect.
-	var lastSequenceNumber: Int { get }
+    /// The last received sequence number. Used for resume/reconnect.
+    var lastSequenceNumber: Int { get }
 
-	/// The session id of this engine.
-	var sessionId: String? { get set }
+    /// The session id of this engine.
+    var sessionId: String? { get set }
 
-	/// A reference to the underlying WebSocket. This is a WebSockets.Websocket on Linux and Starscream.WebSocket on
-	/// macOS/iOS
-	var websocket: WebSocket? { get }
+    /// A reference to the underlying WebSocket. This is a WebSockets.Websocket on Linux and Starscream.WebSocket on
+    /// macOS/iOS
+    var websocket: WebSocket? { get }
 
-	// MARK: Initializers
+    // MARK: Initializers
 
-	/**
-		The main initializer.
+    /**
+        The main initializer.
 
-		- parameter client: The client this engine should be associated with.
-	*/
-	init(client: DiscordClientSpec, shardNum: Int, numShards: Int)
+        - parameter client: The client this engine should be associated with.
+    */
+    init(client: DiscordClientSpec, shardNum: Int, numShards: Int)
 
-	// MARK: Methods
+    // MARK: Methods
 
-	/**
-		Logs that an error occured.
+    /**
+        Logs that an error occured.
 
-		- parameter message: The error message
-	*/
-	func error(message: String)
+        - parameter message: The error message
+    */
+    func error(message: String)
 }
 
 public extension DiscordEngineSpec {
-	/// Default Implementation.
-	func sendGatewayPayload(_ payload: DiscordGatewayPayload) {
-		guard let payloadString = payload.createPayloadString() else {
-			error(message: "Could not create payload string")
+    /// Default Implementation.
+    func sendGatewayPayload(_ payload: DiscordGatewayPayload) {
+        guard let payloadString = payload.createPayloadString() else {
+            error(message: "Could not create payload string")
 
-			return
-		}
+            return
+        }
 
-		DefaultDiscordLogger.Logger.debug("Sending ws: %@", type: engineType, args: payloadString)
+        DefaultDiscordLogger.Logger.debug("Sending ws: %@", type: engineType, args: payloadString)
 
-		#if !os(Linux)
-		websocket?.write(string: payloadString)
-		#else
-		try? websocket?.send(payloadString)
-		#endif
-	}
+        #if !os(Linux)
+        websocket?.write(string: payloadString)
+        #else
+        try? websocket?.send(payloadString)
+        #endif
+    }
 }

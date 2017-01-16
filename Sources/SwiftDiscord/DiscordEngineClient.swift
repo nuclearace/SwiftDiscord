@@ -24,5 +24,5 @@ public protocol DiscordEngineClient {
 
         - parameter data: The event data
     */
-	func handleEngineDispatch(_ event: DiscordDispatchEvent, with payload: DiscordGatewayPayload)
+    func handleEngineDispatch(_ event: DiscordDispatchEvent, with payload: DiscordGatewayPayload)
 }

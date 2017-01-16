@@ -17,95 +17,95 @@
 
 /// Represents a guild channel.
 public struct DiscordGuildChannel : DiscordChannel {
-	// MARK: Properties
+    // MARK: Properties
 
-	/// The snowflake id of the channel.
-	public let id: String
+    /// The snowflake id of the channel.
+    public let id: String
 
-	/// Whether this is a private channel. Should always be false for GuildChannels.
-	public let isPrivate = false
+    /// Whether this is a private channel. Should always be false for GuildChannels.
+    public let isPrivate = false
 
-	/// The snowflake id of the guild this channel is on.
-	public let guildId: String
+    /// The snowflake id of the guild this channel is on.
+    public let guildId: String
 
-	/// What type of channel this is.
-	public let type: DiscordChannelType
+    /// What type of channel this is.
+    public let type: DiscordChannelType
 
-	/// The bitrate of this channel, if this is a voice channel.
-	public var bitrate: Int?
+    /// The bitrate of this channel, if this is a voice channel.
+    public var bitrate: Int?
 
-	/// Reference to the client.
-	public weak var client: DiscordClient?
+    /// Reference to the client.
+    public weak var client: DiscordClient?
 
-	/// The last message received on this channel.
-	///
-	/// **NOTE** Currently is not being updated.
-	public var lastMessageId: String?
+    /// The last message received on this channel.
+    ///
+    /// **NOTE** Currently is not being updated.
+    public var lastMessageId: String?
 
-	/// The name of this channel.
-	public var name: String
+    /// The name of this channel.
+    public var name: String
 
-	/// The permissions specifics to this channel.
-	public var permissionOverwrites: [String: DiscordPermissionOverwrite]
+    /// The permissions specifics to this channel.
+    public var permissionOverwrites: [String: DiscordPermissionOverwrite]
 
-	/// The position of this channel. Mostly for UI purpose.
-	public var position: Int
+    /// The position of this channel. Mostly for UI purpose.
+    public var position: Int
 
-	/// The topic of this channel, if this is a text channel.
-	public var topic: String?
+    /// The topic of this channel, if this is a text channel.
+    public var topic: String?
 
-	/// The user limit of this channel, if this is a voice channel.
-	public var userLimit: Int?
+    /// The user limit of this channel, if this is a voice channel.
+    public var userLimit: Int?
 
-	init(guildChannelObject: [String: Any], client: DiscordClient? = nil) {
-		id = guildChannelObject.get("id", or: "")
-		guildId = guildChannelObject.get("guild_id", or: "")
-		type = DiscordChannelType(rawValue: guildChannelObject.get("type", or: 0)) ?? .text
-		bitrate = guildChannelObject.get("bitrate", or: nil) as Int?
-		lastMessageId = guildChannelObject.get("last_message_id", or: nil) as String?
-		name = guildChannelObject.get("name", or: "")
-		permissionOverwrites = DiscordPermissionOverwrite.overwritesFromArray(
-			guildChannelObject.get("permission_overwrites", or: [[String: Any]]()))
-		position = guildChannelObject.get("position", or: 0)
-		topic = guildChannelObject.get("topic", or: nil) as String?
-		userLimit = guildChannelObject.get("user_limit", or: nil) as Int?
-		self.client = client
-	}
+    init(guildChannelObject: [String: Any], client: DiscordClient? = nil) {
+        id = guildChannelObject.get("id", or: "")
+        guildId = guildChannelObject.get("guild_id", or: "")
+        type = DiscordChannelType(rawValue: guildChannelObject.get("type", or: 0)) ?? .text
+        bitrate = guildChannelObject.get("bitrate", or: nil) as Int?
+        lastMessageId = guildChannelObject.get("last_message_id", or: nil) as String?
+        name = guildChannelObject.get("name", or: "")
+        permissionOverwrites = DiscordPermissionOverwrite.overwritesFromArray(
+            guildChannelObject.get("permission_overwrites", or: [[String: Any]]()))
+        position = guildChannelObject.get("position", or: 0)
+        topic = guildChannelObject.get("topic", or: nil) as String?
+        userLimit = guildChannelObject.get("user_limit", or: nil) as Int?
+        self.client = client
+    }
 
-	// MARK: Methods
+    // MARK: Methods
 
-	/**
-	    Deletes a permission overwrite from this channel.
+    /**
+        Deletes a permission overwrite from this channel.
 
-	    - parameter overwrite: The permission overwrite to delete
-	*/
-	public func deletePermission(_ overwrite: DiscordPermissionOverwrite) {
-	    guard let client = self.client else { return }
+        - parameter overwrite: The permission overwrite to delete
+    */
+    public func deletePermission(_ overwrite: DiscordPermissionOverwrite) {
+        guard let client = self.client else { return }
 
-	    client.deleteChannelPermission(overwrite.id, on: id)
-	}
+        client.deleteChannelPermission(overwrite.id, on: id)
+    }
 
-	/**
-	    Edits a permission overwrite on this channel.
+    /**
+        Edits a permission overwrite on this channel.
 
-	    - parameter overwrite: The permission overwrite to edit
-	*/
-	public func editPermission(_ overwrite: DiscordPermissionOverwrite) {
-		guard let client = self.client else { return }
+        - parameter overwrite: The permission overwrite to edit
+    */
+    public func editPermission(_ overwrite: DiscordPermissionOverwrite) {
+        guard let client = self.client else { return }
 
-		client.editChannelPermission(overwrite, on: id)
-	}
+        client.editChannelPermission(overwrite, on: id)
+    }
 
-	static func guildChannelsFromArray(_ guildChannelArray: [[String: Any]], client: DiscordClient? = nil)
-			-> [String: DiscordGuildChannel] {
-		var guildChannels = [String: DiscordGuildChannel]()
+    static func guildChannelsFromArray(_ guildChannelArray: [[String: Any]], client: DiscordClient? = nil)
+            -> [String: DiscordGuildChannel] {
+        var guildChannels = [String: DiscordGuildChannel]()
 
-		for guildChannelObject in guildChannelArray {
-			let guildChannel = DiscordGuildChannel(guildChannelObject: guildChannelObject, client: client)
+        for guildChannelObject in guildChannelArray {
+            let guildChannel = DiscordGuildChannel(guildChannelObject: guildChannelObject, client: client)
 
-			guildChannels[guildChannel.id] = guildChannel
-		}
+            guildChannels[guildChannel.id] = guildChannel
+        }
 
-		return guildChannels
-	}
+        return guildChannels
+    }
 }

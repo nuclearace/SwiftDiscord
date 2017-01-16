@@ -17,40 +17,40 @@
 
 /// Represents an Emoji.
 public struct DiscordEmoji {
-	// MARK: Properties
+    // MARK: Properties
 
-	/// The snowflake id of the emoji.
-	public let id: String
+    /// The snowflake id of the emoji.
+    public let id: String
 
-	/// Whether this is a managed emoji.
-	public let managed: Bool
+    /// Whether this is a managed emoji.
+    public let managed: Bool
 
-	/// The name of the emoji.
-	public let name: String
+    /// The name of the emoji.
+    public let name: String
 
-	/// Whether this emoji requires colons.
-	public let requireColons: Bool
+    /// Whether this emoji requires colons.
+    public let requireColons: Bool
 
-	/// An array of role snowflake ids this emoji is active for.
-	public let roles: [String]
+    /// An array of role snowflake ids this emoji is active for.
+    public let roles: [String]
 
-	init(emojiObject: [String: Any]) {
-		id = emojiObject.get("id", or: "")
-		managed = emojiObject.get("managed", or: false)
-		name = emojiObject.get("name", or: "")
-		requireColons = emojiObject.get("require_colons", or: false)
-		roles = emojiObject.get("roles", or: [String]())
-	}
+    init(emojiObject: [String: Any]) {
+        id = emojiObject.get("id", or: "")
+        managed = emojiObject.get("managed", or: false)
+        name = emojiObject.get("name", or: "")
+        requireColons = emojiObject.get("require_colons", or: false)
+        roles = emojiObject.get("roles", or: [String]())
+    }
 
-	static func emojisFromArray(_ emojiArray: [[String: Any]]) -> [String: DiscordEmoji] {
-		var emojis = [String: DiscordEmoji]()
+    static func emojisFromArray(_ emojiArray: [[String: Any]]) -> [String: DiscordEmoji] {
+        var emojis = [String: DiscordEmoji]()
 
-		for emoji in emojiArray {
-			let emoji = DiscordEmoji(emojiObject: emoji)
+        for emoji in emojiArray {
+            let emoji = DiscordEmoji(emojiObject: emoji)
 
-			emojis[emoji.id] = emoji
-		}
+            emojis[emoji.id] = emoji
+        }
 
-		return emojis
-	}
+        return emojis
+    }
 }

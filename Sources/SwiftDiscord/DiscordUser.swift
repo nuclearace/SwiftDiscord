@@ -17,93 +17,93 @@
 
 /// Represents a ban.
 public struct DiscordBan {
-	// MARK: Properties
+    // MARK: Properties
 
-	/// The reason this person was banned.
-	public let reason: String?
+    /// The reason this person was banned.
+    public let reason: String?
 
-	/// The user who is banned.
-	public let user: DiscordUser
+    /// The user who is banned.
+    public let user: DiscordUser
 
-	init(banObject: [String: Any]) {
-		reason = banObject["reason"] as? String
-		user = DiscordUser(userObject: banObject.get("user", or: [String: Any]()))
-	}
+    init(banObject: [String: Any]) {
+        reason = banObject["reason"] as? String
+        user = DiscordUser(userObject: banObject.get("user", or: [String: Any]()))
+    }
 
-	static func bansFromArray(_ banArray: [[String: Any]]) -> [DiscordBan] {
-		return banArray.map(DiscordBan.init)
-	}
+    static func bansFromArray(_ banArray: [[String: Any]]) -> [DiscordBan] {
+        return banArray.map(DiscordBan.init)
+    }
 }
 
 /// Declares that a type will act as a Discord user.
 public protocol DiscordUserActor {
-	// MARK: Properties
+    // MARK: Properties
 
-	/// The direct message channels this user is in.
-	var directChannels: [String: DiscordChannel] { get }
+    /// The direct message channels this user is in.
+    var directChannels: [String: DiscordChannel] { get }
 
-	/// The guilds that this user is in.
-	var guilds: [String: DiscordGuild] { get }
+    /// The guilds that this user is in.
+    var guilds: [String: DiscordGuild] { get }
 
-	/// The relationships this user has. Only valid for non-bot users.
-	var relationships: [[String: Any]] { get }
+    /// The relationships this user has. Only valid for non-bot users.
+    var relationships: [[String: Any]] { get }
 
-	/// The Discord JWT for the user.
-	var token: DiscordToken { get }
+    /// The Discord JWT for the user.
+    var token: DiscordToken { get }
 
-	/// The DiscordUser.
-	var user: DiscordUser? { get }
+    /// The DiscordUser.
+    var user: DiscordUser? { get }
 
-	/// The voice state for this user, if they are in a voice channel.
-	var voiceStates: [String: DiscordVoiceState] { get }
+    /// The voice state for this user, if they are in a voice channel.
+    var voiceStates: [String: DiscordVoiceState] { get }
 }
 
 /// Represents a Discord user.
 public struct DiscordUser {
-	// MARK: Properties
+    // MARK: Properties
 
-	/// The base64 encoded avatar of this user.
-	public let avatar: String
+    /// The base64 encoded avatar of this user.
+    public let avatar: String
 
-	/// Whether this user is a bot.
-	public let bot: Bool
+    /// Whether this user is a bot.
+    public let bot: Bool
 
-	/// This user's discriminator.
-	public let discriminator: String
+    /// This user's discriminator.
+    public let discriminator: String
 
-	/// The user's email. Only availabe if we are the user.
-	public let email: String
+    /// The user's email. Only availabe if we are the user.
+    public let email: String
 
-	/// The snowflake id of the user.
-	public let id: String
+    /// The snowflake id of the user.
+    public let id: String
 
-	/// Whether this user has multi-factor authentication enabled.
-	public let mfaEnabled: Bool
+    /// Whether this user has multi-factor authentication enabled.
+    public let mfaEnabled: Bool
 
-	/// This user's username.
-	public let username: String
+    /// This user's username.
+    public let username: String
 
-	/// Whether this user is verified.
-	public let verified: Bool
+    /// Whether this user is verified.
+    public let verified: Bool
 
-	init(userObject: [String: Any]) {
-		avatar = userObject.get("avatar", or: "")
-		bot = userObject.get("bot", or: false)
-		discriminator = userObject.get("discriminator", or: "")
-		email = userObject.get("email", or: "")
-		id = userObject.get("id", or: "")
-		mfaEnabled = userObject.get("mfa_enabled", or: false)
-		username = userObject.get("username", or: "")
-		verified = userObject.get("verified", or: false)
-	}
+    init(userObject: [String: Any]) {
+        avatar = userObject.get("avatar", or: "")
+        bot = userObject.get("bot", or: false)
+        discriminator = userObject.get("discriminator", or: "")
+        email = userObject.get("email", or: "")
+        id = userObject.get("id", or: "")
+        mfaEnabled = userObject.get("mfa_enabled", or: false)
+        username = userObject.get("username", or: "")
+        verified = userObject.get("verified", or: false)
+    }
 
-	static func usersFromArray(_ userArray: [[String: Any]]) -> [DiscordUser] {
-		var users = [DiscordUser]()
+    static func usersFromArray(_ userArray: [[String: Any]]) -> [DiscordUser] {
+        var users = [DiscordUser]()
 
-		for user in userArray {
-			users.append(DiscordUser(userObject: user))
-		}
+        for user in userArray {
+            users.append(DiscordUser(userObject: user))
+        }
 
-		return users
-	}
+        return users
+    }
 }
