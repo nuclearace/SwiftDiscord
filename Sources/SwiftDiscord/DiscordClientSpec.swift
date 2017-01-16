@@ -63,8 +63,10 @@ public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngi
 
 	/**
 		Leaves the currently connected voice channel.
+
+		- parameter onGuild: The snowflake of the guild whose voice channel you would like to leave.
 	*/
-	func leaveVoiceChannel()
+	func leaveVoiceChannel(onGuild guildId: String)
 
 	/**
 		Requests all users from Discord for the guild specified. Use this when you need to get all users on a large
