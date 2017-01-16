@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Provider Struct Reference</title>
+    <title>CreateRole Enum Reference</title>
     <link rel="stylesheet" type="text/css" href="../../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/Provider" class="dashAnchor"></a>
-    <a title="Provider Struct Reference"></a>
+    <a name="//apple_ref/swift/Enum/CreateRole" class="dashAnchor"></a>
+    <a title="CreateRole Enum Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../../index.html"> Reference</a>
         <img id="carat" src="../../img/carat.png" />
-        Provider Struct Reference
+        CreateRole Enum Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -350,32 +350,25 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Provider</h1>
+            <h1>CreateRole</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Provider</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">CreateRole</span></code></pre>
 
                 </div>
               </div>
-            <p>Represents what is providing the content of an embed.</p>
+            <p>Options for creating a role. All are optional.</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Properties"></a>
-                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
-                <a href="#/Properties">
-                  <h3 class="section-name">Properties</h3>
-                </a>
-              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vVV12SwiftDiscord12DiscordEmbed8Provider4nameSS"></a>
-                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vVV12SwiftDiscord12DiscordEmbed8Provider4nameSS">name</a>
+                    <a name="/s:FOV12SwiftDiscord22DiscordEndpointOptions10CreateRole5colorFMS1_FSiS1_"></a>
+                    <a name="//apple_ref/swift/Element/color" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOV12SwiftDiscord22DiscordEndpointOptions10CreateRole5colorFMS1_FSiS1_">color</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -383,26 +376,30 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The name of this provider.</p>
+                        <p>The color of the enum.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">color</span><span class="p">(</span><span class="kt">Int</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vVV12SwiftDiscord12DiscordEmbed8Provider3urlGSqV10Foundation3URL_"></a>
-                    <a name="//apple_ref/swift/Property/url" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vVV12SwiftDiscord12DiscordEmbed8Provider3urlGSqV10Foundation3URL_">url</a>
+                    <a name="/s:FOV12SwiftDiscord22DiscordEndpointOptions10CreateRole5hoistFMS1_FSbS1_"></a>
+                    <a name="//apple_ref/swift/Element/hoist" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOV12SwiftDiscord22DiscordEndpointOptions10CreateRole5hoistFMS1_FSbS1_">hoist</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -410,14 +407,107 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The url of this provider.</p>
+                        <p>Whether the role should be displayed separately in the sidebar.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">hoist</span><span class="p">(</span><span class="kt">Bool</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOV12SwiftDiscord22DiscordEndpointOptions10CreateRole11mentionableFMS1_FSbS1_"></a>
+                    <a name="//apple_ref/swift/Element/mentionable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOV12SwiftDiscord22DiscordEndpointOptions10CreateRole11mentionableFMS1_FSbS1_">mentionable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether this role is mentionable.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">mentionable</span><span class="p">(</span><span class="kt">Bool</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOV12SwiftDiscord22DiscordEndpointOptions10CreateRole4nameFMS1_FSSS1_"></a>
+                    <a name="//apple_ref/swift/Element/name" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOV12SwiftDiscord22DiscordEndpointOptions10CreateRole4nameFMS1_FSSS1_">name</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The name of this role.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">name</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOV12SwiftDiscord22DiscordEndpointOptions10CreateRole11permissionsFMS1_FSiS1_"></a>
+                    <a name="//apple_ref/swift/Element/permissions" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOV12SwiftDiscord22DiscordEndpointOptions10CreateRole11permissionsFMS1_FSiS1_">permissions</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The permissions this role has.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">permissions</span><span class="p">(</span><span class="kt">Int</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
