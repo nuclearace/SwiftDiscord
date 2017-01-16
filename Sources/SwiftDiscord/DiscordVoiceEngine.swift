@@ -447,10 +447,10 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         youtube = EncoderProcess()
         youtube.launchPath = "/usr/local/bin/youtube-dl"
         youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
-        youtube.standardOutput = client.voiceEngine!.requestFileHandleForWriting()!
+        youtube.standardOutput = client.voiceEngines[guildId]?.requestFileHandleForWriting()
 
         youtube.terminationHandler = {[weak self] process in
-            self?.client.voiceEngine?.encoder?.finishEncodingAndClose()
+            self?.client.voiceEngines[guildId]?.encoder?.finishEncodingAndClose()
         }
 
         youtube.launch()
