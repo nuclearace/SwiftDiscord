@@ -189,19 +189,17 @@ open class DiscordShardManager {
     /**
         Use when you will have multiple shards spread across a few instances.
 
-        - parameter shardNumber: This shard's number
-        - parameter totalShards: The total number of shards.
-
+        - parameter withInfo: The information about this single shard.
     */
-    open func manuallyShatter(shardNumber: Int, totalShards: Int) {
+    open func manuallyShatter(withInfo info: DiscordShardInformation) {
         guard let delegate = self.delegate else { return }
 
         DefaultDiscordLogger.Logger.verbose("Manually shattering shard #%@", type: "DiscordShardManager",
-            args: shardNumber)
+            args: info.shardNum)
 
         cleanUp()
 
-        shards.append(createShardWithDelegate(delegate, withShardNum: shardNumber, totalShards: totalShards))
+        shards.append(createShardWithDelegate(delegate, withShardNum: info.shardNum, totalShards: info.totalShards))
     }
 
     /**

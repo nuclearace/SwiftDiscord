@@ -47,12 +47,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     /// The client's delegate.
     public weak var delegate: DiscordClientDelegate?
 
-    /// The manager for this client's shards.
-    public var shardManager: DiscordShardManager!
-
     /// The queue that callbacks are called on. In addition, any reads from any properties of DiscordClient should be
     /// made on this queue, as this is the queue where modifications on them are made.
     public var handleQueue = DispatchQueue.main
+
+    /// The manager for this client's shards.
+    public var shardManager: DiscordShardManager!
+
+    /// If we should only represent a single shard, this is the shard information.
+    public var singleShardInformation: DiscordShardInformation?
 
     #if !os(iOS)
     /// The voice engines, indexed by guild id.
@@ -82,9 +85,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
     /// The guilds that this user is in.
     public private(set) var guilds = [String: DiscordGuild]()
-
-    /// If we should only represent a single shard, this is the shard information.
-    public private(set) var singleShardInformation: DiscordShardInformation?
 
     /// The relationships this user has. Only valid for non-bot users.
     public private(set) var relationships = [[String: Any]]()
@@ -146,8 +146,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     open func connect() {
         DefaultDiscordLogger.Logger.log("Connecting", type: logType)
 
-        if let shardInfo = self.singleShardInformation {
-            shardManager.manuallyShatter(shardNumber: shardInfo.shardNum, totalShards: shardInfo.totalShards)
+        if let shardInfo = singleShardInformation {
+            shardManager.manuallyShatter(withInfo: shardInfo)
         } else {
             shardManager.shatter(into: shards)
         }
