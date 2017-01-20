@@ -234,7 +234,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         return rtpHeader + encryptedBytes
     }
 
-    private func decryptVoiceData(_ data: Data) throws {
+    private func decryptVoiceData(_ data: Data) throws -> DiscordVoiceData {
         defer { free(unencrypted) }
 
         let rtpHeader = Array(data.prefix(12))
@@ -247,8 +247,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
         guard success != -1 else { throw DiscordVoiceEngineError.decryptionError }
 
-        self.client?.handleVoiceData(DiscordVoiceData(rtpHeader: rtpHeader,
-            voiceData: Array(UnsafeBufferPointer<UInt8>(start: unencrypted, count: audioSize))))
+        return DiscordVoiceData(rtpHeader: rtpHeader,
+            voiceData: Array(UnsafeBufferPointer(start: unencrypted, count: audioSize)))
     }
 
     /**
@@ -415,8 +415,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
             do {
                 let (data, _) = try socket.receive(maxBytes: 4096)
+                guard let voiceData = try self?.decryptVoiceData(Data(bytes: data)) else {
+                    return
+                }
 
-                try self?.decryptVoiceData(Data(bytes: data))
+                self?.client?.handleVoiceData(voiceData)
             } catch let err {
                 self?.error(message: "Error reading voice data from udp socket \(err)")
                 self?.disconnect()
