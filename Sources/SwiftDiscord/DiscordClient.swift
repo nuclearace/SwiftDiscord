@@ -83,6 +83,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     /// The guilds that this user is in.
     public private(set) var guilds = [String: DiscordGuild]()
 
+    /// If we should only represent a single shard, this is the shard information.
+    public private(set) var singleShardInformation: DiscordShardInformation?
+
     /// The relationships this user has. Only valid for non-bot users.
     public private(set) var relationships = [[String: Any]]()
 
@@ -120,6 +123,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
                 DefaultDiscordLogger.Logger = logger
             case let .shards(shards) where shards > 0:
                 self.shards = shards
+            case let .singleShard(shardInfo):
+                self.singleShardInformation = shardInfo
             case .fillLargeGuilds:
                 fillLargeGuilds = true
             case .fillUsers:
@@ -141,7 +146,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     open func connect() {
         DefaultDiscordLogger.Logger.log("Connecting", type: logType)
 
-        shardManager.shatter(into: shards)
+        if let shardInfo = self.singleShardInformation {
+            shardManager.manuallyShatter(shardNumber: shardInfo.shardNum, totalShards: shardInfo.totalShards)
+        } else {
+            shardManager.shatter(into: shards)
+        }
+
         shardManager.connect()
     }
 
