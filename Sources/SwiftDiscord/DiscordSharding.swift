@@ -103,9 +103,9 @@ public protocol DiscordShardManagerDelegate : class, DiscordClientSpec {
 open class DiscordShardManager {
     // MARK: Properties
 
-    /// - returns: The `n`th shard.
+    /// - returns: The shard with num `n`
     public subscript(n: Int) -> DiscordShard {
-        return shards[n]
+        return shards.first(where: { $0.shardNum == n })!
     }
 
     /// The individual shards.

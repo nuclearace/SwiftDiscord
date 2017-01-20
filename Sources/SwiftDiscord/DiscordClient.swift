@@ -147,6 +147,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
         DefaultDiscordLogger.Logger.log("Connecting", type: logType)
 
         if let shardInfo = singleShardInformation {
+            shards = shardInfo.totalShards
             shardManager.manuallyShatter(withInfo: shardInfo)
         } else {
             shardManager.shatter(into: shards)

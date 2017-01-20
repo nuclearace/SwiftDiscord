@@ -333,17 +333,17 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         case .sessionDescription:
             udpQueue.async { self.handleVoiceSessionDescription(with: payload.payload) }
         case .speaking:
-                DefaultDiscordLogger.Logger.debug("Got speaking", type: logType, args: payload)
+            DefaultDiscordLogger.Logger.debug("Got speaking", type: logType, args: payload)
         default:
             DefaultDiscordLogger.Logger.debug("Unhandled voice payload %@", type: logType, args: payload)
-            break
         }
     }
 
     private func handleReady(with payload: DiscordGatewayPayloadData) {
         guard case let .object(voiceInformation) = payload,
                 let heartbeatInterval = voiceInformation["heartbeat_interval"] as? Int,
-                let ssrc = voiceInformation["ssrc"] as? Int, let udpPort = voiceInformation["port"] as? Int,
+                let ssrc = voiceInformation["ssrc"] as? Int,
+                let udpPort = voiceInformation["port"] as? Int,
                 let modes = voiceInformation["modes"] as? [String] else {
             disconnect()
 
