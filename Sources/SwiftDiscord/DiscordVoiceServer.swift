@@ -17,6 +17,8 @@
 
 /// Represents the information sent in a VoiceServerUpdate.
 public struct DiscordVoiceServerInformation {
+    // MARK: Properties
+    
     /// The voice endpoint.
     public let endpoint: String
 

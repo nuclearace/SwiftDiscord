@@ -21,11 +21,15 @@ import Foundation
 /// Struct that represents shard information.
 /// Used when a client is doing manual sharding.
 public struct DiscordShardInformation {
+    // MARK: Properties
+    
     /// This client's shard number
     public let shardNum: Int
 
     /// The total number of shards this bot will have.
     public let totalShards: Int
+    
+    // MARK: Initializers
 
     /**
         Creates a new DiscordShardInformation

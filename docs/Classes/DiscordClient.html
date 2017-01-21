@@ -318,6 +318,9 @@
                 <a href="../Structs/DiscordRole.html">DiscordRole</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/DiscordShardInformation.html">DiscordShardInformation</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/DiscordToken.html">DiscordToken</a>
               </li>
               <li class="nav-group-task">
@@ -325,6 +328,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordUserGuild.html">DiscordUserGuild</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a>
@@ -442,6 +448,34 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:vC12SwiftDiscord13DiscordClient11handleQueueCSo13DispatchQueue"></a>
+                    <a name="//apple_ref/swift/Property/handleQueue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient11handleQueueCSo13DispatchQueue">handleQueue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The queue that callbacks are called on. In addition, any reads from any properties of DiscordClient should be
+made on this queue, as this is the queue where modifications on them are made.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">handleQueue</span> <span class="o">=</span> <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:vC12SwiftDiscord13DiscordClient12shardManagerGSQCS_19DiscordShardManager_"></a>
                     <a name="//apple_ref/swift/Property/shardManager" class="dashAnchor"></a>
                     <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient12shardManagerGSQCS_19DiscordShardManager_">shardManager</a>
@@ -469,9 +503,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordClient11handleQueueCSo13DispatchQueue"></a>
-                    <a name="//apple_ref/swift/Property/handleQueue" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient11handleQueueCSo13DispatchQueue">handleQueue</a>
+                    <a name="/s:vC12SwiftDiscord13DiscordClient22singleShardInformationGSqVS_23DiscordShardInformation_"></a>
+                    <a name="//apple_ref/swift/Property/singleShardInformation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordClient22singleShardInformationGSqVS_23DiscordShardInformation_">singleShardInformation</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -479,15 +513,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The queue that callbacks are called on. In addition, any reads from any properties of DiscordClient should be
-made on this queue, as this is the queue where modifications on them are made.</p>
+                        <p>If we should only represent a single shard, this is the shard information.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">handleQueue</span> <span class="o">=</span> <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">singleShardInformation</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordShardInformation.html">DiscordShardInformation</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -2648,7 +2681,7 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-16)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-21)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
