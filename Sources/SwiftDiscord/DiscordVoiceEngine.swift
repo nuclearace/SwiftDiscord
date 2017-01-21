@@ -48,7 +48,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
     /// The voice url
     public override var connectURL: String {
-        return "wss://" + endpoint.components(separatedBy: ":")[0]
+        return "wss://" + voiceServerInformation.endpoint.components(separatedBy: ":")[0]
     }
 
     /// The type of `DiscordEngine` this is. Used to correctly fire engine events.
@@ -62,15 +62,12 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             "session_id": voiceState.sessionId,
             "server_id": voiceState.guildId,
             "user_id": client!.user!.id,
-            "token": voiceServerInformation["token"] as! String
+            "token": voiceServerInformation.token
         ]
     }
 
     /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data
     public private(set) var encoder: DiscordVoiceEncoder?
-
-    /// The raw voice endpoint gotten from Discord
-    public private(set) var endpoint: String!
 
     /// The modes that are available for communication. Only xsalsa20_poly1305 is supported currently
     public private(set) var modes = [String]()
@@ -88,7 +85,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     public private(set) var udpPort = -1
 
     /// Information about the voice server we are connected to
-    public private(set) var voiceServerInformation: [String: Any]!
+    public private(set) var voiceServerInformation: DiscordVoiceServerInformation!
 
     /// The voice state for this engine.
     public private(set) var voiceState: DiscordVoiceState!
@@ -140,7 +137,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
                     moved channels
         - parameter secret: The secret from a previous engine.
     */
-    public convenience init?(client: DiscordClientSpec, voiceServerInformation: [String: Any],
+    public convenience init(client: DiscordClientSpec, voiceServerInformation: DiscordVoiceServerInformation,
             voiceState: DiscordVoiceState, encoder: DiscordVoiceEncoder?, secret: [UInt8]?) {
         self.init(client: client)
 
@@ -152,12 +149,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         self.voiceServerInformation = voiceServerInformation
         self.encoder = encoder
         self.secret = secret
-
-        if let endpoint = voiceServerInformation["endpoint"] as? String {
-            self.endpoint = endpoint
-        } else {
-            return nil
-        }
     }
 
     deinit {
@@ -243,7 +234,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         return rtpHeader + encryptedBytes
     }
 
-    private func decryptVoiceData(_ data: Data) throws {
+    private func decryptVoiceData(_ data: Data) throws -> DiscordVoiceData {
         defer { free(unencrypted) }
 
         let rtpHeader = Array(data.prefix(12))
@@ -256,8 +247,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
         guard success != -1 else { throw DiscordVoiceEngineError.decryptionError }
 
-        self.client?.handleVoiceData(DiscordVoiceData(rtpHeader: rtpHeader,
-            voiceData: Array(UnsafeBufferPointer<UInt8>(start: unencrypted, count: audioSize))))
+        return DiscordVoiceData(rtpHeader: rtpHeader,
+            voiceData: Array(UnsafeBufferPointer(start: unencrypted, count: audioSize)))
     }
 
     /**
@@ -342,17 +333,17 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         case .sessionDescription:
             udpQueue.async { self.handleVoiceSessionDescription(with: payload.payload) }
         case .speaking:
-                DefaultDiscordLogger.Logger.debug("Got speaking", type: logType, args: payload)
+            DefaultDiscordLogger.Logger.debug("Got speaking", type: logType, args: payload)
         default:
             DefaultDiscordLogger.Logger.debug("Unhandled voice payload %@", type: logType, args: payload)
-            break
         }
     }
 
     private func handleReady(with payload: DiscordGatewayPayloadData) {
         guard case let .object(voiceInformation) = payload,
                 let heartbeatInterval = voiceInformation["heartbeat_interval"] as? Int,
-                let ssrc = voiceInformation["ssrc"] as? Int, let udpPort = voiceInformation["port"] as? Int,
+                let ssrc = voiceInformation["ssrc"] as? Int,
+                let udpPort = voiceInformation["port"] as? Int,
                 let modes = voiceInformation["modes"] as? [String] else {
             disconnect()
 
@@ -424,8 +415,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
             do {
                 let (data, _) = try socket.receive(maxBytes: 4096)
+                guard let voiceData = try self?.decryptVoiceData(Data(bytes: data)) else {
+                    return
+                }
 
-                try self?.decryptVoiceData(Data(bytes: data))
+                self?.client?.handleVoiceData(voiceData)
             } catch let err {
                 self?.error(message: "Error reading voice data from udp socket \(err)")
                 self?.disconnect()
@@ -561,7 +555,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     private func startUDP() {
         guard udpPort != -1 else { return }
 
-        let base = endpoint.components(separatedBy: ":")[0]
+        let base = voiceServerInformation.endpoint.components(separatedBy: ":")[0]
         let udpEndpoint = InternetAddress(hostname: base, port: UInt16(udpPort))
 
         guard let client = try? UDPClient(address: udpEndpoint) else {

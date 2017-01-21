@@ -18,6 +18,25 @@
 import Dispatch
 import Foundation
 
+/// Struct that represents shard information.
+/// Used when a client is doing manual sharding.
+public struct DiscordShardInformation {
+    /// This client's shard number
+    public let shardNum: Int
+
+    /// The total number of shards this bot will have.
+    public let totalShards: Int
+
+    /**
+        Creates a new DiscordShardInformation
+    */
+    public init(shardNum: Int, totalShards: Int) {
+        self.shardNum = shardNum
+        self.totalShards = totalShards
+    }
+}
+
+
 /// Protocol that represents a sharded gateway connection. This is the top-level protocol for `DiscordEngineSpec` and
 /// `DiscordEngine`
 public protocol DiscordShard {
@@ -81,12 +100,12 @@ public protocol DiscordShardManagerDelegate : class, DiscordClientSpec {
     Connected being when all shards have recieved a ready event and are receiving events from the gateway. It also
     decides when a client has fully disconnected. Disconnected being when all shards have closed.
 */
-public final class DiscordShardManager {
+open class DiscordShardManager {
     // MARK: Properties
 
-    /// - returns: The `n`th shard.
+    /// - returns: The shard with num `n`
     public subscript(n: Int) -> DiscordShard {
-        return shards[n]
+        return shards.first(where: { $0.shardNum == n })!
     }
 
     /// The individual shards.
@@ -105,12 +124,18 @@ public final class DiscordShardManager {
 
     // MARK: Methods
 
+    private func cleanUp() {
+        shards.removeAll()
+        closedShards = 0
+        connectedShards = 0
+    }
+
     /**
         Connects all shards to the gateway.
 
         **Note** This method is an async method.
     */
-    public func connect() {
+    open func connect() {
         closed = false
 
         DispatchQueue.global().async {[shards = self.shards] in
@@ -125,9 +150,26 @@ public final class DiscordShardManager {
     }
 
     /**
+        Creates a new shard.
+
+        - parameter delegate: The delegate for this shard.
+        - parameter withShardNum: The shard number for the new shard.
+        - parameter totalShards: The total number of shards.
+        - returns: A new `DiscordShard`
+    */
+    open func createShardWithDelegate(_ delegate: DiscordShardManagerDelegate, withShardNum shardNum: Int,
+            totalShards: Int) -> DiscordShard {
+        let engine = DiscordEngine(client: delegate, shardNum: shardNum, numShards: totalShards)
+
+        engine.manager = self
+
+        return engine
+    }
+
+    /**
         Disconnects all shards.
     */
-    public func disconnect() {
+    open func disconnect() {
         func _disconnect() {
             closed = true
 
@@ -145,12 +187,28 @@ public final class DiscordShardManager {
     }
 
     /**
+        Use when you will have multiple shards spread across a few instances.
+
+        - parameter withInfo: The information about this single shard.
+    */
+    open func manuallyShatter(withInfo info: DiscordShardInformation) {
+        guard let delegate = self.delegate else { return }
+
+        DefaultDiscordLogger.Logger.verbose("Manually shattering shard #%@", type: "DiscordShardManager",
+            args: info.shardNum)
+
+        cleanUp()
+
+        shards.append(createShardWithDelegate(delegate, withShardNum: info.shardNum, totalShards: info.totalShards))
+    }
+
+    /**
         Sends a payload on the specified shard.
 
         - parameter payload: The payload to send.
         - parameter onShard: The shard to send the payload on.
     */
-    public func sendPayload(_ payload: DiscordGatewayPayload, onShard shard: Int) {
+    open func sendPayload(_ payload: DiscordGatewayPayload, onShard shard: Int) {
         self[shard].sendGatewayPayload(payload)
     }
 
@@ -159,22 +217,16 @@ public final class DiscordShardManager {
 
         - parameter into: The number of shards to create.
     */
-    public func shatter(into numberOfShards: Int) {
+    open func shatter(into numberOfShards: Int) {
         guard let delegate = self.delegate else { return }
 
         DefaultDiscordLogger.Logger.verbose("Shattering into %@ shards", type: "DiscordShardManager",
             args: numberOfShards)
 
-        shards.removeAll()
-        closedShards = 0
-        connectedShards = 0
+        cleanUp()
 
         for i in 0..<numberOfShards {
-            let engine = DiscordEngine(client: delegate, shardNum: i, numShards: numberOfShards)
-
-            engine.manager = self
-
-            shards.append(engine)
+            shards.append(createShardWithDelegate(delegate, withShardNum: i, totalShards: numberOfShards))
         }
     }
 
@@ -183,8 +235,11 @@ public final class DiscordShardManager {
 
         - parameter shardNum: The number of the shard that disconnected.
     */
-    public func signalShardConnected(shardNum: Int) {
+    open func signalShardConnected(shardNum: Int) {
         func _signalShardConnected() {
+            DefaultDiscordLogger.Logger.verbose("Shard #%@, connected", type: "DiscordShardManager",
+                args: shardNum)
+
             connectedShards += 1
 
             guard connectedShards == shards.count else { return }
@@ -200,8 +255,11 @@ public final class DiscordShardManager {
 
         - parameter shardNum: The number of the shard that disconnected.
     */
-    public func signalShardDisconnected(shardNum: Int) {
+    open func signalShardDisconnected(shardNum: Int) {
         func _signalShardDisconnected() {
+            DefaultDiscordLogger.Logger.verbose("Shard #%@, disconnected", type: "DiscordShardManager",
+                args: shardNum)
+
             closedShards += 1
 
             guard closedShards == shards.count else { return }

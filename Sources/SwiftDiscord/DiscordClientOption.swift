@@ -41,6 +41,9 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
     /// However this means that invsible users will also be pruned.
     case pruneUsers
 
+    /// If this client is going to shard into multiple instances, this tells a client the shard information.
+    case singleShard(DiscordShardInformation)
+
     /// The number of shards this client should spawn. Defaults to 1.
     case shards(Int)
 
@@ -57,6 +60,7 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
         case .log:              description = "log"
         case .logger:           description = "logger"
         case .shards:           description = "shards"
+        case .singleShard:      description = "singleShard"
         case .pruneUsers:       description = "pruneUsers"
         }
 

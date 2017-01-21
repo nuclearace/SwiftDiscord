@@ -47,12 +47,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     /// The client's delegate.
     public weak var delegate: DiscordClientDelegate?
 
-    /// The manager for this client's shards.
-    public var shardManager: DiscordShardManager!
-
     /// The queue that callbacks are called on. In addition, any reads from any properties of DiscordClient should be
     /// made on this queue, as this is the queue where modifications on them are made.
     public var handleQueue = DispatchQueue.main
+
+    /// The manager for this client's shards.
+    public var shardManager: DiscordShardManager!
+
+    /// If we should only represent a single shard, this is the shard information.
+    public var singleShardInformation: DiscordShardInformation?
 
     #if !os(iOS)
     /// The voice engines, indexed by guild id.
@@ -97,7 +100,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     private let voiceQueue = DispatchQueue(label: "voiceQueue")
 
     private var channelCache = [String: DiscordChannel]()
-    private var voiceServerInformations = [String: [String: Any]]()
+    private var voiceServerInformations = [String: DiscordVoiceServerInformation]()
 
     // MARK: Initializers
 
@@ -120,6 +123,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
                 DefaultDiscordLogger.Logger = logger
             case let .shards(shards) where shards > 0:
                 self.shards = shards
+            case let .singleShard(shardInfo):
+                self.singleShardInformation = shardInfo
             case .fillLargeGuilds:
                 fillLargeGuilds = true
             case .fillUsers:
@@ -141,7 +146,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     open func connect() {
         DefaultDiscordLogger.Logger.log("Connecting", type: logType)
 
-        shardManager.shatter(into: shards)
+        if let shardInfo = singleShardInformation {
+            shards = shardInfo.totalShards
+            shardManager.manuallyShatter(withInfo: shardInfo)
+        } else {
+            shardManager.shatter(into: shards)
+        }
+
         shardManager.connect()
     }
 
@@ -218,23 +229,23 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
         case .messageCreate:         handleMessageCreate(with: eventData)
         case .messageUpdate:         handleMessageUpdate(with: eventData)
         case .guildMemberAdd:        handleGuildMemberAdd(with: eventData)
-        case .guildMembersChunk:    handleGuildMembersChunk(with: eventData)
-        case .guildMemberUpdate:    handleGuildMemberUpdate(with: eventData)
-        case .guildMemberRemove:    handleGuildMemberRemove(with: eventData)
-        case .guildRoleCreate:        handleGuildRoleCreate(with: eventData)
-        case .guildRoleDelete:        handleGuildRoleRemove(with: eventData)
-        case .guildRoleUpdate:        handleGuildRoleUpdate(with: eventData)
-        case .guildCreate:            handleGuildCreate(with: eventData)
-        case .guildDelete:            handleGuildDelete(with: eventData)
-        case .guildUpdate:            handleGuildUpdate(with: eventData)
-        case .guildEmojisUpdate:    handleGuildEmojiUpdate(with: eventData)
-        case .channelUpdate:        handleChannelUpdate(with: eventData)
-        case .channelCreate:        handleChannelCreate(with: eventData)
-        case .channelDelete:        handleChannelDelete(with: eventData)
-        case .voiceServerUpdate:    handleVoiceServerUpdate(with: eventData)
-        case .voiceStateUpdate:        handleVoiceStateUpdate(with: eventData)
-        case .ready:                handleReady(with: eventData)
-        default:                    delegate?.client(self, didNotHandleDispatchEvent: event, withData: eventData)
+        case .guildMembersChunk:     handleGuildMembersChunk(with: eventData)
+        case .guildMemberUpdate:     handleGuildMemberUpdate(with: eventData)
+        case .guildMemberRemove:     handleGuildMemberRemove(with: eventData)
+        case .guildRoleCreate:       handleGuildRoleCreate(with: eventData)
+        case .guildRoleDelete:       handleGuildRoleRemove(with: eventData)
+        case .guildRoleUpdate:       handleGuildRoleUpdate(with: eventData)
+        case .guildCreate:           handleGuildCreate(with: eventData)
+        case .guildDelete:           handleGuildDelete(with: eventData)
+        case .guildUpdate:           handleGuildUpdate(with: eventData)
+        case .guildEmojisUpdate:     handleGuildEmojiUpdate(with: eventData)
+        case .channelUpdate:         handleChannelUpdate(with: eventData)
+        case .channelCreate:         handleChannelCreate(with: eventData)
+        case .channelDelete:         handleChannelDelete(with: eventData)
+        case .voiceServerUpdate:     handleVoiceServerUpdate(with: eventData)
+        case .voiceStateUpdate:      handleVoiceStateUpdate(with: eventData)
+        case .ready:                 handleReady(with: eventData)
+        default:                     delegate?.client(self, didNotHandleDispatchEvent: event, withData: eventData)
         }
     }
 
@@ -882,11 +893,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
         DefaultDiscordLogger.Logger.log("Handling voice server update", type: logType)
         DefaultDiscordLogger.Logger.verbose("Voice server update: %@", type: logType, args: data)
 
-        guard let guildId = data["guild_id"] as? String else { return }
+        let info = DiscordVoiceServerInformation(voiceServerInformationObject: data)
 
-        self.voiceServerInformations[guildId] = data
+        self.voiceServerInformations[info.guildId] = info
 
-        self.startVoiceConnection(guildId)
+        self.startVoiceConnection(info.guildId)
     }
 
     /**
