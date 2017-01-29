@@ -164,10 +164,10 @@ public struct DiscordGuildChannel : DiscordChannel {
 
         if !(workingPermissions & .sendMessages == .sendMessages) {
             // If they can't send messages, they automatically lose some permissions
-            workingPermissions &= ~(1 << 12) // TTS messages
-            workingPermissions &= ~(1 << 14) // Mention everyone
-            workingPermissions &= ~(1 << 15) // Attach Files
-            workingPermissions &= ~(1 << 17) // Embed Links
+            workingPermissions &= ~.sendTTSMessages
+            workingPermissions &= ~.mentionEveryone
+            workingPermissions &= ~.attachFiles
+            workingPermissions &= ~.mentionEveryone
         }
 
         if !(workingPermissions & .readMessages == .readMessages) {
