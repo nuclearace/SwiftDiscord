@@ -1,0 +1,11 @@
+language: objective-c
+osx_image: xcode8.2
+branches:
+  only:
+    - master
+    - development
+before_install:
+  - brew update
+  # - brew install ffmpeg --with-fdk-aac --with-sdl2 --with-freetype --with-libass --with-libquvi --with-libvorbis --with-libvpx --with-opus --with-x265
+  - brew install libsodium
+script: swift build -Xlinker -L/usr/local/lib/
