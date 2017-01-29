@@ -56,6 +56,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         return "voiceEngine"
     }
 
+    /// The id of the guild this voice engine is for.
+    public var guildId: String {
+        return voiceState.guildId
+    }
+
     /// Creates the handshake object that Discord expects.
     public override var handshakeObject: [String: Any] {
         return [
