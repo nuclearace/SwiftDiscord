@@ -17,8 +17,10 @@
 
 /// Represents a Discord Permission. Calculating Permissions involves bitwise operations.
 public enum DiscordPermission : Int {
+    /// User has all permissions.
+    case all = -1
     /// The none permission. Mathmatical.
-    case none
+    case none = 0
     /// This user can create invites.
     case createInstantInvite = 0x00000001
     /// This user can kick members.
@@ -73,6 +75,14 @@ public enum DiscordPermission : Int {
     case manageWebhooks = 0x20000000
     /// This user can manage emojis
     case manageEmojis = 0x40000000
+
+    // MARK: Composite permissions
+
+    /// All the channel permissions set to true.
+    case allChannel = 0x33F7FC51
+
+    /// All voice permissions set to true
+    case voice = 0x3F00000
 }
 
 /**
@@ -147,6 +157,26 @@ public func |=(lhs: inout Int, rhs: DiscordPermission) {
 */
 public func &=(lhs: inout Int, rhs: DiscordPermission) {
     lhs &= rhs.rawValue
+}
+
+/**
+    Determines if an Int and a permission represent the same thing.
+
+    - parameter lhs: an Int
+    - parameter rhs: a DiscordPermission
+*/
+public func ==(lhs: Int, rhs: DiscordPermission) -> Bool {
+    return lhs == rhs.rawValue
+}
+
+/**
+    Returns the inverse of this permission.
+
+    - parameter rhs: The permission.
+    - returns: The inverse of this permission
+*/
+public prefix func ~(rhs: DiscordPermission) -> Int {
+    return ~rhs.rawValue
 }
 
 /// Represents a permission overwrite type for a channel.

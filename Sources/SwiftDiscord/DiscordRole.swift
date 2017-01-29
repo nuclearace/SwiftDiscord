@@ -16,7 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a Discord role.
-public struct DiscordRole : JSONAble {
+public struct DiscordRole : JSONAble, Equatable {
     // MARK: Properties
 
     /// The snowflake id of the role.
@@ -66,5 +66,12 @@ public struct DiscordRole : JSONAble {
         }
 
         return roles
+    }
+
+    /**
+        Whether two roles are the same.
+    */
+    public static func ==(lhs: DiscordRole, rhs: DiscordRole) -> Bool {
+        return lhs.id == rhs.id
     }
 }
