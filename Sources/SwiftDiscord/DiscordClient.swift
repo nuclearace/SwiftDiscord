@@ -395,6 +395,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
         #endif
     }
 
+    #if !os(iOS)
     /**
         Called when the voice engine disconnects.
 
@@ -416,6 +417,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
             self.delegate?.client(self, isReadyToSendVoiceWithEngine: engine)
         }
     }
+    #endif
 
     // MARK: DiscordDispatchEventHandler Conformance
 

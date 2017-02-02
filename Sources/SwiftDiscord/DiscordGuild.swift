@@ -234,6 +234,21 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         client.modifyGuild(id, options: options)
     }
 
+    /**
+        Gets the roles that this member has on this guild.
+
+        - parameter member: The member whose roles we are getting.
+    */
+    public func roles(for member: DiscordGuildMember) -> [DiscordRole] {
+        var roles = [DiscordRole]()
+
+        if let everyone = self.roles[id] {
+            roles.append(everyone)
+        }
+
+        return roles + self.roles.filter({ member.roles.contains($0.key) }).map({ $0.1 })
+    }
+
     func shardNumber(assuming numOfShards: Int) -> Int {
         return (Int(id)! >> 22) % numOfShards
     }
