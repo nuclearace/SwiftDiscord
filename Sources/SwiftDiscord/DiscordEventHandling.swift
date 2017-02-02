@@ -177,6 +177,7 @@ public protocol DiscordClientDelegate : class {
     */
     func client(_ client: DiscordClient, didReceiveVoiceStateUpdate voiceState: DiscordVoiceState)
 
+    #if !os(iOS)
     /**
         Called when the client is ready to start sending voice data.
 
@@ -184,6 +185,7 @@ public protocol DiscordClientDelegate : class {
         - parameter isReadyToSendVoiceWithEngine: The encoder that will be used.
     */
     func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine engine: DiscordVoiceEngine)
+    #endif
 
     /**
         Called when the client handles a guild member chunk.
@@ -274,8 +276,10 @@ public extension DiscordClientDelegate {
     /// Default.
     func client(_ client: DiscordClient, didReceiveVoiceStateUpdate voiceState: DiscordVoiceState) { }
 
+    #if !os(iOS)
     /// Default.
     func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine engine: DiscordVoiceEngine) { }
+    #endif
 
     /// Default.
     func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: DiscordLazyDictionary<String, DiscordGuildMember>,
