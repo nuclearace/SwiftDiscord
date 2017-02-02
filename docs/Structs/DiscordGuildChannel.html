@@ -143,6 +143,9 @@
                 <a href="../Functions.html#/s:F12SwiftDiscordoi2eeFTOS_19DiscordClientOptionS0__Sb">==(_:_:)</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordoi2eeFTSiOS_17DiscordPermission_Sb">==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Functions.html#/s:F12SwiftDiscordoi1oFTOS_17DiscordPermissionS0__Si">|(_:_:)</a>
               </li>
               <li class="nav-group-task">
@@ -150,6 +153,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Functions.html#/s:F12SwiftDiscordoi2oeFTRSiOS_17DiscordPermission_T_">|=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F12SwiftDiscordop1tFOS_17DiscordPermissionSi">~(_:)</a>
               </li>
             </ul>
           </li>
@@ -716,6 +722,71 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:FV12SwiftDiscord19DiscordGuildChannel9canMemberFTVS_18DiscordGuildMemberOS_17DiscordPermission_Sb"></a>
+                    <a name="//apple_ref/swift/Method/canMember(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FV12SwiftDiscord19DiscordGuildChannel9canMemberFTVS_18DiscordGuildMemberOS_17DiscordPermission_Sb">canMember(_:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Determines whether this user has the specified permission on this channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">canMember</span><span class="p">(</span><span class="n">_</span> <span class="nv">member</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="p">,</span> <span class="n">_</span> <span class="nv">permission</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordPermission.html">DiscordPermission</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>member</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The member to check.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>permission</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The permission to check for.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Whether the user has this permission in this channel.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:FV12SwiftDiscord19DiscordGuildChannel16deletePermissionFVS_26DiscordPermissionOverwriteT_"></a>
                     <a name="//apple_ref/swift/Method/deletePermission(_:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FV12SwiftDiscord19DiscordGuildChannel16deletePermissionFVS_26DiscordPermissionOverwriteT_">deletePermission(_:)</a>
@@ -807,12 +878,118 @@
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FV12SwiftDiscord19DiscordGuildChannel10overwritesFT3forVS_18DiscordGuildMember_GSaVS_26DiscordPermissionOverwrite_"></a>
+                    <a name="//apple_ref/swift/Method/overwrites(for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FV12SwiftDiscord19DiscordGuildChannel10overwritesFT3forVS_18DiscordGuildMember_GSaVS_26DiscordPermissionOverwrite_">overwrites(for:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Gets the permission overwrites for a user.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">overwrites</span><span class="p">(</span><span class="k">for</span> <span class="nv">member</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>for</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The member to get permission overwrites for.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The permission overwrites this member has.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FV12SwiftDiscord19DiscordGuildChannel11permissionsFT3forVS_18DiscordGuildMember_Si"></a>
+                    <a name="//apple_ref/swift/Method/permissions(for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FV12SwiftDiscord19DiscordGuildChannel11permissionsFT3forVS_18DiscordGuildMember_Si">permissions(for:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Gets the permissions for this member on this channel.</p>
+
+<p>Takes into consideration whether they are the owner, admin, and any roles and permission overwrites they have.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">permissions</span><span class="p">(</span><span class="k">for</span> <span class="nv">member</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>member</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The member to check.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The permissions that this user has, OR’d together.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-01-21)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-01)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
