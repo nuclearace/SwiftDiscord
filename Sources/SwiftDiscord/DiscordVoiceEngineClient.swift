@@ -33,8 +33,7 @@ public protocol DiscordVoiceEngineClient {
     */
     func handleVoiceData(_ data: DiscordVoiceData)
 
-    
-    #if !os(iOS)
+
     /**
         Called when the voice engine disconnects.
 
@@ -48,5 +47,4 @@ public protocol DiscordVoiceEngineClient {
         - parameter engine: The engine that's ready.
     */
     func voiceEngineReady(_ engine: DiscordVoiceEngine)
-    #endif
 }

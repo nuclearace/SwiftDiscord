@@ -1,5 +1,5 @@
 // The MIT License (MIT)
-// Copyright (c) 2016 Erik Little
+// Copyright (c) 2017 Erik Little
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -15,17 +15,11 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-import PackageDescription
+#ifndef configure_h
+#define configure_h
 
-let package = Package(
-    name: "SwiftDiscord",
-    targets: [
-        Target(name: "SwiftDiscord", dependencies: ["DiscordOpus"])
-    ],
-    dependencies: [
-        .Package(url: "https://github.com/nuclearace/copus", majorVersion: 1),
-    	.Package(url: "https://github.com/nuclearace/Sodium", majorVersion: 1),
-        .Package(url: "https://github.com/nuclearace/Starscream", majorVersion: 2),
-        .Package(url: "https://github.com/vapor/engine", majorVersion: 1),
-    ]
-)
+#include <opus/opus.h>
+
+int configure_encoder(OpusEncoder *enc, int bitrate, int vbr);
+
+#endif /* configure_h */
