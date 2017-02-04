@@ -183,13 +183,8 @@ open class DiscordVoiceEncoder {
 
         let maxFrameSize = opusEncoder.maxFrameSize(assumingSize: frameSize)
 
-        readQueue.async {[weak self] in
-            guard let fd = self?.writePipe.fileHandleForReading.fileDescriptor else {
-                callback(true, [])
-
-                return
-            }
-
+        readQueue.async {[weak self, frameSize = self.frameSize,
+                          fd = writePipe.fileHandleForReading.fileDescriptor] in
             defer { free(buf) }
 
             // Read one frame
@@ -207,7 +202,7 @@ open class DiscordVoiceEncoder {
             let pointer = buf.assumingMemoryBound(to: opus_int16.self)
 
             do {
-                callback(false, try this.opusEncoder.encode(pointer, frameSize: 960))
+                callback(false, try this.opusEncoder.encode(pointer, frameSize: frameSize))
             } catch {
                 callback(true, [])
             }
