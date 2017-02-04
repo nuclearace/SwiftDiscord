@@ -17,11 +17,6 @@
 
 import Foundation
 
-#if !os(iOS)
-
-/// The default (max) audio packet size.
-public let defaultAudioSize = 320
-
 /// Declares that a type will be a voice engine.
 public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
     // MARK: Properties
@@ -60,7 +55,7 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
     /**
         Stops encoding and requests a new encoder. A `voiceEngine.ready` event will be fired when the encoder is ready.
     */
-    func requestNewEncoder()
+    func requestNewEncoder() throws
 
     /**
         An async write to the encoder.
@@ -71,12 +66,21 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
     func send(_ data: Data, doneHandler: (() -> Void)?)
 
     /**
-        Sends OPUS encoded voice data to Discord. Because of the assumptions built into the engine, the voice data
-        should have a max length of `defaultAudioSize`
+        Sends OPUS encoded voice data to Discord.
 
         - parameter data: An array of OPUS encoded voice data.
     */
     func sendVoiceData(_ data: [UInt8])
+
+    /**
+        Tells Discord that we are starting to speak.
+    */
+    func startSpeaking()
+
+    /**
+        Tells Discord we're done speaking.
+    */
+    func stopSpeaking()
 }
 
 public extension DiscordVoiceEngineSpec {
@@ -85,5 +89,3 @@ public extension DiscordVoiceEngineSpec {
         encoder?.write(data, doneHandler: doneHandler)
     }
 }
-
-#endif

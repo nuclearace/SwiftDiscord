@@ -177,7 +177,6 @@ public protocol DiscordClientDelegate : class {
     */
     func client(_ client: DiscordClient, didReceiveVoiceStateUpdate voiceState: DiscordVoiceState)
 
-    #if !os(iOS)
     /**
         Called when the client is ready to start sending voice data.
 
@@ -185,7 +184,6 @@ public protocol DiscordClientDelegate : class {
         - parameter isReadyToSendVoiceWithEngine: The encoder that will be used.
     */
     func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine engine: DiscordVoiceEngine)
-    #endif
 
     /**
         Called when the client handles a guild member chunk.
@@ -216,6 +214,22 @@ public protocol DiscordClientDelegate : class {
     */
     func client(_ client: DiscordClient, didUpdateEmojis emojis: [String: DiscordEmoji],
             onGuild guild: DiscordGuild)
+
+    /**
+        Called when a voice engine is requesting a new encoder, can be used to override the default encoder with
+        different bitrate/sample rate/etc.
+
+        This should return the encoder to use.
+
+        **Note**: This method is not called on the main queue.
+        **Note**: This method must be implemented on iOS; there is no FFmpeg middleware on iOS.
+
+        - parameter client: The client that is calling.
+        - parameter needsVoiceEncoderForEngine: The engine that needs an encoder.
+        - returns: A DiscordVoiceEncoder to use to encode with.
+    */
+    func client(_ client: DiscordClient, needsVoiceEncoderForEngine engine: DiscordVoiceEngine)
+            throws -> DiscordVoiceEncoder
 }
 
 public extension DiscordClientDelegate {
@@ -276,10 +290,8 @@ public extension DiscordClientDelegate {
     /// Default.
     func client(_ client: DiscordClient, didReceiveVoiceStateUpdate voiceState: DiscordVoiceState) { }
 
-    #if !os(iOS)
     /// Default.
     func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine engine: DiscordVoiceEngine) { }
-    #endif
 
     /// Default.
     func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: DiscordLazyDictionary<String, DiscordGuildMember>,
@@ -292,4 +304,12 @@ public extension DiscordClientDelegate {
     /// Default.
     func client(_ client: DiscordClient, didUpdateEmojis emojis: [String: DiscordEmoji],
             onGuild guild: DiscordGuild) { }
+
+    #if !os(iOS)
+    /// Default
+    func client(_ client: DiscordClient, needsVoiceEncoderForEngine engine: DiscordVoiceEngine)
+            throws -> DiscordVoiceEncoder {
+        return try DiscordVoiceEncoder()
+    }
+    #endif
 }
