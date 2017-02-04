@@ -14,9 +14,12 @@ A Discord API client for Swift.
 \*\* - Linux stability is currently limited to the stability of open source Foundation, but in thoery should support everything.
 
 - Requirements:
-  - ffmpeg installed via Homebrew (Make sure it is installed with opus support)
-  - libsodium also installed via Homebrew.
+  - libopus
+  - libsodium
   - Swift 3
+
+- Recommendend:
+  - ffmpeg with opus support (Without FFmpeg you must send raw audio)
 
 
 - Installing and Building (Linux and macOS):
