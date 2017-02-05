@@ -4,38 +4,33 @@ A Discord API client for Swift.
 
 - Features:
   - Sending and receiving voice.
-  - macOS, iOS\*, and Linux\*\* support.
-  - Bot and User account support (OAuth coming soon).
+  - macOS, iOS, and Linux\*\* support.
+  - Bot and User account support.
   - REST API separate from client. You can use the REST API separately to build your own client if you wish.
   - Configurable sharding.
-
-\* - iOS does not currently support voice.
 
 \*\* - Linux stability is currently limited to the stability of open source Foundation, but in thoery should support everything.
 
 - Requirements:
-  - ffmpeg installed via Homebrew (Make sure it is installed with opus support)
-  - libsodium also installed via Homebrew.
+  - libopus
+  - libsodium
   - Swift 3
 
+- Recommendend:
+  - ffmpeg (Without FFmpeg you must send raw audio)
 
-- Installing:
+
+- Installing and Building (Linux and macOS):
  - Create your Swift Package Manager project
- - Add `.Package(url: "https://github.com/nuclearace/SwiftDiscord", majorVersion: 0, minor: 5)` to your dependencies in Package.swift
+ - Add `.Package(url: "https://github.com/nuclearace/SwiftDiscord", majorVersion: 2)` to your dependencies in Package.swift
  - Add `import SwiftDiscord` to files you wish to use the module in.
- - Run `swift build -Xlinker -L/usr/local/lib/`. The Xlinker option is needed to tell the package manager where to find the libsodium library that was installed through Homebrew.
+ - Run `swift build -Xlinker -L/usr/local/lib -Xlinker -lopus -Xcc -I/usr/local/include`. The Xlinker options are needed to tell the package manager where to find the libsodium and opus libraries that were installed through Homebrew. The Xcc option tells clang where to find the headers for opus.
 
 Xcode:
 
 If you wish to use Xcode with your Swift Package Manager project, you can do `swift package generate-xcodeproj`. However after doing that, you'll have to make a change to SwiftDiscord's build settings. Just like when compiling from the command line, we have to tell Xcode where to find libsodium. This can be done by adding `/usr/local/lib` to the library search paths.
 
 ![](https://i.imgur.com/JR97eTO.png)
-
-You'll then want to remove all target dependencies and linked libraries except for Starscream and Socks**. (The others are used on Linux, but not macOS or iOS).
-
-![](https://i.imgur.com/vhhnfJp.png)
-
-** - Socks should be removed on iOS as voice is not supported on it.
 
 Usage
 =====

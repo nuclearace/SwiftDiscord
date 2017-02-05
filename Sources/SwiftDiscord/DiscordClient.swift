@@ -57,10 +57,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     /// If we should only represent a single shard, this is the shard information.
     public var singleShardInformation: DiscordShardInformation?
 
-    #if !os(iOS)
     /// The voice engines, indexed by guild id.
     public var voiceEngines = [String: DiscordVoiceEngineSpec]()
-    #endif
 
     /// A callback function to listen for voice packets.
     public var onVoiceData: (DiscordVoiceData) -> Void = {_ in }
@@ -168,11 +166,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
         shardManager.disconnect()
 
-        #if !os(iOS)
         for (_, engine) in voiceEngines {
             engine.disconnect()
         }
-        #endif
     }
 
     /**
@@ -290,7 +286,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
         - parameter channelId: The snowflake of the voice channel you would like to join
     */
     open func joinVoiceChannel(_ channelId: String) {
-        #if !os(iOS)
         guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
                 channel.type == .voice else {
 
@@ -308,10 +303,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
                 "self_mute": false,
                 "self_deaf": false
                 ])
-            ), onShard: shardNum)
-        #else
-        print("Only available on macOS and Linux")
-        #endif
+        ), onShard: shardNum)
     }
 
     /**
@@ -320,7 +312,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
         - parameter onGuild: The snowflake of the guild that you want to leave.
     */
     open func leaveVoiceChannel(onGuild guildId: String) {
-        #if !os(iOS)
         guard voiceEngines[guildId] != nil else { return }
 
         // Make sure the engine is cleaned up before setting it to nil
@@ -340,10 +331,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
         for (guildId, _) in voiceEngines {
             startVoiceConnection(guildId)
         }
-
-        #else
-        print("Only available on macOS and Linux")
-        #endif
     }
 
     /**
@@ -376,7 +363,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     }
 
     private func startVoiceConnection(_ guildId: String) {
-        #if !os(iOS)
         // We need both to start the connection
         guard let voiceState = voiceStates[guildId], let serverInfo = voiceServerInformations[guildId] else {
             return
@@ -390,12 +376,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
         DefaultDiscordLogger.Logger.log("Connecting voice engine", type: logType)
 
         voiceEngines[guildId]?.connect()
-        #else
-        print("Only available on macOS and Linux")
-        #endif
     }
 
-    #if !os(iOS)
     /**
         Called when the voice engine disconnects.
 
@@ -417,7 +399,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
             self.delegate?.client(self, isReadyToSendVoiceWithEngine: engine)
         }
     }
-    #endif
 
     // MARK: DiscordDispatchEventHandler Conformance
 

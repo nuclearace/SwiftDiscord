@@ -6,6 +6,6 @@ branches:
     - development
 before_install:
   - brew update
-  # - brew install ffmpeg --with-fdk-aac --with-sdl2 --with-freetype --with-libass --with-libquvi --with-libvorbis --with-libvpx --with-opus --with-x265
   - brew install libsodium
-script: swift build -Xlinker -L/usr/local/lib/
+  - brew install opus
+script: swift build -Xlinker -L/usr/local/lib -Xlinker -lopus -Xcc -I/usr/local/include

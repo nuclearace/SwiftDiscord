@@ -238,6 +238,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         Gets the roles that this member has on this guild.
 
         - parameter member: The member whose roles we are getting.
+        - returns: An array containing the roles they have.
     */
     public func roles(for member: DiscordGuildMember) -> [DiscordRole] {
         var roles = [DiscordRole]()
