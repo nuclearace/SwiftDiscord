@@ -22,7 +22,10 @@ import Foundation
 
 /// Represents an error that can occur during voice operations.
 public enum DiscordVoiceError : Error {
+    /// Thrown when a failure occurs creating an encoder.
     case creationFail
+
+    /// Thrown when a failure occurs encoding.
     case encodeFail
 }
 
@@ -85,10 +88,11 @@ open class DiscordVoiceEncoder {
     /**
         Sets up an encoder with FFmpeg middleware that can make going from audio files to Opus easier on the user.
 
-        - parameter encoder: The FFmpeg process
+        - parameter encoder: The FFmpeg process.
+        - parameter opusEncoder: The Opus encoder.
         - parameter readPipe: What the encoder reads from, and what a consumer writes to to have things encoded
-                              into Opus
-        - parameter writePipe: What the encoder writes to, and what a consumer reads from to get Opus encoded data
+                              into Opus.
+        - parameter writePipe: What the encoder writes to, and what a consumer reads from to get Opus encoded data.
     */
     public init(encoder: EncoderProcess, opusEncoder: DiscordOpusEncoder, readPipe: Pipe, writePipe: Pipe) {
         self.encoder = encoder
@@ -257,6 +261,8 @@ open class DiscordVoiceEncoder {
     Takes raw PCM 16-bit-le/sample data and returns Opus encoded voice packets.
 */
 open class DiscordOpusEncoder {
+    // MARK: Properties
+
     /// The bitrate for this encoder.
     public let bitrate: Int
 
@@ -271,6 +277,15 @@ open class DiscordOpusEncoder {
 
     private let encoderState: OpaquePointer
 
+    // MARK: Initializers
+
+    /**
+        Creates an Encoder that can take raw PCM data and create Opus packets.
+
+        - parameter bitrate: The target bitrate for this encoder.
+        - parameter sampleRate: The sample rate for the encoder. Discord expects this to be 48k.
+        - parameter channels: The number of channels in the stream to encode, should always be 2.
+    */
     public init(bitrate: Int, sampleRate: Int, channels: Int) throws {
         self.bitrate = bitrate
         self.sampleRate = sampleRate
@@ -292,6 +307,8 @@ open class DiscordOpusEncoder {
         destroyState()
     }
 
+    // MARK: Methods
+
     private func destroyState() {
         opus_encoder_destroy(encoderState)
     }
@@ -300,7 +317,7 @@ open class DiscordOpusEncoder {
         Encodes a single frame of raw PCM 16-bit-le/sample LE data into Opus format.
 
         - parameter audio: A pointer to the audio data. Use `maxFrameSize(assumingSize:)` to find the length.
-        - parameter frameSize: The size of the frame. Most likely 960.
+        - parameter frameSize: The size of the frame in samples per channel.
         - returns: An opus encoded packet.
     */
     open func encode(_ audio: UnsafePointer<opus_int16>, frameSize: Int) throws -> [UInt8] {
