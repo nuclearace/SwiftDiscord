@@ -41,8 +41,8 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
         youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
         youtube.standardOutput = client.voiceEngines[guildId]?.requestFileHandleForWriting()
 
-        youtube.terminationHandler = {[weak self] process in
-            self?.client.voiceEngines[guildId]?.encoder?.finishEncodingAndClose()
+        youtube.terminationHandler = {[weak encoder = voiceEngine.encoder!] process in
+            encoder?.finishEncodingAndClose()
         }
 
         youtube.launch()

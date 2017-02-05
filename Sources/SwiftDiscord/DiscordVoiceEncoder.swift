@@ -170,6 +170,8 @@ open class DiscordVoiceEncoder {
     open func finishEncodingAndClose() {
         guard !closed else { return }
 
+        DefaultDiscordLogger.Logger.debug("Closing pipe for writing", type: "DiscordVoiceEncoder")
+
         close(readPipe.fileHandleForWriting.fileDescriptor)
     }
 
