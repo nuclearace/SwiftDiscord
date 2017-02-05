@@ -4,12 +4,10 @@ A Discord API client for Swift.
 
 - Features:
   - Sending and receiving voice.
-  - macOS, iOS\*, and Linux\*\* support.
-  - Bot and User account support (OAuth coming soon).
+  - macOS, iOS, and Linux\*\* support.
+  - Bot and User account support.
   - REST API separate from client. You can use the REST API separately to build your own client if you wish.
   - Configurable sharding.
-
-\* - iOS does not currently support voice.
 
 \*\* - Linux stability is currently limited to the stability of open source Foundation, but in thoery should support everything.
 
@@ -19,7 +17,7 @@ A Discord API client for Swift.
   - Swift 3
 
 - Recommendend:
-  - ffmpeg with opus support (Without FFmpeg you must send raw audio)
+  - ffmpeg (Without FFmpeg you must send raw audio)
 
 
 - Installing and Building (Linux and macOS):

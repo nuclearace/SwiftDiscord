@@ -130,6 +130,8 @@ open class DiscordVoiceEncoder {
     #endif
 
     deinit {
+        DefaultDiscordLogger.Logger.debug("deinit", type: "DiscordVoiceEncoder")
+
         guard !closed else { return }
 
         closeEncoder()
@@ -181,9 +183,9 @@ open class DiscordVoiceEncoder {
     open func read(callback: @escaping (Bool, [UInt8]) -> Void) {
         guard !closed else { return callback(true, []) }
 
-        let maxFrameSize = opusEncoder.maxFrameSize(assumingSize: frameSize)
-
-        readQueue.async {[weak self, frameSize = self.frameSize,
+        readQueue.async {[weak opusEncoder,
+                          maxFrameSize = opusEncoder.maxFrameSize(assumingSize: frameSize),
+                          frameSize = self.frameSize,
                           fd = writePipe.fileHandleForReading.fileDescriptor] in
             defer { free(buf) }
 
@@ -193,7 +195,7 @@ open class DiscordVoiceEncoder {
 
             DefaultDiscordLogger.Logger.debug("Read %@ bytes", type: "DiscordVoiceEncoder", args: bytesRead)
 
-            guard bytesRead > 0, let this = self else {
+            guard bytesRead > 0, let encoder = opusEncoder else {
                 callback(true, [])
 
                 return
@@ -202,7 +204,7 @@ open class DiscordVoiceEncoder {
             let pointer = buf.assumingMemoryBound(to: opus_int16.self)
 
             do {
-                callback(false, try this.opusEncoder.encode(pointer, frameSize: frameSize))
+                callback(false, try encoder.encode(pointer, frameSize: frameSize))
             } catch {
                 callback(true, [])
             }
