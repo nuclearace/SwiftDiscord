@@ -461,10 +461,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         Example using youtube-dl to play music:
 
         ```swift
+        guard let voiceEngine = client.voiceEngines[guildId] else { return }
         youtube = EncoderProcess()
         youtube.launchPath = "/usr/local/bin/youtube-dl"
         youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
-        youtube.standardOutput = client.voiceEngines[guildId]?.requestFileHandleForWriting()
+        youtube.standardOutput = voiceEngine.requestFileHandleForWriting()
 
         youtube.terminationHandler = {[weak encoder = voiceEngine.encoder!] process in
             encoder?.finishEncodingAndClose()
