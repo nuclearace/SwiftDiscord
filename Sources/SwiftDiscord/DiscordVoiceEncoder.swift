@@ -223,7 +223,7 @@ open class DiscordVoiceEncoder {
         // FileHandle's write doesn't play nicely with the way we use pipes
         // It will throw an exception that we cannot catch if the write handle is closed
         // So do basically exactly what it does, but don't explode the app when the handle is closed
-        writeQueue.async {[weak self] in
+        writeQueue.async {[fd = writeToHandler.fileDescriptor] in
             data.enumerateBytes {bytes, range, stop in
                 let buf = UnsafeRawPointer(bytes.baseAddress!)
                 var bytesRemaining = data.count
@@ -232,8 +232,6 @@ open class DiscordVoiceEncoder {
                     var bytesWritten: Int
 
                     repeat {
-                        guard let fd = self?.writeToHandler.fileDescriptor else { return }
-
                         bytesWritten = Foundation.write(fd, buf.advanced(by: data.count - bytesRemaining), bytesRemaining)
                     } while bytesWritten < 0 && errno == EINTR
 
