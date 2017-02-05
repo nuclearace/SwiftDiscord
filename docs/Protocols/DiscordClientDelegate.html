@@ -51,6 +51,9 @@
                 <a href="../Classes/DiscordLazyValue.html">DiscordLazyValue</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/DiscordOpusEncoder.html">DiscordOpusEncoder</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/DiscordShardManager.html">DiscordShardManager</a>
               </li>
               <li class="nav-group-task">
@@ -58,14 +61,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
-            <a href="../Global Variables.html">Global Variables</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="../Global Variables.html#/s:v12SwiftDiscord16defaultAudioSizeSi">defaultAudioSize</a>
               </li>
             </ul>
           </li>
@@ -113,6 +108,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/DiscordPresenceStatus.html">DiscordPresenceStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordVoiceError.html">DiscordVoiceError</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/DiscordVoiceGatewayCode.html">DiscordVoiceGatewayCode</a>
@@ -1737,8 +1735,6 @@ the corresponding delegate method will be called.</p>
                       <div class="default_impl abstract">
                         <p>Default.</p>
 
-<p>Default.</p>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -2027,12 +2023,93 @@ the corresponding delegate method will be called.</p>
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord21DiscordClientDelegate6clientFzTCS_13DiscordClient26needsVoiceEncoderForEngineCS_18DiscordVoiceEngine_CS_19DiscordVoiceEncoder"></a>
+                    <a name="//apple_ref/swift/Method/client(_:needsVoiceEncoderForEngine:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord21DiscordClientDelegate6clientFzTCS_13DiscordClient26needsVoiceEncoderForEngineCS_18DiscordVoiceEngine_CS_19DiscordVoiceEncoder">client(_:needsVoiceEncoderForEngine:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when a voice engine is requesting a new encoder, can be used to override the default encoder with
+different bitrate/sample rate/etc.</p>
+
+<p>This should return the encoder to use.</p>
+
+<p><strong>Note</strong>: This method is not called on the main queue.
+<strong>Note</strong>: This method must be implemented on iOS; there is no FFmpeg middleware on iOS.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default</p>
+
+<p>Default</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">needsVoiceEncoderForEngine</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>needsVoiceEncoderForEngine</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The engine that needs an encoder.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A DiscordVoiceEncoder to use to encode with.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-01)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-05)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

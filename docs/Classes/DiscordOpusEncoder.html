@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DiscordLazyDictionaryIndex Struct Reference</title>
+    <title>DiscordOpusEncoder Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/DiscordLazyDictionaryIndex" class="dashAnchor"></a>
-    <a title="DiscordLazyDictionaryIndex Struct Reference"></a>
+    <a name="//apple_ref/swift/Class/DiscordOpusEncoder" class="dashAnchor"></a>
+    <a title="DiscordOpusEncoder Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        DiscordLazyDictionaryIndex Struct Reference
+        DiscordOpusEncoder Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -360,25 +360,34 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>DiscordLazyDictionaryIndex</h1>
+            <h1>DiscordOpusEncoder</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordLazyDictionaryIndex</span><span class="o">&lt;</span><span class="kt">K</span><span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">V</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">Comparable</span></code></pre>
+                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordOpusEncoder</span></code></pre>
 
                 </div>
               </div>
-            <p>Used to index into a DiscordLazyDictionary. Holds the index into the backing dictonary</p>
+            <p>An Opus encoder.</p>
+
+<p>Takes raw PCM 16-bit-le/sample data and returns Opus encoded voice packets.</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Properties"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <a href="#/Properties">
+                  <h3 class="section-name">Properties</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFPs10Comparableoi1lFTxx_Sb"></a>
-                    <a name="//apple_ref/swift/Method/&lt;(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFPs10Comparableoi1lFTxx_Sb">&lt;(_:_:)</a>
+                    <a name="/s:vC12SwiftDiscord18DiscordOpusEncoder7bitrateSi"></a>
+                    <a name="//apple_ref/swift/Property/bitrate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord18DiscordOpusEncoder7bitrateSi">bitrate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -386,14 +395,133 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Used to index into a DiscordLazyDictionary. Holds the index into the backing dictonary</p>
+                        <p>The bitrate for this encoder.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&lt;</span><span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt">DiscordLazyDictionaryIndex</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt">DiscordLazyDictionaryIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">bitrate</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord18DiscordOpusEncoder8channelsSi"></a>
+                    <a name="//apple_ref/swift/Property/channels" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord18DiscordOpusEncoder8channelsSi">channels</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The number of channels.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">channels</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord18DiscordOpusEncoder13maxPacketSizeSi"></a>
+                    <a name="//apple_ref/swift/Property/maxPacketSize" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord18DiscordOpusEncoder13maxPacketSizeSi">maxPacketSize</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The maximum size of a opus packet.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">maxPacketSize</span> <span class="o">=</span> <span class="mi">4000</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord18DiscordOpusEncoder10sampleRateSi"></a>
+                    <a name="//apple_ref/swift/Property/sampleRate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord18DiscordOpusEncoder10sampleRateSi">sampleRate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The sampling rate.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">sampleRate</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Initializers"></a>
+                <a name="//apple_ref/swift/Section/Initializers" class="dashAnchor"></a>
+                <a href="#/Initializers">
+                  <h3 class="section-name">Initializers</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord18DiscordOpusEncodercFzT7bitrateSi10sampleRateSi8channelsSi_S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(bitrate:sampleRate:channels:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord18DiscordOpusEncodercFzT7bitrateSi10sampleRateSi8channelsSi_S0_">init(bitrate:sampleRate:channels:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an Encoder that can take raw PCM data and create Opus packets.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">bitrate</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">sampleRate</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">channels</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -404,12 +532,12 @@
                             <tr>
                               <td>
                                 <code>
-                                <em>lhs</em>
+                                <em>bitrate</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>A value to compare.</p>
+                                  <p>The target bitrate for this encoder.</p>
 
                                 </div>
                               </td>
@@ -417,12 +545,25 @@
                             <tr>
                               <td>
                                 <code>
-                                <em>rhs</em>
+                                <em>sampleRate</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>Another value to compare.</p>
+                                  <p>The sample rate for the encoder. Discord expects this to be 48k.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>channels</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The number of channels in the stream to encode, should always be 2.</p>
 
                                 </div>
                               </td>
@@ -433,12 +574,23 @@
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Methods"></a>
+                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
+                <a href="#/Methods">
+                  <h3 class="section-name">Methods</h3>
+                </a>
+              </div>
+              <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZFPs9Equatableoi2eeFTxx_Sb"></a>
-                    <a name="//apple_ref/swift/Method/==(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZFPs9Equatableoi2eeFTxx_Sb">==(_:_:)</a>
+                    <a name="/s:FC12SwiftDiscord18DiscordOpusEncoder6encodeFzTGSPVs5Int16_9frameSizeSi_GSaVs5UInt8_"></a>
+                    <a name="//apple_ref/swift/Method/encode(_:frameSize:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord18DiscordOpusEncoder6encodeFzTGSPVs5Int16_9frameSizeSi_GSaVs5UInt8_">encode(_:frameSize:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -446,14 +598,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Used to index into a DiscordLazyDictionary. Holds the index into the backing dictonary</p>
+                        <p>Encodes a single frame of raw PCM 16-bit-le/sample LE data into Opus format.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">==</span><span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt">DiscordLazyDictionaryIndex</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt">DiscordLazyDictionaryIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">encode</span><span class="p">(</span><span class="n">_</span> <span class="nv">audio</span><span class="p">:</span> <span class="kt">UnsafePointer</span><span class="o">&lt;</span><span class="n">opus_int16</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">frameSize</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -464,12 +616,12 @@
                             <tr>
                               <td>
                                 <code>
-                                <em>lhs</em>
+                                <em>audio</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>A value to compare.</p>
+                                  <p>A pointer to the audio data. Use <code>maxFrameSize(assumingSize:)</code> to find the length.</p>
 
                                 </div>
                               </td>
@@ -477,18 +629,76 @@
                             <tr>
                               <td>
                                 <code>
-                                <em>rhs</em>
+                                <em>frameSize</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>Another value to compare.</p>
+                                  <p>The size of the frame in samples per channel.</p>
 
                                 </div>
                               </td>
                             </tr>
                           </tbody>
                         </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An opus encoded packet.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord18DiscordOpusEncoder12maxFrameSizeFT12assumingSizeSi_Si"></a>
+                    <a name="//apple_ref/swift/Method/maxFrameSize(assumingSize:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord18DiscordOpusEncoder12maxFrameSizeFT12assumingSizeSi_Si">maxFrameSize(assumingSize:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the maximum number of bytes that a frame can contain given a
+frame size in number of samples per channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">maxFrameSize</span><span class="p">(</span><span class="n">assumingSize</span> <span class="nv">size</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>assumingSize</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The size of the frame, in number of samples per channel.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The number of bytes in this frame.</p>
+
                       </div>
                     </section>
                   </div>

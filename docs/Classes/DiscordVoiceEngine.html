@@ -51,6 +51,9 @@
                 <a href="../Classes/DiscordLazyValue.html">DiscordLazyValue</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/DiscordOpusEncoder.html">DiscordOpusEncoder</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/DiscordShardManager.html">DiscordShardManager</a>
               </li>
               <li class="nav-group-task">
@@ -58,14 +61,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
-            <a href="../Global Variables.html">Global Variables</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="../Global Variables.html#/s:v12SwiftDiscord16defaultAudioSizeSi">defaultAudioSize</a>
               </li>
             </ul>
           </li>
@@ -113,6 +108,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/DiscordPresenceStatus.html">DiscordPresenceStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DiscordVoiceError.html">DiscordVoiceError</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/DiscordVoiceGatewayCode.html">DiscordVoiceGatewayCode</a>
@@ -740,8 +738,11 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordClientSpec.html">DiscordClientSpec</a></span><span class="p">,</span> <span class="nv">voiceServerInformation</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a></span><span class="p">,</span>
-            <span class="nv">voiceState</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a></span><span class="p">,</span> <span class="nv">encoder</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a></span><span class="p">?,</span> <span class="nv">secret</span><span class="p">:</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">]?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordClientSpec.html">DiscordClientSpec</a></span><span class="p">,</span>
+                            <span class="nv">voiceServerInformation</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a></span><span class="p">,</span>
+                            <span class="nv">voiceState</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a></span><span class="p">,</span>
+                            <span class="nv">encoder</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a></span><span class="p">?,</span>
+                            <span class="nv">secret</span><span class="p">:</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">]?)</span></code></pre>
 
                         </div>
                       </div>
@@ -938,13 +939,14 @@ sent to Discord.</p>
 
 <p>Example using youtube-dl to play music:</p>
 
-<pre class="highlight swift"><code><span class="n">youtube</span> <span class="o">=</span> <span class="kt">EncoderProcess</span><span class="p">()</span>
+<pre class="highlight swift"><code><span class="k">guard</span> <span class="k">let</span> <span class="nv">voiceEngine</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">voiceEngines</span><span class="p">[</span><span class="n">guildId</span><span class="p">]</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+<span class="n">youtube</span> <span class="o">=</span> <span class="kt">EncoderProcess</span><span class="p">()</span>
 <span class="n">youtube</span><span class="o">.</span><span class="n">launchPath</span> <span class="o">=</span> <span class="s">"/usr/local/bin/youtube-dl"</span>
 <span class="n">youtube</span><span class="o">.</span><span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="s">"-f"</span><span class="p">,</span> <span class="s">"bestaudio"</span><span class="p">,</span> <span class="s">"-q"</span><span class="p">,</span> <span class="s">"-o"</span><span class="p">,</span> <span class="s">"-"</span><span class="p">,</span> <span class="n">link</span><span class="p">]</span>
-<span class="n">youtube</span><span class="o">.</span><span class="n">standardOutput</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">voiceEngines</span><span class="p">[</span><span class="n">guildId</span><span class="p">]?</span><span class="o">.</span><span class="nf">requestFileHandleForWriting</span><span class="p">()</span>
+<span class="n">youtube</span><span class="o">.</span><span class="n">standardOutput</span> <span class="o">=</span> <span class="n">voiceEngine</span><span class="o">.</span><span class="nf">requestFileHandleForWriting</span><span class="p">()</span>
 
-<span class="n">youtube</span><span class="o">.</span><span class="n">terminationHandler</span> <span class="o">=</span> <span class="p">{[</span><span class="k">weak</span> <span class="k">self</span><span class="p">]</span> <span class="n">process</span> <span class="k">in</span>
-    <span class="k">self</span><span class="p">?</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">voiceEngines</span><span class="p">[</span><span class="n">guildId</span><span class="p">]?</span><span class="o">.</span><span class="n">encoder</span><span class="p">?</span><span class="o">.</span><span class="nf">finishEncodingAndClose</span><span class="p">()</span>
+<span class="n">youtube</span><span class="o">.</span><span class="n">terminationHandler</span> <span class="o">=</span> <span class="p">{[</span><span class="k">weak</span> <span class="n">encoder</span> <span class="o">=</span> <span class="n">voiceEngine</span><span class="o">.</span><span class="n">encoder</span><span class="o">!</span><span class="p">]</span> <span class="n">process</span> <span class="k">in</span>
+    <span class="n">encoder</span><span class="p">?</span><span class="o">.</span><span class="nf">finishEncodingAndClose</span><span class="p">()</span>
 <span class="p">}</span>
 
 <span class="n">youtube</span><span class="o">.</span><span class="nf">launch</span><span class="p">()</span>
@@ -970,9 +972,9 @@ sent to Discord.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC12SwiftDiscord18DiscordVoiceEngine17requestNewEncoderFT_T_"></a>
+                    <a name="/s:FC12SwiftDiscord18DiscordVoiceEngine17requestNewEncoderFzT_T_"></a>
                     <a name="//apple_ref/swift/Method/requestNewEncoder()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord18DiscordVoiceEngine17requestNewEncoderFT_T_">requestNewEncoder()</a>
+                    <a class="token" href="#/s:FC12SwiftDiscord18DiscordVoiceEngine17requestNewEncoderFzT_T_">requestNewEncoder()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -987,7 +989,7 @@ sent to Discord.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestNewEncoder</span><span class="p">()</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestNewEncoder</span><span class="p">()</span> <span class="k">throws</span></code></pre>
 
                         </div>
                       </div>
@@ -1034,8 +1036,7 @@ sent to Discord.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Sends OPUS encoded voice data to Discord. Because of the assumptions built into the engine, the voice data
-should have a max length of <code><a href="../Global Variables.html#/s:v12SwiftDiscord16defaultAudioSizeSi">defaultAudioSize</a></code>.</p>
+                        <p>Sends Opus encoded voice data to Discord.</p>
 
                       </div>
                       <div class="declaration">
@@ -1058,7 +1059,7 @@ should have a max length of <code><a href="../Global Variables.html#/s:v12SwiftD
                               </td>
                               <td>
                                 <div>
-                                  <p>An array of OPUS encoded voice data.</p>
+                                  <p>An Opus encoded packet.</p>
 
                                 </div>
                               </td>
@@ -1096,12 +1097,68 @@ should have a max length of <code><a href="../Global Variables.html#/s:v12SwiftD
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord18DiscordVoiceEngine13startSpeakingFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/startSpeaking()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord18DiscordVoiceEngine13startSpeakingFT_T_">startSpeaking()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Tells Discord that we are speaking.</p>
+
+<p>This should be balenced with a call to stopSpeaking()</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">startSpeaking</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord18DiscordVoiceEngine12stopSpeakingFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/stopSpeaking()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord18DiscordVoiceEngine12stopSpeakingFT_T_">stopSpeaking()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Tells Discord we&rsquo;re done speaking.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">stopSpeaking</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-01)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-05)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

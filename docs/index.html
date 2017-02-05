@@ -50,6 +50,9 @@
                 <a href="Classes/DiscordLazyValue.html">DiscordLazyValue</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/DiscordOpusEncoder.html">DiscordOpusEncoder</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/DiscordShardManager.html">DiscordShardManager</a>
               </li>
               <li class="nav-group-task">
@@ -57,14 +60,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
-            <a href="Global Variables.html">Global Variables</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="Global Variables.html#/s:v12SwiftDiscord16defaultAudioSizeSi">defaultAudioSize</a>
               </li>
             </ul>
           </li>
@@ -112,6 +107,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Enums/DiscordPresenceStatus.html">DiscordPresenceStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/DiscordVoiceError.html">DiscordVoiceError</a>
               </li>
               <li class="nav-group-task">
                 <a href="Enums/DiscordVoiceGatewayCode.html">DiscordVoiceGatewayCode</a>
@@ -371,14 +369,12 @@
 
 <ul>
 <li>Sending and receiving voice.</li>
-<li>macOS, iOS*, and Linux** support.</li>
-<li>Bot and User account support (OAuth coming soon).</li>
+<li>macOS, iOS, and Linux** support.</li>
+<li>Bot and User account support.</li>
 <li>REST API separate from client. You can use the REST API separately to build your own client if you wish.</li>
 <li>Configurable sharding.</li>
 </ul></li>
 </ul>
-
-<p>* - iOS does not currently support voice.</p>
 
 <p>** - Linux stability is currently limited to the stability of open source Foundation, but in thoery should support everything.</p>
 
@@ -386,31 +382,30 @@
 <li><p>Requirements:</p>
 
 <ul>
-<li>ffmpeg installed via Homebrew (Make sure it is installed with opus support)</li>
-<li>libsodium also installed via Homebrew.</li>
+<li>libopus</li>
+<li>libsodium</li>
 <li>Swift 3</li>
 </ul></li>
-<li><p>Installing:</p>
+<li><p>Recommendend:</p>
+
+<ul>
+<li>ffmpeg (Without FFmpeg you must send raw audio)</li>
+</ul></li>
+<li><p>Installing and Building (Linux and macOS):</p>
 
 <ul>
 <li>Create your Swift Package Manager project</li>
-<li>Add <code>.Package(url: &quot;https://github.com/nuclearace/SwiftDiscord&quot;, majorVersion: 0, minor: 5)</code> to your dependencies in Package.swift</li>
+<li>Add <code>.Package(url: &quot;https://github.com/nuclearace/SwiftDiscord&quot;, majorVersion: 2)</code> to your dependencies in Package.swift</li>
 <li>Add <code>import SwiftDiscord</code> to files you wish to use the module in.</li>
-<li>Run <code>swift build -Xlinker -L/usr/local/lib/</code>. The Xlinker option is needed to tell the package manager where to find the libsodium library that was installed through Homebrew.</li>
+<li>Run <code>swift build -Xlinker -L/usr/local/lib -Xlinker -lopus -Xcc -I/usr/local/include</code>. The Xlinker options are needed to tell the package manager where to find the libsodium and opus libraries that were installed through Homebrew. The Xcc option tells clang where to find the headers for opus.</li>
 </ul></li>
 </ul>
 
 <p>Xcode:</p>
 
-<p>If you wish to use Xcode with your Swift Package Manager project, you can do <code>swift package generate-xcodeproj</code>. However after doing that, you&rsquo;ll have to make a change to SwiftDiscord&rsquo;s build settings. Just like when compiling from the command line, we have to tell Xcode where to find libsodium. This can be done by adding <code>/usr/local/lib</code> to the library search paths.</p>
+<p>If you wish to use Xcode with your Swift Package Manager project, you can do <code>swift package generate-xcodeproj</code>. However after doing that, you&rsquo;ll have to make a change to SwiftDiscord&rsquo;s build settings. Just like when compiling from the command line, we have to tell Xcode where to find libsodium and libopus. This can be done by adding <code>/usr/local/lib</code> to the library search paths and <code>/usr/local/include</code> to the header search paths. This should be done for the SwiftDiscord and DiscordOpus targets.</p>
 
 <p><img src="https://i.imgur.com/JR97eTO.png" alt=""></p>
-
-<p>You&rsquo;ll then want to remove all target dependencies and linked libraries except for Starscream and Socks**. (The others are used on Linux, but not macOS or iOS).</p>
-
-<p><img src="https://i.imgur.com/vhhnfJp.png" alt=""></p>
-
-<p>** - Socks should be removed on iOS as voice is not supported on it.</p>
 <a href='#usage' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='usage'>Usage</h1>
 
 <p>Checkout the <a href="https://nuclearace.github.io/SwiftDiscord/getting-started.html">getting started</a> page for a quickstart guide.</p>
@@ -428,7 +423,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-01)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-05)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
