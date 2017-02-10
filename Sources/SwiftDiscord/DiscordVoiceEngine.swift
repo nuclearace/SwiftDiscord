@@ -190,7 +190,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         // It's important that we first set it to nil, otherwise the new encoder will exist at the same time as the old
         // one. Which causes weirdness
         encoder = nil
-        encoder = try client?.delegate?.client(client as! DiscordClient, needsVoiceEncoderForEngine: self)
+        encoder = try client?.voiceEngineNeedsEncoder(self)
 
         readData()
 
