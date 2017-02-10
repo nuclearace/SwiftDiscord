@@ -19,7 +19,6 @@
 /// The voice data is OPUS encoded.
 public typealias DiscordVoiceData = (rtpHeader: [UInt8], voiceData: [UInt8])
 
-
 import Foundation
 import Dispatch
 #if !os(Linux)
@@ -109,17 +108,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     }
 
     private var closed = false
-    // This property can be accessed from multiple queues, therefore use encoderSemaphore to manage access
-    // Hopefully when Swift has property behaviors this can be made prettier
-    private var makeEncoder = true {
-        willSet {
-            encoderSemaphore.wait()
-        }
-
-        didSet {
-            encoderSemaphore.signal()
-        }
-    }
 
     #if !os(Linux)
     private var sequenceNum = UInt16(arc4random() >> 16)
@@ -196,8 +184,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     }
 
     private func createEncoder() throws {
-        // Any reads that get EOF because of the encoder dying should not trigger a new encoder
-        makeEncoder = false
+        // Guard against trying to create multiple encoders at once
+        encoderSemaphore.wait()
         // This will trigger a block while the old encoder is released and cleans itself up
         // It's important that we first set it to nil, otherwise the new encoder will exist at the same time as the old
         // one. Which causes weirdness
@@ -208,8 +196,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
         client?.voiceEngineReady(self)
 
-        // Reenable automatic encoder creation
-        makeEncoder = true
+        encoderSemaphore.signal()
     }
 
     private func createRTPHeader() -> [UInt8] {
@@ -253,9 +240,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
         guard success != -1 else { throw DiscordVoiceEngineError.encryptionError }
 
-        let encryptedBytes = Array(UnsafeBufferPointer(start: encrypted, count: packetSize))
-
-        return rtpHeader + encryptedBytes
+        return rtpHeader + Array(UnsafeBufferPointer(start: encrypted, count: packetSize))
     }
 
     private func decryptVoiceData(_ data: Data) throws -> DiscordVoiceData {
@@ -267,7 +252,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         let unencrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
         var nonce = rtpHeader + padding
 
-        let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &self.secret!)
+        let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &secret!)
 
         guard success != -1 else { throw DiscordVoiceEngineError.decryptionError }
 
@@ -333,16 +318,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     }
 
     private func handleDoneReading() {
-        // Should we make a new encoder?
-        // If no, that means a new encoder has already been requested, creating a new one could lead to a race where we
-        // get stuck in a loop of making new encoders
-        encoderSemaphore.wait()
-        guard makeEncoder else {
-            encoderSemaphore.signal()
-            return
-        }
-
-        encoderSemaphore.signal()
         do {
             try createEncoder()
         } catch let err {
@@ -442,6 +417,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
                 }
 
                 self?.client?.handleVoiceData(voiceData)
+            } catch DiscordVoiceEngineError.decryptionError {
+                self?.error(message: "Error decrypting voice packet")
             } catch let err {
                 self?.error(message: "Error reading voice data from udp socket \(err)")
                 self?.disconnect()
@@ -554,6 +531,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
             do {
                 try udpSocket.send(bytes: self.createVoicePacket(data))
+            } catch DiscordVoiceEngineError.encryptionError {
+                self.error(message: "Error encyrpting packet")
             } catch let err {
                 self.error(message: "Failed sending voice packet \(err)")
                 self.disconnect()
