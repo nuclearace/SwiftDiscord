@@ -390,6 +390,16 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     }
 
     /**
+        Called when the voice engine needs an encoder.
+
+        - parameter engine: The engine that needs an encoder
+        - returns: An encoder.
+    */
+    open func voiceEngineNeedsEncoder(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder? {
+        return try delegate?.client(self, needsVoiceEncoderForEngine: engine)
+    }
+
+    /**
         Called when the voice engine is ready.
 
         - parameter engine: The engine that's ready.
