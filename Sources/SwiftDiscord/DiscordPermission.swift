@@ -84,7 +84,6 @@ public enum DiscordPermission : Int {
     /// All voice permissions set to true
     case voice = 0x3F00000
 
-
     /**
         Helper operator for permission math.
 
