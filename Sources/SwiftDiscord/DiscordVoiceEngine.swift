@@ -457,7 +457,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     }
 
     /**
-        Stops encoding and requests a new encoder. A `voiceEngine.ready` event will be fired when the encoder is ready.
+        Stops encoding and requests a new encoder. The `isReadyToSendVoiceWithEngine` delegate method is called when
+        the new encoder is ready.
     */
     public func requestNewEncoder() throws {
         try createEncoder()
