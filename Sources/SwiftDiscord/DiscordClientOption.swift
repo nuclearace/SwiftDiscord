@@ -66,10 +66,10 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
 
         return description
     }
-}
 
-/// Compares two DiscordClientOption's descriptions.
-/// - returns: true if they are the same
-public func ==(lhs: DiscordClientOption, rhs: DiscordClientOption) -> Bool {
-    return lhs.description == rhs.description
+    /// Compares two DiscordClientOption's descriptions.
+    /// - returns: true if they are the same
+    public static func ==(lhs: DiscordClientOption, rhs: DiscordClientOption) -> Bool {
+        return lhs.description == rhs.description
+    }
 }
