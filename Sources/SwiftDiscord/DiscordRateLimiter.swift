@@ -62,11 +62,11 @@ final class DiscordRateLimiter {
                 args: request, rateLimit.remaining)
 
             sharedSession.dataTask(with: request,
-                completionHandler: handleResponse(endpointKey, callback)).resume()
+                completionHandler: createHandleReponse(for: request, endpointKey: endpointKey, callback: callback)).resume()
         }
     }
 
-    static func handleResponse(_ endpointKey: DiscordRateLimitKey, _ callback:
+    static func createHandleReponse(for request: URLRequest, endpointKey: DiscordRateLimitKey, callback:
             @escaping (Data?, HTTPURLResponse?, Error?) -> Void) -> (Data?, URLResponse?, Error?) -> Void {
         return {data, response, error in
             limitQueue.async {
@@ -89,8 +89,8 @@ final class DiscordRateLimiter {
 
                 guard response.statusCode != 429 else {
                     // Hit rate limit
+                    rateLimit.queue.append(RateLimitedRequest(request: request, callback: callback))
                     rateLimit.scheduleReset(on: limitQueue)
-                    callback(data, response, error)
 
                     return
                 }
