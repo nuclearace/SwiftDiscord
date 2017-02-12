@@ -103,6 +103,9 @@ public enum DiscordDispatchEvent : String {
     /// Channel Delete (Handled)
     case channelDelete = "CHANNEL_DELETE"
 
+    /// Channel Pins Update (Not Handled)
+    case channelPinsUpdate = "CHANNEL_PINS_UPDATE"
+
     /// Channel Update (Handled)
     case channelUpdate = "CHANNEL_UPDATE"
 
