@@ -151,11 +151,11 @@ open class DiscordVoiceEncoder {
     }
 
     /**
-        An async read from the encoder. When there is available data, then callback is called.
+        A read from the encoder. If there is no data available, this method blocks.
 
         - returns: A tuple that contains the results of the read.
                    First parameter is a Bool indicating whether the encoder is done.
-                   Second is the OPUS encoded data in an array.
+                   Second is an Opus encoded packet.
     */
     open func read() -> (Bool, [UInt8]) {
         guard !closed else { return (true, []) }
