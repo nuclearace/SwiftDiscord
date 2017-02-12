@@ -398,7 +398,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             guard !done else {
                 DefaultDiscordLogger.Logger.debug("No data, reader probably closed", type: this.logType)
 
-                this.sendSpeaking(false)
+                this.stopSpeaking()
                 this.handleDoneReading()
 
                 return
