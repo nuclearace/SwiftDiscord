@@ -309,7 +309,9 @@ public extension DiscordClientDelegate {
     /// Default
     func client(_ client: DiscordClient, needsVoiceEncoderForEngine engine: DiscordVoiceEngine)
             throws -> DiscordVoiceEncoder {
-        return try DiscordVoiceEncoder()
+        return try DiscordVoiceEncoder(opusEncoder: DiscordOpusEncoder(bitrate: 128_000,
+                                                                       sampleRate: 48_000,
+                                                                       channels: 2))
     }
     #endif
 }

@@ -319,7 +319,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     open func leaveVoiceChannel(onGuild guildId: String) {
         guard voiceEngines[guildId] != nil else { return }
 
-        // Make sure the engine is cleaned up before setting it to nil
+        // Make sure everything is cleaned out
+        voiceStates[guildId] = nil
+        voiceServerInformations[guildId] = nil
         voiceEngines[guildId]?.disconnect()
         voiceEngines[guildId] = nil
 

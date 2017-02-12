@@ -70,7 +70,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     }
 
     /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data
-    public private(set) var encoder: DiscordVoiceEncoder?
+    public private(set) var encoder: DiscordVoiceEncoder!
 
     /// The modes that are available for communication. Only xsalsa20_poly1305 is supported currently
     public private(set) var modes = [String]()
@@ -99,8 +99,10 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
     private let encoderSemaphore = DispatchSemaphore(value: 1)
     private let padding = [UInt8](repeating: 0x00, count: 12)
+    private let writeQueue = DispatchQueue(label: "discordVoiceEngine.writeQueue")
     private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
     private let udpQueueRead = DispatchQueue(label: "discordVoiceEngine.udpQueueRead")
+    private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
 
     private var audioCount = -1
     private var currentUnixTime: Int {
@@ -186,10 +188,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     private func createEncoder() throws {
         // Guard against trying to create multiple encoders at once
         encoderSemaphore.wait()
-        // This will trigger a block while the old encoder is released and cleans itself up
-        // It's important that we first set it to nil, otherwise the new encoder will exist at the same time as the old
-        // one. Which causes weirdness
-        encoder = nil
+
         encoder = try client?.voiceEngineNeedsEncoder(self)
 
         readData()
@@ -214,6 +213,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     }
 
     private func closeOutEngine() {
+        guard !closed else { return }
+
         super.disconnect()
 
         do {
@@ -224,7 +225,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
         closed = true
         connected = false
-        encoder = nil
+        encoder.finishEncodingAndClose()
     }
 
     private func createVoicePacket(_ data: [UInt8]) throws -> [UInt8] {
@@ -318,12 +319,13 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     }
 
     private func handleDoneReading() {
-        do {
-            try createEncoder()
-        } catch let err {
-            error(message: "Failed creating new encoder \(err)")
-            disconnect()
-        }
+        encoderSemaphore.wait()
+        // Add a new pipe on the encoder and put a read on it.
+        encoder.setupPipe()
+        readData()
+
+        encoderSemaphore.signal()
+        client?.voiceEngineReady(self)
     }
 
     override func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
@@ -388,8 +390,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     }
 
     private func readData() {
-        encoder?.read {[weak self] done, data in
-            guard let this = self, this.connected else { return } // engine died
+        readQueue.async {[weak self, weak encoder] in
+            // Perform a blocking read; in the meantime the whole shabang could be deinint'd, so don't capture self
+            // strongly until after we're sure we've read something
+            guard let (done, data) = encoder?.read(), let this = self, !this.closed else { return }
+
             guard !done else {
                 DefaultDiscordLogger.Logger.debug("No data, reader probably closed", type: this.logType)
 
@@ -498,6 +503,17 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     }
 
     /**
+        Sends raw PCM data to the encoder async.
+
+        - parameter data: The data to write to the encoder.
+    */
+    public func send(_ data: Data, doneHandler: (() -> Void)? = nil) {
+        writeQueue.async {[weak self] in
+            self?.encoder.write(data, doneHandler: doneHandler)
+        }
+    }
+
+    /**
         Sends a voice heartbeat to Discord. You shouldn't need to call this directly.
     */
     public override func sendHeartbeat() {
@@ -547,6 +563,21 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
         audioSleep()
     }
+
+    #if !os(iOS)
+    /**
+        Takes a process that outputs random audio data, and sends it to a hidden FFmpeg process that turns the data
+        into raw PCM.
+
+        - parameter middleware: The process that will output audio data.
+        - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
+    */
+    public func setupMiddleware(_ middleware: EncoderProcess, terminationHandler: @escaping () -> Void) {
+        encoder.middleware = DiscordEncoderMiddleware(encoder: encoder,
+                                                      middleware: middleware,
+                                                      terminationHandler: terminationHandler)
+    }
+    #endif
 
     /**
         Starts the handshake with the Discord voice server. You shouldn't need to call this directly.

@@ -22,7 +22,7 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
     // MARK: Properties
 
     /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data.
-    var encoder: DiscordVoiceEncoder? { get }
+    var encoder: DiscordVoiceEncoder! { get }
 
     /// The secret key used for encryption.
     var secret: [UInt8]! { get }
@@ -73,6 +73,17 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
     */
     func sendVoiceData(_ data: [UInt8])
 
+    #if !os(iOS)
+    /**
+        Takes a process that outputs random audio data, and sends it to a hidden FFmpeg process that turns the data
+        into raw PCM.
+
+        - parameter middleware: The process that will output audio data.
+        - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
+    */
+    func setupMiddleware(_ middleware: EncoderProcess, terminationHandler: @escaping () -> Void)
+    #endif
+
     /**
         Tells Discord that we are starting to speak.
     */
@@ -82,11 +93,4 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
         Tells Discord we're done speaking.
     */
     func stopSpeaking()
-}
-
-public extension DiscordVoiceEngineSpec {
-    /// Default implementation.
-    public func send(_ data: Data, doneHandler: (() -> Void)? = nil) {
-        encoder?.write(data, doneHandler: doneHandler)
-    }
 }
