@@ -33,8 +33,13 @@ public enum DiscordVoiceError : Error {
 public class DiscordEncoderMiddleware {
     // MARK: Properties
 
+    /// The FFmpeg process.
     public let ffmpeg: EncoderProcess
+
+    /// The middleware process.
     public let middleware: EncoderProcess
+
+    /// The pipe used to connect FFmpeg to the middleware.
     public let pipe: Pipe
 
     // MARK: Initializers
@@ -42,7 +47,7 @@ public class DiscordEncoderMiddleware {
     /**
         An intializer that sets up a middleware ffmpeg process that encodes some audio data.
     */
-    public init(encoder: DiscordVoiceEncoder, middleware: EncoderProcess, terminationHandler: @escaping () -> Void) {
+    public init(encoder: DiscordVoiceEncoder, middleware: EncoderProcess, terminationHandler: (() -> Void)?) {
         self.middleware = middleware
         ffmpeg = EncoderProcess()
         pipe = Pipe()
@@ -56,13 +61,18 @@ public class DiscordEncoderMiddleware {
             "-ar", "48000", "-ac", "2", "-b:a", "128000", "-acodec", "pcm_s16le", "pipe:1"]
 
         middleware.terminationHandler = {_ in
-            terminationHandler()
+            terminationHandler?()
         }
 
         ffmpeg.terminationHandler = {[weak encoder] _ in
             encoder?.finishEncodingAndClose()
         }
+    }
 
+    /**
+        Starts the middleware.
+    */
+    public func start() {
         ffmpeg.launch()
         middleware.launch()
     }
@@ -143,9 +153,9 @@ open class DiscordVoiceEncoder {
     /**
         An async read from the encoder. When there is available data, then callback is called.
 
-        - parameter callback: A callback that will be called when there is available data, or when the encoder is done.
-                        First parameter is a Bool indicating whether the encoder is done.
-                        Second is the OPUS encoded data in an array.
+        - returns: A tuple that contains the results of the read.
+                   First parameter is a Bool indicating whether the encoder is done.
+                   Second is the OPUS encoded data in an array.
     */
     open func read() -> (Bool, [UInt8]) {
         guard !closed else { return (true, []) }

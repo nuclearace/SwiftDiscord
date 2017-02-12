@@ -30,30 +30,6 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
     // MARK: Methods
 
     /**
-        Used to request a new `FileHandle` that can be used to write directly to the encoder. Which will in turn be
-        sent to Discord.
-
-        Example using youtube-dl to play music:
-
-        ```swift
-        guard let voiceEngine = client.voiceEngines[guildId] else { return }
-        youtube = EncoderProcess()
-        youtube.launchPath = "/usr/local/bin/youtube-dl"
-        youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
-        youtube.standardOutput = voiceEngine.requestFileHandleForWriting()
-
-        youtube.terminationHandler = {[weak encoder = voiceEngine.encoder!] process in
-            encoder?.finishEncodingAndClose()
-        }
-
-        youtube.launch()
-        ```
-
-        - returns: An optional containing a FileHandle that can be written to, or nil if there is no encoder.
-    */
-    func requestFileHandleForWriting() -> FileHandle?
-
-    /**
         Stops encoding and requests a new encoder. A `voiceEngine.ready` event will be fired when the encoder is ready.
     */
     func requestNewEncoder() throws
@@ -78,10 +54,22 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
         Takes a process that outputs random audio data, and sends it to a hidden FFmpeg process that turns the data
         into raw PCM.
 
+        Example setting up youtube-dl to play music.
+
+        ```swift
+        youtube = EncoderProcess()
+        youtube.launchPath = "/usr/local/bin/youtube-dl"
+        youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
+
+        voiceEngine.setupMiddleware(youtube) {
+            print("youtube died")
+        }
+        ```
+
         - parameter middleware: The process that will output audio data.
         - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
     */
-    func setupMiddleware(_ middleware: EncoderProcess, terminationHandler: @escaping () -> Void)
+    func setupMiddleware(_ middleware: EncoderProcess, terminationHandler: (() -> Void)?)
     #endif
 
     /**

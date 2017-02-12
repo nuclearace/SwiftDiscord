@@ -436,32 +436,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     }
 
     /**
-        Used to request a new `FileHandle` that can be used to write directly to the encoder. Which will in turn be
-        sent to Discord.
-
-        Example using youtube-dl to play music:
-
-        ```swift
-        guard let voiceEngine = client.voiceEngines[guildId] else { return }
-        youtube = EncoderProcess()
-        youtube.launchPath = "/usr/local/bin/youtube-dl"
-        youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
-        youtube.standardOutput = voiceEngine.requestFileHandleForWriting()
-
-        youtube.terminationHandler = {[weak encoder = voiceEngine.encoder!] process in
-            encoder?.finishEncodingAndClose()
-        }
-
-        youtube.launch()
-        ```
-
-        - returns: An optional containing a FileHandle that can be written to, or nil if there is no encoder.
-    */
-    public func requestFileHandleForWriting() -> FileHandle? {
-        return encoder?.writeToHandler
-    }
-
-    /**
         Stops encoding and requests a new encoder. The `isReadyToSendVoiceWithEngine` delegate method is called when
         the new encoder is ready.
     */
@@ -569,13 +543,26 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         Takes a process that outputs random audio data, and sends it to a hidden FFmpeg process that turns the data
         into raw PCM.
 
+        Example setting up youtube-dl to play music.
+
+        ```swift
+        youtube = EncoderProcess()
+        youtube.launchPath = "/usr/local/bin/youtube-dl"
+        youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
+
+        voiceEngine.setupMiddleware(youtube) {
+            print("youtube died")
+        }
+        ```
+
         - parameter middleware: The process that will output audio data.
         - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
     */
-    public func setupMiddleware(_ middleware: EncoderProcess, terminationHandler: @escaping () -> Void) {
+    public func setupMiddleware(_ middleware: EncoderProcess, terminationHandler: (() -> Void)?) {
         encoder.middleware = DiscordEncoderMiddleware(encoder: encoder,
                                                       middleware: middleware,
                                                       terminationHandler: terminationHandler)
+        encoder.middleware?.start()
     }
     #endif
 
