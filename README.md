@@ -28,7 +28,7 @@ A Discord API client for Swift.
 
 Xcode:
 
-If you wish to use Xcode with your Swift Package Manager project, you can do `swift package generate-xcodeproj`. However after doing that, you'll have to make a change to SwiftDiscord's build settings. Just like when compiling from the command line, we have to tell Xcode where to find libsodium and libopus. This can be done by adding `/usr/local/lib` to the library search paths and `/usr/local/include` to the header search paths. This should be done for the SwiftDiscord and DiscordOpus targets.
+If you wish to use Xcode with your Swift Package Manager project, you can do `swift package generate-xcodeproj`. However after doing that, you'll have to make a change to SwiftDiscord's build settings. Just like when compiling from the command line, we have to tell Xcode where to find libsodium and libopus. This can be done by adding `/usr/local/lib` to the library search paths and `/usr/local/include` to the header search paths. This should be done for the SwiftDiscord and DiscordOpus targets. The DiscordOpus target also needs the `-lopus` option in "Other Linker Flags".
 
 ![](https://i.imgur.com/JR97eTO.png)
 

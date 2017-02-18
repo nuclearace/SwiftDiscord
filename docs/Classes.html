@@ -41,6 +41,9 @@
                 <a href="Classes/DiscordClient.html">DiscordClient</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/DiscordEncoderMiddleware.html">DiscordEncoderMiddleware</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/DiscordEngine.html">DiscordEngine</a>
               </li>
               <li class="nav-group-task">
@@ -121,38 +124,6 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Extensions/EncoderProcess.html">EncoderProcess</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
-            <a href="Functions.html">Functions</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:F12SwiftDiscordoi1aFTOS_17DiscordPermissionS0__Si">&amp;(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:F12SwiftDiscordoi1aFTSiOS_17DiscordPermission_Si">&amp;(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:F12SwiftDiscordoi2aeFTRSiOS_17DiscordPermission_T_">&amp;=(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:F12SwiftDiscordoi2eeFTOS_19DiscordClientOptionS0__Sb">==(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:F12SwiftDiscordoi2eeFTSiOS_17DiscordPermission_Sb">==(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:F12SwiftDiscordoi1oFTOS_17DiscordPermissionS0__Si">|(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:F12SwiftDiscordoi1oFTSiOS_17DiscordPermission_Si">|(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:F12SwiftDiscordoi2oeFTRSiOS_17DiscordPermission_T_">|=(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:F12SwiftDiscordop1tFOS_17DiscordPermissionSi">~(_:)</a>
               </li>
             </ul>
           </li>
@@ -546,6 +517,35 @@ decides when a client has fully disconnected. Disconnected being when all shards
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:C12SwiftDiscord24DiscordEncoderMiddleware"></a>
+                    <a name="//apple_ref/swift/Class/DiscordEncoderMiddleware" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C12SwiftDiscord24DiscordEncoderMiddleware">DiscordEncoderMiddleware</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A wrapper class for a process that spits out audio data that can be fed into an FFmpeg process that is then sent
+to the engine.</p>
+
+                        <a href="Classes/DiscordEncoderMiddleware.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">DiscordEncoderMiddleware</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:C12SwiftDiscord19DiscordVoiceEncoder"></a>
                     <a name="//apple_ref/swift/Class/DiscordVoiceEncoder" class="dashAnchor"></a>
                     <a class="token" href="#/s:C12SwiftDiscord19DiscordVoiceEncoder">DiscordVoiceEncoder</a>
@@ -556,9 +556,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>DiscordVoiceEncoder is responsible for turning audio data into Opus packets. Depending on the initializer,
-it can use FFmpeg as a middleware to turn audio of different formats into raw PCM that the OpusEncoder in turn
-turns into Opus packets.</p>
+                        <p>DiscordVoiceEncoder is responsible for turning audio data into Opus packets.</p>
 
                         <a href="Classes/DiscordVoiceEncoder.html" class="slightly-smaller">See more</a>
                       </div>
@@ -643,7 +641,7 @@ packets that are sent and received.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-05)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-18)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

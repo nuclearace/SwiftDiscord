@@ -42,6 +42,9 @@
                 <a href="../Classes/DiscordClient.html">DiscordClient</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/DiscordEncoderMiddleware.html">DiscordEncoderMiddleware</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/DiscordEngine.html">DiscordEngine</a>
               </li>
               <li class="nav-group-task">
@@ -122,38 +125,6 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Extensions/EncoderProcess.html">EncoderProcess</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
-            <a href="../Functions.html">Functions</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:F12SwiftDiscordoi1aFTOS_17DiscordPermissionS0__Si">&amp;(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:F12SwiftDiscordoi1aFTSiOS_17DiscordPermission_Si">&amp;(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:F12SwiftDiscordoi2aeFTRSiOS_17DiscordPermission_T_">&amp;=(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:F12SwiftDiscordoi2eeFTOS_19DiscordClientOptionS0__Sb">==(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:F12SwiftDiscordoi2eeFTSiOS_17DiscordPermission_Sb">==(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:F12SwiftDiscordoi1oFTOS_17DiscordPermissionS0__Si">|(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:F12SwiftDiscordoi1oFTSiOS_17DiscordPermission_Si">|(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:F12SwiftDiscordoi2oeFTRSiOS_17DiscordPermission_T_">|=(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:F12SwiftDiscordop1tFOS_17DiscordPermissionSi">~(_:)</a>
               </li>
             </ul>
           </li>
@@ -494,9 +465,9 @@ packets that are sent and received.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord18DiscordVoiceEngine7encoderGSqCS_19DiscordVoiceEncoder_"></a>
+                    <a name="/s:vC12SwiftDiscord18DiscordVoiceEngine7encoderGSQCS_19DiscordVoiceEncoder_"></a>
                     <a name="//apple_ref/swift/Property/encoder" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord18DiscordVoiceEngine7encoderGSqCS_19DiscordVoiceEncoder_">encoder</a>
+                    <a class="token" href="#/s:vC12SwiftDiscord18DiscordVoiceEngine7encoderGSQCS_19DiscordVoiceEncoder_">encoder</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -511,7 +482,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">encoder</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">encoder</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a></span><span class="o">!</span></code></pre>
 
                         </div>
                       </div>
@@ -924,54 +895,6 @@ You shouldn&rsquo;t call this directly.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC12SwiftDiscord18DiscordVoiceEngine27requestFileHandleForWritingFT_GSqCSo10FileHandle_"></a>
-                    <a name="//apple_ref/swift/Method/requestFileHandleForWriting()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord18DiscordVoiceEngine27requestFileHandleForWritingFT_GSqCSo10FileHandle_">requestFileHandleForWriting()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Used to request a new <code>FileHandle</code> that can be used to write directly to the encoder. Which will in turn be
-sent to Discord.</p>
-
-<p>Example using youtube-dl to play music:</p>
-
-<pre class="highlight swift"><code><span class="k">guard</span> <span class="k">let</span> <span class="nv">voiceEngine</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">voiceEngines</span><span class="p">[</span><span class="n">guildId</span><span class="p">]</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
-<span class="n">youtube</span> <span class="o">=</span> <span class="kt">EncoderProcess</span><span class="p">()</span>
-<span class="n">youtube</span><span class="o">.</span><span class="n">launchPath</span> <span class="o">=</span> <span class="s">"/usr/local/bin/youtube-dl"</span>
-<span class="n">youtube</span><span class="o">.</span><span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="s">"-f"</span><span class="p">,</span> <span class="s">"bestaudio"</span><span class="p">,</span> <span class="s">"-q"</span><span class="p">,</span> <span class="s">"-o"</span><span class="p">,</span> <span class="s">"-"</span><span class="p">,</span> <span class="n">link</span><span class="p">]</span>
-<span class="n">youtube</span><span class="o">.</span><span class="n">standardOutput</span> <span class="o">=</span> <span class="n">voiceEngine</span><span class="o">.</span><span class="nf">requestFileHandleForWriting</span><span class="p">()</span>
-
-<span class="n">youtube</span><span class="o">.</span><span class="n">terminationHandler</span> <span class="o">=</span> <span class="p">{[</span><span class="k">weak</span> <span class="n">encoder</span> <span class="o">=</span> <span class="n">voiceEngine</span><span class="o">.</span><span class="n">encoder</span><span class="o">!</span><span class="p">]</span> <span class="n">process</span> <span class="k">in</span>
-    <span class="n">encoder</span><span class="p">?</span><span class="o">.</span><span class="nf">finishEncodingAndClose</span><span class="p">()</span>
-<span class="p">}</span>
-
-<span class="n">youtube</span><span class="o">.</span><span class="nf">launch</span><span class="p">()</span>
-</code></pre>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestFileHandleForWriting</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">FileHandle</span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>An optional containing a FileHandle that can be written to, or nil if there is no encoder.</p>
-
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:FC12SwiftDiscord18DiscordVoiceEngine17requestNewEncoderFzT_T_"></a>
                     <a name="//apple_ref/swift/Method/requestNewEncoder()" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC12SwiftDiscord18DiscordVoiceEngine17requestNewEncoderFzT_T_">requestNewEncoder()</a>
@@ -982,7 +905,8 @@ sent to Discord.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Stops encoding and requests a new encoder. A <code>voiceEngine.ready</code> event will be fired when the encoder is ready.</p>
+                        <p>Stops encoding and requests a new encoder. The <code>isReadyToSendVoiceWithEngine</code> delegate method is called when
+the new encoder is ready.</p>
 
                       </div>
                       <div class="declaration">
@@ -992,6 +916,53 @@ sent to Discord.</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestNewEncoder</span><span class="p">()</span> <span class="k">throws</span></code></pre>
 
                         </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord18DiscordVoiceEngine4sendFTV10Foundation4Data11doneHandlerGSqFT_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/send(_:doneHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord18DiscordVoiceEngine4sendFTV10Foundation4Data11doneHandlerGSqFT_T___T_">send(_:doneHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sends raw PCM data to the encoder async.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">send</span><span class="p">(</span><span class="n">_</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">,</span> <span class="nv">doneHandler</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data to write to the encoder.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1060,6 +1031,78 @@ sent to Discord.</p>
                               <td>
                                 <div>
                                   <p>An Opus encoded packet.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord18DiscordVoiceEngine15setupMiddlewareFTCSo7Process18terminationHandlerGSqFT_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/setupMiddleware(_:terminationHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord18DiscordVoiceEngine15setupMiddlewareFTCSo7Process18terminationHandlerGSqFT_T___T_">setupMiddleware(_:terminationHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Takes a process that outputs random audio data, and sends it to a hidden FFmpeg process that turns the data
+into raw PCM.</p>
+
+<p>Example setting up youtube-dl to play music.</p>
+
+<pre class="highlight swift"><code><span class="n">youtube</span> <span class="o">=</span> <span class="kt">EncoderProcess</span><span class="p">()</span>
+<span class="n">youtube</span><span class="o">.</span><span class="n">launchPath</span> <span class="o">=</span> <span class="s">"/usr/local/bin/youtube-dl"</span>
+<span class="n">youtube</span><span class="o">.</span><span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="s">"-f"</span><span class="p">,</span> <span class="s">"bestaudio"</span><span class="p">,</span> <span class="s">"-q"</span><span class="p">,</span> <span class="s">"-o"</span><span class="p">,</span> <span class="s">"-"</span><span class="p">,</span> <span class="n">link</span><span class="p">]</span>
+
+<span class="n">voiceEngine</span><span class="o">.</span><span class="nf">setupMiddleware</span><span class="p">(</span><span class="n">youtube</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"youtube died"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">setupMiddleware</span><span class="p">(</span><span class="n">_</span> <span class="nv">middleware</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord14EncoderProcess">EncoderProcess</a></span><span class="p">,</span> <span class="nv">terminationHandler</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>middleware</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The process that will output audio data.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>terminationHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Called when the middleware is done. Does not mean that all encoding is done.</p>
 
                                 </div>
                               </td>
@@ -1158,7 +1201,7 @@ sent to Discord.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-05)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-18)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

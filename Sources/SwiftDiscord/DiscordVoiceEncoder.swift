@@ -30,6 +30,11 @@ public enum DiscordVoiceError : Error {
 }
 
 #if !os(iOS)
+/**
+    A wrapper class for a process that spits out audio data that can be fed into an FFmpeg process that is then sent
+    to the engine.
+
+*/
 public class DiscordEncoderMiddleware {
     // MARK: Properties
 
