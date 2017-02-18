@@ -30,7 +30,7 @@ import Socks
 import Sodium
 
 enum DiscordVoiceEngineError : Error {
-    case decryptionError
+    case decryptionError([UInt8])
     case encryptionError
     case ipExtraction
 }
@@ -261,7 +261,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
         let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &secret!)
 
-        guard success != -1 else { throw DiscordVoiceEngineError.decryptionError }
+        guard success != -1 else { throw DiscordVoiceEngineError.decryptionError(rtpHeader) }
 
         return DiscordVoiceData(rtpHeader: rtpHeader,
             voiceData: Array(UnsafeBufferPointer(start: unencrypted, count: audioSize)))
@@ -428,8 +428,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
                 }
 
                 self?.client?.handleVoiceData(voiceData)
-            } catch DiscordVoiceEngineError.decryptionError {
+            } catch let DiscordVoiceEngineError.decryptionError(rtpHeader) {
                 self?.error(message: "Error decrypting voice packet")
+                self?.client?.handleVoiceData((rtpHeader, []))
             } catch let err {
                 self?.error(message: "Error reading voice data from udp socket \(err)")
                 self?.disconnect()
