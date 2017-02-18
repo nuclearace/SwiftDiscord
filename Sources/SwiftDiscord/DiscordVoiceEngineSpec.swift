@@ -22,36 +22,12 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
     // MARK: Properties
 
     /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data.
-    var encoder: DiscordVoiceEncoder? { get }
+    var encoder: DiscordVoiceEncoder! { get }
 
     /// The secret key used for encryption.
     var secret: [UInt8]! { get }
 
     // MARK: Methods
-
-    /**
-        Used to request a new `FileHandle` that can be used to write directly to the encoder. Which will in turn be
-        sent to Discord.
-
-        Example using youtube-dl to play music:
-
-        ```swift
-        guard let voiceEngine = client.voiceEngines[guildId] else { return }
-        youtube = EncoderProcess()
-        youtube.launchPath = "/usr/local/bin/youtube-dl"
-        youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
-        youtube.standardOutput = voiceEngine.requestFileHandleForWriting()
-
-        youtube.terminationHandler = {[weak encoder = voiceEngine.encoder!] process in
-            encoder?.finishEncodingAndClose()
-        }
-
-        youtube.launch()
-        ```
-
-        - returns: An optional containing a FileHandle that can be written to, or nil if there is no encoder.
-    */
-    func requestFileHandleForWriting() -> FileHandle?
 
     /**
         Stops encoding and requests a new encoder. A `voiceEngine.ready` event will be fired when the encoder is ready.
@@ -73,6 +49,29 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
     */
     func sendVoiceData(_ data: [UInt8])
 
+    #if !os(iOS)
+    /**
+        Takes a process that outputs random audio data, and sends it to a hidden FFmpeg process that turns the data
+        into raw PCM.
+
+        Example setting up youtube-dl to play music.
+
+        ```swift
+        youtube = EncoderProcess()
+        youtube.launchPath = "/usr/local/bin/youtube-dl"
+        youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
+
+        voiceEngine.setupMiddleware(youtube) {
+            print("youtube died")
+        }
+        ```
+
+        - parameter middleware: The process that will output audio data.
+        - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
+    */
+    func setupMiddleware(_ middleware: EncoderProcess, terminationHandler: (() -> Void)?)
+    #endif
+
     /**
         Tells Discord that we are starting to speak.
     */
@@ -82,11 +81,4 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
         Tells Discord we're done speaking.
     */
     func stopSpeaking()
-}
-
-public extension DiscordVoiceEngineSpec {
-    /// Default implementation.
-    public func send(_ data: Data, doneHandler: (() -> Void)? = nil) {
-        encoder?.write(data, doneHandler: doneHandler)
-    }
 }

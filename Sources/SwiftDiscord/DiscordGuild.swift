@@ -61,10 +61,10 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public internal(set) var memberCount: Int
 
     /// A `DiscordLazyDictionary` of guild members. The key is the snowflake id of the user.
-    public internal(set) var members: DiscordLazyDictionary<String, DiscordGuildMember>
+    public internal(set) var members = DiscordLazyDictionary<String, DiscordGuildMember>()
 
     /// A `DiscordLazyDictionary` of presences. The key is the snowflake id of the user.
-    public internal(set) var presences: DiscordLazyDictionary<String, DiscordPresence>
+    public internal(set) var presences = DiscordLazyDictionary<String, DiscordPresence>()
 
     /// A dictionary of this guild's roles. The key is the snowflake id of the role.
     public internal(set) var roles: [String: DiscordRole]
@@ -117,7 +117,11 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         mfaLevel = guildObject.get("mfa_level", or: -1)
         name = guildObject.get("name", or: "")
         ownerId = guildObject.get("owner_id", or: "")
-        presences = DiscordPresence.presencesFromArray(guildObject.get("presences", or: [[String: Any]]()), guildId: id)
+
+        if !(client?.discardPresences ?? false) {
+            presences = DiscordPresence.presencesFromArray(guildObject.get("presences", or: [[String: Any]]()), guildId: id)
+        }
+
         region = guildObject.get("region", or: "")
         roles = DiscordRole.rolesFromArray(guildObject.get("roles", or: [[String: Any]]()))
         splash = guildObject.get("splash", or: "")

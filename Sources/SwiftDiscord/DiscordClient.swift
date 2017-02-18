@@ -47,6 +47,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     /// The client's delegate.
     public weak var delegate: DiscordClientDelegate?
 
+    /// If true, the client does not store presences.
+    public var discardPresences = false
+
     /// The queue that callbacks are called on. In addition, any reads from any properties of DiscordClient should be
     /// made on this queue, as this is the queue where modifications on them are made.
     public var handleQueue = DispatchQueue.main
@@ -123,6 +126,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
                 self.shards = shards
             case let .singleShard(shardInfo):
                 self.singleShardInformation = shardInfo
+            case .discardPresences:
+                discardPresences = true
             case .fillLargeGuilds:
                 fillLargeGuilds = true
             case .fillUsers:
@@ -314,7 +319,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     open func leaveVoiceChannel(onGuild guildId: String) {
         guard voiceEngines[guildId] != nil else { return }
 
-        // Make sure the engine is cleaned up before setting it to nil
+        // Make sure everything is cleaned out
+        voiceStates[guildId] = nil
+        voiceServerInformations[guildId] = nil
         voiceEngines[guildId]?.disconnect()
         voiceEngines[guildId] = nil
 
@@ -387,6 +394,16 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
         handleQueue.async {
             self.leaveVoiceChannel(onGuild: engine.voiceState.guildId)
         }
+    }
+
+    /**
+        Called when the voice engine needs an encoder.
+
+        - parameter engine: The engine that needs an encoder
+        - returns: An encoder.
+    */
+    open func voiceEngineNeedsEncoder(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder? {
+        return try delegate?.client(self, needsVoiceEncoderForEngine: engine)
     }
 
     /**
@@ -819,9 +836,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
             presence = DiscordPresence(presenceObject: data, guildId: guildId)
         }
 
-        DefaultDiscordLogger.Logger.debug("Updated presence: %@", type: logType, args: presence!)
+        if !discardPresences {
+            DefaultDiscordLogger.Logger.debug("Updated presence: %@", type: logType, args: presence!)
 
-        guild.presences[userId] = presence!
+            guild.presences[userId] = presence!
+        }
 
         delegate?.client(self, didReceivePresenceUpdate: presence!)
 

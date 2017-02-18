@@ -83,100 +83,100 @@ public enum DiscordPermission : Int {
 
     /// All voice permissions set to true
     case voice = 0x3F00000
-}
 
-/**
-    Helper operator for permission math.
+    /**
+        Helper operator for permission math.
 
-    - parameter lhs: a DiscordPermission
-    - parameter rhs: a DiscordPermission
+        - parameter lhs: a DiscordPermission
+        - parameter rhs: a DiscordPermission
 
-    - returns: the or of the two permissiosn
-*/
-public func |(lhs: DiscordPermission, rhs: DiscordPermission) -> Int {
-    return lhs.rawValue | rhs.rawValue
-}
+        - returns: the or of the two permissiosn
+    */
+    public static func |(lhs: DiscordPermission, rhs: DiscordPermission) -> Int {
+        return lhs.rawValue | rhs.rawValue
+    }
 
-/**
-    Helper operator for permission math.
+    /**
+        Helper operator for permission math.
 
-    - parameter lhs: a DiscordPermission
-    - parameter rhs: a DiscordPermission
+        - parameter lhs: a DiscordPermission
+        - parameter rhs: a DiscordPermission
 
-    - returns: the and of the two permissiosn
-*/
-public func &(lhs: DiscordPermission, rhs: DiscordPermission) -> Int {
-    return lhs.rawValue & rhs.rawValue
-}
+        - returns: the and of the two permissiosn
+    */
+    public static func &(lhs: DiscordPermission, rhs: DiscordPermission) -> Int {
+        return lhs.rawValue & rhs.rawValue
+    }
 
-/**
-    Helper operator for permission math.
+    /**
+        Helper operator for permission math.
 
-    - parameter lhs: an int
-    - parameter rhs: a DiscordPermission
+        - parameter lhs: an int
+        - parameter rhs: a DiscordPermission
 
-    - returns: the or of the two permissiosn
-*/
-public func |(lhs: Int, rhs: DiscordPermission) -> Int {
-    return lhs | rhs.rawValue
-}
+        - returns: the or of the two permissiosn
+    */
+    public static func |(lhs: Int, rhs: DiscordPermission) -> Int {
+        return lhs | rhs.rawValue
+    }
 
-/**
-    Helper operator for permission math.
+    /**
+        Helper operator for permission math.
 
-    - parameter lhs: an Int
-    - parameter rhs: a DiscordPermission
+        - parameter lhs: an Int
+        - parameter rhs: a DiscordPermission
 
-    - returns: the and of the two permissiosn
-*/
-public func &(lhs: Int, rhs: DiscordPermission) -> Int {
-    return lhs & rhs.rawValue
-}
+        - returns: the and of the two permissiosn
+    */
+    public static func &(lhs: Int, rhs: DiscordPermission) -> Int {
+        return lhs & rhs.rawValue
+    }
 
-/**
-    Helper operator for permission math.
+    /**
+        Helper operator for permission math.
 
-    Ors the two permissions and assigns the result to `lhs`.
+        Ors the two permissions and assigns the result to `lhs`.
 
-    - parameter lhs: a Int
-    - parameter rhs: a DiscordPermission
+        - parameter lhs: a Int
+        - parameter rhs: a DiscordPermission
 
-    - returns: the or of the two permissiosn
-*/
-public func |=(lhs: inout Int, rhs: DiscordPermission) {
-    lhs |= rhs.rawValue
-}
+        - returns: the or of the two permissiosn
+    */
+    public static func |=(lhs: inout Int, rhs: DiscordPermission) {
+        lhs |= rhs.rawValue
+    }
 
-/**
-    Helper operator for permission math.
+    /**
+        Helper operator for permission math.
 
-    Ands the two permissions and assigns the result to `lhs`.
+        Ands the two permissions and assigns the result to `lhs`.
 
-    - parameter lhs: an Int
-    - parameter rhs: a DiscordPermission
-*/
-public func &=(lhs: inout Int, rhs: DiscordPermission) {
-    lhs &= rhs.rawValue
-}
+        - parameter lhs: an Int
+        - parameter rhs: a DiscordPermission
+    */
+    public static func &=(lhs: inout Int, rhs: DiscordPermission) {
+        lhs &= rhs.rawValue
+    }
 
-/**
-    Determines if an Int and a permission represent the same thing.
+    /**
+        Determines if an Int and a permission represent the same thing.
 
-    - parameter lhs: an Int
-    - parameter rhs: a DiscordPermission
-*/
-public func ==(lhs: Int, rhs: DiscordPermission) -> Bool {
-    return lhs == rhs.rawValue
-}
+        - parameter lhs: an Int
+        - parameter rhs: a DiscordPermission
+    */
+    public static func ==(lhs: Int, rhs: DiscordPermission) -> Bool {
+        return lhs == rhs.rawValue
+    }
 
-/**
-    Returns the inverse of this permission.
+    /**
+        Returns the inverse of this permission.
 
-    - parameter rhs: The permission.
-    - returns: The inverse of this permission
-*/
-public prefix func ~(rhs: DiscordPermission) -> Int {
-    return ~rhs.rawValue
+        - parameter rhs: The permission.
+        - returns: The inverse of this permission
+    */
+    public static prefix func ~(rhs: DiscordPermission) -> Int {
+        return ~rhs.rawValue
+    }
 }
 
 /// Represents a permission overwrite type for a channel.

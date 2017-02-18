@@ -42,6 +42,9 @@ public enum DiscordDispatchEvent : String {
     /// Message Reaction Add (Not handled)
     case messageReactionAdd = "MESSAGE_REACTION_ADD"
 
+    /// Message Reaction Remove All (Not handled)
+    case messageReactionRemoveAll = "MESSAGE_REACTION_REMOVE_ALL"
+
     /// Message Reaction Remove (Not handled)
     case messageReactionRemove = "MESSAGE_REACTION_REMOVE"
 
@@ -99,6 +102,9 @@ public enum DiscordDispatchEvent : String {
 
     /// Channel Delete (Handled)
     case channelDelete = "CHANNEL_DELETE"
+
+    /// Channel Pins Update (Not Handled)
+    case channelPinsUpdate = "CHANNEL_PINS_UPDATE"
 
     /// Channel Update (Handled)
     case channelUpdate = "CHANNEL_UPDATE"

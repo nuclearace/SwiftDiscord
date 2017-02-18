@@ -20,6 +20,9 @@ import Foundation
 
 /// A enum representing a configuration option.
 public enum DiscordClientOption : CustomStringConvertible, Equatable {
+    /// If passed this option, the client will not store presences on the guild.
+    case discardPresences
+
     /// This option causes the client to request all users for large guilds as soon as they are created.
     case fillLargeGuilds
 
@@ -54,6 +57,7 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
         let description: String
 
         switch self {
+        case .discardPresences: description = "discardPresences"
         case .fillLargeGuilds:  description = "fillLargeGuilds"
         case .fillUsers:        description = "fillUsers"
         case .handleQueue:      description = "handleQueue"
@@ -66,10 +70,10 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
 
         return description
     }
-}
 
-/// Compares two DiscordClientOption's descriptions.
-/// - returns: true if they are the same
-public func ==(lhs: DiscordClientOption, rhs: DiscordClientOption) -> Bool {
-    return lhs.description == rhs.description
+    /// Compares two DiscordClientOption's descriptions.
+    /// - returns: true if they are the same
+    public static func ==(lhs: DiscordClientOption, rhs: DiscordClientOption) -> Bool {
+        return lhs.description == rhs.description
+    }
 }
