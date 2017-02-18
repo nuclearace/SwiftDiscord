@@ -293,11 +293,11 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
         func handleInvalidSession() {
             if case let .bool(netsplit) = payload.payload, !netsplit {
-                DefaultDiscordLogger.Logger.error("Invalid session received. Invalidating session", type: logType)
+                DefaultDiscordLogger.Logger.log("Invalid session received. Invalidating session", type: logType)
 
                 sessionId = nil
             } else {
-                DefaultDiscordLogger.Logger.error("Netsplit recieved, trying to resume", type: logType)
+                DefaultDiscordLogger.Logger.log("Netsplit recieved, trying to resume", type: logType)
             }
 
             resuming = false

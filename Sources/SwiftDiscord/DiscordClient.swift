@@ -180,7 +180,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
         Finds a channel by its snowflake.
 
         - parameter fromId: A channel snowflake
-
         - returns: An optional containing a `DiscordChannel` if one was found.
     */
     public func findChannel(fromId channelId: String) -> DiscordChannel? {
@@ -366,7 +365,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
     */
     open func setPresence(_ presence: DiscordPresenceUpdate) {
         shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.statusUpdate),
-            payload: .object(presence.json)), onShard: 0)
+                                                       payload: .object(presence.json)),
+                                                       onShard: 0)
     }
 
     private func startVoiceConnection(_ guildId: String) {
@@ -377,8 +377,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler,
 
         // Reuse a previous engine's encoder if possible
         let previousEngine = voiceEngines[guildId]
-        voiceEngines[guildId] = DiscordVoiceEngine(client: self, voiceServerInformation: serverInfo,
-            voiceState: voiceState, encoder: previousEngine?.encoder, secret: previousEngine?.secret)
+        voiceEngines[guildId] = DiscordVoiceEngine(client: self,
+                                                   voiceServerInformation: serverInfo,
+                                                   voiceState: voiceState,
+                                                   encoder: previousEngine?.encoder,
+                                                   secret: previousEngine?.secret)
 
         DefaultDiscordLogger.Logger.log("Connecting voice engine", type: logType)
 
