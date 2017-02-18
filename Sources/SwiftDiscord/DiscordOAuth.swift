@@ -17,6 +17,48 @@
 
 import Foundation
 
+/**
+    Represents the different scopes a Discord OAuth token can have.
+*/
+public enum DiscordScope : String {
+    /// For oauth2 bots, this puts the bot in the user's selected guild by default.
+    case bot
+
+    /// allows /users/@me/connections to return linked Twitch and YouTube accounts.
+    case connections
+
+    /// Enables /users/@me to return an email.
+    case email
+
+    /// Allows /users/@me without email.
+    case identify
+
+    /// Allows /users/@me/guilds to return basic information about all of a user's guilds.
+    case guilds
+
+    /// Allows /invites/{invite.id} to be used for joining a user's guild.
+    case guildsJoin = "guilds.join"
+
+    /// Allows your app to join users to a group dm.
+    case gdmJoin = "gdm.join"
+
+    /// for local rpc server api access, this allows you to read messages from all client channels
+    /// (otherwise restricted to channels/guilds your app creates).
+    case messagesRead = "messages.read"
+
+    /// For local rpc server access, this allows you to control a user's local Discord client.
+    case rpc
+
+    /// For local rpc server api access, this allows you to access the API as the local user.
+    case rpcApi = "rpc.api"
+
+    /// For local rpc server api access, this allows you to receive notifications pushed out to the user.
+    case rpcNotificationsRead = "rpc.notifications.read"
+
+    /// This generates a webhook that is returned in the oauth token response for authorization code grants.
+    case webhookIncoming = "webhook.incoming"
+}
+
 /// Represents the Discord OAuth endpoint.
 public enum DiscordOAuthEndpoint : String {
     /// The base OAuth endpoint.
