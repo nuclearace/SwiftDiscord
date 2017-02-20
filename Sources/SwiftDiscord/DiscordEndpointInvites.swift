@@ -82,7 +82,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function, takes an optional `DiscordInvite`
     */
     public static func getInvite(_ invite: String, with token: DiscordToken,
-            callback: @escaping (DiscordInvite?) -> Void) {
+                                 callback: @escaping (DiscordInvite?) -> Void) {
         var request = createRequest(with: token, for: .invites, replacing: [
             "invite.code": invite,
         ])

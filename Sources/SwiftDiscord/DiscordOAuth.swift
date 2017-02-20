@@ -21,6 +21,7 @@ import Foundation
 public enum DiscordOAuthEndpoint : String {
     /// The base OAuth endpoint.
     case baseURL = "https://discordapp.com/api/oauth2/authorize"
+
     /// The bot scope.
     case bot
 

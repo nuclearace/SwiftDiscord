@@ -29,7 +29,8 @@ public extension DiscordEndpoint {
         - parameter callback: A callback that returns the webhook created, if successful.
     */
     public static func createWebhook(forChannel channelId: String, with token: DiscordToken,
-            options: [DiscordEndpointOptions.WebhookOption], callback: @escaping (DiscordWebhook?) -> Void) {
+                                     options: [DiscordEndpointOptions.WebhookOption],
+                                     callback: @escaping (DiscordWebhook?) -> Void) {
         var createJSON: [String: Any] = [:]
 
         for option in options {
@@ -94,7 +95,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function taking an optional `DiscordWebhook`
     */
     public static func getWebhook(_ webhookId: String, with token: DiscordToken,
-            callback: @escaping (DiscordWebhook?) -> Void) {
+                                  callback: @escaping (DiscordWebhook?) -> Void) {
         var request = createRequest(with: token, for: .webhook, replacing: ["webhook.id": webhookId])
 
         request.httpMethod = "GET"
@@ -122,7 +123,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function taking an array of `DiscordWebhook`s
     */
     public static func getWebhooks(forChannel channelId: String, with token: DiscordToken,
-            callback: @escaping ([DiscordWebhook]) -> Void) {
+                                   callback: @escaping ([DiscordWebhook]) -> Void) {
         var request = createRequest(with: token, for: .channelWebhooks, replacing: ["channel.id": channelId])
 
         request.httpMethod = "GET"
@@ -158,7 +159,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function taking an array of `DiscordWebhook`s
     */
     public static func getWebhooks(forGuild guildId: String, with token: DiscordToken,
-            callback: @escaping ([DiscordWebhook]) -> Void) {
+                                   callback: @escaping ([DiscordWebhook]) -> Void) {
         var request = createRequest(with: token, for: .guildWebhooks, replacing: ["guild.id": guildId])
 
         request.httpMethod = "GET"
@@ -189,7 +190,8 @@ public extension DiscordEndpoint {
         - parameter callback: A callback that returns the updated webhook, if successful.
     */
     public static func modifyWebhook(_ webhookId: String, with token: DiscordToken,
-            options: [DiscordEndpointOptions.WebhookOption], callback: @escaping (DiscordWebhook?) -> Void) {
+                                     options: [DiscordEndpointOptions.WebhookOption],
+                                     callback: @escaping (DiscordWebhook?) -> Void) {
         var createJSON: [String: Any] = [:]
 
         for option in options {

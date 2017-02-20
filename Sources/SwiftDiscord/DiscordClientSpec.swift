@@ -19,7 +19,7 @@ import Foundation
 import Dispatch
 
 /// Protocol that abstracts a DiscordClient
-public protocol DiscordClientSpec : class, DiscordEngineClient, DiscordVoiceEngineClient, DiscordUserActor {
+public protocol DiscordClientSpec : class, DiscordVoiceManagerDelegate, DiscordShardManagerDelegate, DiscordUserActor {
 	// MARK: Properties
 
 	/// Whether or not this client is connected.

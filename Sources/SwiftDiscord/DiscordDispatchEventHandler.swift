@@ -16,7 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Protocol that declares a type will handle Discord dispatch events.
-public protocol DiscordDispatchEventHandler : DiscordClientSpec {
+public protocol DiscordDispatchEventHandler {
 	// MARK: Methods
 
 	/**
