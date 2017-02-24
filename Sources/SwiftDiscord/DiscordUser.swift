@@ -15,26 +15,6 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/// Represents a ban.
-public struct DiscordBan {
-    // MARK: Properties
-
-    /// The reason this person was banned.
-    public let reason: String?
-
-    /// The user who is banned.
-    public let user: DiscordUser
-
-    init(banObject: [String: Any]) {
-        reason = banObject["reason"] as? String
-        user = DiscordUser(userObject: banObject.get("user", or: [String: Any]()))
-    }
-
-    static func bansFromArray(_ banArray: [[String: Any]]) -> [DiscordBan] {
-        return banArray.map(DiscordBan.init)
-    }
-}
-
 /// Declares that a type will act as a Discord user.
 public protocol DiscordUserActor {
     // MARK: Properties
@@ -105,5 +85,25 @@ public struct DiscordUser {
         }
 
         return users
+    }
+}
+
+/// Represents a ban.
+public struct DiscordBan {
+    // MARK: Properties
+
+    /// The reason this person was banned.
+    public let reason: String?
+
+    /// The user who is banned.
+    public let user: DiscordUser
+
+    init(banObject: [String: Any]) {
+        reason = banObject["reason"] as? String
+        user = DiscordUser(userObject: banObject.get("user", or: [String: Any]()))
+    }
+
+    static func bansFromArray(_ banArray: [[String: Any]]) -> [DiscordBan] {
+        return banArray.map(DiscordBan.init)
     }
 }

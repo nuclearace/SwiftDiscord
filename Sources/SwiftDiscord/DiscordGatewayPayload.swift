@@ -85,7 +85,7 @@ public struct DiscordGatewayPayload {
         - parameter name: The name of this dispatch
     */
     public init(code: DiscordGatewayCode, payload: DiscordGatewayPayloadData, sequenceNumber: Int? = nil,
-        name: String? = nil) {
+                name: String? = nil) {
         self.code = code
         self.payload = payload
         self.sequenceNumber = sequenceNumber

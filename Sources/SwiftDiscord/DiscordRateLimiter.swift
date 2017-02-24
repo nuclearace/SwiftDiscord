@@ -174,8 +174,6 @@ private final class DiscordRateLimit {
 
         guard seconds > 0 else { return DispatchTime(uptimeNanoseconds: 0) }
 
-        // print("seconds till reset: \(seconds)")
-
         return DispatchTime.now() + Double(seconds)
     }
 

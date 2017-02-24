@@ -15,6 +15,13 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+/// Declares that a type will have a Discord token.
+public protocol DiscordTokenBearer {
+    // MARK: Properties
+
+    /// The token for the user.
+    var token: DiscordToken { get }
+}
 
 /**
     A type that represents a Discord JWT.

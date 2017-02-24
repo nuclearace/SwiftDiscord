@@ -54,13 +54,13 @@ public extension DiscordEngineGatewayHandling {
         }
 
         if event == .ready, case let .object(payloadObject) = payload.payload,
-            let sessionId = payloadObject["session_id"] as? String {
+           let sessionId = payloadObject["session_id"] as? String {
                 manager?.signalShardConnected(shardNum: shardNum)
                 self.sessionId = sessionId
         } else if event == .resumed {
             handleResumed(payload)
         }
 
-        client?.handleEngineDispatch(event, with: payload)
+        delegate?.handleEngineDispatch(event, with: payload)
     }
 }

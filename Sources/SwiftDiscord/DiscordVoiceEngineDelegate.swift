@@ -1,5 +1,5 @@
 // The MIT License (MIT)
-// Copyright (c) 2016 Erik Little
+// Copyright (c) 2017 Erik Little
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -18,12 +18,7 @@
 import Foundation
 
 /// Declares that a type will be a client for a voice engine.
-public protocol DiscordVoiceEngineClient {
-    // MARK: Properties
-
-    /// A function that will be used to customize what happens to the voice data.
-    var onVoiceData: (DiscordVoiceData) -> Void { get set }
-
+public protocol DiscordVoiceEngineDelegate : DiscordEngineDelegate {
     // MARK: Methods
 
     /**
@@ -31,8 +26,7 @@ public protocol DiscordVoiceEngineClient {
 
         - parameter data: The voice data that was received
     */
-    func handleVoiceData(_ data: DiscordVoiceData)
-
+    func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveVoiceData data: DiscordVoiceData)
 
     /**
         Called when the voice engine disconnects.

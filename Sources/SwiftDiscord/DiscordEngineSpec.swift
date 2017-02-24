@@ -27,7 +27,7 @@ public protocol DiscordEngineSpec : class, DiscordShard, DiscordEngineHeartbeata
     // MARK: Properties
 
     /// A reference to the client this engine is associated with.
-    weak var client: DiscordClientSpec? { get }
+    weak var delegate: DiscordEngineDelegate? { get }
 
     /// The url to connect to.
     var connectURL: String { get }
@@ -52,7 +52,7 @@ public protocol DiscordEngineSpec : class, DiscordShard, DiscordEngineHeartbeata
 
         - parameter client: The client this engine should be associated with.
     */
-    init(client: DiscordClientSpec, shardNum: Int, numShards: Int)
+    init(delegate: DiscordEngineDelegate, shardNum: Int, numShards: Int)
 
     // MARK: Methods
 
@@ -66,7 +66,7 @@ public protocol DiscordEngineSpec : class, DiscordShard, DiscordEngineHeartbeata
 
 public extension DiscordEngineSpec {
     /// Default Implementation.
-    func sendGatewayPayload(_ payload: DiscordGatewayPayload) {
+    func sendPayload(_ payload: DiscordGatewayPayload) {
         guard let payloadString = payload.createPayloadString() else {
             error(message: "Could not create payload string")
 
