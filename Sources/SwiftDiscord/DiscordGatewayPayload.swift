@@ -129,9 +129,7 @@ extension DiscordGatewayPayload {
             return nil
         }
 
-        let sequenceNumber = dictionary["s"] as? Int
-        let name = dictionary["t"] as? String
-
-        return DiscordGatewayPayload(code: code, payload: payload, sequenceNumber: sequenceNumber, name: name)
+        return DiscordGatewayPayload(code: code, payload: payload, sequenceNumber: dictionary["s"] as? Int,
+                                     name: dictionary["t"] as? String)
     }
 }
