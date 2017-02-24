@@ -321,14 +321,21 @@ public extension DiscordEndpoint {
         - parameter tts: Whether this message should be read a text-to-speech message
         - parameter callback: An optional callback containing the message, if successful.
     */
-    public static func sendFile(_ file: DiscordFileUpload, content: String, with token: DiscordToken,
-                                to channel: String, tts: Bool, callback: ((DiscordMessage?) -> Void)?) {
+    public static func sendFile(_ file: DiscordFileUpload, content: String, embed: DiscordEmbed?,
+                                with token: DiscordToken, to channel: String, tts: Bool,
+                                callback: ((DiscordMessage?) -> Void)?) {
         var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel])
 
-        let (boundary, formData) = createMultipartBody(fields: [
-            "content": content,
-            "tts": String(tts)
-        ], file: file)
+        var fields: [String: String] = [
+                "content": content,
+                "tts": String(tts),
+        ]
+
+        if let embed = embed, let encoded = encodeJSON(["embed": embed.json]) {
+            fields["payload_json"] = encoded
+        }
+
+        let (boundary, formData) = createMultipartBody(fields: fields, file: file)
 
         request.httpMethod = "POST"
         request.httpBody = formData

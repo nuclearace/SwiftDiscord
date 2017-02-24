@@ -147,6 +147,23 @@ public struct DiscordEmbed : JSONAble {
         }
     }
 
+    /// Represents an Embed's footer.
+    public struct Image : JSONAble {
+        // MARK: Properties
+
+        /// The text for this footer.
+        public let url: String
+
+        /**
+            Creates an Image object.
+
+            - parameter url: The url for this field.
+        */
+        public init(url: String) {
+            self.url = url
+        }
+    }
+
     /// Represents what is providing the content of an embed.
     public struct Provider : JSONAble {
         // MARK: Properties
@@ -189,6 +206,9 @@ public struct DiscordEmbed : JSONAble {
     /// The footer for this embed.
     public let footer: Footer?
 
+    /// The image for this embed.
+    public let image: Image?
+
     /// The provider of this embed.
     public let provider: Provider?
 
@@ -218,6 +238,7 @@ public struct DiscordEmbed : JSONAble {
         - parameter description: The description of this embed.
         - parameter author: The author of this embed.
         - parameter url: The url for this embed, if there is one.
+        - parameter image: The image for the embed, if there is one.
         - parameter thumbnail: The thumbnail of this embed, if there is one.
         - parameter color: The color of this embed.
         - parameter footer: The footer for this embed, if there is one.
@@ -226,6 +247,7 @@ public struct DiscordEmbed : JSONAble {
                 description: String,
                 author: Author? = nil,
                 url: URL? = nil,
+                image: Image? = nil,
                 thumbnail: Thumbnail? = nil,
                 color: Int? = nil,
                 footer: Footer? = nil) {
@@ -236,6 +258,7 @@ public struct DiscordEmbed : JSONAble {
         self.thumbnail = thumbnail
         self.type = "rich"
         self.url = url
+        self.image = image
         self.color = color
         self.footer = footer
     }
@@ -248,6 +271,7 @@ public struct DiscordEmbed : JSONAble {
         title = embedObject.get("title", or: "")
         type = embedObject.get("type", or: "")
         url = URL(string: embedObject.get("url", or: ""))
+        image = Image(imageObject: embedObject.get("image", or: nil))
         fields = Field.fieldsFromArray(embedObject.get("fields", or: []))
         color = embedObject.get("color", or: nil)
         footer = Footer(footerObject: embedObject.get("footer", or: nil))
@@ -288,6 +312,14 @@ extension DiscordEmbed.Footer {
         text = footerObject.get("text", or: "")
         iconUrl = URL(string: footerObject.get("iconUrl", or: ""))
         proxyUrl = URL(string: footerObject.get("proxy_icon_url", or: ""))
+    }
+}
+
+extension DiscordEmbed.Image {
+    init?(imageObject: [String: Any]?) {
+        guard let imageObject = imageObject else { return nil }
+
+        url = imageObject.get("url", or: "")
     }
 }
 

@@ -176,8 +176,8 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter tts: Whether this message should be read a text-to-speech message
         - parameter callback: An optional callback containing the message, if successful.
     */
-    func sendFile(_ file: DiscordFileUpload, content: String, to channelId: String, tts: Bool,
-                  callback: ((DiscordMessage?) -> Void)?)
+    func sendFile(_ file: DiscordFileUpload, content: String, embed: DiscordEmbed?, to channelId: String,
+                  tts: Bool, callback: ((DiscordMessage?) -> Void)?)
 
     /**
         Triggers typing on the specified channel.
@@ -700,9 +700,10 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    public func sendFile(_ file: DiscordFileUpload, content: String, to channelId: String, tts: Bool = false,
-                         callback: ((DiscordMessage?) -> Void)? = nil) {
-        DiscordEndpoint.sendFile(file, content: content, with: token, to: channelId, tts: tts, callback: callback)
+    public func sendFile(_ file: DiscordFileUpload, content: String, embed: DiscordEmbed? = nil,
+                         to channelId: String, tts: Bool = false, callback: ((DiscordMessage?) -> Void)? = nil) {
+        DiscordEndpoint.sendFile(file, content: content, embed: embed, with: token, to: channelId, tts: tts,
+                                 callback: callback)
     }
 
     /// Default implementation

@@ -128,12 +128,14 @@ public extension DiscordChannel {
 
         - parameter file: A `DiscordFileUpload` to upload
         - parameter content: An optional message for this upload
+        - parameter embed: An optional embed object.
         - parameter tts: Whether the message is TTS
     */
-    public func sendFile(_ file: DiscordFileUpload, content: String = "", tts: Bool = false) {
+    public func sendFile(_ file: DiscordFileUpload, content: String = "", embed: DiscordEmbed? = nil,
+                         tts: Bool = false) {
         guard let client = self.client, type != .voice else { return }
 
-        client.sendFile(file, content: content, to: id, tts: tts)
+        client.sendFile(file, content: content, embed: embed, to: id, tts: tts)
     }
 
     /**
