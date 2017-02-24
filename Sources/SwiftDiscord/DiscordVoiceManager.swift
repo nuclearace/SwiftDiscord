@@ -37,7 +37,7 @@ public protocol DiscordVoiceManagerDelegate : class, DiscordTokenBearer {
         - parameter fromEngine: The engine that received the data.
     */
     func voiceManager(_ manager: DiscordVoiceManager, didReceiveVoiceData data: DiscordVoiceData,
-        fromEngine engine: DiscordVoiceEngine)
+                      fromEngine engine: DiscordVoiceEngine)
 
     /**
         Called when a voice engine is ready.
@@ -55,7 +55,7 @@ public protocol DiscordVoiceManagerDelegate : class, DiscordTokenBearer {
         - returns: An encoder.
     */
     func voiceManager(_ manager: DiscordVoiceManager,
-        needsEncoderForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder?
+                      needsEncoderForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder?
 }
 
 /// A manager for voice engines.
@@ -152,7 +152,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate {
     /**
         Handles voice data received from a VoiceEngine
 
-        - paramter didReceiveVoiceData: A DiscordVoiceData tuple
+        - parameter didReceiveVoiceData: A DiscordVoiceData tuple
     */
     open func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveVoiceData data: DiscordVoiceData) {
         delegate?.voiceManager(self, didReceiveVoiceData: data, fromEngine: engine)

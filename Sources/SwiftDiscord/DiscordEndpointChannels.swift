@@ -314,11 +314,12 @@ public extension DiscordEndpoint {
     /**
         Sends a file with an optional message to the specified channel.
 
-        - parameter file: The file to send
-        - parameter content: The content of the message
-        - parameter with: The token to authenticate to Discord with
-        - parameter to: The snowflake id of the channel to send to
-        - parameter tts: Whether this message should be read a text-to-speech message
+        - parameter file: The file to send.
+        - parameter content: The content of the message.
+        - parameter embed: An embed for this message.
+        - parameter with: The token to authenticate to Discord with.
+        - parameter to: The snowflake id of the channel to send to.
+        - parameter tts: Whether this message should be read a text-to-speech message.
         - parameter callback: An optional callback containing the message, if successful.
     */
     public static func sendFile(_ file: DiscordFileUpload, content: String, embed: DiscordEmbed?,
