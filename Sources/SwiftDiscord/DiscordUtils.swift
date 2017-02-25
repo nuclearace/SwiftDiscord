@@ -46,6 +46,11 @@ public struct DiscordFileUpload {
     }
 }
 
+enum Either<L, R> {
+    case left(L)
+    case right(R)
+}
+
 #if os(macOS)
 /// A typealias for `Process`. Needed because `Process` on Linux is `Task`.
 public typealias EncoderProcess = Process

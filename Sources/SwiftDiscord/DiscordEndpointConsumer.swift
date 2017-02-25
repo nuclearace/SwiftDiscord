@@ -172,13 +172,10 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         Sends a message with an optional file and embed to the specified channel.
 
         - parameter message: The message to send.
-        - parameter file: The file to send.
         - parameter to: The snowflake id of the channel to send to.
-        - parameter tts: Whether this message should be read a text-to-speech message.
         - parameter callback: An optional callback containing the message, if successful.
     */
-    func sendMessage(_ message: String, file: DiscordFileUpload?, embed: DiscordEmbed?, to channelId: String,
-                     tts: Bool, callback: ((DiscordMessage?) -> Void)?)
+    func sendMessage(_ message: DiscordMessage, to channelId: String, callback: ((DiscordMessage?) -> Void)?)
 
     /**
         Triggers typing on the specified channel.
@@ -697,14 +694,19 @@ public extension DiscordEndpointConsumer {
     /// Default implementation
     public func sendMessage(_ message: String, to channelId: String, tts: Bool = false,
                             embed: DiscordEmbed? = nil, callback: ((DiscordMessage?) -> Void)? = nil) {
-        DiscordEndpoint.sendMessage(message, with: token, to: channelId, tts: tts, embed: embed, callback: callback)
+        if let embed = embed {
+            DiscordEndpoint.sendMessage(DiscordMessage(content: message, embeds: [embed], tts: tts), with: token,
+                                        to: channelId, callback: callback)
+        } else {
+            DiscordEndpoint.sendMessage(DiscordMessage(content: message, tts: tts), with: token, to: channelId,
+                                        callback: callback)
+        }
     }
 
-    /// Default implementation
-    public func sendMessage(_ message: String, file: DiscordFileUpload? = nil, embed: DiscordEmbed? = nil,
-                            to channelId: String, tts: Bool = false, callback: ((DiscordMessage?) -> Void)? = nil) {
-        DiscordEndpoint.sendMessage(message, file: file, embed: embed, with: token, to: channelId, tts: tts,
-                                    callback: callback)
+    /// Default implementation.
+    public func sendMessage(_ message: DiscordMessage, to channelId: String,
+                            callback: ((DiscordMessage?) -> Void)? = nil) {
+        DiscordEndpoint.sendMessage(message, with: token, to: channelId, callback: callback)
     }
 
     /// Default implementation

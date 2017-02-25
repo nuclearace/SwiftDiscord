@@ -313,36 +313,32 @@ public extension DiscordEndpoint {
     }
 
     /**
-        Sends a file with an optional message to the specified channel.
+        Sends a message to the specified channel.
 
-        - parameter content: The content of the message.
-        - parameter file: The file to send.
-        - parameter embed: An embed for this message.
+        - parameter message: The content of the message.
         - parameter with: The token to authenticate to Discord with.
         - parameter to: The snowflake id of the channel to send to.
-        - parameter tts: Whether this message should be read a text-to-speech message.
         - parameter callback: An optional callback containing the message, if successful.
     */
-    public static func sendMessage(_ content: String, file: DiscordFileUpload?, embed: DiscordEmbed?,
-                                   with token: DiscordToken, to channel: String, tts: Bool,
+    public static func sendMessage(_ message: DiscordMessage, with token: DiscordToken, to channel: String,
                                    callback: ((DiscordMessage?) -> Void)?) {
         var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel])
 
-        var fields: [String: String] = [
-                "content": content,
-                "tts": String(tts),
-        ]
-
-        if let embed = embed, let encoded = encodeJSON(["embed": embed.json]) {
-            fields["payload_json"] = encoded
-        }
-
-        let (boundary, formData) = createMultipartBody(fields: fields, file: file)
+        DefaultDiscordLogger.Logger.log("Sending message to: %@", type: "DiscordEndpointChannels", args: channel)
+        DefaultDiscordLogger.Logger.verbose("Message: %@", type: "DiscordEndpointChannels", args: message)
 
         request.httpMethod = "POST"
-        request.httpBody = formData
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        request.setValue(String(formData.count), forHTTPHeaderField: "Content-Length")
+
+        switch message.createDataForSending() {
+        case let .left(data):
+            request.httpBody = data
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue(String(data.count), forHTTPHeaderField: "Content-Length")
+        case let .right((boundary, body)):
+            request.httpBody = body
+            request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+            request.setValue(String(body.count), forHTTPHeaderField: "Content-Length")
+        }
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channel])
 

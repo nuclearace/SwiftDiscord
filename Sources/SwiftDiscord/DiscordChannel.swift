@@ -126,29 +126,44 @@ public extension DiscordChannel {
     /**
         Sends a file to this channel.
 
-        - parameter file: A `DiscordFileUpload` to upload
-        - parameter content: An optional message for this upload
-        - parameter embed: An optional embed object.
-        - parameter tts: Whether the message is TTS
+        - parameter file: A `DiscordFileUpload` to upload.
+        - parameter content: An optional message for this upload.
+        - parameter tts: Whether the message is TTS.
     */
-    public func sendFile(_ file: DiscordFileUpload, content: String = "", embed: DiscordEmbed? = nil,
-                         tts: Bool = false) {
+    @available(*, deprecated: 3.1, message: "Will be removed in 3.2, use the new `send` method")
+    public func sendFile(_ file: DiscordFileUpload, content: String = "", tts: Bool = false) {
         guard let client = self.client, type != .voice else { return }
 
-        client.sendMessage(content, file: file, embed: embed, to: id, tts: tts)
+        client.sendMessage(DiscordMessage(content: content, files: [file], tts: tts), to: id)
     }
 
     /**
         Sends a message to this channel.
 
-        - parameter content: An optional message for this upload
-        - parameter tts: Whether the message is TTS
-        - parameter embed: An optional embed for this message
+        - parameter content: An optional message for this upload.
+        - parameter tts: Whether the message is TTS.
+        - parameter embed: An optional embed for this message.
     */
+    @available(*, deprecated: 3.1, message: "Will be removed in 3.2, use the new `send` method")
     public func sendMessage(_ content: String, tts: Bool = false, embed: DiscordEmbed? = nil) {
         guard let client = self.client, type != .voice else { return }
 
-        client.sendMessage(content, to: id, tts: tts, embed: embed)
+        if let embed = embed {
+            client.sendMessage(DiscordMessage(content: content, embeds: [embed], tts: tts), to: id)
+        } else {
+            client.sendMessage(DiscordMessage(content: content, tts: tts), to: id)
+        }
+    }
+
+    /**
+        Sends a message to this channel.
+
+        - parameter message: The message to send.
+    */
+    public func send(_ message: DiscordMessage) {
+        guard let client = self.client, type != .voice else { return }
+
+        client.sendMessage(message, to: id)
     }
 
     /**
