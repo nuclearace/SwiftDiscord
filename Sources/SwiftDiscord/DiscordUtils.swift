@@ -89,7 +89,7 @@ extension String {
     }
 }
 
-func createMultipartBody(fields: [String: String], file: DiscordFileUpload) -> (boundary: String, body: Data) {
+func createMultipartBody(fields: [String: String], file: DiscordFileUpload?) -> (boundary: String, body: Data) {
     let boundary = "Boundary-\(UUID())"
     var body = Data()
 
@@ -99,11 +99,13 @@ func createMultipartBody(fields: [String: String], file: DiscordFileUpload) -> (
         body.append("\(value)\r\n".data(using: .utf8)!)
     }
 
-    body.append("--\(boundary)\r\n".data(using: .utf8)!)
-    body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(file.filename)\"\r\n".data(using: .utf8)!)
-    body.append("Content-Type: \(file.mimeType)\r\n\r\n".data(using: .utf8)!)
-    body.append(file.data)
-    body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+    if let file = file {
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(file.filename)\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: \(file.mimeType)\r\n\r\n".data(using: .utf8)!)
+        body.append(file.data)
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+    }
 
     return (boundary, body)
 }

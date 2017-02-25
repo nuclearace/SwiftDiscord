@@ -158,26 +158,27 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     /**
         Sends a message to the specified channel.
 
-        - parameter content: The content of the message
-        - parameter to: The snowflake id of the channel to send to
-        - parameter tts: Whether this message should be read a text-to-speech message
+        - parameter content: The content of the message.
+        - parameter to: The snowflake id of the channel to send to.
+        - parameter tts: Whether this message should be read a text-to-speech message.
         - parameter embed: An optional embed for this message.
         - parameter callback: An optional callback containing the message, if successful.
     */
+    @available(*, deprecated: 3.1, message: "Will be removed in 3.2, use the new sendMessage")
     func sendMessage(_ message: String, to channelId: String, tts: Bool, embed: DiscordEmbed?,
                      callback: ((DiscordMessage?) -> Void)?)
 
     /**
-        Sends a file with an optional message to the specified channel.
+        Sends a message with an optional file and embed to the specified channel.
 
-        - parameter file: The file to send
-        - parameter content: The content of the message
-        - parameter to: The snowflake id of the channel to send to
-        - parameter tts: Whether this message should be read a text-to-speech message
+        - parameter message: The message to send.
+        - parameter file: The file to send.
+        - parameter to: The snowflake id of the channel to send to.
+        - parameter tts: Whether this message should be read a text-to-speech message.
         - parameter callback: An optional callback containing the message, if successful.
     */
-    func sendFile(_ file: DiscordFileUpload, content: String, embed: DiscordEmbed?, to channelId: String,
-                  tts: Bool, callback: ((DiscordMessage?) -> Void)?)
+    func sendMessage(_ message: String, file: DiscordFileUpload?, embed: DiscordEmbed?, to channelId: String,
+                     tts: Bool, callback: ((DiscordMessage?) -> Void)?)
 
     /**
         Triggers typing on the specified channel.
@@ -700,10 +701,10 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    public func sendFile(_ file: DiscordFileUpload, content: String, embed: DiscordEmbed? = nil,
-                         to channelId: String, tts: Bool = false, callback: ((DiscordMessage?) -> Void)? = nil) {
-        DiscordEndpoint.sendFile(file, content: content, embed: embed, with: token, to: channelId, tts: tts,
-                                 callback: callback)
+    public func sendMessage(_ message: String, file: DiscordFileUpload? = nil, embed: DiscordEmbed? = nil,
+                            to channelId: String, tts: Bool = false, callback: ((DiscordMessage?) -> Void)? = nil) {
+        DiscordEndpoint.sendMessage(message, file: file, embed: embed, with: token, to: channelId, tts: tts,
+                                    callback: callback)
     }
 
     /// Default implementation

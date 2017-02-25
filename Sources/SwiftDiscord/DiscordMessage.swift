@@ -147,7 +147,7 @@ public struct DiscordEmbed : JSONAble {
         }
     }
 
-    /// Represents an Embed's footer.
+    /// Represents an Embed's image.
     public struct Image : JSONAble {
         // MARK: Properties
 

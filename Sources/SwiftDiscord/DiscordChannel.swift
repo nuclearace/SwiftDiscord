@@ -135,7 +135,7 @@ public extension DiscordChannel {
                          tts: Bool = false) {
         guard let client = self.client, type != .voice else { return }
 
-        client.sendFile(file, content: content, embed: embed, to: id, tts: tts)
+        client.sendMessage(content, file: file, embed: embed, to: id, tts: tts)
     }
 
     /**

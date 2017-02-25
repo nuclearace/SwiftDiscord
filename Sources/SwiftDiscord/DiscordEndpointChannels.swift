@@ -276,6 +276,7 @@ public extension DiscordEndpoint {
         - parameter embed: An optional embed for this message.
         - parameter callback: An optional callback containing the message, if successful.
     */
+    @available(*, deprecated: 3.1, message: "Will be removed in 3.2, use the new sendMessage")
     public static func sendMessage(_ content: String, with token: DiscordToken, to channel: String, tts: Bool,
                                    embed: DiscordEmbed?, callback: ((DiscordMessage?) -> Void)?) {
         let messageObject: [String: Any] = [
@@ -314,17 +315,17 @@ public extension DiscordEndpoint {
     /**
         Sends a file with an optional message to the specified channel.
 
-        - parameter file: The file to send.
         - parameter content: The content of the message.
+        - parameter file: The file to send.
         - parameter embed: An embed for this message.
         - parameter with: The token to authenticate to Discord with.
         - parameter to: The snowflake id of the channel to send to.
         - parameter tts: Whether this message should be read a text-to-speech message.
         - parameter callback: An optional callback containing the message, if successful.
     */
-    public static func sendFile(_ file: DiscordFileUpload, content: String, embed: DiscordEmbed?,
-                                with token: DiscordToken, to channel: String, tts: Bool,
-                                callback: ((DiscordMessage?) -> Void)?) {
+    public static func sendMessage(_ content: String, file: DiscordFileUpload?, embed: DiscordEmbed?,
+                                   with token: DiscordToken, to channel: String, tts: Bool,
+                                   callback: ((DiscordMessage?) -> Void)?) {
         var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel])
 
         var fields: [String: String] = [
