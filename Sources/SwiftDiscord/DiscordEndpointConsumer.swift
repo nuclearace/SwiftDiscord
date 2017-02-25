@@ -171,6 +171,27 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     /**
         Sends a message with an optional file and embed to the specified channel.
 
+        Sending just a message:
+
+        ```swift
+        client.sendMessage("This is a DiscordMessage", to: channelId, callback: nil)
+        ```
+
+        Sending a message with an embed:
+
+        ```swift
+        client.sendMessage(DiscordMessage(content: "This message also comes with an embed", embeds: [embed]),
+                           to: channelId, callback: nil)
+        ```
+
+        Sending a fully loaded message:
+
+         ```swift
+        client.sendMessage(DiscordMessage(content: "This message has it all", embeds: [embed],
+                                          files: [file]),
+                           to: channelId, callback: nil)
+        ```
+
         - parameter message: The message to send.
         - parameter to: The snowflake id of the channel to send to.
         - parameter callback: An optional callback containing the message, if successful.

@@ -156,7 +156,23 @@ public extension DiscordChannel {
     }
 
     /**
-        Sends a message to this channel.
+        Sends a message to this channel. Can be used to send embeds and files as well.
+
+        ```swift
+        channel.send("This is just a simple message")
+        ```
+
+        Sending a message with an embed:
+
+        ```swift
+        channel.send(DiscordMessage(content: "This message also comes with an embed", embeds: [embed]))
+        ```
+
+        Sending a fully loaded message:
+
+         ```swift
+        channel.send(DiscordMessage(content: "This message has it all", embeds: [embed], files: [file]))
+        ```
 
         - parameter message: The message to send.
     */
