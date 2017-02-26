@@ -65,6 +65,9 @@
               <li class="nav-group-task">
                 <a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordVoiceManager.html">DiscordVoiceManager</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -150,7 +153,7 @@
                 <a href="../Protocols/DiscordEndpointConsumer.html">DiscordEndpointConsumer</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordEngineClient.html">DiscordEngineClient</a>
+                <a href="../Protocols/DiscordEngineDelegate.html">DiscordEngineDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/DiscordEngineGatewayHandling.html">DiscordEngineGatewayHandling</a>
@@ -171,13 +174,19 @@
                 <a href="../Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/DiscordTokenBearer.html">DiscordTokenBearer</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/DiscordUserActor.html">DiscordUserActor</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordVoiceEngineClient.html">DiscordVoiceEngineClient</a>
+                <a href="../Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/DiscordVoiceEngineSpec.html">DiscordVoiceEngineSpec</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordVoiceManagerDelegate.html">DiscordVoiceManagerDelegate</a>
               </li>
             </ul>
           </li>
@@ -204,6 +213,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordEmbed/Footer.html">– Footer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Image.html">– Image</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordEmbed/Provider.html">– Provider</a>
@@ -305,6 +317,9 @@
                 <a href="../Structs/DiscordUserGuild.html">DiscordUserGuild</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/DiscordVoiceData.html">DiscordVoiceData</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a>
               </li>
               <li class="nav-group-task">
@@ -318,9 +333,6 @@
           <li class="nav-group-name">
             <a href="../Typealiases.html">Typealiases</a>
             <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:12SwiftDiscord16DiscordVoiceData">DiscordVoiceData</a>
-              </li>
               <li class="nav-group-task">
                 <a href="../Typealiases.html#/s:12SwiftDiscord14EncoderProcess">EncoderProcess</a>
               </li>
@@ -429,6 +441,34 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Footer</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:VV12SwiftDiscord12DiscordEmbed5Image"></a>
+                    <a name="//apple_ref/swift/Struct/Image" class="dashAnchor"></a>
+                    <a class="token" href="#/s:VV12SwiftDiscord12DiscordEmbed5Image">Image</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents an Embed&rsquo;s image.</p>
+
+                        <a href="../Structs/DiscordEmbed/Image.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Image</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
 
                         </div>
                       </div>
@@ -613,6 +653,33 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:vV12SwiftDiscord12DiscordEmbed5imageGSqVS0_5Image_"></a>
+                    <a name="//apple_ref/swift/Property/image" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord12DiscordEmbed5imageGSqVS0_5Image_">image</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The image for this embed.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">image</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed/Image.html">Image</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:vV12SwiftDiscord12DiscordEmbed8providerGSqVS0_8Provider_"></a>
                     <a name="//apple_ref/swift/Property/provider" class="dashAnchor"></a>
                     <a class="token" href="#/s:vV12SwiftDiscord12DiscordEmbed8providerGSqVS0_8Provider_">provider</a>
@@ -786,9 +853,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FV12SwiftDiscord12DiscordEmbedcFT5titleSS11descriptionSS6authorGSqVS0_6Author_3urlGSqV10Foundation3URL_9thumbnailGSqVS0_9Thumbnail_5colorGSqSi_6footerGSqVS0_6Footer__S0_"></a>
-                    <a name="//apple_ref/swift/Method/init(title:description:author:url:thumbnail:color:footer:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FV12SwiftDiscord12DiscordEmbedcFT5titleSS11descriptionSS6authorGSqVS0_6Author_3urlGSqV10Foundation3URL_9thumbnailGSqVS0_9Thumbnail_5colorGSqSi_6footerGSqVS0_6Footer__S0_">init(title:description:author:url:thumbnail:color:footer:)</a>
+                    <a name="/s:FV12SwiftDiscord12DiscordEmbedcFT5titleSS11descriptionSS6authorGSqVS0_6Author_3urlGSqV10Foundation3URL_5imageGSqVS0_5Image_9thumbnailGSqVS0_9Thumbnail_5colorGSqSi_6footerGSqVS0_6Footer__S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(title:description:author:url:image:thumbnail:color:footer:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FV12SwiftDiscord12DiscordEmbedcFT5titleSS11descriptionSS6authorGSqVS0_6Author_3urlGSqV10Foundation3URL_5imageGSqVS0_5Image_9thumbnailGSqVS0_9Thumbnail_5colorGSqSi_6footerGSqVS0_6Footer__S0_">init(title:description:author:url:image:thumbnail:color:footer:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -809,6 +876,7 @@
                 <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
                 <span class="nv">author</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed/Author.html">Author</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
                 <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+                <span class="nv">image</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed/Image.html">Image</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
                 <span class="nv">thumbnail</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed/Thumbnail.html">Thumbnail</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
                 <span class="nv">color</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
                 <span class="nv">footer</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed/Footer.html">Footer</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
@@ -874,6 +942,19 @@
                             <tr>
                               <td>
                                 <code>
+                                <em>image</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The image for the embed, if there is one.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
                                 <em>thumbnail</em>
                                 </code>
                               </td>
@@ -921,7 +1002,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-18)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-26)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

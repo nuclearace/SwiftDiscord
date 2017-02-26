@@ -437,6 +437,8 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
 
     let files: [DiscordFileUpload]
 
+    // MARK: Initializers
+
     init(messageObject: [String: Any], client: DiscordClient?) {
         attachments = DiscordAttachment.attachmentsFromArray(messageObject.get("attachments", or: [[String: Any]]()))
         author = DiscordUser(userObject: messageObject.get("author", or: [String: Any]()))
@@ -463,6 +465,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         - parameter content: The content of this message.
         - parameter embeds: The embeds for this message.
         - parameter files: The files to send with this message.
+        - parameter tts: Whether this message should be text-to-speach.
     */
     public init(content: String, embeds: [DiscordEmbed] = [], files: [DiscordFileUpload] = [], tts: Bool = false) {
         self.content = content

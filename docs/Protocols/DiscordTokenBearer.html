@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DiscordPresence Struct Reference</title>
+    <title>DiscordTokenBearer Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/DiscordPresence" class="dashAnchor"></a>
-    <a title="DiscordPresence Struct Reference"></a>
+    <a name="//apple_ref/swift/Protocol/DiscordTokenBearer" class="dashAnchor"></a>
+    <a title="DiscordTokenBearer Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        DiscordPresence Struct Reference
+        DiscordTokenBearer Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -343,14 +343,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>DiscordPresence</h1>
+            <h1>DiscordTokenBearer</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordPresence</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordTokenBearer</span></code></pre>
 
                 </div>
               </div>
-            <p>Represents a presence.</p>
+            <p>Declares that a type will have a Discord token.</p>
 
           </section>
           <section class="section task-group-section">
@@ -366,9 +366,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV12SwiftDiscord15DiscordPresence7guildIdSS"></a>
-                    <a name="//apple_ref/swift/Property/guildId" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord15DiscordPresence7guildIdSS">guildId</a>
+                    <a name="/s:vP12SwiftDiscord18DiscordTokenBearer5tokenVS_12DiscordToken"></a>
+                    <a name="//apple_ref/swift/Property/token" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP12SwiftDiscord18DiscordTokenBearer5tokenVS_12DiscordToken">token</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -376,149 +376,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The snowflake of the guild this presence belongs on.</p>
+                        <p>The token for the user.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord15DiscordPresence4userVS_11DiscordUser"></a>
-                    <a name="//apple_ref/swift/Property/user" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord15DiscordPresence4userVS_11DiscordUser">user</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The user associated with this presence.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">user</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordUser.html">DiscordUser</a></span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord15DiscordPresence4gameGSqVS_11DiscordGame_"></a>
-                    <a name="//apple_ref/swift/Property/game" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord15DiscordPresence4gameGSqVS_11DiscordGame_">game</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The game this user is playing, if they are playing a game.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">game</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGame.html">DiscordGame</a></span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord15DiscordPresence4nickGSqSS_"></a>
-                    <a name="//apple_ref/swift/Property/nick" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord15DiscordPresence4nickGSqSS_">nick</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>This user&rsquo;s nick on this guild.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">nick</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord15DiscordPresence5rolesGSaSS_"></a>
-                    <a name="//apple_ref/swift/Property/roles" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord15DiscordPresence5rolesGSaSS_">roles</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The roles?</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">roles</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV12SwiftDiscord15DiscordPresence6statusOS_21DiscordPresenceStatus"></a>
-                    <a name="//apple_ref/swift/Property/status" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV12SwiftDiscord15DiscordPresence6statusOS_21DiscordPresenceStatus">status</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The status of this user.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordPresenceStatus.html">DiscordPresenceStatus</a></span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span></code></pre>
 
                         </div>
                       </div>

@@ -62,6 +62,7 @@ public protocol DiscordVoiceManagerDelegate : class, DiscordTokenBearer {
 open class DiscordVoiceManager : DiscordVoiceEngineDelegate {
     // MARK: Properties
 
+    /// The delegate for this manager.
     public weak var delegate: DiscordVoiceManagerDelegate?
 
     /// The token for the user.

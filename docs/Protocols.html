@@ -64,6 +64,9 @@
               <li class="nav-group-task">
                 <a href="Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Classes/DiscordVoiceManager.html">DiscordVoiceManager</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -149,7 +152,7 @@
                 <a href="Protocols/DiscordEndpointConsumer.html">DiscordEndpointConsumer</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/DiscordEngineClient.html">DiscordEngineClient</a>
+                <a href="Protocols/DiscordEngineDelegate.html">DiscordEngineDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/DiscordEngineGatewayHandling.html">DiscordEngineGatewayHandling</a>
@@ -170,13 +173,19 @@
                 <a href="Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a>
               </li>
               <li class="nav-group-task">
+                <a href="Protocols/DiscordTokenBearer.html">DiscordTokenBearer</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/DiscordUserActor.html">DiscordUserActor</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/DiscordVoiceEngineClient.html">DiscordVoiceEngineClient</a>
+                <a href="Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/DiscordVoiceEngineSpec.html">DiscordVoiceEngineSpec</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/DiscordVoiceManagerDelegate.html">DiscordVoiceManagerDelegate</a>
               </li>
             </ul>
           </li>
@@ -203,6 +212,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Structs/DiscordEmbed/Footer.html">– Footer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/DiscordEmbed/Image.html">– Image</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/DiscordEmbed/Provider.html">– Provider</a>
@@ -304,6 +316,9 @@
                 <a href="Structs/DiscordUserGuild.html">DiscordUserGuild</a>
               </li>
               <li class="nav-group-task">
+                <a href="Structs/DiscordVoiceData.html">DiscordVoiceData</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a>
               </li>
               <li class="nav-group-task">
@@ -317,9 +332,6 @@
           <li class="nav-group-name">
             <a href="Typealiases.html">Typealiases</a>
             <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="Typealiases.html#/s:12SwiftDiscord16DiscordVoiceData">DiscordVoiceData</a>
-              </li>
               <li class="nav-group-task">
                 <a href="Typealiases.html#/s:12SwiftDiscord14EncoderProcess">EncoderProcess</a>
               </li>
@@ -423,7 +435,7 @@ the corresponding delegate method will be called.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordClientSpec</span> <span class="p">:</span> <span class="kd">class</span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordEngineClient.html">DiscordEngineClient</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordVoiceEngineClient.html">DiscordVoiceEngineClient</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordUserActor.html">DiscordUserActor</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordClientSpec</span> <span class="p">:</span> <span class="kd">class</span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordVoiceManagerDelegate.html">DiscordVoiceManagerDelegate</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordUserActor.html">DiscordUserActor</a></span></code></pre>
 
                         </div>
                       </div>
@@ -483,7 +495,7 @@ the corresponding delegate method will be called.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordDispatchEventHandler</span> <span class="p">:</span> <span class="kt"><a href="Protocols/DiscordClientSpec.html">DiscordClientSpec</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordDispatchEventHandler</span></code></pre>
 
                         </div>
                       </div>
@@ -534,9 +546,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:P12SwiftDiscord19DiscordEngineClient"></a>
-                    <a name="//apple_ref/swift/Protocol/DiscordEngineClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:P12SwiftDiscord19DiscordEngineClient">DiscordEngineClient</a>
+                    <a name="/s:P12SwiftDiscord21DiscordEngineDelegate"></a>
+                    <a name="//apple_ref/swift/Protocol/DiscordEngineDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P12SwiftDiscord21DiscordEngineDelegate">DiscordEngineDelegate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -544,15 +556,15 @@ that if you make modifications to the client inside of a callback, you first dis
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Declares a type will be a client of a DiscordEngine.</p>
+                        <p>Declares a type will be a delegate of a DiscordEngine.</p>
 
-                        <a href="Protocols/DiscordEngineClient.html" class="slightly-smaller">See more</a>
+                        <a href="Protocols/DiscordEngineDelegate.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordEngineClient</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordEngineDelegate</span> <span class="p">:</span> <span class="kd">class</span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordTokenBearer.html">DiscordTokenBearer</a></span></code></pre>
 
                         </div>
                       </div>
@@ -741,7 +753,39 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordShardManagerDelegate</span> <span class="p">:</span> <span class="kd">class</span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordClientSpec.html">DiscordClientSpec</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordShardManagerDelegate</span> <span class="p">:</span> <span class="kd">class</span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordTokenBearer.html">DiscordTokenBearer</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:P12SwiftDiscord18DiscordTokenBearer"></a>
+                    <a name="//apple_ref/swift/Protocol/DiscordTokenBearer" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P12SwiftDiscord18DiscordTokenBearer">DiscordTokenBearer</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Declares that a type will have a Discord token.</p>
+
+                        <a href="Protocols/DiscordTokenBearer.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordTokenBearer</span></code></pre>
 
                         </div>
                       </div>
@@ -787,9 +831,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:P12SwiftDiscord24DiscordVoiceEngineClient"></a>
-                    <a name="//apple_ref/swift/Protocol/DiscordVoiceEngineClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:P12SwiftDiscord24DiscordVoiceEngineClient">DiscordVoiceEngineClient</a>
+                    <a name="/s:P12SwiftDiscord26DiscordVoiceEngineDelegate"></a>
+                    <a name="//apple_ref/swift/Protocol/DiscordVoiceEngineDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P12SwiftDiscord26DiscordVoiceEngineDelegate">DiscordVoiceEngineDelegate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -799,13 +843,13 @@ that if you make modifications to the client inside of a callback, you first dis
                       <div class="abstract">
                         <p>Declares that a type will be a client for a voice engine.</p>
 
-                        <a href="Protocols/DiscordVoiceEngineClient.html" class="slightly-smaller">See more</a>
+                        <a href="Protocols/DiscordVoiceEngineDelegate.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordVoiceEngineClient</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordVoiceEngineDelegate</span> <span class="p">:</span> <span class="kt"><a href="Protocols/DiscordEngineDelegate.html">DiscordEngineDelegate</a></span></code></pre>
 
                         </div>
                       </div>
@@ -846,10 +890,42 @@ that if you make modifications to the client inside of a callback, you first dis
                 </li>
               </ul>
             </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:P12SwiftDiscord27DiscordVoiceManagerDelegate"></a>
+                    <a name="//apple_ref/swift/Protocol/DiscordVoiceManagerDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P12SwiftDiscord27DiscordVoiceManagerDelegate">DiscordVoiceManagerDelegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A delegate for a VoiceManager.</p>
+
+                        <a href="Protocols/DiscordVoiceManagerDelegate.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordVoiceManagerDelegate</span> <span class="p">:</span> <span class="kd">class</span><span class="p">,</span> <span class="kt"><a href="Protocols/DiscordTokenBearer.html">DiscordTokenBearer</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-18)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-26)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

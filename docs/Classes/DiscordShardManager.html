@@ -65,6 +65,9 @@
               <li class="nav-group-task">
                 <a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
               </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DiscordVoiceManager.html">DiscordVoiceManager</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -150,7 +153,7 @@
                 <a href="../Protocols/DiscordEndpointConsumer.html">DiscordEndpointConsumer</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordEngineClient.html">DiscordEngineClient</a>
+                <a href="../Protocols/DiscordEngineDelegate.html">DiscordEngineDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/DiscordEngineGatewayHandling.html">DiscordEngineGatewayHandling</a>
@@ -171,13 +174,19 @@
                 <a href="../Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/DiscordTokenBearer.html">DiscordTokenBearer</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/DiscordUserActor.html">DiscordUserActor</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordVoiceEngineClient.html">DiscordVoiceEngineClient</a>
+                <a href="../Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/DiscordVoiceEngineSpec.html">DiscordVoiceEngineSpec</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordVoiceManagerDelegate.html">DiscordVoiceManagerDelegate</a>
               </li>
             </ul>
           </li>
@@ -204,6 +213,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordEmbed/Footer.html">– Footer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordEmbed/Image.html">– Image</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/DiscordEmbed/Provider.html">– Provider</a>
@@ -305,6 +317,9 @@
                 <a href="../Structs/DiscordUserGuild.html">DiscordUserGuild</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/DiscordVoiceData.html">DiscordVoiceData</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a>
               </li>
               <li class="nav-group-task">
@@ -319,9 +334,6 @@
             <a href="../Typealiases.html">Typealiases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:12SwiftDiscord16DiscordVoiceData">DiscordVoiceData</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Typealiases.html#/s:12SwiftDiscord14EncoderProcess">EncoderProcess</a>
               </li>
             </ul>
@@ -334,7 +346,7 @@
             <h1>DiscordShardManager</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordShardManager</span></code></pre>
+                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordShardManager</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordEngineDelegate.html">DiscordEngineDelegate</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/DiscordTokenBearer.html">DiscordTokenBearer</a></span></code></pre>
 
                 </div>
               </div>
@@ -380,6 +392,33 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <h4>Return Value</h4>
                         <p>The shard with num <code>n</code></p>
 
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord19DiscordShardManager5tokenVS_12DiscordToken"></a>
+                    <a name="//apple_ref/swift/Property/token" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord19DiscordShardManager5tokenVS_12DiscordToken">token</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The token for the user.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -472,7 +511,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">createShardWithDelegate</span><span class="p">(</span><span class="n">_</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a></span><span class="p">,</span> <span class="n">withShardNum</span> <span class="nv">shardNum</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span>
-            <span class="nv">totalShards</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span></code></pre>
+                                      <span class="nv">totalShards</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span></code></pre>
 
                         </div>
                       </div>
@@ -553,6 +592,55 @@ decides when a client has fully disconnected. Disconnected being when all shards
                           <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">disconnect</span><span class="p">()</span></code></pre>
 
                         </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord19DiscordShardManager20handleEngineDispatchFTOS_20DiscordDispatchEvent4withVS_21DiscordGatewayPayload_T_"></a>
+                    <a name="//apple_ref/swift/Method/handleEngineDispatch(_:with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord19DiscordShardManager20handleEngineDispatchFTOS_20DiscordDispatchEvent4withVS_21DiscordGatewayPayload_T_">handleEngineDispatch(_:with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Handles engine dispatch events. You shouldn&rsquo;t need to call this method directly.</p>
+
+<p>Override to provide custom engine dispatch functionality.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleEngineDispatch</span><span class="p">(</span><span class="n">_</span> <span class="nv">event</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a></span><span class="p">,</span> <span class="n">with</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>payload</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A <code>DiscordGatewayPayload</code> containing the dispatch information.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -810,7 +898,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-18)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-26)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
