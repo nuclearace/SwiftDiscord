@@ -29,7 +29,7 @@ func client(_ client: DiscordClient, didConnect connected: Bool) {
 
 func client(_ client: DiscordClient, didCreateMessage message: DiscordMessage) {
     if message.content == "$mycommand" {
-        message.channel?.sendMessage("I got your command")
+        message.channel?.send("I got your command")
     }
 }
 
