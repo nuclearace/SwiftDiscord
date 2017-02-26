@@ -147,6 +147,23 @@ public struct DiscordEmbed : JSONAble {
         }
     }
 
+    /// Represents an Embed's image.
+    public struct Image : JSONAble {
+        // MARK: Properties
+
+        /// The text for this footer.
+        public let url: String
+
+        /**
+            Creates an Image object.
+
+            - parameter url: The url for this field.
+        */
+        public init(url: String) {
+            self.url = url
+        }
+    }
+
     /// Represents what is providing the content of an embed.
     public struct Provider : JSONAble {
         // MARK: Properties
@@ -189,6 +206,9 @@ public struct DiscordEmbed : JSONAble {
     /// The footer for this embed.
     public let footer: Footer?
 
+    /// The image for this embed.
+    public let image: Image?
+
     /// The provider of this embed.
     public let provider: Provider?
 
@@ -218,6 +238,7 @@ public struct DiscordEmbed : JSONAble {
         - parameter description: The description of this embed.
         - parameter author: The author of this embed.
         - parameter url: The url for this embed, if there is one.
+        - parameter image: The image for the embed, if there is one.
         - parameter thumbnail: The thumbnail of this embed, if there is one.
         - parameter color: The color of this embed.
         - parameter footer: The footer for this embed, if there is one.
@@ -226,6 +247,7 @@ public struct DiscordEmbed : JSONAble {
                 description: String,
                 author: Author? = nil,
                 url: URL? = nil,
+                image: Image? = nil,
                 thumbnail: Thumbnail? = nil,
                 color: Int? = nil,
                 footer: Footer? = nil) {
@@ -236,6 +258,7 @@ public struct DiscordEmbed : JSONAble {
         self.thumbnail = thumbnail
         self.type = "rich"
         self.url = url
+        self.image = image
         self.color = color
         self.footer = footer
     }
@@ -248,6 +271,7 @@ public struct DiscordEmbed : JSONAble {
         title = embedObject.get("title", or: "")
         type = embedObject.get("type", or: "")
         url = URL(string: embedObject.get("url", or: ""))
+        image = Image(imageObject: embedObject.get("image", or: nil))
         fields = Field.fieldsFromArray(embedObject.get("fields", or: []))
         color = embedObject.get("color", or: nil)
         footer = Footer(footerObject: embedObject.get("footer", or: nil))
@@ -288,6 +312,14 @@ extension DiscordEmbed.Footer {
         text = footerObject.get("text", or: "")
         iconUrl = URL(string: footerObject.get("iconUrl", or: ""))
         proxyUrl = URL(string: footerObject.get("proxy_icon_url", or: ""))
+    }
+}
+
+extension DiscordEmbed.Image {
+    init?(imageObject: [String: Any]?) {
+        guard let imageObject = imageObject else { return nil }
+
+        url = imageObject.get("url", or: "")
     }
 }
 
@@ -336,7 +368,18 @@ public struct DiscordReaction {
 }
 
 /// Represents a Discord chat message.
-public struct DiscordMessage : DiscordClientHolder {
+public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
+    // MARK: Typealiases
+
+    /// ExpressibleByStringLiteral conformance
+    public typealias StringLiteralType = String
+
+    /// ExpressibleByStringLiteral conformance.
+    public typealias ExtendedGraphemeClusterLiteralType = String.ExtendedGraphemeClusterLiteralType
+
+    /// ExpressibleByStringLiteral conformance.
+    public typealias UnicodeScalarLiteralType = String.UnicodeScalarLiteralType
+
     // MARK: Properties
 
     /// The attachments included in this message.
@@ -392,6 +435,8 @@ public struct DiscordMessage : DiscordClientHolder {
         return client?.findChannel(fromId: channelId)
     }
 
+    let files: [DiscordFileUpload]
+
     init(messageObject: [String: Any], client: DiscordClient?) {
         attachments = DiscordAttachment.attachmentsFromArray(messageObject.get("attachments", or: [[String: Any]]()))
         author = DiscordUser(userObject: messageObject.get("author", or: [String: Any]()))
@@ -408,10 +453,91 @@ public struct DiscordMessage : DiscordClientHolder {
         tts = messageObject.get("tts", or: false)
         editedTimestamp = convertISO8601(string: messageObject.get("edited_timestamp", or: "")) ?? Date()
         timestamp = convertISO8601(string: messageObject.get("timestamp", or: "")) ?? Date()
+        files = []
         self.client = client
     }
 
+    /**
+        Creates a message that can be used to send.
+
+        - parameter content: The content of this message.
+        - parameter embeds: The embeds for this message.
+        - parameter files: The files to send with this message.
+    */
+    public init(content: String, embeds: [DiscordEmbed] = [], files: [DiscordFileUpload] = [], tts: Bool = false) {
+        self.content = content
+        self.embeds = embeds
+        self.files = files
+        self.tts = tts
+        self.attachments = []
+        self.author = DiscordUser(userObject: [:])
+        self.channelId = ""
+        self.id = ""
+        self.mentionEveryone = false
+        self.mentionRoles = []
+        self.mentions = []
+        self.nonce = ""
+        self.pinned = false
+        self.reactions = []
+        self.editedTimestamp = Date()
+        self.timestamp = Date()
+    }
+
+    /**
+        ExpressibleByStringLiteral conformance.
+
+        - parameter unicodeScalarLiteral: The unicode scalar literal
+    */
+    public init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
+        self.init(stringLiteral: String(extendedGraphemeClusterLiteral: value))
+    }
+
+    /**
+        ExpressibleByStringLiteral conformance.
+
+        - parameter extendedGraphemeClusterLiteral: The grapheme scalar literal
+    */
+    public init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
+        self.init(stringLiteral: String(extendedGraphemeClusterLiteral: value))
+    }
+
+    /**
+        ExpressibleByStringLiteral conformance.
+
+        - parameter stringLiteral: The string literal
+    */
+    public init(stringLiteral value: StringLiteralType) {
+        self.init(content: value)
+    }
+
     // MARK: Methods
+
+    func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
+        if let file = files.first {
+            var fields: [String: String] = [
+                    "content": content,
+                    "tts": String(tts),
+            ]
+
+            if let embed = embeds.first, let encoded = encodeJSON(["embed": embed.json]) {
+                fields["payload_json"] = encoded
+            }
+
+            return .right(createMultipartBody(fields: fields, file: file))
+        } else {
+            let messageObject: [String: Any] = [
+                    "content": content,
+                    "tts": tts,
+                    "embed": embeds.first?.json ?? [:]
+            ]
+
+            guard let contentData = encodeJSON(messageObject)?.data(using: .utf8, allowLossyConversion: false) else {
+                return .left(Data())
+            }
+
+            return .left(contentData)
+        }
+    }
 
     /**
         Deletes this message from Discord.

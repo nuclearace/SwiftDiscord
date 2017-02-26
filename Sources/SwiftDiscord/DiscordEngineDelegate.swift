@@ -1,5 +1,5 @@
 // The MIT License (MIT)
-// Copyright (c) 2016 Erik Little
+// Copyright (c) 2017 Erik Little
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -15,8 +15,8 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/// Declares a type will be a client of a DiscordEngine.
-public protocol DiscordEngineClient {
+/// Declares a type will be a delegate of a DiscordEngine.
+public protocol DiscordEngineDelegate : class, DiscordTokenBearer {
     // MARK: Methods
 
     /**

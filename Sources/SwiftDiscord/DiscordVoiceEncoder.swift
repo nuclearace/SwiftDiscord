@@ -29,6 +29,15 @@ public enum DiscordVoiceError : Error {
     case encodeFail
 }
 
+/// A struct that contains the RTP header and voice data from a voice packet.
+public struct DiscordVoiceData {
+    /// The header for this packet.
+    public let rtpHeader: [UInt8]
+
+    /// The voice data, Opus encoded.
+    public let voiceData: [UInt8]
+}
+
 #if !os(iOS)
 /**
     A wrapper class for a process that spits out audio data that can be fed into an FFmpeg process that is then sent

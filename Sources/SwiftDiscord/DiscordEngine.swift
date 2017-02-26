@@ -51,7 +51,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     /// Override if you need to customize the handshake object.
     open var handshakeObject: [String: Any] {
         var identify: [String: Any] = [
-            "token": client!.token.token,
+            "token": delegate!.token.token,
             "properties": [
                 "$os": os,
                 "$browser": "SwiftDiscord",
@@ -74,7 +74,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     /// Override if you need to customize the resume object.
     open var resumeObject: [String: Any] {
         return [
-            "token": client!.token.token,
+            "token": delegate!.token.token,
             "session_id": sessionId!,
             "seq": lastSequenceNumber
         ]
@@ -104,8 +104,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     /// On Linux this is a WebSockets.WebSocket. While on macOS/iOS this is a Starscream.WebSocket
     public internal(set) var websocket: WebSocket?
 
-    /// The client that this engine is associated with.
-    public private(set) weak var client: DiscordClientSpec?
+    /// The delegate that this engine is associated with.
+    public private(set) weak var delegate: DiscordEngineDelegate?
 
     /// The dispatch queue that heartbeats are sent on.
     public private(set) var heartbeatQueue = DispatchQueue(label: "discordEngine.heartbeatQueue")
@@ -132,10 +132,10 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     /**
         Creates a new DiscordEngine.
 
-        - parameter client: The DiscordClientSpec this engine should be associated with.
+        - parameter delegate: The DiscordClientSpec this engine should be associated with.
     */
-    public required init(client: DiscordClientSpec, shardNum: Int = 0, numShards: Int = 1) {
-        self.client = client
+    public required init(delegate: DiscordEngineDelegate, shardNum: Int = 0, numShards: Int = 1) {
+        self.delegate = delegate
         self.shardNum = shardNum
         self.numShards = numShards
     }
@@ -293,11 +293,11 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
         func handleInvalidSession() {
             if case let .bool(netsplit) = payload.payload, !netsplit {
-                DefaultDiscordLogger.Logger.error("Invalid session received. Invalidating session", type: logType)
+                DefaultDiscordLogger.Logger.log("Invalid session received. Invalidating session", type: logType)
 
                 sessionId = nil
             } else {
-                DefaultDiscordLogger.Logger.error("Netsplit recieved, trying to resume", type: logType)
+                DefaultDiscordLogger.Logger.log("Netsplit recieved, trying to resume", type: logType)
             }
 
             resuming = false
@@ -320,8 +320,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
         case .invalidSession:
             handleInvalidSession()
         case .heartbeat:
-            sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.heartbeat),
-                payload: .integer(1)))
+            sendPayload(DiscordGatewayPayload(code: .gateway(.heartbeat),
+                                              payload: .integer(1)))
         case .heartbeatAck:
             heartbeatQueue.sync { self.pongsMissed = 0 }
             DefaultDiscordLogger.Logger.debug("Got heartback ack", type: logType)
@@ -429,7 +429,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
         DefaultDiscordLogger.Logger.debug("Sending heartbeat, shard: %@", type: logType, args: shardNum)
 
         pongsMissed += 1
-        sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
+        sendPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
 
         let time = DispatchTime.now() + Double(heartbeatInterval)
 
@@ -446,8 +446,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
         Override this method if you need to customize the handshake process.
     */
     open func startHandshake() {
-        guard client != nil else {
-            error(message: "Client nil before handshaked")
+        guard delegate != nil else {
+            error(message: "delegate nil before handshaked")
 
             return
         }
@@ -455,11 +455,11 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
         if sessionId != nil {
             DefaultDiscordLogger.Logger.log("Sending resume, shard: %@", type: logType, args: shardNum)
 
-            sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.resume), payload: .object(resumeObject)))
+            sendPayload(DiscordGatewayPayload(code: .gateway(.resume), payload: .object(resumeObject)))
         } else {
             DefaultDiscordLogger.Logger.log("Sending handshake, shard: %@", type: logType, args: shardNum)
 
-            sendGatewayPayload(DiscordGatewayPayload(code: .gateway(.identify), payload: .object(handshakeObject)))
+            sendPayload(DiscordGatewayPayload(code: .gateway(.identify), payload: .object(handshakeObject)))
         }
     }
 

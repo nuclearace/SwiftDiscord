@@ -193,7 +193,7 @@ public protocol DiscordClientDelegate : class {
         - parameter forGuild: The guild the members were added to.
     */
     func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: DiscordLazyDictionary<String, DiscordGuildMember>,
-            forGuild guild: DiscordGuild)
+                forGuild guild: DiscordGuild)
 
     /**
         Called when the client does not handle a dispatch event.
@@ -203,7 +203,7 @@ public protocol DiscordClientDelegate : class {
         - parameter withData: The data for the event.
     */
     func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent,
-            withData data: [String: Any])
+                withData data: [String: Any])
 
     /**
         Called when the client updates a guild's emojis.
@@ -213,7 +213,7 @@ public protocol DiscordClientDelegate : class {
         - parameter onGuild: The guild the emojis were updated on.
     */
     func client(_ client: DiscordClient, didUpdateEmojis emojis: [String: DiscordEmoji],
-            onGuild guild: DiscordGuild)
+                onGuild guild: DiscordGuild)
 
     /**
         Called when a voice engine is requesting a new encoder, can be used to override the default encoder with
@@ -228,8 +228,7 @@ public protocol DiscordClientDelegate : class {
         - parameter needsVoiceEncoderForEngine: The engine that needs an encoder.
         - returns: A DiscordVoiceEncoder to use to encode with.
     */
-    func client(_ client: DiscordClient, needsVoiceEncoderForEngine engine: DiscordVoiceEngine)
-            throws -> DiscordVoiceEncoder
+    func client(_ client: DiscordClient, needsVoiceEncoderForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder
 }
 
 public extension DiscordClientDelegate {
@@ -295,20 +294,19 @@ public extension DiscordClientDelegate {
 
     /// Default.
     func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: DiscordLazyDictionary<String, DiscordGuildMember>,
-            forGuild guild: DiscordGuild) { }
+                forGuild guild: DiscordGuild) { }
 
     /// Default.
     func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent,
-            withData data: [String: Any]) { }
+                withData data: [String: Any]) { }
 
     /// Default.
     func client(_ client: DiscordClient, didUpdateEmojis emojis: [String: DiscordEmoji],
-            onGuild guild: DiscordGuild) { }
+                onGuild guild: DiscordGuild) { }
 
     #if !os(iOS)
     /// Default
-    func client(_ client: DiscordClient, needsVoiceEncoderForEngine engine: DiscordVoiceEngine)
-            throws -> DiscordVoiceEncoder {
+    func client(_ client: DiscordClient, needsVoiceEncoderForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder {
         return try DiscordVoiceEncoder(opusEncoder: DiscordOpusEncoder(bitrate: 128_000,
                                                                        sampleRate: 48_000,
                                                                        channels: 2))

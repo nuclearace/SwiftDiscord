@@ -15,10 +15,6 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/// A named tuple that contains the RTP header and voice data from a voice packet.
-/// The voice data is OPUS encoded.
-public typealias DiscordVoiceData = (rtpHeader: [UInt8], voiceData: [UInt8])
-
 import Foundation
 import Dispatch
 #if !os(Linux)
@@ -30,7 +26,7 @@ import Socks
 import Sodium
 
 enum DiscordVoiceEngineError : Error {
-    case decryptionError
+    case decryptionError([UInt8])
     case encryptionError
     case ipExtraction
 }
@@ -64,10 +60,13 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         return [
             "session_id": voiceState.sessionId,
             "server_id": voiceState.guildId,
-            "user_id": client!.user!.id,
+            "user_id": voiceState.userId,
             "token": voiceServerInformation.token
         ]
     }
+
+    /// The voice engine's delegate.
+    public private(set) weak var voiceDelegate: DiscordVoiceEngineDelegate?
 
     /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data
     public private(set) var encoder: DiscordVoiceEncoder!
@@ -126,18 +125,19 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     /**
         Constructs a new VoiceEngine
 
-        - parameter client: The client this engine should be associated with
+        - parameter delegate: The client this engine should be associated with
         - parameter voiceServerInformation: The voice server information
         - parameter encoder: A DiscordVoiceEncoder that from a previous engine. Send if you are still encoding i.e
                     moved channels
         - parameter secret: The secret from a previous engine.
     */
-    public convenience init(client: DiscordClientSpec,
+    public convenience init(delegate: DiscordVoiceEngineDelegate,
                             voiceServerInformation: DiscordVoiceServerInformation,
                             voiceState: DiscordVoiceState,
                             encoder: DiscordVoiceEncoder?,
                             secret: [UInt8]?) {
-        self.init(client: client)
+        self.init(delegate: delegate)
+        self.voiceDelegate = delegate
 
         _ = sodium_init()
 
@@ -189,11 +189,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         // Guard against trying to create multiple encoders at once
         encoderSemaphore.wait()
 
-        encoder = try client?.voiceEngineNeedsEncoder(self)
+        encoder = try voiceDelegate?.voiceEngineNeedsEncoder(self)
 
         readData()
 
-        client?.voiceEngineReady(self)
+        voiceDelegate?.voiceEngineReady(self)
 
         encoderSemaphore.signal()
     }
@@ -261,7 +261,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
         let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &secret!)
 
-        guard success != -1 else { throw DiscordVoiceEngineError.decryptionError }
+        guard success != -1 else { throw DiscordVoiceEngineError.decryptionError(rtpHeader) }
 
         return DiscordVoiceData(rtpHeader: rtpHeader,
             voiceData: Array(UnsafeBufferPointer(start: unencrypted, count: audioSize)))
@@ -273,8 +273,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     public override func disconnect() {
         DefaultDiscordLogger.Logger.log("Disconnecting VoiceEngine", type: logType)
 
-        client?.voiceEngineDidDisconnect(self)
         closeOutEngine()
+        voiceDelegate?.voiceEngineDidDisconnect(self)
     }
 
     private func extractIPAndPort(from bytes: [UInt8]) throws -> (String, Int) {
@@ -331,7 +331,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         readData()
 
         encoderSemaphore.signal()
-        client?.voiceEngineReady(self)
+        voiceDelegate?.voiceEngineReady(self)
     }
 
     override func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
@@ -423,13 +423,18 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
             do {
                 let (data, _) = try socket.receive(maxBytes: 4096)
-                guard let voiceData = try self?.decryptVoiceData(Data(bytes: data)) else {
+                guard let voiceData = try self?.decryptVoiceData(Data(bytes: data)), let this = self else {
                     return
                 }
 
-                self?.client?.handleVoiceData(voiceData)
-            } catch DiscordVoiceEngineError.decryptionError {
-                self?.error(message: "Error decrypting voice packet")
+                self?.voiceDelegate?.voiceEngine(this, didReceiveVoiceData: voiceData)
+            } catch let DiscordVoiceEngineError.decryptionError(rtpHeader) {
+                guard let this = self else { return }
+
+                let data = DiscordVoiceData(rtpHeader: rtpHeader, voiceData: [])
+
+                this.error(message: "Error decrypting voice packet \(data)")
+                this.voiceDelegate?.voiceEngine(this, didReceiveVoiceData: data)
             } catch let err {
                 self?.error(message: "Error reading voice data from udp socket \(err)")
                 self?.disconnect()
@@ -464,7 +469,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             ]
         ]
 
-        sendGatewayPayload(DiscordGatewayPayload(code: .voice(.selectProtocol), payload: .object(payloadData)))
+        sendPayload(DiscordGatewayPayload(code: .voice(.selectProtocol), payload: .object(payloadData)))
         startHeartbeat(seconds: heartbeatInterval / 1000)
         connected = true
 
@@ -499,7 +504,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     public override func sendHeartbeat() {
         guard !closed else { return }
 
-        sendGatewayPayload(DiscordGatewayPayload(code: .voice(.heartbeat), payload: .integer(currentUnixTime)))
+        sendPayload(DiscordGatewayPayload(code: .voice(.heartbeat), payload: .integer(currentUnixTime)))
 
         let time = DispatchTime.now() + Double(heartbeatInterval)
 
@@ -512,7 +517,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             "delay": 0
         ]
 
-        sendGatewayPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object(speakingObject)))
+        sendPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object(speakingObject)))
     }
 
     /**
@@ -576,11 +581,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         Starts the handshake with the Discord voice server. You shouldn't need to call this directly.
     */
     public override func startHandshake() {
-        guard client != nil else { return }
+        guard voiceDelegate != nil else { return }
 
         DefaultDiscordLogger.Logger.log("Starting voice handshake", type: logType)
 
-        sendGatewayPayload(DiscordGatewayPayload(code: .voice(.identify), payload: .object(handshakeObject)))
+        sendPayload(DiscordGatewayPayload(code: .voice(.identify), payload: .object(handshakeObject)))
     }
 
     /**

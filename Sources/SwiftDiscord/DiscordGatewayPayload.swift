@@ -85,7 +85,7 @@ public struct DiscordGatewayPayload {
         - parameter name: The name of this dispatch
     */
     public init(code: DiscordGatewayCode, payload: DiscordGatewayPayloadData, sequenceNumber: Int? = nil,
-        name: String? = nil) {
+                name: String? = nil) {
         self.code = code
         self.payload = payload
         self.sequenceNumber = sequenceNumber
@@ -129,9 +129,7 @@ extension DiscordGatewayPayload {
             return nil
         }
 
-        let sequenceNumber = dictionary["s"] as? Int
-        let name = dictionary["t"] as? String
-
-        return DiscordGatewayPayload(code: code, payload: payload, sequenceNumber: sequenceNumber, name: name)
+        return DiscordGatewayPayload(code: code, payload: payload, sequenceNumber: dictionary["s"] as? Int,
+                                     name: dictionary["t"] as? String)
     }
 }
