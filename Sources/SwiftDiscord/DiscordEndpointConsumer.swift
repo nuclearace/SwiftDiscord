@@ -156,19 +156,6 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void)
 
     /**
-        Sends a message to the specified channel.
-
-        - parameter content: The content of the message.
-        - parameter to: The snowflake id of the channel to send to.
-        - parameter tts: Whether this message should be read a text-to-speech message.
-        - parameter embed: An optional embed for this message.
-        - parameter callback: An optional callback containing the message, if successful.
-    */
-    @available(*, deprecated: 3.1, message: "Will be removed in 3.2, use the new sendMessage")
-    func sendMessage(_ message: String, to channelId: String, tts: Bool, embed: DiscordEmbed?,
-                     callback: ((DiscordMessage?) -> Void)?)
-
-    /**
         Sends a message with an optional file and embed to the specified channel.
 
         Sending just a message:
@@ -710,18 +697,6 @@ public extension DiscordEndpointConsumer {
     /// Default implementation
     public func removeGuildRole(_ roleId: String, on guildId: String, callback: ((DiscordRole?) -> Void)? = nil) {
         DiscordEndpoint.removeGuildRole(roleId, on: guildId, with: token, callback: callback)
-    }
-
-    /// Default implementation
-    public func sendMessage(_ message: String, to channelId: String, tts: Bool = false,
-                            embed: DiscordEmbed? = nil, callback: ((DiscordMessage?) -> Void)? = nil) {
-        if let embed = embed {
-            DiscordEndpoint.sendMessage(DiscordMessage(content: message, embeds: [embed], tts: tts), with: token,
-                                        to: channelId, callback: callback)
-        } else {
-            DiscordEndpoint.sendMessage(DiscordMessage(content: message, tts: tts), with: token, to: channelId,
-                                        callback: callback)
-        }
     }
 
     /// Default implementation.

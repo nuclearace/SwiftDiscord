@@ -59,12 +59,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// If we should only represent a single shard, this is the shard information.
     public var singleShardInformation: DiscordShardInformation?
 
-    /// The voice engines, indexed by guild id.
-    @available(*, deprecated: 3.1, message: "Will be removed in 3.2, use `voiceEngines` on the voiceManager")
-    public var voiceEngines: [String: DiscordVoiceEngine] {
-        return voiceManager.voiceEngines
-    }
-
     /// A manager for the voice engines.
     public private(set) var voiceManager: DiscordVoiceManager!
 
@@ -97,12 +91,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
     /// The DiscordUser this client is connected to.
     public private(set) var user: DiscordUser?
-
-    /// The voice states for this user, if they are in any voice channels.
-    @available(*, deprecated: 3.1, message: "Will be removed in 3.2, use `voiceStates` on the voiceManager")
-    public var voiceStates: [String: DiscordVoiceState] {
-        return voiceManager.voiceStates
-    }
 
     private let parseQueue = DispatchQueue(label: "parseQueue")
     private let logType = "DiscordClient"
