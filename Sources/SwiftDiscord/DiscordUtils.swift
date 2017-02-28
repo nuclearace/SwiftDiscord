@@ -17,35 +17,6 @@
 
 import Foundation
 
-/// Represents a file to be uploaded to Discord.
-public struct DiscordFileUpload {
-    // MARK: Properties
-
-    /// The file data.
-    public let data: Data
-
-    /// The filename.
-    public let filename: String
-
-    /// The mime type.
-    public let mimeType: String
-
-    // MARK: Initializers
-
-    /**
-        Constructs a new DiscordFileUpload.
-
-        - parameter data: The file data
-        - parameter filename: The filename
-        - parameter mimeType: The mime type
-    */
-    public init(data: Data, filename: String, mimeType: String) {
-        self.data = data
-        self.filename = filename
-        self.mimeType = mimeType
-    }
-}
-
 enum Either<L, R> {
     case left(L)
     case right(R)
@@ -135,10 +106,16 @@ func decodeJSON(_ string: String) -> JSON? {
     }
 }
 
-func convertISO8601(string: String) -> Date? {
-    let RFC3339DateFormatter = DateFormatter()
+class DiscordDateFormatter {
+    private static let formatter = DiscordDateFormatter()
 
-    RFC3339DateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"
+    private let RFC3339DateFormatter = DateFormatter()
 
-    return RFC3339DateFormatter.date(from: string)
+    private init() {
+        RFC3339DateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"
+    }
+
+    static func format(_ string: String) -> Date? {
+        return formatter.RFC3339DateFormatter.date(from: string)
+    }
 }

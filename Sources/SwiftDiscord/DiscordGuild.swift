@@ -129,7 +129,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject.get("voice_states", or: [[String: Any]]()),
             guildId: id)
         unavailable = guildObject.get("unavailable", or: false)
-        joinedAt = convertISO8601(string: guildObject.get("joined_at", or: "")) ?? Date()
+        joinedAt = DiscordDateFormatter.format(guildObject.get("joined_at", or: "")) ?? Date()
         self.client = client
     }
 

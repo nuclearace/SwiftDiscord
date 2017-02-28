@@ -17,6 +17,35 @@
 
 import Foundation
 
+/// Represents a file to be uploaded to Discord.
+public struct DiscordFileUpload {
+    // MARK: Properties
+
+    /// The file data.
+    public let data: Data
+
+    /// The filename.
+    public let filename: String
+
+    /// The mime type.
+    public let mimeType: String
+
+    // MARK: Initializers
+
+    /**
+        Constructs a new DiscordFileUpload.
+
+        - parameter data: The file data
+        - parameter filename: The filename
+        - parameter mimeType: The mime type
+    */
+    public init(data: Data, filename: String, mimeType: String) {
+        self.data = data
+        self.filename = filename
+        self.mimeType = mimeType
+    }
+}
+
 /// Represents an attachment.
 public struct DiscordAttachment {
     // MARK: Properties
@@ -427,7 +456,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// The timestamp of this message.
     public let timestamp: Date
 
-    /// Whether or not this message should be read by a screen reader.å
+    /// Whether or not this message should be read by a screen reader.
     public let tts: Bool
 
     /// The channel that this message originated from. Can return nil if the channel couldn't be found.
@@ -453,8 +482,8 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         pinned = messageObject.get("pinned", or: false)
         reactions = DiscordReaction.reactionsFromArray(messageObject.get("reactions", or: []))
         tts = messageObject.get("tts", or: false)
-        editedTimestamp = convertISO8601(string: messageObject.get("edited_timestamp", or: "")) ?? Date()
-        timestamp = convertISO8601(string: messageObject.get("timestamp", or: "")) ?? Date()
+        editedTimestamp = DiscordDateFormatter.format(messageObject.get("edited_timestamp", or: "")) ?? Date()
+        timestamp = DiscordDateFormatter.format(messageObject.get("timestamp", or: "")) ?? Date()
         files = []
         self.client = client
     }

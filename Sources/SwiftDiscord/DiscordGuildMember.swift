@@ -49,7 +49,7 @@ public struct DiscordGuildMember {
         mute = guildMemberObject.get("mute", or: false)
         nick = guildMemberObject["nick"] as? String
         roles = guildMemberObject.get("roles", or: [String]())
-        joinedAt = convertISO8601(string: guildMemberObject.get("joined_at", or: "")) ?? Date()
+        joinedAt = DiscordDateFormatter.format(guildMemberObject.get("joined_at", or: "")) ?? Date()
     }
 
     static func guildMembersFromArray(_ guildMembersArray: [[String: Any]], withGuildId guildId: String)
