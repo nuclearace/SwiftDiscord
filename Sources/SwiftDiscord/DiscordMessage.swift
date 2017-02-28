@@ -17,32 +17,190 @@
 
 import Foundation
 
-/// Represents a file to be uploaded to Discord.
-public struct DiscordFileUpload {
+/// Represents a Discord chat message.
+public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
+    // MARK: Typealiases
+
+    /// ExpressibleByStringLiteral conformance
+    public typealias StringLiteralType = String
+
+    /// ExpressibleByStringLiteral conformance.
+    public typealias ExtendedGraphemeClusterLiteralType = String.ExtendedGraphemeClusterLiteralType
+
+    /// ExpressibleByStringLiteral conformance.
+    public typealias UnicodeScalarLiteralType = String.UnicodeScalarLiteralType
+
     // MARK: Properties
 
-    /// The file data.
-    public let data: Data
+    /// The attachments included in this message.
+    public let attachments: [DiscordAttachment]
 
-    /// The filename.
-    public let filename: String
+    /// Who sent this message.
+    public let author: DiscordUser
 
-    /// The mime type.
-    public let mimeType: String
+    /// The snowflake id of the channel this message is on.
+    public let channelId: String
+
+    /// A reference to the client.
+    public weak var client: DiscordClient?
+
+    /// The content of this message.
+    public let content: String
+
+    /// When this message was last edited.
+    public let editedTimestamp: Date
+
+    /// The embeds that are in this message.
+    public let embeds: [DiscordEmbed]
+
+    /// The snowflake id of this message.
+    public let id: String
+
+    /// Whether or not this message mentioned everyone.
+    public let mentionEveryone: Bool
+
+    /// List of snowflake ids of roles that were mentioned in this message.
+    public let mentionRoles: [String]
+
+    /// List of users that were mentioned in this message.
+    public let mentions: [DiscordUser]
+
+    /// Used for validating a message was sent.
+    public let nonce: String
+
+    /// Whether this message is pinned.
+    public let pinned: Bool
+
+    /// The reactions a message has.
+    public let reactions: [DiscordReaction]
+
+    /// The timestamp of this message.
+    public let timestamp: Date
+
+    /// Whether or not this message should be read by a screen reader.
+    public let tts: Bool
+
+    /// The channel that this message originated from. Can return nil if the channel couldn't be found.
+    public var channel: DiscordChannel? {
+        return client?.findChannel(fromId: channelId)
+    }
+
+    let files: [DiscordFileUpload]
 
     // MARK: Initializers
 
-    /**
-        Constructs a new DiscordFileUpload.
+    init(messageObject: [String: Any], client: DiscordClient?) {
+        attachments = DiscordAttachment.attachmentsFromArray(messageObject.get("attachments", or: [[String: Any]]()))
+        author = DiscordUser(userObject: messageObject.get("author", or: [String: Any]()))
+        channelId = messageObject.get("channel_id", or: "")
+        content = messageObject.get("content", or: "")
+        embeds = DiscordEmbed.embedsFromArray(messageObject.get("embeds", or: [[String: Any]]()))
+        id = messageObject.get("id", or: "")
+        mentionEveryone = messageObject.get("mention_everyone", or: false)
+        mentionRoles = messageObject.get("mention_roles", or: [String]())
+        mentions = DiscordUser.usersFromArray(messageObject.get("mentions", or: [[String: Any]]()))
+        nonce = messageObject.get("nonce", or: "")
+        pinned = messageObject.get("pinned", or: false)
+        reactions = DiscordReaction.reactionsFromArray(messageObject.get("reactions", or: []))
+        tts = messageObject.get("tts", or: false)
+        editedTimestamp = DiscordDateFormatter.format(messageObject.get("edited_timestamp", or: "")) ?? Date()
+        timestamp = DiscordDateFormatter.format(messageObject.get("timestamp", or: "")) ?? Date()
+        files = []
+        self.client = client
+    }
 
-        - parameter data: The file data
-        - parameter filename: The filename
-        - parameter mimeType: The mime type
+    /**
+        Creates a message that can be used to send.
+
+        - parameter content: The content of this message.
+        - parameter embeds: The embeds for this message.
+        - parameter files: The files to send with this message.
+        - parameter tts: Whether this message should be text-to-speach.
     */
-    public init(data: Data, filename: String, mimeType: String) {
-        self.data = data
-        self.filename = filename
-        self.mimeType = mimeType
+    public init(content: String, embeds: [DiscordEmbed] = [], files: [DiscordFileUpload] = [], tts: Bool = false) {
+        self.content = content
+        self.embeds = embeds
+        self.files = files
+        self.tts = tts
+        self.attachments = []
+        self.author = DiscordUser(userObject: [:])
+        self.channelId = ""
+        self.id = ""
+        self.mentionEveryone = false
+        self.mentionRoles = []
+        self.mentions = []
+        self.nonce = ""
+        self.pinned = false
+        self.reactions = []
+        self.editedTimestamp = Date()
+        self.timestamp = Date()
+    }
+
+    /**
+        ExpressibleByStringLiteral conformance.
+
+        - parameter unicodeScalarLiteral: The unicode scalar literal
+    */
+    public init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
+        self.init(stringLiteral: String(extendedGraphemeClusterLiteral: value))
+    }
+
+    /**
+        ExpressibleByStringLiteral conformance.
+
+        - parameter extendedGraphemeClusterLiteral: The grapheme scalar literal
+    */
+    public init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
+        self.init(stringLiteral: String(extendedGraphemeClusterLiteral: value))
+    }
+
+    /**
+        ExpressibleByStringLiteral conformance.
+
+        - parameter stringLiteral: The string literal
+    */
+    public init(stringLiteral value: StringLiteralType) {
+        self.init(content: value)
+    }
+
+    // MARK: Methods
+
+    func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
+        if let file = files.first {
+            var fields: [String: String] = [
+                    "content": content,
+                    "tts": String(tts),
+            ]
+
+            if let embed = embeds.first, let encoded = encodeJSON(["embed": embed.json]) {
+                fields["payload_json"] = encoded
+            }
+
+            return .right(createMultipartBody(fields: fields, file: file))
+        } else {
+            let messageObject: [String: Any] = [
+                    "content": content,
+                    "tts": tts,
+                    "embed": embeds.first?.json ?? [:]
+            ]
+
+            guard let contentData = encodeJSON(messageObject)?.data(using: .utf8, allowLossyConversion: false) else {
+                return .left(Data())
+            }
+
+            return .left(contentData)
+        }
+    }
+
+    /**
+        Deletes this message from Discord.
+    */
+    public func delete() {
+        channel?.deleteMessage(self)
+    }
+
+    static func messagesFromArray(_ array: [[String: Any]]) -> [DiscordMessage] {
+        return array.map({ DiscordMessage(messageObject: $0, client: nil) })
     }
 }
 
@@ -372,6 +530,35 @@ extension DiscordEmbed.Thumbnail {
     }
 }
 
+/// Represents a file to be uploaded to Discord.
+public struct DiscordFileUpload {
+    // MARK: Properties
+
+    /// The file data.
+    public let data: Data
+
+    /// The filename.
+    public let filename: String
+
+    /// The mime type.
+    public let mimeType: String
+
+    // MARK: Initializers
+
+    /**
+        Constructs a new DiscordFileUpload.
+
+        - parameter data: The file data
+        - parameter filename: The filename
+        - parameter mimeType: The mime type
+    */
+    public init(data: Data, filename: String, mimeType: String) {
+        self.data = data
+        self.filename = filename
+        self.mimeType = mimeType
+    }
+}
+
 /// Represents a message reaction.
 public struct DiscordReaction {
     // MARK: Properties
@@ -393,192 +580,5 @@ public struct DiscordReaction {
 
     static func reactionsFromArray(_ reactionsArray: [[String: Any]]) -> [DiscordReaction] {
         return reactionsArray.map(DiscordReaction.init)
-    }
-}
-
-/// Represents a Discord chat message.
-public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
-    // MARK: Typealiases
-
-    /// ExpressibleByStringLiteral conformance
-    public typealias StringLiteralType = String
-
-    /// ExpressibleByStringLiteral conformance.
-    public typealias ExtendedGraphemeClusterLiteralType = String.ExtendedGraphemeClusterLiteralType
-
-    /// ExpressibleByStringLiteral conformance.
-    public typealias UnicodeScalarLiteralType = String.UnicodeScalarLiteralType
-
-    // MARK: Properties
-
-    /// The attachments included in this message.
-    public let attachments: [DiscordAttachment]
-
-    /// Who sent this message.
-    public let author: DiscordUser
-
-    /// The snowflake id of the channel this message is on.
-    public let channelId: String
-
-    /// A reference to the client.
-    public weak var client: DiscordClient?
-
-    /// The content of this message.
-    public let content: String
-
-    /// When this message was last edited.
-    public let editedTimestamp: Date
-
-    /// The embeds that are in this message.
-    public let embeds: [DiscordEmbed]
-
-    /// The snowflake id of this message.
-    public let id: String
-
-    /// Whether or not this message mentioned everyone.
-    public let mentionEveryone: Bool
-
-    /// List of snowflake ids of roles that were mentioned in this message.
-    public let mentionRoles: [String]
-
-    /// List of users that were mentioned in this message.
-    public let mentions: [DiscordUser]
-
-    /// Used for validating a message was sent.
-    public let nonce: String
-
-    /// Whether this message is pinned.
-    public let pinned: Bool
-
-    /// The reactions a message has.
-    public let reactions: [DiscordReaction]
-
-    /// The timestamp of this message.
-    public let timestamp: Date
-
-    /// Whether or not this message should be read by a screen reader.
-    public let tts: Bool
-
-    /// The channel that this message originated from. Can return nil if the channel couldn't be found.
-    public var channel: DiscordChannel? {
-        return client?.findChannel(fromId: channelId)
-    }
-
-    let files: [DiscordFileUpload]
-
-    // MARK: Initializers
-
-    init(messageObject: [String: Any], client: DiscordClient?) {
-        attachments = DiscordAttachment.attachmentsFromArray(messageObject.get("attachments", or: [[String: Any]]()))
-        author = DiscordUser(userObject: messageObject.get("author", or: [String: Any]()))
-        channelId = messageObject.get("channel_id", or: "")
-        content = messageObject.get("content", or: "")
-        embeds = DiscordEmbed.embedsFromArray(messageObject.get("embeds", or: [[String: Any]]()))
-        id = messageObject.get("id", or: "")
-        mentionEveryone = messageObject.get("mention_everyone", or: false)
-        mentionRoles = messageObject.get("mention_roles", or: [String]())
-        mentions = DiscordUser.usersFromArray(messageObject.get("mentions", or: [[String: Any]]()))
-        nonce = messageObject.get("nonce", or: "")
-        pinned = messageObject.get("pinned", or: false)
-        reactions = DiscordReaction.reactionsFromArray(messageObject.get("reactions", or: []))
-        tts = messageObject.get("tts", or: false)
-        editedTimestamp = DiscordDateFormatter.format(messageObject.get("edited_timestamp", or: "")) ?? Date()
-        timestamp = DiscordDateFormatter.format(messageObject.get("timestamp", or: "")) ?? Date()
-        files = []
-        self.client = client
-    }
-
-    /**
-        Creates a message that can be used to send.
-
-        - parameter content: The content of this message.
-        - parameter embeds: The embeds for this message.
-        - parameter files: The files to send with this message.
-        - parameter tts: Whether this message should be text-to-speach.
-    */
-    public init(content: String, embeds: [DiscordEmbed] = [], files: [DiscordFileUpload] = [], tts: Bool = false) {
-        self.content = content
-        self.embeds = embeds
-        self.files = files
-        self.tts = tts
-        self.attachments = []
-        self.author = DiscordUser(userObject: [:])
-        self.channelId = ""
-        self.id = ""
-        self.mentionEveryone = false
-        self.mentionRoles = []
-        self.mentions = []
-        self.nonce = ""
-        self.pinned = false
-        self.reactions = []
-        self.editedTimestamp = Date()
-        self.timestamp = Date()
-    }
-
-    /**
-        ExpressibleByStringLiteral conformance.
-
-        - parameter unicodeScalarLiteral: The unicode scalar literal
-    */
-    public init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
-        self.init(stringLiteral: String(extendedGraphemeClusterLiteral: value))
-    }
-
-    /**
-        ExpressibleByStringLiteral conformance.
-
-        - parameter extendedGraphemeClusterLiteral: The grapheme scalar literal
-    */
-    public init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
-        self.init(stringLiteral: String(extendedGraphemeClusterLiteral: value))
-    }
-
-    /**
-        ExpressibleByStringLiteral conformance.
-
-        - parameter stringLiteral: The string literal
-    */
-    public init(stringLiteral value: StringLiteralType) {
-        self.init(content: value)
-    }
-
-    // MARK: Methods
-
-    func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
-        if let file = files.first {
-            var fields: [String: String] = [
-                    "content": content,
-                    "tts": String(tts),
-            ]
-
-            if let embed = embeds.first, let encoded = encodeJSON(["embed": embed.json]) {
-                fields["payload_json"] = encoded
-            }
-
-            return .right(createMultipartBody(fields: fields, file: file))
-        } else {
-            let messageObject: [String: Any] = [
-                    "content": content,
-                    "tts": tts,
-                    "embed": embeds.first?.json ?? [:]
-            ]
-
-            guard let contentData = encodeJSON(messageObject)?.data(using: .utf8, allowLossyConversion: false) else {
-                return .left(Data())
-            }
-
-            return .left(contentData)
-        }
-    }
-
-    /**
-        Deletes this message from Discord.
-    */
-    public func delete() {
-        channel?.deleteMessage(self)
-    }
-
-    static func messagesFromArray(_ array: [[String: Any]]) -> [DiscordMessage] {
-        return array.map({ DiscordMessage(messageObject: $0, client: nil) })
     }
 }
