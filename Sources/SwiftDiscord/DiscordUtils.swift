@@ -65,6 +65,10 @@ extension String {
     }
 }
 
+extension URL {
+    static let localhost = URL(string: "http://localhost/")!
+}
+
 func createMultipartBody(fields: [String: String], file: DiscordFileUpload?) -> (boundary: String, body: Data) {
     let boundary = "Boundary-\(UUID())"
     var body = Data()

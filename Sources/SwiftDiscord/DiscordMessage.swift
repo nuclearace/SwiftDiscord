@@ -233,9 +233,9 @@ public struct DiscordAttachment {
         id = attachmentObject.get("id", or: "")
         filename = attachmentObject.get("filename", or: "")
         height = attachmentObject["height"] as? Int
-        proxyUrl = URL(string: attachmentObject.get("proxy_url", or: "")) ?? URL(string: "http://localhost/")!
+        proxyUrl = URL(string: attachmentObject.get("proxy_url", or: "")) ?? URL.localhost
         size = attachmentObject.get("size", or: 0)
-        url = URL(string: attachmentObject.get("url", or: "")) ?? URL(string: "http://localhost/")!
+        url = URL(string: attachmentObject.get("url", or: "")) ?? URL.localhost
         width = attachmentObject["width"] as? Int
     }
 
@@ -338,8 +338,14 @@ public struct DiscordEmbed : JSONAble {
     public struct Image : JSONAble {
         // MARK: Properties
 
+        /// The height of this image.
+        public let height: Int
+
         /// The text for this footer.
         public let url: String
+
+        /// The width of this image.
+        public let width: Int
 
         /**
             Creates an Image object.
@@ -347,7 +353,9 @@ public struct DiscordEmbed : JSONAble {
             - parameter url: The url for this field.
         */
         public init(url: String) {
+            self.height = -1
             self.url = url
+            self.width = -1
         }
     }
 
@@ -506,7 +514,9 @@ extension DiscordEmbed.Image {
     init?(imageObject: [String: Any]?) {
         guard let imageObject = imageObject else { return nil }
 
+        height = imageObject.get("height", or: -1)
         url = imageObject.get("url", or: "")
+        width = imageObject.get("width", or: -1)
     }
 }
 
@@ -524,8 +534,8 @@ extension DiscordEmbed.Thumbnail {
         guard let thumbnailObject = thumbnailObject else { return nil }
 
         height = thumbnailObject.get("height", or: 0)
-        proxyUrl = URL(string: thumbnailObject.get("proxy_url", or: "")) ?? URL(string: "http://localhost/")!
-        url = URL(string: thumbnailObject.get("url", or: "")) ?? URL(string: "http://localhost/")!
+        proxyUrl = URL(string: thumbnailObject.get("proxy_url", or: "")) ?? URL.localhost
+        url = URL(string: thumbnailObject.get("url", or: "")) ?? URL.localhost
         width = thumbnailObject.get("width", or: 0)
     }
 }
