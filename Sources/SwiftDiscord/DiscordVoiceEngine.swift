@@ -98,10 +98,10 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
     private let encoderSemaphore = DispatchSemaphore(value: 1)
     private let padding = [UInt8](repeating: 0x00, count: 12)
-    private let writeQueue = DispatchQueue(label: "discordVoiceEngine.writeQueue")
+    private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
     private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
     private let udpQueueRead = DispatchQueue(label: "discordVoiceEngine.udpQueueRead")
-    private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
+    private let writeQueue = DispatchQueue(label: "discordVoiceEngine.writeQueue")
 
     private var audioCount = -1
     private var currentUnixTime: Int {
