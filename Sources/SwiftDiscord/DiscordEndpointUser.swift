@@ -30,10 +30,7 @@ public extension DiscordEndpoint {
     */
     public static func createDM(with: String, user: String, with token: DiscordToken,
                                 callback: @escaping (DiscordDMChannel?) -> Void) {
-        guard let contentData = encodeJSON(["recipient_id": with])?.data(using: .utf8, allowLossyConversion: false)
-                else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(["recipient_id": with]) else { return }
 
         var request = createRequest(with: token, for: .userChannels, replacing: ["me": user])
 

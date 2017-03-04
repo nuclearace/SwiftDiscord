@@ -87,9 +87,7 @@ public extension DiscordEndpoint {
             }
         }
 
-        guard let contentData = encodeJSON(modifyJSON)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(modifyJSON) else { return }
 
         var request = createRequest(with: token, for: .guilds, replacing: [
             "guild.id": guildId
@@ -143,9 +141,7 @@ public extension DiscordEndpoint {
             }
         }
 
-        guard let contentData = encodeJSON(createJSON)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(createJSON) else { return }
 
         var request = createRequest(with: token, for: .guildChannels, replacing: [
             "guild.id": guildId
@@ -209,9 +205,7 @@ public extension DiscordEndpoint {
     public static func modifyGuildChannelPositions(on guildId: String, channelPositions: [[String: Any]],
                                                    with token: DiscordToken,
                                                    callback: (([DiscordGuildChannel]) -> Void)?) {
-        guard let contentData = encodeJSON(channelPositions)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(channelPositions) else { return }
 
         var request = createRequest(with: token, for: .guildChannels, replacing: [
             "guild.id": guildId
@@ -383,9 +377,7 @@ public extension DiscordEndpoint {
             "user.id": userId
         ])
 
-        guard let contentData = encodeJSON(banJSON)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(banJSON) else { return }
 
         request.httpMethod = "PUT"
         request.httpBody = contentData
@@ -483,9 +475,7 @@ public extension DiscordEndpoint {
         DefaultDiscordLogger.Logger.log("Creating a new role on %@", type: "DiscordEndpointGuild", args: guildId)
         DefaultDiscordLogger.Logger.verbose("Role options %@", type: "DiscordEndpointGuild", args: roleData)
 
-        guard let contentData = encodeJSON(roleData)?.data(using: .utf8, allowLossyConversion: false) else {
-            return callback(nil)
-        }
+        guard let contentData = JSON.encodeJSONData(roleData) else { return callback(nil) }
 
         var request = createRequest(with: token, for: .guildRoles, replacing: ["guild.id": guildId])
 
@@ -548,9 +538,7 @@ public extension DiscordEndpoint {
             "role.id": role.id
         ])
 
-        guard let contentData = encodeJSON(roleJSON)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(roleJSON) else { return }
 
         request.httpMethod = "PATCH"
         request.httpBody = contentData

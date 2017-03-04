@@ -106,15 +106,13 @@ public struct DiscordGatewayPayload {
             payload["t"] = name!
         }
 
-        return encodeJSON(payload)
+        return JSON.encodeJSON(payload)
     }
 }
 
 extension DiscordGatewayPayload {
     static func payloadFromString(_ string: String, fromGateway: Bool = true) -> DiscordGatewayPayload? {
-        guard let decodedJSON = decodeJSON(string), case let JSON.object(dictionary) = decodedJSON else {
-            return nil
-        }
+        guard case let .object(dictionary)? = JSON.decodeJSON(string) else { return nil }
 
         guard let op = dictionary["op"] as? Int else { return nil }
 

@@ -323,6 +323,6 @@ public enum DiscordEndpoint : String {
             return nil
         }
 
-        return decodeJSON(stringData)
+        return JSON.decodeJSON(stringData)
     }
 }

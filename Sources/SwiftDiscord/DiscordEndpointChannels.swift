@@ -94,9 +94,7 @@ public extension DiscordEndpoint {
             }
         }
 
-        guard let contentData = encodeJSON(modifyJSON)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(modifyJSON) else { return }
 
         var request = createRequest(with: token, for: .channel, replacing: [
             "channel.id": channelId
@@ -140,9 +138,7 @@ public extension DiscordEndpoint {
             "messages": messages
         ]
 
-        guard let contentData = encodeJSON(editObject)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(editObject) else { return }
 
         request.httpMethod = "POST"
         request.httpBody = contentData
@@ -200,9 +196,7 @@ public extension DiscordEndpoint {
             "content": content
         ]
 
-        guard let contentData = encodeJSON(editObject)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(editObject) else { return }
 
         request.httpMethod = "PATCH"
         request.httpBody = contentData
@@ -363,9 +357,7 @@ public extension DiscordEndpoint {
                                              with token: DiscordToken, callback: ((Bool) -> Void)?) {
         let overwriteJSON = permissionOverwrite.json
 
-        guard let contentData = encodeJSON(overwriteJSON)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(overwriteJSON) else { return }
 
         var request = createRequest(with: token, for: .channelPermission, replacing: [
             "channel.id": channelId,
@@ -410,9 +402,7 @@ public extension DiscordEndpoint {
             }
         }
 
-        guard let contentData = encodeJSON(inviteJSON)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(inviteJSON) else { return }
 
         var request = createRequest(with: token, for: .channelInvites, replacing: [
             "channel.id": channelId

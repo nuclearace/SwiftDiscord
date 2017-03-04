@@ -172,7 +172,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
                     "tts": String(tts),
             ]
 
-            if let embed = embeds.first, let encoded = encodeJSON(["embed": embed.json]) {
+            if let embed = embeds.first, let encoded = JSON.encodeJSON(["embed": embed.json]) {
                 fields["payload_json"] = encoded
             }
 
@@ -184,9 +184,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
                     "embed": embeds.first?.json ?? [:]
             ]
 
-            guard let contentData = encodeJSON(messageObject)?.data(using: .utf8, allowLossyConversion: false) else {
-                return .left(Data())
-            }
+            guard let contentData = JSON.encodeJSONData(messageObject) else { return .left(Data()) }
 
             return .left(contentData)
         }
