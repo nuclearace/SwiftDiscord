@@ -92,7 +92,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// The DiscordUser this client is connected to.
     public private(set) var user: DiscordUser?
 
-    private let parseQueue = DispatchQueue(label: "parseQueue")
     private let logType = "DiscordClient"
     private let voiceQueue = DispatchQueue(label: "voiceQueue")
 
@@ -658,22 +657,14 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     open func handleGuildMembersChunk(with data: [String: Any]) {
         DefaultDiscordLogger.Logger.log("Handling guild members chunk", type: logType)
 
-        guard let guildId = data["guild_id"] as? String else { return }
+        guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
         guard let members = data["members"] as? [[String: Any]] else { return }
 
-        parseQueue.async {
-            let guildMembers = DiscordGuildMember.guildMembersFromArray(members, withGuildId: guildId)
+        let guildMembers = DiscordGuildMember.guildMembersFromArray(members, withGuildId: guildId)
 
-            self.handleQueue.async {
-                guard let guild = self.guilds[guildId] else { return }
+        guild.members.updateValues(withOtherDict: guildMembers)
 
-                for (memberId, member) in guildMembers {
-                    guild.members[memberId] = member
-                }
-
-                self.delegate?.client(self, didHandleGuildMemberChunk: guildMembers, forGuild: guild)
-            }
-        }
+        delegate?.client(self, didHandleGuildMemberChunk: guildMembers, forGuild: guild)
     }
 
     /**

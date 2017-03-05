@@ -120,6 +120,11 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
 
     fileprivate var backingDictionary = [K: DiscordLazyValue<V>]()
 
+    /// - returns: The number of stored key/value pairs
+    public var count: Int {
+        return backingDictionary.count
+    }
+
     /// - returns: The start index
     public var startIndex: Index {
         return DiscordLazyDictionaryIndex<Key, Value>(backingIndex: backingDictionary.startIndex)
@@ -130,21 +135,16 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         return DiscordLazyDictionaryIndex<Key, Value>(backingIndex: backingDictionary.endIndex)
     }
 
-    /// - returns: A Bool indicating whether this dictionary is empty
-    public var isEmpty: Bool {
-        return backingDictionary.isEmpty
-    }
-
-    /// - returns: The number of stored key/value pairs
-    public var count: Int {
-        return backingDictionary.count
-    }
-
     /// - returns: The first key/value pair stored in the dictionary.
     public var first: (Key, Value)? {
         guard let firstValue = backingDictionary.first else { return nil }
 
         return (firstValue.key, firstValue.value.value)
+    }
+
+    /// - returns: A Bool indicating whether this dictionary is empty
+    public var isEmpty: Bool {
+        return backingDictionary.isEmpty
     }
 
     /**
@@ -317,6 +317,17 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         }
 
         return Slice(base: base, bounds: base.startIndex..<base.endIndex)
+    }
+
+    /**
+        Updates the values stored in self with values stored in other, without evaluating the value.
+
+        - parameter withOtherDict: The values to update with.
+    */
+    public mutating func updateValues(withOtherDict other: DiscordLazyDictionary<Key, Value>) {
+        for (key, value) in other.backingDictionary {
+            backingDictionary[key] = value
+        }
     }
 }
 
