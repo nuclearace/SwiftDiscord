@@ -248,6 +248,9 @@
                 <a href="../Structs/DiscordEndpointOptions/ModifyChannel.html">– ModifyChannel</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/ModifyMember.html">– ModifyMember</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/DiscordEndpointOptions/ModifyGuild.html">– ModifyGuild</a>
               </li>
               <li class="nav-group-task">
@@ -1466,113 +1469,6 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11sendMessageFTSS2toSS3ttsSb5embedGSqVS_12DiscordEmbed_8callbackGSqFGSqVS_14DiscordMessage_T___T_"></a>
-                    <a name="//apple_ref/swift/Method/sendMessage(_:to:tts:embed:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11sendMessageFTSS2toSS3ttsSb5embedGSqVS_12DiscordEmbed_8callbackGSqFGSqVS_14DiscordMessage_T___T_">sendMessage(_:to:tts:embed:callback:)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Default implementation
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Sends a message to the specified channel.</p>
-
-                      </div>
-                      <h4>Default Implementation</h4>
-                      <div class="default_impl abstract">
-                        <p>Default implementation</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">sendMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">message</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">to</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">tts</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">embed</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed.html">DiscordEmbed</a></span><span class="p">?,</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>content</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The content of the message.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>to</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The snowflake id of the channel to send to.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>tts</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Whether this message should be read a text-to-speech message.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>embed</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>An optional embed for this message.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>callback</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>An optional callback containing the message, if successful.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11sendMessageFTVS_14DiscordMessage2toSS8callbackGSqFGSqS1__T___T_"></a>
                     <a name="//apple_ref/swift/Method/sendMessage(_:to:callback:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11sendMessageFTVS_14DiscordMessage2toSS8callbackGSqFGSqS1__T___T_">sendMessage(_:to:callback:)</a>
@@ -2697,6 +2593,100 @@ that if you make modifications to the client inside of a callback, you first dis
                               <td>
                                 <div>
                                   <p>An optional callback containing the modified channels, if successful.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer17modifyGuildMemberFTSS2onSS7optionsGSaOVS_22DiscordEndpointOptions12ModifyMember_8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuildMember(_:on:options:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer17modifyGuildMemberFTSS2onSS7optionsGSaOVS_22DiscordEndpointOptions12ModifyMember_8callbackGSqFSbT___T_">modifyGuildMember(_:on:options:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Modifies a guild member.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default implementation</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuildMember</span><span class="p">(</span><span class="n">_</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">ModifyMember</span><span class="p">],</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>id</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the member.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the member to modify.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The options for this member.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function, indicating whether the modify succeeded.</p>
 
                                 </div>
                               </td>
@@ -4007,7 +3997,7 @@ that if you make modifications to the client inside of a callback, you first dis
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-26)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-03-05)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

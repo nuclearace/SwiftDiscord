@@ -248,6 +248,9 @@
                 <a href="../Structs/DiscordEndpointOptions/ModifyChannel.html">– ModifyChannel</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/DiscordEndpointOptions/ModifyMember.html">– ModifyMember</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/DiscordEndpointOptions/ModifyGuild.html">– ModifyGuild</a>
               </li>
               <li class="nav-group-task">
@@ -694,158 +697,6 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FE12SwiftDiscordPS_14DiscordChannel8sendFileFTVS_17DiscordFileUpload7contentSS3ttsSb_T_"></a>
-                    <a name="//apple_ref/swift/Method/sendFile(_:content:tts:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FE12SwiftDiscordPS_14DiscordChannel8sendFileFTVS_17DiscordFileUpload7contentSS3ttsSb_T_">sendFile(_:content:tts:)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Sends a file to this channel.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">sendFile</span><span class="p">(</span><span class="n">_</span> <span class="nv">file</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordFileUpload.html">DiscordFileUpload</a></span><span class="p">,</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">""</span><span class="p">,</span> <span class="nv">tts</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>file</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A <code>DiscordFileUpload</code> to upload.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>content</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>An optional message for this upload.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>tts</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Whether the message is TTS.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FE12SwiftDiscordPS_14DiscordChannel11sendMessageFTSS3ttsSb5embedGSqVS_12DiscordEmbed__T_"></a>
-                    <a name="//apple_ref/swift/Method/sendMessage(_:tts:embed:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FE12SwiftDiscordPS_14DiscordChannel11sendMessageFTSS3ttsSb5embedGSqVS_12DiscordEmbed__T_">sendMessage(_:tts:embed:)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Sends a message to this channel.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">sendMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">tts</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="nv">embed</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordEmbed.html">DiscordEmbed</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>content</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>An optional message for this upload.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>tts</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Whether the message is TTS.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>embed</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>An optional embed for this message.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:FE12SwiftDiscordPS_14DiscordChannel4sendFVS_14DiscordMessageT_"></a>
                     <a name="//apple_ref/swift/Method/send(_:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FE12SwiftDiscordPS_14DiscordChannel4sendFVS_14DiscordMessageT_">send(_:)</a>
@@ -991,7 +842,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-02-26)</p>
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-03-05)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
