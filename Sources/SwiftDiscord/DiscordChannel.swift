@@ -124,38 +124,6 @@ public extension DiscordChannel {
     }
 
     /**
-        Sends a file to this channel.
-
-        - parameter file: A `DiscordFileUpload` to upload.
-        - parameter content: An optional message for this upload.
-        - parameter tts: Whether the message is TTS.
-    */
-    @available(*, deprecated: 3.1, message: "Will be removed in 3.2, use the new `send` method")
-    public func sendFile(_ file: DiscordFileUpload, content: String = "", tts: Bool = false) {
-        guard let client = self.client, type != .voice else { return }
-
-        client.sendMessage(DiscordMessage(content: content, files: [file], tts: tts), to: id)
-    }
-
-    /**
-        Sends a message to this channel.
-
-        - parameter content: An optional message for this upload.
-        - parameter tts: Whether the message is TTS.
-        - parameter embed: An optional embed for this message.
-    */
-    @available(*, deprecated: 3.1, message: "Will be removed in 3.2, use the new `send` method")
-    public func sendMessage(_ content: String, tts: Bool = false, embed: DiscordEmbed? = nil) {
-        guard let client = self.client, type != .voice else { return }
-
-        if let embed = embed {
-            client.sendMessage(DiscordMessage(content: content, embeds: [embed], tts: tts), to: id)
-        } else {
-            client.sendMessage(DiscordMessage(content: content, tts: tts), to: id)
-        }
-    }
-
-    /**
         Sends a message to this channel. Can be used to send embeds and files as well.
 
         ```swift

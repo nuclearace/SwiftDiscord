@@ -36,12 +36,11 @@ struct DiscordEndpointGateway {
 
         URLSession.shared.dataTask(with: request) {data, response, error in
             guard let data = data, let stringData = String(data: data, encoding: .utf8),
-                let json = decodeJSON(stringData), case let .object(info) = json,
-                let gateway = info["url"] as? String else {
-                    gatewaySemaphore.signal()
-
-                    return
-                }
+                  case let .object(info)? = JSON.decodeJSON(stringData),
+                  let gateway = info["url"] as? String else {
+                gatewaySemaphore.signal()
+                return
+            }
 
             url = gateway
             gatewaySemaphore.signal()

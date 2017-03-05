@@ -44,9 +44,7 @@ public extension DiscordEndpoint {
 
         DefaultDiscordLogger.Logger.debug("Creating webhook on: %@", type: "DiscordEndpointChannels", args: channelId)
 
-        guard let contentData = encodeJSON(createJSON)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(createJSON) else { return }
 
         var request = createRequest(with: token, for: .channelWebhooks, replacing: ["channel.id": channelId])
 
@@ -140,7 +138,7 @@ public extension DiscordEndpoint {
                 return
             }
 
-            guard let stringData = String(data: data, encoding: .utf8), let json = decodeJSON(stringData),
+            guard let stringData = String(data: data, encoding: .utf8), let json = JSON.decodeJSON(stringData),
                 case let .array(webhooks) = json else {
                     callback([])
 
@@ -205,9 +203,7 @@ public extension DiscordEndpoint {
 
         DefaultDiscordLogger.Logger.debug("Modifying webhook: %@", type: "DiscordEndpointChannels", args: webhookId)
 
-        guard let contentData = encodeJSON(createJSON)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(createJSON) else { return }
 
         var request = createRequest(with: token, for: .webhook, replacing: ["webhook.id": webhookId])
 

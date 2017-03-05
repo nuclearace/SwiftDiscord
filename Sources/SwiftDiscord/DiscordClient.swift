@@ -59,12 +59,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// If we should only represent a single shard, this is the shard information.
     public var singleShardInformation: DiscordShardInformation?
 
-    /// The voice engines, indexed by guild id.
-    @available(*, deprecated: 3.1, message: "Will be removed in 3.2, use `voiceEngines` on the voiceManager")
-    public var voiceEngines: [String: DiscordVoiceEngine] {
-        return voiceManager.voiceEngines
-    }
-
     /// A manager for the voice engines.
     public private(set) var voiceManager: DiscordVoiceManager!
 
@@ -98,13 +92,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// The DiscordUser this client is connected to.
     public private(set) var user: DiscordUser?
 
-    /// The voice states for this user, if they are in any voice channels.
-    @available(*, deprecated: 3.1, message: "Will be removed in 3.2, use `voiceStates` on the voiceManager")
-    public var voiceStates: [String: DiscordVoiceState] {
-        return voiceManager.voiceStates
-    }
-
-    private let parseQueue = DispatchQueue(label: "parseQueue")
     private let logType = "DiscordClient"
     private let voiceQueue = DispatchQueue(label: "voiceQueue")
 
@@ -178,7 +165,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         shardManager.disconnect()
 
-        for (_, engine) in voiceEngines {
+        for (_, engine) in voiceManager.voiceEngines {
             engine.disconnect()
         }
     }
@@ -602,8 +589,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     open func handleGuildMemberAdd(with data: [String: Any]) {
         DefaultDiscordLogger.Logger.log("Handling guild member add", type: logType)
 
-        let guildMember = DiscordGuildMember(guildMemberObject: data, guildId: data["guild_id"] as! String)
-        guard let guild = guilds[guildMember.guildId] else { return }
+        guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
+
+        let guildMember = DiscordGuildMember(guildMemberObject: data, guildId: guild.id, guild: guild)
 
         DefaultDiscordLogger.Logger.verbose("Created guild member: %@", type: logType, args: guildMember)
 
@@ -670,22 +658,14 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     open func handleGuildMembersChunk(with data: [String: Any]) {
         DefaultDiscordLogger.Logger.log("Handling guild members chunk", type: logType)
 
-        guard let guildId = data["guild_id"] as? String else { return }
+        guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
         guard let members = data["members"] as? [[String: Any]] else { return }
 
-        parseQueue.async {
-            let guildMembers = DiscordGuildMember.guildMembersFromArray(members, withGuildId: guildId)
+        let guildMembers = DiscordGuildMember.guildMembersFromArray(members, withGuildId: guildId, guild: guild)
 
-            self.handleQueue.async {
-                guard let guild = self.guilds[guildId] else { return }
+        guild.members.updateValues(withOtherDict: guildMembers)
 
-                for (memberId, member) in guildMembers {
-                    guild.members[memberId] = member
-                }
-
-                self.delegate?.client(self, didHandleGuildMemberChunk: guildMembers, forGuild: guild)
-            }
-        }
+        delegate?.client(self, didHandleGuildMemberChunk: guildMembers, forGuild: guild)
     }
 
     /**
@@ -848,8 +828,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         }
 
         guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
-        guard let user = data["user"] as? [String: Any] else { return }
-        guard let userId = user["id"] as? String else { return }
+        guard let user = data["user"] as? [String: Any], let userId = user["id"] as? String else { return }
 
         var presence = guilds[guildId]?.presences[userId]
 

@@ -17,35 +17,6 @@
 
 import Foundation
 
-/// Represents a file to be uploaded to Discord.
-public struct DiscordFileUpload {
-    // MARK: Properties
-
-    /// The file data.
-    public let data: Data
-
-    /// The filename.
-    public let filename: String
-
-    /// The mime type.
-    public let mimeType: String
-
-    // MARK: Initializers
-
-    /**
-        Constructs a new DiscordFileUpload.
-
-        - parameter data: The file data
-        - parameter filename: The filename
-        - parameter mimeType: The mime type
-    */
-    public init(data: Data, filename: String, mimeType: String) {
-        self.data = data
-        self.filename = filename
-        self.mimeType = mimeType
-    }
-}
-
 enum Either<L, R> {
     case left(L)
     case right(R)
@@ -94,6 +65,10 @@ extension String {
     }
 }
 
+extension URL {
+    static let localhost = URL(string: "http://localhost/")!
+}
+
 func createMultipartBody(fields: [String: String], file: DiscordFileUpload?) -> (boundary: String, body: Data) {
     let boundary = "Boundary-\(UUID())"
     var body = Data()
@@ -115,30 +90,16 @@ func createMultipartBody(fields: [String: String], file: DiscordFileUpload?) -> 
     return (boundary, body)
 }
 
-func encodeJSON(_ object: Any) -> String? {
-    guard let data = try? JSONSerialization.data(withJSONObject: object) else { return nil }
+class DiscordDateFormatter {
+    private static let formatter = DiscordDateFormatter()
 
-    return String(data: data, encoding: .utf8)
-}
+    private let RFC3339DateFormatter = DateFormatter()
 
-func decodeJSON(_ string: String) -> JSON? {
-    guard let data = string.data(using: .utf8, allowLossyConversion: false) else { return nil }
-    guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) else { return nil }
-
-    switch json {
-    case let dictionary as [String: Any]:
-        return .object(dictionary)
-    case let array as [Any]:
-        return .array(array)
-    default:
-        return nil
+    private init() {
+        RFC3339DateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"
     }
-}
 
-func convertISO8601(string: String) -> Date? {
-    let RFC3339DateFormatter = DateFormatter()
-
-    RFC3339DateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"
-
-    return RFC3339DateFormatter.date(from: string)
+    static func format(_ string: String) -> Date? {
+        return formatter.RFC3339DateFormatter.date(from: string)
+    }
 }

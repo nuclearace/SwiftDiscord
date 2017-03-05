@@ -46,6 +46,9 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         return "DiscordGuild(name: \(name))"
     }
 
+    /// A `DiscordLazyDictionary` of guild members. The key is the snowflake id of the user.
+    public var members = DiscordLazyDictionary<String, DiscordGuildMember>()
+
     /// Reference to the client.
     public weak var client: DiscordClient?
 
@@ -59,9 +62,6 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     ///
     /// *This number might not be the actual number of users in the `members` field.*
     public internal(set) var memberCount: Int
-
-    /// A `DiscordLazyDictionary` of guild members. The key is the snowflake id of the user.
-    public internal(set) var members = DiscordLazyDictionary<String, DiscordGuildMember>()
 
     /// A `DiscordLazyDictionary` of presences. The key is the snowflake id of the user.
     public internal(set) var presences = DiscordLazyDictionary<String, DiscordPresence>()
@@ -112,8 +112,6 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         id = guildObject.get("id", or: "")
         large = guildObject.get("large", or: false)
         memberCount = guildObject.get("member_count", or: 0)
-        members = DiscordGuildMember.guildMembersFromArray(guildObject.get("members", or: [[String: Any]]()),
-            withGuildId: id)
         mfaLevel = guildObject.get("mfa_level", or: -1)
         name = guildObject.get("name", or: "")
         ownerId = guildObject.get("owner_id", or: "")
@@ -129,8 +127,10 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject.get("voice_states", or: [[String: Any]]()),
             guildId: id)
         unavailable = guildObject.get("unavailable", or: false)
-        joinedAt = convertISO8601(string: guildObject.get("joined_at", or: "")) ?? Date()
+        joinedAt = DiscordDateFormatter.format(guildObject.get("joined_at", or: "")) ?? Date()
         self.client = client
+        members = DiscordGuildMember.guildMembersFromArray(guildObject.get("members", or: [[String: Any]]()),
+                                                           withGuildId: id, guild: self)
     }
 
     // MARK: Methods
@@ -236,6 +236,18 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         guard let client = self.client else { return }
 
         client.modifyGuild(id, options: options)
+    }
+
+    /**
+        Modifies a guild member.
+
+        - parameter member: The member to modify.
+        - parameter options: The options to set.
+    */
+    public func modifyMember(_ member: DiscordGuildMember, options: [DiscordEndpointOptions.ModifyMember]) {
+        guard let client = self.client else { return }
+
+        client.modifyGuildMember(member.user.id, on: id, options: options)
     }
 
     /**

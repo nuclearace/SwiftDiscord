@@ -94,9 +94,7 @@ public extension DiscordEndpoint {
             }
         }
 
-        guard let contentData = encodeJSON(modifyJSON)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(modifyJSON) else { return }
 
         var request = createRequest(with: token, for: .channel, replacing: [
             "channel.id": channelId
@@ -140,9 +138,7 @@ public extension DiscordEndpoint {
             "messages": messages
         ]
 
-        guard let contentData = encodeJSON(editObject)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(editObject) else { return }
 
         request.httpMethod = "POST"
         request.httpBody = contentData
@@ -200,9 +196,7 @@ public extension DiscordEndpoint {
             "content": content
         ]
 
-        guard let contentData = encodeJSON(editObject)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(editObject) else { return }
 
         request.httpMethod = "PATCH"
         request.httpBody = contentData
@@ -263,52 +257,6 @@ public extension DiscordEndpoint {
             }
 
             callback(DiscordMessage.messagesFromArray(messages as! [[String: Any]]))
-        })
-    }
-
-    /**
-        Sends a message to the specified channel.
-
-        - parameter content: The content of the message.
-        - parameter with: The token to authenticate to Discord with.
-        - parameter to: The snowflake id of the channel to send to.
-        - parameter tts: Whether this message should be read a text-to-speech message.
-        - parameter embed: An optional embed for this message.
-        - parameter callback: An optional callback containing the message, if successful.
-    */
-    @available(*, deprecated: 3.1, message: "Will be removed in 3.2, use the new sendMessage")
-    public static func sendMessage(_ content: String, with token: DiscordToken, to channel: String, tts: Bool,
-                                   embed: DiscordEmbed?, callback: ((DiscordMessage?) -> Void)?) {
-        let messageObject: [String: Any] = [
-            "content": content,
-            "tts": tts,
-            "embed": embed?.json ?? [:]
-        ]
-
-        DefaultDiscordLogger.Logger.log("Sending message to: %@", type: "DiscordEndpointChannels", args: channel)
-        DefaultDiscordLogger.Logger.verbose("Message: %@", type: "DiscordEndpointChannels", args: messageObject)
-
-        guard let contentData = encodeJSON(messageObject)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
-
-        var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel])
-
-        request.httpMethod = "POST"
-        request.httpBody = contentData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channel])
-
-        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            guard case let .object(message)? = self.jsonFromResponse(data: data, response: response) else {
-                callback?(nil)
-
-                return
-            }
-
-            callback?(DiscordMessage(messageObject: message, client: nil))
         })
     }
 
@@ -409,9 +357,7 @@ public extension DiscordEndpoint {
                                              with token: DiscordToken, callback: ((Bool) -> Void)?) {
         let overwriteJSON = permissionOverwrite.json
 
-        guard let contentData = encodeJSON(overwriteJSON)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(overwriteJSON) else { return }
 
         var request = createRequest(with: token, for: .channelPermission, replacing: [
             "channel.id": channelId,
@@ -456,9 +402,7 @@ public extension DiscordEndpoint {
             }
         }
 
-        guard let contentData = encodeJSON(inviteJSON)?.data(using: .utf8, allowLossyConversion: false) else {
-            return
-        }
+        guard let contentData = JSON.encodeJSONData(inviteJSON) else { return }
 
         var request = createRequest(with: token, for: .channelInvites, replacing: [
             "channel.id": channelId
