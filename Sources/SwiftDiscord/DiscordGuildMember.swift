@@ -21,38 +21,74 @@ import Foundation
 public struct DiscordGuildMember {
     // MARK: Properties
 
-    /// The id of the guild of this user.
+    /// The id of the guild of this member.
     public let guildId: String
 
-    /// The date this user joined the guild.
+    /// The date this member joined the guild.
     public let joinedAt: Date
 
     /// The user object for this member.
     public let user: DiscordUser
 
-    /// Whether this user has been deafened.
-    public var deaf: Bool
+    /// Whether this member has been deafened.
+    /// Changing this will cause the client to attempt to change the deafen status on Discord.
+    public var deaf: Bool {
+        get {
+            return _deaf
+        }
 
-    /// Whether this user has been muted.
-    public var mute: Bool
+        set {
+            guild?.modifyMember(self, options: [.deaf(newValue)])
+        }
+    }
 
-    /// This user's nickname, if they have one.
-    public var nick: String?
+    /// Whether this member is muted.
+    /// Changing this will cause the client to attempt to change the deafen status on Discord.
+    public var mute: Bool {
+        get {
+            return _mute
+        }
+
+        set {
+            guild?.modifyMember(self, options: [.mute(newValue)])
+        }
+    }
+
+    /// This member's nickname, if they have one.
+    /// Changing this value will cause the client to attempt to change the nick on Discord.
+    public var nick: String? {
+        get {
+            return _nick
+        }
+
+        set {
+            guild?.modifyMember(self, options: [.nick(newValue)])
+        }
+    }
 
     /// An array of role snowflake ids that this user has.
     public var roles: [String]
 
-    init(guildMemberObject: [String: Any], guildId: String) {
+    /// The guild this member is on
+    public internal(set) weak var guild: DiscordGuild?
+
+    private var _deaf: Bool
+    private var _mute: Bool
+    private var _nick: String?
+
+    init(guildMemberObject: [String: Any], guildId: String, guild: DiscordGuild? = nil) {
         self.guildId = guildId
         user = DiscordUser(userObject: guildMemberObject.get("user", or: [String: Any]()))
-        deaf = guildMemberObject.get("deaf", or: false)
-        mute = guildMemberObject.get("mute", or: false)
-        nick = guildMemberObject["nick"] as? String
+        _deaf = guildMemberObject.get("deaf", or: false)
+        _mute = guildMemberObject.get("mute", or: false)
+        _nick = guildMemberObject["nick"] as? String
         roles = guildMemberObject.get("roles", or: [String]())
         joinedAt = DiscordDateFormatter.format(guildMemberObject.get("joined_at", or: "")) ?? Date()
+        self.guild = guild
     }
 
-    static func guildMembersFromArray(_ guildMembersArray: [[String: Any]], withGuildId guildId: String)
+    static func guildMembersFromArray(_ guildMembersArray: [[String: Any]], withGuildId guildId: String,
+                                      guild: DiscordGuild?)
             -> DiscordLazyDictionary<String, DiscordGuildMember> {
         var guildMembers = DiscordLazyDictionary<String, DiscordGuildMember>()
 
@@ -61,7 +97,9 @@ public struct DiscordGuildMember {
                 fatalError("Couldn't extract userId")
             }
 
-            guildMembers[lazy: id] = .lazy({ DiscordGuildMember(guildMemberObject: guildMember, guildId: guildId) })
+            guildMembers[lazy: id] = .lazy({[weak guild] in
+                DiscordGuildMember(guildMemberObject: guildMember, guildId: guildId, guild: guild)
+            })
         }
 
         return guildMembers
@@ -72,7 +110,7 @@ public struct DiscordGuildMember {
             self.roles = roles
         }
 
-        nick = updateObject["nick"] as? String
+        _nick = updateObject["nick"] as? String
 
         return self
     }

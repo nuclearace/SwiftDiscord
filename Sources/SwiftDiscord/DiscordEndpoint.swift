@@ -116,6 +116,24 @@ public struct DiscordEndpointOptions {
         case userLimit(Int)
     }
 
+    /// Modify a guild member.
+    public enum ModifyMember {
+        /// The id of the channel to move this member to. If they're connected to voice.
+        case channel(String)
+
+        /// Whether this member is deafened.
+        case deaf(Bool)
+
+        /// Whether this member is muted.
+        case mute(Bool)
+
+        /// The nick for this member.
+        case nick(String?)
+
+        /// The roles this member should have.
+        case roles([DiscordRole])
+    }
+
     /// Modify guild options.
     public enum ModifyGuild {
         /// The snowflake id of the afk channel.

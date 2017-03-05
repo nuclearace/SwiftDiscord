@@ -309,6 +309,17 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
                                      callback: (([DiscordGuildChannel]) -> Void)?)
 
     /**
+        Modifies a guild member.
+
+        - parameter id: The snowflake id of the member.
+        - parameter on: The snowflake id of the member to modify.
+        - parameter options: The options for this member.
+        - parameter callback: The callback function, indicating whether the modify succeeded.
+    */
+    func modifyGuildMember(_ id: String, on guildId: String, options: [DiscordEndpointOptions.ModifyMember],
+                           callback: ((Bool) -> Void)?)
+
+    /**
         Edits the specified role.
 
         - parameter permissionOverwrite: The new DiscordRole
@@ -670,6 +681,12 @@ public extension DiscordEndpointConsumer {
                                             callback: (([DiscordGuildChannel]) -> Void)? = nil) {
         DiscordEndpoint.modifyGuildChannelPositions(on: guildId, channelPositions: channelPositions,
             with: token, callback: callback)
+    }
+
+    /// Default implementation
+    func modifyGuildMember(_ id: String, on guildId: String, options: [DiscordEndpointOptions.ModifyMember],
+                           callback: ((Bool) -> Void)? = nil) {
+        DiscordEndpoint.modifyGuildMember(id, on: guildId, options: options, with: token, callback: callback)
     }
 
     /// Default implementation

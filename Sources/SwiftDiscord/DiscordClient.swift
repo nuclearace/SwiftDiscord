@@ -589,8 +589,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     open func handleGuildMemberAdd(with data: [String: Any]) {
         DefaultDiscordLogger.Logger.log("Handling guild member add", type: logType)
 
-        let guildMember = DiscordGuildMember(guildMemberObject: data, guildId: data["guild_id"] as! String)
-        guard let guild = guilds[guildMember.guildId] else { return }
+        guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
+
+        let guildMember = DiscordGuildMember(guildMemberObject: data, guildId: guild.id, guild: guild)
 
         DefaultDiscordLogger.Logger.verbose("Created guild member: %@", type: logType, args: guildMember)
 
@@ -660,7 +661,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
         guard let members = data["members"] as? [[String: Any]] else { return }
 
-        let guildMembers = DiscordGuildMember.guildMembersFromArray(members, withGuildId: guildId)
+        let guildMembers = DiscordGuildMember.guildMembersFromArray(members, withGuildId: guildId, guild: guild)
 
         guild.members.updateValues(withOtherDict: guildMembers)
 

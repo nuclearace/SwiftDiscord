@@ -323,9 +323,56 @@ public extension DiscordEndpoint {
             }
 
             let guildMembers = DiscordGuildMember.guildMembersFromArray(members as! [[String: Any]],
-                withGuildId: guildId)
+                withGuildId: guildId, guild: nil)
 
             callback(guildMembers.map({ $0.1 }))
+        })
+    }
+
+    /**
+        Modifies a guild member.
+
+        - parameter id: The snowflake id of the member.
+        - parameter on: The snowflake id of the member to modify.
+        - parameter options: The options for this member.
+        - parameter with: The token to authenticate to Discord with.
+        - parameter callback: The callback function, indicating whether the modify succeeded.
+    */
+    public static func modifyGuildMember(_ id: String, on guildId: String,
+                                         options: [DiscordEndpointOptions.ModifyMember], with token: DiscordToken,
+                                         callback: ((Bool) -> Void)?) {
+        var patchParams: [String: Any] = [:]
+
+        for option in options {
+            switch option {
+            case let .channel(id):      patchParams["channel_id"] = id
+            case let .deaf(deaf):       patchParams["deaf"] = deaf
+            case let .mute(mute):       patchParams["mute"] = mute
+            case let .nick(nick):       patchParams["nick"] = nick ?? ""
+            case let .roles(roles):     patchParams["roles"] = roles.map({ $0.id })
+            }
+        }
+
+        DefaultDiscordLogger.Logger.debug("Modifying guild member %@ with options: %@ on %@",
+                                          type: "DiscordEndpointGuild",
+                                          args: id, patchParams, guildId)
+
+        guard let contentData = JSON.encodeJSONData(patchParams) else { return }
+
+        var request = createRequest(with: token, for: .guildMember, replacing: [
+                "guild.id": guildId,
+                "user.id": id
+        ])
+
+        request.httpMethod = "PATCH"
+        request.httpBody = contentData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
+
+        let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildMembers, parameters: ["guild.id": guildId])
+
+        DiscordRateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+            callback?(response?.statusCode == 204)
         })
     }
 
