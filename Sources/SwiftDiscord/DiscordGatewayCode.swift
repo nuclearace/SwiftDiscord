@@ -94,7 +94,7 @@ public enum DiscordGatewayCloseReason : Int {
     case unknownError = 4000
 
     /// Discord got an opcode is doesn't recognize.
-    case unkownOpcode = 4001
+    case unknownOpcode = 4001
 
     /// We sent a payload Discord doesn't know what to do with.
     case decodeError = 4002
