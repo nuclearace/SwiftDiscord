@@ -432,7 +432,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles channel creates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didCreateChannel` delegate method.
 
@@ -462,7 +462,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles channel deletes from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didDeleteChannel` delegate method.
 
@@ -485,7 +485,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles channel updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didUpdateChannel` delegate method.
 
@@ -508,7 +508,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild creates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didCreateGuild` delegate method.
 
@@ -536,7 +536,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild deletes from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didDeleteGuild` delegate method.
 
@@ -556,7 +556,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild emoji updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didUpdateEmojis:onGuild:` delegate method.
 
@@ -580,7 +580,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild member adds from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didAddGuildMember` delegate method.
 
@@ -604,7 +604,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild member removes from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didRemoveGuildMember` delegate method.
 
@@ -628,7 +628,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild member updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didUpdateGuildMember` delegate method.
 
@@ -649,7 +649,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild members chunks from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didHandleGuildMemberChunk:forGuild:` delegate method.
 
@@ -671,7 +671,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild role creates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didCreateRole` delegate method.
 
@@ -694,7 +694,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild role removes from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didDeleteRole` delegate method.
 
@@ -715,7 +715,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild member updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didUpdateRole` delegate method.
 
@@ -739,7 +739,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didUpdateGuild` delegate method.
 
@@ -759,7 +759,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles message updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didUpdateMessage` delegate method.
 
@@ -778,7 +778,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles message creates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didCreateMessage` delegate method.
 
@@ -797,7 +797,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles presence updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didReceivePresenceUpdate` delegate method.
 
@@ -854,7 +854,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles the ready event from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didReceiveReady` delegate method.
 
@@ -889,7 +889,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles voice server updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         - parameter with: The data from the event
     */
@@ -907,7 +907,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles voice state updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didReceiveVoiceStateUpdate` delegate method.
 
