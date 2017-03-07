@@ -320,8 +320,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
         case .invalidSession:
             handleInvalidSession()
         case .heartbeat:
-            sendPayload(DiscordGatewayPayload(code: .gateway(.heartbeat),
-                                              payload: .integer(1)))
+            sendPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
         case .heartbeatAck:
             heartbeatQueue.sync { self.pongsMissed = 0 }
             DefaultDiscordLogger.Logger.debug("Got heartback ack", type: logType)
