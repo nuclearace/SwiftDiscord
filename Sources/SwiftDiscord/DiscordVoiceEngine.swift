@@ -186,6 +186,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     }
 
     private func createEncoder() throws {
+        defer { encoderSemaphore.signal() }
+
         // Guard against trying to create multiple encoders at once
         encoderSemaphore.wait()
 
@@ -194,8 +196,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         readData()
 
         voiceDelegate?.voiceEngineReady(self)
-
-        encoderSemaphore.signal()
     }
 
     private func createRTPHeader() -> [UInt8] {
