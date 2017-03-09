@@ -375,16 +375,17 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         - parameter engine: The engine that disconnected.
     */
     open func voiceManager(_ manager: DiscordVoiceManager, didDisconnectEngine engine: DiscordVoiceEngine) {
-        guard let shardNum = guilds[engine.guildId]?.shardNumber(assuming: shards) else { return }
+        handleQueue.async {
+            guard let shardNum = self.guilds[engine.guildId]?.shardNumber(assuming: self.shards) else { return }
 
-        let payload = DiscordGatewayPayloadData.object(["guild_id": engine.guildId,
-                               "channel_id": NSNull(),
-                               "self_mute": false,
-                               "self_deaf": false])
+            let payload = DiscordGatewayPayloadData.object(["guild_id": engine.guildId,
+                                                            "channel_id": NSNull(),
+                                                            "self_mute": false,
+                                                            "self_deaf": false])
 
-        shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate), payload: payload),
-                                 onShard: shardNum
-        )
+            self.shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate), payload: payload),
+                                          onShard: shardNum)
+        }
     }
 
     /**
