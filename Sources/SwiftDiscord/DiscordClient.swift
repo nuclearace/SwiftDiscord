@@ -59,9 +59,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// If we should only represent a single shard, this is the shard information.
     public var singleShardInformation: DiscordShardInformation?
 
-    /// A manager for the voice engines.
-    public private(set) var voiceManager: DiscordVoiceManager!
-
     /// A callback function to listen for voice packets.
     public var onVoiceData: (DiscordVoiceData) -> Void = {_ in }
 
@@ -91,6 +88,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
     /// The DiscordUser this client is connected to.
     public private(set) var user: DiscordUser?
+
+    /// A manager for the voice engines.
+    public private(set) var voiceManager: DiscordVoiceManager!
 
     private let logType = "DiscordClient"
     private let voiceQueue = DispatchQueue(label: "voiceQueue")
