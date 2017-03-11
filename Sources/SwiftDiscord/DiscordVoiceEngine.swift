@@ -65,6 +65,9 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         ]
     }
 
+    /// The decoders for this voice engine.
+    public let decoderSession = DiscordVoiceSessionDecoder()
+
     /// The voice engine's delegate.
     public private(set) weak var voiceDelegate: DiscordVoiceEngineDelegate?
 
@@ -178,7 +181,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             return
         }
 
-        DefaultDiscordLogger.Logger.debug("Sleeping %@ %@", type: logType, args: waitTime, audioCount)
+//        DefaultDiscordLogger.Logger.debug("Sleeping %@ %@", type: logType, args: waitTime, audioCount)
 
         Thread.sleep(forTimeInterval: waitTime)
 
@@ -248,7 +251,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         return rtpHeader + Array(UnsafeBufferPointer(start: encrypted, count: packetSize))
     }
 
-    private func decryptVoiceData(_ data: Data) throws -> DiscordVoiceData {
+    private func decryptVoiceData(_ data: Data) throws -> [UInt8] {
         let unencrypted: UnsafeMutablePointer<UInt8>
 
         defer { free(unencrypted) }
@@ -263,8 +266,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
         guard success != -1 else { throw DiscordVoiceEngineError.decryptionError(rtpHeader) }
 
-        return DiscordVoiceData(rtpHeader: rtpHeader,
-            voiceData: Array(UnsafeBufferPointer(start: unencrypted, count: audioSize)))
+        return rtpHeader + Array(UnsafeBufferPointer(start: unencrypted, count: audioSize))
     }
 
     /**
@@ -410,7 +412,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
                 return
             }
 
-            DefaultDiscordLogger.Logger.debug("Read %@ bytes", type: this.logType, args: data.count)
+//            DefaultDiscordLogger.Logger.debug("Read %@ bytes", type: this.logType, args: data.count)
 
             this.sendVoiceData(data)
             this.readData()
@@ -423,18 +425,23 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
             do {
                 let (data, _) = try socket.receive(maxBytes: 4096)
-                guard let voiceData = try self?.decryptVoiceData(Data(bytes: data)), let this = self else {
-                    return
-                }
 
-                self?.voiceDelegate?.voiceEngine(this, didReceiveVoiceData: voiceData)
+                DefaultDiscordLogger.Logger.log("Received data %@", type: "DiscordVoiceEngine", args: data)
+
+                guard let this = self else { return }
+
+                let voicePacket = try this.decryptVoiceData(Data(bytes: data))
+                let packet = try this.decoderSession.decode(voicePacket)
+
+                this.voiceDelegate?.voiceEngine(this, didReceiveVoiceData: packet)
+            } catch DiscordVoiceError.initialPacket {
+                DefaultDiscordLogger.Logger.debug("Got initial packet", type: "DiscordVoiceEngine")
+            } catch DiscordVoiceError.decodeFail {
+                DefaultDiscordLogger.Logger.debug("Failed to decode a packet", type: "DiscordVoiceEngine")
             } catch let DiscordVoiceEngineError.decryptionError(rtpHeader) {
                 guard let this = self else { return }
 
-                let data = DiscordVoiceData(rtpHeader: rtpHeader, voiceData: [])
-
-                this.error(message: "Error decrypting voice packet \(data)")
-                this.voiceDelegate?.voiceEngine(this, didReceiveVoiceData: data)
+                this.error(message: "Error decrypting voice packet \(rtpHeader)")
             } catch let err {
                 self?.error(message: "Error reading voice data from udp socket \(err)")
                 self?.disconnect()
@@ -529,7 +536,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         udpQueue.sync {
             guard let udpSocket = self.udpSocket else { return }
 
-            DefaultDiscordLogger.Logger.debug("Should send voice data: %@ bytes", type: self.logType, args: data.count)
+//            DefaultDiscordLogger.Logger.debug("Should send voice data: %@ bytes", type: self.logType, args: data.count)
 
             do {
                 try udpSocket.send(bytes: self.createVoicePacket(data))

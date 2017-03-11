@@ -26,3 +26,8 @@ int configure_encoder(OpusEncoder *enc, int bitrate, int vbr)
 
     return err;
 }
+
+int configure_decoder(OpusDecoder *dec, int gain)
+{
+    return opus_decoder_ctl(dec, OPUS_SET_GAIN(gain));
+}
