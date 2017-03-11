@@ -84,7 +84,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     public private(set) var guilds = [String: DiscordGuild]()
 
     /// The relationships this user has. Only valid for non-bot users.
-    public private(set) var relationships = [[String: Any]]()
+    public private(set) var relationships = Array<Dictionary<String, Any>>()
 
     /// The DiscordUser this client is connected to.
     public private(set) var user: DiscordUser?
