@@ -15,6 +15,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import COPUS
 import Foundation
 
 /// Declares that a type will be a voice engine.
@@ -81,4 +82,39 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
         Tells Discord we're done speaking.
     */
     func stopSpeaking()
+}
+
+/// Declares that a type has enough information to encode/decode Opus data.
+public protocol DiscordOpusCodeable {
+    // MARK: Properties
+
+    /// The number of channels.
+    var channels: Int { get }
+
+    /// The sampling rate.
+    var sampleRate: Int { get }
+
+    // MARK: Methods
+
+    /**
+        Returns the maximum number of bytes that a frame can contain given a
+        frame size in number of samples per channel.
+
+        - parameter assumingSize: The size of the frame, in number of samples per channel.
+        - returns: The number of bytes in this frame.
+    */
+    func maxFrameSize(assumingSize size: Int) -> Int
+}
+
+public extension DiscordOpusCodeable {
+    /**
+        Returns the maximum number of bytes that a frame can contain given a
+        frame size in number of samples per channel.
+
+        - parameter assumingSize: The size of the frame, in number of samples per channel.
+        - returns: The number of bytes in this frame.
+    */
+    public func maxFrameSize(assumingSize size: Int) -> Int {
+        return size * channels * MemoryLayout<opus_int16>.size
+    }
 }
