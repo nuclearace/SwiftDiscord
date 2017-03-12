@@ -19,7 +19,16 @@ import COPUS
 import DiscordOpus
 import Foundation
 
+/// Class that will be used to decode opus voice data into raw PCM data.
 open class DiscordVoiceSessionDecoder {
+    // MARK: Methods
+
+    /**
+        Decodes an opus encoded packet into raw PCM. The first 12 bytes of the packet should be the RTP header.
+
+        - parameter packet: The full voice packet, including RTP header.
+        - returns: A `DiscordVoiceData`.
+    */
     open func decode(_ packet: [UInt8]) throws -> DiscordVoiceData {
         let rtpHeader = Array(packet.prefix(12)).map(Int.init(_:))
         let voiceData = Array(packet.dropFirst(12))
