@@ -29,7 +29,7 @@ open class DiscordVoiceSessionDecoder {
 
         // TODO Decoding opus
 
-        return DiscordVoiceData(seqNum: seqNum, timestamp: timestamp, ssrc: ssrc, voiceData: voiceData)
+        return DiscordVoiceData(seqNum: seqNum, ssrc: ssrc, timestamp: timestamp, voiceData: voiceData)
     }
 }
 
@@ -119,13 +119,6 @@ public struct DiscordVoiceData {
     /// The timestamp of this packet.
     public let timestamp: Int
 
-    /// The raw voice data.
+    /// The Opus encoded data.
     public let voiceData: [UInt8]
-
-    init(seqNum: Int, timestamp: Int, ssrc: Int, voiceData: [UInt8]) {
-        self.seqNum = seqNum
-        self.timestamp = timestamp
-        self.ssrc = ssrc
-        self.voiceData = voiceData
-    }
 }

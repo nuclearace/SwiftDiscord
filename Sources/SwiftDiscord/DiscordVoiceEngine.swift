@@ -251,7 +251,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         return rtpHeader + Array(UnsafeBufferPointer(start: encrypted, count: packetSize))
     }
 
-    private func decryptVoiceData(_ data: Data) throws -> [UInt8] {
+    private func decryptVoiceData(_ data: [UInt8]) throws -> [UInt8] {
         let unencrypted: UnsafeMutablePointer<UInt8>
 
         defer { free(unencrypted) }
@@ -430,7 +430,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
                 guard let this = self else { return }
 
-                let voicePacket = try this.decryptVoiceData(Data(bytes: data))
+                let voicePacket = try this.decryptVoiceData(data)
                 let packet = try this.decoderSession.decode(voicePacket)
 
                 this.voiceDelegate?.voiceEngine(this, didReceiveVoiceData: packet)
