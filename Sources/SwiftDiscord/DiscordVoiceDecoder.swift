@@ -20,66 +20,16 @@ import DiscordOpus
 import Foundation
 
 open class DiscordVoiceSessionDecoder {
-    public private(set) var decoders = [Int: DiscordOpusDecoder]()
-    public private(set) var sequences = [Int: Int]()
-    public private(set) var timestamps = [Int: Int]()
-
-    private var buffers = [Int: [DiscordVoiceData]]()
-
     open func decode(_ packet: [UInt8]) throws -> DiscordVoiceData {
         let rtpHeader = Array(packet.prefix(12)).map(Int.init(_:))
         let voiceData = Array(packet.dropFirst(12))
         let seqNum = rtpHeader[2] << 8 | rtpHeader[3]
         let timestamp = rtpHeader[4] << 24 | rtpHeader[5] << 16 | rtpHeader[6] << 8 | rtpHeader[7]
         let ssrc = rtpHeader[8] << 24 | rtpHeader[9] << 16 | rtpHeader[10] << 8 | rtpHeader[11]
-        let decoder: DiscordOpusDecoder
 
-        if let previous = decoders[ssrc] {
-            DefaultDiscordLogger.Logger.debug("Reusing decoder for ssrc: %@, seqNum: %@, timestamp: %@",
-                                              type: "DiscordVoiceSessionDecoder", args: ssrc, seqNum, timestamp)
-            decoder = previous
-        } else {
-            DefaultDiscordLogger.Logger.debug("New decoder for ssrc: %@, seqNum: %@, timestamp: %@",
-                                              type: "DiscordVoiceSessionDecoder", args: ssrc, seqNum, timestamp)
-            decoder = try DiscordOpusDecoder(sampleRate: 48_000, channels: 2)
-            buffers[ssrc] = [DiscordVoiceData]()
-            decoders[ssrc] = decoder
-        }
+        // TODO Decoding opus
 
-        guard let previousSeqNum = sequences[ssrc], let previousTimestamp = timestamps[ssrc] else {
-            sequences[ssrc] = seqNum
-            timestamps[ssrc] = timestamp
-
-            throw DiscordVoiceError.initialPacket
-        }
-
-        guard seqNum == previousSeqNum + 1 else {
-            if seqNum < previousSeqNum {
-                // Don't handle old packets
-                throw DiscordVoiceError.decodeFail
-            }
-
-            // sequences[ssrc] = seqNum
-            // timestamps[ssrc] = timestamp
-
-            // TODO Handle this
-            DefaultDiscordLogger.Logger.debug("Out of order packet", type: "DiscordVoiceSessionDecoder")
-
-            // print(try decoder.decode(nil, packetSize: 0, frameSize: 5760))
-
-            throw DiscordVoiceError.decodeFail
-        }
-
-        let decoded = try voiceData.withUnsafeBytes {bytes -> [opus_int16] in
-            let pointer = bytes.baseAddress!.assumingMemoryBound(to: UInt8.self)
-
-            return try decoder.decode(pointer, packetSize: voiceData.count, frameSize: timestamp - previousTimestamp)
-        }
-
-        sequences[ssrc] = seqNum
-        timestamps[ssrc] = timestamp
-
-        return DiscordVoiceData(seqNum: seqNum, timestamp: timestamp, ssrc: ssrc, voiceData: decoded)
+        return DiscordVoiceData(seqNum: seqNum, timestamp: timestamp, ssrc: ssrc, voiceData: voiceData)
     }
 }
 
@@ -158,7 +108,7 @@ open class DiscordOpusDecoder : DiscordOpusCodeable {
     }
 }
 
-/// A struct that contains a Discord voice packet.
+/// A struct that contains a Discord voice packet. The voice data is still opus encoded.
 public struct DiscordVoiceData {
     /// The sequence number of this packet.
     public let seqNum: Int
@@ -170,9 +120,9 @@ public struct DiscordVoiceData {
     public let timestamp: Int
 
     /// The raw voice data.
-    public let voiceData: [Int16]
+    public let voiceData: [UInt8]
 
-    init(seqNum: Int, timestamp: Int, ssrc: Int, voiceData: [Int16]) {
+    init(seqNum: Int, timestamp: Int, ssrc: Int, voiceData: [UInt8]) {
         self.seqNum = seqNum
         self.timestamp = timestamp
         self.ssrc = ssrc

@@ -182,7 +182,7 @@ open class DiscordVoiceEncoder {
         buf = UnsafeMutableRawPointer.allocate(bytes: maxFrameSize, alignedTo: MemoryLayout<UInt8>.alignment)
         let bytesRead = Foundation.read(fd, buf, maxFrameSize)
 
-//        DefaultDiscordLogger.Logger.debug("Read %@ bytes", type: "DiscordVoiceEncoder", args: bytesRead)
+        DefaultDiscordLogger.Logger.debug("Read %@ bytes", type: "DiscordVoiceEncoder", args: bytesRead)
 
         guard bytesRead > 0, !closed else {
             return (true, [])

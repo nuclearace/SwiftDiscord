@@ -412,7 +412,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
                 return
             }
 
-//            DefaultDiscordLogger.Logger.debug("Read %@ bytes", type: this.logType, args: data.count)
+            DefaultDiscordLogger.Logger.debug("Read %@ bytes", type: this.logType, args: data.count)
 
             this.sendVoiceData(data)
             this.readData()
@@ -536,7 +536,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         udpQueue.sync {
             guard let udpSocket = self.udpSocket else { return }
 
-//            DefaultDiscordLogger.Logger.debug("Should send voice data: %@ bytes", type: self.logType, args: data.count)
+            DefaultDiscordLogger.Logger.debug("Should send voice data: %@ bytes", type: self.logType, args: data.count)
 
             do {
                 try udpSocket.send(bytes: self.createVoicePacket(data))
