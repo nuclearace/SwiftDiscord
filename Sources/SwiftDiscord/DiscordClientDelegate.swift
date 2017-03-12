@@ -186,6 +186,18 @@ public protocol DiscordClientDelegate : class {
     func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine engine: DiscordVoiceEngine)
 
     /**
+        Called when the client receives voice data.
+
+        **Note** This is called from a queue that is dedicated to voice data, not the `handleQueue`.
+
+        - parameter client: The client that is calling.
+        - parameter didReceiveVoiceData: The voice data that was received.
+        - parameter fromEngine: The voice engine that received the data.
+    */
+    func client(_ client: DiscordClient, didReceiveVoiceData voiceData: DiscordVoiceData,
+                fromEngine engine: DiscordVoiceEngine)
+
+    /**
         Called when the client handles a guild member chunk.
 
         - parameter client: The client that is calling.
@@ -303,6 +315,10 @@ public extension DiscordClientDelegate {
     /// Default.
     func client(_ client: DiscordClient, didUpdateEmojis emojis: [String: DiscordEmoji],
                 onGuild guild: DiscordGuild) { }
+
+    /// Default.
+    func client(_ client: DiscordClient, didReceiveVoiceData voiceData: DiscordVoiceData,
+                fromEngine engine: DiscordVoiceEngine) { }
 
     #if !os(iOS)
     /// Default
