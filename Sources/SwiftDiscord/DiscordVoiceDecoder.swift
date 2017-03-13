@@ -19,7 +19,8 @@ import COPUS
 import DiscordOpus
 import Foundation
 
-/// Class that will be used to decode opus voice data into raw PCM data.
+/// Class that decodes Opus voice data into raw PCM data for a VoiceEngine. It can decode multiple streams. Decoding is
+/// not thread safe, and it is up to the caller to decode safely.
 open class DiscordVoiceSessionDecoder {
     // MARK: Methods
 
