@@ -307,7 +307,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
                 self.selectProtocol(with: ip, on: port)
             } catch {
-                // print("Something blew up")
+                self.error(message: "Something went wrong extracting the ip and port")
                 self.disconnect()
             }
         }
