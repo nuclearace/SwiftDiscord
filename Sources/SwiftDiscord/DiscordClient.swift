@@ -59,9 +59,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// If we should only represent a single shard, this is the shard information.
     public var singleShardInformation: DiscordShardInformation?
 
-    /// A callback function to listen for voice packets.
-    public var onVoiceData: (DiscordVoiceData) -> Void = {_ in }
-
     /// Whether large guilds should have their users fetched as soon as they are created.
     public var fillLargeGuilds = false
 
@@ -398,7 +395,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     open func voiceManager(_ manager: DiscordVoiceManager, didReceiveVoiceData data: DiscordVoiceData,
                            fromEngine engine: DiscordVoiceEngine) {
         voiceQueue.async {
-            self.onVoiceData(data)
+            self.delegate?.client(self, didReceiveVoiceData: data, fromEngine: engine)
         }
     }
 
