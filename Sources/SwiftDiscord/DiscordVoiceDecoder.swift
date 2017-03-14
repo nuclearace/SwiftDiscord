@@ -22,11 +22,11 @@ import Foundation
 /// Class that decodes Opus voice data into raw PCM data for a VoiceEngine. It can decode multiple streams. Decoding is
 /// not thread safe, and it is up to the caller to decode safely.
 open class DiscordVoiceSessionDecoder {
-    // MARK: Methods
-
     private var decoders = [Int: DiscordOpusDecoder]()
     private var sequences = [Int: Int]()
     private var timestamps = [Int: Int]()
+
+    // MARK: Methods
 
     /**
         Decodes an opus encoded packet into raw PCM. The first 12 bytes of the packet should be the RTP header.

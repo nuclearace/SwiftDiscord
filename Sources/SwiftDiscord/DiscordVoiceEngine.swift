@@ -179,7 +179,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             return
         }
 
-         DefaultDiscordLogger.Logger.debug("Sleeping %@ %@", type: logType, args: waitTime, audioCount)
+        DefaultDiscordLogger.Logger.debug("Sleeping %@ %@", type: logType, args: waitTime, audioCount)
 
         Thread.sleep(forTimeInterval: waitTime)
 
