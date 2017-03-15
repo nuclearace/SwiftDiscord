@@ -425,7 +425,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             do {
                 let (data, _) = try socket.recvfrom(maxBytes: 4096)
 
-                DefaultDiscordLogger.Logger.log("Received data %@", type: "DiscordVoiceEngine", args: data)
+                DefaultDiscordLogger.Logger.debug("Received data %@", type: "DiscordVoiceEngine", args: data)
 
                 guard let this = self else { return }
 
