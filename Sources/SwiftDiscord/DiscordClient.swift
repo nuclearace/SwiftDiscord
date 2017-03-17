@@ -266,13 +266,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         let shardNum = guild.shardNumber(assuming: shards)
 
-        self.shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
-            payload: .object([
-                "guild_id": guild.id,
-                "channel_id": channel.id,
-                "self_mute": false,
-                "self_deaf": false
-                ])
+        shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
+                                                       payload: .object(["guild_id": guild.id,
+                                                                         "channel_id": channel.id,
+                                                                         "self_mute": false,
+                                                                         "self_deaf": false
+                                                                        ])
         ), onShard: shardNum)
     }
 
