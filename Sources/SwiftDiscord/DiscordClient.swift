@@ -244,11 +244,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         Gets the `DiscordGuild` for a channel snowflake.
 
         - parameter channelId: A channel snowflake
-
         - returns: An optional containing a `DiscordGuild` if one was found.
     */
     public func guildForChannel(_ channelId: String) -> DiscordGuild? {
-        return guilds.filter({ return $0.1.channels[channelId] != nil }).map({ $0.1 }).first
+        return guilds.filter({ $0.1.channels[channelId] != nil }).map({ $0.1 }).first
     }
 
     /**
