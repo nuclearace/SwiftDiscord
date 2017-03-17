@@ -237,7 +237,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         defer { free(encrypted) }
 
         let packetSize = Int(crypto_secretbox_MACBYTES) + data.count
-        encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: packetSize)
+        encrypted = UnsafeMutablePointer.allocate(capacity: packetSize)
         let rtpHeader = createRTPHeader()
         var nonce = rtpHeader + padding
         var buf = data
@@ -257,7 +257,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         let rtpHeader = Array(data.prefix(12))
         let voiceData = Array(data.dropFirst(12))
         let audioSize = voiceData.count - Int(crypto_secretbox_MACBYTES)
-        unencrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
+        unencrypted = UnsafeMutablePointer.allocate(capacity: audioSize)
         var nonce = rtpHeader + padding
 
         let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &secret!)
