@@ -536,27 +536,29 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         - parameter data: An Opus encoded packet.
     */
     public func sendVoiceData(_ data: [UInt8]) {
-        udpQueue.sync {
-            guard let udpSocket = self.udpSocket, self.secret != nil else { return }
+        func _sendVoiceData() {
+            guard let udpSocket = self.udpSocket, secret != nil else { return }
 
-            DefaultDiscordLogger.Logger.debug("Should send voice data: %@ bytes", type: self.logType, args: data.count)
+            DefaultDiscordLogger.Logger.debug("Should send voice data: %@ bytes", type: logType, args: data.count)
 
             do {
-                try udpSocket.sendto(data: self.createVoicePacket(data))
+                try udpSocket.sendto(data: createVoicePacket(data))
             } catch DiscordVoiceEngineError.encryptionError {
-                self.error(message: "Error encyrpting packet")
+                error(message: "Error encyrpting packet")
             } catch let err {
-                self.error(message: "Failed sending voice packet \(err)")
-                self.disconnect()
+                error(message: "Failed sending voice packet \(err)")
+                disconnect()
 
                 return
             }
 
-            self.sequenceNum = self.sequenceNum &+ 1
-            self.timestamp = self.timestamp &+ 960
+            sequenceNum = sequenceNum &+ 1
+            timestamp = timestamp &+ 960
+
+            audioSleep()
         }
 
-        audioSleep()
+        udpQueue.sync(execute: _sendVoiceData)
     }
 
     #if !os(iOS)
