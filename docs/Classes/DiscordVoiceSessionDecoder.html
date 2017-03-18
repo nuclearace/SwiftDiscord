@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>EncoderProcess Extension Reference</title>
+    <title>DiscordVoiceSessionDecoder Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Extension/EncoderProcess" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Class/DiscordVoiceSessionDecoder" class="dashAnchor"></a>
 
-    <a title="EncoderProcess Extension Reference"></a>
+    <a title="DiscordVoiceSessionDecoder Class Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -38,7 +38,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html"> Reference</a>
       <img class="carat" src="../img/carat.png" />
-      EncoderProcess Extension Reference
+      DiscordVoiceSessionDecoder Class Reference
     </p>
 
     <div class="content-wrapper">
@@ -373,8 +373,15 @@
 
         <section class="section">
           <div class="section-content">
-            <h1>EncoderProcess</h1>
-            <p>Undocumented</p>
+            <h1>DiscordVoiceSessionDecoder</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordVoiceSessionDecoder</span></code></pre>
+
+                </div>
+              </div>
+            <p>Class that decodes Opus voice data into raw PCM data for a VoiceEngine. It can decode multiple streams. Decoding is
+not thread safe, and it is up to the caller to decode safely.</p>
 
           </div>
         </section>
@@ -382,13 +389,20 @@
         <section class="section">
           <div class="section-content">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Methods"></a>
+                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
+                <a href="#/Methods">
+                  <h3 class="section-name">Methods</h3>
+                </a>
+              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/"></a>
-                    <a name="//apple_ref/swift/Property/isRunning" class="dashAnchor"></a>
-                    <a class="token" href="#/">isRunning</a>
+                    <a name="/s:FC12SwiftDiscord26DiscordVoiceSessionDecoder6decodeFzGSaVs5UInt8_VS_16DiscordVoiceData"></a>
+                    <a name="//apple_ref/swift/Method/decode(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord26DiscordVoiceSessionDecoder6decodeFzGSaVs5UInt8_VS_16DiscordVoiceData">decode(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -396,7 +410,40 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Decodes an opus encoded packet into raw PCM. The first 12 bytes of the packet should be the RTP header.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">decode</span><span class="p">(</span><span class="n">_</span> <span class="nv">packet</span><span class="p">:</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">])</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/DiscordVoiceData.html">DiscordVoiceData</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>packet</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The full voice packet, including RTP header.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A <code><a href="../Structs/DiscordVoiceData.html">DiscordVoiceData</a></code>.</p>
 
                       </div>
                     </section>

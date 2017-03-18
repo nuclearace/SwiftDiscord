@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>EncoderProcess Extension Reference</title>
+    <title>DiscordOpusCodeable Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Extension/EncoderProcess" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Protocol/DiscordOpusCodeable" class="dashAnchor"></a>
 
-    <a title="EncoderProcess Extension Reference"></a>
+    <a title="DiscordOpusCodeable Protocol Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -38,7 +38,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html"> Reference</a>
       <img class="carat" src="../img/carat.png" />
-      EncoderProcess Extension Reference
+      DiscordOpusCodeable Protocol Reference
     </p>
 
     <div class="content-wrapper">
@@ -373,8 +373,14 @@
 
         <section class="section">
           <div class="section-content">
-            <h1>EncoderProcess</h1>
-            <p>Undocumented</p>
+            <h1>DiscordOpusCodeable</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordOpusCodeable</span></code></pre>
+
+                </div>
+              </div>
+            <p>Declares that a type has enough information to encode/decode Opus data.</p>
 
           </div>
         </section>
@@ -382,13 +388,20 @@
         <section class="section">
           <div class="section-content">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Properties"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <a href="#/Properties">
+                  <h3 class="section-name">Properties</h3>
+                </a>
+              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/"></a>
-                    <a name="//apple_ref/swift/Property/isRunning" class="dashAnchor"></a>
-                    <a class="token" href="#/">isRunning</a>
+                    <a name="/s:vP12SwiftDiscord19DiscordOpusCodeable8channelsSi"></a>
+                    <a name="//apple_ref/swift/Property/channels" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP12SwiftDiscord19DiscordOpusCodeable8channelsSi">channels</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -396,7 +409,115 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The number of channels.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">channels</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vP12SwiftDiscord19DiscordOpusCodeable10sampleRateSi"></a>
+                    <a name="//apple_ref/swift/Property/sampleRate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vP12SwiftDiscord19DiscordOpusCodeable10sampleRateSi">sampleRate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The sampling rate.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">sampleRate</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Methods"></a>
+                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
+                <a href="#/Methods">
+                  <h3 class="section-name">Methods</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord19DiscordOpusCodeable12maxFrameSizeFT12assumingSizeSi_Si"></a>
+                    <a name="//apple_ref/swift/Method/maxFrameSize(assumingSize:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord19DiscordOpusCodeable12maxFrameSizeFT12assumingSizeSi_Si">maxFrameSize(assumingSize:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the maximum number of bytes that a frame can contain given a
+frame size in number of samples per channel.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Returns the maximum number of bytes that a frame can contain given a
+frame size in number of samples per channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">maxFrameSize</span><span class="p">(</span><span class="n">assumingSize</span> <span class="nv">size</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>assumingSize</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The size of the frame, in number of samples per channel.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The number of bytes in this frame.</p>
 
                       </div>
                     </section>

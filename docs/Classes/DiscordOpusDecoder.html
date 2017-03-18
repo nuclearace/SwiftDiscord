@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>EncoderProcess Extension Reference</title>
+    <title>DiscordOpusDecoder Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Extension/EncoderProcess" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Class/DiscordOpusDecoder" class="dashAnchor"></a>
 
-    <a title="EncoderProcess Extension Reference"></a>
+    <a title="DiscordOpusDecoder Class Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -38,7 +38,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html"> Reference</a>
       <img class="carat" src="../img/carat.png" />
-      EncoderProcess Extension Reference
+      DiscordOpusDecoder Class Reference
     </p>
 
     <div class="content-wrapper">
@@ -373,8 +373,16 @@
 
         <section class="section">
           <div class="section-content">
-            <h1>EncoderProcess</h1>
-            <p>Undocumented</p>
+            <h1>DiscordOpusDecoder</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordOpusDecoder</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordOpusCodeable.html">DiscordOpusCodeable</a></span></code></pre>
+
+                </div>
+              </div>
+            <p>An Opus decoder.</p>
+
+<p>Takes Opus packets and returns raw PCM 16-bit-le/sample data.</p>
 
           </div>
         </section>
@@ -382,13 +390,20 @@
         <section class="section">
           <div class="section-content">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Properties"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <a href="#/Properties">
+                  <h3 class="section-name">Properties</h3>
+                </a>
+              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/"></a>
-                    <a name="//apple_ref/swift/Property/isRunning" class="dashAnchor"></a>
-                    <a class="token" href="#/">isRunning</a>
+                    <a name="/s:vC12SwiftDiscord18DiscordOpusDecoder8channelsSi"></a>
+                    <a name="//apple_ref/swift/Property/channels" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord18DiscordOpusDecoder8channelsSi">channels</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -396,7 +411,215 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The number of channels.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">channels</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC12SwiftDiscord18DiscordOpusDecoder10sampleRateSi"></a>
+                    <a name="//apple_ref/swift/Property/sampleRate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC12SwiftDiscord18DiscordOpusDecoder10sampleRateSi">sampleRate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The sampling rate.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">sampleRate</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Initializers"></a>
+                <a name="//apple_ref/swift/Section/Initializers" class="dashAnchor"></a>
+                <a href="#/Initializers">
+                  <h3 class="section-name">Initializers</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord18DiscordOpusDecodercFzT10sampleRateSi8channelsSi4gainSi_S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(sampleRate:channels:gain:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord18DiscordOpusDecodercFzT10sampleRateSi8channelsSi4gainSi_S0_">init(sampleRate:channels:gain:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a Decoder that takes Opus encoded data and outputs raw PCM 16-bit-le/sample data.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">sampleRate</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">channels</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">gain</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>sampleRate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The sample rate for the decoder. Discord expects this to be 48k.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>channels</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The number of channels in the stream to decode, should always be 2.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>gain</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The gain for this decoder.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Methods"></a>
+                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
+                <a href="#/Methods">
+                  <h3 class="section-name">Methods</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord18DiscordOpusDecoder6decodeFzTGSqGSPVs5UInt8__10packetSizeSi9frameSizeSi_GSaVs5Int16_"></a>
+                    <a name="//apple_ref/swift/Method/decode(_:packetSize:frameSize:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord18DiscordOpusDecoder6decodeFzTGSqGSPVs5UInt8__10packetSizeSi9frameSizeSi_GSaVs5Int16_">decode(_:packetSize:frameSize:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Decodes Opus data into raw PCM 16-bit-le/sample data.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">decode</span><span class="p">(</span><span class="n">_</span> <span class="nv">audio</span><span class="p">:</span> <span class="kt">UnsafePointer</span><span class="o">&lt;</span><span class="kt">UInt8</span><span class="o">&gt;</span><span class="p">?,</span> <span class="nv">packetSize</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">frameSize</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">opus_int16</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>audio</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A pointer to the audio data.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>packetSize</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The number of bytes in this packet.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>frameSize</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The size of the frame in samples per channel.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An opus encoded packet.</p>
 
                       </div>
                     </section>
