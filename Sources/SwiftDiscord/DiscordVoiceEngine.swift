@@ -22,11 +22,11 @@ import Starscream
 #else
 import WebSockets
 #endif
-import Socks
+import SocksCore
 import Sodium
 
 enum DiscordVoiceEngineError : Error {
-    case decryptionError([UInt8])
+    case decryptionError
     case encryptionError
     case ipExtraction
 }
@@ -81,7 +81,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     public private(set) var ssrc: UInt32 = 0
 
     /// The UDP socket that is used to send/receive voice data
-    public private(set) var udpSocket: UDPClient?
+    public private(set) var udpSocket: UDPInternetSocket?
 
     /// Our UDP port
     public private(set) var udpPort = -1
@@ -96,6 +96,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         return "DiscordVoiceEngine"
     }
 
+    private let decoderSession = DiscordVoiceSessionDecoder()
     private let encoderSemaphore = DispatchSemaphore(value: 1)
     private let padding = [UInt8](repeating: 0x00, count: 12)
     private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
@@ -186,6 +187,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     }
 
     private func createEncoder() throws {
+        defer { encoderSemaphore.signal() }
+
         // Guard against trying to create multiple encoders at once
         encoderSemaphore.wait()
 
@@ -194,8 +197,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         readData()
 
         voiceDelegate?.voiceEngineReady(self)
-
-        encoderSemaphore.signal()
     }
 
     private func createRTPHeader() -> [UInt8] {
@@ -236,7 +237,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         defer { free(encrypted) }
 
         let packetSize = Int(crypto_secretbox_MACBYTES) + data.count
-        encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: packetSize)
+        encrypted = UnsafeMutablePointer.allocate(capacity: packetSize)
         let rtpHeader = createRTPHeader()
         var nonce = rtpHeader + padding
         var buf = data
@@ -248,7 +249,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         return rtpHeader + Array(UnsafeBufferPointer(start: encrypted, count: packetSize))
     }
 
-    private func decryptVoiceData(_ data: Data) throws -> DiscordVoiceData {
+    private func decryptVoiceData(_ data: [UInt8]) throws -> [UInt8] {
         let unencrypted: UnsafeMutablePointer<UInt8>
 
         defer { free(unencrypted) }
@@ -256,15 +257,14 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         let rtpHeader = Array(data.prefix(12))
         let voiceData = Array(data.dropFirst(12))
         let audioSize = voiceData.count - Int(crypto_secretbox_MACBYTES)
-        unencrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
+        unencrypted = UnsafeMutablePointer.allocate(capacity: audioSize)
         var nonce = rtpHeader + padding
 
         let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &secret!)
 
-        guard success != -1 else { throw DiscordVoiceEngineError.decryptionError(rtpHeader) }
+        guard success != -1 else { throw DiscordVoiceEngineError.decryptionError }
 
-        return DiscordVoiceData(rtpHeader: rtpHeader,
-            voiceData: Array(UnsafeBufferPointer(start: unencrypted, count: audioSize)))
+        return rtpHeader + Array(UnsafeBufferPointer(start: unencrypted, count: audioSize))
     }
 
     /**
@@ -300,14 +300,14 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             let discoveryData = [UInt8](repeating: 0x00, count: 70)
 
             do {
-                try udpSocket.send(bytes: discoveryData)
+                try udpSocket.sendto(data: discoveryData)
 
-                let (data, _) = try udpSocket.receive(maxBytes: 70)
+                let (data, _) = try udpSocket.recvfrom(maxBytes: 70)
                 let (ip, port) = try self.extractIPAndPort(from: data)
 
                 self.selectProtocol(with: ip, on: port)
             } catch {
-                // print("Something blew up")
+                self.error(message: "Something went wrong extracting the ip and port")
                 self.disconnect()
             }
         }
@@ -343,7 +343,8 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         case .ready:
             handleReady(with: payload.payload)
         case .sessionDescription:
-            udpQueue.async { self.handleVoiceSessionDescription(with: payload.payload) }
+            udpQueue.sync { self.handleVoiceSessionDescription(with: payload.payload) }
+            sendSilence()
         case .speaking:
             DefaultDiscordLogger.Logger.debug("Got speaking", type: logType, args: payload)
         default:
@@ -422,19 +423,22 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             guard let socket = self?.udpSocket, self?.connected ?? false else { return }
 
             do {
-                let (data, _) = try socket.receive(maxBytes: 4096)
-                guard let voiceData = try self?.decryptVoiceData(Data(bytes: data)), let this = self else {
-                    return
-                }
+                let (data, _) = try socket.recvfrom(maxBytes: 4096)
 
-                self?.voiceDelegate?.voiceEngine(this, didReceiveVoiceData: voiceData)
-            } catch let DiscordVoiceEngineError.decryptionError(rtpHeader) {
+                DefaultDiscordLogger.Logger.debug("Received data %@", type: "DiscordVoiceEngine", args: data)
+
                 guard let this = self else { return }
 
-                let data = DiscordVoiceData(rtpHeader: rtpHeader, voiceData: [])
+                let voicePacket = try this.decryptVoiceData(data)
+                let packet = try this.decoderSession.decode(voicePacket)
 
-                this.error(message: "Error decrypting voice packet \(data)")
-                this.voiceDelegate?.voiceEngine(this, didReceiveVoiceData: data)
+                this.voiceDelegate?.voiceEngine(this, didReceiveVoiceData: packet)
+            } catch DiscordVoiceError.initialPacket {
+                DefaultDiscordLogger.Logger.debug("Got initial packet", type: "DiscordVoiceEngine")
+            } catch DiscordVoiceError.decodeFail {
+                DefaultDiscordLogger.Logger.debug("Failed to decode a packet", type: "DiscordVoiceEngine")
+            } catch DiscordVoiceEngineError.decryptionError {
+                self?.error(message: "Error decrypting voice packet")
             } catch let err {
                 self?.error(message: "Error reading voice data from udp socket \(err)")
                 self?.disconnect()
@@ -511,6 +515,12 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         heartbeatQueue.asyncAfter(deadline: time) {[weak self] in self?.sendHeartbeat() }
     }
 
+    private func sendSilence() {
+        for _ in 0..<5 {
+            sendVoiceData([0xF8, 0xFF, 0xFE])
+        }
+    }
+
     private func sendSpeaking(_ speaking: Bool) {
         let speakingObject: [String: Any] = [
             "speaking": speaking,
@@ -527,12 +537,12 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     */
     public func sendVoiceData(_ data: [UInt8]) {
         udpQueue.sync {
-            guard let udpSocket = self.udpSocket else { return }
+            guard let udpSocket = self.udpSocket, self.secret != nil else { return }
 
             DefaultDiscordLogger.Logger.debug("Should send voice data: %@ bytes", type: self.logType, args: data.count)
 
             do {
-                try udpSocket.send(bytes: self.createVoicePacket(data))
+                try udpSocket.sendto(data: self.createVoicePacket(data))
             } catch DiscordVoiceEngineError.encryptionError {
                 self.error(message: "Error encyrpting packet")
             } catch let err {
@@ -603,7 +613,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         let base = voiceServerInformation.endpoint.components(separatedBy: ":")[0]
         let udpEndpoint = InternetAddress(hostname: base, port: UInt16(udpPort))
 
-        guard let client = try? UDPClient(address: udpEndpoint) else {
+        guard let client = try? UDPInternetSocket(address: udpEndpoint) else {
             disconnect()
 
             return

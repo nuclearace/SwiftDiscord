@@ -59,12 +59,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// If we should only represent a single shard, this is the shard information.
     public var singleShardInformation: DiscordShardInformation?
 
-    /// A manager for the voice engines.
-    public private(set) var voiceManager: DiscordVoiceManager!
-
-    /// A callback function to listen for voice packets.
-    public var onVoiceData: (DiscordVoiceData) -> Void = {_ in }
-
     /// Whether large guilds should have their users fetched as soon as they are created.
     public var fillLargeGuilds = false
 
@@ -87,10 +81,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     public private(set) var guilds = [String: DiscordGuild]()
 
     /// The relationships this user has. Only valid for non-bot users.
-    public private(set) var relationships = [[String: Any]]()
+    public private(set) var relationships = Array<Dictionary<String, Any>>()
 
     /// The DiscordUser this client is connected to.
     public private(set) var user: DiscordUser?
+
+    /// A manager for the voice engines.
+    public private(set) var voiceManager: DiscordVoiceManager!
 
     private let logType = "DiscordClient"
     private let voiceQueue = DispatchQueue(label: "voiceQueue")
@@ -247,11 +244,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         Gets the `DiscordGuild` for a channel snowflake.
 
         - parameter channelId: A channel snowflake
-
         - returns: An optional containing a `DiscordGuild` if one was found.
     */
     public func guildForChannel(_ channelId: String) -> DiscordGuild? {
-        return guilds.filter({ return $0.1.channels[channelId] != nil }).map({ $0.1 }).first
+        return guilds.filter({ $0.1.channels[channelId] != nil }).map({ $0.1 }).first
     }
 
     /**
@@ -270,13 +266,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         let shardNum = guild.shardNumber(assuming: shards)
 
-        self.shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
-            payload: .object([
-                "guild_id": guild.id,
-                "channel_id": channel.id,
-                "self_mute": false,
-                "self_deaf": false
-                ])
+        shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
+                                                       payload: .object(["guild_id": guild.id,
+                                                                         "channel_id": channel.id,
+                                                                         "self_mute": false,
+                                                                         "self_deaf": false
+                                                                        ])
         ), onShard: shardNum)
     }
 
@@ -375,16 +370,17 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         - parameter engine: The engine that disconnected.
     */
     open func voiceManager(_ manager: DiscordVoiceManager, didDisconnectEngine engine: DiscordVoiceEngine) {
-        guard let shardNum = guilds[engine.guildId]?.shardNumber(assuming: shards) else { return }
+        handleQueue.async {
+            guard let shardNum = self.guilds[engine.guildId]?.shardNumber(assuming: self.shards) else { return }
 
-        let payload = DiscordGatewayPayloadData.object(["guild_id": engine.guildId,
-                               "channel_id": NSNull(),
-                               "self_mute": false,
-                               "self_deaf": false])
+            let payload = DiscordGatewayPayloadData.object(["guild_id": engine.guildId,
+                                                            "channel_id": NSNull(),
+                                                            "self_mute": false,
+                                                            "self_deaf": false])
 
-        shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate), payload: payload),
-                                 onShard: shardNum
-        )
+            self.shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate), payload: payload),
+                                          onShard: shardNum)
+        }
     }
 
     /**
@@ -397,7 +393,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     open func voiceManager(_ manager: DiscordVoiceManager, didReceiveVoiceData data: DiscordVoiceData,
                            fromEngine engine: DiscordVoiceEngine) {
         voiceQueue.async {
-            self.onVoiceData(data)
+            self.delegate?.client(self, didReceiveVoiceData: data, fromEngine: engine)
         }
     }
 
@@ -432,7 +428,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles channel creates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didCreateChannel` delegate method.
 
@@ -462,7 +458,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles channel deletes from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didDeleteChannel` delegate method.
 
@@ -485,7 +481,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles channel updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didUpdateChannel` delegate method.
 
@@ -508,7 +504,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild creates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didCreateGuild` delegate method.
 
@@ -536,7 +532,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild deletes from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didDeleteGuild` delegate method.
 
@@ -556,7 +552,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild emoji updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didUpdateEmojis:onGuild:` delegate method.
 
@@ -580,7 +576,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild member adds from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didAddGuildMember` delegate method.
 
@@ -604,7 +600,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild member removes from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didRemoveGuildMember` delegate method.
 
@@ -628,7 +624,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild member updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didUpdateGuildMember` delegate method.
 
@@ -649,7 +645,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild members chunks from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didHandleGuildMemberChunk:forGuild:` delegate method.
 
@@ -671,7 +667,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild role creates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didCreateRole` delegate method.
 
@@ -694,7 +690,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild role removes from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didDeleteRole` delegate method.
 
@@ -715,7 +711,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild member updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didUpdateRole` delegate method.
 
@@ -739,7 +735,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles guild updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didUpdateGuild` delegate method.
 
@@ -759,7 +755,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles message updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didUpdateMessage` delegate method.
 
@@ -778,7 +774,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles message creates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didCreateMessage` delegate method.
 
@@ -797,7 +793,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles presence updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didReceivePresenceUpdate` delegate method.
 
@@ -854,7 +850,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles the ready event from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didReceiveReady` delegate method.
 
@@ -889,7 +885,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles voice server updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         - parameter with: The data from the event
     */
@@ -907,7 +903,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /**
         Handles voice state updates from Discord. You shouldn't need to call this method directly.
 
-        Override to provide additional custmization around this event.
+        Override to provide additional customization around this event.
 
         Calls the `didReceiveVoiceStateUpdate` delegate method.
 

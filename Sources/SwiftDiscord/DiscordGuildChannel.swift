@@ -65,7 +65,7 @@ public struct DiscordGuildChannel : DiscordChannel {
         lastMessageId = guildChannelObject.get("last_message_id", or: nil) as String?
         name = guildChannelObject.get("name", or: "")
         permissionOverwrites = DiscordPermissionOverwrite.overwritesFromArray(
-            guildChannelObject.get("permission_overwrites", or: [[String: Any]]()))
+            guildChannelObject.get("permission_overwrites", or: JSONArray()))
         position = guildChannelObject.get("position", or: 0)
         topic = guildChannelObject.get("topic", or: nil) as String?
         userLimit = guildChannelObject.get("user_limit", or: nil) as Int?

@@ -1,5 +1,5 @@
 // The MIT License (MIT)
-// Copyright (c) 2016 Erik Little
+// Copyright (c) 2017 Erik Little
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -27,15 +27,12 @@ public enum DiscordVoiceError : Error {
 
     /// Thrown when a failure occurs encoding.
     case encodeFail
-}
 
-/// A struct that contains the RTP header and voice data from a voice packet.
-public struct DiscordVoiceData {
-    /// The header for this packet.
-    public let rtpHeader: [UInt8]
+    /// Thrown when a decode failure occurs.
+    case decodeFail
 
-    /// The voice data, Opus encoded.
-    public let voiceData: [UInt8]
+    /// Thrown when the first packet is received.
+    case initialPacket
 }
 
 #if !os(iOS)
@@ -206,7 +203,7 @@ open class DiscordVoiceEncoder {
     }
 
     /**
-        An async write to the encoder.
+        Writes to the encoder.
 
         - parameter data: Raw audio data that should be turned into OPUS encoded data.
         - parameter doneHandler: An optional handler that will be called when we are done writing.
@@ -247,7 +244,7 @@ open class DiscordVoiceEncoder {
 
     Takes raw PCM 16-bit-le/sample data and returns Opus encoded voice packets.
 */
-open class DiscordOpusEncoder {
+open class DiscordOpusEncoder : DiscordOpusCodeable {
     // MARK: Properties
 
     /// The bitrate for this encoder.
@@ -318,16 +315,5 @@ open class DiscordOpusEncoder {
         guard lenPacket > 0 else { throw DiscordVoiceError.encodeFail }
 
         return Array(UnsafeBufferPointer(start: output, count: Int(lenPacket)))
-    }
-
-    /**
-        Returns the maximum number of bytes that a frame can contain given a
-        frame size in number of samples per channel.
-
-        - parameter assumingSize: The size of the frame, in number of samples per channel.
-        - returns: The number of bytes in this frame.
-    */
-    public func maxFrameSize(assumingSize size: Int) -> Int {
-        return size * channels * MemoryLayout<opus_int16>.size
     }
 }

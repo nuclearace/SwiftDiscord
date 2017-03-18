@@ -45,7 +45,7 @@ public struct DiscordDMChannel : DiscordChannel {
     }
 
     init(dmReadyObject: [String: Any], client: DiscordClient? = nil) {
-        recipient = DiscordUser(userObject: dmReadyObject.get("recipients", or: [[String: Any]]())[0])
+        recipient = DiscordUser(userObject: dmReadyObject.get("recipients", or: JSONArray())[0])
         id = dmReadyObject.get("id", or: "")
         lastMessageId = dmReadyObject.get("lastMessageId", or: "")
         self.client = client
@@ -90,7 +90,7 @@ public struct DiscordGroupDMChannel : DiscordChannel {
     public var name: String?
 
     init(dmReadyObject: [String: Any], client: DiscordClient? = nil) {
-        recipients = dmReadyObject.get("recipients", or: [[String: Any]]()).map(DiscordUser.init)
+        recipients = dmReadyObject.get("recipients", or: JSONArray()).map(DiscordUser.init)
         id = dmReadyObject.get("id", or: "")
         lastMessageId = dmReadyObject.get("lastMessageId", or: "")
         name = dmReadyObject["name"] as? String

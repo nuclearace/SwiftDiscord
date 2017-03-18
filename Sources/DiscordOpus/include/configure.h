@@ -21,5 +21,6 @@
 #include <opus/opus.h>
 
 int configure_encoder(OpusEncoder *enc, int bitrate, int vbr);
+int configure_decoder(OpusDecoder *dec, int gain);
 
 #endif /* configure_h */

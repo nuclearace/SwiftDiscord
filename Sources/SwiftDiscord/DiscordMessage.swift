@@ -90,15 +90,15 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     // MARK: Initializers
 
     init(messageObject: [String: Any], client: DiscordClient?) {
-        attachments = DiscordAttachment.attachmentsFromArray(messageObject.get("attachments", or: [[String: Any]]()))
-        author = DiscordUser(userObject: messageObject.get("author", or: [String: Any]()))
+        attachments = DiscordAttachment.attachmentsFromArray(messageObject.get("attachments", or: JSONArray()))
+        author = DiscordUser(userObject: messageObject.get("author", or: Dictionary<String, Any>()))
         channelId = messageObject.get("channel_id", or: "")
         content = messageObject.get("content", or: "")
-        embeds = DiscordEmbed.embedsFromArray(messageObject.get("embeds", or: [[String: Any]]()))
+        embeds = DiscordEmbed.embedsFromArray(messageObject.get("embeds", or: JSONArray()))
         id = messageObject.get("id", or: "")
         mentionEveryone = messageObject.get("mention_everyone", or: false)
         mentionRoles = messageObject.get("mention_roles", or: [String]())
-        mentions = DiscordUser.usersFromArray(messageObject.get("mentions", or: [[String: Any]]()))
+        mentions = DiscordUser.usersFromArray(messageObject.get("mentions", or: JSONArray()))
         nonce = messageObject.get("nonce", or: "")
         pinned = messageObject.get("pinned", or: false)
         reactions = DiscordReaction.reactionsFromArray(messageObject.get("reactions", or: []))

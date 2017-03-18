@@ -101,13 +101,13 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public private(set) var verificationLevel: Int
 
     init(guildObject: [String: Any], client: DiscordClient?) {
-        channels = DiscordGuildChannel.guildChannelsFromArray(guildObject.get("channels", or: [[String: Any]]()),
+        channels = DiscordGuildChannel.guildChannelsFromArray(guildObject.get("channels", or: JSONArray()),
             client: client)
         defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
         embedEnabled = guildObject.get("embed_enabled", or: false)
         embedChannelId = guildObject.get("embed_channel_id", or: "")
-        emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: [[String: Any]]()))
-        features = guildObject.get("features", or: [Any]())
+        emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: JSONArray()))
+        features = guildObject.get("features", or: Array<Any>())
         icon = guildObject.get("icon", or: "")
         id = guildObject.get("id", or: "")
         large = guildObject.get("large", or: false)
@@ -117,19 +117,19 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         ownerId = guildObject.get("owner_id", or: "")
 
         if !(client?.discardPresences ?? false) {
-            presences = DiscordPresence.presencesFromArray(guildObject.get("presences", or: [[String: Any]]()), guildId: id)
+            presences = DiscordPresence.presencesFromArray(guildObject.get("presences", or: JSONArray()), guildId: id)
         }
 
         region = guildObject.get("region", or: "")
-        roles = DiscordRole.rolesFromArray(guildObject.get("roles", or: [[String: Any]]()))
+        roles = DiscordRole.rolesFromArray(guildObject.get("roles", or: JSONArray()))
         splash = guildObject.get("splash", or: "")
         verificationLevel = guildObject.get("verification_level", or: -1)
-        voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject.get("voice_states", or: [[String: Any]]()),
+        voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject.get("voice_states", or: JSONArray()),
             guildId: id)
         unavailable = guildObject.get("unavailable", or: false)
         joinedAt = DiscordDateFormatter.format(guildObject.get("joined_at", or: "")) ?? Date()
         self.client = client
-        members = DiscordGuildMember.guildMembersFromArray(guildObject.get("members", or: [[String: Any]]()),
+        members = DiscordGuildMember.guildMembersFromArray(guildObject.get("members", or: JSONArray()),
                                                            withGuildId: id, guild: self)
     }
 
