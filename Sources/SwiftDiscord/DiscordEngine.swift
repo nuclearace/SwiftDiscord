@@ -284,8 +284,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     */
     open func handleDispatch(_ payload: DiscordGatewayPayload) {
         guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
-            DefaultDiscordLogger.Logger.error("Could not create dispatch event %@", type: "DiscordEngineGatewayHandling",
-                                              args: payload)
+            DefaultDiscordLogger.Logger.error("Could not create dispatch event %@", type: logType, args: payload)
 
             return
         }
