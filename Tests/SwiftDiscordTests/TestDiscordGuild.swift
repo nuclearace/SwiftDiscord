@@ -115,6 +115,28 @@ class TestDiscordGuild : XCTestCase {
         XCTAssertTrue(guild.unavailable, "init should set unavailable")
     }
 
+    func testGuildCorrectlyGetsRolesForMember() {
+        var tMember = testMember
+        var role2 = testRole
+
+        role2["id"] = "testrole2"
+        role2["name"] = "A new role"
+        tMember["roles"] = [testRole["id"] as! String, role2["id"] as! String]
+
+        let guild = DiscordGuild(guildObject: ["id": "guildid",
+                                               "roles": [testRole, role2]
+                                              ], client: nil)
+        let member = DiscordGuildMember(guildMemberObject: tMember, guildId: guild.id, guild: guild)
+
+        XCTAssertEqual(guild.roles.count, 2, "guild should have two roles")
+
+        let roles = guild.roles(for: member)
+
+        XCTAssertEqual(roles.count, 2, "guild should find two roles for member")
+        XCTAssertNotNil(roles.first(where: { $0.id == "testrole" }), "roles should find testrole")
+        XCTAssertNotNil(roles.first(where: { $0.id == "testrole2" }), "roles should find role2")
+    }
+
     func testCreatingGuildWithALargeNumberOfMembersIsFast() {
         tGuild["members"] = createGuildMemberObjects(n: 100_000)
 

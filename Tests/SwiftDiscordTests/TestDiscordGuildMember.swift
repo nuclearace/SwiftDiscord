@@ -40,7 +40,6 @@ class TestDiscordGuildMember : XCTestCase {
 
         XCTAssertEqual(member.nick, "A new nick", "Member should have a new nick")
         XCTAssertEqual(member.roleIds.count, 2, "Should have new roles")
-
     }
 
     override func setUp() {
