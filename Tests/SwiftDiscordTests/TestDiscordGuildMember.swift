@@ -37,4 +37,16 @@ class TestDiscordGuildMember : XCTestCase {
         XCTAssertEqual(member.roles!.count, 1, "Member should have roles")
         XCTAssertEqual(member.roles![0].name, "My Test Role", "Member should have a specific role")
     }
+
+    func testUpdatingMember() {
+        var member = DiscordGuildMember(guildMemberObject: testMember, guildId: guild.id, guild: guild)
+
+        _ = member.updateMember(["nick": "A new nick",
+                                 "roles": ["testrole", "testrole2"]
+                                ])
+
+        XCTAssertEqual(member.nick, "A new nick", "Member should have a new nick")
+        XCTAssertEqual(member.roleIds.count, 2, "Should have new roles")
+
+    }
 }
