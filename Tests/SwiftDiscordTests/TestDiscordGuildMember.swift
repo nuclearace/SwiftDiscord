@@ -9,13 +9,6 @@ import XCTest
 class TestDiscordGuildMember : XCTestCase {
     var guild: DiscordGuild!
 
-    override func setUp() {
-        guild = DiscordGuild(guildObject: [
-            "id": "guildid",
-            "roles": [testRole]
-        ], client: nil)
-    }
-
     func testCreatingGuildMember() {
         var tMember = testMember
         tMember["mute"] = true
@@ -25,8 +18,8 @@ class TestDiscordGuildMember : XCTestCase {
         let member = DiscordGuildMember(guildMemberObject: tMember, guildId: guild.id, guild: guild)
 
         XCTAssertEqual(member.roleIds.count, 1, "Member should have 1 role id")
-        XCTAssertEqual(member.deaf, true, "Member should deaf")
-        XCTAssertEqual(member.mute, true, "Member should be muted")
+        XCTAssertTrue(member.deaf, "Member should deaf")
+        XCTAssertTrue(member.mute, "Member should be muted")
         XCTAssertEqual(member.nick, "Some Test Nick", "Member should have a nick")
     }
 
@@ -48,5 +41,12 @@ class TestDiscordGuildMember : XCTestCase {
         XCTAssertEqual(member.nick, "A new nick", "Member should have a new nick")
         XCTAssertEqual(member.roleIds.count, 2, "Should have new roles")
 
+    }
+
+    override func setUp() {
+        guild = DiscordGuild(guildObject: [
+            "id": "guildid",
+            "roles": [testRole]
+        ], client: nil)
     }
 }
