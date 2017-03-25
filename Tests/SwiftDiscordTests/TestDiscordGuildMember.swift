@@ -7,8 +7,6 @@ import XCTest
 @testable import SwiftDiscord
 
 class TestDiscordGuildMember : XCTestCase {
-    var guild: DiscordGuild!
-
     func testCreatingGuildMember() {
         var tMember = testMember
         tMember["mute"] = true
@@ -41,6 +39,8 @@ class TestDiscordGuildMember : XCTestCase {
         XCTAssertEqual(member.nick, "A new nick", "Member should have a new nick")
         XCTAssertEqual(member.roleIds.count, 2, "Should have new roles")
     }
+
+    var guild: DiscordGuild!
 
     override func setUp() {
         guild = DiscordGuild(guildObject: [

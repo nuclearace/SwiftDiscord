@@ -4,6 +4,9 @@
 
 import Foundation
 
+let helloPacket = "{\"t\":null,\"s\":null,\"op\":10,\"d\":{\"heartbeat_interval\":41250,\"_trace\":[\"discord-gateway-prd-1-24\"]}}"
+let readyPacket = "{\"t\":\"READY\",\"s\":null,\"op\":0,\"d\":{\"session_id\": \"hello_world\"}}"
+
 let testRole: [String: Any] = [
     "color": 0,
     "hoist": false,

@@ -278,6 +278,30 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     }
 
     /**
+        Handles a dispatch payload.
+
+        - parameter payload: The dispatch payload
+    */
+    open func handleDispatch(_ payload: DiscordGatewayPayload) {
+        guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
+            DefaultDiscordLogger.Logger.error("Could not create dispatch event %@", type: "DiscordEngineGatewayHandling",
+                                              args: payload)
+
+            return
+        }
+
+        if event == .ready, case let .object(payloadObject) = payload.payload,
+           let sessionId = payloadObject["session_id"] as? String {
+            manager?.signalShardConnected(shardNum: shardNum)
+            self.sessionId = sessionId
+        } else if event == .resumed {
+            handleResumed(payload)
+        }
+
+        delegate?.engine(self, didReceiveEvent: event, with: payload)
+    }
+
+    /**
         Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
 
         Override this method if you need to customize payload handling.
@@ -343,6 +367,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
         connected = true
 
         startHeartbeat(seconds: milliseconds / 1000)
+        delegate?.engine(self, gotHelloWithPayload: payload)
     }
 
     /**

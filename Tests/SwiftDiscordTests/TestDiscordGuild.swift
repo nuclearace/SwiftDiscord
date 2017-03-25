@@ -7,8 +7,6 @@ import XCTest
 @testable import SwiftDiscord
 
 class TestDiscordGuild : XCTestCase {
-    var tGuild: [String: Any]!
-
     func testCreatingGuildSetsId() {
         let guild = DiscordGuild(guildObject: testGuild, client: nil)
 
@@ -162,6 +160,8 @@ class TestDiscordGuild : XCTestCase {
         XCTAssertEqual(guild.presences.count, 100_000, "init should create 100_000 presences")
         XCTAssertEqual(guild.presences["5000"]?.user.id, "5000", "init should create presences correctly")
     }
+
+    var tGuild: [String: Any]!
 
     override func setUp() {
         tGuild = testGuild
