@@ -35,6 +35,20 @@ let testMember: [String: Any] = [
     "joined_at": ""
 ]
 
+let testGame: [String: Any] = [
+    "name": "testGame",
+    "type": 0,
+    "url": ""
+]
+
+let testPresence: [String: Any] = [
+    "guild_id": "testGuild",
+    "user": testUser,
+    "game": testGame,
+    "nick": "",
+    "status": "offline"
+]
+
 let testGuildChannel: [String: Any] = [
     "id": "guildChannel",
     "guild_id": "",
@@ -68,3 +82,33 @@ let testGuild: [String: Any] = [
     "joined_at": "",
     "members": [[String: Any]]()
 ]
+
+func createGuildMemberObjects(n: Int) -> [[String: Any]] {
+    var members = [[String: Any]]()
+
+    for i in 0..<n {
+        var user = testUser
+        var member = testMember
+        user["id"] = String(i)
+        member["user"] = user
+
+        members.append(member)
+    }
+
+    return members
+}
+
+func createPresenceObjects(n: Int) -> [[String: Any]] {
+    var presences = [[String: Any]]()
+
+    for i in 0..<n {
+        var user = testUser
+        var presence = testPresence
+        user["id"] = String(i)
+        presence["user"] = user
+
+        presences.append(presence)
+    }
+
+    return presences
+}

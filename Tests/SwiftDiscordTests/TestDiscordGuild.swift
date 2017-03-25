@@ -115,6 +115,32 @@ class TestDiscordGuild : XCTestCase {
         XCTAssertTrue(guild.unavailable, "init should set unavailable")
     }
 
+    func testCreatingGuildWithALargeNumberOfMembersIsFast() {
+        tGuild["members"] = createGuildMemberObjects(n: 100_000)
+
+        var guild: DiscordGuild!
+
+        measure {
+            guild = DiscordGuild(guildObject: self.tGuild, client: nil)
+        }
+
+        XCTAssertEqual(guild.members.count, 100_000, "init should create 100_000 members")
+        XCTAssertEqual(guild.members["5000"]?.user.id, "5000", "init should create members correctly")
+    }
+
+    func testCreatingGuildWithALargeNumberOfPresencesIsFast() {
+        tGuild["presences"] = createPresenceObjects(n: 100_000)
+
+        var guild: DiscordGuild!
+
+        measure {
+            guild = DiscordGuild(guildObject: self.tGuild, client: nil)
+        }
+
+        XCTAssertEqual(guild.presences.count, 100_000, "init should create 100_000 presences")
+        XCTAssertEqual(guild.presences["5000"]?.user.id, "5000", "init should create presences correctly")
+    }
+
     override func setUp() {
         tGuild = testGuild
     }
