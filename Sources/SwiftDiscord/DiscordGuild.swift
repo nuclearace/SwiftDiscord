@@ -38,7 +38,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     /// The base64 encoded splash image.
     public let splash: String
 
-    /// Whether this guild is unavaiable.
+    /// Whether this guild is unavailable.
     public let unavailable: Bool
 
     /// - returns: A description of this guild

@@ -22,7 +22,7 @@ enum Either<L, R> {
     case right(R)
 }
 
-typealias JSONArray = Array<Dictionary<String, Any>>
+typealias JSONArray = [[String: Any]]
 
 #if os(macOS)
 /// A typealias for `Process`. Needed because `Process` on Linux is `Task`.
