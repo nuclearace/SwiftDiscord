@@ -18,6 +18,14 @@ let testRole: [String: Any] = [
     "position": 0
 ]
 
+let testEmoji: [String: Any] = [
+    "id": "testEmoji",
+    "managed": false,
+    "name": "test_emoji",
+    "require_colons": true,
+    "roles": [] as [String]
+]
+
 let testUser: [String: Any] = [
     "avatar": "",
     "bot": false,
@@ -99,6 +107,7 @@ func createGuildMemberObjects(n: Int) -> [[String: Any]] {
     for i in 0..<n {
         var user = testUser
         var member = testMember
+
         user["id"] = String(i)
         member["user"] = user
 
@@ -114,6 +123,7 @@ func createPresenceObjects(n: Int) -> [[String: Any]] {
     for i in 0..<n {
         var user = testUser
         var presence = testPresence
+
         user["id"] = String(i)
         presence["user"] = user
 
@@ -123,14 +133,27 @@ func createPresenceObjects(n: Int) -> [[String: Any]] {
     return presences
 }
 
+func createEmojiObjects(n: Int) -> [[String: Any]] {
+    var emojis = [[String: Any]]()
+
+    for i in 0..<n {
+        var emoji = testUser
+
+        emoji["id"] = String("emoji\(i)")
+        emoji["name"] = String("Custom emoji \(i)")
+
+        emojis.append(emoji)
+    }
+
+    return emojis
+}
+
 let testGuildJSON: [String: Any] = {
-    let members = createGuildMemberObjects(n: 20)
-    let presences = createPresenceObjects(n: 20)
     var tGuild = testGuild
 
     tGuild["channels"] = [testGuildChannel]
-    tGuild["members"] = members
-    tGuild["presences"] = presences
+    tGuild["members"] = createGuildMemberObjects(n: 20)
+    tGuild["presences"] = createPresenceObjects(n: 20)
     tGuild["member_count"] = 20
 
     return tGuild

@@ -118,6 +118,21 @@ class TestDiscordClient : XCTestCase {
 
     func PENDING_testClientCreatesGroupDMChannel() { /* TODO write test */ }
 
+    func testClientHandlesGuildEmojiUpdate() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[.guildEmojisUpdate] = expectation(description: "Client should call guild emoji update method")
+
+        let emojiUpdate: [String: Any] = [
+            "guild_id": "testGuild",
+            "emojis": createEmojiObjects(n: 20)
+        ]
+
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
+        client.handleDispatch(event: .guildEmojisUpdate, data: .object(emojiUpdate))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
     var client: DiscordClient!
     var expectations = [DiscordDispatchEvent: XCTestExpectation]()
 
@@ -239,5 +254,12 @@ extension TestDiscordClient : DiscordClientDelegate {
         XCTAssert(guild === clientGuild, "Guild on the client should be the same as one passed to handler")
 
         expectations[.guildUpdate]?.fulfill()
+    }
+
+    func client(_ client: DiscordClient, didUpdateEmojis emojis: [String: DiscordEmoji],
+                onGuild guild: DiscordGuild) {
+        XCTAssertEqual(guild.emojis.count, 20, "Update should have 20 emoji")
+
+        expectations[.guildEmojisUpdate]?.fulfill()
     }
 }
