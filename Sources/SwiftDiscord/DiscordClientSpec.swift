@@ -37,9 +37,9 @@ public protocol DiscordClientSpec : class, DiscordVoiceManagerDelegate, DiscordS
 	/**
 		- parameter token: The discord token of the user.
 		- parameter configuration: An array of DiscordClientOption that can be used to customize the client.
-
+		- parameter delegate: The delegate for this client.
 	*/
-	init(token: DiscordToken, configuration: [DiscordClientOption])
+	init(token: DiscordToken, configuration: [DiscordClientOption], delegate: DiscordClientDelegate)
 
 	// MARK: Methods
 
