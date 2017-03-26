@@ -86,6 +86,13 @@ let testGuild: [String: Any] = [
     "members": [[String: Any]]()
 ]
 
+let testDMChannel: [String: Any] = [
+    "type": 1,
+    "recipients": [testUser],
+    "id": testUser["id"] as! String,
+    "last_message_id": ""
+]
+
 func createGuildMemberObjects(n: Int) -> [[String: Any]] {
     var members = [[String: Any]]()
 

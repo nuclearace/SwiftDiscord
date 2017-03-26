@@ -37,17 +37,16 @@ public struct DiscordDMChannel : DiscordChannel {
     /// The snowflake id of the last received message on this channel.
     public var lastMessageId: String
 
-
     init(dmObject: [String: Any]) {
         recipient = DiscordUser(userObject: dmObject.get("recipient", or: [String: Any]()))
         id = dmObject.get("id", or: "")
-        lastMessageId = dmObject.get("lastMessageId", or: "")
+        lastMessageId = dmObject.get("last_message_id", or: "")
     }
 
     init(dmReadyObject: [String: Any], client: DiscordClient? = nil) {
         recipient = DiscordUser(userObject: dmReadyObject.get("recipients", or: JSONArray())[0])
         id = dmReadyObject.get("id", or: "")
-        lastMessageId = dmReadyObject.get("lastMessageId", or: "")
+        lastMessageId = dmReadyObject.get("last_message_id", or: "")
         self.client = client
     }
 

@@ -59,7 +59,7 @@ class TestDiscordClient : XCTestCase {
     }
 
     func testClientHandlesGuildMemberUpdate() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
+        expectations[.guildCreate] = expectation(description: "Client should call guild member update method")
         expectations[.guildMemberUpdate] = expectation(description: "Client should call guild member update method")
 
         var tMember = testMember
@@ -77,7 +77,7 @@ class TestDiscordClient : XCTestCase {
     }
 
     func testClientHandlesGuildMemberRemove() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
+        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
         expectations[.guildMemberRemove] = expectation(description: "Client should call guild member remove method")
 
         var tMember = testMember
@@ -93,6 +93,31 @@ class TestDiscordClient : XCTestCase {
         waitForExpectations(timeout: 0.2)
     }
 
+    func testClientCreatesGuildChannel() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[.channelCreate] = expectation(description: "Client should call create create method")
+
+        var tChannel = testGuildChannel
+
+        tChannel["id"] = "testChannel2"
+        tChannel["name"] = "A new channel"
+
+        client.handleDispatch(event: .guildCreate, data: .object(createTestGuildJSON()))
+        client.handleDispatch(event: .channelCreate, data: .object(tChannel))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientCreatesDMChannel() {
+        expectations[.channelCreate] = expectation(description: "Client should call create create method")
+
+        client.handleDispatch(event: .channelCreate, data: .object(testDMChannel))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func PENDING_testClientCreatesGroupDMChannel() { /* TODO write test */ }
+
     var client: DiscordClient!
     var expectations = [DiscordDispatchEvent: XCTestExpectation]()
 
@@ -103,6 +128,43 @@ class TestDiscordClient : XCTestCase {
 }
 
 extension TestDiscordClient : DiscordClientDelegate {
+    func client(_ client: DiscordClient, didCreateChannel channel: DiscordChannel) {
+        func testGuildChannel(_ channel: DiscordGuildChannel) {
+            guard let clientGuild = client.guilds[channel.guildId] else {
+                XCTFail()
+
+                return
+            }
+
+            XCTAssertEqual(clientGuild.channels.count, 2, "Create channel should add new guild channel")
+            XCTAssertEqual(clientGuild.channels[channel.id]?.name, "A new channel", "Create channel should correctly " +
+                                                                                    "create a guild channel")
+        }
+
+        func testDMChannel(_ channel: DiscordDMChannel) {
+            guard let clientChannel = client.directChannels[channel.id] else {
+                XCTFail()
+
+                return
+            }
+
+            XCTAssertEqual(clientChannel.type, .direct, "Create channel should correctly type direct channels")
+            XCTAssertEqual(clientChannel.id, testUser["id"] as! String, "Channel create should index channels by " +
+                                                                        "recipient id")
+        }
+
+        func testGroupDMChannel(_ channel: DiscordGroupDMChannel) { }
+
+        switch channel {
+        case let guildChannel as DiscordGuildChannel:      testGuildChannel(guildChannel)
+        case let dmChannel as DiscordDMChannel:            testDMChannel(dmChannel)
+        case let groupDmChannel as DiscordGroupDMChannel:  testGroupDMChannel(groupDmChannel)
+        default: XCTFail()
+        }
+
+        expectations[.channelCreate]?.fulfill()
+    }
+
     func client(_ client: DiscordClient, didAddGuildMember member: DiscordGuildMember) {
         guard let clientGuild = client.guilds[member.guildId] else {
             XCTFail()
