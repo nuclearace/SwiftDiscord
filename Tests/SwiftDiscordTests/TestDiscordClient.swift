@@ -10,7 +10,7 @@ class TestDiscordClient : XCTestCase {
     func testClientCreatesGuild() {
         expectations[.guildCreate] = expectation(description: "Client should call guild create method")
 
-        client.handleDispatch(event: .guildCreate, data: .object(createTestGuildJSON()))
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
 
         waitForExpectations(timeout: 0.2)
     }
@@ -24,7 +24,7 @@ class TestDiscordClient : XCTestCase {
             "name": "A new name"
         ]
 
-        client.handleDispatch(event: .guildCreate, data: .object(createTestGuildJSON()))
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
         client.handleDispatch(event: .guildUpdate, data: .object(updateJSON))
 
         waitForExpectations(timeout: 0.2)
@@ -34,7 +34,7 @@ class TestDiscordClient : XCTestCase {
         expectations[.guildCreate] = expectation(description: "Client should call guild create method")
         expectations[.guildDelete] = expectation(description: "Client should call guild delete method")
 
-        client.handleDispatch(event: .guildCreate, data: .object(createTestGuildJSON()))
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
         client.handleDispatch(event: .guildDelete, data: .object(["id": "testGuild"]))
 
         waitForExpectations(timeout: 0.2)
@@ -52,7 +52,7 @@ class TestDiscordClient : XCTestCase {
         tMember["user"] = tUser
         tMember["nick"] = "test nick"
 
-        client.handleDispatch(event: .guildCreate, data: .object(createTestGuildJSON()))
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
         client.handleDispatch(event: .guildMemberAdd, data: .object(tMember))
 
         waitForExpectations(timeout: 0.2)
@@ -70,7 +70,7 @@ class TestDiscordClient : XCTestCase {
         tMember["user"] = tUser
         tMember["nick"] = "a new nick"
 
-        client.handleDispatch(event: .guildCreate, data: .object(createTestGuildJSON()))
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
         client.handleDispatch(event: .guildMemberUpdate, data: .object(tMember))
 
         waitForExpectations(timeout: 0.2)
@@ -87,7 +87,7 @@ class TestDiscordClient : XCTestCase {
         tMember["guild_id"] = "testGuild"
         tMember["user"] = tUser
 
-        client.handleDispatch(event: .guildCreate, data: .object(createTestGuildJSON()))
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
         client.handleDispatch(event: .guildMemberRemove, data: .object(tMember))
 
         waitForExpectations(timeout: 0.2)
@@ -102,7 +102,7 @@ class TestDiscordClient : XCTestCase {
         tChannel["id"] = "testChannel2"
         tChannel["name"] = "A new channel"
 
-        client.handleDispatch(event: .guildCreate, data: .object(createTestGuildJSON()))
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
         client.handleDispatch(event: .channelCreate, data: .object(tChannel))
 
         waitForExpectations(timeout: 0.2)

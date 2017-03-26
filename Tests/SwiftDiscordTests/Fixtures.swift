@@ -123,7 +123,7 @@ func createPresenceObjects(n: Int) -> [[String: Any]] {
     return presences
 }
 
-func createTestGuildJSON() -> [String: Any] {
+let testGuildJSON: [String: Any] = {
     let members = createGuildMemberObjects(n: 20)
     let presences = createPresenceObjects(n: 20)
     var tGuild = testGuild
@@ -134,4 +134,4 @@ func createTestGuildJSON() -> [String: Any] {
     tGuild["member_count"] = 20
 
     return tGuild
-}
+}()
