@@ -131,7 +131,7 @@ extension TestDiscordClient : DiscordClientDelegate {
     func client(_ client: DiscordClient, didCreateChannel channel: DiscordChannel) {
         func testGuildChannel(_ channel: DiscordGuildChannel) {
             guard let clientGuild = client.guilds[channel.guildId] else {
-                XCTFail()
+                XCTFail("Guild for channel should be in guilds")
 
                 return
             }
@@ -143,7 +143,7 @@ extension TestDiscordClient : DiscordClientDelegate {
 
         func testDMChannel(_ channel: DiscordDMChannel) {
             guard let clientChannel = client.directChannels[channel.id] else {
-                XCTFail()
+                XCTFail("DM channel should be in direct channels")
 
                 return
             }
@@ -153,13 +153,13 @@ extension TestDiscordClient : DiscordClientDelegate {
                                                                         "recipient id")
         }
 
-        func testGroupDMChannel(_ channel: DiscordGroupDMChannel) { }
+        func testGroupDMChannel(_ channel: DiscordGroupDMChannel) { XCTFail("Checks needed for GroupDM") }
 
         switch channel {
         case let guildChannel as DiscordGuildChannel:      testGuildChannel(guildChannel)
         case let dmChannel as DiscordDMChannel:            testDMChannel(dmChannel)
         case let groupDmChannel as DiscordGroupDMChannel:  testGroupDMChannel(groupDmChannel)
-        default: XCTFail()
+        default: XCTFail("Unknown channel type")
         }
 
         expectations[.channelCreate]?.fulfill()
@@ -167,7 +167,7 @@ extension TestDiscordClient : DiscordClientDelegate {
 
     func client(_ client: DiscordClient, didAddGuildMember member: DiscordGuildMember) {
         guard let clientGuild = client.guilds[member.guildId] else {
-            XCTFail()
+            XCTFail("Guild for member should be in guilds")
 
             return
         }
@@ -182,7 +182,7 @@ extension TestDiscordClient : DiscordClientDelegate {
 
     func client(_ client: DiscordClient, didRemoveGuildMember member: DiscordGuildMember) {
         guard let clientGuild = client.guilds[member.guildId] else {
-            XCTFail()
+            XCTFail("Guild for member should be in guilds")
 
             return
         }
@@ -196,7 +196,7 @@ extension TestDiscordClient : DiscordClientDelegate {
 
     func client(_ client: DiscordClient, didUpdateGuildMember member: DiscordGuildMember) {
         guard let guildMember = client.guilds[member.guildId]?.members[member.user.id] else {
-            XCTFail()
+            XCTFail("Guild member should be in guild")
 
             return
         }
@@ -208,7 +208,7 @@ extension TestDiscordClient : DiscordClientDelegate {
 
     func client(_ client: DiscordClient, didCreateGuild guild: DiscordGuild) {
         guard let clientGuild = client.guilds[guild.id] else {
-            XCTFail()
+            XCTFail("Guild should be in guilds")
 
             return
         }
@@ -230,7 +230,7 @@ extension TestDiscordClient : DiscordClientDelegate {
 
     func client(_ client: DiscordClient, didUpdateGuild guild: DiscordGuild) {
         guard let clientGuild = client.guilds[guild.id] else {
-            XCTFail()
+            XCTFail("Guild should be in guilds")
 
             return
         }
