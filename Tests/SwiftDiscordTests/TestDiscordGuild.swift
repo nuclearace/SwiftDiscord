@@ -117,7 +117,7 @@ class TestDiscordGuild : XCTestCase {
         var tMember = testMember
         var role2 = testRole
 
-        role2["id"] = "testrole2"
+        role2["id"] = "testRole2"
         role2["name"] = "A new role"
         tMember["roles"] = [testRole["id"] as! String, role2["id"] as! String]
 
@@ -131,8 +131,8 @@ class TestDiscordGuild : XCTestCase {
         let roles = guild.roles(for: member)
 
         XCTAssertEqual(roles.count, 2, "guild should find two roles for member")
-        XCTAssertNotNil(roles.first(where: { $0.id == "testrole" }), "roles should find testrole")
-        XCTAssertNotNil(roles.first(where: { $0.id == "testrole2" }), "roles should find role2")
+        XCTAssertNotNil(roles.first(where: { $0.id == testRole["id"] as! String }), "roles should find testrole")
+        XCTAssertNotNil(roles.first(where: { $0.id == role2["id"] as! String }), "roles should find role2")
     }
 
     func testCreatingGuildWithALargeNumberOfMembersIsFast() {

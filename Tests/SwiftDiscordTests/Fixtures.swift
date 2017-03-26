@@ -10,7 +10,7 @@ let readyPacket = "{\"t\":\"READY\",\"s\":null,\"op\":0,\"d\":{\"session_id\": \
 let testRole: [String: Any] = [
     "color": 0,
     "hoist": false,
-    "id": "testrole",
+    "id": "testRole",
     "managed": false,
     "mentionable": true,
     "name": "My Test Role",
@@ -42,7 +42,7 @@ let testMember: [String: Any] = [
     "deaf": false,
     "mute": false,
     "nick": "",
-    "roles": ["testrole"],
+    "roles": ["testRole"],
     "joined_at": ""
 ]
 

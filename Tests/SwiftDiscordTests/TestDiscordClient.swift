@@ -133,6 +133,65 @@ class TestDiscordClient : XCTestCase {
         waitForExpectations(timeout: 0.2)
     }
 
+    func testClientHandlesRoleCreate() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[.guildRoleCreate] = expectation(description: "Client should call guild role create method")
+
+        let roleCreate: [String: Any] = [
+            "guild_id": "testGuild",
+            "role": testRole
+        ]
+
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
+        client.handleDispatch(event: .guildRoleCreate, data: .object(roleCreate))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientHandlesRoleUpdate() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[.guildRoleCreate] = expectation(description: "Client should call guild role create method")
+        expectations[.guildRoleUpdate] = expectation(description: "Client should call guild role update method")
+
+        var tRole = testRole
+        var roleUpdate: [String: Any] = [
+            "guild_id": "testGuild",
+            "role": testRole
+        ]
+
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
+        client.handleDispatch(event: .guildRoleCreate, data: .object(roleUpdate))
+
+        tRole["name"] = "A dank role"
+        roleUpdate["role"] = tRole
+
+        client.handleDispatch(event: .guildRoleUpdate, data: .object(roleUpdate))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientHandlesRoleRemove() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[.guildRoleCreate] = expectation(description: "Client should call guild role create method")
+        expectations[.guildRoleDelete] = expectation(description: "Client should call guild role delete method")
+
+        let roleCreate: [String: Any] = [
+            "guild_id": "testGuild",
+            "role": testRole
+        ]
+
+        let roleDelete: [String: Any] = [
+            "guild_id": "testGuild",
+            "role_id": "testRole"
+        ]
+
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
+        client.handleDispatch(event: .guildRoleCreate, data: .object(roleCreate))
+        client.handleDispatch(event: .guildRoleDelete, data: .object(roleDelete))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
     var client: DiscordClient!
     var expectations = [DiscordDispatchEvent: XCTestExpectation]()
 
@@ -261,5 +320,44 @@ extension TestDiscordClient : DiscordClientDelegate {
         XCTAssertEqual(guild.emojis.count, 20, "Update should have 20 emoji")
 
         expectations[.guildEmojisUpdate]?.fulfill()
+    }
+
+    func client(_ client: DiscordClient, didCreateRole role: DiscordRole, onGuild guild: DiscordGuild) {
+        guard let clientGuild = client.guilds[guild.id] else {
+            XCTFail("Guild should be in guilds")
+
+            return
+        }
+
+        XCTAssertNotNil(clientGuild.roles[role.id], "Role should be in guild")
+        XCTAssertEqual(role.name, "My Test Role", "Role create should correctly make role")
+
+        expectations[.guildRoleCreate]?.fulfill()
+    }
+
+    func client(_ client: DiscordClient, didDeleteRole role: DiscordRole, fromGuild guild: DiscordGuild) {
+        guard let clientGuild = client.guilds[guild.id] else {
+            XCTFail("Guild should be in guilds")
+
+            return
+        }
+
+        XCTAssertNil(clientGuild.roles[role.id], "Role should not be in guild")
+        XCTAssertEqual(role.name, "My Test Role", "Role create should correctly make role")
+
+        expectations[.guildRoleDelete]?.fulfill()
+    }
+
+    func client(_ client: DiscordClient, didUpdateRole role: DiscordRole, onGuild guild: DiscordGuild) {
+        guard let clientGuild = client.guilds[guild.id] else {
+            XCTFail("Guild should be in guilds")
+
+            return
+        }
+
+        XCTAssertNotNil(clientGuild.roles[role.id], "Role should be in guild")
+        XCTAssertEqual(role.name, "A dank role", "Role create should correctly update role")
+
+        expectations[.guildRoleUpdate]?.fulfill()
     }
 }
