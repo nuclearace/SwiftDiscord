@@ -40,6 +40,59 @@ class TestDiscordClient : XCTestCase {
         waitForExpectations(timeout: 0.2)
     }
 
+    func testClientHandlesGuildMemberAdd() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
+        expectations[.guildMemberAdd] = expectation(description: "Client should call guild member add method")
+
+        var tMember = testMember
+        var tUser = testUser
+
+        tUser["id"] = "30"
+        tMember["guild_id"] = "testGuild"
+        tMember["user"] = tUser
+        tMember["nick"] = "test nick"
+
+        client.handleDispatch(event: .guildCreate, data: .object(createTestGuildJSON()))
+        client.handleDispatch(event: .guildMemberAdd, data: .object(tMember))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientHandlesGuildMemberUpdate() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
+        expectations[.guildMemberUpdate] = expectation(description: "Client should call guild member update method")
+
+        var tMember = testMember
+        var tUser = testUser
+
+        tUser["id"] = "15"
+        tMember["guild_id"] = "testGuild"
+        tMember["user"] = tUser
+        tMember["nick"] = "a new nick"
+
+        client.handleDispatch(event: .guildCreate, data: .object(createTestGuildJSON()))
+        client.handleDispatch(event: .guildMemberUpdate, data: .object(tMember))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientHandlesGuildMemberRemove() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
+        expectations[.guildMemberRemove] = expectation(description: "Client should call guild member remove method")
+
+        var tMember = testMember
+        var tUser = testUser
+
+        tUser["id"] = "15"
+        tMember["guild_id"] = "testGuild"
+        tMember["user"] = tUser
+
+        client.handleDispatch(event: .guildCreate, data: .object(createTestGuildJSON()))
+        client.handleDispatch(event: .guildMemberRemove, data: .object(tMember))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
     var client: DiscordClient!
     var expectations = [DiscordDispatchEvent: XCTestExpectation]()
 
@@ -50,6 +103,47 @@ class TestDiscordClient : XCTestCase {
 }
 
 extension TestDiscordClient : DiscordClientDelegate {
+    func client(_ client: DiscordClient, didAddGuildMember member: DiscordGuildMember) {
+        guard let clientGuild = client.guilds[member.guildId] else {
+            XCTFail()
+
+            return
+        }
+
+        XCTAssertEqual(member.nick, "test nick", "Guild member add should correctly create a member")
+        XCTAssertNotNil(clientGuild.members[member.user.id], "Member should be in guild after being added")
+        XCTAssertEqual(clientGuild.members.count, 21, "Guild member add should correctly add a new member to members")
+        XCTAssertEqual(clientGuild.memberCount, 21, "Guild member add should correctly increment the number of members")
+
+        expectations[.guildMemberAdd]?.fulfill()
+    }
+
+    func client(_ client: DiscordClient, didRemoveGuildMember member: DiscordGuildMember) {
+        guard let clientGuild = client.guilds[member.guildId] else {
+            XCTFail()
+
+            return
+        }
+
+        XCTAssertNil(clientGuild.members[member.user.id], "Guild member remove should remove member")
+        XCTAssertEqual(clientGuild.members.count, 19, "Guild member remove should correctly remove a member")
+        XCTAssertEqual(clientGuild.memberCount, 19, "Guild member remove should correctly decrement the number of members")
+
+        expectations[.guildMemberRemove]?.fulfill()
+    }
+
+    func client(_ client: DiscordClient, didUpdateGuildMember member: DiscordGuildMember) {
+        guard let guildMember = client.guilds[member.guildId]?.members[member.user.id] else {
+            XCTFail()
+
+            return
+        }
+
+        XCTAssertEqual(guildMember.nick, "a new nick", "Member on guild should be updated")
+
+        expectations[.guildMemberUpdate]?.fulfill()
+    }
+
     func client(_ client: DiscordClient, didCreateGuild guild: DiscordGuild) {
         guard let clientGuild = client.guilds[guild.id] else {
             XCTFail()

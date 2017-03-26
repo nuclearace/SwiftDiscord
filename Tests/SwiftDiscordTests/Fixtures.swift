@@ -124,6 +124,7 @@ func createTestGuildJSON() -> [String: Any] {
     tGuild["channels"] = [testGuildChannel]
     tGuild["members"] = members
     tGuild["presences"] = presences
+    tGuild["member_count"] = 20
 
     return tGuild
 }
