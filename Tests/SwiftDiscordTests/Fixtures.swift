@@ -54,9 +54,9 @@ let testPresence: [String: Any] = [
 
 let testGuildChannel: [String: Any] = [
     "id": "guildChannel",
-    "guild_id": "",
+    "guild_id": "testGuild",
     "type": 0,
-    "name": "",
+    "name": "TestChannel",
     "permission_overwrites": [[String: Any]](),
     "position": 0
 ]
@@ -114,4 +114,16 @@ func createPresenceObjects(n: Int) -> [[String: Any]] {
     }
 
     return presences
+}
+
+func createTestGuildJSON() -> [String: Any] {
+    let members = createGuildMemberObjects(n: 20)
+    let presences = createPresenceObjects(n: 20)
+    var tGuild = testGuild
+
+    tGuild["channels"] = [testGuildChannel]
+    tGuild["members"] = members
+    tGuild["presences"] = presences
+
+    return tGuild
 }
