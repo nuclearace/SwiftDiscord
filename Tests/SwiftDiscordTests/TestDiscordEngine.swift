@@ -23,11 +23,30 @@ class TestDiscordEngine : XCTestCase, DiscordEngineDelegate {
         waitForExpectations(timeout: 0.2)
     }
 
+    func testEngineUpdatesSequenceNumber() {
+        let payload1 = DiscordGatewayPayload(code: .gateway(.dispatch), payload: .object([:]), sequenceNumber: 1,
+                                             name: DiscordDispatchEvent.messageCreate.rawValue)
+        let payload2 = DiscordGatewayPayload(code: .gateway(.dispatch), payload: .object([:]), sequenceNumber: 2,
+                                             name: DiscordDispatchEvent.messageUpdate.rawValue)
+
+        expectation = expectation(description: "Engine should update the sequence number")
+
+        engine.handleGatewayPayload(payload1)
+        engine.handleGatewayPayload(payload2)
+
+        waitForExpectations(timeout: 0.2)
+    }
+
     func engine(_ engine: DiscordEngine, didReceiveEvent event: DiscordDispatchEvent,
                 with payload: DiscordGatewayPayload) {
         switch event {
         case .ready:
             XCTAssertEqual(engine.sessionId, "hello_world", "Engine should correctly set the session id")
+            expectation.fulfill()
+        case .messageCreate:
+            XCTAssertEqual(engine.lastSequenceNumber, 1, "Engine should correctly set the last sequence number")
+        case .messageUpdate:
+            XCTAssertEqual(engine.lastSequenceNumber, 2, "Engine should correctly set the last sequence number")
             expectation.fulfill()
         default:
             return
