@@ -98,11 +98,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
     /**
         - parameter token: The discord token of the user
-        - parameter configuration: An array of DiscordClientOption that can be used to customize the client
         - parameter delegate: The delegate for this client.
+        - parameter configuration: An array of DiscordClientOption that can be used to customize the client
     */
-    public required init(token: DiscordToken, configuration: [DiscordClientOption] = [],
-                         delegate: DiscordClientDelegate) {
+    public required init(token: DiscordToken, delegate: DiscordClientDelegate,
+                         configuration: [DiscordClientOption] = []) {
         self.token = token
         self.shardManager = DiscordShardManager(delegate: self)
         self.voiceManager = DiscordVoiceManager(delegate: self)
