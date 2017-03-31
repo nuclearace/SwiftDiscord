@@ -260,7 +260,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     */
     open func joinVoiceChannel(_ channelId: String) {
         guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
-                channel.type == .voice else {
+              channel.type == .voice else {
 
             return
         }
