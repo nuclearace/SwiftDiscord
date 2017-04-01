@@ -116,7 +116,13 @@ class TestDiscordClient : XCTestCase {
         waitForExpectations(timeout: 0.2)
     }
 
-    func PENDING_testClientCreatesGroupDMChannel() { /* TODO write test */ }
+    func testClientCreatesGroupDMChannel() {
+        expectations[.channelCreate] = expectation(description: "Client should call create create method")
+
+        client.handleDispatch(event: .channelCreate, data: .object(testGroupDMChannel))
+
+        waitForExpectations(timeout: 0.2)
+    }
 
     func testClientDeletesGuildChannel() {
         expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
@@ -131,6 +137,24 @@ class TestDiscordClient : XCTestCase {
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
         client.handleDispatch(event: .channelCreate, data: .object(tChannel))
         client.handleDispatch(event: .channelDelete, data: .object(tChannel))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientDeletesDirectChannel() {
+        expectations[.channelCreate] = expectation(description: "Client should call create create method")
+
+        client.handleDispatch(event: .channelCreate, data: .object(testDMChannel))
+        client.handleDispatch(event: .channelDelete, data: .object(testDMChannel))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientDeletesGroupDMChannel() {
+        expectations[.channelCreate] = expectation(description: "Client should call create create method")
+
+        client.handleDispatch(event: .channelCreate, data: .object(testGroupDMChannel))
+        client.handleDispatch(event: .channelDelete, data: .object(testGroupDMChannel))
 
         waitForExpectations(timeout: 0.2)
     }
@@ -232,59 +256,88 @@ class TestDiscordClient : XCTestCase {
     }
 }
 
+extension TestDiscordClient {
+    // MARK: Channel testing
+
+    enum ChannelTestType {
+        case create
+        case delete
+    }
+
+    func guildChannelTest(_ channel: DiscordGuildChannel, expectedGuildChannels expected: Int,
+                          testType type: ChannelTestType) {
+        guard let clientGuild = client.guilds[channel.guildId] else {
+            XCTFail("Guild for channel should be in guilds")
+
+            return
+        }
+
+        switch type {
+        case .create:
+            XCTAssertEqual(clientGuild.channels[channel.id]?.id, channel.id, "Channels should be the same")
+        case .delete:
+            XCTAssertNil(clientGuild.channels[channel.id], "Channel should be removed from guild")
+        }
+
+        XCTAssertEqual(clientGuild.channels.count, expected, "Number of channels should be predictable")
+    }
+
+    func dmChannelTest(_ channel: DiscordDMChannel, testType type: ChannelTestType) {
+        switch type {
+        case .create:
+            XCTAssertNotNil(client.directChannels[channel.id], "Created DM Channel should be in direct channels")
+        case .delete:
+            XCTAssertNil(client.directChannels[channel.id], "Deleted DM Channel should not be in direct channels")
+        }
+
+        XCTAssertEqual(channel.type, .direct, "Create channel should correctly type direct channels")
+        XCTAssertEqual(channel.id, testUser["id"] as! String, "Channel create should index channels by "
+                                                              + "recipient id")
+    }
+
+    func groupDMChannelTest(_ channel: DiscordGroupDMChannel, testType type: ChannelTestType) {
+        switch type {
+        case .create:
+            XCTAssertNotNil(client.directChannels[channel.id], "Created Group DM Channel should be in direct channels")
+        case .delete:
+            XCTAssertNil(client.directChannels[channel.id], "Deleted Group DM Channel should not be in direct channels")
+        }
+
+        XCTAssertEqual(channel.type, .groupDM, "Create channel should correctly type direct channels")
+        XCTAssertEqual(channel.name, "A Group DM", "Channel create should index channels by recipient id")
+    }
+}
+
 extension TestDiscordClient : DiscordClientDelegate {
+    // MARK: DiscordClientDelegate
+
     func client(_ client: DiscordClient, didCreateChannel channel: DiscordChannel) {
-        func testGuildChannel(_ channel: DiscordGuildChannel) {
-            guard let clientGuild = client.guilds[channel.guildId] else {
-                XCTFail("Guild for channel should be in guilds")
-
-                return
-            }
-
-            XCTAssertEqual(clientGuild.channels.count, 2, "Create channel should add new guild channel")
-            XCTAssertEqual(clientGuild.channels[channel.id]?.name, "A new channel", "Create channel should correctly " +
-                                                                                    "create a guild channel")
-        }
-
-        func testDMChannel(_ channel: DiscordDMChannel) {
-            guard let clientChannel = client.directChannels[channel.id] else {
-                XCTFail("DM channel should be in direct channels")
-
-                return
-            }
-
-            XCTAssertEqual(clientChannel.type, .direct, "Create channel should correctly type direct channels")
-            XCTAssertEqual(clientChannel.id, testUser["id"] as! String, "Channel create should index channels by " +
-                                                                        "recipient id")
-        }
-
-        func testGroupDMChannel(_ channel: DiscordGroupDMChannel) { XCTFail("Checks needed for GroupDM") }
-
         switch channel {
-        case let guildChannel as DiscordGuildChannel:      testGuildChannel(guildChannel)
-        case let dmChannel as DiscordDMChannel:            testDMChannel(dmChannel)
-        case let groupDmChannel as DiscordGroupDMChannel:  testGroupDMChannel(groupDmChannel)
-        default: XCTFail("Unknown channel type")
+        case let guildChannel as DiscordGuildChannel:
+            guildChannelTest(guildChannel, expectedGuildChannels: 2,
+                             testType: .create)
+        case let dmChannel as DiscordDMChannel:
+            dmChannelTest(dmChannel, testType: .create)
+        case let groupDmChannel as DiscordGroupDMChannel:
+            groupDMChannelTest(groupDmChannel, testType: .create)
+        default:
+            XCTFail("Unknown channel type")
         }
 
         expectations[.channelCreate]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didDeleteChannel channel: DiscordChannel) {
-        guard let guildChannel = channel as? DiscordGuildChannel else {
-            XCTFail("Removed channel is not a guild channel")
-
-            return
+        switch channel {
+        case let guildChannel as DiscordGuildChannel:
+            guildChannelTest(guildChannel, expectedGuildChannels: 1, testType: .delete)
+        case let dmChannel as DiscordDMChannel:
+            dmChannelTest(dmChannel, testType: .delete)
+        case let groupDmChannel as DiscordGroupDMChannel:
+            groupDMChannelTest(groupDmChannel, testType: .delete)
+        default:
+            XCTFail("Unknown channel type")
         }
-
-        guard let clientGuild = client.guilds[guildChannel.guildId] else {
-            XCTFail("Guild for channel should be in guilds")
-
-            return
-        }
-
-        XCTAssertEqual(clientGuild.channels.count, 1, "Guild should only have one channel")
-        XCTAssertEqual(guildChannel.name, "A new channel", "A new channel should have been deleted")
 
         expectations[.channelDelete]?.fulfill()
     }

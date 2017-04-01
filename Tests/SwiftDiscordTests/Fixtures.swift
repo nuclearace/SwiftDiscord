@@ -101,6 +101,14 @@ let testDMChannel: [String: Any] = [
     "last_message_id": ""
 ]
 
+let testGroupDMChannel: [String: Any] = [
+    "type": 3,
+    "recipients": [testUser],
+    "id": testUser["id"] as! String,
+    "last_message_id": "",
+    "name": "A Group DM"
+]
+
 func createGuildMemberObjects(n: Int) -> [[String: Any]] {
     var members = [[String: Any]]()
 
