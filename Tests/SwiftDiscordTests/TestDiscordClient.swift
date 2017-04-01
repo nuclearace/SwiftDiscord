@@ -118,6 +118,37 @@ class TestDiscordClient : XCTestCase {
 
     func PENDING_testClientCreatesGroupDMChannel() { /* TODO write test */ }
 
+    func testClientDeletesGuildChannel() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[.channelCreate] = expectation(description: "Client should call create create method")
+        expectations[.channelDelete] = expectation(description: "Client should call delete channel method")
+
+        var tChannel = testGuildChannel
+
+        tChannel["id"] = "testChannel2"
+        tChannel["name"] = "A new channel"
+
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
+        client.handleDispatch(event: .channelCreate, data: .object(tChannel))
+        client.handleDispatch(event: .channelDelete, data: .object(tChannel))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientUpdatesGuildChannel() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[.channelUpdate] = expectation(description: "Client should call update channel method")
+
+        var tChannel = testGuildChannel
+
+        tChannel["name"] = "A new channel"
+
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
+        client.handleDispatch(event: .channelUpdate, data: .object(tChannel))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
     func testClientHandlesGuildEmojiUpdate() {
         expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
         expectations[.guildEmojisUpdate] = expectation(description: "Client should call guild emoji update method")
@@ -237,6 +268,44 @@ extension TestDiscordClient : DiscordClientDelegate {
         }
 
         expectations[.channelCreate]?.fulfill()
+    }
+
+    func client(_ client: DiscordClient, didDeleteChannel channel: DiscordChannel) {
+        guard let guildChannel = channel as? DiscordGuildChannel else {
+            XCTFail("Removed channel is not a guild channel")
+
+            return
+        }
+
+        guard let clientGuild = client.guilds[guildChannel.guildId] else {
+            XCTFail("Guild for channel should be in guilds")
+
+            return
+        }
+
+        XCTAssertEqual(clientGuild.channels.count, 1, "Guild should only have one channel")
+        XCTAssertEqual(guildChannel.name, "A new channel", "A new channel should have been deleted")
+
+        expectations[.channelDelete]?.fulfill()
+    }
+
+    func client(_ client: DiscordClient, didUpdateChannel channel: DiscordChannel) {
+        guard let guildChannel = channel as? DiscordGuildChannel else {
+            XCTFail("Updated channel is not a guild channel")
+
+            return
+        }
+
+        guard let clientGuild = client.guilds[guildChannel.guildId] else {
+            XCTFail("Guild for channel should be in guilds")
+
+            return
+        }
+
+        XCTAssertEqual(clientGuild.channels.count, 1, "Guild should only have one channel")
+        XCTAssertEqual(guildChannel.name, "A new channel", "A new channel should have been updated")
+
+        expectations[.channelUpdate]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didAddGuildMember member: DiscordGuildMember) {

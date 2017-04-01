@@ -468,6 +468,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         - parameter with: The data from the event
     */
     open func handleChannelDelete(with data: [String: Any]) {
+        // TODO Handle other types of channels
+
         DefaultDiscordLogger.Logger.log("Handling channel delete", type: logType)
 
         guard let guildId = data["guild_id"] as? String else { return }

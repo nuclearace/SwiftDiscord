@@ -63,9 +63,8 @@ public enum DiscordOAuthEndpoint : String {
 
     private func createURL(getParams: [String: String]) -> URL {
         var params = getParams
-
         var com = URLComponents(url: URL(string: DiscordOAuthEndpoint.baseURL.rawValue)!,
-            resolvingAgainstBaseURL: false)!
+                                resolvingAgainstBaseURL: false)!
 
         params["scope"] = rawValue
 
