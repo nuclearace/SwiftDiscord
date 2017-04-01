@@ -468,15 +468,23 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         - parameter with: The data from the event
     */
     open func handleChannelDelete(with data: [String: Any]) {
-        // TODO Handle other types of channels
-
         DefaultDiscordLogger.Logger.log("Handling channel delete", type: logType)
 
-        guard let guildId = data["guild_id"] as? String else { return }
+        guard let type = DiscordChannelType(rawValue: data["type"] as? Int ?? -1) else { return }
         guard let channelId = data["id"] as? String else { return }
-        guard let removedChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) else { return }
 
-        channelCache.removeValue(forKey: removedChannel.id)
+        let removedChannel: DiscordChannel
+
+        if type == .text || type == .voice, let guildId = data["guild_id"] as? String,
+           let guildChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) {
+            removedChannel = guildChannel
+        } else if type == .direct || type == .groupDM, let direct = directChannels.removeValue(forKey: channelId) {
+            removedChannel = direct
+        } else {
+            return
+        }
+
+        channelCache.removeValue(forKey: channelId)
 
         DefaultDiscordLogger.Logger.verbose("Removed channel: %@", type: logType, args: removedChannel)
 
