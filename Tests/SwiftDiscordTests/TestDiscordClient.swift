@@ -314,8 +314,7 @@ extension TestDiscordClient : DiscordClientDelegate {
     func client(_ client: DiscordClient, didCreateChannel channel: DiscordChannel) {
         switch channel {
         case let guildChannel as DiscordGuildChannel:
-            guildChannelTest(guildChannel, expectedGuildChannels: 2,
-                             testType: .create)
+            guildChannelTest(guildChannel, expectedGuildChannels: 2, testType: .create)
         case let dmChannel as DiscordDMChannel:
             dmChannelTest(dmChannel, testType: .create)
         case let groupDmChannel as DiscordGroupDMChannel:
