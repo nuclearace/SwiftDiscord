@@ -247,6 +247,14 @@ class TestDiscordClient : XCTestCase {
         waitForExpectations(timeout: 0.2)
     }
 
+    func testClientCallsUnhandledEventMethod() {
+        expectations[.typingStart] = expectation(description: "Client should call the unhandled event method")
+
+        client.handleDispatch(event: .typingStart, data: .object([:]))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
     func testClientFindsGuildChannel() {
         expectations[.guildCreate] = expectation(description: "Client should call guild create method")
 
@@ -522,4 +530,10 @@ extension TestDiscordClient : DiscordClientDelegate {
 
         expectations[.guildRoleUpdate]?.fulfill()
     }
+
+    func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent,
+                withData data: [String: Any]) {
+        expectations[.typingStart]?.fulfill()
+    }
+
 }
