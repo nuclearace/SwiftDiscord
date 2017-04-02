@@ -782,7 +782,7 @@ made on this queue, as this is the queue where modifications on them are made.</
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">relationships</span> <span class="o">=</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Dictionary</span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">Any</span><span class="o">&gt;&gt;</span><span class="p">()</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">relationships</span> <span class="o">=</span> <span class="p">[[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]]()</span></code></pre>
 
                         </div>
                       </div>
@@ -857,9 +857,9 @@ made on this queue, as this is the queue where modifications on them are made.</
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordClientcFT5tokenVS_12DiscordToken13configurationGSaOS_19DiscordClientOption__S0_"></a>
-                    <a name="//apple_ref/swift/Method/init(token:configuration:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClientcFT5tokenVS_12DiscordToken13configurationGSaOS_19DiscordClientOption__S0_">init(token:configuration:)</a>
+                    <a name="/s:FC12SwiftDiscord13DiscordClientcFT5tokenVS_12DiscordToken8delegatePS_21DiscordClientDelegate_13configurationGSaOS_19DiscordClientOption__S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(token:delegate:configuration:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordClientcFT5tokenVS_12DiscordToken8delegatePS_21DiscordClientDelegate_13configurationGSaOS_19DiscordClientOption__S0_">init(token:delegate:configuration:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -873,7 +873,8 @@ made on this queue, as this is the queue where modifications on them are made.</
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">required</span> <span class="nf">init</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">configuration</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/DiscordClientOption.html">DiscordClientOption</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[])</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">required</span> <span class="nf">init</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordClientDelegate.html">DiscordClientDelegate</a></span><span class="p">,</span>
+                         <span class="nv">configuration</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/DiscordClientOption.html">DiscordClientOption</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[])</span></code></pre>
 
                         </div>
                       </div>
@@ -890,6 +891,19 @@ made on this queue, as this is the queue where modifications on them are made.</
                               <td>
                                 <div>
                                   <p>The discord token of the user</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>delegate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The delegate for this client.</p>
 
                                 </div>
                               </td>
@@ -2838,7 +2852,7 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-03-18)</p>
+      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-04-02)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

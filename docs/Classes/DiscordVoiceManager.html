@@ -556,9 +556,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC12SwiftDiscord19DiscordVoiceManager20handleEngineDispatchFTOS_20DiscordDispatchEvent4withVS_21DiscordGatewayPayload_T_"></a>
-                    <a name="//apple_ref/swift/Method/handleEngineDispatch(_:with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord19DiscordVoiceManager20handleEngineDispatchFTOS_20DiscordDispatchEvent4withVS_21DiscordGatewayPayload_T_">handleEngineDispatch(_:with:)</a>
+                    <a name="/s:FC12SwiftDiscord19DiscordVoiceManager6engineFTCS_13DiscordEngine15didReceiveEventOS_20DiscordDispatchEvent4withVS_21DiscordGatewayPayload_T_"></a>
+                    <a name="//apple_ref/swift/Method/engine(_:didReceiveEvent:with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord19DiscordVoiceManager6engineFTCS_13DiscordEngine15didReceiveEventOS_20DiscordDispatchEvent4withVS_21DiscordGatewayPayload_T_">engine(_:didReceiveEvent:with:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -575,7 +575,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleEngineDispatch</span><span class="p">(</span><span class="n">_</span> <span class="nv">event</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a></span><span class="p">,</span> <span class="n">with</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">engine</span><span class="p">(</span><span class="n">_</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordEngine.html">DiscordEngine</a></span><span class="p">,</span> <span class="n">didReceiveEvent</span> <span class="nv">event</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a></span><span class="p">,</span>
+                     <span class="n">with</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -586,12 +587,89 @@
                             <tr>
                               <td>
                                 <code>
+                                <em>engine</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The engine that received the event.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didReceiveEvent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The event that was received.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
                                 <em>payload</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
                                   <p>A <code>DiscordGatewayPayload</code> containing the dispatch information.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC12SwiftDiscord19DiscordVoiceManager6engineFTCS_13DiscordEngine19gotHelloWithPayloadVS_21DiscordGatewayPayload_T_"></a>
+                    <a name="//apple_ref/swift/Method/engine(_:gotHelloWithPayload:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord19DiscordVoiceManager6engineFTCS_13DiscordEngine19gotHelloWithPayloadVS_21DiscordGatewayPayload_T_">engine(_:gotHelloWithPayload:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when an engine handled a hello packet.</p>
+
+<ul>
+<li>gotHelloWithPayload: The hello data.</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">engine</span><span class="p">(</span><span class="n">_</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordEngine.html">DiscordEngine</a></span><span class="p">,</span> <span class="n">gotHelloWithPayload</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>engine</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The engine that received the event.</p>
 
                                 </div>
                               </td>
@@ -850,7 +928,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-03-18)</p>
+      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-04-02)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
