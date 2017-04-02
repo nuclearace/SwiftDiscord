@@ -161,7 +161,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     private func audioSleep() {
         guard audioCount != -1 else {
             // First time
-            startSpeaking() // Make sure we're speaking
+            sendSpeaking(true) // Make sure we're speaking
             audioCount = 1
             startTime = currentUnixTime
 
@@ -326,6 +326,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
     private func handleDoneReading() {
         encoderSemaphore.wait()
+        sendSilence()
         // Add a new pipe on the encoder and put a read on it.
         encoder.setupPipe()
         readData()
@@ -405,7 +406,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
             guard !done else {
                 DefaultDiscordLogger.Logger.debug("No data, reader probably closed", type: this.logType)
 
-                this.stopSpeaking()
                 this.handleDoneReading()
 
                 return
@@ -519,9 +519,17 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         for _ in 0..<5 {
             sendVoiceData([0xF8, 0xFF, 0xFE])
         }
+
+        sendSpeaking(false)
+        udpQueue.async { self.audioCount = -1 }
     }
 
-    private func sendSpeaking(_ speaking: Bool) {
+    /**
+        Sends whether we are speaking or not.
+
+        - parameter speaking: Our speaking status.
+    */
+    public func sendSpeaking(_ speaking: Bool) {
         let speakingObject: [String: Any] = [
             "speaking": speaking,
             "delay": 0
@@ -600,15 +608,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         sendPayload(DiscordGatewayPayload(code: .voice(.identify), payload: .object(handshakeObject)))
     }
 
-    /**
-        Tells Discord that we are speaking.
-
-        This should be balenced with a call to stopSpeaking()
-    */
-    public func startSpeaking() {
-        sendSpeaking(true)
-    }
-
     private func startUDP() {
         guard udpPort != -1 else { return }
 
@@ -625,12 +624,5 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
         // Begin async UDP setup
         findIP()
-    }
-
-    /**
-        Tells Discord we're done speaking.
-    */
-    public func stopSpeaking() {
-        sendSpeaking(false)
     }
 }
