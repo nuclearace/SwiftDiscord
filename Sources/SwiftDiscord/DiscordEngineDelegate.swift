@@ -20,9 +20,22 @@ public protocol DiscordEngineDelegate : class, DiscordTokenBearer {
     // MARK: Methods
 
     /**
-        Handles engine dispatch events.
+        Handles engine dispatch events. You shouldn't need to call this method directly.
 
-        - parameter data: The event data
+        Override to provide custom engine dispatch functionality.
+
+        - parameter engine: The engine that received the event.
+        - parameter didReceiveEvent: The event that was received.
+        - parameter payload: A `DiscordGatewayPayload` containing the dispatch information.
     */
-    func handleEngineDispatch(_ event: DiscordDispatchEvent, with payload: DiscordGatewayPayload)
+    func engine(_ engine: DiscordEngine, didReceiveEvent event: DiscordDispatchEvent,
+                with payload: DiscordGatewayPayload)
+
+    /**
+        Called when an engine handled a hello packet.
+
+        - parameter engine: The engine that received the event.
+        - gotHelloWithPayload: The hello data.
+    */
+    func engine(_ engine: DiscordEngine, gotHelloWithPayload payload: DiscordGatewayPayload)
 }

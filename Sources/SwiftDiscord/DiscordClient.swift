@@ -81,7 +81,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     public private(set) var guilds = [String: DiscordGuild]()
 
     /// The relationships this user has. Only valid for non-bot users.
-    public private(set) var relationships = Array<Dictionary<String, Any>>()
+    public private(set) var relationships = [[String: Any]]()
 
     /// The DiscordUser this client is connected to.
     public private(set) var user: DiscordUser?
@@ -89,21 +89,24 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// A manager for the voice engines.
     public private(set) var voiceManager: DiscordVoiceManager!
 
+    var channelCache = [String: DiscordChannel]()
+
     private let logType = "DiscordClient"
     private let voiceQueue = DispatchQueue(label: "voiceQueue")
-
-    private var channelCache = [String: DiscordChannel]()
 
     // MARK: Initializers
 
     /**
         - parameter token: The discord token of the user
+        - parameter delegate: The delegate for this client.
         - parameter configuration: An array of DiscordClientOption that can be used to customize the client
     */
-    public required init(token: DiscordToken, configuration: [DiscordClientOption] = []) {
+    public required init(token: DiscordToken, delegate: DiscordClientDelegate,
+                         configuration: [DiscordClientOption] = []) {
         self.token = token
         self.shardManager = DiscordShardManager(delegate: self)
         self.voiceManager = DiscordVoiceManager(delegate: self)
+        self.delegate = delegate
 
         for config in configuration {
             switch config {
@@ -257,7 +260,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     */
     open func joinVoiceChannel(_ channelId: String) {
         guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
-                channel.type == .voice else {
+              channel.type == .voice else {
 
             return
         }
@@ -345,7 +348,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         handleQueue.async {
             self.connected = false
 
-            self.delegate?.client(self, didDisconnectWithReason: "All shards closed")
+            self.delegate?.client(self, didDisconnectWithReason: reason)
         }
     }
 
@@ -467,11 +470,21 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     open func handleChannelDelete(with data: [String: Any]) {
         DefaultDiscordLogger.Logger.log("Handling channel delete", type: logType)
 
-        guard let guildId = data["guild_id"] as? String else { return }
+        guard let type = DiscordChannelType(rawValue: data["type"] as? Int ?? -1) else { return }
         guard let channelId = data["id"] as? String else { return }
-        guard let removedChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) else { return }
 
-        channelCache.removeValue(forKey: removedChannel.id)
+        let removedChannel: DiscordChannel
+
+        if type == .text || type == .voice, let guildId = data["guild_id"] as? String,
+           let guildChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) {
+            removedChannel = guildChannel
+        } else if type == .direct || type == .groupDM, let direct = directChannels.removeValue(forKey: channelId) {
+            removedChannel = direct
+        } else {
+            return
+        }
+
+        channelCache.removeValue(forKey: channelId)
 
         DefaultDiscordLogger.Logger.verbose("Removed channel: %@", type: logType, args: removedChannel)
 

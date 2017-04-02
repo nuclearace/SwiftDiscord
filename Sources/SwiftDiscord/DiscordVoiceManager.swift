@@ -96,10 +96,23 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate {
 
         Override to provide custom engine dispatch functionality.
 
+        - parameter engine: The engine that received the event.
+        - parameter didReceiveEvent: The event that was received.
         - parameter payload: A `DiscordGatewayPayload` containing the dispatch information.
     */
-    public func handleEngineDispatch(_ event: DiscordDispatchEvent, with payload: DiscordGatewayPayload) {
-        // Voice engine shouldn't call this.
+    open func engine(_ engine: DiscordEngine, didReceiveEvent event: DiscordDispatchEvent,
+                     with payload: DiscordGatewayPayload) {
+
+    }
+
+    /**
+        Called when an engine handled a hello packet.
+
+        - parameter engine: The engine that received the event.
+        - gotHelloWithPayload: The hello data.
+    */
+    open func engine(_ engine: DiscordEngine, gotHelloWithPayload payload: DiscordGatewayPayload) {
+
     }
 
     /**

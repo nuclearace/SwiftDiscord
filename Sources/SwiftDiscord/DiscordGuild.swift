@@ -38,7 +38,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     /// The base64 encoded splash image.
     public let splash: String
 
-    /// Whether this guild is unavaiable.
+    /// Whether this guild is unavailable.
     public let unavailable: Bool
 
     /// - returns: A description of this guild
@@ -263,7 +263,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
             roles.append(everyone)
         }
 
-        return roles + self.roles.filter({ member.roles.contains($0.key) }).map({ $0.1 })
+        return roles + self.roles.filter({ member.roleIds.contains($0.key) }).map({ $0.1 })
     }
 
     func shardNumber(assuming numOfShards: Int) -> Int {

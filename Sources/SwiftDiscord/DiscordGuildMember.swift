@@ -42,6 +42,15 @@ public struct DiscordGuildMember {
         }
     }
 
+    /// If this member has a guild object attached, this returns the `DiscordRoles` for the member.
+    /// If a guild is unavailable, you can call `roles(for:)` on this member's guild directly.
+    /// - returns: An Array of `DiscordRole` or nil if there is no guild attached to this member.
+    public var roles: [DiscordRole]? {
+        guard let guild = self.guild else { return nil }
+
+        return guild.roles(for: self)
+    }
+
     /// Whether this member is muted.
     /// Changing this will cause the client to attempt to change the deafen status on Discord.
     public var mute: Bool {
@@ -67,7 +76,7 @@ public struct DiscordGuildMember {
     }
 
     /// An array of role snowflake ids that this user has.
-    public var roles: [String]
+    public var roleIds: [String]
 
     /// The guild this member is on
     public internal(set) weak var guild: DiscordGuild?
@@ -82,7 +91,7 @@ public struct DiscordGuildMember {
         _deaf = guildMemberObject.get("deaf", or: false)
         _mute = guildMemberObject.get("mute", or: false)
         _nick = guildMemberObject["nick"] as? String
-        roles = guildMemberObject.get("roles", or: [String]())
+        roleIds = guildMemberObject.get("roles", or: [String]())
         joinedAt = DiscordDateFormatter.format(guildMemberObject.get("joined_at", or: "")) ?? Date()
         self.guild = guild
     }
@@ -107,7 +116,7 @@ public struct DiscordGuildMember {
 
     mutating func updateMember(_ updateObject: [String: Any]) -> DiscordGuildMember {
         if let roles = updateObject["roles"] as? [String] {
-            self.roles = roles
+            self.roleIds = roles
         }
 
         _nick = updateObject["nick"] as? String

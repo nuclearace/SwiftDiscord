@@ -22,29 +22,29 @@ public struct DiscordVoiceState {
     /// The snowflake id of the voice channel this state belongs to.
     public let channelId: String
 
+    /// Whether this user is deafened.
+    public let deaf: Bool
+
     /// The snowflake id of the guild this state belongs to.
     public let guildId: String
+
+    /// Whether this user is muted.
+    public let mute: Bool
+
+    /// Whether this user has deafened themself.
+    public let selfDeaf: Bool
+
+    /// Whether this user has muted themself.
+    public let selfMute: Bool
 
     /// The session id that this state belongs to.
     public let sessionId: String
 
+    /// Whether this user is being suppressed.
+    public let suppress: Bool
+
     /// The snowflake id of the user this state is for.
     public let userId: String
-
-    /// Whether this user is deafened.
-    public var deaf: Bool
-
-    /// Whether this user is muted.
-    public var mute: Bool
-
-    /// Whether this user has deafened themself.
-    public var selfDeaf: Bool
-
-    /// Whether this user has muted themself.
-    public var selfMute: Bool
-
-    /// Whether this user is being suppressed.
-    public var suppress: Bool
 
     init(voiceStateObject: [String: Any], guildId: String) {
         self.guildId = guildId

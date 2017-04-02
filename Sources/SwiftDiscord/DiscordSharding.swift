@@ -210,10 +210,23 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer {
 
         Override to provide custom engine dispatch functionality.
 
+        - parameter engine: The engine that received the event.
+        - parameter didReceiveEvent: The event that was received.
         - parameter payload: A `DiscordGatewayPayload` containing the dispatch information.
     */
-    open func handleEngineDispatch(_ event: DiscordDispatchEvent, with payload: DiscordGatewayPayload) {
+    open func engine(_ engine: DiscordEngine, didReceiveEvent event: DiscordDispatchEvent,
+                     with payload: DiscordGatewayPayload) {
         delegate?.shardManager(self, shouldHandleEvent: event, withPayload: payload)
+    }
+
+    /**
+        Called when an engine handled a hello packet.
+
+        - parameter engine: The engine that received the event.
+        - gotHelloWithPayload: The hello data.
+    */
+    open func engine(_ engine: DiscordEngine, gotHelloWithPayload payload: DiscordGatewayPayload) {
+
     }
 
     /**

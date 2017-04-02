@@ -127,7 +127,7 @@ public struct DiscordGuildChannel : DiscordChannel {
         - returns: The permission overwrites this member has.
     */
     public func overwrites(for member: DiscordGuildMember) -> [DiscordPermissionOverwrite] {
-        return permissionOverwrites.filter({ member.roles.contains($0.key) || member.user.id == $0.key }).map({ $0.1 })
+        return permissionOverwrites.filter({ member.roleIds.contains($0.key) || member.user.id == $0.key }).map({ $0.1 })
     }
 
     /**

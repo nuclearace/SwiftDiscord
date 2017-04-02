@@ -91,7 +91,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
 
     init(messageObject: [String: Any], client: DiscordClient?) {
         attachments = DiscordAttachment.attachmentsFromArray(messageObject.get("attachments", or: JSONArray()))
-        author = DiscordUser(userObject: messageObject.get("author", or: Dictionary<String, Any>()))
+        author = DiscordUser(userObject: messageObject.get("author", or: [String: Any]()))
         channelId = messageObject.get("channel_id", or: "")
         content = messageObject.get("content", or: "")
         embeds = DiscordEmbed.embedsFromArray(messageObject.get("embeds", or: JSONArray()))

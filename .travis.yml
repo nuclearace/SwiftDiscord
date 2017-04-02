@@ -8,4 +8,4 @@ before_install:
   - brew update
   - brew install libsodium
   - brew install opus
-script: swift build -Xlinker -L/usr/local/lib -Xlinker -lopus -Xcc -I/usr/local/include
+script: swift test -Xlinker -L/usr/local/lib -Xlinker -lopus -Xcc -I/usr/local/include

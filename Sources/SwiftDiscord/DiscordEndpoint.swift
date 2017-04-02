@@ -312,7 +312,7 @@ public enum DiscordEndpoint : String {
         - returns: a URLRequest that can be further customized
     */
     public static func createRequest(with token: DiscordToken, for endpoint: DiscordEndpoint,
-        replacing: [String: String], getParams: [String: String]? = nil) -> URLRequest {
+                                     replacing: [String: String], getParams: [String: String]? = nil) -> URLRequest {
 
         var request = URLRequest(url: endpoint.createURL(replacing: replacing, getParams: getParams ?? [:]))
 
@@ -337,7 +337,7 @@ public enum DiscordEndpoint : String {
 
     static func jsonFromResponse(data: Data?, response: HTTPURLResponse?) -> JSON? {
         guard let data = data, let response = response, (response.statusCode == 200 || response.statusCode == 201),
-                let stringData = String(data: data, encoding: .utf8) else {
+              let stringData = String(data: data, encoding: .utf8) else {
             return nil
         }
 
