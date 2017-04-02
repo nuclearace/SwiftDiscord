@@ -247,6 +247,36 @@ class TestDiscordClient : XCTestCase {
         waitForExpectations(timeout: 0.2)
     }
 
+    func testClientFindsGuildChannel() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
+
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
+
+        assertFindChannel(channelFixture: testGuildChannel, channelType: DiscordGuildChannel.self)
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientFindsDirectChannel() {
+        expectations[.channelCreate] = expectation(description: "Client should call guild create method")
+
+        client.handleDispatch(event: .channelCreate, data: .object(testDMChannel))
+
+        assertFindChannel(channelFixture: testDMChannel, channelType: DiscordDMChannel.self)
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientFindsGroupDMChannel() {
+        expectations[.channelCreate] = expectation(description: "Client should call guild create method")
+
+        client.handleDispatch(event: .channelCreate, data: .object(testGroupDMChannel))
+
+        assertFindChannel(channelFixture: testDMChannel, channelType: DiscordGroupDMChannel.self)
+
+        waitForExpectations(timeout: 0.2)
+    }
+
     var client: DiscordClient!
     var expectations = [DiscordDispatchEvent: XCTestExpectation]()
 
@@ -305,6 +335,17 @@ extension TestDiscordClient {
 
         XCTAssertEqual(channel.type, .groupDM, "Create channel should correctly type direct channels")
         XCTAssertEqual(channel.name, "A Group DM", "Channel create should index channels by recipient id")
+    }
+
+    func assertFindChannel<T: DiscordChannel>(channelFixture: [String: Any], channelType: T.Type) {
+        guard let channel = client.findChannel(fromId: channelFixture["id"] as! String) as? T else {
+            XCTFail("Client did not find channel")
+
+            return
+        }
+
+        XCTAssertEqual(channel.id, channelFixture["id"] as! String, "findChannel should find the correct channel")
+        XCTAssertNotNil(client.channelCache[channel.id], "Found channel should be in cache")
     }
 }
 

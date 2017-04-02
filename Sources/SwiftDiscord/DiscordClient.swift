@@ -89,10 +89,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// A manager for the voice engines.
     public private(set) var voiceManager: DiscordVoiceManager!
 
+    var channelCache = [String: DiscordChannel]()
+
     private let logType = "DiscordClient"
     private let voiceQueue = DispatchQueue(label: "voiceQueue")
-
-    private var channelCache = [String: DiscordChannel]()
 
     // MARK: Initializers
 
@@ -348,7 +348,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         handleQueue.async {
             self.connected = false
 
-            self.delegate?.client(self, didDisconnectWithReason: "All shards closed")
+            self.delegate?.client(self, didDisconnectWithReason: reason)
         }
     }
 
