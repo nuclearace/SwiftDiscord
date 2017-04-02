@@ -1,5 +1,7 @@
 # SwiftDiscord
 
+[![Build Status](https://travis-ci.org/nuclearace/SwiftDiscord.svg?branch=master)](https://travis-ci.org/nuclearace/SwiftDiscord)
+
 A Discord API client for Swift.
 
 - Features:
