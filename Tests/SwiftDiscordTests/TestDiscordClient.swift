@@ -294,8 +294,8 @@ extension TestDiscordClient {
         case delete
     }
 
-    func guildChannelTest(_ channel: DiscordGuildChannel, expectedGuildChannels expected: Int,
-                          testType type: ChannelTestType) {
+    func assertGuildChannel(_ channel: DiscordGuildChannel, expectedGuildChannels expected: Int,
+                            testType type: ChannelTestType) {
         guard let clientGuild = client.guilds[channel.guildId] else {
             XCTFail("Guild for channel should be in guilds")
 
@@ -312,7 +312,7 @@ extension TestDiscordClient {
         XCTAssertEqual(clientGuild.channels.count, expected, "Number of channels should be predictable")
     }
 
-    func dmChannelTest(_ channel: DiscordDMChannel, testType type: ChannelTestType) {
+    func assertDMChannel(_ channel: DiscordDMChannel, testType type: ChannelTestType) {
         switch type {
         case .create:
             XCTAssertNotNil(client.directChannels[channel.id], "Created DM Channel should be in direct channels")
@@ -325,7 +325,7 @@ extension TestDiscordClient {
                                                               + "recipient id")
     }
 
-    func groupDMChannelTest(_ channel: DiscordGroupDMChannel, testType type: ChannelTestType) {
+    func assertGroupDMChannel(_ channel: DiscordGroupDMChannel, testType type: ChannelTestType) {
         switch type {
         case .create:
             XCTAssertNotNil(client.directChannels[channel.id], "Created Group DM Channel should be in direct channels")
@@ -355,11 +355,11 @@ extension TestDiscordClient : DiscordClientDelegate {
     func client(_ client: DiscordClient, didCreateChannel channel: DiscordChannel) {
         switch channel {
         case let guildChannel as DiscordGuildChannel:
-            guildChannelTest(guildChannel, expectedGuildChannels: 2, testType: .create)
+            assertGuildChannel(guildChannel, expectedGuildChannels: 2, testType: .create)
         case let dmChannel as DiscordDMChannel:
-            dmChannelTest(dmChannel, testType: .create)
+            assertDMChannel(dmChannel, testType: .create)
         case let groupDmChannel as DiscordGroupDMChannel:
-            groupDMChannelTest(groupDmChannel, testType: .create)
+            assertGroupDMChannel(groupDmChannel, testType: .create)
         default:
             XCTFail("Unknown channel type")
         }
@@ -370,11 +370,11 @@ extension TestDiscordClient : DiscordClientDelegate {
     func client(_ client: DiscordClient, didDeleteChannel channel: DiscordChannel) {
         switch channel {
         case let guildChannel as DiscordGuildChannel:
-            guildChannelTest(guildChannel, expectedGuildChannels: 1, testType: .delete)
+            assertGuildChannel(guildChannel, expectedGuildChannels: 1, testType: .delete)
         case let dmChannel as DiscordDMChannel:
-            dmChannelTest(dmChannel, testType: .delete)
+            assertDMChannel(dmChannel, testType: .delete)
         case let groupDmChannel as DiscordGroupDMChannel:
-            groupDMChannelTest(groupDmChannel, testType: .delete)
+            assertGroupDMChannel(groupDmChannel, testType: .delete)
         default:
             XCTFail("Unknown channel type")
         }
