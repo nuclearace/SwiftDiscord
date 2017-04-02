@@ -44,6 +44,13 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
     func send(_ data: Data, doneHandler: (() -> Void)?)
 
     /**
+        Sends whether we are speaking or not.
+
+        - parameter speaking: Our speaking status.
+    */
+    func sendSpeaking(_ speaking: Bool)
+
+    /**
         Sends OPUS encoded voice data to Discord.
 
         - parameter data: An array of OPUS encoded voice data.
@@ -72,16 +79,6 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
     */
     func setupMiddleware(_ middleware: EncoderProcess, terminationHandler: (() -> Void)?)
     #endif
-
-    /**
-        Tells Discord that we are starting to speak.
-    */
-    func startSpeaking()
-
-    /**
-        Tells Discord we're done speaking.
-    */
-    func stopSpeaking()
 }
 
 /// Declares that a type has enough information to encode/decode Opus data.
