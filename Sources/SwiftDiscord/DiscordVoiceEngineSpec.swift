@@ -41,7 +41,7 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
         - parameter data: Raw audio data that should be turned into OPUS encoded data.
         - parameter doneHandler: An optional handler that will be called when we are done writing.
     */
-    func send(_ data: Data, doneHandler: (() -> Void)?)
+    func send(_ data: Data, doneHandler: (() -> ())?)
 
     /**
         Sends whether we are speaking or not.
@@ -77,7 +77,7 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
         - parameter middleware: The process that will output audio data.
         - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
     */
-    func setupMiddleware(_ middleware: EncoderProcess, terminationHandler: (() -> Void)?)
+    func setupMiddleware(_ middleware: EncoderProcess, terminationHandler: (() -> ())?)
     #endif
 }
 

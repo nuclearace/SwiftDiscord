@@ -35,7 +35,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter on: The channel that we are adding on
         - parameter callback: An optional callback indicating whether the pinned message was added.
     */
-    func addPinnedMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> Void)?)
+    func addPinnedMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> ())?)
 
     /**
         Deletes a bunch of messages at once.
@@ -44,7 +44,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter on: The channel that we are deleting on
         - parameter callback: An optional callback indicating whether the messages were deleted.
     */
-    func bulkDeleteMessages(_ messages: [String], on channelId: String, callback: ((Bool) -> Void)?)
+    func bulkDeleteMessages(_ messages: [String], on channelId: String, callback: ((Bool) -> ())?)
 
     /**
         Creates an invite for a channel/guild.
@@ -54,7 +54,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter callback: The callback function. Takes an optional `DiscordInvite`
     */
     func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
-                      callback: @escaping (DiscordInvite?) -> Void)
+                      callback: @escaping (DiscordInvite?) -> ())
 
     /**
         Deletes the specified channel.
@@ -62,7 +62,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter channelId: The snowflake id of the channel
         - parameter callback: An optional callback indicating whether the channel was deleted.
     */
-    func deleteChannel(_ channelId: String, callback: ((Bool) -> Void)?)
+    func deleteChannel(_ channelId: String, callback: ((Bool) -> ())?)
 
     /**
         Deletes a channel permission
@@ -71,7 +71,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter on: The channel that we are deleting on
         - parameter callback: An optional callback indicating whether the permission was deleted.
     */
-    func deleteChannelPermission(_ overwriteId: String, on channelId: String, callback: ((Bool) -> Void)?)
+    func deleteChannelPermission(_ overwriteId: String, on channelId: String, callback: ((Bool) -> ())?)
 
     /**
         Deletes a single message
@@ -80,7 +80,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter on: The channel that we are deleting on
         - parameter callback: An optional callback indicating whether the message was deleted.
     */
-    func deleteMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> Void)?)
+    func deleteMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> ())?)
 
     /**
         Unpins a message.
@@ -89,7 +89,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter on: The channel that we are unpinning on
         - parameter callback: An optional callback indicating whether the message was unpinned.
     */
-    func deletePinnedMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> Void)?)
+    func deletePinnedMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> ())?)
 
     /**
         Gets the specified channel.
@@ -97,7 +97,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter channelId: The snowflake id of the channel
         - parameter callback: The callback function containing an optional `DiscordGuildChannel`
     */
-    func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> Void)
+    func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> ())
 
     /**
         Edits a message
@@ -107,7 +107,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter content: The new content of the message
         - parameter callback: An optional callback containing the edited message, if successful.
     */
-    func editMessage(_ messageId: String, on channelId: String, content: String, callback: ((DiscordMessage?) -> Void)?)
+    func editMessage(_ messageId: String, on channelId: String, content: String, callback: ((DiscordMessage?) -> ())?)
 
     /**
         Edits the specified permission overwrite.
@@ -117,7 +117,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter callback: An optional callback indicating whether the edit was successful.
     */
     func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String,
-                               callback: ((Bool) -> Void)?)
+                               callback: ((Bool) -> ())?)
 
     /**
         Gets the invites for a channel.
@@ -125,7 +125,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter for: The channel that we are getting on
         - parameter callback: The callback function, taking an array of `DiscordInvite`
     */
-    func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void)
+    func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> ())
 
     /**
         Gets a group of messages according to the specified options.
@@ -135,7 +135,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter callback: The callback function, taking an array of `DiscordMessages`
     */
     func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage],
-                     callback: @escaping ([DiscordMessage]) -> Void)
+                     callback: @escaping ([DiscordMessage]) -> ())
 
     /**
         Modifies the specified channel.
@@ -145,7 +145,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter callback: An optional callback containing the edited guild channel, if successful.
     */
     func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel],
-                       callback: ((DiscordGuildChannel?) -> Void)?)
+                       callback: ((DiscordGuildChannel?) -> ())?)
 
     /**
         Gets the pinned messages for a channel.
@@ -153,7 +153,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter for: The channel that we are getting the pinned messages for
         - parameter callback: The callback function, taking an array of `DiscordMessages`
     */
-    func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void)
+    func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> ())
 
     /**
         Sends a message with an optional file and embed to the specified channel.
@@ -183,7 +183,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter to: The snowflake id of the channel to send to.
         - parameter callback: An optional callback containing the message, if successful.
     */
-    func sendMessage(_ message: DiscordMessage, to channelId: String, callback: ((DiscordMessage?) -> Void)?)
+    func sendMessage(_ message: DiscordMessage, to channelId: String, callback: ((DiscordMessage?) -> ())?)
 
     /**
         Triggers typing on the specified channel.
@@ -191,7 +191,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter on: The snowflake id of the channel to send to
         - parameter callback: An optional callback indicating whether typing was triggered.
     */
-    func triggerTyping(on channelId: String, callback: ((Bool) -> Void)?)
+    func triggerTyping(on channelId: String, callback: ((Bool) -> ())?)
 
     // MARK: Guilds
 
@@ -204,7 +204,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter with: The token to authenticate to Discord with.
         - parameter callback: An optional callback indicating whether the role was added successfully.
     */
-    func addGuildMemberRole(_ roleId: String, to userId: String, on guildId: String, callback: ((Bool) -> Void)?)
+    func addGuildMemberRole(_ roleId: String, to userId: String, on guildId: String, callback: ((Bool) -> ())?)
 
     /**
         Creates a guild channel.
@@ -214,7 +214,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter callback: An optional callback containing the new channel, if successful.
     */
     func createGuildChannel(on guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel],
-                            callback: ((DiscordGuildChannel?) -> Void)?)
+                            callback: ((DiscordGuildChannel?) -> ())?)
 
     /**
         Creates a role on a guild.
@@ -224,7 +224,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter callback: The callback function, taking an optional `DiscordRole`.
     */
     func createGuildRole(on guildId: String, withOptions options: [DiscordEndpointOptions.CreateRole],
-                         callback: @escaping (DiscordRole?) -> Void)
+                         callback: @escaping (DiscordRole?) -> ())
 
     /**
         Deletes the specified guild.
@@ -232,7 +232,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter guildId: The snowflake id of the guild
         - parameter callback: An optional callback containing the deleted guild, if successful.
     */
-    func deleteGuild(_ guildId: String, callback: ((DiscordGuild?) -> Void)?)
+    func deleteGuild(_ guildId: String, callback: ((DiscordGuild?) -> ())?)
 
     /**
         Gets the bans on a guild.
@@ -240,7 +240,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter for: The snowflake id of the guild
         - parameter callback: The callback function, taking an array of `DiscordBan`
     */
-    func getGuildBans(for guildId: String, callback: @escaping ([DiscordBan]) -> Void)
+    func getGuildBans(for guildId: String, callback: @escaping ([DiscordBan]) -> ())
 
     /**
         Gets the channels on a guild.
@@ -248,7 +248,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter guildId: The snowflake id of the guild
         - parameter callback: The callback function, taking an array of `DiscordGuildChannel`
     */
-    func getGuildChannels(_ guildId: String, callback: @escaping ([DiscordGuildChannel]) -> Void)
+    func getGuildChannels(_ guildId: String, callback: @escaping ([DiscordGuildChannel]) -> ())
 
     /**
         Gets the specified guild member.
@@ -257,7 +257,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter on: The snowflake id of the guild
         - parameter callback: The callback function containing an optional `DiscordGuildMember`
     */
-    func getGuildMember(by id: String, on guildId: String, callback: @escaping (DiscordGuildMember?) -> Void)
+    func getGuildMember(by id: String, on guildId: String, callback: @escaping (DiscordGuildMember?) -> ())
 
     /**
         Gets the members on a guild.
@@ -267,7 +267,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter callback: The callback function, taking an array of `DiscordGuildMember`
     */
     func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
-                         callback: @escaping ([DiscordGuildMember]) -> Void)
+                         callback: @escaping ([DiscordGuildMember]) -> ())
 
     /**
         Gets the roles on a guild.
@@ -275,7 +275,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter for: The snowflake id of the guild
         - parameter callback: The callback function, taking an array of `DiscordRole`
     */
-    func getGuildRoles(for guildId: String, callback: @escaping ([DiscordRole]) -> Void)
+    func getGuildRoles(for guildId: String, callback: @escaping ([DiscordRole]) -> ())
 
     /**
         Creates a guild ban.
@@ -285,7 +285,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter deleteMessageDays: The number of days to delete this user's messages
         - parameter callback: An optional callback indicating whether the ban was successful.
     */
-    func guildBan(userId: String, on guildId: String, deleteMessageDays: Int, callback: ((Bool) -> Void)?)
+    func guildBan(userId: String, on guildId: String, deleteMessageDays: Int, callback: ((Bool) -> ())?)
 
     /**
         Modifies the specified guild.
@@ -295,7 +295,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter callback: An optional callback containing the modified guild, if successful.
     */
     func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild],
-                     callback: ((DiscordGuild?) -> Void)?)
+                     callback: ((DiscordGuild?) -> ())?)
 
     /**
         Modifies the position of a channel.
@@ -306,7 +306,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter callback: An optional callback containing the modified channels, if successful.
     */
     func modifyGuildChannelPositions(on guildId: String, channelPositions: [[String: Any]],
-                                     callback: (([DiscordGuildChannel]) -> Void)?)
+                                     callback: (([DiscordGuildChannel]) -> ())?)
 
     /**
         Modifies a guild member.
@@ -317,7 +317,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter callback: The callback function, indicating whether the modify succeeded.
     */
     func modifyGuildMember(_ id: String, on guildId: String, options: [DiscordEndpointOptions.ModifyMember],
-                           callback: ((Bool) -> Void)?)
+                           callback: ((Bool) -> ())?)
 
     /**
         Edits the specified role.
@@ -326,7 +326,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter on: The guild that we are editing on
         - parameter callback: An optional callback containing the modified role, if successful.
     */
-    func modifyGuildRole(_ role: DiscordRole, on guildId: String, callback: ((DiscordRole?) -> Void)?)
+    func modifyGuildRole(_ role: DiscordRole, on guildId: String, callback: ((DiscordRole?) -> ())?)
 
     /**
         Removes a guild ban.
@@ -335,7 +335,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter on: The snowflake id of the guild
         - parameter callback: An optional callback indicating whether the ban was successfully removed.
     */
-    func removeGuildBan(for userId: String, on guildId: String, callback: ((Bool) -> Void)?)
+    func removeGuildBan(for userId: String, on guildId: String, callback: ((Bool) -> ())?)
 
     /**
         Removes a role from a guild member.
@@ -346,7 +346,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter with: The token to authenticate to Discord with.
         - parameter callback: An optional callback indicating whether the role was removed successfully.
     */
-    func removeGuildMemberRole(_ roleId: String, from userId: String, on guildId: String, callback: ((Bool) -> Void)?)
+    func removeGuildMemberRole(_ roleId: String, from userId: String, on guildId: String, callback: ((Bool) -> ())?)
 
     /**
         Removes a guild role.
@@ -355,7 +355,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter on: The snowflake id of the guild
         - parameter callback: An optional callback containing the removed role, if successful.
     */
-    func removeGuildRole(_ roleId: String, on guildId: String, callback: ((DiscordRole?) -> Void)?)
+    func removeGuildRole(_ roleId: String, on guildId: String, callback: ((DiscordRole?) -> ())?)
 
     // MARK: Webhooks
 
@@ -367,7 +367,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter callback: A callback that returns the webhook created, if successful.
     */
     func createWebhook(forChannel channelId: String, options: [DiscordEndpointOptions.WebhookOption],
-                       callback: @escaping (DiscordWebhook?) -> Void)
+                       callback: @escaping (DiscordWebhook?) -> ())
 
     /**
         Deletes a webhook. The user must be the owner of the webhook.
@@ -375,7 +375,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter webhookId: The id of the webhook
         - paramter callback: An optional callback function that indicates whether the delete was successful
     */
-    func deleteWebhook(_ webhookId: String, callback: ((Bool) -> Void)?)
+    func deleteWebhook(_ webhookId: String, callback: ((Bool) -> ())?)
 
     /**
         Gets the specified webhook.
@@ -383,7 +383,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter webhookId: The snowflake id of the webhook
         - parameter callback: The callback function containing an optional `DiscordToken`
     */
-    func getWebhook(_ webhookId: String, callback: @escaping (DiscordWebhook?) -> Void)
+    func getWebhook(_ webhookId: String, callback: @escaping (DiscordWebhook?) -> ())
 
     /**
         Gets the webhooks for a specified channel.
@@ -391,7 +391,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter forChannel: The snowflake id of the channel.
         - parameter callback: The callback function taking an array of `DiscordWebhook`s
     */
-    func getWebhooks(forChannel channelId: String, callback: @escaping ([DiscordWebhook]) -> Void)
+    func getWebhooks(forChannel channelId: String, callback: @escaping ([DiscordWebhook]) -> ())
 
     /**
         Gets the webhooks for a specified guild.
@@ -399,7 +399,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter forGuild: The snowflake id of the guild.
         - parameter callback: The callback function taking an array of `DiscordWebhook`s
     */
-    func getWebhooks(forGuild guildId: String, callback: @escaping ([DiscordWebhook]) -> Void)
+    func getWebhooks(forGuild guildId: String, callback: @escaping ([DiscordWebhook]) -> ())
 
     /**
         Modifies a webhook.
@@ -409,7 +409,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter callback: A callback that returns the updated webhook, if successful.
     */
     func modifyWebhook(_ webhookId: String, options: [DiscordEndpointOptions.WebhookOption],
-                       callback: @escaping (DiscordWebhook?) -> Void)
+                       callback: @escaping (DiscordWebhook?) -> ())
 
     // MARK: Invites
 
@@ -419,7 +419,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter invite: The invite code to accept
         - parameter callback: An optional callback containing the accepted invite, if successful
     */
-    func acceptInvite(_ invite: String, callback: ((DiscordInvite?) -> Void)?)
+    func acceptInvite(_ invite: String, callback: ((DiscordInvite?) -> ())?)
 
     /**
         Deletes an invite.
@@ -427,7 +427,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter invite: The invite code to delete
         - parameter callback: An optional callback containing the deleted invite, if successful
     */
-    func deleteInvite(_ invite: String, callback: ((DiscordInvite?) -> Void)?)
+    func deleteInvite(_ invite: String, callback: ((DiscordInvite?) -> ())?)
 
     /**
         Gets an invite.
@@ -435,7 +435,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter invite: The invite code to accept
         - parameter callback: The callback function, takes an optional `DiscordInvite`
     */
-    func getInvite(_ invite: String, callback: @escaping (DiscordInvite?) -> Void)
+    func getInvite(_ invite: String, callback: @escaping (DiscordInvite?) -> ())
 
     // MARK: Users
 
@@ -446,7 +446,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter user: Our snowflake id
         - parameter callback: The callback function. Takes an optional `DiscordDMChannel`
     */
-    func createDM(with: String, callback: @escaping (DiscordDMChannel?) -> Void)
+    func createDM(with: String, callback: @escaping (DiscordDMChannel?) -> ())
 
     /**
         Gets the direct message channels for a user.
@@ -455,7 +455,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter callback: The callback function, taking a dictionary of `DiscordDMChannel` associated by
                               the recipient's id
     */
-    func getDMs(callback: @escaping ([String: DiscordDMChannel]) -> Void)
+    func getDMs(callback: @escaping ([String: DiscordDMChannel]) -> ())
 
     /**
         Gets guilds the user is in.
@@ -463,7 +463,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter user: Our snowflake id
         - parameter callback: The callback function, taking a dictionary of `DiscordUserGuild` associated by guild id
     */
-    func getGuilds(callback: @escaping ([String: DiscordUserGuild]) -> Void)
+    func getGuilds(callback: @escaping ([String: DiscordUserGuild]) -> ())
 
     // MARK: Misc
 
@@ -477,104 +477,104 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
 
 public extension DiscordEndpointConsumer {
     /// Default implementation
-    public func acceptInvite(_ invite: String, callback: ((DiscordInvite?) -> Void)? = nil) {
+    public func acceptInvite(_ invite: String, callback: ((DiscordInvite?) -> ())? = nil) {
         DiscordEndpoint.acceptInvite(invite, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func addPinnedMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> Void)? = nil) {
+    public func addPinnedMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> ())? = nil) {
         DiscordEndpoint.addPinnedMessage(messageId, on: channelId, with: token, callback: callback)
     }
 
     /// Default implementation
     public func addGuildMemberRole(_ roleId: String, to userId: String, on guildId: String,
-                                   callback: ((Bool) -> Void)?) {
+                                   callback: ((Bool) -> ())?) {
         DiscordEndpoint.addGuildMemberRole(roleId, to: userId, on: guildId, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func bulkDeleteMessages(_ messages: [String], on channelId: String, callback: ((Bool) -> Void)? = nil) {
+    public func bulkDeleteMessages(_ messages: [String], on channelId: String, callback: ((Bool) -> ())? = nil) {
         DiscordEndpoint.bulkDeleteMessages(messages, on: channelId, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func createDM(with: String, callback: @escaping (DiscordDMChannel?) -> Void) {
+    public func createDM(with: String, callback: @escaping (DiscordDMChannel?) -> ()) {
         DiscordEndpoint.createDM(with: with, user: user!.id, with: token, callback: callback)
     }
 
     /// Default implementation
     public func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
-                             callback: @escaping (DiscordInvite?) -> Void) {
+                             callback: @escaping (DiscordInvite?) -> ()) {
         DiscordEndpoint.createInvite(for: channelId, options: options, with: token, callback: callback)
     }
 
     /// Default implementation
     public func createGuildChannel(on guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel],
-                                   callback: ((DiscordGuildChannel?) -> Void)? = nil) {
+                                   callback: ((DiscordGuildChannel?) -> ())? = nil) {
         DiscordEndpoint.createGuildChannel(guildId, options: options, with: token, callback: callback)
     }
 
     /// Default implementation
     public func createGuildRole(on guildId: String, withOptions options: [DiscordEndpointOptions.CreateRole] = [],
-                                callback: @escaping (DiscordRole?) -> Void) {
+                                callback: @escaping (DiscordRole?) -> ()) {
         DiscordEndpoint.createGuildRole(on: guildId, withOptions: options, with: token, callback: callback)
     }
 
     /// Default implementation
     public func createWebhook(forChannel channelId: String, options: [DiscordEndpointOptions.WebhookOption],
-                              callback: @escaping (DiscordWebhook?) -> Void = {_ in }) {
+                              callback: @escaping (DiscordWebhook?) -> () = {_ in }) {
         DiscordEndpoint.createWebhook(forChannel: channelId, with: token, options: options, callback: callback)
     }
 
     /// Default implementation
-    public func deleteChannel(_ channelId: String, callback: ((Bool) -> Void)? = nil) {
+    public func deleteChannel(_ channelId: String, callback: ((Bool) -> ())? = nil) {
         DiscordEndpoint.deleteChannel(channelId, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func deleteChannelPermission(_ overwriteId: String, on channelId: String, callback: ((Bool) -> Void)? = nil) {
+    public func deleteChannelPermission(_ overwriteId: String, on channelId: String, callback: ((Bool) -> ())? = nil) {
         DiscordEndpoint.deleteChannelPermission(overwriteId, on: channelId, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func deleteGuild(_ guildId: String, callback: ((DiscordGuild?) -> Void)? = nil) {
+    public func deleteGuild(_ guildId: String, callback: ((DiscordGuild?) -> ())? = nil) {
         DiscordEndpoint.deleteGuild(guildId, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func deleteInvite(_ invite: String, callback: ((DiscordInvite?) -> Void)? = nil) {
+    public func deleteInvite(_ invite: String, callback: ((DiscordInvite?) -> ())? = nil) {
         DiscordEndpoint.deleteInvite(invite, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func deleteMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> Void)? = nil) {
+    public func deleteMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> ())? = nil) {
         DiscordEndpoint.deleteMessage(messageId, on: channelId, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func deletePinnedMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> Void)? = nil) {
+    public func deletePinnedMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> ())? = nil) {
         DiscordEndpoint.deletePinnedMessage(messageId, on: channelId, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func deleteWebhook(_ webhookId: String, callback: ((Bool) -> Void)? = nil) {
+    public func deleteWebhook(_ webhookId: String, callback: ((Bool) -> ())? = nil) {
         DiscordEndpoint.deleteWebhook(webhookId, with: token, callback: callback)
     }
 
     /// Default implementation
     public func editMessage(_ messageId: String, on channelId: String, content: String,
-                            callback: ((DiscordMessage?) -> Void)? = nil) {
+                            callback: ((DiscordMessage?) -> ())? = nil) {
         DiscordEndpoint.editMessage(messageId, on: channelId, content: content, with: token, callback: callback)
     }
 
     /// Default implementation
     public func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String,
-                                      callback: ((Bool) -> Void)? = nil) {
+                                      callback: ((Bool) -> ())? = nil) {
         DiscordEndpoint.editChannelPermission(permissionOverwrite, on: channelId, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> Void) {
+    public func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> ()) {
         DiscordEndpoint.getChannel(channelId, with: token, callback: callback)
     }
 
@@ -586,144 +586,144 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    public func getDMs(callback: @escaping ([String: DiscordDMChannel]) -> Void) {
+    public func getDMs(callback: @escaping ([String: DiscordDMChannel]) -> ()) {
         DiscordEndpoint.getDMs(user: user!.id, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func getGuildBans(for guildId: String, callback: @escaping ([DiscordBan]) -> Void) {
+    public func getGuildBans(for guildId: String, callback: @escaping ([DiscordBan]) -> ()) {
         DiscordEndpoint.getGuildBans(for: guildId, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func getGuildChannels(_ guildId: String, callback: @escaping ([DiscordGuildChannel]) -> Void) {
+    public func getGuildChannels(_ guildId: String, callback: @escaping ([DiscordGuildChannel]) -> ()) {
         DiscordEndpoint.getGuildChannels(guildId, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func getGuildMember(by id: String, on guildId: String, callback: @escaping (DiscordGuildMember?) -> Void) {
+    public func getGuildMember(by id: String, on guildId: String, callback: @escaping (DiscordGuildMember?) -> ()) {
         DiscordEndpoint.getGuildMember(by: id, on: guildId, with: token, callback: callback)
     }
 
     /// Default implementation
     public func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
-                                callback: @escaping ([DiscordGuildMember]) -> Void) {
+                                callback: @escaping ([DiscordGuildMember]) -> ()) {
         DiscordEndpoint.getGuildMembers(on: guildId, options: options, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func getGuilds(callback: @escaping ([String: DiscordUserGuild]) -> Void) {
+    public func getGuilds(callback: @escaping ([String: DiscordUserGuild]) -> ()) {
         DiscordEndpoint.getGuilds(user: user!.id, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func getGuildRoles(for guildId: String, callback: @escaping ([DiscordRole]) -> Void) {
+    public func getGuildRoles(for guildId: String, callback: @escaping ([DiscordRole]) -> ()) {
         DiscordEndpoint.getGuildRoles(for: guildId, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func getInvite(_ invite: String, callback: @escaping (DiscordInvite?) -> Void) {
+    public func getInvite(_ invite: String, callback: @escaping (DiscordInvite?) -> ()) {
         DiscordEndpoint.getInvite(invite, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> Void) {
+    public func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> ()) {
         return DiscordEndpoint.getInvites(for: channelId, with: token, callback: callback)
     }
 
     /// Default implementation
     public func getMessages(for channelId: String, options: [DiscordEndpointOptions.GetMessage] = [],
-                            callback: @escaping ([DiscordMessage]) -> Void) {
+                            callback: @escaping ([DiscordMessage]) -> ()) {
         DiscordEndpoint.getMessages(for: channelId, with: token, options: options, callback: callback)
     }
 
     /// Default implementation
-    public func getWebhook(_ webhookId: String, callback: @escaping (DiscordWebhook?) -> Void) {
+    public func getWebhook(_ webhookId: String, callback: @escaping (DiscordWebhook?) -> ()) {
         DiscordEndpoint.getWebhook(webhookId, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func getWebhooks(forChannel channelId: String, callback: @escaping ([DiscordWebhook]) -> Void) {
+    public func getWebhooks(forChannel channelId: String, callback: @escaping ([DiscordWebhook]) -> ()) {
         DiscordEndpoint.getWebhooks(forChannel: channelId, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func getWebhooks(forGuild guildId: String, callback: @escaping ([DiscordWebhook]) -> Void) {
+    public func getWebhooks(forGuild guildId: String, callback: @escaping ([DiscordWebhook]) -> ()) {
         DiscordEndpoint.getWebhooks(forGuild: guildId, with: token, callback: callback)
     }
 
     /// Default implementation
     public func guildBan(userId: String, on guildId: String, deleteMessageDays: Int = 7,
-                         callback: ((Bool) -> Void)? = nil) {
+                         callback: ((Bool) -> ())? = nil) {
         DiscordEndpoint.guildBan(userId: userId, on: guildId, deleteMessageDays: deleteMessageDays,
             with: token, callback: callback)
     }
 
     /// Default implementation
-    public func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> Void) {
+    public func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> ()) {
         DiscordEndpoint.getPinnedMessages(for: channelId, with: token, callback: callback)
     }
 
     /// Default implementation
     public func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel],
-                              callback: ((DiscordGuildChannel?) -> Void)? = nil) {
+                              callback: ((DiscordGuildChannel?) -> ())? = nil) {
         DiscordEndpoint.modifyChannel(channelId, options: options, with: token, callback: callback)
     }
 
     /// Default implementation
     public func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild],
-                            callback: ((DiscordGuild?) -> Void)? = nil) {
+                            callback: ((DiscordGuild?) -> ())? = nil) {
         DiscordEndpoint.modifyGuild(guildId, options: options, with: token, callback: callback)
     }
 
     /// Default implementation
     public func modifyGuildChannelPositions(on guildId: String, channelPositions: [[String: Any]],
-                                            callback: (([DiscordGuildChannel]) -> Void)? = nil) {
+                                            callback: (([DiscordGuildChannel]) -> ())? = nil) {
         DiscordEndpoint.modifyGuildChannelPositions(on: guildId, channelPositions: channelPositions,
             with: token, callback: callback)
     }
 
     /// Default implementation
     func modifyGuildMember(_ id: String, on guildId: String, options: [DiscordEndpointOptions.ModifyMember],
-                           callback: ((Bool) -> Void)? = nil) {
+                           callback: ((Bool) -> ())? = nil) {
         DiscordEndpoint.modifyGuildMember(id, on: guildId, options: options, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func modifyGuildRole(_ role: DiscordRole, on guildId: String, callback: ((DiscordRole?) -> Void)? = nil) {
+    public func modifyGuildRole(_ role: DiscordRole, on guildId: String, callback: ((DiscordRole?) -> ())? = nil) {
         DiscordEndpoint.modifyGuildRole(role, on: guildId, with: token, callback: callback)
     }
 
     /// Default implementation
     public func modifyWebhook(_ webhookId: String, options: [DiscordEndpointOptions.WebhookOption],
-            callback: @escaping (DiscordWebhook?) -> Void = {_ in }) {
+            callback: @escaping (DiscordWebhook?) -> () = {_ in }) {
         DiscordEndpoint.modifyWebhook(webhookId, with: token, options: options, callback: callback)
     }
 
     /// Default implementation
-    public func removeGuildBan(for userId: String, on guildId: String, callback: ((Bool) -> Void)? = nil) {
+    public func removeGuildBan(for userId: String, on guildId: String, callback: ((Bool) -> ())? = nil) {
         DiscordEndpoint.removeGuildBan(for: userId, on: guildId, with: token, callback: callback)
     }
 
     /// Default implementation.
     public func removeGuildMemberRole(_ roleId: String, from userId: String, on guildId: String,
-                                      callback: ((Bool) -> Void)?) {
+                                      callback: ((Bool) -> ())?) {
         DiscordEndpoint.removeGuildMemberRole(roleId, from: userId, on: guildId, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func removeGuildRole(_ roleId: String, on guildId: String, callback: ((DiscordRole?) -> Void)? = nil) {
+    public func removeGuildRole(_ roleId: String, on guildId: String, callback: ((DiscordRole?) -> ())? = nil) {
         DiscordEndpoint.removeGuildRole(roleId, on: guildId, with: token, callback: callback)
     }
 
     /// Default implementation.
     public func sendMessage(_ message: DiscordMessage, to channelId: String,
-                            callback: ((DiscordMessage?) -> Void)? = nil) {
+                            callback: ((DiscordMessage?) -> ())? = nil) {
         DiscordEndpoint.sendMessage(message, with: token, to: channelId, callback: callback)
     }
 
     /// Default implementation
-    public func triggerTyping(on channelId: String, callback: ((Bool) -> Void)? = nil) {
+    public func triggerTyping(on channelId: String, callback: ((Bool) -> ())? = nil) {
         DiscordEndpoint.triggerTyping(on: channelId, with: token, callback: callback)
     }
 }

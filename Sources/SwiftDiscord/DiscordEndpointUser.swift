@@ -29,7 +29,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function. Takes an optional `DiscordDMChannel`
     */
     public static func createDM(with: String, user: String, with token: DiscordToken,
-                                callback: @escaping (DiscordDMChannel?) -> Void) {
+                                callback: @escaping (DiscordDMChannel?) -> ()) {
         guard let contentData = JSON.encodeJSONData(["recipient_id": with]) else { return }
 
         var request = createRequest(with: token, for: .userChannels, replacing: ["me": user])
@@ -61,7 +61,7 @@ public extension DiscordEndpoint {
                               the recipient's id
     */
     public static func getDMs(user: String, with token: DiscordToken,
-                              callback: @escaping ([String: DiscordDMChannel]) -> Void) {
+                              callback: @escaping ([String: DiscordDMChannel]) -> ()) {
         var request = createRequest(with: token, for: .userChannels, replacing: ["me": user])
 
         request.httpMethod = "GET"
@@ -89,7 +89,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function, taking a dictionary of `DiscordUserGuild` associated by guild id
     */
     public static func getGuilds(user: String, with token: DiscordToken,
-                                 callback: @escaping ([String: DiscordUserGuild]) -> Void) {
+                                 callback: @escaping ([String: DiscordUserGuild]) -> ()) {
         var request = createRequest(with: token, for: .userGuilds, replacing: ["me": user])
 
         request.httpMethod = "GET"

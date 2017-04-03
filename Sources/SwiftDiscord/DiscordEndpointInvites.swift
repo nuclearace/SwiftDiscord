@@ -27,7 +27,7 @@ public extension DiscordEndpoint {
         - parameter with: The token to authenticate to Discord with
         - parameter callback: An optional callback containing the accepted invite, if successful
     */
-    public static func acceptInvite(_ invite: String, with token: DiscordToken, callback: ((DiscordInvite?) -> Void)?) {
+    public static func acceptInvite(_ invite: String, with token: DiscordToken, callback: ((DiscordInvite?) -> ())?) {
         var request = createRequest(with: token, for: .invites, replacing: [
             "invite.code": invite,
         ])
@@ -54,7 +54,7 @@ public extension DiscordEndpoint {
         - parameter with: The token to authenticate to Discord with
         - parameter callback: An optional callback containing the deleted invite, if successful
     */
-    public static func deleteInvite(_ invite: String, with token: DiscordToken, callback: ((DiscordInvite?) -> Void)?) {
+    public static func deleteInvite(_ invite: String, with token: DiscordToken, callback: ((DiscordInvite?) -> ())?) {
         var request = createRequest(with: token, for: .invites, replacing: [
             "invite.code": invite,
         ])
@@ -82,7 +82,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function, takes an optional `DiscordInvite`
     */
     public static func getInvite(_ invite: String, with token: DiscordToken,
-                                 callback: @escaping (DiscordInvite?) -> Void) {
+                                 callback: @escaping (DiscordInvite?) -> ()) {
         var request = createRequest(with: token, for: .invites, replacing: [
             "invite.code": invite,
         ])

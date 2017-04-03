@@ -36,7 +36,7 @@ final class DiscordRateLimiter {
     private init() {}
 
     static func executeRequest(_ request: URLRequest, for endpointKey: DiscordRateLimitKey,
-            callback: @escaping (Data?, HTTPURLResponse?, Error?) -> Void) {
+            callback: @escaping (Data?, HTTPURLResponse?, Error?) -> ()) {
         limitQueue.async {
             if DiscordRateLimiter.shared.endpointLimits[endpointKey] == nil {
                 // First time handling this endpoint, err on the side caution and limit to one
@@ -67,7 +67,7 @@ final class DiscordRateLimiter {
     }
 
     static func createHandleReponse(for request: URLRequest, endpointKey: DiscordRateLimitKey, callback:
-            @escaping (Data?, HTTPURLResponse?, Error?) -> Void) -> (Data?, URLResponse?, Error?) -> Void {
+            @escaping (Data?, HTTPURLResponse?, Error?) -> ()) -> (Data?, URLResponse?, Error?) -> () {
         return {data, response, error in
             limitQueue.async {
                 let rateLimit = DiscordRateLimiter.shared.endpointLimits[endpointKey]!
@@ -149,7 +149,7 @@ struct DiscordRateLimitKey: Hashable {
     }
 }
 
-private typealias RateLimitedRequest = (request: URLRequest, callback: (Data?, HTTPURLResponse?, Error?) -> Void)
+private typealias RateLimitedRequest = (request: URLRequest, callback: (Data?, HTTPURLResponse?, Error?) -> ())
 
 /// A DiscordRateLimit's job is to keep track of a endpoint's rate limit.
 /// If we told the DiscordRateLimiter we hit a limit, it will add the request to the Limit's queue.
