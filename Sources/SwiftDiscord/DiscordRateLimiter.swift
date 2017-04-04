@@ -18,6 +18,9 @@
 import Foundation
 import Dispatch
 
+private typealias RequestCallback = (Data?, HTTPURLResponse?, Error?) -> ()
+private typealias RateLimitedRequest = (request: URLRequest, callback: RequestCallback)
+
 /// The DiscordRateLimiter is in charge of making sure we don't flood Discord with requests.
 /// It keeps a dictionary of DiscordRateLimitKeys and DiscordRateLimits.
 /// All requests to the REST api should be routed through the DiscordRateLimiter.
@@ -37,7 +40,7 @@ final class DiscordRateLimiter {
 
     static func executeRequest(_ request: URLRequest, for endpointKey: DiscordRateLimitKey,
             callback: @escaping (Data?, HTTPURLResponse?, Error?) -> ()) {
-        limitQueue.async {
+        func _executeRequest() {
             if DiscordRateLimiter.shared.endpointLimits[endpointKey] == nil {
                 // First time handling this endpoint, err on the side caution and limit to one
                 DiscordRateLimiter.shared.endpointLimits[endpointKey] =
@@ -62,14 +65,18 @@ final class DiscordRateLimiter {
                 args: request, rateLimit.remaining)
 
             sharedSession.dataTask(with: request,
-                completionHandler: createHandleReponse(for: request, endpointKey: endpointKey, callback: callback)).resume()
+                                   completionHandler: createResponseHandler(for: request,
+                                                                            endpointKey: endpointKey,
+                                                                            callback: callback)).resume()
         }
+
+        limitQueue.async(execute: _executeRequest)
     }
 
-    static func createHandleReponse(for request: URLRequest, endpointKey: DiscordRateLimitKey, callback:
-            @escaping (Data?, HTTPURLResponse?, Error?) -> ()) -> (Data?, URLResponse?, Error?) -> () {
-        return {data, response, error in
-            limitQueue.async {
+    private static func createResponseHandler(for request: URLRequest, endpointKey: DiscordRateLimitKey,
+                                              callback: @escaping RequestCallback) -> (Data?, URLResponse?, Error?) -> () {
+        func _createResponseHandler(data: Data?, response: URLResponse?, error: Error?) {
+            func _responseHandler() {
                 let rateLimit = DiscordRateLimiter.shared.endpointLimits[endpointKey]!
 
                 guard let response = response as? HTTPURLResponse else {
@@ -96,31 +103,35 @@ final class DiscordRateLimiter {
                 }
 
                 if let limit = response.allHeaderFields["x-ratelimit-limit"],
-                    let remaining = response.allHeaderFields["x-ratelimit-remaining"],
-                    let reset = response.allHeaderFields["x-ratelimit-reset"] {
-                        #if !os(Linux)
-                        // Update the limit and attempt to schedule a limit reset
-                        rateLimit.updateLimits(limit: Int(limit as! String)!,
-                                               remaining: Int(remaining as! String)!,
-                                               reset: Int(reset as! String)!)
-                        #else
-                        rateLimit.updateLimits(limit: Int(limit)!,
-                                               remaining: Int(remaining)!,
-                                               reset: Int(reset)!)
-                        #endif
-                        rateLimit.scheduleReset(on: limitQueue)
+                   let remaining = response.allHeaderFields["x-ratelimit-remaining"],
+                   let reset = response.allHeaderFields["x-ratelimit-reset"] {
+                    #if !os(Linux)
+                    // Update the limit and attempt to schedule a limit reset
+                    rateLimit.updateLimits(limit: Int(limit as! String)!,
+                                           remaining: Int(remaining as! String)!,
+                                           reset: Int(reset as! String)!)
+                    #else
+                    rateLimit.updateLimits(limit: Int(limit)!,
+                                           remaining: Int(remaining)!,
+                                           reset: Int(reset)!)
+                    #endif
+                    rateLimit.scheduleReset(on: limitQueue)
                 } else {
                     rateLimit.scheduleReset(on: limitQueue)
                 }
 
                 DefaultDiscordLogger.Logger.debug("New limit: %@", type: "DiscordRateLimiter", args: rateLimit.limit)
                 DefaultDiscordLogger.Logger.debug("New remaining: %@", type: "DiscordRateLimiter",
-                    args: rateLimit.remaining)
+                                                  args: rateLimit.remaining)
                 DefaultDiscordLogger.Logger.debug("New reset: %@", type: "DiscordRateLimiter", args: rateLimit.reset)
 
                 callback(data, response, error)
             }
+
+            limitQueue.async(execute: _responseHandler)
         }
+
+        return _createResponseHandler
     }
 }
 
@@ -148,8 +159,6 @@ struct DiscordRateLimitKey: Hashable {
         return lhs.key == rhs.key
     }
 }
-
-private typealias RateLimitedRequest = (request: URLRequest, callback: (Data?, HTTPURLResponse?, Error?) -> ())
 
 /// A DiscordRateLimit's job is to keep track of a endpoint's rate limit.
 /// If we told the DiscordRateLimiter we hit a limit, it will add the request to the Limit's queue.
