@@ -168,8 +168,8 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
         if let file = files.first {
             var fields: [String: String] = [
-                    "content": content,
-                    "tts": String(tts),
+                "content": content,
+                "tts": String(tts),
             ]
 
             if let embed = embeds.first, let encoded = JSON.encodeJSON(["embed": embed.json]) {
@@ -179,9 +179,9 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
             return .right(createMultipartBody(fields: fields, file: file))
         } else {
             let messageObject: [String: Any] = [
-                    "content": content,
-                    "tts": tts,
-                    "embed": embeds.first?.json ?? [:]
+                "content": content,
+                "tts": tts,
+                "embed": embeds.first?.json ?? [:]
             ]
 
             guard let contentData = JSON.encodeJSONData(messageObject) else { return .left(Data()) }
