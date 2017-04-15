@@ -25,7 +25,9 @@ enum Either<L, R> {
 
 typealias JSONArray = [[String: Any]]
 
+#if !os(iOS)
 public typealias EncoderProcess = Process
+#endif
 
 extension Dictionary {
     func get<T>(_ value: Key, or default: T) -> T {
