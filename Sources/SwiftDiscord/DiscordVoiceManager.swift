@@ -123,8 +123,8 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
         guard voiceEngines[guildId] != nil else { return }
 
         protected {
-            self.voiceStates[guildId] = nil
-            self.voiceServerInformations[guildId] = nil
+            voiceStates[guildId] = nil
+            voiceServerInformations[guildId] = nil
         }
 
         voiceEngines[guildId]?.disconnect()
@@ -177,7 +177,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     open func voiceEngineDidDisconnect(_ engine: DiscordVoiceEngine) {
         delegate?.voiceManager(self, didDisconnectEngine: engine)
 
-        protected { self.voiceEngines[engine.guildId] = nil }
+        protected { voiceEngines[engine.guildId] = nil }
     }
 
     /**

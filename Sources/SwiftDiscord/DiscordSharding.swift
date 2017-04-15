@@ -145,9 +145,9 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
 
     private func cleanUp() {
         protected {
-            self.shards.removeAll()
-            self.closedShards = 0
-            self.connectedShards = 0
+            shards.removeAll()
+            closedShards = 0
+            connectedShards = 0
         }
     }
 
@@ -161,8 +161,8 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
             protected {
                 closed = false
 
-                for shard in self.shards {
-                    guard !self.closed else { break }
+                for shard in shards {
+                    guard !closed else { break }
 
                     shard.connect()
 
@@ -196,7 +196,7 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
     */
     open func disconnect() {
         protected {
-            self.closed = true
+            closed = true
 
             for shard in shards {
                 shard.disconnect()
@@ -229,9 +229,7 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
         - parameter engine: The engine that received the event.
         - gotHelloWithPayload: The hello data.
     */
-    open func engine(_ engine: DiscordEngine, gotHelloWithPayload payload: DiscordGatewayPayload) {
-
-    }
+    open func engine(_ engine: DiscordEngine, gotHelloWithPayload payload: DiscordGatewayPayload) { }
 
     /**
         Use when you will have multiple shards spread across a few instances.
@@ -247,9 +245,7 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
         cleanUp()
 
         protected {
-            self.shards.append(self.createShardWithDelegate(delegate,
-                                                            withShardNum: info.shardNum,
-                                                            totalShards: info.totalShards))
+            shards.append(createShardWithDelegate(delegate, withShardNum: info.shardNum, totalShards: info.totalShards))
         }
     }
 
@@ -278,7 +274,7 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
 
         protected {
             for i in 0..<numberOfShards {
-                self.shards.append(createShardWithDelegate(delegate, withShardNum: i, totalShards: numberOfShards))
+                shards.append(createShardWithDelegate(delegate, withShardNum: i, totalShards: numberOfShards))
             }
         }
     }
@@ -289,15 +285,15 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
         - parameter shardNum: The number of the shard that disconnected.
     */
     open func signalShardConnected(shardNum: Int) {
+        DefaultDiscordLogger.Logger.verbose("Shard #%@, connected", type: "DiscordShardManager",
+                                            args: shardNum)
+
         protected {
-            DefaultDiscordLogger.Logger.verbose("Shard #%@, connected", type: "DiscordShardManager",
-                                                args: shardNum)
+            connectedShards += 1
 
-            self.connectedShards += 1
+            guard connectedShards == shards.count else { return }
 
-            guard self.connectedShards == self.shards.count else { return }
-
-            self.delegate?.shardManager(self, didConnect: true)
+            delegate?.shardManager(self, didConnect: true)
         }
     }
 
@@ -307,15 +303,15 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
         - parameter shardNum: The number of the shard that disconnected.
     */
     open func signalShardDisconnected(shardNum: Int) {
+        DefaultDiscordLogger.Logger.verbose("Shard #%@, disconnected", type: "DiscordShardManager",
+                                            args: shardNum)
+
         protected {
-            DefaultDiscordLogger.Logger.verbose("Shard #%@, disconnected", type: "DiscordShardManager",
-                                                args: shardNum)
+            closedShards += 1
 
-            self.closedShards += 1
+            guard closedShards == shards.count else { return }
 
-            guard self.closedShards == self.shards.count else { return }
-
-            self.delegate?.shardManager(self, didDisconnectWithReason: "Closed")
+            delegate?.shardManager(self, didDisconnectWithReason: "Closed")
         }
     }
 }
