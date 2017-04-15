@@ -938,9 +938,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         if state.userId == user?.id {
             if state.channelId == "" {
-                voiceManager.voiceStates[state.guildId] = nil
+                voiceManager.protected { self.voiceManager.voiceStates[state.guildId] = nil }
             } else {
-                voiceManager.voiceStates[state.guildId] = state
+                voiceManager.protected { self.voiceManager.voiceStates[state.guildId] = state }
 
                 startVoiceConnection(state.guildId)
             }

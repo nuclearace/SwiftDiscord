@@ -15,6 +15,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Dispatch
 import Foundation
 
 enum Either<L, R> {
@@ -103,5 +104,19 @@ class DiscordDateFormatter {
 
     static func format(_ string: String) -> Date? {
         return formatter.RFC3339DateFormatter.date(from: string)
+    }
+}
+
+protocol Lockable {
+    var lock: DispatchSemaphore { get }
+
+    func protected(block: () -> ())
+}
+
+extension Lockable {
+    func protected(block: () -> ()) {
+        lock.wait()
+        block()
+        lock.signal()
     }
 }

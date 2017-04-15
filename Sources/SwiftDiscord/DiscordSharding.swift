@@ -114,7 +114,7 @@ public protocol DiscordShardManagerDelegate : class, DiscordTokenBearer {
     Connected being when all shards have recieved a ready event and are receiving events from the gateway. It also
     decides when a client has fully disconnected. Disconnected being when all shards have closed.
 */
-open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer {
+open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lockable {
     // MARK: Properties
 
     /// - returns: The shard with num `n`
@@ -130,7 +130,7 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer {
     /// The individual shards.
     public var shards = [DiscordShard]()
 
-    private let shardQueue = DispatchQueue(label: "shardQueue")
+    let lock = DispatchSemaphore(value: 1)
 
     private var closed = false
     private var closedShards = 0
@@ -144,9 +144,11 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer {
     // MARK: Methods
 
     private func cleanUp() {
-        shards.removeAll()
-        closedShards = 0
-        connectedShards = 0
+        protected {
+            self.shards.removeAll()
+            self.closedShards = 0
+            self.connectedShards = 0
+        }
     }
 
     /**
@@ -155,17 +157,21 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer {
         **Note** This method is an async method.
     */
     open func connect() {
-        closed = false
+        func _connect() {
+            protected {
+                closed = false
 
-        DispatchQueue.global().async {[shards = self.shards] in
-            for shard in shards {
-                guard !self.closed else { break }
+                for shard in self.shards {
+                    guard !self.closed else { break }
 
-                shard.connect()
+                    shard.connect()
 
-                Thread.sleep(forTimeInterval: 5.0)
+                    Thread.sleep(forTimeInterval: 5.0)
+                }
             }
         }
+
+        DispatchQueue.global().async(execute: _connect)
     }
 
     /**
@@ -189,8 +195,8 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer {
         Disconnects all shards.
     */
     open func disconnect() {
-        func _disconnect() {
-            closed = true
+        protected {
+            self.closed = true
 
             for shard in shards {
                 shard.disconnect()
@@ -201,8 +207,6 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer {
                 delegate?.shardManager(self, didDisconnectWithReason: "Closed")
             }
         }
-
-        shardQueue.async(execute: _disconnect)
     }
 
     /**
@@ -242,7 +246,11 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer {
 
         cleanUp()
 
-        shards.append(createShardWithDelegate(delegate, withShardNum: info.shardNum, totalShards: info.totalShards))
+        protected {
+            self.shards.append(self.createShardWithDelegate(delegate,
+                                                            withShardNum: info.shardNum,
+                                                            totalShards: info.totalShards))
+        }
     }
 
     /**
@@ -252,7 +260,7 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer {
         - parameter onShard: The shard to send the payload on.
     */
     open func sendPayload(_ payload: DiscordGatewayPayload, onShard shard: Int) {
-        self[shard].sendPayload(payload)
+        protected { self[shard].sendPayload(payload) }
     }
 
     /**
@@ -268,8 +276,10 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer {
 
         cleanUp()
 
-        for i in 0..<numberOfShards {
-            shards.append(createShardWithDelegate(delegate, withShardNum: i, totalShards: numberOfShards))
+        protected {
+            for i in 0..<numberOfShards {
+                self.shards.append(createShardWithDelegate(delegate, withShardNum: i, totalShards: numberOfShards))
+            }
         }
     }
 
@@ -279,18 +289,16 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer {
         - parameter shardNum: The number of the shard that disconnected.
     */
     open func signalShardConnected(shardNum: Int) {
-        func _signalShardConnected() {
+        protected {
             DefaultDiscordLogger.Logger.verbose("Shard #%@, connected", type: "DiscordShardManager",
-                args: shardNum)
+                                                args: shardNum)
 
-            connectedShards += 1
+            self.connectedShards += 1
 
-            guard connectedShards == shards.count else { return }
+            guard self.connectedShards == self.shards.count else { return }
 
-            delegate?.shardManager(self, didConnect: true)
+            self.delegate?.shardManager(self, didConnect: true)
         }
-
-        shardQueue.async(execute: _signalShardConnected)
     }
 
     /**
@@ -299,17 +307,15 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer {
         - parameter shardNum: The number of the shard that disconnected.
     */
     open func signalShardDisconnected(shardNum: Int) {
-        func _signalShardDisconnected() {
+        protected {
             DefaultDiscordLogger.Logger.verbose("Shard #%@, disconnected", type: "DiscordShardManager",
-                args: shardNum)
+                                                args: shardNum)
 
-            closedShards += 1
+            self.closedShards += 1
 
-            guard closedShards == shards.count else { return }
+            guard self.closedShards == self.shards.count else { return }
 
-            delegate?.shardManager(self, didDisconnectWithReason: "Closed")
+            self.delegate?.shardManager(self, didDisconnectWithReason: "Closed")
         }
-
-        shardQueue.async(execute: _signalShardDisconnected)
     }
 }
