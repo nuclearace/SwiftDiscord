@@ -243,7 +243,7 @@ public extension DiscordEndpoint {
         }
 
         var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel],
-            getParams: getParams)
+                                    getParams: getParams)
 
         request.httpMethod = "GET"
 

@@ -213,8 +213,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     open func handleDispatch(event: DiscordDispatchEvent, data: DiscordGatewayPayloadData) {
         guard case let .object(eventData) = data else {
             DefaultDiscordLogger.Logger.error("Got dispatch event without an object: %@, %@",
-                type: "DiscordDispatchEventHandler", args: event, data)
-
+                                              type: "DiscordDispatchEventHandler", args: event, data)
             return
         }
 
