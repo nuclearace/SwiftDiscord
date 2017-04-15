@@ -120,14 +120,14 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
         - parameter onGuild: The snowflake of the guild that you want to leave.
     */
     open func leaveVoiceChannel(onGuild guildId: String) {
-        guard voiceEngines[guildId] != nil else { return }
+        guard get(voiceEngines[guildId]) != nil else { return }
 
         protected {
             voiceStates[guildId] = nil
             voiceServerInformations[guildId] = nil
         }
 
-        voiceEngines[guildId]?.disconnect()
+        get(voiceEngines[guildId])?.disconnect()
 
         // Make sure everything is cleaned out
 

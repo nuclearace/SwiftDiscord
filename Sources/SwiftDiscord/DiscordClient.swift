@@ -165,7 +165,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         shardManager.disconnect()
 
-        for (_, engine) in voiceManager.voiceEngines {
+        for (_, engine) in voiceManager.get(voiceManager.voiceEngines) {
             engine.disconnect()
         }
     }

@@ -119,7 +119,7 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
 
     /// - returns: The shard with num `n`
     public subscript(n: Int) -> DiscordShard {
-        return shards.first(where: { $0.shardNum == n })!
+        return get(shards).first(where: { $0.shardNum == n })!
     }
 
     /// The token for the user.
@@ -158,16 +158,14 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
     */
     open func connect() {
         func _connect() {
-            protected {
-                closed = false
+            let shards = get(self.shards)
 
-                for shard in shards {
-                    guard !closed else { break }
+            protected { closed = false }
 
-                    shard.connect()
+            for shard in shards where get(!closed) {
+                shard.connect()
 
-                    Thread.sleep(forTimeInterval: 5.0)
-                }
+                Thread.sleep(forTimeInterval: 5.0)
             }
         }
 
@@ -201,11 +199,11 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
             for shard in shards {
                 shard.disconnect()
             }
+        }
 
-            if connectedShards != shards.count {
-                // Still connecting, say we disconnected, since we never connected to begin with
-                delegate?.shardManager(self, didDisconnectWithReason: "Closed")
-            }
+        if get(connectedShards != shards.count) {
+            // Still connecting, say we disconnected, since we never connected to begin with
+            delegate?.shardManager(self, didDisconnectWithReason: "Closed")
         }
     }
 
@@ -285,16 +283,13 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
         - parameter shardNum: The number of the shard that disconnected.
     */
     open func signalShardConnected(shardNum: Int) {
-        DefaultDiscordLogger.Logger.verbose("Shard #%@, connected", type: "DiscordShardManager",
-                                            args: shardNum)
+        DefaultDiscordLogger.Logger.verbose("Shard #%@, connected", type: "DiscordShardManager", args: shardNum)
 
-        protected {
-            connectedShards += 1
+        protected { connectedShards += 1 }
 
-            guard connectedShards == shards.count else { return }
+        guard get(connectedShards == shards.count) else { return }
 
-            delegate?.shardManager(self, didConnect: true)
-        }
+        delegate?.shardManager(self, didConnect: true)
     }
 
     /**
@@ -303,15 +298,12 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
         - parameter shardNum: The number of the shard that disconnected.
     */
     open func signalShardDisconnected(shardNum: Int) {
-        DefaultDiscordLogger.Logger.verbose("Shard #%@, disconnected", type: "DiscordShardManager",
-                                            args: shardNum)
+        DefaultDiscordLogger.Logger.verbose("Shard #%@, disconnected", type: "DiscordShardManager", args: shardNum)
 
-        protected {
-            closedShards += 1
+        protected { closedShards += 1 }
 
-            guard closedShards == shards.count else { return }
+        guard get(closedShards == shards.count) else { return }
 
-            delegate?.shardManager(self, didDisconnectWithReason: "Closed")
-        }
+        delegate?.shardManager(self, didDisconnectWithReason: "Closed")
     }
 }
