@@ -266,15 +266,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         DefaultDiscordLogger.Logger.log("Joining voice channel: %@", type: self.logType, args: channel)
 
-        let shardNum = guild.shardNumber(assuming: shards)
-
         shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
                                                        payload: .object(["guild_id": guild.id,
                                                                          "channel_id": channel.id,
                                                                          "self_mute": false,
                                                                          "self_deaf": false
                                                                         ])
-        ), onShard: shardNum)
+        ), onShard: guild.shardNumber(assuming: shards))
     }
 
     /**
