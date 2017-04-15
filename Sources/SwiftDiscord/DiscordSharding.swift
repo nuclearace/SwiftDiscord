@@ -254,7 +254,7 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
         - parameter onShard: The shard to send the payload on.
     */
     open func sendPayload(_ payload: DiscordGatewayPayload, onShard shard: Int) {
-        protected { self[shard].sendPayload(payload) }
+        self[shard].sendPayload(payload)
     }
 
     /**
