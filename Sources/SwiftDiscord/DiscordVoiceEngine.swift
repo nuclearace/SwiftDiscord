@@ -589,7 +589,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         - parameter middleware: The process that will output audio data.
         - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
     */
-    public func setupMiddleware(_ middleware: EncoderProcess, terminationHandler: (() -> ())?) {
+    public func setupMiddleware(_ middleware: Process, terminationHandler: (() -> ())?) {
         encoder.middleware = DiscordEncoderMiddleware(encoder: encoder,
                                                       middleware: middleware,
                                                       terminationHandler: terminationHandler)

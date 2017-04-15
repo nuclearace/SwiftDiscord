@@ -45,10 +45,10 @@ public class DiscordEncoderMiddleware {
     // MARK: Properties
 
     /// The FFmpeg process.
-    public let ffmpeg: EncoderProcess
+    public let ffmpeg: Process
 
     /// The middleware process.
-    public let middleware: EncoderProcess
+    public let middleware: Process
 
     /// The pipe used to connect FFmpeg to the middleware.
     public let pipe: Pipe
@@ -58,9 +58,9 @@ public class DiscordEncoderMiddleware {
     /**
         An intializer that sets up a middleware ffmpeg process that encodes some audio data.
     */
-    public init(encoder: DiscordVoiceEncoder, middleware: EncoderProcess, terminationHandler: (() -> ())?) {
+    public init(encoder: DiscordVoiceEncoder, middleware: Process, terminationHandler: (() -> ())?) {
         self.middleware = middleware
-        ffmpeg = EncoderProcess()
+        ffmpeg = Process()
         pipe = Pipe()
 
         middleware.standardOutput = pipe
