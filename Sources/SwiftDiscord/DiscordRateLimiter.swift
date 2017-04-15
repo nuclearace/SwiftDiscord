@@ -79,16 +79,16 @@ final class DiscordRateLimiter {
             func _responseHandler() {
                 let rateLimit = DiscordRateLimiter.shared.endpointLimits[endpointKey]!
 
+                defer { rateLimit.scheduleReset(on: limitQueue) }
+
                 guard let response = response as? HTTPURLResponse else {
                     // Not quite sure what happened
-                    rateLimit.scheduleReset(on: limitQueue)
                     callback(data, nil, error)
 
                     return
                 }
 
                 guard error == nil else {
-                    rateLimit.scheduleReset(on: limitQueue)
                     callback(data, response, error)
 
                     return
@@ -97,7 +97,6 @@ final class DiscordRateLimiter {
                 guard response.statusCode != 429 else {
                     // Hit rate limit
                     rateLimit.queue.append(RateLimitedRequest(request: request, callback: callback))
-                    rateLimit.scheduleReset(on: limitQueue)
 
                     return
                 }
@@ -109,9 +108,6 @@ final class DiscordRateLimiter {
                     rateLimit.updateLimits(limit: Int(limit as! String)!,
                                            remaining: Int(remaining as! String)!,
                                            reset: Int(reset as! String)!)
-                    rateLimit.scheduleReset(on: limitQueue)
-                } else {
-                    rateLimit.scheduleReset(on: limitQueue)
                 }
 
                 DefaultDiscordLogger.Logger.debug("New limit: %@", type: "DiscordRateLimiter", args: rateLimit.limit)
