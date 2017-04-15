@@ -105,16 +105,10 @@ final class DiscordRateLimiter {
                 if let limit = response.allHeaderFields["x-ratelimit-limit"],
                    let remaining = response.allHeaderFields["x-ratelimit-remaining"],
                    let reset = response.allHeaderFields["x-ratelimit-reset"] {
-                    #if !os(Linux)
                     // Update the limit and attempt to schedule a limit reset
                     rateLimit.updateLimits(limit: Int(limit as! String)!,
                                            remaining: Int(remaining as! String)!,
                                            reset: Int(reset as! String)!)
-                    #else
-                    rateLimit.updateLimits(limit: Int(limit)!,
-                                           remaining: Int(remaining)!,
-                                           reset: Int(reset)!)
-                    #endif
                     rateLimit.scheduleReset(on: limitQueue)
                 } else {
                     rateLimit.scheduleReset(on: limitQueue)
