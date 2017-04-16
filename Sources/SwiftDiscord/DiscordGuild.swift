@@ -20,6 +20,8 @@ import Foundation
 
 /// Represents a Guild.
 public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
+    private static let logType = "DiscordGuild"
+
     // MARK: Properties
 
     // TODO figure out what features are
@@ -268,6 +270,30 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 
     func shardNumber(assuming numOfShards: Int) -> Int {
         return (Int(id)! >> 22) % numOfShards
+    }
+
+    func updateGuild(fromPresence presence: DiscordPresence, fillingUsers fillUsers: Bool,
+                     pruningUsers pruneUsers: Bool) {
+        let userId = presence.user.id
+
+        if pruneUsers && presence.status == .offline {
+            DefaultDiscordLogger.Logger.debug("Pruning guild member %@ on %@", type: DiscordGuild.logType,
+                                              args: userId, id)
+
+            members[userId] = nil
+            presences[userId] = nil
+        } else if fillUsers && !members.contains(userId) {
+            DefaultDiscordLogger.Logger.debug("Should get member %@; pull from the API", type: DiscordGuild.logType,
+                                              args: userId)
+
+            members[lazy: userId] = .lazy({[weak self] in
+                guard let this = self else {
+                    return DiscordGuildMember(guildMemberObject: [:], guildId: "")
+                }
+
+                return this.getGuildMember(userId) ?? DiscordGuildMember(guildMemberObject: [:], guildId: "")
+            })
+        }
     }
 
     // Used to update a guild from a guildUpdate event
