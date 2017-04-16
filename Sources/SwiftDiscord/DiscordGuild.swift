@@ -297,7 +297,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     }
 
     // Used to update a guild from a guildUpdate event
-    func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
+    func updateGuild(fromGuildUpdate newGuild: [String: Any]) -> DiscordGuild {
         if let defaultMessageNotifications = newGuild["default_message_notifications"] as? Int {
             self.defaultMessageNotifications = defaultMessageNotifications
         }

@@ -755,7 +755,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         DefaultDiscordLogger.Logger.log("Handling guild update", type: logType)
 
         guard let guildId = data["id"] as? String else { return }
-        guard let updatedGuild = self.guilds[guildId]?.updateGuild(with: data) else { return }
+        guard let updatedGuild = self.guilds[guildId]?.updateGuild(fromGuildUpdate: data) else { return }
 
         DefaultDiscordLogger.Logger.verbose("Updated guild: %@", type: logType, args: updatedGuild)
 
