@@ -61,7 +61,7 @@ public class DiscordLazyValue<V> {
 }
 
 extension DiscordLazyValue : CustomStringConvertible {
-    /// The descripton of the DiscordLazyValue. Does not evaluate if it hasn't been already.
+    /// The description of the DiscordLazyValue. Does not evaluate if it hasn't been already.
     public var description: String {
         let value: String
 

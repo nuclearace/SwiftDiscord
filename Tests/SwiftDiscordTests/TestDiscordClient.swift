@@ -285,6 +285,16 @@ class TestDiscordClient : XCTestCase {
         waitForExpectations(timeout: 0.2)
     }
 
+    func testClientCorrectlyAddsPresenceToGuild() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
+        expectations[.presenceUpdate] = expectation(description: "Client should call presence update method")
+
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
+        client.handleDispatch(event: .presenceUpdate, data: .object(testPresence))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
     var client: DiscordClient!
     var expectations = [DiscordDispatchEvent: XCTestExpectation]()
 
@@ -491,6 +501,14 @@ extension TestDiscordClient : DiscordClientDelegate {
 
         expectations[.guildEmojisUpdate]?.fulfill()
     }
+
+    func client(_ client: DiscordClient, didReceivePresenceUpdate presence: DiscordPresence) {
+        XCTAssertEqual(presence.user.id, testUser["id"] as! String, "Presence should be for the test user")
+        XCTAssertNotNil(client.guilds[presence.guildId]?.presences[presence.user.id])
+
+        expectations[.presenceUpdate]?.fulfill()
+    }
+
 
     func client(_ client: DiscordClient, didCreateRole role: DiscordRole, onGuild guild: DiscordGuild) {
         guard let clientGuild = client.guilds[guild.id] else {
