@@ -147,14 +147,6 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Extensions/EncoderProcess.html">EncoderProcess</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
             <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
@@ -356,14 +348,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DiscordWebhook.html">DiscordWebhook</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Typealiases.html">Typealiases</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord14EncoderProcess">EncoderProcess</a>
               </li>
             </ul>
           </li>
@@ -1430,7 +1414,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                  <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                  <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -1503,7 +1487,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -1577,7 +1561,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">ModifyChannel</span><span class="p">],</span>
-                                     <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                     <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -1664,7 +1648,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">bulkDeleteMessages</span><span class="p">(</span><span class="n">_</span> <span class="nv">messages</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                          <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                          <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -1751,7 +1735,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                     <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                     <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -1838,7 +1822,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">editMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                   <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                   <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -1939,7 +1923,7 @@ that if you make modifications to the client inside of a callback, you first dis
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getMessages</span><span class="p">(</span><span class="k">for</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
                                    <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">GetMessage</span><span class="p">],</span>
-                                   <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                   <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -2026,7 +2010,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">sendMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">message</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="n">to</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
-                                   <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                   <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2112,7 +2096,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">triggerTyping</span><span class="p">(</span><span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">triggerTyping</span><span class="p">(</span><span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2186,7 +2170,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteChannelPermission</span><span class="p">(</span><span class="n">_</span> <span class="nv">overwriteId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                               <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                               <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2273,7 +2257,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">editChannelPermission</span><span class="p">(</span><span class="n">_</span> <span class="nv">permissionOverwrite</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
-                                             <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                             <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2360,7 +2344,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">createInvite</span><span class="p">(</span><span class="k">for</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">CreateInvite</span><span class="p">],</span>
-                                    <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                    <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -2447,7 +2431,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getInvites</span><span class="p">(</span><span class="k">for</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                  <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                  <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -2521,7 +2505,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">addPinnedMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                        <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                        <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2608,7 +2592,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deletePinnedMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                           <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                           <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2695,7 +2679,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getPinnedMessages</span><span class="p">(</span><span class="k">for</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                         <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                         <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -2779,7 +2763,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteGuild</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteGuild</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2853,7 +2837,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyGuild</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">ModifyGuild</span><span class="p">],</span>
-                                   <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                   <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -2940,7 +2924,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">createGuildChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">GuildCreateChannel</span><span class="p">],</span>
-                                          <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                          <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3027,7 +3011,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getGuildChannels</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                        <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                        <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -3102,7 +3086,7 @@ that if you make modifications to the client inside of a callback, you first dis
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyGuildChannelPositions</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">channelPositions</span><span class="p">:</span> <span class="p">[[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]],</span>
                                                    <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                                   <span class="nv">callback</span><span class="p">:</span> <span class="p">(([</span><span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                                   <span class="nv">callback</span><span class="p">:</span> <span class="p">(([</span><span class="kt"><a href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3189,7 +3173,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">addGuildMemberRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">to</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
-                                          <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                          <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3289,7 +3273,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getGuildMember</span><span class="p">(</span><span class="n">by</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                      <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                      <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -3376,7 +3360,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getGuildMembers</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">GuildGetMembers</span><span class="p">],</span>
-                                       <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                       <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -3464,7 +3448,7 @@ that if you make modifications to the client inside of a callback, you first dis
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyGuildMember</span><span class="p">(</span><span class="n">_</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
                                          <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">ModifyMember</span><span class="p">],</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                         <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                         <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3564,7 +3548,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getGuildBans</span><span class="p">(</span><span class="k">for</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                    <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordBan.html">DiscordBan</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                    <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordBan.html">DiscordBan</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -3638,7 +3622,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">guildBan</span><span class="p">(</span><span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">deleteMessageDays</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3738,7 +3722,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">removeGuildBan</span><span class="p">(</span><span class="k">for</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                      <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                      <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3825,7 +3809,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">removeGuildMemberRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">from</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
-                                             <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                             <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -3925,7 +3909,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">createGuildRole</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">withOptions</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">CreateRole</span><span class="p">],</span>
-                                       <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                       <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -4012,7 +3996,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getGuildRoles</span><span class="p">(</span><span class="k">for</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                     <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                     <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -4086,7 +4070,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">role</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                       <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                       <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -4173,7 +4157,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">removeGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                       <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                                       <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -4270,7 +4254,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">acceptInvite</span><span class="p">(</span><span class="n">_</span> <span class="nv">invite</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">acceptInvite</span><span class="p">(</span><span class="n">_</span> <span class="nv">invite</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -4343,7 +4327,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteInvite</span><span class="p">(</span><span class="n">_</span> <span class="nv">invite</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteInvite</span><span class="p">(</span><span class="n">_</span> <span class="nv">invite</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -4417,7 +4401,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getInvite</span><span class="p">(</span><span class="n">_</span> <span class="nv">invite</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                 <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                 <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -4502,7 +4486,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">createDM</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">user</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordDMChannel.html">DiscordDMChannel</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordDMChannel.html">DiscordDMChannel</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -4589,7 +4573,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getDMs</span><span class="p">(</span><span class="nv">user</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                              <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordDMChannel.html">DiscordDMChannel</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                              <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordDMChannel.html">DiscordDMChannel</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -4663,7 +4647,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getGuilds</span><span class="p">(</span><span class="nv">user</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                 <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordUserGuild.html">DiscordUserGuild</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                 <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordUserGuild.html">DiscordUserGuild</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -4749,7 +4733,7 @@ that if you make modifications to the client inside of a callback, you first dis
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">createWebhook</span><span class="p">(</span><span class="n">forChannel</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
                                      <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">WebhookOption</span><span class="p">],</span>
-                                     <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                     <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -4839,7 +4823,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">deleteWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -4900,7 +4884,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                  <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                  <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -4974,7 +4958,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getWebhooks</span><span class="p">(</span><span class="n">forChannel</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                   <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                   <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -5048,7 +5032,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getWebhooks</span><span class="p">(</span><span class="n">forGuild</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
-                                   <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                   <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -5123,7 +5107,7 @@ that if you make modifications to the client inside of a callback, you first dis
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">modifyWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span>
                                      <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordEndpointOptions.html">DiscordEndpointOptions</a></span><span class="o">.</span><span class="kt">WebhookOption</span><span class="p">],</span>
-                                     <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                                     <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -5197,7 +5181,7 @@ that if you make modifications to the client inside of a callback, you first dis
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-04-02)</p>
+      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-04-16)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

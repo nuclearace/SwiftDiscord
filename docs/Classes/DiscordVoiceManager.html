@@ -147,14 +147,6 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Extensions/EncoderProcess.html">EncoderProcess</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
             <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
@@ -359,14 +351,6 @@
               </li>
             </ul>
           </li>
-          <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Typealiases.html">Typealiases</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord14EncoderProcess">EncoderProcess</a>
-              </li>
-            </ul>
-          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -376,7 +360,7 @@
             <h1>DiscordVoiceManager</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordVoiceManager</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a></span></code></pre>
+                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordVoiceManager</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a></span><span class="p">,</span> <span class="kt">Lockable</span></code></pre>
 
                 </div>
               </div>
@@ -730,6 +714,54 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:FC12SwiftDiscord19DiscordVoiceManager20startVoiceConnectionFSST_"></a>
+                    <a name="//apple_ref/swift/Method/startVoiceConnection(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC12SwiftDiscord19DiscordVoiceManager20startVoiceConnectionFSST_">startVoiceConnection(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Tries to open a voice connection to the specified guild.
+Only succeeds if we have both a voice state and the voice server info for this guild.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">startVoiceConnection</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>guildId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the guild to connect to.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:FC12SwiftDiscord19DiscordVoiceManager24voiceEngineDidDisconnectFCS_18DiscordVoiceEngineT_"></a>
                     <a name="//apple_ref/swift/Method/voiceEngineDidDisconnect(_:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC12SwiftDiscord19DiscordVoiceManager24voiceEngineDidDisconnectFCS_18DiscordVoiceEngineT_">voiceEngineDidDisconnect(_:)</a>
@@ -928,7 +960,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-04-02)</p>
+      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-04-16)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
