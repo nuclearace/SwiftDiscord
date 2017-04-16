@@ -53,7 +53,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter options: An array of `DiscordEndpointOptions.CreateInvite` options
         - parameter callback: The callback function. Takes an optional `DiscordInvite`
     */
-    func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
+    func createInvite(for channelId: String, options: [DiscordEndpoint.Options.CreateInvite],
                       callback: @escaping (DiscordInvite?) -> ())
 
     /**
@@ -134,7 +134,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter options: An array of `DiscordEndpointOptions.GetMessage` options
         - parameter callback: The callback function, taking an array of `DiscordMessages`
     */
-    func getMessages(for channel: String, options: [DiscordEndpointOptions.GetMessage],
+    func getMessages(for channel: String, options: [DiscordEndpoint.Options.GetMessage],
                      callback: @escaping ([DiscordMessage]) -> ())
 
     /**
@@ -144,7 +144,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter options: An array of `DiscordEndpointOptions.ModifyChannel` options
         - parameter callback: An optional callback containing the edited guild channel, if successful.
     */
-    func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel],
+    func modifyChannel(_ channelId: String, options: [DiscordEndpoint.Options.ModifyChannel],
                        callback: ((DiscordGuildChannel?) -> ())?)
 
     /**
@@ -213,7 +213,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter options: An array of `DiscordEndpointOptions.GuildCreateChannel` options
         - parameter callback: An optional callback containing the new channel, if successful.
     */
-    func createGuildChannel(on guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel],
+    func createGuildChannel(on guildId: String, options: [DiscordEndpoint.Options.GuildCreateChannel],
                             callback: ((DiscordGuildChannel?) -> ())?)
 
     /**
@@ -223,7 +223,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter withOptions: The options for the new role. Optional in the default implementation.
         - parameter callback: The callback function, taking an optional `DiscordRole`.
     */
-    func createGuildRole(on guildId: String, withOptions options: [DiscordEndpointOptions.CreateRole],
+    func createGuildRole(on guildId: String, withOptions options: [DiscordEndpoint.Options.CreateRole],
                          callback: @escaping (DiscordRole?) -> ())
 
     /**
@@ -266,7 +266,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter options: An array of `DiscordEndpointOptions.GuildGetMembers` options
         - parameter callback: The callback function, taking an array of `DiscordGuildMember`
     */
-    func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
+    func getGuildMembers(on guildId: String, options: [DiscordEndpoint.Options.GuildGetMembers],
                          callback: @escaping ([DiscordGuildMember]) -> ())
 
     /**
@@ -294,7 +294,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter options: An array of `DiscordEndpointOptions.ModifyGuild` options
         - parameter callback: An optional callback containing the modified guild, if successful.
     */
-    func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild],
+    func modifyGuild(_ guildId: String, options: [DiscordEndpoint.Options.ModifyGuild],
                      callback: ((DiscordGuild?) -> ())?)
 
     /**
@@ -316,7 +316,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter options: The options for this member.
         - parameter callback: The callback function, indicating whether the modify succeeded.
     */
-    func modifyGuildMember(_ id: String, on guildId: String, options: [DiscordEndpointOptions.ModifyMember],
+    func modifyGuildMember(_ id: String, on guildId: String, options: [DiscordEndpoint.Options.ModifyMember],
                            callback: ((Bool) -> ())?)
 
     /**
@@ -366,7 +366,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter options: The options for this webhook
         - parameter callback: A callback that returns the webhook created, if successful.
     */
-    func createWebhook(forChannel channelId: String, options: [DiscordEndpointOptions.WebhookOption],
+    func createWebhook(forChannel channelId: String, options: [DiscordEndpoint.Options.WebhookOption],
                        callback: @escaping (DiscordWebhook?) -> ())
 
     /**
@@ -408,7 +408,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
         - parameter options: The options for this webhook
         - parameter callback: A callback that returns the updated webhook, if successful.
     */
-    func modifyWebhook(_ webhookId: String, options: [DiscordEndpointOptions.WebhookOption],
+    func modifyWebhook(_ webhookId: String, options: [DiscordEndpoint.Options.WebhookOption],
                        callback: @escaping (DiscordWebhook?) -> ())
 
     // MARK: Invites
@@ -503,25 +503,25 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    public func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
+    public func createInvite(for channelId: String, options: [DiscordEndpoint.Options.CreateInvite],
                              callback: @escaping (DiscordInvite?) -> ()) {
         DiscordEndpoint.createInvite(for: channelId, options: options, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func createGuildChannel(on guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel],
+    public func createGuildChannel(on guildId: String, options: [DiscordEndpoint.Options.GuildCreateChannel],
                                    callback: ((DiscordGuildChannel?) -> ())? = nil) {
         DiscordEndpoint.createGuildChannel(guildId, options: options, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func createGuildRole(on guildId: String, withOptions options: [DiscordEndpointOptions.CreateRole] = [],
+    public func createGuildRole(on guildId: String, withOptions options: [DiscordEndpoint.Options.CreateRole] = [],
                                 callback: @escaping (DiscordRole?) -> ()) {
         DiscordEndpoint.createGuildRole(on: guildId, withOptions: options, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func createWebhook(forChannel channelId: String, options: [DiscordEndpointOptions.WebhookOption],
+    public func createWebhook(forChannel channelId: String, options: [DiscordEndpoint.Options.WebhookOption],
                               callback: @escaping (DiscordWebhook?) -> () = {_ in }) {
         DiscordEndpoint.createWebhook(forChannel: channelId, with: token, options: options, callback: callback)
     }
@@ -606,7 +606,7 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    public func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
+    public func getGuildMembers(on guildId: String, options: [DiscordEndpoint.Options.GuildGetMembers],
                                 callback: @escaping ([DiscordGuildMember]) -> ()) {
         DiscordEndpoint.getGuildMembers(on: guildId, options: options, with: token, callback: callback)
     }
@@ -632,7 +632,7 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    public func getMessages(for channelId: String, options: [DiscordEndpointOptions.GetMessage] = [],
+    public func getMessages(for channelId: String, options: [DiscordEndpoint.Options.GetMessage] = [],
                             callback: @escaping ([DiscordMessage]) -> ()) {
         DiscordEndpoint.getMessages(for: channelId, with: token, options: options, callback: callback)
     }
@@ -665,13 +665,13 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    public func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel],
+    public func modifyChannel(_ channelId: String, options: [DiscordEndpoint.Options.ModifyChannel],
                               callback: ((DiscordGuildChannel?) -> ())? = nil) {
         DiscordEndpoint.modifyChannel(channelId, options: options, with: token, callback: callback)
     }
 
     /// Default implementation
-    public func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild],
+    public func modifyGuild(_ guildId: String, options: [DiscordEndpoint.Options.ModifyGuild],
                             callback: ((DiscordGuild?) -> ())? = nil) {
         DiscordEndpoint.modifyGuild(guildId, options: options, with: token, callback: callback)
     }
@@ -684,7 +684,7 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    func modifyGuildMember(_ id: String, on guildId: String, options: [DiscordEndpointOptions.ModifyMember],
+    func modifyGuildMember(_ id: String, on guildId: String, options: [DiscordEndpoint.Options.ModifyMember],
                            callback: ((Bool) -> ())? = nil) {
         DiscordEndpoint.modifyGuildMember(id, on: guildId, options: options, with: token, callback: callback)
     }
@@ -695,7 +695,7 @@ public extension DiscordEndpointConsumer {
     }
 
     /// Default implementation
-    public func modifyWebhook(_ webhookId: String, options: [DiscordEndpointOptions.WebhookOption],
+    public func modifyWebhook(_ webhookId: String, options: [DiscordEndpoint.Options.WebhookOption],
             callback: @escaping (DiscordWebhook?) -> () = {_ in }) {
         DiscordEndpoint.modifyWebhook(webhookId, with: token, options: options, callback: callback)
     }

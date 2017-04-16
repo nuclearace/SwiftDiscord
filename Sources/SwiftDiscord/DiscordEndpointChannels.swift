@@ -75,7 +75,7 @@ public extension DiscordEndpoint {
         - parameter with: The token to authenticate to Discord with
         - parameter callback: An optional callback containing the edited channel, if successful.
     */
-    public static func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel],
+    public static func modifyChannel(_ channelId: String, options: [Options.ModifyChannel],
                                      with token: DiscordToken, callback: ((DiscordGuildChannel?) -> ())?) {
         var modifyJSON: [String: Any] = [:]
 
@@ -225,7 +225,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function, taking an array of `DiscordMessages`
     */
     public static func getMessages(for channel: String, with token: DiscordToken,
-                                   options: [DiscordEndpointOptions.GetMessage],
+                                   options: [Options.GetMessage],
                                    callback: @escaping ([DiscordMessage]) -> ()) {
         var getParams: [String: String] = [:]
 
@@ -385,7 +385,7 @@ public extension DiscordEndpoint {
         - parameter with: The token to authenticate to Discord with
         - parameter callback: The callback function. Takes an optional `DiscordInvite`
     */
-    public static func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
+    public static func createInvite(for channelId: String, options: [Options.CreateInvite],
                                     with token: DiscordToken, callback: @escaping (DiscordInvite?) -> ()) {
         var inviteJSON: [String: Any] = [:]
 

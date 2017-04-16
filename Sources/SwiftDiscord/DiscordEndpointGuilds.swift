@@ -60,7 +60,7 @@ public extension DiscordEndpoint {
         - parameter with: The token to authenticate to Discord with
         - parameter callback: An optional callback containing the modified guild, if successful.
     */
-    public static func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild],
+    public static func modifyGuild(_ guildId: String, options: [Options.ModifyGuild],
                                    with token: DiscordToken, callback: ((DiscordGuild?) -> ())?) {
         var modifyJSON: [String: Any] = [:]
 
@@ -122,7 +122,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback containing the new channel, if successful.
 
     */
-    public static func createGuildChannel(_ guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel],
+    public static func createGuildChannel(_ guildId: String, options: [Options.GuildCreateChannel],
                                           with token: DiscordToken, callback: ((DiscordGuildChannel?) -> ())?) {
         var createJSON: [String: Any] = [:]
 
@@ -295,7 +295,7 @@ public extension DiscordEndpoint {
         - parameter with: The token to authenticate to Discord with
         - parameter callback: The callback function, taking an array of `DiscordGuildMember`
     */
-    public static func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
+    public static func getGuildMembers(on guildId: String, options: [Options.GuildGetMembers],
                                        with token: DiscordToken, callback: @escaping ([DiscordGuildMember]) -> ()) {
         var getParams: [String: String] = [:]
 
@@ -339,7 +339,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function, indicating whether the modify succeeded.
     */
     public static func modifyGuildMember(_ id: String, on guildId: String,
-                                         options: [DiscordEndpointOptions.ModifyMember], with token: DiscordToken,
+                                         options: [Options.ModifyMember], with token: DiscordToken,
                                          callback: ((Bool) -> ())?) {
         var patchParams: [String: Any] = [:]
 
@@ -500,7 +500,7 @@ public extension DiscordEndpoint {
         - parameter with: The token to authenticate to Discord with
         - parameter callback: The callback function, taking an optional `DiscordRole`
     */
-    public static func createGuildRole(on guildId: String, withOptions options: [DiscordEndpointOptions.CreateRole],
+    public static func createGuildRole(on guildId: String, withOptions options: [Options.CreateRole],
                                        with token: DiscordToken, callback: @escaping (DiscordRole?) -> ()) {
         var roleData: [String: Any] = [:]
 

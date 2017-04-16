@@ -117,7 +117,7 @@ public extension DiscordChannel {
 
         - parameter options: An array of `DiscordEndpointOptions.ModifyChannel`
     */
-    public func modifyChannel(options: [DiscordEndpointOptions.ModifyChannel]) {
+    public func modifyChannel(options: [DiscordEndpoint.Options.ModifyChannel]) {
         guard let client = self.client else { return }
 
         client.modifyChannel(id, options: options)

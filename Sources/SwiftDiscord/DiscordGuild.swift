@@ -155,7 +155,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 
         - parameter with: The options for this new channel
     */
-    public func createChannel(with options: [DiscordEndpointOptions.GuildCreateChannel]) {
+    public func createChannel(with options: [DiscordEndpoint.Options.GuildCreateChannel]) {
         guard let client = self.client else { return }
 
         DefaultDiscordLogger.Logger.log("Creating guild channel on %@", type: "DiscordGuild", args: id)
@@ -234,7 +234,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 
         - parameter options: An array of options to change
     */
-    public func modifyGuild(options: [DiscordEndpointOptions.ModifyGuild]) {
+    public func modifyGuild(options: [DiscordEndpoint.Options.ModifyGuild]) {
         guard let client = self.client else { return }
 
         client.modifyGuild(id, options: options)
@@ -246,7 +246,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         - parameter member: The member to modify.
         - parameter options: The options to set.
     */
-    public func modifyMember(_ member: DiscordGuildMember, options: [DiscordEndpointOptions.ModifyMember]) {
+    public func modifyMember(_ member: DiscordGuildMember, options: [DiscordEndpoint.Options.ModifyMember]) {
         guard let client = self.client else { return }
 
         client.modifyGuildMember(member.user.id, on: id, options: options)

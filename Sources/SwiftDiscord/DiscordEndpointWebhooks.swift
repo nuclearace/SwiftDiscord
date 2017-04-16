@@ -29,7 +29,7 @@ public extension DiscordEndpoint {
         - parameter callback: A callback that returns the webhook created, if successful.
     */
     public static func createWebhook(forChannel channelId: String, with token: DiscordToken,
-                                     options: [DiscordEndpointOptions.WebhookOption],
+                                     options: [Options.WebhookOption],
                                      callback: @escaping (DiscordWebhook?) -> ()) {
         var createJSON: [String: Any] = [:]
 
@@ -188,7 +188,7 @@ public extension DiscordEndpoint {
         - parameter callback: A callback that returns the updated webhook, if successful.
     */
     public static func modifyWebhook(_ webhookId: String, with token: DiscordToken,
-                                     options: [DiscordEndpointOptions.WebhookOption],
+                                     options: [Options.WebhookOption],
                                      callback: @escaping (DiscordWebhook?) -> ()) {
         var createJSON: [String: Any] = [:]
 
