@@ -15,6 +15,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Dispatch
 import Foundation
 
 /// A delegate for a VoiceManager.
@@ -59,7 +60,7 @@ public protocol DiscordVoiceManagerDelegate : class, DiscordTokenBearer {
 }
 
 /// A manager for voice engines.
-open class DiscordVoiceManager : DiscordVoiceEngineDelegate {
+open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     // MARK: Properties
 
     /// The delegate for this manager.
@@ -75,6 +76,8 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate {
 
     /// The voice states for this user, if they are in any voice channels.
     public internal(set) var voiceStates = [String: DiscordVoiceState]()
+
+    let lock = DispatchSemaphore(value: 1)
 
     var voiceServerInformations = [String: DiscordVoiceServerInformation]()
 
@@ -101,9 +104,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate {
         - parameter payload: A `DiscordGatewayPayload` containing the dispatch information.
     */
     open func engine(_ engine: DiscordEngine, didReceiveEvent event: DiscordDispatchEvent,
-                     with payload: DiscordGatewayPayload) {
-
-    }
+                     with payload: DiscordGatewayPayload) { }
 
     /**
         Called when an engine handled a hello packet.
@@ -111,9 +112,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate {
         - parameter engine: The engine that received the event.
         - gotHelloWithPayload: The hello data.
     */
-    open func engine(_ engine: DiscordEngine, gotHelloWithPayload payload: DiscordGatewayPayload) {
-
-    }
+    open func engine(_ engine: DiscordEngine, gotHelloWithPayload payload: DiscordGatewayPayload) { }
 
     /**
         Leaves the voice channel that is associated with the guild specified.
@@ -121,19 +120,37 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate {
         - parameter onGuild: The snowflake of the guild that you want to leave.
     */
     open func leaveVoiceChannel(onGuild guildId: String) {
-        guard voiceEngines[guildId] != nil else { return }
+        guard let engine = get(voiceEngines[guildId]) else { return }
+
+        protected {
+            voiceStates[guildId] = nil
+            voiceServerInformations[guildId] = nil
+        }
+
+        engine.disconnect()
 
         // Make sure everything is cleaned out
-        voiceStates[guildId] = nil
-        voiceServerInformations[guildId] = nil
-        voiceEngines[guildId]?.disconnect()
 
         for (guildId, _) in voiceEngines {
             startVoiceConnection(guildId)
         }
     }
 
-    func startVoiceConnection(_ guildId: String) {
+    /**
+        Tries to open a voice connection to the specified guild.
+        Only succeeds if we have both a voice state and the voice server info for this guild.
+
+        - parameter guildId: The id of the guild to connect to.
+    */
+    open func startVoiceConnection(_ guildId: String) {
+        protected {
+            _startVoiceConnection(guildId)
+        }
+    }
+
+    /// Tries to create a voice engine for a guild, and connect.
+    /// **Not thread safe.**
+    private func _startVoiceConnection(_ guildId: String) {
         // We need both to start the connection
         guard let voiceState = voiceStates[guildId], let serverInfo = voiceServerInformations[guildId] else {
             return
@@ -160,7 +177,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate {
     open func voiceEngineDidDisconnect(_ engine: DiscordVoiceEngine) {
         delegate?.voiceManager(self, didDisconnectEngine: engine)
 
-        voiceEngines[engine.guildId] = nil
+        protected { voiceEngines[engine.guildId] = nil }
     }
 
     /**

@@ -30,7 +30,7 @@ public extension DiscordEndpoint {
     */
     public static func createWebhook(forChannel channelId: String, with token: DiscordToken,
                                      options: [DiscordEndpointOptions.WebhookOption],
-                                     callback: @escaping (DiscordWebhook?) -> Void) {
+                                     callback: @escaping (DiscordWebhook?) -> ()) {
         var createJSON: [String: Any] = [:]
 
         for option in options {
@@ -73,7 +73,7 @@ public extension DiscordEndpoint {
         - parameter with: The token to authenticate to Discord with
         - paramter callback: An optional callback indicating whether the delete was successful
     */
-    public static func deleteWebhook(_ webhookId: String, with token: DiscordToken, callback: ((Bool) -> Void)?) {
+    public static func deleteWebhook(_ webhookId: String, with token: DiscordToken, callback: ((Bool) -> ())?) {
         var request = createRequest(with: token, for: .webhook, replacing: ["webhook.id": webhookId,])
 
         request.httpMethod = "DELETE"
@@ -93,7 +93,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function taking an optional `DiscordWebhook`
     */
     public static func getWebhook(_ webhookId: String, with token: DiscordToken,
-                                  callback: @escaping (DiscordWebhook?) -> Void) {
+                                  callback: @escaping (DiscordWebhook?) -> ()) {
         var request = createRequest(with: token, for: .webhook, replacing: ["webhook.id": webhookId])
 
         request.httpMethod = "GET"
@@ -121,7 +121,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function taking an array of `DiscordWebhook`s
     */
     public static func getWebhooks(forChannel channelId: String, with token: DiscordToken,
-                                   callback: @escaping ([DiscordWebhook]) -> Void) {
+                                   callback: @escaping ([DiscordWebhook]) -> ()) {
         var request = createRequest(with: token, for: .channelWebhooks, replacing: ["channel.id": channelId])
 
         request.httpMethod = "GET"
@@ -157,7 +157,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function taking an array of `DiscordWebhook`s
     */
     public static func getWebhooks(forGuild guildId: String, with token: DiscordToken,
-                                   callback: @escaping ([DiscordWebhook]) -> Void) {
+                                   callback: @escaping ([DiscordWebhook]) -> ()) {
         var request = createRequest(with: token, for: .guildWebhooks, replacing: ["guild.id": guildId])
 
         request.httpMethod = "GET"
@@ -189,7 +189,7 @@ public extension DiscordEndpoint {
     */
     public static func modifyWebhook(_ webhookId: String, with token: DiscordToken,
                                      options: [DiscordEndpointOptions.WebhookOption],
-                                     callback: @escaping (DiscordWebhook?) -> Void) {
+                                     callback: @escaping (DiscordWebhook?) -> ()) {
         var createJSON: [String: Any] = [:]
 
         for option in options {

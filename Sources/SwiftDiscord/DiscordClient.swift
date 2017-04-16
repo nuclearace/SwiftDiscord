@@ -165,7 +165,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         shardManager.disconnect()
 
-        for (_, engine) in voiceManager.voiceEngines {
+        for (_, engine) in voiceManager.get(voiceManager.voiceEngines) {
             engine.disconnect()
         }
     }
@@ -213,8 +213,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     open func handleDispatch(event: DiscordDispatchEvent, data: DiscordGatewayPayloadData) {
         guard case let .object(eventData) = data else {
             DefaultDiscordLogger.Logger.error("Got dispatch event without an object: %@, %@",
-                type: "DiscordDispatchEventHandler", args: event, data)
-
+                                              type: "DiscordDispatchEventHandler", args: event, data)
             return
         }
 
@@ -267,15 +266,13 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         DefaultDiscordLogger.Logger.log("Joining voice channel: %@", type: self.logType, args: channel)
 
-        let shardNum = guild.shardNumber(assuming: shards)
-
         shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
                                                        payload: .object(["guild_id": guild.id,
                                                                          "channel_id": channel.id,
                                                                          "self_mute": false,
                                                                          "self_deaf": false
                                                                         ])
-        ), onShard: shardNum)
+        ), onShard: guild.shardNumber(assuming: shards))
     }
 
     /**
@@ -939,9 +936,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         if state.userId == user?.id {
             if state.channelId == "" {
-                voiceManager.voiceStates[state.guildId] = nil
+                voiceManager.protected { self.voiceManager.voiceStates[state.guildId] = nil }
             } else {
-                voiceManager.voiceStates[state.guildId] = state
+                voiceManager.protected { self.voiceManager.voiceStates[state.guildId] = state }
 
                 startVoiceConnection(state.guildId)
             }

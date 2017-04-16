@@ -32,7 +32,7 @@ public extension DiscordEndpoint {
         - parameter with: The token to authenticate to Discord with
         - parameter callback: An optional callback containing the deleted guild, if successful.
     */
-    public static func deleteGuild(_ guildId: String, with token: DiscordToken, callback: ((DiscordGuild?) -> Void)?) {
+    public static func deleteGuild(_ guildId: String, with token: DiscordToken, callback: ((DiscordGuild?) -> ())?) {
         var request = createRequest(with: token, for: .guilds, replacing: [
             "guild.id": guildId,
         ])
@@ -61,7 +61,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback containing the modified guild, if successful.
     */
     public static func modifyGuild(_ guildId: String, options: [DiscordEndpointOptions.ModifyGuild],
-                                   with token: DiscordToken, callback: ((DiscordGuild?) -> Void)?) {
+                                   with token: DiscordToken, callback: ((DiscordGuild?) -> ())?) {
         var modifyJSON: [String: Any] = [:]
 
         for option in options {
@@ -123,7 +123,7 @@ public extension DiscordEndpoint {
 
     */
     public static func createGuildChannel(_ guildId: String, options: [DiscordEndpointOptions.GuildCreateChannel],
-                                          with token: DiscordToken, callback: ((DiscordGuildChannel?) -> Void)?) {
+                                          with token: DiscordToken, callback: ((DiscordGuildChannel?) -> ())?) {
         var createJSON: [String: Any] = [:]
 
         for option in options {
@@ -175,7 +175,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function, taking an array of `DiscordGuildChannel`
     */
     public static func getGuildChannels(_ guildId: String, with token: DiscordToken,
-                                        callback: @escaping ([DiscordGuildChannel]) -> Void) {
+                                        callback: @escaping ([DiscordGuildChannel]) -> ()) {
         var request = createRequest(with: token, for: .guildChannels, replacing: ["guild.id": guildId])
 
         request.httpMethod = "GET"
@@ -204,7 +204,7 @@ public extension DiscordEndpoint {
     */
     public static func modifyGuildChannelPositions(on guildId: String, channelPositions: [[String: Any]],
                                                    with token: DiscordToken,
-                                                   callback: (([DiscordGuildChannel]) -> Void)?) {
+                                                   callback: (([DiscordGuildChannel]) -> ())?) {
         guard let contentData = JSON.encodeJSONData(channelPositions) else { return }
 
         var request = createRequest(with: token, for: .guildChannels, replacing: [
@@ -241,7 +241,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback indicating whether the role was added successfully.
     */
     public static func addGuildMemberRole(_ roleId: String, to userId: String, on guildId: String,
-                                          with token: DiscordToken, callback: ((Bool) -> Void)?) {
+                                          with token: DiscordToken, callback: ((Bool) -> ())?) {
         var request = createRequest(with: token, for: .guildMemberRole, replacing: [
             "guild.id": guildId,
             "user.id": userId,
@@ -266,7 +266,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function containing an optional `DiscordGuildMember`
     */
     public static func getGuildMember(by id: String, on guildId: String, with token: DiscordToken,
-                                      callback: @escaping (DiscordGuildMember?) -> Void) {
+                                      callback: @escaping (DiscordGuildMember?) -> ()) {
         var request = createRequest(with: token, for: .guildMember, replacing: [
             "guild.id": guildId,
             "user.id": id
@@ -296,7 +296,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function, taking an array of `DiscordGuildMember`
     */
     public static func getGuildMembers(on guildId: String, options: [DiscordEndpointOptions.GuildGetMembers],
-                                       with token: DiscordToken, callback: @escaping ([DiscordGuildMember]) -> Void) {
+                                       with token: DiscordToken, callback: @escaping ([DiscordGuildMember]) -> ()) {
         var getParams: [String: String] = [:]
 
         for option in options {
@@ -340,7 +340,7 @@ public extension DiscordEndpoint {
     */
     public static func modifyGuildMember(_ id: String, on guildId: String,
                                          options: [DiscordEndpointOptions.ModifyMember], with token: DiscordToken,
-                                         callback: ((Bool) -> Void)?) {
+                                         callback: ((Bool) -> ())?) {
         var patchParams: [String: Any] = [:]
 
         for option in options {
@@ -386,7 +386,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function, taking an array of `DiscordBan`
     */
     public static func getGuildBans(for guildId: String, with token: DiscordToken,
-                                    callback: @escaping ([DiscordBan]) -> Void) {
+                                    callback: @escaping ([DiscordBan]) -> ()) {
         var request = createRequest(with: token, for: .guildBans, replacing: ["guild.id": guildId])
 
         request.httpMethod = "GET"
@@ -416,7 +416,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback indicating whether the ban was successful.
     */
     public static func guildBan(userId: String, on guildId: String, deleteMessageDays: Int, with token: DiscordToken,
-                                callback: ((Bool) -> Void)?) {
+                                callback: ((Bool) -> ())?) {
         let banJSON = ["delete-message-days": deleteMessageDays]
 
         var request = createRequest(with: token, for: .guildBanUser, replacing: [
@@ -447,7 +447,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback indicating whether the ban was successfully removed.
     */
     public static func removeGuildBan(for userId: String, on guildId: String, with token: DiscordToken,
-                                      callback: ((Bool) -> Void)?) {
+                                      callback: ((Bool) -> ())?) {
         var request = createRequest(with: token, for: .guildBanUser, replacing: [
             "guild.id": guildId,
             "user.id": userId
@@ -474,7 +474,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback indicating whether the role was removed successfully.
     */
     public static func removeGuildMemberRole(_ roleId: String, from userId: String, on guildId: String,
-                                             with token: DiscordToken, callback: ((Bool) -> Void)?) {
+                                             with token: DiscordToken, callback: ((Bool) -> ())?) {
         var request = createRequest(with: token, for: .guildMemberRole, replacing: [
             "guild.id": guildId,
             "user.id": userId,
@@ -501,7 +501,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function, taking an optional `DiscordRole`
     */
     public static func createGuildRole(on guildId: String, withOptions options: [DiscordEndpointOptions.CreateRole],
-                                       with token: DiscordToken, callback: @escaping (DiscordRole?) -> Void) {
+                                       with token: DiscordToken, callback: @escaping (DiscordRole?) -> ()) {
         var roleData: [String: Any] = [:]
 
         for option in options {
@@ -550,7 +550,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function, taking an array of `DiscordRole`
     */
     public static func getGuildRoles(for guildId: String, with token: DiscordToken,
-                                     callback: @escaping ([DiscordRole]) -> Void) {
+                                     callback: @escaping ([DiscordRole]) -> ()) {
         var request = createRequest(with: token, for: .guildRoles, replacing: ["guild.id": guildId])
 
         request.httpMethod = "GET"
@@ -577,7 +577,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback containing the modified role, if successful.
     */
     public static func modifyGuildRole(_ role: DiscordRole, on guildId: String, with token: DiscordToken,
-                                       callback: ((DiscordRole?) -> Void)?) {
+                                       callback: ((DiscordRole?) -> ())?) {
         let roleJSON = role.json
 
         var request = createRequest(with: token, for: .guildRole, replacing: [
@@ -614,7 +614,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback containing the deleted role, if successful.
     */
     public static func removeGuildRole(_ roleId: String, on guildId: String, with token: DiscordToken,
-                                       callback: ((DiscordRole?) -> Void)?) {
+                                       callback: ((DiscordRole?) -> ())?) {
         var request = createRequest(with: token, for: .guildRole, replacing: [
             "guild.id": guildId,
             "role.id": roleId

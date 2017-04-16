@@ -45,10 +45,10 @@ public class DiscordEncoderMiddleware {
     // MARK: Properties
 
     /// The FFmpeg process.
-    public let ffmpeg: EncoderProcess
+    public let ffmpeg: Process
 
     /// The middleware process.
-    public let middleware: EncoderProcess
+    public let middleware: Process
 
     /// The pipe used to connect FFmpeg to the middleware.
     public let pipe: Pipe
@@ -58,9 +58,9 @@ public class DiscordEncoderMiddleware {
     /**
         An intializer that sets up a middleware ffmpeg process that encodes some audio data.
     */
-    public init(encoder: DiscordVoiceEncoder, middleware: EncoderProcess, terminationHandler: (() -> Void)?) {
+    public init(encoder: DiscordVoiceEncoder, middleware: Process, terminationHandler: (() -> ())?) {
         self.middleware = middleware
-        ffmpeg = EncoderProcess()
+        ffmpeg = Process()
         pipe = Pipe()
 
         middleware.standardOutput = pipe
@@ -208,7 +208,7 @@ open class DiscordVoiceEncoder {
         - parameter data: Raw audio data that should be turned into OPUS encoded data.
         - parameter doneHandler: An optional handler that will be called when we are done writing.
     */
-    open func write(_ data: Data, doneHandler: (() -> Void)? = nil) {
+    open func write(_ data: Data, doneHandler: (() -> ())? = nil) {
         guard !closed else { return }
 
         // FileHandle's write doesn't play nicely with the way we use pipes

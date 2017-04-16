@@ -28,7 +28,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function containing an optional `DiscordGuildChannel`
     */
     public static func getChannel(_ channelId: String, with token: DiscordToken,
-                                  callback: @escaping (DiscordGuildChannel?) -> Void) {
+                                  callback: @escaping (DiscordGuildChannel?) -> ()) {
         var request = createRequest(with: token, for: .channel, replacing: ["channel.id": channelId])
 
         request.httpMethod = "GET"
@@ -53,7 +53,7 @@ public extension DiscordEndpoint {
         - parameter with: The token to authenticate to Discord with
         - parameter callback: An optional callback indicating whether the channel was deleted.
     */
-    public static func deleteChannel(_ channelId: String, with token: DiscordToken, callback: ((Bool) -> Void)?) {
+    public static func deleteChannel(_ channelId: String, with token: DiscordToken, callback: ((Bool) -> ())?) {
         var request = createRequest(with: token, for: .channel, replacing: [
             "channel.id": channelId,
         ])
@@ -76,7 +76,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback containing the edited channel, if successful.
     */
     public static func modifyChannel(_ channelId: String, options: [DiscordEndpointOptions.ModifyChannel],
-                                     with token: DiscordToken, callback: ((DiscordGuildChannel?) -> Void)?) {
+                                     with token: DiscordToken, callback: ((DiscordGuildChannel?) -> ())?) {
         var modifyJSON: [String: Any] = [:]
 
         for option in options {
@@ -129,7 +129,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback indicating whether the messages were deleted.
     */
     public static func bulkDeleteMessages(_ messages: [String], on channelId: String, with token: DiscordToken,
-                                          callback: ((Bool) -> Void)?) {
+                                          callback: ((Bool) -> ())?) {
         var request = createRequest(with: token, for: .bulkMessageDelete, replacing: [
             "channel.id": channelId
         ])
@@ -161,7 +161,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback indicating whether the message was deleted.
     */
     public static func deleteMessage(_ messageId: String, on channelId: String, with token: DiscordToken,
-                                     callback: ((Bool) -> Void)?) {
+                                     callback: ((Bool) -> ())?) {
         var request = createRequest(with: token, for: .channelMessage, replacing: [
             "channel.id": channelId,
             "message.id": messageId
@@ -186,7 +186,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback containing the edited message, if successful
     */
     public static func editMessage(_ messageId: String, on channelId: String, content: String, with token: DiscordToken,
-                                   callback: ((DiscordMessage?) -> Void)?) {
+                                   callback: ((DiscordMessage?) -> ())?) {
         var request = createRequest(with: token, for: .channelMessage, replacing: [
             "channel.id": channelId,
             "message.id": messageId
@@ -226,7 +226,7 @@ public extension DiscordEndpoint {
     */
     public static func getMessages(for channel: String, with token: DiscordToken,
                                    options: [DiscordEndpointOptions.GetMessage],
-                                   callback: @escaping ([DiscordMessage]) -> Void) {
+                                   callback: @escaping ([DiscordMessage]) -> ()) {
         var getParams: [String: String] = [:]
 
         for option in options {
@@ -243,7 +243,7 @@ public extension DiscordEndpoint {
         }
 
         var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel],
-            getParams: getParams)
+                                    getParams: getParams)
 
         request.httpMethod = "GET"
 
@@ -269,7 +269,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback containing the message, if successful.
     */
     public static func sendMessage(_ message: DiscordMessage, with token: DiscordToken, to channel: String,
-                                   callback: ((DiscordMessage?) -> Void)?) {
+                                   callback: ((DiscordMessage?) -> ())?) {
         var request = createRequest(with: token, for: .messages, replacing: ["channel.id": channel])
 
         DefaultDiscordLogger.Logger.log("Sending message to: %@", type: "DiscordEndpointChannels", args: channel)
@@ -308,7 +308,7 @@ public extension DiscordEndpoint {
         - parameter with: The token to authenticate to Discord with
         - parameter callback: An optional callback indicating whether typing was triggered.
     */
-    public static func triggerTyping(on channelId: String, with token: DiscordToken, callback: ((Bool) -> Void)?) {
+    public static func triggerTyping(on channelId: String, with token: DiscordToken, callback: ((Bool) -> ())?) {
         var request = createRequest(with: token, for: .typing, replacing: ["channel.id": channelId])
 
         request.httpMethod = "POST"
@@ -330,7 +330,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback indicating whether the permission was deleted.
     */
     public static func deleteChannelPermission(_ overwriteId: String, on channelId: String, with token: DiscordToken,
-                                               callback: ((Bool) -> Void)?) {
+                                               callback: ((Bool) -> ())?) {
         var request = createRequest(with: token, for: .channelPermission, replacing: [
             "channel.id": channelId,
             "overwrite.id": overwriteId
@@ -354,7 +354,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback indicating whether the edit was successful.
     */
     public static func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: String,
-                                             with token: DiscordToken, callback: ((Bool) -> Void)?) {
+                                             with token: DiscordToken, callback: ((Bool) -> ())?) {
         let overwriteJSON = permissionOverwrite.json
 
         guard let contentData = JSON.encodeJSONData(overwriteJSON) else { return }
@@ -386,7 +386,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function. Takes an optional `DiscordInvite`
     */
     public static func createInvite(for channelId: String, options: [DiscordEndpointOptions.CreateInvite],
-                                    with token: DiscordToken, callback: @escaping (DiscordInvite?) -> Void) {
+                                    with token: DiscordToken, callback: @escaping (DiscordInvite?) -> ()) {
         var inviteJSON: [String: Any] = [:]
 
         for option in options {
@@ -434,7 +434,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function, taking an array of `DiscordInvite`
     */
     public static func getInvites(for channelId: String, with token: DiscordToken,
-                                  callback: @escaping ([DiscordInvite]) -> Void) {
+                                  callback: @escaping ([DiscordInvite]) -> ()) {
         var request = createRequest(with: token, for: .channelInvites, replacing: [
             "channel.id": channelId
         ])
@@ -464,7 +464,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback indicating whether the pinned message was added.
     */
     public static func addPinnedMessage(_ messageId: String, on channelId: String, with token: DiscordToken,
-                                        callback: ((Bool) -> Void)?) {
+                                        callback: ((Bool) -> ())?) {
         var request = createRequest(with: token, for: .pinnedMessage, replacing: [
             "channel.id": channelId,
             "message.id": messageId
@@ -488,7 +488,7 @@ public extension DiscordEndpoint {
         - parameter callback: An optional callback indicating whether the message was unpinned.
     */
     public static func deletePinnedMessage(_ messageId: String, on channelId: String, with token: DiscordToken,
-                                           callback: ((Bool) -> Void)?) {
+                                           callback: ((Bool) -> ())?) {
         var request = createRequest(with: token, for: .pinnedMessage, replacing: [
             "channel.id": channelId,
             "message.id": messageId
@@ -511,7 +511,7 @@ public extension DiscordEndpoint {
         - parameter callback: The callback function, taking an array of `DiscordMessages`
     */
     public static func getPinnedMessages(for channelId: String, with token: DiscordToken,
-                                         callback: @escaping ([DiscordMessage]) -> Void) {
+                                         callback: @escaping ([DiscordMessage]) -> ()) {
         var request = createRequest(with: token, for: .pins, replacing: ["channel.id": channelId])
 
         request.httpMethod = "GET"

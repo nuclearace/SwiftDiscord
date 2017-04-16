@@ -15,6 +15,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Dispatch
 import Foundation
 
 enum Either<L, R> {
@@ -23,21 +24,6 @@ enum Either<L, R> {
 }
 
 typealias JSONArray = [[String: Any]]
-
-#if os(macOS)
-/// A typealias for `Process`. Needed because `Process` on Linux is `Task`.
-public typealias EncoderProcess = Process
-#elseif os(Linux)
-/// A typealias for `Task`. Needed because `Task` on macOS is `Process`.
-public typealias EncoderProcess = Task
-
-public extension EncoderProcess {
-    /// Whether the task is running.
-    var isRunning: Bool {
-        return running
-    }
-}
-#endif
 
 extension Dictionary {
     func get<T>(_ value: Key, or default: T) -> T {
@@ -103,5 +89,28 @@ class DiscordDateFormatter {
 
     static func format(_ string: String) -> Date? {
         return formatter.RFC3339DateFormatter.date(from: string)
+    }
+}
+
+protocol Lockable {
+    var lock: DispatchSemaphore { get }
+
+    func protected(_ block: () -> ())
+    func get<T>(_ getter: @autoclosure () -> T) -> T
+}
+
+extension Lockable {
+    func protected(_ block: () -> ()) {
+        lock.wait()
+        block()
+        lock.signal()
+    }
+
+    func get<T>(_ getter: @autoclosure () -> T) -> T {
+        defer { lock.signal() }
+
+        lock.wait()
+
+        return getter()
     }
 }
