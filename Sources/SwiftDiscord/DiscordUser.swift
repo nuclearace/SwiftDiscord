@@ -15,26 +15,6 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/// Declares that a type will act as a Discord user.
-public protocol DiscordUserActor {
-    // MARK: Properties
-
-    /// The direct message channels this user is in.
-    var directChannels: [String: DiscordChannel] { get }
-
-    /// The guilds that this user is in.
-    var guilds: [String: DiscordGuild] { get }
-
-    /// The relationships this user has. Only valid for non-bot users.
-    var relationships: [[String: Any]] { get }
-
-    /// The Discord JWT for the user.
-    var token: DiscordToken { get }
-
-    /// The DiscordUser.
-    var user: DiscordUser? { get }
-}
-
 /// Represents a Discord user.
 public struct DiscordUser {
     // MARK: Properties
@@ -83,6 +63,26 @@ public struct DiscordUser {
 
         return users
     }
+}
+
+/// Declares that a type will act as a Discord user.
+public protocol DiscordUserActor {
+    // MARK: Properties
+
+    /// The direct message channels this user is in.
+    var directChannels: [String: DiscordChannel] { get }
+
+    /// The guilds that this user is in.
+    var guilds: [String: DiscordGuild] { get }
+
+    /// The relationships this user has. Only valid for non-bot users.
+    var relationships: [[String: Any]] { get }
+
+    /// The Discord JWT for the user.
+    var token: DiscordToken { get }
+
+    /// The DiscordUser.
+    var user: DiscordUser? { get }
 }
 
 /// Represents a ban.
