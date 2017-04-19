@@ -297,6 +297,14 @@ class TestDiscordClient : XCTestCase {
         waitForExpectations(timeout: 0.2)
     }
 
+    func testClientCorrectlyCreatesMessage() {
+        expectations[.messageCreate] = expectation(description: "Client should call the message create method")
+
+        client.handleDispatch(event: .messageCreate, data: .object(testMessage))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
     var client: DiscordClient!
     var expectations = [DiscordDispatchEvent: XCTestExpectation]()
 
@@ -502,6 +510,13 @@ extension TestDiscordClient : DiscordClientDelegate {
         XCTAssertEqual(guild.emojis.count, 20, "Update should have 20 emoji")
 
         expectations[.guildEmojisUpdate]?.fulfill()
+    }
+
+    func client(_ client: DiscordClient, didCreateMessage message: DiscordMessage) {
+        XCTAssertEqual(message.content, testMessage["content"] as! String, "Message content should be the same")
+        XCTAssertEqual(message.channelId, testMessage["channel_id"] as! String, "Channel id should be the same")
+
+        expectations[.messageCreate]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didReceivePresenceUpdate presence: DiscordPresence) {
