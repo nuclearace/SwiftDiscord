@@ -19,6 +19,7 @@ import Foundation
 
 /**
     Protocol that declares a type will be a consumer of the Discord REST API.
+    All requests through from a consumer should be rate limited.
 
     This is where a `DiscordClient` gets the methods that interact with the REST API.
 

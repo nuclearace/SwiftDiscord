@@ -25,18 +25,7 @@ import Foundation
 // TODO Guild batch modify roles
 
 /**
-    This enum controls the interface with the Discord REST API.
-
-    It defines several endpoint cases which are then used by the various static methods defined on this enum.
-    The cases themselves are of little use.
-
-    The methods all take a `DiscordToken` which is used for authentication with the REST API.
-    GET methods also take a callback.
-
-    All requests through this enum are rate limited.
-
-    **NOTE**: Callbacks from methods on this enum are *NOT* executed on the client's handleQueue. So it is important
-    that if you make modifications to the client inside of a callback, you first dispatch back on the handleQueue.
+    This enum defines the endpoints used to interact with the Discord API.
 */
 public enum DiscordEndpoint : String {
     /// The base url for the Discord REST API.
