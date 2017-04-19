@@ -24,8 +24,8 @@ private typealias RateLimitedRequest = (request: URLRequest, callback: RequestCa
 /// The DiscordRateLimiter is in charge of making sure we don't flood Discord with requests.
 /// It keeps a dictionary of DiscordRateLimitKeys and DiscordRateLimits.
 /// All requests to the REST api should be routed through the DiscordRateLimiter.
-/// If a DiscordRateLimit determines we have hit a limit, we add the request and its callback to the limit's queue
-/// after that it is up to the DiscordRateLimit to decide when to make the request.
+/// If a DiscordRateLimit determines we have hit a limit, we add the request and its callback to the limit's queue.
+/// After that it is up to the DiscordRateLimit to decide when to make the request.
 /// TODO handle the global rate limit
 public final class DiscordRateLimiter {
     private let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue())
@@ -33,8 +33,18 @@ public final class DiscordRateLimiter {
     private var limitQueue = DispatchQueue(label: "limitQueue")
     private var endpointLimits = [DiscordRateLimitKey: DiscordRateLimit]()
 
-    func executeRequest(_ request: URLRequest, for endpointKey: DiscordRateLimitKey,
-                        callback: @escaping (Data?, HTTPURLResponse?, Error?) -> ()) {
+    // MARK: Methods
+
+    /**
+        Executes a request through the rate limiter. If the rate limit is hit, the request is put in a queue
+        and executed later.
+
+        - parameter request: The request to execute.
+        - parameter for: The endpoint key.
+        - parameter callback: The callback for this request.
+    */
+    public func executeRequest(_ request: URLRequest, for endpointKey: DiscordRateLimitKey,
+                               callback: @escaping (Data?, HTTPURLResponse?, Error?) -> ()) {
         func _executeRequest() {
             if endpointLimits[endpointKey] == nil {
                 // First time handling this endpoint, err on the side caution and limit to one
@@ -122,13 +132,20 @@ public final class DiscordRateLimiter {
 /// Ex. /channels/232184444340011009/messages and /channels/186926276592795659/messages
 /// Are considered different endpoints
 public struct DiscordRateLimitKey: Hashable {
-    let key: String
+    // MARK: Properties
 
+    /// The raw key for this endpoint.
+    public let key: String
+
+    /// The hash of the key.
     public var hashValue: Int {
         return key.hashValue
     }
 
-    init(endpoint: DiscordEndpoint, parameters: [String: String]) {
+    // MARK: Initializers
+
+    /// Creates a new endpoint key.
+    public init(endpoint: DiscordEndpoint, parameters: [String: String]) {
         var key = endpoint.rawValue
 
         for (param, value) in parameters {
@@ -138,6 +155,7 @@ public struct DiscordRateLimitKey: Hashable {
         self.key = key
     }
 
+    /// Whether two keys are equal.
     public static func ==(lhs: DiscordRateLimitKey, rhs: DiscordRateLimitKey) -> Bool {
         return lhs.key == rhs.key
     }
