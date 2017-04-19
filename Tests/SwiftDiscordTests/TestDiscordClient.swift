@@ -126,7 +126,7 @@ class TestDiscordClient : XCTestCase {
 
     func testClientDeletesGuildChannel() {
         expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
-        expectations[.channelCreate] = expectation(description: "Client should call create create method")
+        expectations[.channelCreate] = expectation(description: "Client should call channel create method")
         expectations[.channelDelete] = expectation(description: "Client should call delete channel method")
 
         var tChannel = testGuildChannel
@@ -142,7 +142,8 @@ class TestDiscordClient : XCTestCase {
     }
 
     func testClientDeletesDirectChannel() {
-        expectations[.channelCreate] = expectation(description: "Client should call create create method")
+        expectations[.channelCreate] = expectation(description: "Client should call channel create method")
+        expectations[.channelDelete] = expectation(description: "Client should call channel delete method")
 
         client.handleDispatch(event: .channelCreate, data: .object(testDMChannel))
         client.handleDispatch(event: .channelDelete, data: .object(testDMChannel))
@@ -152,6 +153,7 @@ class TestDiscordClient : XCTestCase {
 
     func testClientDeletesGroupDMChannel() {
         expectations[.channelCreate] = expectation(description: "Client should call create create method")
+        expectations[.channelDelete] = expectation(description: "Client should call channel delete method")
 
         client.handleDispatch(event: .channelCreate, data: .object(testGroupDMChannel))
         client.handleDispatch(event: .channelDelete, data: .object(testGroupDMChannel))
