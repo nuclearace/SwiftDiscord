@@ -40,6 +40,9 @@ import Dispatch
 open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, DiscordEndpointConsumer {
     // MARK: Properties
 
+    /// The rate limiter for this client.
+    public let rateLimiter = DiscordRateLimiter()
+
     /// The Discord JWT token.
     public let token: DiscordToken
 

@@ -18,6 +18,11 @@
 import Foundation
 
 // TODO Group DM
+// TODO Add guild member
+// TODO Guild integrations
+// TODO Guild pruning
+// TODO Guild embeds
+// TODO Guild batch modify roles
 
 /**
     This enum controls the interface with the Discord REST API.
@@ -176,15 +181,6 @@ public enum DiscordEndpoint : String {
         com.queryItems = getParams.map({ URLQueryItem(name: $0.key, value: $0.value) })
 
         return com.url!
-    }
-
-    static func jsonFromResponse(data: Data?, response: HTTPURLResponse?) -> JSON? {
-        guard let data = data, let response = response, (response.statusCode == 200 || response.statusCode == 201),
-              let stringData = String(data: data, encoding: .utf8) else {
-            return nil
-        }
-
-        return JSON.decodeJSON(stringData)
     }
 }
 
