@@ -15,6 +15,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Dispatch
 import Foundation
 #if !os(Linux)
 import Starscream
@@ -23,59 +24,161 @@ import WebSockets
 #endif
 
 /// Declares that a type will be an Engine for the Discord Gateway.
-public protocol DiscordEngineSpec : class, DiscordShard, DiscordEngineHeartbeatable {
+public protocol DiscordEngineSpec : class, DiscordShard {
     // MARK: Properties
-
-    /// The url to connect to.
-    var connectURL: String { get }
-
-    /// The type of engine. Used to correctly fire events.
-    var engineType: String { get }
 
     /// The last received sequence number. Used for resume/reconnect.
     var lastSequenceNumber: Int { get }
 
     /// The session id of this engine.
     var sessionId: String? { get set }
+}
+
+/// Declares that a type will be capable of communicating with Discord's WebSockets
+public protocol DiscordWebSocketable : class {
+    /// MARK: Properties
+
+    /// The url to connect to.
+    var connectURL: String { get }
+
+    /// The UUID for this WebSocketable.
+    var connectUUID: UUID { get set }
+
+    /// A description of this WebSocketable.
+    var description: String { get }
+
+    var parseQueue: DispatchQueue { get }
 
     /// A reference to the underlying WebSocket. This is a WebSockets.Websocket on Linux and Starscream.WebSocket on
-    /// macOS/iOS
-    var websocket: WebSocket? { get }
-
-    // MARK: Initializers
-
-    /**
-        The main initializer.
-
-        - parameter client: The client this engine should be associated with.
-    */
-    init(delegate: DiscordShardDelegate, shardNum: Int, numShards: Int)
+    /// macOS/iOS.
+    var websocket: WebSocket? { get set }
 
     // MARK: Methods
+
+    /**
+        Attaches the WebSocket handlers that listen for text/connects/disconnects/etc
+
+        Override if you need to provide custom handlers.
+
+        Note: You should handle both WebSockets.WebSocket and Starscream.WebSocket handlers.
+    */
+    func attachWebSocketHandlers()
+
+    /**
+        Starts the connection to the Discord gateway.
+    */
+    func connect()
+
+    /**
+        Disconnects the engine. An `engine.disconnect` is fired on disconnection.
+    */
+    func disconnect()
+
+    /**
+        Handles a close from the WebSocket.
+
+        - parameter reason: The reason the socket closed.
+    */
+    func handleClose(reason: NSError?)
+}
+
+public extension DiscordWebSocketable where Self: DiscordGatewayable {
+    /// Default implementation.
+    public func attachWebSocketHandlers() {
+        #if !os(Linux)
+        websocket?.onConnect = {[weak self] in
+            guard let this = self else { return }
+
+            DefaultDiscordLogger.Logger.log("WebSocket Connected, %@", type: "DiscordWebSocketable",
+                                            args: this.description)
+
+            this.connectUUID = UUID()
+
+            this.startHandshake()
+        }
+
+        websocket?.onDisconnect = {[weak self] err in
+            guard let this = self else { return }
+
+            DefaultDiscordLogger.Logger.log("WebSocket disconnected %@, %@", type: "DiscordWebSocketable",
+                                            args: String(describing: err), this.description)
+
+            this.handleClose(reason: err)
+        }
+
+        websocket?.onText = {[weak self] string in
+            guard let this = self else { return }
+
+            DefaultDiscordLogger.Logger.debug("%@ Got text: %@", type: "DiscordWebSocketable",
+                                              args: this.description, string)
+
+            this.parseGatewayMessage(string)
+        }
+        #else
+        websocket?.onText = {[weak self] ws, text in
+            guard let this = self else { return }
+
+            DefaultDiscordLogger.Logger.debug("%@, Got text: %@", type: "DiscordWebSocketable",
+                                              args: this.description, text)
+
+            this.parseGatewayMessage(text)
+        }
+
+        websocket?.onClose = {[weak self] _, _, _, _ in
+            guard let this = self else { return }
+
+            DefaultDiscordLogger.Logger.log("WebSocket closed, %@", type: "DiscordWebSocketable",
+                                            args: this.description)
+
+            this.handleClose()
+        }
+        #endif
+    }
+
+    /**
+        Starts the connection to the Discord gateway.
+    */
+    public func connect() {
+        DefaultDiscordLogger.Logger.log("Connecting to %@, %@", type: "DiscordWebSocketable",
+                                        args: connectURL, description)
+        DefaultDiscordLogger.Logger.log("Attaching WebSocket, shard: %@", type: "DiscordWebSocketable",
+                                        args: description)
+
+        #if !os(Linux)
+        websocket = WebSocket(url: URL(string: connectURL)!)
+        websocket?.callbackQueue = parseQueue
+
+        attachWebSocketHandlers()
+        websocket?.connect()
+        #else
+        try? WebSocket.background(to: connectURL) {[weak self] ws in
+            guard let this = self else { return }
+            DefaultDiscordLogger.Logger.log("Websocket connected, shard: ", type: "DiscordWebSocketable",
+                                            args: this.description)
+
+            this.websocket = ws
+            this.connectUUID = UUID()
+
+            this.attachWebSocketHandlers()
+            this.startHandshake()
+        }
+        #endif
+    }
+
+    internal func closeWebSockets() {
+        #if !os(Linux)
+        websocket?.disconnect()
+        #else
+        try? websocket?.close()
+        #endif
+    }
 
     /**
         Logs that an error occured.
 
         - parameter message: The error message
     */
-    func error(message: String)
-}
-
-public extension DiscordEngineSpec {
-    /// Default Implementation.
-    func sendPayload(_ payload: DiscordGatewayPayload) {
-        guard let payloadString = payload.createPayloadString() else {
-            error(message: "Could not create payload string")
-
-            return
-        }
-
-        DefaultDiscordLogger.Logger.debug("Sending ws: %@", type: engineType, args: payloadString)
-
-        #if !os(Linux)
-        websocket?.write(string: payloadString)
-        #else
-        try? websocket?.send(payloadString)
-        #endif
+    public func error(message: String) {
+        DefaultDiscordLogger.Logger.error(message, type: description)
     }
 }

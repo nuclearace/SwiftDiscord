@@ -42,7 +42,7 @@ public struct DiscordShardInformation {
 
 /// Protocol that represents a sharded gateway connection. This is the top-level protocol for `DiscordEngineSpec` and
 /// `DiscordEngine`
-public protocol DiscordShard {
+public protocol DiscordShard : DiscordWebSocketable, DiscordGatewayable {
     // MARK: Properties
 
     /// Whether this shard is connected to the gateway
@@ -57,24 +57,14 @@ public protocol DiscordShard {
     /// This shard's number.
     var shardNum: Int { get }
 
-    // MARK: Methods
+    // MARK: Initializers
 
     /**
-        Starts the connection to the Discord gateway.
-    */
-    func connect()
+        The main initializer.
 
-    /**
-        Disconnects the engine. An `engine.disconnect` is fired on disconnection.
+        - parameter client: The client this engine should be associated with.
     */
-    func disconnect()
-
-    /**
-        Sends a gateway payload to Discord.
-
-        - parameter payload: The payload object.
-    */
-    func sendPayload(_ payload: DiscordGatewayPayload)
+    init(delegate: DiscordShardDelegate, shardNum: Int, numShards: Int)
 }
 
 /// Declares that a type will be a shard's delegate.

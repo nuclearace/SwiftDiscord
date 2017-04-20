@@ -43,8 +43,8 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     }
 
     /// The type of DiscordEngineSpec. Used to correctly fire events.
-    open var engineType: String {
-        return "engine"
+    open var description: String {
+        return "shard: \(shardNum)"
     }
 
     /// Creates the handshake object that Discord expects.
@@ -86,8 +86,19 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     /// The shard number of this engine.
     public let shardNum: Int
 
+    /// The queue that WebSockets use to parse things.
+    public let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
+
+    /// The UUID of this WebSocketable.
+    public var connectUUID = UUID()
+
     /// This engine's session id.
     public var sessionId: String?
+
+    /// The underlying WebSocket.
+    ///
+    /// On Linux this is a WebSockets.WebSocket. While on macOS/iOS this is a Starscream.WebSocket
+    public var websocket: WebSocket?
 
     /// Whether this engine is connected to the gateway.
     public internal(set) var connected = false
@@ -95,11 +106,6 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     // Only touch on handleQueue
     /// The interval (in seconds) to send heartbeats.
     public internal(set) var heartbeatInterval = 0
-
-    /// The underlying WebSocket.
-    ///
-    /// On Linux this is a WebSockets.WebSocket. While on macOS/iOS this is a Starscream.WebSocket
-    public internal(set) var websocket: WebSocket?
 
     /// The delegate that this engine is associated with.
     public private(set) weak var delegate: DiscordShardDelegate?
@@ -111,7 +117,6 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     /// The last sequence number received. Will be used for session resumes.
     public private(set) var lastSequenceNumber = -1
 
-    let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
     let handleQueue = DispatchQueue(label: "discordEngine.handleQueue")
 
     var logType: String {
@@ -121,7 +126,6 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     var pongsMissed = 0
 
     private var closed = false
-    private var connectUUID = UUID()
     private var resuming = false
 
     // MARK: Initializers
@@ -140,112 +144,14 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     // MARK: Methods
 
     /**
-        Attaches the WebSocket handlers that listen for text/connects/disconnects/etc
-
-        Override if you need to provide custom handlers.
-
-        Note: You should handle both WebSockets.WebSocket and Starscream.WebSocket handlers.
-    */
-    open func attachWebSocketHandlers() {
-        #if !os(Linux)
-        websocket?.onConnect = {[weak self] in
-            guard let this = self else { return }
-
-            DefaultDiscordLogger.Logger.log("WebSocket Connected, shard: %@", type: this.logType, args: this.shardNum)
-
-            this.connectUUID = UUID()
-
-            this.startHandshake()
-        }
-
-        websocket?.onDisconnect = {[weak self] err in
-            guard let this = self else { return }
-
-            DefaultDiscordLogger.Logger.log("WebSocket disconnected %@, shard: %@",
-                type: this.logType, args: String(describing: err), this.shardNum)
-
-            this.handleClose(reason: err)
-        }
-
-        websocket?.onText = {[weak self] string in
-            guard let this = self else { return }
-
-            DefaultDiscordLogger.Logger.debug("Shard: %@ Got text: %@", type: this.logType, args: this.shardNum, string)
-
-            this.parseGatewayMessage(string)
-        }
-        #else
-        websocket?.onText = {[weak self] ws, text in
-            guard let this = self else { return }
-
-            DefaultDiscordLogger.Logger.debug("Shard: %@, Got text: %@", type: this.logType, args: this.shardNum, text)
-
-            this.parseGatewayMessage(text)
-        }
-
-        websocket?.onClose = {[weak self] _, _, _, _ in
-            guard let this = self else { return }
-
-            DefaultDiscordLogger.Logger.log("WebSocket closed, shard: ", type: this.logType, args: this.shardNum)
-
-            this.handleClose()
-        }
-        #endif
-    }
-
-    /**
-        Starts the connection to the Discord gateway.
-    */
-    open func connect() {
-        DefaultDiscordLogger.Logger.log("Connecting to %@, shard: %@", type: logType, args: connectURL, shardNum)
-        DefaultDiscordLogger.Logger.log("Attaching WebSocket, shard: %@", type: logType, args: shardNum)
-
-        #if !os(Linux)
-        websocket = WebSocket(url: URL(string: connectURL)!)
-        websocket?.callbackQueue = parseQueue
-
-        attachWebSocketHandlers()
-        websocket?.connect()
-        #else
-        try? WebSocket.background(to: connectURL) {[weak self] ws in
-            guard let this = self else { return }
-            DefaultDiscordLogger.Logger.log("Websocket connected, shard: ", type: "DiscordEngine", args: this.shardNum)
-
-            this.websocket = ws
-            this.connectUUID = UUID()
-
-            this.attachWebSocketHandlers()
-            this.startHandshake()
-        }
-        #endif
-    }
-
-    /**
         Disconnects the engine. An `engine.disconnect` is fired on disconnection.
     */
-    open func disconnect() {
-        DefaultDiscordLogger.Logger.log("Disconnecting, shard: %@", type: logType, args: shardNum)
+    public func disconnect() {
+        DefaultDiscordLogger.Logger.log("Disconnecting, %@", type: "DiscordWebSocketable", args: description)
 
         closed = true
 
-        disconnectWebSockets()
-    }
-
-    private func disconnectWebSockets() {
-        #if !os(Linux)
-        websocket?.disconnect()
-        #else
-        try? websocket?.close()
-        #endif
-    }
-
-    /**
-        Logs that an error occured.
-
-        - parameter message: The error message
-    */
-    open func error(message: String) {
-        DefaultDiscordLogger.Logger.error(message, type: logType)
+        closeWebSockets()
     }
 
     /**
@@ -441,7 +347,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
             DefaultDiscordLogger.Logger.log("Too many pongs missed; closing, shard: %@", type: logType, args: shardNum)
 
             pongsMissed = 0
-            disconnectWebSockets()
+            closeWebSockets()
 
             return
         }
@@ -488,7 +394,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
         - parameter seconds: The heartbeat interval
     */
-    open func startHeartbeat(seconds: Int) {
+    public func startHeartbeat(seconds: Int) {
         heartbeatInterval = seconds
 
         sendHeartbeat()

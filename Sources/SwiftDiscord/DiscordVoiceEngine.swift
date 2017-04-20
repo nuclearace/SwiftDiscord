@@ -37,16 +37,25 @@ enum DiscordVoiceEngineError : Error {
     Discord uses encrypted OPUS encoded voice packets. The engine is responsible for encyrpting/decrypting voice
     packets that are sent and received.
 */
-public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
+public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     // MARK: Properties
 
+    /// The heartbeat queue.
+    public let heartbeatQueue = DispatchQueue(label: "discordVoiceEngine.heartbeatQueue")
+
+    /// The parse queue.
+    public let parseQueue = DispatchQueue(label: "discordVoiceEngine.parseQueue")
+
     /// The voice url
-    public override var connectURL: String {
+    public var connectURL: String {
         return "wss://" + voiceServerInformation.endpoint.components(separatedBy: ":")[0]
     }
 
+    /// The connect UUID of this WebSocketable.
+    public var connectUUID = UUID()
+
     /// The type of `DiscordEngine` this is. Used to correctly fire engine events.
-    public override var engineType: String {
+    public var description: String {
         return "voiceEngine"
     }
 
@@ -56,7 +65,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     }
 
     /// Creates the handshake object that Discord expects.
-    public override var handshakeObject: [String: Any] {
+    public var handshakeObject: [String: Any] {
         return [
             "session_id": voiceState.sessionId,
             "server_id": voiceState.guildId,
@@ -65,8 +74,19 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         ]
     }
 
+    /// Not used in voice gateways
+    public var resumeObject: [String: Any] {
+        return [:]
+    }
+
+    /// The underlying websocket.
+    public var websocket: WebSocket?
+
     /// The voice engine's delegate.
     public private(set) weak var voiceDelegate: DiscordVoiceEngineDelegate?
+
+    /// The heartbeat interval for this engine.
+    public private(set) var heartbeatInterval = -1
 
     /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data
     public private(set) var encoder: DiscordVoiceEncoder!
@@ -92,12 +112,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     /// The voice state for this engine.
     public private(set) var voiceState: DiscordVoiceState!
 
-    override var logType: String {
-        return "DiscordVoiceEngine"
-    }
+    let logType = "DiscordVoiceEngine"
 
     private let decoderSession = DiscordVoiceSessionDecoder()
     private let encoderSemaphore = DispatchSemaphore(value: 1)
+    private let handleQueue = DispatchQueue(label: "discordVoiceEngine.handleQueue")
     private let padding = [UInt8](repeating: 0x00, count: 12)
     private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
     private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
@@ -109,6 +128,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         return Int(Date().timeIntervalSince1970 * 1000)
     }
 
+    private var connected = false
     private var closed = false
 
     #if !os(Linux)
@@ -132,12 +152,11 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
                     moved channels
         - parameter secret: The secret from a previous engine.
     */
-    public convenience init(delegate: DiscordVoiceEngineDelegate,
-                            voiceServerInformation: DiscordVoiceServerInformation,
-                            voiceState: DiscordVoiceState,
-                            encoder: DiscordVoiceEncoder?,
-                            secret: [UInt8]?) {
-        self.init(delegate: delegate)
+    public init(delegate: DiscordVoiceEngineDelegate,
+                voiceServerInformation: DiscordVoiceServerInformation,
+                voiceState: DiscordVoiceState,
+                encoder: DiscordVoiceEncoder?,
+                secret: [UInt8]?) {
         self.voiceDelegate = delegate
 
         _ = sodium_init()
@@ -218,8 +237,6 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     private func closeOutEngine() {
         guard !closed else { return }
 
-        super.disconnect()
-
         do {
             try udpSocket?.close()
         } catch {
@@ -270,8 +287,10 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     /**
         Disconnects the voice engine.
     */
-    public override func disconnect() {
+    public func disconnect() {
         DefaultDiscordLogger.Logger.log("Disconnecting VoiceEngine", type: logType)
+
+        closeWebSockets()
 
         closeOutEngine()
         voiceDelegate?.voiceEngineDidDisconnect(self)
@@ -318,7 +337,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
 
         - parameter reason: The reason the socket closed.
     */
-    public override func handleClose(reason: NSError? = nil) {
+    public func handleClose(reason: NSError? = nil) {
         DefaultDiscordLogger.Logger.log("Voice engine closed", type: logType)
 
         closeOutEngine()
@@ -335,7 +354,20 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         voiceDelegate?.voiceEngineReady(self)
     }
 
-    override func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
+    /**
+        Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
+
+        Override this method if you need to customize payload handling.
+
+        - parameter payload: The payload object
+    */
+    public func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
+        handleQueue.async {
+            self._handleGatewayPayload(payload)
+        }
+    }
+
+    func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
         guard case let .voice(voiceCode) = payload.code else {
             fatalError("Got gateway payload in non gateway engine")
         }
@@ -387,7 +419,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
         Parses a raw message from the WebSocket. This is the entry point for voice events.
         You shouldn't call this directly.
     */
-    public override func parseGatewayMessage(_ string: String) {
+    public func parseGatewayMessage(_ string: String) {
         guard let decoded = DiscordGatewayPayload.payloadFromString(string, fromGateway: false) else {
             DefaultDiscordLogger.Logger.log("Got unknown payload %@", type: logType, args: string)
 
@@ -505,7 +537,7 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     /**
         Sends a voice heartbeat to Discord. You shouldn't need to call this directly.
     */
-    public override func sendHeartbeat() {
+    public func sendHeartbeat() {
         guard !closed else { return }
 
         sendPayload(DiscordGatewayPayload(code: .voice(.heartbeat), payload: .integer(currentUnixTime)))
@@ -600,12 +632,23 @@ public final class DiscordVoiceEngine : DiscordEngine, DiscordVoiceEngineSpec {
     /**
         Starts the handshake with the Discord voice server. You shouldn't need to call this directly.
     */
-    public override func startHandshake() {
+    public func startHandshake() {
         guard voiceDelegate != nil else { return }
 
         DefaultDiscordLogger.Logger.log("Starting voice handshake", type: logType)
 
         sendPayload(DiscordGatewayPayload(code: .voice(.identify), payload: .object(handshakeObject)))
+    }
+
+    /**
+        Starts the engine's heartbeat. You should call this method when you know the interval that Discord expects.
+
+        - parameter seconds: The heartbeat interval
+    */
+    public func startHeartbeat(seconds: Int) {
+        heartbeatInterval = seconds
+
+        sendHeartbeat()
     }
 
     private func startUDP() {
