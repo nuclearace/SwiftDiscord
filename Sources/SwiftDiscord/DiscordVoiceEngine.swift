@@ -343,6 +343,12 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         closeOutEngine()
     }
 
+    /// Currently unused in VoiceEngines.
+    public func handleDispatch(_ payload: DiscordGatewayPayload) { }
+
+    /// Currently unused in VoiceEngines.
+    public func handleHello(_ payload: DiscordGatewayPayload) { }
+
     private func handleDoneReading() {
         encoderSemaphore.wait()
         sendSilence()
@@ -403,6 +409,9 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         startUDP()
     }
+
+    /// Currently unused in VoiceEngines.
+    public func handleResumed(_ payload: DiscordGatewayPayload) { }
 
     private func handleVoiceSessionDescription(with payload: DiscordGatewayPayloadData) {
         guard case let .object(voiceInformation) = payload,

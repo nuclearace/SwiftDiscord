@@ -34,7 +34,7 @@ private let os = "Linux"
 /**
     The base class for Discord WebSocket communications.
 */
-open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, DiscordEngineHeartbeatable {
+open class DiscordEngine : DiscordEngineSpec {
     // MARK: Properties
 
     /// The url for the gateway.

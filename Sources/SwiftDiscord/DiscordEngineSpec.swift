@@ -47,6 +47,7 @@ public protocol DiscordWebSocketable : class {
     /// A description of this WebSocketable.
     var description: String { get }
 
+    /// The queue WebSockets do their parsing on.
     var parseQueue: DispatchQueue { get }
 
     /// A reference to the underlying WebSocket. This is a WebSockets.Websocket on Linux and Starscream.WebSocket on

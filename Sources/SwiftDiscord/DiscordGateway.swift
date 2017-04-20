@@ -40,6 +40,29 @@ public protocol DiscordGatewayable : DiscordEngineHeartbeatable {
     */
     func handleGatewayPayload(_ payload: DiscordGatewayPayload)
 
+    // MARK: Methods
+
+    /**
+        Handles a dispatch payload.
+
+        - parameter payload: The dispatch payload
+    */
+    func handleDispatch(_ payload: DiscordGatewayPayload)
+
+    /**
+        Handles the hello event.
+
+        - parameter payload: The dispatch payload
+    */
+    func handleHello(_ payload: DiscordGatewayPayload)
+
+    /**
+        Handles the resumed event.
+
+        - parameter payload: The payload for the event.
+    */
+    func handleResumed(_ payload: DiscordGatewayPayload)
+
     /**
         Parses a raw message from the WebSocket. This is the entry point for all Discord events.
         You shouldn't call this directly.
