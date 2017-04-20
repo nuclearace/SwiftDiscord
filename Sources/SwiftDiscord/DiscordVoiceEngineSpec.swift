@@ -82,7 +82,7 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
 }
 
 /// Declares that a type will be a client for a voice engine.
-public protocol DiscordVoiceEngineDelegate : DiscordShardDelegate {
+public protocol DiscordVoiceEngineDelegate : class {
     // MARK: Methods
 
     /**

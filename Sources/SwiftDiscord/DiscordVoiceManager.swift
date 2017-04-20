@@ -116,19 +116,6 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
         }
     }
 
-    /// Unused in voice connections
-    open func shard(_ engine: DiscordShard, didReceiveEvent event: DiscordDispatchEvent,
-                    with payload: DiscordGatewayPayload) { }
-
-    /// Unused in voice connections
-    open func shard(_ engine: DiscordShard, gotHelloWithPayload payload: DiscordGatewayPayload) { }
-
-    /// Unused in voice connections
-    open func shardDidConnect(_ shard: DiscordShard) { }
-
-    /// Unused in voice connections
-    open func shardDidDisconnect(_ shard: DiscordShard) { }
-
     /**
         Tries to open a voice connection to the specified guild.
         Only succeeds if we have both a voice state and the voice server info for this guild.
