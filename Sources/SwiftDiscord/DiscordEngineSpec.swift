@@ -26,9 +26,6 @@ import WebSockets
 public protocol DiscordEngineSpec : class, DiscordShard, DiscordEngineHeartbeatable {
     // MARK: Properties
 
-    /// A reference to the client this engine is associated with.
-    weak var delegate: DiscordEngineDelegate? { get }
-
     /// The url to connect to.
     var connectURL: String { get }
 
@@ -52,7 +49,7 @@ public protocol DiscordEngineSpec : class, DiscordShard, DiscordEngineHeartbeata
 
         - parameter client: The client this engine should be associated with.
     */
-    init(delegate: DiscordEngineDelegate, shardNum: Int, numShards: Int)
+    init(delegate: DiscordShardDelegate, shardNum: Int, numShards: Int)
 
     // MARK: Methods
 

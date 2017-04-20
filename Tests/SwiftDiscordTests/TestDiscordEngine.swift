@@ -45,13 +45,15 @@ class TestDiscordEngine : XCTestCase {
     }
 }
 
-extension TestDiscordEngine : DiscordEngineDelegate {
+extension TestDiscordEngine : DiscordShardDelegate {
     var token: DiscordToken {
         return "Testing"
     }
 
-    func engine(_ engine: DiscordEngine, didReceiveEvent event: DiscordDispatchEvent,
+    func shard(_ shard: DiscordShard, didReceiveEvent event: DiscordDispatchEvent,
                 with payload: DiscordGatewayPayload) {
+        let engine = shard as! DiscordEngine
+
         switch event {
         case .ready:
             XCTAssertEqual(engine.sessionId, "hello_world", "Engine should correctly set the session id")
@@ -66,9 +68,13 @@ extension TestDiscordEngine : DiscordEngineDelegate {
         }
     }
 
-    func engine(_ engine: DiscordEngine, gotHelloWithPayload payload: DiscordGatewayPayload) {
+    func shard(_ shard: DiscordShard, gotHelloWithPayload payload: DiscordGatewayPayload) {
         XCTAssertTrue(engine.connected, "Engine should be connected after getting hello")
 
         expectation.fulfill()
     }
+
+    func shardDidConnect(_ shard: DiscordShard) { }
+
+    func shardDidDisconnect(_ shard: DiscordShard) { }
 }

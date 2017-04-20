@@ -81,6 +81,40 @@ public protocol DiscordVoiceEngineSpec : DiscordEngineSpec {
     #endif
 }
 
+/// Declares that a type will be a client for a voice engine.
+public protocol DiscordVoiceEngineDelegate : DiscordShardDelegate {
+    // MARK: Methods
+
+    /**
+        Handles received voice data from a voice engine.
+
+        - parameter data: The voice data that was received
+    */
+    func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveVoiceData data: DiscordVoiceData)
+
+    /**
+        Called when the voice engine disconnects.
+
+        - parameter engine: The engine that disconnected.
+    */
+    func voiceEngineDidDisconnect(_ engine: DiscordVoiceEngine)
+
+    /**
+        Called when the voice engine needs an encoder.
+
+        - parameter engine: The engine that needs an encoder.
+        - returns: An encoder.
+    */
+    func voiceEngineNeedsEncoder(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder?
+
+    /**
+        Called when the voice engine is ready.
+
+        - parameter engine: The engine that's ready.
+    */
+    func voiceEngineReady(_ engine: DiscordVoiceEngine)
+}
+
 /// Declares that a type has enough information to encode/decode Opus data.
 public protocol DiscordOpusCodeable {
     // MARK: Properties

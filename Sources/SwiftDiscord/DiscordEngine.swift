@@ -86,9 +86,6 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     /// The shard number of this engine.
     public let shardNum: Int
 
-    /// A reference to this engine's shard manager.
-    public var manager: DiscordShardManager?
-
     /// This engine's session id.
     public var sessionId: String?
 
@@ -105,7 +102,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
     public internal(set) var websocket: WebSocket?
 
     /// The delegate that this engine is associated with.
-    public private(set) weak var delegate: DiscordEngineDelegate?
+    public private(set) weak var delegate: DiscordShardDelegate?
 
     /// The dispatch queue that heartbeats are sent on.
     public private(set) var heartbeatQueue = DispatchQueue(label: "discordEngine.heartbeatQueue")
@@ -134,7 +131,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
         - parameter delegate: The DiscordClientSpec this engine should be associated with.
     */
-    public required init(delegate: DiscordEngineDelegate, shardNum: Int = 0, numShards: Int = 1) {
+    public required init(delegate: DiscordShardDelegate, shardNum: Int = 0, numShards: Int = 1) {
         self.delegate = delegate
         self.shardNum = shardNum
         self.numShards = numShards
@@ -269,7 +266,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
         }
 
         guard !closed else {
-            manager?.signalShardDisconnected(shardNum: shardNum)
+            delegate?.shardDidDisconnect(self)
 
             return
         }
@@ -291,13 +288,13 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
 
         if event == .ready, case let .object(payloadObject) = payload.payload,
            let sessionId = payloadObject["session_id"] as? String {
-            manager?.signalShardConnected(shardNum: shardNum)
+            delegate?.shardDidConnect(self)
             self.sessionId = sessionId
         } else if event == .resumed {
             handleResumed(payload)
         }
 
-        delegate?.engine(self, didReceiveEvent: event, with: payload)
+        delegate?.shard(self, didReceiveEvent: event, with: payload)
     }
 
     /**
@@ -366,7 +363,7 @@ open class DiscordEngine : DiscordEngineSpec, DiscordEngineGatewayHandling, Disc
         connected = true
 
         startHeartbeat(seconds: milliseconds / 1000)
-        delegate?.engine(self, gotHelloWithPayload: payload)
+        delegate?.shard(self, gotHelloWithPayload: payload)
     }
 
     /**

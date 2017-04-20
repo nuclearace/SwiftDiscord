@@ -95,26 +95,6 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     // MARK: Methods
 
     /**
-        Handles engine dispatch events. You shouldn't need to call this method directly.
-
-        Override to provide custom engine dispatch functionality.
-
-        - parameter engine: The engine that received the event.
-        - parameter didReceiveEvent: The event that was received.
-        - parameter payload: A `DiscordGatewayPayload` containing the dispatch information.
-    */
-    open func engine(_ engine: DiscordEngine, didReceiveEvent event: DiscordDispatchEvent,
-                     with payload: DiscordGatewayPayload) { }
-
-    /**
-        Called when an engine handled a hello packet.
-
-        - parameter engine: The engine that received the event.
-        - gotHelloWithPayload: The hello data.
-    */
-    open func engine(_ engine: DiscordEngine, gotHelloWithPayload payload: DiscordGatewayPayload) { }
-
-    /**
         Leaves the voice channel that is associated with the guild specified.
 
         - parameter onGuild: The snowflake of the guild that you want to leave.
@@ -135,6 +115,19 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
             startVoiceConnection(guildId)
         }
     }
+
+    /// Unused in voice connections
+    open func shard(_ engine: DiscordShard, didReceiveEvent event: DiscordDispatchEvent,
+                    with payload: DiscordGatewayPayload) { }
+
+    /// Unused in voice connections
+    open func shard(_ engine: DiscordShard, gotHelloWithPayload payload: DiscordGatewayPayload) { }
+
+    /// Unused in voice connections
+    open func shardDidConnect(_ shard: DiscordShard) { }
+
+    /// Unused in voice connections
+    open func shardDidDisconnect(_ shard: DiscordShard) { }
 
     /**
         Tries to open a voice connection to the specified guild.
@@ -207,4 +200,6 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     open func voiceEngineReady(_ engine: DiscordVoiceEngine) {
         delegate?.voiceManager(self, engineIsReady: engine)
     }
+
+
 }

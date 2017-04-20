@@ -40,7 +40,6 @@ public struct DiscordShardInformation {
     }
 }
 
-
 /// Protocol that represents a sharded gateway connection. This is the top-level protocol for `DiscordEngineSpec` and
 /// `DiscordEngine`
 public protocol DiscordShard {
@@ -49,8 +48,8 @@ public protocol DiscordShard {
     /// Whether this shard is connected to the gateway
     var connected: Bool { get }
 
-    /// A reference to the manager
-    weak var manager: DiscordShardManager? { get set }
+    /// A reference to the client this engine is associated with.
+    weak var delegate: DiscordShardDelegate? { get }
 
     /// The total number of shards.
     var numShards: Int { get }
@@ -76,6 +75,43 @@ public protocol DiscordShard {
         - parameter payload: The payload object.
     */
     func sendPayload(_ payload: DiscordGatewayPayload)
+}
+
+/// Declares that a type will be a shard's delegate.
+public protocol DiscordShardDelegate : class, DiscordTokenBearer {
+    /**
+        Used by shards to signal that they have connected.
+
+        - parameter shardNum: The number of the shard that disconnected.
+    */
+    func shardDidConnect(_ shard: DiscordShard)
+
+    /**
+        Used by shards to signal that they have disconnected
+
+        - parameter shardNum: The number of the shard that disconnected.
+    */
+    func shardDidDisconnect(_ shard: DiscordShard)
+
+    /**
+    Handles engine dispatch events. You shouldn't need to call this method directly.
+
+    Override to provide custom engine dispatch functionality.
+
+    - parameter engine: The engine that received the event.
+    - parameter didReceiveEvent: The event that was received.
+    - parameter payload: A `DiscordGatewayPayload` containing the dispatch information.
+*/
+    func shard(_ engine: DiscordShard, didReceiveEvent event: DiscordDispatchEvent,
+                with payload: DiscordGatewayPayload)
+
+    /**
+        Called when an engine handled a hello packet.
+
+        - parameter engine: The engine that received the event.
+        - gotHelloWithPayload: The hello data.
+    */
+    func shard(_ engine: DiscordShard, gotHelloWithPayload payload: DiscordGatewayPayload)
 }
 
 /// The delegate for a `DiscordShardManager`.
@@ -114,7 +150,7 @@ public protocol DiscordShardManagerDelegate : class, DiscordTokenBearer {
     Connected being when all shards have recieved a ready event and are receiving events from the gateway. It also
     decides when a client has fully disconnected. Disconnected being when all shards have closed.
 */
-open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lockable {
+open class DiscordShardManager : DiscordShardDelegate, Lockable {
     // MARK: Properties
 
     /// - returns: The shard with num `n`
@@ -182,11 +218,7 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
     */
     open func createShardWithDelegate(_ delegate: DiscordShardManagerDelegate, withShardNum shardNum: Int,
                                       totalShards: Int) -> DiscordShard {
-        let engine = DiscordEngine(delegate: self, shardNum: shardNum, numShards: totalShards)
-
-        engine.manager = self
-
-        return engine
+        return DiscordEngine(delegate: self, shardNum: shardNum, numShards: totalShards)
     }
 
     /**
@@ -206,28 +238,6 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
             delegate?.shardManager(self, didDisconnectWithReason: "Closed")
         }
     }
-
-    /**
-        Handles engine dispatch events. You shouldn't need to call this method directly.
-
-        Override to provide custom engine dispatch functionality.
-
-        - parameter engine: The engine that received the event.
-        - parameter didReceiveEvent: The event that was received.
-        - parameter payload: A `DiscordGatewayPayload` containing the dispatch information.
-    */
-    open func engine(_ engine: DiscordEngine, didReceiveEvent event: DiscordDispatchEvent,
-                     with payload: DiscordGatewayPayload) {
-        delegate?.shardManager(self, shouldHandleEvent: event, withPayload: payload)
-    }
-
-    /**
-        Called when an engine handled a hello packet.
-
-        - parameter engine: The engine that received the event.
-        - gotHelloWithPayload: The hello data.
-    */
-    open func engine(_ engine: DiscordEngine, gotHelloWithPayload payload: DiscordGatewayPayload) { }
 
     /**
         Use when you will have multiple shards spread across a few instances.
@@ -258,6 +268,60 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
     }
 
     /**
+        Handles engine dispatch events. You shouldn't need to call this method directly.
+
+        Override to provide custom engine dispatch functionality.
+
+        - parameter shard: The engine that received the event.
+        - parameter didReceiveEvent: The event that was received.
+        - parameter payload: A `DiscordGatewayPayload` containing the dispatch information.
+    */
+    open func shard(_ shard: DiscordShard, didReceiveEvent event: DiscordDispatchEvent,
+                    with payload: DiscordGatewayPayload) {
+        delegate?.shardManager(self, shouldHandleEvent: event, withPayload: payload)
+    }
+
+    /**
+        Called when an engine handled a hello packet.
+
+        - parameter shard: The shard that received the event.
+        - gotHelloWithPayload: The hello data.
+    */
+    open func shard(_ engine: DiscordShard, gotHelloWithPayload payload: DiscordGatewayPayload) { }
+
+    /**
+        Used by shards to signal that they have connected.
+
+        - parameter shardNum: The number of the shard that disconnected.
+    */
+    open func shardDidConnect(_ shard: DiscordShard) {
+        DefaultDiscordLogger.Logger.verbose("Shard #%@, connected", type: "DiscordShardManager",
+                                            args: shard.shardNum)
+
+        protected { connectedShards += 1 }
+
+        guard get(connectedShards == shards.count) else { return }
+
+        delegate?.shardManager(self, didConnect: true)
+    }
+
+    /**
+        Used by shards to signal that they have disconnected
+
+        - parameter shardNum: The number of the shard that disconnected.
+    */
+    open func shardDidDisconnect(_ shard: DiscordShard) {
+        DefaultDiscordLogger.Logger.verbose("Shard #%@, disconnected", type: "DiscordShardManager",
+                                            args: shard.shardNum)
+
+        protected { closedShards += 1 }
+
+        guard get(closedShards == shards.count) else { return }
+
+        delegate?.shardManager(self, didDisconnectWithReason: "Closed")
+    }
+
+    /**
         Creates the shards for this manager.
 
         - parameter into: The number of shards to create.
@@ -275,35 +339,5 @@ open class DiscordShardManager : DiscordEngineDelegate, DiscordTokenBearer, Lock
                 shards.append(createShardWithDelegate(delegate, withShardNum: i, totalShards: numberOfShards))
             }
         }
-    }
-
-    /**
-        Used by shards to signal that they have connected.
-
-        - parameter shardNum: The number of the shard that disconnected.
-    */
-    open func signalShardConnected(shardNum: Int) {
-        DefaultDiscordLogger.Logger.verbose("Shard #%@, connected", type: "DiscordShardManager", args: shardNum)
-
-        protected { connectedShards += 1 }
-
-        guard get(connectedShards == shards.count) else { return }
-
-        delegate?.shardManager(self, didConnect: true)
-    }
-
-    /**
-        Used by shards to signal that they have disconnected
-
-        - parameter shardNum: The number of the shard that disconnected.
-    */
-    open func signalShardDisconnected(shardNum: Int) {
-        DefaultDiscordLogger.Logger.verbose("Shard #%@, disconnected", type: "DiscordShardManager", args: shardNum)
-
-        protected { closedShards += 1 }
-
-        guard get(closedShards == shards.count) else { return }
-
-        delegate?.shardManager(self, didDisconnectWithReason: "Closed")
     }
 }
