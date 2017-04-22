@@ -118,7 +118,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     private let encoderSemaphore = DispatchSemaphore(value: 1)
     private let padding = [UInt8](repeating: 0x00, count: 12)
     private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
-    private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
+    private let udpQueueWrite = DispatchQueue(label: "discordVoiceEngine.udpQueueWrite")
     private let udpQueueRead = DispatchQueue(label: "discordVoiceEngine.udpQueueRead")
     private let writeQueue = DispatchQueue(label: "discordVoiceEngine.writeQueue")
 
@@ -311,7 +311,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
     // https://discordapp.com/developers/docs/topics/voice-connections#ip-discovery
     private func findIP() {
-        udpQueue.async {
+        udpQueueWrite.async {
             guard let udpSocket = self.udpSocket else { return }
 
             // print("Finding IP")
@@ -367,10 +367,6 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         - parameter payload: The payload object
     */
     public func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
-        self._handleGatewayPayload(payload)
-    }
-
-    func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
         guard case let .voice(voiceCode) = payload.code else {
             fatalError("Got gateway payload in non gateway engine")
         }
@@ -379,7 +375,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         case .ready:
             handleReady(with: payload.payload)
         case .sessionDescription:
-            udpQueue.sync { self.handleVoiceSessionDescription(with: payload.payload) }
+            udpQueueWrite.sync { self.handleVoiceSessionDescription(with: payload.payload) }
             sendSilence()
         case .speaking:
             DefaultDiscordLogger.Logger.debug("Got speaking", type: logType, args: payload)
@@ -559,7 +555,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         }
 
         sendSpeaking(false)
-        udpQueue.async { self.audioCount = -1 }
+        udpQueueWrite.async { self.audioCount = -1 }
     }
 
     /**
@@ -604,7 +600,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             audioSleep()
         }
 
-        udpQueue.sync(execute: _sendVoiceData)
+        udpQueueWrite.sync(execute: _sendVoiceData)
     }
 
     #if !os(iOS)
