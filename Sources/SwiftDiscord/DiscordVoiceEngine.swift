@@ -116,7 +116,6 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
     private let decoderSession = DiscordVoiceSessionDecoder()
     private let encoderSemaphore = DispatchSemaphore(value: 1)
-    private let handleQueue = DispatchQueue(label: "discordVoiceEngine.handleQueue")
     private let padding = [UInt8](repeating: 0x00, count: 12)
     private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
     private let udpQueue = DispatchQueue(label: "discordVoiceEngine.udpQueue")
@@ -368,9 +367,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         - parameter payload: The payload object
     */
     public func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
-        handleQueue.async {
-            self._handleGatewayPayload(payload)
-        }
+        self._handleGatewayPayload(payload)
     }
 
     func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
