@@ -386,10 +386,10 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
     private func handleReady(with payload: DiscordGatewayPayloadData) {
         guard case let .object(voiceInformation) = payload,
-                let heartbeatInterval = voiceInformation["heartbeat_interval"] as? Int,
-                let ssrc = voiceInformation["ssrc"] as? Int,
-                let udpPort = voiceInformation["port"] as? Int,
-                let modes = voiceInformation["modes"] as? [String] else {
+              let heartbeatInterval = voiceInformation["heartbeat_interval"] as? Int,
+              let ssrc = voiceInformation["ssrc"] as? Int,
+              let udpPort = voiceInformation["port"] as? Int,
+              let modes = voiceInformation["modes"] as? [String] else {
             disconnect()
 
             return
@@ -408,7 +408,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
     private func handleVoiceSessionDescription(with payload: DiscordGatewayPayloadData) {
         guard case let .object(voiceInformation) = payload,
-                let secret = voiceInformation["secret_key"] as? [Int] else {
+              let secret = voiceInformation["secret_key"] as? [Int] else {
             disconnect()
 
             return

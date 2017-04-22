@@ -80,6 +80,9 @@ open class DiscordEngine : DiscordEngineSpec {
         ]
     }
 
+    /// The dispatch queue that heartbeats are sent on.
+    public let heartbeatQueue = DispatchQueue(label: "discordEngine.heartbeatQueue")
+
     /// The total number of shards.
     public let numShards: Int
 
@@ -109,9 +112,6 @@ open class DiscordEngine : DiscordEngineSpec {
 
     /// The delegate that this engine is associated with.
     public private(set) weak var delegate: DiscordShardDelegate?
-
-    /// The dispatch queue that heartbeats are sent on.
-    public private(set) var heartbeatQueue = DispatchQueue(label: "discordEngine.heartbeatQueue")
 
     // Only touch on handleQueue
     /// The last sequence number received. Will be used for session resumes.
@@ -338,7 +338,8 @@ open class DiscordEngine : DiscordEngineSpec {
     */
     open func sendHeartbeat() {
         guard connected else {
-            DefaultDiscordLogger.Logger.debug("Tried heartbeating on disconnected shard, shard: %@", type: logType, args: shardNum)
+            DefaultDiscordLogger.Logger.debug("Tried heartbeating on disconnected shard, shard: %@", type: logType,
+                                              args: shardNum)
 
             return
         }
