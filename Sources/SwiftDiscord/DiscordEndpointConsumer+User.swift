@@ -17,7 +17,7 @@
 
 import Foundation
 
-public extension DiscordEndpointConsumer {
+public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     public func createDM(with: String, callback: @escaping (DiscordDMChannel?) -> ()) {
         guard let user = self.user, let contentData = JSON.encodeJSONData(["recipient_id": with]) else { return }

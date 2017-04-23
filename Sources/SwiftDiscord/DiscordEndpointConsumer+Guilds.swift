@@ -17,7 +17,7 @@
 
 import Foundation
 
-public extension DiscordEndpointConsumer {
+public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     public func addGuildMemberRole(_ roleId: String, to userId: String, on guildId: String,
                                    callback: ((Bool) -> ())?) {

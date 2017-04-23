@@ -17,7 +17,7 @@
 
 import Foundation
 
-public extension DiscordEndpointConsumer {
+public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     public func addPinnedMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> ())? = nil) {
         var request = DiscordEndpoint.createRequest(with: token, for: .pinnedMessage, replacing: [

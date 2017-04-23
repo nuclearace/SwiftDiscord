@@ -26,7 +26,7 @@ import Foundation
     **NOTE**: Callbacks from the default implementations are *NOT* executed on the client's handleQueue. So it is important
     that if you make modifications to the client inside of a callback, you first dispatch back on the handleQueue.
 */
-public protocol DiscordEndpointConsumer : DiscordUserActor {
+public protocol DiscordEndpointConsumer {
     // MARK: Properties
 
     /// The rate limiter for this consumer.
@@ -481,7 +481,7 @@ public protocol DiscordEndpointConsumer : DiscordUserActor {
     func getBotURL(with permissions: [DiscordPermission]) -> URL?
 }
 
-public extension DiscordEndpointConsumer {
+public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     public func getBotURL(with permissions: [DiscordPermission]) -> URL? {
         guard let user = self.user else { return nil }

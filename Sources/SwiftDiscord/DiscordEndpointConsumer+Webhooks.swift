@@ -17,7 +17,7 @@
 
 import Foundation
 
-public extension DiscordEndpointConsumer {
+public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     public func createWebhook(forChannel channelId: String, options: [DiscordEndpoint.Options.WebhookOption],
                               callback: @escaping (DiscordWebhook?) -> () = {_ in }) {

@@ -17,7 +17,7 @@
 
 import Foundation
 
-public extension DiscordEndpointConsumer {
+public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     public func acceptInvite(_ invite: String, callback: ((DiscordInvite?) -> ())? = nil) {
         var request = DiscordEndpoint.createRequest(with: token, for: .invites, replacing: [
