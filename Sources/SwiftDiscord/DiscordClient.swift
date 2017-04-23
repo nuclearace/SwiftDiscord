@@ -40,6 +40,9 @@ import Dispatch
 open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, DiscordEndpointConsumer {
     // MARK: Properties
 
+    /// The rate limiter for this client.
+    public let rateLimiter = DiscordRateLimiter()
+
     /// The Discord JWT token.
     public let token: DiscordToken
 
@@ -755,7 +758,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         DefaultDiscordLogger.Logger.log("Handling guild update", type: logType)
 
         guard let guildId = data["id"] as? String else { return }
-        guard let updatedGuild = self.guilds[guildId]?.updateGuild(with: data) else { return }
+        guard let updatedGuild = guilds[guildId]?.updateGuild(fromGuildUpdate: data) else { return }
 
         DefaultDiscordLogger.Logger.verbose("Updated guild: %@", type: logType, args: updatedGuild)
 
@@ -810,29 +813,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         - parameter with: The data from the event
     */
     open func handlePresenceUpdate(with data: [String: Any]) {
-        func handlePresence(_ presence: DiscordPresence, guild: DiscordGuild) {
-            let userId = presence.user.id
-
-            if pruneUsers && presence.status == .offline {
-                DefaultDiscordLogger.Logger.debug("Pruning guild member %@ on %@", type: logType,
-                    args: userId, guild.id)
-
-                guild.members[userId] = nil
-                guild.presences[userId] = nil
-            } else if fillUsers && !guild.members.contains(userId) {
-                DefaultDiscordLogger.Logger.debug("Should get member %@; pull from the API", type: logType,
-                    args: userId)
-
-                guild.members[lazy: userId] = .lazy({[weak guild] in
-                    guard let guild = guild else {
-                        return DiscordGuildMember(guildMemberObject: [:], guildId: "")
-                    }
-
-                    return guild.getGuildMember(userId) ?? DiscordGuildMember(guildMemberObject: [:], guildId: "")
-                })
-            }
-        }
-
         guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
         guard let user = data["user"] as? [String: Any], let userId = user["id"] as? String else { return }
 
@@ -852,9 +832,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         delegate?.client(self, didReceivePresenceUpdate: presence!)
 
-        guard pruneUsers || fillUsers else { return }
-
-        handlePresence(presence!, guild: guild)
+        guild.updateGuild(fromPresence: presence!, fillingUsers: fillUsers, pruningUsers: pruneUsers)
     }
 
     /**

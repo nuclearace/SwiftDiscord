@@ -20,6 +20,8 @@ import Foundation
 
 /// Represents a Guild.
 public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
+    private static let logType = "DiscordGuild"
+
     // MARK: Properties
 
     // TODO figure out what features are
@@ -153,7 +155,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 
         - parameter with: The options for this new channel
     */
-    public func createChannel(with options: [DiscordEndpointOptions.GuildCreateChannel]) {
+    public func createChannel(with options: [DiscordEndpoint.Options.GuildCreateChannel]) {
         guard let client = self.client else { return }
 
         DefaultDiscordLogger.Logger.log("Creating guild channel on %@", type: "DiscordGuild", args: id)
@@ -232,7 +234,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 
         - parameter options: An array of options to change
     */
-    public func modifyGuild(options: [DiscordEndpointOptions.ModifyGuild]) {
+    public func modifyGuild(options: [DiscordEndpoint.Options.ModifyGuild]) {
         guard let client = self.client else { return }
 
         client.modifyGuild(id, options: options)
@@ -244,7 +246,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         - parameter member: The member to modify.
         - parameter options: The options to set.
     */
-    public func modifyMember(_ member: DiscordGuildMember, options: [DiscordEndpointOptions.ModifyMember]) {
+    public func modifyMember(_ member: DiscordGuildMember, options: [DiscordEndpoint.Options.ModifyMember]) {
         guard let client = self.client else { return }
 
         client.modifyGuildMember(member.user.id, on: id, options: options)
@@ -270,8 +272,32 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         return (Int(id)! >> 22) % numOfShards
     }
 
+    func updateGuild(fromPresence presence: DiscordPresence, fillingUsers fillUsers: Bool,
+                     pruningUsers pruneUsers: Bool) {
+        let userId = presence.user.id
+
+        if pruneUsers && presence.status == .offline {
+            DefaultDiscordLogger.Logger.debug("Pruning guild member %@ on %@", type: DiscordGuild.logType,
+                                              args: userId, id)
+
+            members[userId] = nil
+            presences[userId] = nil
+        } else if fillUsers && !members.contains(userId) {
+            DefaultDiscordLogger.Logger.debug("Should get member %@; pull from the API", type: DiscordGuild.logType,
+                                              args: userId)
+
+            members[lazy: userId] = .lazy({[weak self] in
+                guard let this = self else {
+                    return DiscordGuildMember(guildMemberObject: [:], guildId: "")
+                }
+
+                return this.getGuildMember(userId) ?? DiscordGuildMember(guildMemberObject: [:], guildId: "")
+            })
+        }
+    }
+
     // Used to update a guild from a guildUpdate event
-    func updateGuild(with newGuild: [String: Any]) -> DiscordGuild {
+    func updateGuild(fromGuildUpdate newGuild: [String: Any]) -> DiscordGuild {
         if let defaultMessageNotifications = newGuild["default_message_notifications"] as? Int {
             self.defaultMessageNotifications = defaultMessageNotifications
         }

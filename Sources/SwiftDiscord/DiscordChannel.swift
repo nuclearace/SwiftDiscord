@@ -17,6 +17,17 @@
 
 import class Dispatch.DispatchSemaphore
 
+/// Protocol that declares a type will be a Discord channel.
+public protocol DiscordChannel : DiscordClientHolder {
+    // MARK: Properties
+
+    /// The id of the channel.
+    var id: String { get }
+
+    /// The type of the channel
+    var type: DiscordChannelType { get }
+}
+
 /// Represents the type of a channel.
 public enum DiscordChannelType : Int {
     /// A text channel.
@@ -30,17 +41,6 @@ public enum DiscordChannelType : Int {
 
     /// A GroupDM.
     case groupDM
-}
-
-/// Protocol that declares a type will be a Discord channel.
-public protocol DiscordChannel : DiscordClientHolder {
-    // MARK: Properties
-
-    /// The id of the channel.
-    var id: String { get }
-
-    /// The type of the channel
-    var type: DiscordChannelType { get }
 }
 
 public extension DiscordChannel {
@@ -117,7 +117,7 @@ public extension DiscordChannel {
 
         - parameter options: An array of `DiscordEndpointOptions.ModifyChannel`
     */
-    public func modifyChannel(options: [DiscordEndpointOptions.ModifyChannel]) {
+    public func modifyChannel(options: [DiscordEndpoint.Options.ModifyChannel]) {
         guard let client = self.client else { return }
 
         client.modifyChannel(id, options: options)

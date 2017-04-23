@@ -17,178 +17,15 @@
 
 import Foundation
 
-/// A namespace struct for endpoint options.
-public struct DiscordEndpointOptions {
-    private init() {}
-
-    /// Create invite options.
-    public enum CreateInvite {
-        /// How long this invite should live.
-        case maxAge(Int)
-
-        /// Number of uses this invite has before it becomes invalid
-        case maxUses(Int)
-
-        /// Whether this invite only grant temporary membership
-        case temporary(Bool)
-
-        /// if true, don't try to reuse a similar invite (useful for creating many unique one time use invites)
-        case unique(Bool)
-    }
-
-    /// Options for creating a role. All are optional.
-    public enum CreateRole {
-        /// The color of the enum.
-        case color(Int)
-
-        /// Whether the role should be displayed separately in the sidebar.
-        case hoist(Bool)
-
-        /// Whether this role is mentionable.
-        case mentionable(Bool)
-
-        /// The name of this role.
-        case name(String)
-
-        /// The permissions this role has.
-        case permissions(Int)
-    }
-
-    /// Get message options.
-    ///
-    /// after, around and before are mutually exclusive. They shouldn't be in the same get request
-    public enum GetMessage {
-        /// The message to get other messages after.
-        case after(DiscordMessage)
-
-        /// The message to get other messages around.
-        case around(DiscordMessage)
-
-        /// The message to get other messages before.
-        case before(DiscordMessage)
-
-        /// The number of messages to get.
-        case limit(Int)
-    }
-
-    /// Guild create channel options.
-    public enum GuildCreateChannel {
-        /// The bitrate of a voice channel.
-        case bitrate(Int)
-
-        /// The name of the channel.
-        case name(String)
-
-        /// An array of permissions for this channel.
-        case permissionOverwrites([DiscordPermissionOverwrite])
-
-        /// The type of this channel.
-        case type(DiscordChannelType)
-
-        /// The user limit for a voice channel
-        case userLimit(Int)
-    }
-
-    /// Guild get members options.
-    public enum GuildGetMembers {
-        /// The user index to get users after (pagination).
-        case after(Int)
-
-        /// The number of users to get.
-        case limit(Int)
-    }
-
-    /// Modify channel options.
-    public enum ModifyChannel {
-        /// The bitrate of a voice channel.
-        case bitrate(Int)
-
-        /// The name of the channel.
-        case name(String)
-
-        /// The position of this channel.
-        case position(Int)
-
-        /// The topic of a text channel.
-        case topic(String)
-
-        /// The user limit of a voice channel.
-        case userLimit(Int)
-    }
-
-    /// Modify a guild member.
-    public enum ModifyMember {
-        /// The id of the channel to move this member to. If they're connected to voice.
-        case channel(String)
-
-        /// Whether this member is deafened.
-        case deaf(Bool)
-
-        /// Whether this member is muted.
-        case mute(Bool)
-
-        /// The nick for this member.
-        case nick(String?)
-
-        /// The roles this member should have.
-        case roles([DiscordRole])
-    }
-
-    /// Modify guild options.
-    public enum ModifyGuild {
-        /// The snowflake id of the afk channel.
-        case afkChannelId(String)
-
-        /// The length of time before a user is sent to the afk channel.
-        case afkTimeout(Int)
-
-        /// The default notification setting.
-        case defaultMessageNotifications(Int)
-
-        /// A base64 encoded string of the guild icon.
-        case icon(String)
-
-        /// The name of the guild.
-        case name(String)
-
-        /// The snowflake id of the new guild owner.
-        case ownerId(String)
-
-        /// The region this guild is in.
-        case region(String)
-
-        /// The base64 encoded splash image for this guild.
-        case splash(String)
-
-        /// The required verification level of this guild.
-        case verificationLevel(Int)
-    }
-
-    /// The options for creating/editing a webhook.
-    public enum WebhookOption {
-        /// The name of the webhook
-        case name(String)
-
-        /// The avatar of the webhook. A base64 128x128 jpeg image.
-        case avatar(String)
-    }
-}
-
 // TODO Group DM
+// TODO Add guild member
+// TODO Guild integrations
+// TODO Guild pruning
+// TODO Guild embeds
+// TODO Guild batch modify roles
 
 /**
-    This enum controls the interface with the Discord REST API.
-
-    It defines several endpoint cases which are then used by the various static methods defined on this enum.
-    The cases themselves are of little use.
-
-    The methods all take a `DiscordToken` which is used for authentication with the REST API.
-    GET methods also take a callback.
-
-    All requests through this enum are rate limited.
-
-    **NOTE**: Callbacks from methods on this enum are *NOT* executed on the client's handleQueue. So it is important
-    that if you make modifications to the client inside of a callback, you first dispatch back on the handleQueue.
+    This enum defines the endpoints used to interact with the Discord API.
 */
 public enum DiscordEndpoint : String {
     /// The base url for the Discord REST API.
@@ -334,13 +171,163 @@ public enum DiscordEndpoint : String {
 
         return com.url!
     }
+}
 
-    static func jsonFromResponse(data: Data?, response: HTTPURLResponse?) -> JSON? {
-        guard let data = data, let response = response, (response.statusCode == 200 || response.statusCode == 201),
-              let stringData = String(data: data, encoding: .utf8) else {
-            return nil
+public extension DiscordEndpoint {
+    /// A namespace struct for endpoint options.
+    public struct Options {
+        private init() {}
+
+        /// Create invite options.
+        public enum CreateInvite {
+            /// How long this invite should live.
+            case maxAge(Int)
+
+            /// Number of uses this invite has before it becomes invalid
+            case maxUses(Int)
+
+            /// Whether this invite only grant temporary membership
+            case temporary(Bool)
+
+            /// if true, don't try to reuse a similar invite (useful for creating many unique one time use invites)
+            case unique(Bool)
         }
 
-        return JSON.decodeJSON(stringData)
+        /// Options for creating a role. All are optional.
+        public enum CreateRole {
+            /// The color of the enum.
+            case color(Int)
+
+            /// Whether the role should be displayed separately in the sidebar.
+            case hoist(Bool)
+
+            /// Whether this role is mentionable.
+            case mentionable(Bool)
+
+            /// The name of this role.
+            case name(String)
+
+            /// The permissions this role has.
+            case permissions(Int)
+        }
+
+        /// Get message options.
+        ///
+        /// after, around and before are mutually exclusive. They shouldn't be in the same get request
+        public enum GetMessage {
+            /// The message to get other messages after.
+            case after(DiscordMessage)
+
+            /// The message to get other messages around.
+            case around(DiscordMessage)
+
+            /// The message to get other messages before.
+            case before(DiscordMessage)
+
+            /// The number of messages to get.
+            case limit(Int)
+        }
+
+        /// Guild create channel options.
+        public enum GuildCreateChannel {
+            /// The bitrate of a voice channel.
+            case bitrate(Int)
+
+            /// The name of the channel.
+            case name(String)
+
+            /// An array of permissions for this channel.
+            case permissionOverwrites([DiscordPermissionOverwrite])
+
+            /// The type of this channel.
+            case type(DiscordChannelType)
+
+            /// The user limit for a voice channel
+            case userLimit(Int)
+        }
+
+        /// Guild get members options.
+        public enum GuildGetMembers {
+            /// The user index to get users after (pagination).
+            case after(Int)
+
+            /// The number of users to get.
+            case limit(Int)
+        }
+
+        /// Modify channel options.
+        public enum ModifyChannel {
+            /// The bitrate of a voice channel.
+            case bitrate(Int)
+
+            /// The name of the channel.
+            case name(String)
+
+            /// The position of this channel.
+            case position(Int)
+
+            /// The topic of a text channel.
+            case topic(String)
+
+            /// The user limit of a voice channel.
+            case userLimit(Int)
+        }
+
+        /// Modify a guild member.
+        public enum ModifyMember {
+            /// The id of the channel to move this member to. If they're connected to voice.
+            case channel(String)
+
+            /// Whether this member is deafened.
+            case deaf(Bool)
+
+            /// Whether this member is muted.
+            case mute(Bool)
+
+            /// The nick for this member.
+            case nick(String?)
+
+            /// The roles this member should have.
+            case roles([DiscordRole])
+        }
+
+        /// Modify guild options.
+        public enum ModifyGuild {
+            /// The snowflake id of the afk channel.
+            case afkChannelId(String)
+
+            /// The length of time before a user is sent to the afk channel.
+            case afkTimeout(Int)
+
+            /// The default notification setting.
+            case defaultMessageNotifications(Int)
+
+            /// A base64 encoded string of the guild icon.
+            case icon(String)
+
+            /// The name of the guild.
+            case name(String)
+
+            /// The snowflake id of the new guild owner.
+            case ownerId(String)
+
+            /// The region this guild is in.
+            case region(String)
+
+            /// The base64 encoded splash image for this guild.
+            case splash(String)
+
+            /// The required verification level of this guild.
+            case verificationLevel(Int)
+        }
+
+        /// The options for creating/editing a webhook.
+        public enum WebhookOption {
+            /// The name of the webhook
+            case name(String)
+
+            /// The avatar of the webhook. A base64 128x128 jpeg image.
+            case avatar(String)
+        }
     }
 }

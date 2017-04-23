@@ -44,6 +44,15 @@ enum JSON {
             return nil
         }
     }
+
+    static func jsonFromResponse(data: Data?, response: HTTPURLResponse?) -> JSON? {
+        guard let data = data, let response = response, (response.statusCode == 200 || response.statusCode == 201),
+              let stringData = String(data: data, encoding: .utf8) else {
+            return nil
+        }
+
+        return JSON.decodeJSON(stringData)
+    }
 }
 
 enum JSONError : Error {

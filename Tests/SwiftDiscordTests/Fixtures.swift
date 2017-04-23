@@ -109,6 +109,27 @@ let testGroupDMChannel: [String: Any] = [
     "name": "A Group DM"
 ]
 
+let testAttachment: [String: Any] = [:]
+let testEmbed: [String: Any] = [:]
+
+let testMessage: [String: Any] = [
+    "attachments": [testAttachment],
+    "author": testUser,
+    "channel_id": testGuildChannel["id"] as! String,
+    "content": "This is a test message",
+    "embeds": [testEmbed],
+    "id": "testMessage",
+    "mention_everyone": false,
+    "mention_roles": [String](),
+    "mentions": [[String: Any]](),
+    "nonce": "",
+    "pinned": false,
+    "reactions": [[String: Any]](),
+    "tts": false,
+    "edited_timestamp": "",
+    "timestamp": ""
+]
+
 func createGuildMemberObjects(n: Int) -> [[String: Any]] {
     var members = [[String: Any]]()
 
