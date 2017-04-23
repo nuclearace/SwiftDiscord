@@ -23,10 +23,10 @@ A Discord API client for Swift.
 
 
 - Installing and Building (Linux and macOS):
- - Create your Swift Package Manager project
- - Add `.Package(url: "https://github.com/nuclearace/SwiftDiscord", majorVersion: 3)` to your dependencies in Package.swift
- - Add `import SwiftDiscord` to files you wish to use the module in.
- - Run `swift build -Xlinker -L/usr/local/lib -Xlinker -lopus -Xcc -I/usr/local/include`. The Xlinker options are needed to tell the package manager where to find the libsodium and opus libraries that were installed through Homebrew. The Xcc option tells clang where to find the headers for opus.
+    - Create your Swift Package Manager project
+    - Add `.Package(url: "https://github.com/nuclearace/SwiftDiscord", majorVersion: 3)` to your dependencies in Package.swift
+    - Add `import SwiftDiscord` to files you wish to use the module in.
+    - Run `swift build -Xlinker -L/usr/local/lib -Xlinker -lopus -Xcc -I/usr/local/include`. The Xlinker options are needed to tell the package manager where to find the libsodium and opus libraries that were installed through Homebrew. The Xcc option tells clang where to find the headers for opus.
 
 Xcode:
 
