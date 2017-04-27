@@ -35,6 +35,8 @@ public enum DiscordPermission : Int {
     case manageGuild = 0x00000020
     /// This user can add reactions.
     case addReactions = 0x00000040
+    /// This user can view the audit log.
+    case viewAuditLog = 0x00000080
     /// This user can read messages.
     case readMessages = 0x00000400
     /// This user can send messages.
