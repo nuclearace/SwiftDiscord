@@ -218,11 +218,9 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func createRTPHeader() -> [UInt8] {
-        let header: UnsafeMutableRawBufferPointer
+        let header = UnsafeMutableRawBufferPointer.allocate(count: 12)
 
         defer { header.deallocate() }
-
-        header = UnsafeMutableRawBufferPointer.allocate(count: 12)
 
         header.storeBytes(of: 0x80, as: UInt8.self)
         header.storeBytes(of: 0x78, toByteOffset: 1, as: UInt8.self)
