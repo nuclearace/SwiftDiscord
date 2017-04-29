@@ -187,12 +187,9 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
     /// Default implementation
     public func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> ()) {
-        var request = DiscordEndpoint.createRequest(with: token, for: .channelInvites, replacing: [
+        let request = DiscordEndpoint.createRequest(with: token, for: .channelInvites, replacing: [
             "channel.id": channelId
         ])
-
-        request.httpMethod = "GET"
-
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .channelInvites, parameters: ["channel.id": channelId])
 
         rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
@@ -240,10 +237,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
     /// Default implementation
     public func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> ()) {
-        var request = DiscordEndpoint.createRequest(with: token, for: .channel, replacing: ["channel.id": channelId])
-
-        request.httpMethod = "GET"
-
+        let request = DiscordEndpoint.createRequest(with: token, for: .channel, replacing: ["channel.id": channelId])
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .channel, parameters: ["channel.id": channelId])
 
         rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
@@ -275,11 +269,8 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        var request = DiscordEndpoint.createRequest(with: token, for: .messages, replacing: ["channel.id": channelId],
+        let request = DiscordEndpoint.createRequest(with: token, for: .messages, replacing: ["channel.id": channelId],
                                                     getParams: getParams)
-
-        request.httpMethod = "GET"
-
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channelId])
 
         rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
@@ -295,10 +286,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
     /// Default implementation
     public func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> ()) {
-        var request = DiscordEndpoint.createRequest(with: token, for: .pins, replacing: ["channel.id": channelId])
-
-        request.httpMethod = "GET"
-
+        let request = DiscordEndpoint.createRequest(with: token, for: .pins, replacing: ["channel.id": channelId])
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .pins, parameters: ["channel.id": channelId])
 
         rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
