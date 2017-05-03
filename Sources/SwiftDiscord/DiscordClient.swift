@@ -816,7 +816,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         guard let guildId = data["guild_id"] as? String, let guild = guilds[guildId] else { return }
         guard let user = data["user"] as? [String: Any], let userId = user["id"] as? String else { return }
 
-        var presence = guilds[guildId]?.presences[userId]
+        var presence = guild.presences[userId]
 
         if presence != nil {
             presence!.updatePresence(presenceObject: data)
