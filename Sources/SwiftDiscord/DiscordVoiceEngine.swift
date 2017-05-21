@@ -22,7 +22,7 @@ import Starscream
 #else
 import WebSockets
 #endif
-import SocksCore
+import Sockets
 import Sodium
 
 enum DiscordVoiceEngineError : Error {

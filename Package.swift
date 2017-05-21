@@ -26,6 +26,6 @@ let package = Package(
         .Package(url: "https://github.com/nuclearace/copus", majorVersion: 1),
     	.Package(url: "https://github.com/nuclearace/Sodium", majorVersion: 1),
         .Package(url: "https://github.com/nuclearace/Starscream", majorVersion: 2),
-        .Package(url: "https://github.com/vapor/engine", majorVersion: 1),
+        .Package(url: "https://github.com/vapor/engine", majorVersion: 2),
     ]
 )

@@ -2,9 +2,9 @@
   "autoPin": true,
   "pins": [
     {
-      "package": "CLibreSSL",
+      "package": "Bits",
       "reason": null,
-      "repositoryURL": "https://github.com/vapor/clibressl.git",
+      "repositoryURL": "https://github.com/vapor/bits.git",
       "version": "1.0.0"
     },
     {
@@ -14,28 +14,46 @@
       "version": "1.0.9"
     },
     {
+      "package": "CTLS",
+      "reason": null,
+      "repositoryURL": "https://github.com/vapor/ctls.git",
+      "version": "1.0.0"
+    },
+    {
       "package": "Core",
       "reason": null,
       "repositoryURL": "https://github.com/vapor/core.git",
-      "version": "1.1.1"
+      "version": "2.0.1"
     },
     {
       "package": "Crypto",
       "reason": null,
       "repositoryURL": "https://github.com/vapor/crypto.git",
-      "version": "1.1.0"
+      "version": "2.0.0"
+    },
+    {
+      "package": "Debugging",
+      "reason": null,
+      "repositoryURL": "https://github.com/vapor/debugging.git",
+      "version": "1.0.0"
     },
     {
       "package": "Engine",
       "reason": null,
       "repositoryURL": "https://github.com/vapor/engine",
-      "version": "1.3.12"
+      "version": "2.0.0"
     },
     {
-      "package": "Socks",
+      "package": "Random",
       "reason": null,
-      "repositoryURL": "https://github.com/vapor/socks.git",
-      "version": "1.2.7"
+      "repositoryURL": "https://github.com/vapor/random.git",
+      "version": "1.0.0"
+    },
+    {
+      "package": "Sockets",
+      "reason": null,
+      "repositoryURL": "https://github.com/vapor/sockets.git",
+      "version": "2.0.0"
     },
     {
       "package": "Sodium",
@@ -53,7 +71,7 @@
       "package": "TLS",
       "reason": null,
       "repositoryURL": "https://github.com/vapor/tls.git",
-      "version": "1.1.2"
+      "version": "2.0.0"
     }
   ],
   "version": 1
