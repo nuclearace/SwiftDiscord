@@ -23,6 +23,8 @@ A Discord API client for Swift.
 
 
 - Installing and Building (Linux and macOS):
+    - Install vapor dependencies:
+        - `brew tap vapor/tap && brew install ctls` or `eval "$(curl -sL https://apt.vapor.sh)"; sudo apt-get install vapor;`
     - Create your Swift Package Manager project
     - Add `.Package(url: "https://github.com/nuclearace/SwiftDiscord", majorVersion: 3)` to your dependencies in Package.swift
     - Add `import SwiftDiscord` to files you wish to use the module in.
