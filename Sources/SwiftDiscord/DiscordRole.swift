@@ -38,9 +38,7 @@ public struct DiscordRole : JSONAble, Equatable {
     public var name: String
 
     /// The permissions this role has.
-    ///
-    /// *Bit field*
-    public var permissions: Int
+    public var permissions: DiscordPermission
 
     /// The position of this role.
     public var position: Int
@@ -52,7 +50,7 @@ public struct DiscordRole : JSONAble, Equatable {
         managed = roleObject.get("managed", or: false)
         mentionable = roleObject.get("mentionable", or: false)
         name = roleObject.get("name", or: "")
-        permissions = roleObject.get("permissions", or: 0)
+        permissions = DiscordPermission(rawValue: roleObject.get("permissions", or: 0))
         position = roleObject.get("position", or: 0)
     }
 

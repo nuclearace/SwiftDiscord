@@ -79,11 +79,11 @@ public enum DiscordOAuthEndpoint : String {
         - parameter for: The snowflake id of the bot user
         - parameter with: An array of `DiscordPermission` that this bot should have
     */
-    public static func createBotAddURL(for user: DiscordUser, with permissions: [DiscordPermission]) -> URL? {
+    public static func createBotAddURL(for user: DiscordUser, with permissions: DiscordPermission) -> URL? {
         guard user.bot else { return nil }
 
         return DiscordOAuthEndpoint.bot.createURL(getParams: [
-            "permissions": String(permissions.reduce(0, |)),
+            "permissions": permissions.rawValue.description,
             "client_id": user.id
         ])
     }

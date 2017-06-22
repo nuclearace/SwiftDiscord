@@ -41,7 +41,7 @@ extension DiscordGuildChannel {
         - returns: Whether the user has this permission in this channel.
     */
     public func canMember(_ member: DiscordGuildMember, _ permission: DiscordPermission) -> Bool {
-        return permissions(for: member) & permission == permission
+        return permissions(for: member).contains(permission)
     }
 
     /**
@@ -84,46 +84,45 @@ extension DiscordGuildChannel {
         - parameter member: The member to check.
         - returns: The permissions that this user has, OR'd together.
     */
-    public func permissions(for member: DiscordGuildMember) -> Int {
-        guard let guild = self.guild else { return 0 }
-        guard guild.ownerId != member.user.id else { return -1 } // Owner has all permissions
+    public func permissions(for member: DiscordGuildMember) -> DiscordPermission {
+        guard let guild = self.guild else { return [] }
+        guard guild.ownerId != member.user.id else { return DiscordPermission.all } // Owner has all permissions
 
-        var workingPermissions = guild.roles(for: member).reduce(0, { $0 | $1.permissions })
+        var workingPermissions = guild.roles(for: member).reduce([] as DiscordPermission, { $0.union($1.permissions) })
 
-        if workingPermissions & .administrator == .administrator {
+        if workingPermissions.contains(.administrator) {
             // Admin has all permissions
-            return -1
+            return DiscordPermission.all
         }
 
         let overwrites = self.overwrites(for: member)
-        let (allowRole, denyRole, allowMember, denyMember) = overwrites.reduce((0, 0, 0, 0), {cur, overwrite in
+        let (allowRole, denyRole, allowMember, denyMember) = overwrites.reduce(([], [], [], []) as (DiscordPermission, DiscordPermission, DiscordPermission, DiscordPermission), {cur, overwrite in
             switch overwrite.type {
             case .role:
-                return (cur.0 | overwrite.allow, cur.1 | overwrite.deny, cur.2, cur.3)
+                return (cur.0.union(overwrite.allow), cur.1.union(overwrite.deny), cur.2, cur.3)
             case .member:
-                return (cur.0, cur.1, cur.2 | overwrite.allow, cur.3 | overwrite.deny)
+                return (cur.0, cur.1, cur.2.union(overwrite.allow), cur.3.union(overwrite.deny))
             }
         })
 
-        workingPermissions = (workingPermissions & ~denyRole) | allowRole
-        workingPermissions = (workingPermissions & ~denyMember) | allowMember
+        workingPermissions.subtract(denyRole)
+        workingPermissions.formUnion(allowRole)
+        workingPermissions.subtract(denyMember)
+        workingPermissions.formUnion(allowMember)
 
-        if !(workingPermissions & .sendMessages == .sendMessages) {
+        if !workingPermissions.contains(.sendMessages) {
             // If they can't send messages, they automatically lose some permissions
-            workingPermissions &= ~.sendTTSMessages
-            workingPermissions &= ~.mentionEveryone
-            workingPermissions &= ~.attachFiles
-            workingPermissions &= ~.mentionEveryone
+            workingPermissions.subtract([.sendTTSMessages, .mentionEveryone, .attachFiles])
         }
 
-        if !(workingPermissions & .readMessages == .readMessages) {
+        if !workingPermissions.contains(.readMessages) {
             // If they can't read, they lose all channel based permissions
-            workingPermissions &= ~.allChannel
+            workingPermissions.subtract(.allChannel)
         }
 
         if self is DiscordGuildTextChannel {
             // Text channels don't have voice permissions.
-            workingPermissions &= ~.voice
+            workingPermissions.subtract(.voice)
         }
 
         return workingPermissions
