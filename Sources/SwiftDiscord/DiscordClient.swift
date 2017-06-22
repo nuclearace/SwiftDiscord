@@ -94,7 +94,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
     var channelCache = [String: DiscordChannel]()
 
-    private let logType = "DiscordClient"
+    private var logType: String { return "DiscordClient" }
     private let voiceQueue = DispatchQueue(label: "voiceQueue")
 
     // MARK: Initializers

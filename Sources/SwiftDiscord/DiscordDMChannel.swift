@@ -23,7 +23,7 @@ public struct DiscordDMChannel : DiscordTextChannel {
     public let id: String
 
     /// Whether this channel is private. Should always be true for DMChannels
-    public let isPrivate = true
+    public var isPrivate: Bool { return true }
 
     /// The user this channel is with.
     public let recipient: DiscordUser
@@ -68,7 +68,7 @@ public struct DiscordGroupDMChannel : DiscordTextChannel {
     public let id: String
 
     /// Whether this channel is private. Should always be true for DMChannels
-    public let isPrivate = true
+    public var isPrivate: Bool { return true }
 
     /// The users in this channel.
     public let recipients: [DiscordUser]
