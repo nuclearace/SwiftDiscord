@@ -78,7 +78,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     public private(set) var connected = false
 
     /// The direct message channels this user is in.
-    public private(set) var directChannels = [String: DiscordChannel]()
+    public private(set) var directChannels = [String: DiscordTextChannel]()
 
     /// The guilds that this user is in.
     public private(set) var guilds = [String: DiscordGuild]()
@@ -261,8 +261,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         - parameter channelId: The snowflake of the voice channel you would like to join
     */
     open func joinVoiceChannel(_ channelId: String) {
-        guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId],
-              channel.type == .voice else {
+        guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId] as? DiscordGuildVoiceChannel else {
 
             return
         }
@@ -445,10 +444,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         switch channel {
         case let guildChannel as DiscordGuildChannel:
             guilds[guildChannel.guildId]?.channels[guildChannel.id] = guildChannel
-        case is DiscordDMChannel:
-            fallthrough
-        case is DiscordGroupDMChannel:
-            directChannels[channel.id] = channel
+        case let dmChannel as DiscordDMChannel:
+            directChannels[channel.id] = dmChannel
+        case let groupChannel as DiscordGroupDMChannel:
+            directChannels[channel.id] = groupChannel
         default:
             break
         }
@@ -503,7 +502,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     open func handleChannelUpdate(with data: [String: Any]) {
         DefaultDiscordLogger.Logger.log("Handling channel update", type: logType)
 
-        let channel = DiscordGuildChannel(guildChannelObject: data, client: self)
+        let channel = guildChannelFromObject(data, client: self)
 
         DefaultDiscordLogger.Logger.verbose("Updated channel: %@", type: logType, args: channel)
 

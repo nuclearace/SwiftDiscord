@@ -236,7 +236,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> ()) {
+    public func getChannel(_ channelId: String, callback: @escaping (DiscordChannel?) -> ()) {
         let request = DiscordEndpoint.createRequest(with: token, for: .channel, replacing: ["channel.id": channelId])
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .channel, parameters: ["channel.id": channelId])
 
@@ -247,7 +247,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 return
             }
 
-            callback(DiscordGuildChannel(guildChannelObject: channel))
+            callback(channelFromObject(channel, withClient: nil))
         })
     }
 
@@ -340,7 +340,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 return
             }
 
-            callback?(DiscordGuildChannel(guildChannelObject: channel))
+            callback?(guildChannelFromObject(channel))
         })
     }
 

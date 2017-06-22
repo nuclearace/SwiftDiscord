@@ -70,7 +70,7 @@ public protocol DiscordUserActor {
     // MARK: Properties
 
     /// The direct message channels this user is in.
-    var directChannels: [String: DiscordChannel] { get }
+    var directChannels: [String: DiscordTextChannel] { get }
 
     /// The guilds that this user is in.
     var guilds: [String: DiscordGuild] { get }

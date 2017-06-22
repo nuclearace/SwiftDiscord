@@ -78,7 +78,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 return
             }
 
-            callback?(DiscordGuildChannel(guildChannelObject: channel))
+            callback?(guildChannelFromObject(channel))
         })
     }
 
@@ -176,7 +176,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 return
             }
 
-            callback(DiscordGuildChannel.guildChannelsFromArray(channels as! [[String: Any]]).map({ $0.value }))
+            callback(guildChannelsFromArray(channels as! [[String: Any]]).map({ $0.value }))
         })
     }
 
@@ -344,7 +344,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 return
             }
 
-            callback?(DiscordGuildChannel.guildChannelsFromArray(channels as! [[String: Any]]).map({ $0.value }))
+            callback?(guildChannelsFromArray(channels as! [[String: Any]]).map({ $0.value }))
         })
     }
 

@@ -97,7 +97,7 @@ class TestDiscordClient : XCTestCase {
         expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
         expectations[.channelCreate] = expectation(description: "Client should call create create method")
 
-        var tChannel = testGuildChannel
+        var tChannel = testGuildTextChannel
 
         tChannel["id"] = "testChannel2"
         tChannel["name"] = "A new channel"
@@ -129,7 +129,7 @@ class TestDiscordClient : XCTestCase {
         expectations[.channelCreate] = expectation(description: "Client should call channel create method")
         expectations[.channelDelete] = expectation(description: "Client should call delete channel method")
 
-        var tChannel = testGuildChannel
+        var tChannel = testGuildTextChannel
 
         tChannel["id"] = "testChannel2"
         tChannel["name"] = "A new channel"
@@ -165,7 +165,7 @@ class TestDiscordClient : XCTestCase {
         expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
         expectations[.channelUpdate] = expectation(description: "Client should call update channel method")
 
-        var tChannel = testGuildChannel
+        var tChannel = testGuildTextChannel
 
         tChannel["name"] = "A new channel"
 
@@ -257,12 +257,22 @@ class TestDiscordClient : XCTestCase {
         waitForExpectations(timeout: 0.2)
     }
 
-    func testClientFindsGuildChannel() {
+    func testClientFindsGuildTextChannel() {
         expectations[.guildCreate] = expectation(description: "Client should call guild create method")
 
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
 
-        assertFindChannel(channelFixture: testGuildChannel, channelType: DiscordGuildChannel.self)
+        assertFindChannel(channelFixture: testGuildTextChannel, channelType: DiscordGuildTextChannel.self)
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientFindsGuildVoiceChannel() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
+
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
+
+        assertFindChannel(channelFixture: testGuildVoiceChannel, channelType: DiscordGuildVoiceChannel.self)
 
         waitForExpectations(timeout: 0.2)
     }
@@ -348,7 +358,6 @@ extension TestDiscordClient {
             XCTAssertNil(client.directChannels[channel.id], "Deleted DM Channel should not be in direct channels")
         }
 
-        XCTAssertEqual(channel.type, .direct, "Create channel should correctly type direct channels")
         XCTAssertEqual(channel.id, testUser["id"] as! String, "Channel create should index channels by "
                                                               + "recipient id")
     }
@@ -361,7 +370,6 @@ extension TestDiscordClient {
             XCTAssertNil(client.directChannels[channel.id], "Deleted Group DM Channel should not be in direct channels")
         }
 
-        XCTAssertEqual(channel.type, .groupDM, "Create channel should correctly type direct channels")
         XCTAssertEqual(channel.name, "A Group DM", "Channel create should index channels by recipient id")
     }
 
@@ -383,7 +391,7 @@ extension TestDiscordClient : DiscordClientDelegate {
     func client(_ client: DiscordClient, didCreateChannel channel: DiscordChannel) {
         switch channel {
         case let guildChannel as DiscordGuildChannel:
-            assertGuildChannel(guildChannel, expectedGuildChannels: 2, testType: .create)
+            assertGuildChannel(guildChannel, expectedGuildChannels: 3, testType: .create)
         case let dmChannel as DiscordDMChannel:
             assertDMChannel(dmChannel, testType: .create)
         case let groupDmChannel as DiscordGroupDMChannel:
@@ -398,7 +406,7 @@ extension TestDiscordClient : DiscordClientDelegate {
     func client(_ client: DiscordClient, didDeleteChannel channel: DiscordChannel) {
         switch channel {
         case let guildChannel as DiscordGuildChannel:
-            assertGuildChannel(guildChannel, expectedGuildChannels: 1, testType: .delete)
+            assertGuildChannel(guildChannel, expectedGuildChannels: 2, testType: .delete)
         case let dmChannel as DiscordDMChannel:
             assertDMChannel(dmChannel, testType: .delete)
         case let groupDmChannel as DiscordGroupDMChannel:
@@ -423,7 +431,7 @@ extension TestDiscordClient : DiscordClientDelegate {
             return
         }
 
-        XCTAssertEqual(clientGuild.channels.count, 1, "Guild should only have one channel")
+        XCTAssertEqual(clientGuild.channels.count, 2, "Guild should have two channels")
         XCTAssertEqual(guildChannel.name, "A new channel", "A new channel should have been updated")
 
         expectations[.channelUpdate]?.fulfill()
@@ -477,7 +485,7 @@ extension TestDiscordClient : DiscordClientDelegate {
             return
         }
 
-        XCTAssertEqual(clientGuild.channels.count, 1, "Created guild should have one channel")
+        XCTAssertEqual(clientGuild.channels.count, 2, "Created guild should have two channels")
         XCTAssertEqual(clientGuild.members.count, 20, "Created guild should have 20 members")
         XCTAssertEqual(clientGuild.presences.count, 20, "Created guild should have 20 presences")
         XCTAssert(guild === clientGuild, "Guild on the client should be the same as one passed to handler")

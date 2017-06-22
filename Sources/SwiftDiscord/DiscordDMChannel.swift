@@ -16,7 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a direct message channel with another user.
-public struct DiscordDMChannel : DiscordChannel {
+public struct DiscordDMChannel : DiscordTextChannel {
     // MARK: Properties
 
     /// The snowflake id of the channel.
@@ -27,9 +27,6 @@ public struct DiscordDMChannel : DiscordChannel {
 
     /// The user this channel is with.
     public let recipient: DiscordUser
-
-    /// A DiscordDMChannel should always be a direct channel
-    public let type = DiscordChannelType.direct
 
     /// Reference to the client.
     public weak var client: DiscordClient?
@@ -64,7 +61,7 @@ public struct DiscordDMChannel : DiscordChannel {
 }
 
 /// Represents a direct message channel with a group of users.
-public struct DiscordGroupDMChannel : DiscordChannel {
+public struct DiscordGroupDMChannel : DiscordTextChannel {
     // MARK: Properties
 
     /// The snowflake id of the channel.
@@ -75,9 +72,6 @@ public struct DiscordGroupDMChannel : DiscordChannel {
 
     /// The users in this channel.
     public let recipients: [DiscordUser]
-
-    /// A DiscordGroupDMChannel should always be a direct channel
-    public let type = DiscordChannelType.groupDM
 
     /// Reference to the client.
     public weak var client: DiscordClient?

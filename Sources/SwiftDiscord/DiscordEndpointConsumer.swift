@@ -101,9 +101,9 @@ public protocol DiscordEndpointConsumer {
         Gets the specified channel.
 
         - parameter channelId: The snowflake id of the channel
-        - parameter callback: The callback function containing an optional `DiscordGuildChannel`
+        - parameter callback: The callback function containing an optional `DiscordChannel`
     */
-    func getChannel(_ channelId: String, callback: @escaping (DiscordGuildChannel?) -> ())
+    func getChannel(_ channelId: String, callback: @escaping (DiscordChannel?) -> ())
 
     /**
         Edits a message
