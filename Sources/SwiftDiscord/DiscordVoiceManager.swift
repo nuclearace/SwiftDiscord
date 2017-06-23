@@ -81,7 +81,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
 
     var voiceServerInformations = [String: DiscordVoiceServerInformation]()
 
-    private let logType = "DiscordVoiceManager"
+    private var logType: String { return "DiscordVoiceManager" }
 
     // MARK: Initializers
 

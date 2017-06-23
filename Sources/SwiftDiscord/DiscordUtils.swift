@@ -85,6 +85,7 @@ class DiscordDateFormatter {
 
     private init() {
         RFC3339DateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"
+        RFC3339DateFormatter.locale = Locale(identifier: "en_US")
     }
 
     static func format(_ string: String) -> Date? {

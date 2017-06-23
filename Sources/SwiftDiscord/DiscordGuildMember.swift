@@ -96,6 +96,17 @@ public struct DiscordGuildMember {
         self.guild = guild
     }
 
+    init(guildId: String, user: DiscordUser, deaf: Bool, mute: Bool, nick: String?, roles: [String], joinedAt: Date, guild: DiscordGuild? = nil) {
+        self.user = user
+        self._deaf = deaf
+        self._mute = mute
+        self._nick = nick
+        self.roleIds = roles
+        self.joinedAt = joinedAt
+        self.guild = guild
+        self.guildId = guildId
+    }
+
     static func guildMembersFromArray(_ guildMembersArray: [[String: Any]], withGuildId guildId: String,
                                       guild: DiscordGuild?)
             -> DiscordLazyDictionary<String, DiscordGuildMember> {

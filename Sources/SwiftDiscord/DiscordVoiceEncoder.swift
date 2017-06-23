@@ -251,7 +251,7 @@ open class DiscordOpusEncoder : DiscordOpusCodeable {
     public let channels: Int
 
     /// The maximum size of a opus packet.
-    public let maxPacketSize = 4000
+    public var maxPacketSize: Int { return 4000 }
 
     /// The sampling rate.
     public let sampleRate: Int
