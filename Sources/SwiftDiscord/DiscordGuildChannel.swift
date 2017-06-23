@@ -112,7 +112,7 @@ extension DiscordGuildChannel {
 
         if !workingPermissions.contains(.sendMessages) {
             // If they can't send messages, they automatically lose some permissions
-            workingPermissions.subtract([.sendTTSMessages, .mentionEveryone, .attachFiles])
+            workingPermissions.subtract([.sendTTSMessages, .mentionEveryone, .attachFiles, .embedLinks])
         }
 
         if !workingPermissions.contains(.readMessages) {

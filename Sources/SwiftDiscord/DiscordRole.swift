@@ -54,6 +54,17 @@ public struct DiscordRole : JSONAble, Equatable {
         position = roleObject.get("position", or: 0)
     }
 
+    init(id: String, color: Int, hoist: Bool, managed: Bool, mentionable: Bool, name: String, permissions: DiscordPermission, position: Int) {
+        self.id = id
+        self.color = color
+        self.hoist = hoist
+        self.managed = managed
+        self.mentionable = mentionable
+        self.name = name
+        self.permissions = permissions
+        self.position = position
+    }
+
     static func rolesFromArray(_ rolesArray: [[String: Any]]) -> [String: DiscordRole] {
         var roles = [String: DiscordRole]()
 
