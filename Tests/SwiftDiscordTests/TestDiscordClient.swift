@@ -35,6 +35,12 @@ class TestDiscordClient : XCTestCase {
         expectations[.guildDelete] = expectation(description: "Client should call guild delete method")
 
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
+
+        // Force guild's channels into the channel cache
+        for channel in (testGuildJSON["channels"] as! [[String: Any]]).map({ $0["id"] as! String }) {
+            _ = client.findChannel(fromId: channel)
+        }
+
         client.handleDispatch(event: .guildDelete, data: .object(["id": "testGuild"]))
 
         waitForExpectations(timeout: 0.2)
@@ -495,6 +501,9 @@ extension TestDiscordClient : DiscordClientDelegate {
 
     func client(_ client: DiscordClient, didDeleteGuild guild: DiscordGuild) {
         XCTAssertEqual(client.guilds.count, 0, "Client should have no guilds")
+        for channel in guild.channels.keys {
+            XCTAssertNil(client.channelCache[channel], "Removing a guild should remove its channels from the channel cache")
+        }
         XCTAssertEqual(guild.id, "testGuild", "Test guild should be removed")
 
         expectations[.guildDelete]?.fulfill()

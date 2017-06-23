@@ -556,6 +556,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         guard let guildId = data["id"] as? String else { return }
         guard let removedGuild = guilds.removeValue(forKey: guildId) else { return }
 
+        if let client = removedGuild.client {
+            for channel in removedGuild.channels.keys {
+                client.channelCache[channel] = nil
+            }
+        }
+
         DefaultDiscordLogger.Logger.verbose("Removed guild: %@", type: logType, args: removedGuild)
 
         delegate?.client(self, didDeleteGuild: removedGuild)

@@ -81,11 +81,8 @@ class TestDiscordPermissions : XCTestCase {
     }
 
     override func tearDown() {
-        for (guildID, channelID) in permissionsTestClient.guilds.flatMap({ guild in guild.value.channels.keys.map { (guild.key, $0) } }) {
-            permissionsTestClient.handleChannelDelete(with: ["id": channelID, "type": 0, "guild_id": guildID])
-        }
-        XCTAssertEqual(permissionsTestClient.channelCache.count, 0, "Removing all channels should clear the channel cache")
         permissionsTestClient.handleGuildDelete(with: permissionsTestGuildJSON)
+        XCTAssertEqual(permissionsTestClient.channelCache.count, 0, "Removing guild should clear its channels from the channel cache")
     }
 
     func testBasicPermissions() {
