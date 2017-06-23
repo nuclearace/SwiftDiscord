@@ -67,7 +67,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
 
-        DefaultDiscordLogger.Logger.log("Creating guild channel on %@", type: "DiscordEndpointGuild", args: guildId)
+        DefaultDiscordLogger.Logger.log("Creating guild channel on \(guildId)", type: "DiscordEndpointGuild")
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildChannels, parameters: ["guild.id": guildId])
 
@@ -102,8 +102,8 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        DefaultDiscordLogger.Logger.log("Creating a new role on %@", type: "DiscordEndpointGuild", args: guildId)
-        DefaultDiscordLogger.Logger.verbose("Role options %@", type: "DiscordEndpointGuild", args: roleData)
+        DefaultDiscordLogger.Logger.log("Creating a new role on \(guildId)", type: "DiscordEndpointGuild")
+        DefaultDiscordLogger.Logger.verbose("Role options \(roleData)", type: "DiscordEndpointGuild")
 
         guard let contentData = JSON.encodeJSONData(roleData) else { return callback(nil) }
 
@@ -158,7 +158,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 return
             }
 
-            DefaultDiscordLogger.Logger.debug("Got guild bans %@", type: "DiscordEndpointGuild", args: bans)
+            DefaultDiscordLogger.Logger.debug("Got guild bans \(bans)", type: "DiscordEndpointGuild")
 
             callback(DiscordBan.bansFromArray(bans as! [[String: Any]]))
         })
@@ -363,9 +363,8 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        DefaultDiscordLogger.Logger.debug("Modifying guild member %@ with options: %@ on %@",
-                                          type: "DiscordEndpointGuild",
-                                          args: id, patchParams, guildId)
+        DefaultDiscordLogger.Logger.debug("Modifying guild member \(id) with options: \(patchParams) on \(guildId)",
+                                          type: "DiscordEndpointGuild")
 
         guard let contentData = JSON.encodeJSONData(patchParams) else { return }
 
@@ -422,7 +421,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         request.httpMethod = "DELETE"
 
-        DefaultDiscordLogger.Logger.log("Unbanning %@ on %@", type: "DiscordEndpointGuild", args: userId, guildId)
+        DefaultDiscordLogger.Logger.log("Unbanning \(userId) on \(guildId)", type: "DiscordEndpointGuild")
 
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildBans, parameters: ["guild.id": guildId])
 

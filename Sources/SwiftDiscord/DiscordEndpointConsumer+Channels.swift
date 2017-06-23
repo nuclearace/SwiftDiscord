@@ -349,8 +349,8 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                             callback: ((DiscordMessage?) -> ())? = nil) {
         var request = DiscordEndpoint.createRequest(with: token, for: .messages, replacing: ["channel.id": channelId])
 
-        DefaultDiscordLogger.Logger.log("Sending message to: %@", type: "DiscordEndpointChannels", args: channelId)
-        DefaultDiscordLogger.Logger.verbose("Message: %@", type: "DiscordEndpointChannels", args: message)
+        DefaultDiscordLogger.Logger.log("Sending message to: \(channelId)", type: "DiscordEndpointChannels")
+        DefaultDiscordLogger.Logger.verbose("Message: \(message)", type: "DiscordEndpointChannels")
 
         request.httpMethod = "POST"
 

@@ -66,7 +66,7 @@ public extension DiscordChannel {
     public func delete() {
         guard let client = self.client else { return }
 
-        DefaultDiscordLogger.Logger.log("Deleting channel: %@", type: "DiscordChannel", args: id)
+        DefaultDiscordLogger.Logger.log("Deleting channel: \(id)", type: "DiscordChannel")
 
         client.deleteChannel(id)
     }

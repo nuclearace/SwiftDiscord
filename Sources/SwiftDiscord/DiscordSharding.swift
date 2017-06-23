@@ -237,8 +237,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     open func manuallyShatter(withInfo info: DiscordShardInformation) {
         guard let delegate = self.delegate else { return }
 
-        DefaultDiscordLogger.Logger.verbose("Manually shattering shard #%@", type: "DiscordShardManager",
-                                            args: info.shardNum)
+        DefaultDiscordLogger.Logger.verbose("Manually shattering shard #\(info.shardNum)", type: "DiscordShardManager")
 
         cleanUp()
 
@@ -285,8 +284,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
         - parameter shardNum: The number of the shard that disconnected.
     */
     open func shardDidConnect(_ shard: DiscordShard) {
-        DefaultDiscordLogger.Logger.verbose("Shard #%@, connected", type: "DiscordShardManager",
-                                            args: shard.shardNum)
+        DefaultDiscordLogger.Logger.verbose("Shard #\(shard.shardNum), connected", type: "DiscordShardManager")
 
         protected { connectedShards += 1 }
 
@@ -301,8 +299,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
         - parameter shardNum: The number of the shard that disconnected.
     */
     open func shardDidDisconnect(_ shard: DiscordShard) {
-        DefaultDiscordLogger.Logger.verbose("Shard #%@, disconnected", type: "DiscordShardManager",
-                                            args: shard.shardNum)
+        DefaultDiscordLogger.Logger.verbose("Shard #\(shard.shardNum), disconnected", type: "DiscordShardManager")
 
         protected { closedShards += 1 }
 
@@ -319,8 +316,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     open func shatter(into numberOfShards: Int) {
         guard let delegate = self.delegate else { return }
 
-        DefaultDiscordLogger.Logger.verbose("Shattering into %@ shards", type: "DiscordShardManager",
-                                            args: numberOfShards)
+        DefaultDiscordLogger.Logger.verbose("Shattering into \(numberOfShards) shards", type: "DiscordShardManager")
 
         cleanUp()
 

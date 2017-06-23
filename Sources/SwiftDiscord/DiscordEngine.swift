@@ -147,7 +147,7 @@ open class DiscordEngine : DiscordEngineSpec {
         Disconnects the engine. An `engine.disconnect` is fired on disconnection.
     */
     public func disconnect() {
-        DefaultDiscordLogger.Logger.log("Disconnecting, %@", type: "DiscordWebSocketable", args: description)
+        DefaultDiscordLogger.Logger.log("Disconnecting, \(description)", type: "DiscordWebSocketable")
 
         closed = true
 
@@ -165,7 +165,7 @@ open class DiscordEngine : DiscordEngineSpec {
         connected = false
         heartbeatQueue.sync { self.pongsMissed = 0 }
 
-        DefaultDiscordLogger.Logger.log("Disconnected, shard: %@", type: logType, args: shardNum)
+        DefaultDiscordLogger.Logger.log("Disconnected, shard: \(shardNum)", type: logType)
 
         if closeReason == .sessionTimeout {
             sessionId = nil
@@ -187,7 +187,7 @@ open class DiscordEngine : DiscordEngineSpec {
     */
     open func handleDispatch(_ payload: DiscordGatewayPayload) {
         guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
-            DefaultDiscordLogger.Logger.error("Could not create dispatch event %@", type: logType, args: payload)
+            DefaultDiscordLogger.Logger.error("Could not create dispatch event \(payload)", type: logType)
 
             return
         }
@@ -276,7 +276,7 @@ open class DiscordEngine : DiscordEngineSpec {
         Handles the resumed event. You shouldn't call this directly.
     */
     open func handleResumed(_ payload: DiscordGatewayPayload) {
-        DefaultDiscordLogger.Logger.log("Resumed gateway session on shard: %@", type: logType, args: shardNum)
+        DefaultDiscordLogger.Logger.log("Resumed gateway session on shard: \(shardNum)", type: logType)
 
         resuming = false
 
@@ -311,7 +311,7 @@ open class DiscordEngine : DiscordEngineSpec {
             return
         }
 
-        DefaultDiscordLogger.Logger.log("Trying to resume gateway session on shard: %@", type: logType, args: shardNum)
+        DefaultDiscordLogger.Logger.log("Trying to resume gateway session on shard: \(shardNum)", type: logType)
 
         resuming = true
 
@@ -322,8 +322,8 @@ open class DiscordEngine : DiscordEngineSpec {
         handleQueue.asyncAfter(deadline: DispatchTime.now() + Double(wait)) {[weak self] in
             guard let this = self, this.resuming else { return }
 
-            DefaultDiscordLogger.Logger.debug("Calling engine connect for gateway resume with wait: %@",
-                type: this.logType, args: wait)
+            DefaultDiscordLogger.Logger.debug("Calling engine connect for gateway resume with wait: \(wait)",
+                type: this.logType)
 
             this.connect()
 
@@ -338,14 +338,13 @@ open class DiscordEngine : DiscordEngineSpec {
     */
     open func sendHeartbeat() {
         guard connected else {
-            DefaultDiscordLogger.Logger.debug("Tried heartbeating on disconnected shard, shard: %@", type: logType,
-                                              args: shardNum)
+            DefaultDiscordLogger.Logger.debug("Tried heartbeating on disconnected shard, shard: \(shardNum)", type: logType)
 
             return
         }
 
         guard pongsMissed < 2 else {
-            DefaultDiscordLogger.Logger.log("Too many pongs missed; closing, shard: %@", type: logType, args: shardNum)
+            DefaultDiscordLogger.Logger.log("Too many pongs missed; closing, shard: \(shardNum)", type: logType)
 
             pongsMissed = 0
             closeWebSockets()
@@ -353,7 +352,7 @@ open class DiscordEngine : DiscordEngineSpec {
             return
         }
 
-        DefaultDiscordLogger.Logger.debug("Sending heartbeat, shard: %@", type: logType, args: shardNum)
+        DefaultDiscordLogger.Logger.debug("Sending heartbeat, shard: \(shardNum)", type: logType)
 
         pongsMissed += 1
         sendPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
@@ -380,11 +379,11 @@ open class DiscordEngine : DiscordEngineSpec {
         }
 
         if sessionId != nil {
-            DefaultDiscordLogger.Logger.log("Sending resume, shard: %@", type: logType, args: shardNum)
+            DefaultDiscordLogger.Logger.log("Sending resume, shard: \(shardNum)", type: logType)
 
             sendPayload(DiscordGatewayPayload(code: .gateway(.resume), payload: .object(resumeObject)))
         } else {
-            DefaultDiscordLogger.Logger.log("Sending handshake, shard: %@", type: logType, args: shardNum)
+            DefaultDiscordLogger.Logger.log("Sending handshake, shard: \(shardNum)", type: logType)
 
             sendPayload(DiscordGatewayPayload(code: .gateway(.identify), payload: .object(handshakeObject)))
         }

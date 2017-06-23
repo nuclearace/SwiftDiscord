@@ -32,7 +32,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        DefaultDiscordLogger.Logger.debug("Creating webhook on: %@", type: "DiscordEndpointChannels", args: channelId)
+        DefaultDiscordLogger.Logger.debug("Creating webhook on: \(channelId)", type: "DiscordEndpointChannels")
 
         guard let contentData = JSON.encodeJSONData(createJSON) else { return }
 
@@ -75,7 +75,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         let request = DiscordEndpoint.createRequest(with: token, for: .webhook, replacing: ["webhook.id": webhookId])
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .webhook, parameters: ["webhook.id": webhookId])
 
-        DefaultDiscordLogger.Logger.debug("Getting webhook: %@", type: "DiscordEndpointWebhooks", args: webhookId)
+        DefaultDiscordLogger.Logger.debug("Getting webhook: \(webhookId)", type: "DiscordEndpointWebhooks")
 
         rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
             guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -94,8 +94,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                                     replacing: ["channel.id": channelId])
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .channelWebhooks, parameters: ["channel.id": channelId])
 
-        DefaultDiscordLogger.Logger.debug("Getting webhooks for channel: %@", type: "DiscordEndpointWebhooks",
-                                          args: channelId)
+        DefaultDiscordLogger.Logger.debug("Getting webhooks for channel: \(channelId)", type: "DiscordEndpointWebhooks")
 
         rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
             guard case let .array(webhooks)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -113,8 +112,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         let request = DiscordEndpoint.createRequest(with: token, for: .guildWebhooks, replacing: ["guild.id": guildId])
         let rateLimiterKey = DiscordRateLimitKey(endpoint: .guildWebhooks, parameters: ["guild.id": guildId])
 
-        DefaultDiscordLogger.Logger.debug("Getting webhooks for guild: %@", type: "DiscordEndpointWebhooks",
-                                          args: guildId)
+        DefaultDiscordLogger.Logger.debug("Getting webhooks for guild: \(guildId)", type: "DiscordEndpointWebhooks")
 
         rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
             guard case let .array(webhooks)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -141,7 +139,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        DefaultDiscordLogger.Logger.debug("Modifying webhook: %@", type: "DiscordEndpointChannels", args: webhookId)
+        DefaultDiscordLogger.Logger.debug("Modifying webhook: \(webhookId)", type: "DiscordEndpointChannels")
 
         guard let contentData = JSON.encodeJSONData(createJSON) else { return }
 

@@ -158,7 +158,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public func createChannel(with options: [DiscordEndpoint.Options.GuildCreateChannel]) {
         guard let client = self.client else { return }
 
-        DefaultDiscordLogger.Logger.log("Creating guild channel on %@", type: "DiscordGuild", args: id)
+        DefaultDiscordLogger.Logger.log("Creating guild channel on \(id)", type: "DiscordGuild")
 
         client.createGuildChannel(on: id, options: options)
     }
@@ -204,7 +204,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         var guildMember: DiscordGuildMember?
 
         client.getGuildMember(by: userId, on: id) {member in
-            DefaultDiscordLogger.Logger.debug("Got member: %@", type: "DiscordGuild", args: userId)
+            DefaultDiscordLogger.Logger.debug("Got member: \(userId)", type: "DiscordGuild")
 
             guildMember = member
 
@@ -277,14 +277,12 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         let userId = presence.user.id
 
         if pruneUsers && presence.status == .offline {
-            DefaultDiscordLogger.Logger.debug("Pruning guild member %@ on %@", type: DiscordGuild.logType,
-                                              args: userId, id)
+            DefaultDiscordLogger.Logger.debug("Pruning guild member \(userId) on \(id)", type: DiscordGuild.logType)
 
             members[userId] = nil
             presences[userId] = nil
         } else if fillUsers && !members.contains(userId) {
-            DefaultDiscordLogger.Logger.debug("Should get member %@; pull from the API", type: DiscordGuild.logType,
-                                              args: userId)
+            DefaultDiscordLogger.Logger.debug("Should get member \(userId); pull from the API", type: DiscordGuild.logType)
 
             members[lazy: userId] = .lazy({[weak self] in
                 guard let this = self else {
@@ -349,7 +347,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public func unban(_ user: DiscordUser) {
         guard let client = self.client else { return }
 
-        DefaultDiscordLogger.Logger.log("Unbanning user %@ on %@", type: "DiscordGuild", args: user, id)
+        DefaultDiscordLogger.Logger.log("Unbanning user \(user) on \(id)", type: "DiscordGuild")
 
         client.removeGuildBan(for: user.id, on: id)
     }

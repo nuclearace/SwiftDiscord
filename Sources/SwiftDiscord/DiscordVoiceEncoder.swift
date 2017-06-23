@@ -179,7 +179,7 @@ open class DiscordVoiceEncoder {
 
         defer { free(buf) }
 
-        DefaultDiscordLogger.Logger.debug("Read %@ bytes", type: "DiscordVoiceEncoder", args: bytesRead)
+        DefaultDiscordLogger.Logger.debug("Read \(bytesRead) bytes", type: "DiscordVoiceEncoder")
 
         guard bytesRead > 0, !closed else {
             return (true, [])

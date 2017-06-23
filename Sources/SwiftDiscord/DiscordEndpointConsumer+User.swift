@@ -56,7 +56,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 return
             }
 
-            DefaultDiscordLogger.Logger.debug("Got DMChannels: %@", type: "DiscordEndpointUser", args: channels)
+            DefaultDiscordLogger.Logger.debug("Got DMChannels: \(channels)", type: "DiscordEndpointUser")
 
             callback(DiscordDMChannel.DMsfromArray(channels as! [[String: Any]]))
         })

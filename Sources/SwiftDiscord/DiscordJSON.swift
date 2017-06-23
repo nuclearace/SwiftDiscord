@@ -118,7 +118,7 @@ extension JSONAble {
                 do {
                     json[name.snakecase] = try sendable.jsonValue()
                 } catch {
-                    DefaultDiscordLogger.Logger.error("Couldn't json property %@", type: "JSONAble", args: name)
+                    DefaultDiscordLogger.Logger.error("Couldn't json property \(name)", type: "JSONAble")
                 }
             }
         }
