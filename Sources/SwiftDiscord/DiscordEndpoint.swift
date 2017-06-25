@@ -17,6 +17,49 @@
 
 import Foundation
 
+/**
+ * An HTTP content-type.  Common options are available as enum values, but if you need something special, use .other("My-Special-Type")
+ */
+public enum HTTPContentType: CustomStringConvertible {
+    case json
+    case other(String)
+
+    public var description: String {
+        switch self {
+        case .json:
+            return "application/json"
+        case let .other(type):
+            return type
+        }
+    }
+}
+
+/**
+ * An HTTP Request Method.  This includes any associated data.
+ */
+public enum HTTPMethod {
+    case get(params: [String: String]?)
+    case post(content: (Data, type: HTTPContentType)?)
+    case put(content: (Data, type: HTTPContentType)?)
+    case patch(content: (Data, type: HTTPContentType)?)
+    case delete
+
+    var methodString: String {
+        switch self {
+        case .get:
+            return "GET"
+        case .post:
+            return "POST"
+        case .put:
+            return "PUT"
+        case .patch:
+            return "PATCH"
+        case .delete:
+            return "DELETE"
+        }
+    }
+}
+
 // TODO Group DM
 // TODO Add guild member
 // TODO Guild integrations
@@ -27,113 +70,171 @@ import Foundation
 /**
     This enum defines the endpoints used to interact with the Discord API.
 */
-public enum DiscordEndpoint : String {
+public enum DiscordEndpoint: CustomStringConvertible {
     /// The base url for the Discord REST API.
-    case baseURL = "https://discordapp.com/api/v6"
+    case baseURL
 
     /* Channels */
     /// The base channel endpoint.
-    case channel = "/channels/channel.id"
+    case channel(id: String)
 
     // Messages
     /// The base channel messages endpoint.
-    case messages = "/channels/channel.id/messages"
+    case messages(channel: String)
 
     /// The channel bulk delete endpoint.
-    case bulkMessageDelete = "/channels/channel.id/messages/bulk_delete"
+    case bulkMessageDelete(channel: String)
 
     /// The base channel message endpoint.
-    case channelMessage = "/channels/channel.id/messages/message.id"
+    case channelMessage(channel: String, message: String)
+
+    /// Same as channelMessage, separate for rate limiting purposes
+    case channelMessageDelete(channel: String, message: String)
 
     /// The channel typing endpoint.
-    case typing = "/channels/channel.id/typing"
+    case typing(channel: String)
 
     // Permissions
     /// The base channel permissions endpoint.
-    case permissions = "/channels/channel.id/permissions"
+    case permissions(channel: String)
 
     /// The channel permission endpoint.
-    case channelPermission = "/channels/channel.id/permissions/overwrite.id"
+    case channelPermission(channel: String, overwrite: String)
 
     // Invites
     /// The base endpoint for invites.
-    case invites = "/invites/invite.code"
+    case invites(code: String)
 
     /// The base endpoint for channel invites.
-    case channelInvites = "/channels/channel.id/invites"
+    case channelInvites(channel: String)
 
     // Pinned Messages
     /// The base endpoint for pinned channel messages.
-    case pins = "/channels/channel.id/pins"
+    case pins(channel: String)
 
     /// The channel pinned message endpoint.
-    case pinnedMessage = "/channels/channel.id/pins/message.id"
+    case pinnedMessage(channel: String, message: String)
 
     // Webhooks
     /// The channel webhooks endpoint.
-    case channelWebhooks = "/channels/channel.id/webhooks"
+    case channelWebhooks(channel: String)
     /* End channels */
 
     /* Guilds */
     /// The base guild endpoint.
-    case guilds = "/guilds/guild.id"
+    case guilds(id: String)
 
     // Guild Channels
     /// The base endpoint for guild channels.
-    case guildChannels = "/guilds/guild.id/channels"
+    case guildChannels(guild: String)
 
     // Guild Members
     /// The base guild members endpoint.
-    case guildMembers = "/guilds/guild.id/members"
+    case guildMembers(guild: String)
 
     /// The guild member endpoint.
-    case guildMember = "/guilds/guild.id/members/user.id"
+    case guildMember(guild: String, user: String)
 
     /// The guild member roles enpoint.
-    case guildMemberRole = "/guilds/guild.id/members/user.id/roles/role.id"
+    case guildMemberRole(guild: String, user: String, role: String)
 
     // Guild Bans
     /// The base guild bans endpoint.
-    case guildBans = "/guilds/guild.id/bans"
+    case guildBans(guild: String)
 
     /// The guild ban user endpoint.
-    case guildBanUser = "/guilds/guild.id/bans/user.id"
+    case guildBanUser(guild: String, user: String)
 
     // Guild Roles
     /// The base guild roles endpoint.
-    case guildRoles = "/guilds/guild.id/roles"
+    case guildRoles(guild: String)
 
     /// The guild role endpoint.
-    case guildRole = "/guilds/guild.id/roles/role.id"
+    case guildRole(guild: String, role: String)
 
     // Webhooks
     /// The guilds webhooks endpoint.
-    case guildWebhooks = "/guilds/guild.id/webhooks"
+    case guildWebhooks(guild: String)
     /* End Guilds */
 
     /* User */
-    /// The user channels endpoint.
-    case userChannels = "/users/me/channels"
+    /// The user channels endpoint.  Use nil for self.
+    case userChannels
 
-    /// The user guilds endpoint.
-    case userGuilds = "/users/me/guilds"
+    /// The user guilds endpoint.  Use nil for self
+    case userGuilds
 
     /* Webhooks */
     /// The single webhook endpoint.
-    case webhook = "/webhooks/webhook.id"
+    case webhook(id: String)
 
     /// The single webhook with token endpoint.
-    case webhookWithToken = "/webhooks/webhook.id/webhook.token"
+    case webhookWithToken(id: String, token: String)
 
     /// A slack compatible webhook.
-    case webhookSlack = "/webhooks/webhook.id/webhook.token/slack"
+    case webhookSlack(id: String, token: String)
 
     /// A GitHub compatible webhook.
-    case webhookGithub = "/webhooks/webhook.id/webhook.token/github"
+    case webhookGithub(id: String, token: String)
     /* End Webhooks */
 
     var combined: String {
-        return DiscordEndpoint.baseURL.rawValue + rawValue
+        return DiscordEndpoint.baseURL.description + description
+    }
+
+    // MARK: Endpoint string calculation
+
+    public var description: String {
+        switch self {
+        case .baseURL: return "https://discordapp.com/api/v6"
+
+        // -- Channels --
+        case let .channel(id): return "/channels/\(id)"
+        // Messages
+        case let .messages(channel):                return "/channels/\(channel)/messages"
+        case let .bulkMessageDelete(channel):       return "/channels/\(channel)/messages/bulk_delete"
+        case let .channelMessage(channel, message): return "/channels/\(channel)/messages/\(message)"
+        case let .channelMessageDelete(channel, message): return "/channels/\(channel)/messages/\(message)"
+        case let .typing(channel):                  return "/channels/\(channel)/typing"
+        // Permissions
+        case let .permissions(channel):                  return "/channels/\(channel)/permissions"
+        case let .channelPermission(channel, overwrite): return "/channels/\(channel)/permissions/\(overwrite)"
+        // Invites
+        case let .invites(code):           return "/invites/\(code)"
+        case let .channelInvites(channel): return "/channels/\(channel)/invites"
+        // Pinned Messages
+        case let .pins(channel):                   return "/channels/\(channel)/pins"
+        case let .pinnedMessage(channel, message): return "/channels/\(channel)/pins/\(message)"
+        // Webhooks
+        case let .channelWebhooks(channel): return "/channels/\(channel)/webhooks"
+
+        // -- Guilds --
+        case let .guilds(id): return "/guilds/\(id)"
+        // Guild Channels
+        case let .guildChannels(guild): return "/guilds/\(guild)/channels"
+        // Guild Members
+        case let .guildMembers(guild):                return "/guilds/\(guild)/members"
+        case let .guildMember(guild, user):           return "/guilds/\(guild)/members/\(user)"
+        case let .guildMemberRole(guild, user, role): return "/guilds/\(guild)/members/\(user)/roles/\(role)"
+        // Guild Bans
+        case let .guildBans(guild):          return "/guilds/\(guild)/bans"
+        case let .guildBanUser(guild, user): return "/guilds/\(guild)/bans/\(user)"
+        // Guild Roles
+        case let .guildRoles(guild):      return "/guilds/\(guild)/roles"
+        case let .guildRole(guild, role): return "/guilds/\(guild)/roles/\(role)"
+        // Webhooks
+        case let .guildWebhooks(guild): return "/guilds/\(guild)/webhooks"
+
+        // -- User --
+        case .userChannels: return "/users/@me/channels"
+        case .userGuilds:   return "/users/@me/guilds"
+
+        // -- Webhooks --
+        case let .webhook(id):                 return "/webhooks/\(id)"
+        case let .webhookWithToken(id, token): return "/webhooks/\(id)/\(token)"
+        case let .webhookSlack(id, token):     return "/webhooks/\(id)/\(token)/slack"
+        case let .webhookGithub(id, token):    return "/webhooks/\(id)/\(token)/github"
+        }
     }
 
     // MARK: Methods
@@ -143,33 +244,66 @@ public enum DiscordEndpoint : String {
 
         - parameter with: A DiscordToken that will be used for authentication
         - parameter for: The endpoint this request is for
-        - parameter replacing: A dictionary that will be used to fill in the endpoint's url
         - parameter getParams: An optional dictionary of get parameters.
 
         - returns: a URLRequest that can be further customized
     */
-    public static func createRequest(with token: DiscordToken, for endpoint: DiscordEndpoint,
-                                     replacing: [String: String], getParams: [String: String]? = nil) -> URLRequest {
+    public func createRequest(with token: DiscordToken, method: HTTPMethod) -> URLRequest? {
 
-        var request = URLRequest(url: endpoint.createURL(replacing: replacing, getParams: getParams ?? [:]))
+        let getParams: [String: String]?
+        if case let .get(params) = method {
+            getParams = params
+        }
+        else {
+            getParams = nil
+        }
+
+        guard let url = self.createURL(getParams: getParams) else { return nil }
+        var request = URLRequest(url: url)
 
         request.setValue(token.token, forHTTPHeaderField: "Authorization")
+        request.httpMethod = method.methodString
+
+        var content: (Data, type: HTTPContentType)? = nil
+        if case let .post(optionalContent) = method {
+            content = optionalContent
+        }
+        else if case let .put(optionalContent) = method {
+            content = optionalContent
+        }
+        else if case let .patch(optionalContent) = method {
+            content = optionalContent
+        }
+        if let content = content {
+            request.httpBody = content.0
+            request.setValue(content.type.description, forHTTPHeaderField: "Content-Type")
+            request.setValue(content.0.count.description, forHTTPHeaderField: "Content-Length")
+        }
 
         return request
     }
 
-    private func createURL(replacing: [String: String], getParams: [String: String]) -> URL {
-        var combined = self.combined
+    private func createURL(getParams: [String: String]?) -> URL? {
 
-        for (key, value) in replacing {
-            combined = combined.replacingOccurrences(of: key, with: value)
+        // This can fail, specifically if you try to include a non-url-encoded emoji in it
+        guard let url = URL(string: self.combined) else {
+            DefaultDiscordLogger.Logger.error("Couldn't convert \"\(self.combined)\" to a URL.  This shouldn't happen.", type: "DiscordEndpoint")
+            return nil
         }
 
-        var com = URLComponents(url: URL(string: combined)!, resolvingAgainstBaseURL: false)!
+        if let getParams = getParams {
+            guard var com = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+                DefaultDiscordLogger.Logger.error("Couldn't convert \"\(url)\" to URLComponents.  This shouldn't happen.", type: "DiscordEndpoint")
+                return nil
+            }
 
-        com.queryItems = getParams.map({ URLQueryItem(name: $0.key, value: $0.value) })
+            com.queryItems = getParams.map({ URLQueryItem(name: $0.key, value: $0.value) })
 
-        return com.url!
+            return com.url!
+        }
+        else {
+            return url
+        }
     }
 }
 

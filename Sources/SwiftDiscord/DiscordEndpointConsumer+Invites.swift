@@ -20,59 +20,46 @@ import Foundation
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     public func acceptInvite(_ invite: String, callback: ((DiscordInvite?) -> ())? = nil) {
-        var request = DiscordEndpoint.createRequest(with: token, for: .invites, replacing: [
-            "invite.code": invite,
-        ])
-
-        request.httpMethod = "POST"
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .invites, parameters: ["invite.code": invite])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(invite)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback?(nil)
-
                 return
             }
-
             callback?(DiscordInvite(inviteObject: invite))
-        })
+        }
+        rateLimiter.executeRequest(endpoint: .invites(code: invite),
+                                   token: token,
+                                   method: .post(content: nil),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
     public func deleteInvite(_ invite: String, callback: ((DiscordInvite?) -> ())? = nil) {
-        var request = DiscordEndpoint.createRequest(with: token, for: .invites, replacing: [
-            "invite.code": invite,
-        ])
-
-        request.httpMethod = "DELETE"
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .invites, parameters: ["invite.code": invite])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(invite)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback?(nil)
-
                 return
             }
-
             callback?(DiscordInvite(inviteObject: invite))
-        })
+        }
+        rateLimiter.executeRequest(endpoint: .invites(code: invite),
+                                   token: token,
+                                   method: .delete,
+                                   callback: requestCallback)
     }
 
     /// Default implementation
     public func getInvite(_ invite: String, callback: @escaping (DiscordInvite?) -> ()) {
-        let request = DiscordEndpoint.createRequest(with: token, for: .invites, replacing: ["invite.code": invite])
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .invites, parameters: ["invite.code": invite])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(invite)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
-
                 return
             }
-
             callback(DiscordInvite(inviteObject: invite))
-        })
+        }
+        rateLimiter.executeRequest(endpoint: .invites(code: invite),
+                                   token: token,
+                                   method: .get(params: nil),
+                                   callback: requestCallback)
     }
 }

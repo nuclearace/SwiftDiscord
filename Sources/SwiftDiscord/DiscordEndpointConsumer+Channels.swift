@@ -20,42 +20,19 @@ import Foundation
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     public func addPinnedMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> ())? = nil) {
-        var request = DiscordEndpoint.createRequest(with: token, for: .pinnedMessage, replacing: [
-            "channel.id": channelId,
-            "message.id": messageId
-        ])
-
-        request.httpMethod = "PUT"
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .pins, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            callback?(response?.statusCode == 204)
-        })
+        rateLimiter.executeRequest(endpoint: .pinnedMessage(channel: channelId, message: messageId),
+                                   token: token,
+                                   method: .put(content: nil),
+                                   callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
     /// Default implementation
     public func bulkDeleteMessages(_ messages: [String], on channelId: String, callback: ((Bool) -> ())? = nil) {
-        var request = DiscordEndpoint.createRequest(with: token, for: .bulkMessageDelete, replacing: [
-            "channel.id": channelId
-        ])
-
-        let editObject = [
-            "messages": messages
-        ]
-
-        guard let contentData = JSON.encodeJSONData(editObject) else { return }
-
-        request.httpMethod = "POST"
-        request.httpBody = contentData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            callback?(response?.statusCode == 204)
-        })
+        guard let contentData = JSON.encodeJSONData(["messages": messages]) else { return }
+        rateLimiter.executeRequest(endpoint: .bulkMessageDelete(channel: channelId),
+                                   token: token,
+                                   method: .post(content: (contentData, type: .json)),
+                                   callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
     /// Default implementation
@@ -78,89 +55,51 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         guard let contentData = JSON.encodeJSONData(inviteJSON) else { return }
 
-        var request = DiscordEndpoint.createRequest(with: token, for: .channelInvites, replacing: [
-            "channel.id": channelId
-        ])
-
-        request.httpMethod = "POST"
-        request.httpBody = contentData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .channelInvites, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(invite)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
 
                 return
             }
-
             callback(DiscordInvite(inviteObject: invite))
-        })
+        }
+
+        rateLimiter.executeRequest(endpoint: .channelInvites(channel: channelId),
+                                   token: token,
+                                   method: .post(content: (contentData, type: .json)),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
     public func deleteChannel(_ channelId: String, callback: ((Bool) -> ())? = nil) {
-        var request = DiscordEndpoint.createRequest(with: token, for: .channel, replacing: [
-            "channel.id": channelId,
-        ])
-
-        request.httpMethod = "DELETE"
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .channel, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            callback?(response?.statusCode == 200)
-        })
+        rateLimiter.executeRequest(endpoint: .channel(id: channelId),
+                                   token: token,
+                                   method: .delete,
+                                   callback: { _, response, _ in callback?(response?.statusCode == 200) })
     }
 
     /// Default implementation
     public func deleteChannelPermission(_ overwriteId: String, on channelId: String, callback: ((Bool) -> ())? = nil) {
-        var request = DiscordEndpoint.createRequest(with: token, for: .channelPermission, replacing: [
-            "channel.id": channelId,
-            "overwrite.id": overwriteId
-        ])
-
-        request.httpMethod = "DELETE"
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .permissions, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            callback?(response?.statusCode == 204)
-        })
+        rateLimiter.executeRequest(endpoint: .channelPermission(channel: channelId, overwrite: overwriteId),
+                                   token: token,
+                                   method: .delete,
+                                   callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
     /// Default implementation
     public func deleteMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> ())? = nil) {
-        var request = DiscordEndpoint.createRequest(with: token, for: .channelMessage, replacing: [
-            "channel.id": channelId,
-            "message.id": messageId
-        ])
-
-        request.httpMethod = "DELETE"
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            callback?(response?.statusCode == 204)
-        })
+        rateLimiter.executeRequest(endpoint: .channelMessageDelete(channel: channelId, message: messageId),
+                                   token: token,
+                                   method: .delete,
+                                   callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
     /// Default implementation
     public func deletePinnedMessage(_ messageId: String, on channelId: String, callback: ((Bool) -> ())? = nil) {
-        var request = DiscordEndpoint.createRequest(with: token, for: .pinnedMessage, replacing: [
-            "channel.id": channelId,
-            "message.id": messageId
-        ])
-
-        request.httpMethod = "DELETE"
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .pins, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            callback?(response?.statusCode == 204)
-        })
+        rateLimiter.executeRequest(endpoint: .pinnedMessage(channel: channelId, message: messageId),
+                                   token: token,
+                                   method: .delete,
+                                   callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
     /// Default implementation
@@ -168,87 +107,60 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                       callback: ((Bool) -> ())? = nil) {
         guard let contentData = JSON.encodeJSONData(permissionOverwrite.json) else { return }
 
-        var request = DiscordEndpoint.createRequest(with: token, for: .channelPermission, replacing: [
-            "channel.id": channelId,
-            "overwrite.id": permissionOverwrite.id
-        ])
-
-        request.httpMethod = "PUT"
-        request.httpBody = contentData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .permissions, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            callback?(response?.statusCode == 204)
-        })
+        rateLimiter.executeRequest(endpoint: .channelPermission(channel: channelId, overwrite: permissionOverwrite.id),
+                                   token: token,
+                                   method: .put(content: (contentData, type: .json)),
+                                   callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
     /// Default implementation
     public func getInvites(for channelId: String, callback: @escaping ([DiscordInvite]) -> ()) {
-        let request = DiscordEndpoint.createRequest(with: token, for: .channelInvites, replacing: [
-            "channel.id": channelId
-        ])
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .channelInvites, parameters: ["channel.id": channelId])
 
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(invites)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([])
-
                 return
             }
-
             callback(DiscordInvite.invitesFromArray(inviteArray: invites as! [[String: Any]]))
-        })
+        }
+
+        rateLimiter.executeRequest(endpoint: .channelInvites(channel: channelId),
+                                   token: token,
+                                   method: .get(params: nil),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
     public func editMessage(_ messageId: String, on channelId: String, content: String,
                             callback: ((DiscordMessage?) -> ())? = nil) {
-        var request = DiscordEndpoint.createRequest(with: token, for: .channelMessage, replacing: [
-            "channel.id": channelId,
-            "message.id": messageId
-        ])
+        guard let contentData = JSON.encodeJSONData(["content": content]) else { return }
 
-        let editObject = [
-            "content": content
-        ]
-
-        guard let contentData = JSON.encodeJSONData(editObject) else { return }
-
-        request.httpMethod = "PATCH"
-        request.httpBody = contentData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(message)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback?(nil)
-
                 return
             }
-
             callback?(DiscordMessage(messageObject: message, client: nil))
-        })
+        }
+        rateLimiter.executeRequest(endpoint: .channelMessage(channel: channelId, message: messageId),
+                                   token: token,
+                                   method: .patch(content: (contentData, type: .json)),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
     public func getChannel(_ channelId: String, callback: @escaping (DiscordChannel?) -> ()) {
-        let request = DiscordEndpoint.createRequest(with: token, for: .channel, replacing: ["channel.id": channelId])
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .channel, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+        let requestCallback: DiscordRequestCallback = {data, response, error in
             guard case let .object(channel)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
-
                 return
             }
-
             callback(channelFromObject(channel, withClient: nil))
-        })
+        }
+        rateLimiter.executeRequest(endpoint: .channel(id: channelId),
+                                   token: token,
+                                   method: .get(params: nil),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
@@ -269,35 +181,32 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        let request = DiscordEndpoint.createRequest(with: token, for: .messages, replacing: ["channel.id": channelId],
-                                                    getParams: getParams)
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+        let requestCallback: DiscordRequestCallback = {data, response, error in
             guard case let .array(messages)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([])
-
                 return
             }
-
             callback(DiscordMessage.messagesFromArray(messages as! [[String: Any]]))
-        })
+        }
+        rateLimiter.executeRequest(endpoint: .messages(channel: channelId),
+                                   token: token,
+                                   method: .get(params: getParams),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
     public func getPinnedMessages(for channelId: String, callback: @escaping ([DiscordMessage]) -> ()) {
-        let request = DiscordEndpoint.createRequest(with: token, for: .pins, replacing: ["channel.id": channelId])
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .pins, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+        let requestCallback: DiscordRequestCallback = {data, response, error in
             guard case let .array(messages)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([])
-
                 return
             }
-
             callback(DiscordMessage.messagesFromArray(messages as! [[String: Any]]))
-        })
+        }
+        rateLimiter.executeRequest(endpoint: .pins(channel: channelId),
+                                   token: token,
+                                   method: .get(params: nil),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
@@ -322,72 +231,50 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         guard let contentData = JSON.encodeJSONData(modifyJSON) else { return }
 
-        var request = DiscordEndpoint.createRequest(with: token, for: .channel, replacing: [
-            "channel.id": channelId
-        ])
-
-        request.httpMethod = "PATCH"
-        request.httpBody = contentData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .channel, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+        let requestCallback: DiscordRequestCallback = {data, response, error in
             guard case let .object(channel)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback?(nil)
-
                 return
             }
-
             callback?(guildChannelFromObject(channel))
-        })
+        }
+        rateLimiter.executeRequest(endpoint: .channel(id: channelId),
+                                   token: token,
+                                   method: .patch(content: (contentData, type: .json)),
+                                   callback: requestCallback)
     }
 
     /// Default implementation.
     public func sendMessage(_ message: DiscordMessage, to channelId: String,
                             callback: ((DiscordMessage?) -> ())? = nil) {
-        var request = DiscordEndpoint.createRequest(with: token, for: .messages, replacing: ["channel.id": channelId])
-
+        let method: HTTPMethod
+        switch message.createDataForSending() {
+        case let .left(data):
+            method = .post(content: (data, type: .json))
+        case let .right((boundary, body)):
+            method = .post(content: (body, type: .other("multipart/form-data; boundary=\(boundary)")))
+        }
         DefaultDiscordLogger.Logger.log("Sending message to: \(channelId)", type: "DiscordEndpointChannels")
         DefaultDiscordLogger.Logger.verbose("Message: \(message)", type: "DiscordEndpointChannels")
 
-        request.httpMethod = "POST"
-
-        switch message.createDataForSending() {
-        case let .left(data):
-            request.httpBody = data
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.setValue(String(data.count), forHTTPHeaderField: "Content-Length")
-        case let .right((boundary, body)):
-            request.httpBody = body
-            request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-            request.setValue(String(body.count), forHTTPHeaderField: "Content-Length")
-        }
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .messages, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(message)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback?(nil)
-
                 return
             }
-
             callback?(DiscordMessage(messageObject: message, client: nil))
-        })
+        }
+        rateLimiter.executeRequest(endpoint: .messages(channel: channelId),
+                                   token: token,
+                                   method: method,
+                                   callback: requestCallback)
     }
 
     /// Default implementation
     public func triggerTyping(on channelId: String, callback: ((Bool) -> ())? = nil) {
-        var request = DiscordEndpoint.createRequest(with: token, for: .typing, replacing: ["channel.id": channelId])
-
-        request.httpMethod = "POST"
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .typing, parameters: ["channel.id": channelId])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
-            callback?(response?.statusCode == 204)
-        })
+        rateLimiter.executeRequest(endpoint: .typing(channel: channelId),
+                                   token: token,
+                                   method: .post(content: nil),
+                                   callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 }
