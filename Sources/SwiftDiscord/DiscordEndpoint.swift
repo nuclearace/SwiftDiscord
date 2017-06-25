@@ -158,10 +158,10 @@ public enum DiscordEndpoint: CustomStringConvertible {
     /* End Guilds */
 
     /* User */
-    /// The user channels endpoint.  Use nil for self.
+    /// The user channels endpoint.
     case userChannels
 
-    /// The user guilds endpoint.  Use nil for self
+    /// The user guilds endpoint.
     case userGuilds
 
     /* Webhooks */
