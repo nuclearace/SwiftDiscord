@@ -186,54 +186,84 @@ public enum DiscordEndpoint: CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case .baseURL: return "https://discordapp.com/api/v6"
+        case .baseURL:
+			return "https://discordapp.com/api/v6"
 
         // -- Channels --
-        case let .channel(id): return "/channels/\(id)"
+        case let .channel(id):
+			return "/channels/\(id)"
         // Messages
-        case let .messages(channel):                return "/channels/\(channel)/messages"
-        case let .bulkMessageDelete(channel):       return "/channels/\(channel)/messages/bulk_delete"
-        case let .channelMessage(channel, message): return "/channels/\(channel)/messages/\(message)"
-        case let .channelMessageDelete(channel, message): return "/channels/\(channel)/messages/\(message)"
-        case let .typing(channel):                  return "/channels/\(channel)/typing"
+        case let .messages(channel):
+			return "/channels/\(channel)/messages"
+        case let .bulkMessageDelete(channel):
+			return "/channels/\(channel)/messages/bulk_delete"
+        case let .channelMessage(channel, message):
+			return "/channels/\(channel)/messages/\(message)"
+        case let .channelMessageDelete(channel, message):
+			return "/channels/\(channel)/messages/\(message)"
+        case let .typing(channel):
+			return "/channels/\(channel)/typing"
         // Permissions
-        case let .permissions(channel):                  return "/channels/\(channel)/permissions"
-        case let .channelPermission(channel, overwrite): return "/channels/\(channel)/permissions/\(overwrite)"
+        case let .permissions(channel):
+			return "/channels/\(channel)/permissions"
+        case let .channelPermission(channel, overwrite):
+			return "/channels/\(channel)/permissions/\(overwrite)"
         // Invites
-        case let .invites(code):           return "/invites/\(code)"
-        case let .channelInvites(channel): return "/channels/\(channel)/invites"
+        case let .invites(code):
+			return "/invites/\(code)"
+        case let .channelInvites(channel):
+			return "/channels/\(channel)/invites"
         // Pinned Messages
-        case let .pins(channel):                   return "/channels/\(channel)/pins"
-        case let .pinnedMessage(channel, message): return "/channels/\(channel)/pins/\(message)"
+        case let .pins(channel):
+			return "/channels/\(channel)/pins"
+        case let .pinnedMessage(channel, message):
+			return "/channels/\(channel)/pins/\(message)"
         // Webhooks
-        case let .channelWebhooks(channel): return "/channels/\(channel)/webhooks"
+        case let .channelWebhooks(channel):
+			return "/channels/\(channel)/webhooks"
 
         // -- Guilds --
-        case let .guilds(id): return "/guilds/\(id)"
+        case let .guilds(id):
+			return "/guilds/\(id)"
         // Guild Channels
-        case let .guildChannels(guild): return "/guilds/\(guild)/channels"
+        case let .guildChannels(guild):
+			return "/guilds/\(guild)/channels"
         // Guild Members
-        case let .guildMembers(guild):                return "/guilds/\(guild)/members"
-        case let .guildMember(guild, user):           return "/guilds/\(guild)/members/\(user)"
-        case let .guildMemberRole(guild, user, role): return "/guilds/\(guild)/members/\(user)/roles/\(role)"
+        case let .guildMembers(guild):
+			return "/guilds/\(guild)/members"
+        case let .guildMember(guild, user):
+			return "/guilds/\(guild)/members/\(user)"
+        case let .guildMemberRole(guild, user, role):
+			return "/guilds/\(guild)/members/\(user)/roles/\(role)"
         // Guild Bans
-        case let .guildBans(guild):          return "/guilds/\(guild)/bans"
-        case let .guildBanUser(guild, user): return "/guilds/\(guild)/bans/\(user)"
+        case let .guildBans(guild):
+			return "/guilds/\(guild)/bans"
+        case let .guildBanUser(guild, user):
+			return "/guilds/\(guild)/bans/\(user)"
         // Guild Roles
-        case let .guildRoles(guild):      return "/guilds/\(guild)/roles"
-        case let .guildRole(guild, role): return "/guilds/\(guild)/roles/\(role)"
+        case let .guildRoles(guild):
+			return "/guilds/\(guild)/roles"
+        case let .guildRole(guild, role):
+			return "/guilds/\(guild)/roles/\(role)"
         // Webhooks
-        case let .guildWebhooks(guild): return "/guilds/\(guild)/webhooks"
+        case let .guildWebhooks(guild):
+			return "/guilds/\(guild)/webhooks"
 
         // -- User --
-        case .userChannels: return "/users/@me/channels"
-        case .userGuilds:   return "/users/@me/guilds"
+        case .userChannels:
+			return "/users/@me/channels"
+        case .userGuilds:
+			return "/users/@me/guilds"
 
         // -- Webhooks --
-        case let .webhook(id):                 return "/webhooks/\(id)"
-        case let .webhookWithToken(id, token): return "/webhooks/\(id)/\(token)"
-        case let .webhookSlack(id, token):     return "/webhooks/\(id)/\(token)/slack"
-        case let .webhookGithub(id, token):    return "/webhooks/\(id)/\(token)/github"
+        case let .webhook(id):
+			return "/webhooks/\(id)"
+        case let .webhookWithToken(id, token):
+			return "/webhooks/\(id)/\(token)"
+        case let .webhookSlack(id, token):
+			return "/webhooks/\(id)/\(token)/slack"
+        case let .webhookGithub(id, token):
+			return "/webhooks/\(id)/\(token)/github"
         }
     }
 
@@ -253,8 +283,7 @@ public enum DiscordEndpoint: CustomStringConvertible {
         let getParams: [String: String]?
         if case let .get(params) = method {
             getParams = params
-        }
-        else {
+        } else {
             getParams = nil
         }
 
@@ -267,17 +296,15 @@ public enum DiscordEndpoint: CustomStringConvertible {
         var content: (Data, type: HTTPContentType)? = nil
         if case let .post(optionalContent) = method {
             content = optionalContent
-        }
-        else if case let .put(optionalContent) = method {
+        } else if case let .put(optionalContent) = method {
             content = optionalContent
-        }
-        else if case let .patch(optionalContent) = method {
+        } else if case let .patch(optionalContent) = method {
             content = optionalContent
         }
         if let content = content {
             request.httpBody = content.0
-            request.setValue(content.type.description, forHTTPHeaderField: "Content-Type")
-            request.setValue(content.0.count.description, forHTTPHeaderField: "Content-Length")
+            request.setValue(String(describing: content.type), forHTTPHeaderField: "Content-Type")
+            request.setValue(String(content.0.count), forHTTPHeaderField: "Content-Length")
         }
 
         return request
@@ -300,8 +327,7 @@ public enum DiscordEndpoint: CustomStringConvertible {
             com.queryItems = getParams.map({ URLQueryItem(name: $0.key, value: $0.value) })
 
             return com.url!
-        }
-        else {
+        } else {
             return url
         }
     }

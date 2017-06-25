@@ -132,8 +132,7 @@ extension DiscordGuildChannel {
 func guildChannelFromObject(_ channelObject: [String: Any], client: DiscordClient? = nil) -> DiscordGuildChannel {
     if channelObject["type"] as? Int == DiscordChannelType.voice.rawValue {
         return DiscordGuildVoiceChannel(guildChannelObject: channelObject, client: client)
-    }
-    else {
+    } else {
         return DiscordGuildTextChannel(guildChannelObject: channelObject, client: client)
     }
 }
