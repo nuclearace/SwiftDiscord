@@ -18,7 +18,7 @@
 import Foundation
 import Dispatch
 
-public typealias DiscordRequestCallback = (Data?, HTTPURLResponse?, Error?) -> ()
+internal typealias DiscordRequestCallback = (Data?, HTTPURLResponse?, Error?) -> ()
 private typealias RateLimitedRequest = (request: URLRequest, callback: DiscordRequestCallback)
 
 /// The DiscordRateLimiter is in charge of making sure we don't flood Discord with requests.
@@ -44,7 +44,7 @@ public final class DiscordRateLimiter {
         - parameter callback: The callback for this request.
     */
     public func executeRequest(_ request: URLRequest, for endpointKey: DiscordRateLimitKey,
-                               callback: @escaping DiscordRequestCallback) {
+                               callback: @escaping (Data?, HTTPURLResponse?, Error?) -> ()) {
         func _executeRequest() {
             if endpointLimits[endpointKey] == nil {
                 // First time handling this endpoint, err on the side caution and limit to one
@@ -78,7 +78,7 @@ public final class DiscordRateLimiter {
     public func executeRequest(endpoint: DiscordEndpoint,
                                   token: DiscordToken,
                                  method: HTTPMethod,
-                               callback: @escaping DiscordRequestCallback) {
+                               callback: @escaping (Data?, HTTPURLResponse?, Error?) -> ()) {
         let rateLimitKey = DiscordRateLimitKey(for: endpoint)
         guard let request = endpoint.createRequest(with: token, method: method) else {
             // Error is logged by createRequest
