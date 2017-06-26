@@ -34,32 +34,6 @@ public enum HTTPContentType: CustomStringConvertible {
     }
 }
 
-/**
- * An HTTP Request Method.  This includes any associated data.
- */
-public enum HTTPMethod {
-    case get(params: [String: String]?)
-    case post(content: (Data, type: HTTPContentType)?)
-    case put(content: (Data, type: HTTPContentType)?)
-    case patch(content: (Data, type: HTTPContentType)?)
-    case delete
-
-    var methodString: String {
-        switch self {
-        case .get:
-            return "GET"
-        case .post:
-            return "POST"
-        case .put:
-            return "PUT"
-        case .patch:
-            return "PATCH"
-        case .delete:
-            return "DELETE"
-        }
-    }
-}
-
 // TODO Group DM
 // TODO Add guild member
 // TODO Guild integrations
@@ -181,6 +155,78 @@ public enum DiscordEndpoint: CustomStringConvertible {
     var combined: String {
         return DiscordEndpoint.baseURL.description + description
     }
+
+	// MARK: Endpoint Request enum
+
+	/**
+	* An HTTP Request for an Endpoint.  This includes any associated data.
+	*/
+	public enum EndpointRequest {
+		case get(params: [String: String]?)
+		case post(content: (Data, type: HTTPContentType)?)
+		case put(content: (Data, type: HTTPContentType)?)
+		case patch(content: (Data, type: HTTPContentType)?)
+		case delete
+
+		var methodString: String {
+			switch self {
+			case .get:
+				return "GET"
+			case .post:
+				return "POST"
+			case .put:
+				return "PUT"
+			case .patch:
+				return "PATCH"
+			case .delete:
+				return "DELETE"
+			}
+		}
+
+		/**
+		Helper method that creates the basic request for an endpoint.
+
+		- parameter with: A DiscordToken that will be used for authentication
+		- parameter for: The endpoint this request is for
+		- parameter getParams: An optional dictionary of get parameters.
+
+		- returns: a URLRequest that can be further customized
+		*/
+		public func createRequest(with token: DiscordToken, endpoint: DiscordEndpoint) -> URLRequest? {
+
+			let getParams: [String: String]?
+			if case let .get(params) = self {
+				getParams = params
+			}
+			else {
+				getParams = nil
+			}
+
+			guard let url = endpoint.createURL(getParams: getParams) else { return nil }
+			var request = URLRequest(url: url)
+
+			request.setValue(token.token, forHTTPHeaderField: "Authorization")
+			request.httpMethod = self.methodString
+
+			var content: (Data, type: HTTPContentType)? = nil
+			if case let .post(optionalContent) = self {
+				content = optionalContent
+			}
+			else if case let .put(optionalContent) = self {
+				content = optionalContent
+			}
+			else if case let .patch(optionalContent) = self {
+				content = optionalContent
+			}
+			if let content = content {
+				request.httpBody = content.0
+				request.setValue(content.type.description, forHTTPHeaderField: "Content-Type")
+				request.setValue(content.0.count.description, forHTTPHeaderField: "Content-Length")
+			}
+
+			return request
+		}
+	}
 
     // MARK: Endpoint string calculation
 
@@ -352,47 +398,6 @@ public enum DiscordEndpoint: CustomStringConvertible {
 	}
 
     // MARK: Methods
-
-    /**
-        Helper method that creates the basic request for an endpoint.
-
-        - parameter with: A DiscordToken that will be used for authentication
-        - parameter for: The endpoint this request is for
-        - parameter getParams: An optional dictionary of get parameters.
-
-        - returns: a URLRequest that can be further customized
-    */
-    public func createRequest(with token: DiscordToken, method: HTTPMethod) -> URLRequest? {
-
-        let getParams: [String: String]?
-        if case let .get(params) = method {
-            getParams = params
-        } else {
-            getParams = nil
-        }
-
-        guard let url = self.createURL(getParams: getParams) else { return nil }
-        var request = URLRequest(url: url)
-
-        request.setValue(token.token, forHTTPHeaderField: "Authorization")
-        request.httpMethod = method.methodString
-
-        var content: (Data, type: HTTPContentType)? = nil
-        if case let .post(optionalContent) = method {
-            content = optionalContent
-        } else if case let .put(optionalContent) = method {
-            content = optionalContent
-        } else if case let .patch(optionalContent) = method {
-            content = optionalContent
-        }
-        if let content = content {
-            request.httpBody = content.0
-            request.setValue(String(describing: content.type), forHTTPHeaderField: "Content-Type")
-            request.setValue(String(content.0.count), forHTTPHeaderField: "Content-Length")
-        }
-
-        return request
-    }
 
     private func createURL(getParams: [String: String]?) -> URL? {
 

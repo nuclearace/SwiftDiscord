@@ -29,7 +29,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .invites(code: invite),
                                    token: token,
-                                   method: .post(content: nil),
+                                   requestInfo: .post(content: nil),
                                    callback: requestCallback)
     }
 
@@ -44,7 +44,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .invites(code: invite),
                                    token: token,
-                                   method: .delete,
+                                   requestInfo: .delete,
                                    callback: requestCallback)
     }
 
@@ -59,7 +59,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .invites(code: invite),
                                    token: token,
-                                   method: .get(params: nil),
+                                   requestInfo: .get(params: nil),
                                    callback: requestCallback)
     }
 }

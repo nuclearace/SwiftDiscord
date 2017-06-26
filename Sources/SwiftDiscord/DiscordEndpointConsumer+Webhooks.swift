@@ -45,7 +45,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .channelWebhooks(channel: channelId),
                                    token: token,
-                                   method: .post(content: (contentData, type: .json)),
+                                   requestInfo: .post(content: (contentData, type: .json)),
                                    callback: requestCallback)
     }
 
@@ -53,7 +53,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     public func deleteWebhook(_ webhookId: String, callback: ((Bool) -> ())? = nil) {
         rateLimiter.executeRequest(endpoint: .webhook(id: webhookId),
                                    token: token,
-                                   method: .delete,
+                                   requestInfo: .delete,
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
@@ -68,7 +68,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .webhook(id: webhookId),
                                    token: token,
-                                   method: .get(params: nil),
+                                   requestInfo: .get(params: nil),
                                    callback: requestCallback)
     }
 
@@ -83,7 +83,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .channelWebhooks(channel: channelId),
                                    token: token,
-                                   method: .get(params: nil),
+                                   requestInfo: .get(params: nil),
                                    callback: requestCallback)
     }
 
@@ -100,7 +100,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .guildWebhooks(guild: guildId),
                                    token: token,
-                                   method: .get(params: nil),
+                                   requestInfo: .get(params: nil),
                                    callback: requestCallback)
     }
 
@@ -131,7 +131,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .webhook(id: webhookId),
                                    token: token,
-                                   method: .patch(content: (contentData, type: .json)),
+                                   requestInfo: .patch(content: (contentData, type: .json)),
                                    callback: requestCallback)
     }
 }

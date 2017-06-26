@@ -76,11 +76,11 @@ public final class DiscordRateLimiter {
     }
 
     public func executeRequest(endpoint: DiscordEndpoint,
-                                  token: DiscordToken,
-                                 method: HTTPMethod,
+                               token: DiscordToken,
+                               requestInfo: DiscordEndpoint.EndpointRequest,
                                callback: @escaping (Data?, HTTPURLResponse?, Error?) -> ()) {
         let rateLimitKey = DiscordRateLimitKey(endpoint: endpoint.endpointForRateLimiter)
-        guard let request = endpoint.createRequest(with: token, method: method) else {
+        guard let request = requestInfo.createRequest(with: token, endpoint: endpoint) else {
             // Error is logged by createRequest
             return
         }

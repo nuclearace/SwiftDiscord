@@ -23,7 +23,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                    callback: ((Bool) -> ())?) {
         rateLimiter.executeRequest(endpoint: .guildMemberRole(guild: guildId, user: userId, role: roleId),
                                    token: token,
-                                   method: .put(content: nil),
+                                   requestInfo: .put(content: nil),
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
@@ -60,7 +60,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .guildChannels(guild: guildId),
                                    token: token,
-                                   method: .post(content: (contentData, type: .json)),
+                                   requestInfo: .post(content: (contentData, type: .json)),
                                    callback: requestCallback)
     }
 
@@ -100,7 +100,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .guildRoles(guild: guildId),
                                    token: token,
-                                   method: .post(content: (contentData, type: .json)),
+                                   requestInfo: .post(content: (contentData, type: .json)),
                                    callback: requestCallback)
     }
 
@@ -117,7 +117,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .guilds(id: guildId),
                                    token: token,
-                                   method: .delete,
+                                   requestInfo: .delete,
                                    callback: requestCallback)
     }
 
@@ -133,7 +133,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .guildBans(guild: guildId),
                                    token: token,
-                                   method: .get(params: nil),
+                                   requestInfo: .get(params: nil),
                                    callback: requestCallback)
     }
 
@@ -148,7 +148,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .guildChannels(guild: guildId),
                                    token: token,
-                                   method: .get(params: nil),
+                                   requestInfo: .get(params: nil),
                                    callback: requestCallback)
     }
 
@@ -163,7 +163,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .guildMember(guild: guildId, user: id),
                                    token: token,
-                                   method: .get(params: nil),
+                                   requestInfo: .get(params: nil),
                                    callback: requestCallback)
     }
 
@@ -192,7 +192,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .guildMembers(guild: guildId),
                                    token: token,
-                                   method: .get(params: getParams),
+                                   requestInfo: .get(params: getParams),
                                    callback: requestCallback)
     }
 
@@ -207,7 +207,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .guildRoles(guild: guildId),
                                    token: token,
-                                   method: .get(params: nil),
+                                   requestInfo: .get(params: nil),
                                    callback: requestCallback)
     }
 
@@ -218,7 +218,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         rateLimiter.executeRequest(endpoint: .guildBanUser(guild: guildId, user: userId),
                                    token: token,
-                                   method: .put(content: (contentData, .json)),
+                                   requestInfo: .put(content: (contentData, .json)),
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
         }
 
@@ -263,7 +263,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .guilds(id: guildId),
                                    token: token,
-                                   method: .patch(content: (contentData, type: .json)),
+                                   requestInfo: .patch(content: (contentData, type: .json)),
                                    callback: requestCallback)
     }
 
@@ -283,7 +283,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .guildChannels(guild: guildId),
                                    token: token,
-                                   method: .patch(content: (contentData, type: .json)),
+                                   requestInfo: .patch(content: (contentData, type: .json)),
                                    callback: requestCallback)
     }
 
@@ -309,7 +309,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         rateLimiter.executeRequest(endpoint: .guildMember(guild: guildId, user: id),
                                    token: token,
-                                   method: .patch(content: (contentData, type: .json)),
+                                   requestInfo: .patch(content: (contentData, type: .json)),
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
@@ -326,7 +326,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .guildRoles(guild: guildId),
                                    token: token,
-                                   method: .patch(content: (contentData, type: .json)),
+                                   requestInfo: .patch(content: (contentData, type: .json)),
                                    callback: requestCallback)
     }
 
@@ -336,7 +336,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         rateLimiter.executeRequest(endpoint: .guildBanUser(guild: guildId, user: userId),
                                    token: token,
-                                   method: .delete,
+                                   requestInfo: .delete,
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
@@ -345,7 +345,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                       callback: ((Bool) -> ())?) {
         rateLimiter.executeRequest(endpoint: .guildMemberRole(guild: guildId, user: userId, role: roleId),
                                    token: token,
-                                   method: .delete,
+                                   requestInfo: .delete,
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
@@ -360,7 +360,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .guildRole(guild: guildId, role: roleId),
                                    token: token,
-                                   method: .delete,
+                                   requestInfo: .delete,
                                    callback: requestCallback)
     }
 }
