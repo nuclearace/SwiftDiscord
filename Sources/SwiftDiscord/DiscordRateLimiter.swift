@@ -79,7 +79,7 @@ public final class DiscordRateLimiter {
                                   token: DiscordToken,
                                  method: HTTPMethod,
                                callback: @escaping (Data?, HTTPURLResponse?, Error?) -> ()) {
-        let rateLimitKey = DiscordRateLimitKey(for: endpoint)
+        let rateLimitKey = DiscordRateLimitKey(endpoint: endpoint.endpointForRateLimiter)
         guard let request = endpoint.createRequest(with: token, method: method) else {
             // Error is logged by createRequest
             return
@@ -139,32 +139,6 @@ public final class DiscordRateLimiter {
     }
 }
 
-/// URL Parts for the purpose of rate limiting
-public struct DiscordRateLimitURLParts: OptionSet {
-    public let rawValue: Int
-
-    static let guilds = DiscordRateLimitURLParts(rawValue: 1 << 0)
-    static let channels = DiscordRateLimitURLParts(rawValue: 1 << 1)
-    static let messages = DiscordRateLimitURLParts(rawValue: 1 << 2)
-    static let messagesDelete = DiscordRateLimitURLParts(rawValue: 1 << 3)
-    static let bulkDelete = DiscordRateLimitURLParts(rawValue: 1 << 4)
-    static let typing = DiscordRateLimitURLParts(rawValue: 1 << 5)
-    static let permissions = DiscordRateLimitURLParts(rawValue: 1 << 6)
-    static let invites = DiscordRateLimitURLParts(rawValue: 1 << 7)
-    static let pins = DiscordRateLimitURLParts(rawValue: 1 << 8)
-    static let webhooks = DiscordRateLimitURLParts(rawValue: 1 << 9)
-    static let members = DiscordRateLimitURLParts(rawValue: 1 << 10)
-    static let roles = DiscordRateLimitURLParts(rawValue: 1 << 11)
-    static let bans = DiscordRateLimitURLParts(rawValue: 1 << 12)
-    static let users = DiscordRateLimitURLParts(rawValue: 1 << 13)
-    static let slack = DiscordRateLimitURLParts(rawValue: 1 << 14)
-    static let github = DiscordRateLimitURLParts(rawValue: 1 << 15)
-
-    public init(rawValue: Int) {
-        self.rawValue = rawValue
-    }
-}
-
 /// An endpoint is made up of a REST api endpoint and any major parameters in that endpoint.
 /// Ex. /channels/232184444340011009/messages and /channels/186926276592795659/messages
 /// Are considered different endpoints
@@ -172,105 +146,28 @@ public struct DiscordRateLimitKey: Hashable {
     // MARK: Properties
 
     /// The guild or channel ID in this endpoint (or "" if neither)
-    public let id: String
-    /// The url parts in this endpoint
-    public let urlParts: DiscordRateLimitURLParts
+    public let key: String
 
     /// The hash of the key.
     public var hashValue: Int {
-        return (urlParts.rawValue << 5) &+ urlParts.rawValue &+ id.hashValue
+        return key.hashValue
     }
 
     // MARK: Initializers
 
     /// Creates a new endpoint key.
-    public init(for endpoint: DiscordEndpoint) {
-        switch endpoint {
-        case .baseURL:
-            DefaultDiscordLogger.Logger.error("Attempted to get rate limit key for base URL", type: "DiscordEndpoint")
-            id = ""; urlParts = []
-
-        // -- Channels --
-        case let .channel(id):
-            self.id = id; urlParts = [.channels]
-        // Messages
-        case let .messages(channel):
-            id = channel; urlParts = [.channels, .messages]
-        case let .bulkMessageDelete(channel):
-            id = channel; urlParts = [.channels, .bulkDelete]
-        case let .channelMessage(channel, _):
-            id = channel; urlParts = [.channels, .messages]
-        case let .channelMessageDelete(channel, _):
-            id = channel; urlParts = [.channels, .messagesDelete]
-        case let .typing(channel):
-            id = channel; urlParts = [.channels, .typing]
-        // Permissions
-        case let .permissions(channel):
-            id = channel; urlParts = [.channels, .permissions]
-        case let .channelPermission(channel, _):
-            id = channel; urlParts = [.channels, .permissions]
-        // Invites
-        case .invites:
-            id = ""; urlParts = [.invites]
-        case let .channelInvites(channel):
-            id = channel; urlParts = [.channels, .invites]
-        // Pinned Messages
-        case let .pins(channel):
-            id = channel; urlParts = [.channels, .pins]
-        case let .pinnedMessage(channel, _):
-            id = channel; urlParts = [.channels, .pins]
-        // Webhooks
-        case let .channelWebhooks(channel):
-            id = channel; urlParts = [.channels, .webhooks]
-
-        // -- Guilds --
-        case let .guilds(id):
-            self.id = id; urlParts = [.guilds]
-        // Guild Channels
-        case let .guildChannels(guild):
-            id = guild; urlParts = [.guilds, .channels]
-        // Guild Members
-        case let .guildMembers(guild):
-            id = guild; urlParts = [.guilds, .members]
-        case let .guildMember(guild, _):
-            id = guild; urlParts = [.guilds, .members]
-        case let .guildMemberRole(guild, _, _):
-            id = guild; urlParts = [.guilds, .members, .roles]
-        // Guild Bans
-        case let .guildBans(guild):
-            id = guild; urlParts = [.guilds, .bans]
-        case let .guildBanUser(guild, _):
-            id = guild; urlParts = [.guilds, .bans]
-        // Guild Roles
-        case let .guildRoles(guild):
-            id = guild; urlParts = [.guilds, .roles]
-        case let .guildRole(guild, _):
-            id = guild; urlParts = [.guilds, .roles]
-        // Webhooks
-        case let .guildWebhooks(guild):
-            id = guild; urlParts = [.guilds, .webhooks]
-
-        // -- User --
-        case .userChannels:
-            id = ""; urlParts = [.users, .channels]
-        case .userGuilds:
-            id = ""; urlParts = [.users, .guilds]
-
-        // -- Webhooks --
-        case .webhook:
-            id = ""; urlParts = [.webhooks]
-        case .webhookWithToken:
-            id = ""; urlParts = [.webhooks]
-        case .webhookSlack:
-            id = ""; urlParts = [.webhooks, .slack]
-        case .webhookGithub:
-            id = ""; urlParts = [.webhooks, .github]
-        }
+    public init(endpoint: DiscordEndpoint) {
+		if case let .channelMessageDelete(channel, _) = endpoint {
+			self.key = DiscordEndpoint.messages(channel: channel).description + "d"
+		}
+		else {
+			self.key = endpoint.description
+		}
     }
 
     /// Whether two keys are equal.
     public static func ==(lhs: DiscordRateLimitKey, rhs: DiscordRateLimitKey) -> Bool {
-        return lhs.id == rhs.id && lhs.urlParts == rhs.urlParts
+        return lhs.key == rhs.key
     }
 }
 
