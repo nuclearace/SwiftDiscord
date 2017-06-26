@@ -159,8 +159,7 @@ public struct DiscordRateLimitKey: Hashable {
     public init(endpoint: DiscordEndpoint) {
 		if case let .channelMessageDelete(channel, _) = endpoint {
 			self.key = DiscordEndpoint.messages(channel: channel).description + "d"
-		}
-		else {
+		} else {
 			self.key = endpoint.description
 		}
     }
