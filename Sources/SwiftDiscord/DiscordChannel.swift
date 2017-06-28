@@ -22,7 +22,7 @@ public protocol DiscordChannel : DiscordClientHolder {
     // MARK: Properties
 
     /// The id of the channel.
-    var id: String { get }
+    var id: ChannelID { get }
 
     /// Whether or not the channel is private
     var isPrivate: Bool { get }
@@ -32,7 +32,7 @@ public protocol DiscordChannel : DiscordClientHolder {
 public protocol DiscordTextChannel : DiscordChannel {
 
     /// The snowflake id of the last received message on this channel.
-    var lastMessageId: String { get }
+    var lastMessageId: MessageID { get }
 }
 
 /// Represents the type of a channel.
@@ -195,8 +195,8 @@ func channelFromObject(_ object: [String: Any], withClient client: DiscordClient
     }
 }
 
-func privateChannelsFromArray(_ channels: [[String: Any]], client: DiscordClient) -> [String: DiscordTextChannel] {
-    var channelDict = [String: DiscordTextChannel]()
+func privateChannelsFromArray(_ channels: [[String: Any]], client: DiscordClient) -> [ChannelID: DiscordTextChannel] {
+    var channelDict = [ChannelID: DiscordTextChannel]()
 
     for channel in channels {
         guard let channel = channelFromObject(channel, withClient: client) as? DiscordTextChannel else { continue }

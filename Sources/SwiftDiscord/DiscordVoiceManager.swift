@@ -72,14 +72,14 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     }
 
     /// The voice engines, indexed by guild id.
-    public private(set) var voiceEngines = [String: DiscordVoiceEngine]()
+    public private(set) var voiceEngines = [GuildID: DiscordVoiceEngine]()
 
     /// The voice states for this user, if they are in any voice channels.
-    public internal(set) var voiceStates = [String: DiscordVoiceState]()
+    public internal(set) var voiceStates = [GuildID: DiscordVoiceState]()
 
     let lock = DispatchSemaphore(value: 1)
 
-    var voiceServerInformations = [String: DiscordVoiceServerInformation]()
+    var voiceServerInformations = [GuildID: DiscordVoiceServerInformation]()
 
     private var logType: String { return "DiscordVoiceManager" }
 
@@ -99,7 +99,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
 
         - parameter onGuild: The snowflake of the guild that you want to leave.
     */
-    open func leaveVoiceChannel(onGuild guildId: String) {
+    open func leaveVoiceChannel(onGuild guildId: GuildID) {
         guard let engine = get(voiceEngines[guildId]) else { return }
 
         protected {
@@ -122,7 +122,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
 
         - parameter guildId: The id of the guild to connect to.
     */
-    open func startVoiceConnection(_ guildId: String) {
+    open func startVoiceConnection(_ guildId: GuildID) {
         protected {
             _startVoiceConnection(guildId)
         }
@@ -130,7 +130,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
 
     /// Tries to create a voice engine for a guild, and connect.
     /// **Not thread safe.**
-    private func _startVoiceConnection(_ guildId: String) {
+    private func _startVoiceConnection(_ guildId: GuildID) {
         // We need both to start the connection
         guard let voiceState = voiceStates[guildId], let serverInfo = voiceServerInformations[guildId] else {
             return

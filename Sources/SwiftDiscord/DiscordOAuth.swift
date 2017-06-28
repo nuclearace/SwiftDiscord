@@ -84,7 +84,7 @@ public enum DiscordOAuthEndpoint : String {
 
         return DiscordOAuthEndpoint.bot.createURL(getParams: [
             "permissions": permissions.rawValue.description,
-            "client_id": user.id
+            "client_id": user.id.description
         ])
     }
 }

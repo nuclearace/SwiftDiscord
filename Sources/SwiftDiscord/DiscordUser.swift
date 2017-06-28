@@ -32,7 +32,7 @@ public struct DiscordUser {
     public let email: String
 
     /// The snowflake id of the user.
-    public let id: String
+    public let id: UserID
 
     /// Whether this user has multi-factor authentication enabled.
     public let mfaEnabled: Bool
@@ -48,20 +48,14 @@ public struct DiscordUser {
         bot = userObject.get("bot", or: false)
         discriminator = userObject.get("discriminator", or: "")
         email = userObject.get("email", or: "")
-        id = userObject.get("id", or: "")
+        id = Snowflake(userObject["id"] as? String) ?? 0
         mfaEnabled = userObject.get("mfa_enabled", or: false)
         username = userObject.get("username", or: "")
         verified = userObject.get("verified", or: false)
     }
 
     static func usersFromArray(_ userArray: [[String: Any]]) -> [DiscordUser] {
-        var users = [DiscordUser]()
-
-        for user in userArray {
-            users.append(DiscordUser(userObject: user))
-        }
-
-        return users
+        return userArray.map(DiscordUser.init)
     }
 }
 
@@ -70,10 +64,10 @@ public protocol DiscordUserActor {
     // MARK: Properties
 
     /// The direct message channels this user is in.
-    var directChannels: [String: DiscordTextChannel] { get }
+    var directChannels: [UserID: DiscordTextChannel] { get }
 
     /// The guilds that this user is in.
-    var guilds: [String: DiscordGuild] { get }
+    var guilds: [GuildID: DiscordGuild] { get }
 
     /// The relationships this user has. Only valid for non-bot users.
     var relationships: [[String: Any]] { get }

@@ -20,7 +20,7 @@ public struct DiscordUserGuild {
     // MARK: Properties
 
     /// The snowflake id of the guild.
-    public let id: String
+    public let id: GuildID
 
     /// The name of the guild.
     public let name: String
@@ -35,15 +35,15 @@ public struct DiscordUserGuild {
     public let permissions: DiscordPermission
 
     init(userGuildObject: [String: Any]) {
-        id = userGuildObject.get("id", or: "")
+        id = Snowflake(userGuildObject["id"] as? String) ?? 0
         name = userGuildObject.get("name", or: "")
         icon = userGuildObject.get("icon", or: "")
         owner = userGuildObject.get("owner", or: false)
         permissions = DiscordPermission(rawValue: userGuildObject.get("permissions", or: 0))
     }
 
-    static func userGuildsFromArray(_ guilds: [[String: Any]]) -> [String: DiscordUserGuild] {
-        var userGuildDictionary = [String: DiscordUserGuild]()
+    static func userGuildsFromArray(_ guilds: [[String: Any]]) -> [GuildID: DiscordUserGuild] {
+        var userGuildDictionary = [GuildID: DiscordUserGuild]()
 
         for guildObject in guilds {
             let guild = DiscordUserGuild(userGuildObject: guildObject)

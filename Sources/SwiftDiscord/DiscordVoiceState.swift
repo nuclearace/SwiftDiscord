@@ -20,13 +20,13 @@ public struct DiscordVoiceState {
     // MARK: Properties
 
     /// The snowflake id of the voice channel this state belongs to.
-    public let channelId: String
+    public let channelId: ChannelID
 
     /// Whether this user is deafened.
     public let deaf: Bool
 
     /// The snowflake id of the guild this state belongs to.
-    public let guildId: String
+    public let guildId: GuildID
 
     /// Whether this user is muted.
     public let mute: Bool
@@ -44,13 +44,13 @@ public struct DiscordVoiceState {
     public let suppress: Bool
 
     /// The snowflake id of the user this state is for.
-    public let userId: String
+    public let userId: UserID
 
-    init(voiceStateObject: [String: Any], guildId: String) {
+    init(voiceStateObject: [String: Any], guildId: GuildID) {
         self.guildId = guildId
-        channelId = voiceStateObject.get("channel_id", or: "")
+        channelId = Snowflake(voiceStateObject["channel_id"] as? String) ?? 0
         sessionId = voiceStateObject.get("session_id", or: "")
-        userId = voiceStateObject.get("user_id", or: "")
+        userId = Snowflake(voiceStateObject["user_id"] as? String) ?? 0
         deaf = voiceStateObject.get("deaf", or: false)
         mute = voiceStateObject.get("mute", or: false)
         selfDeaf = voiceStateObject.get("self_deaf", or: false)
@@ -58,8 +58,8 @@ public struct DiscordVoiceState {
         suppress = voiceStateObject.get("suppress", or: false)
     }
 
-    static func voiceStatesFromArray(_ voiceStateArray: [[String: Any]], guildId: String) -> [String: DiscordVoiceState] {
-        var voiceStates = [String: DiscordVoiceState]()
+    static func voiceStatesFromArray(_ voiceStateArray: [[String: Any]], guildId: GuildID) -> [UserID: DiscordVoiceState] {
+        var voiceStates = [UserID: DiscordVoiceState]()
 
         for voiceState in voiceStateArray {
             let voiceState = DiscordVoiceState(voiceStateObject: voiceState, guildId: guildId)

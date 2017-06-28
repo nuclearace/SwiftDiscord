@@ -20,7 +20,7 @@ public struct DiscordDMChannel : DiscordTextChannel {
     // MARK: Properties
 
     /// The snowflake id of the channel.
-    public let id: String
+    public let id: ChannelID
 
     /// Whether this channel is private. Should always be true for DMChannels
     public var isPrivate: Bool { return true }
@@ -32,23 +32,23 @@ public struct DiscordDMChannel : DiscordTextChannel {
     public weak var client: DiscordClient?
 
     /// The snowflake id of the last received message on this channel.
-    public var lastMessageId: String
+    public var lastMessageId: MessageID
 
     init(dmObject: [String: Any]) {
         recipient = DiscordUser(userObject: dmObject.get("recipient", or: [String: Any]()))
-        id = dmObject.get("id", or: "")
-        lastMessageId = dmObject.get("last_message_id", or: "")
+        id = Snowflake(dmObject["id"] as? String) ?? 0
+        lastMessageId = Snowflake(dmObject["last_message_id"] as? String) ?? 0
     }
 
     init(dmReadyObject: [String: Any], client: DiscordClient? = nil) {
         recipient = DiscordUser(userObject: dmReadyObject.get("recipients", or: JSONArray())[0])
-        id = dmReadyObject.get("id", or: "")
-        lastMessageId = dmReadyObject.get("last_message_id", or: "")
+        id = Snowflake(dmReadyObject["id"] as? String) ?? 0
+        lastMessageId = Snowflake(dmReadyObject["last_message_id"] as? String) ?? 0
         self.client = client
     }
 
-    static func DMsfromArray(_ dmArray: [[String: Any]]) -> [String: DiscordDMChannel] {
-        var dms = [String: DiscordDMChannel]()
+    static func DMsfromArray(_ dmArray: [[String: Any]]) -> [ChannelID: DiscordDMChannel] {
+        var dms = [ChannelID: DiscordDMChannel]()
 
         for dm in dmArray {
             let dmChannel = DiscordDMChannel(dmObject: dm)
@@ -65,7 +65,7 @@ public struct DiscordGroupDMChannel : DiscordTextChannel {
     // MARK: Properties
 
     /// The snowflake id of the channel.
-    public let id: String
+    public let id: ChannelID
 
     /// Whether this channel is private. Should always be true for DMChannels
     public var isPrivate: Bool { return true }
@@ -77,15 +77,15 @@ public struct DiscordGroupDMChannel : DiscordTextChannel {
     public weak var client: DiscordClient?
 
     /// The snowflake id of the last received message on this channel.
-    public var lastMessageId: String
+    public var lastMessageId: MessageID
 
     /// The name of this group dm.
     public var name: String?
 
     init(dmReadyObject: [String: Any], client: DiscordClient? = nil) {
         recipients = dmReadyObject.get("recipients", or: JSONArray()).map(DiscordUser.init)
-        id = dmReadyObject.get("id", or: "")
-        lastMessageId = dmReadyObject.get("lastMessageId", or: "")
+        id = Snowflake(dmReadyObject["id"] as? String) ?? 0
+        lastMessageId = Snowflake(dmReadyObject["last_message_id"] as? String) ?? 0
         name = dmReadyObject["name"] as? String
         self.client = client
     }

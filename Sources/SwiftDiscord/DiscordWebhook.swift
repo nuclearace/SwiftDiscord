@@ -25,13 +25,13 @@ public struct DiscordWebhook {
     public let avatar: String?
 
     /// The snowflake for the channel this webhook is for.
-    public let channelId: String
+    public let channelId: ChannelID
 
     /// The snowflake for of the guild this webhook is for, if for a guild.
-    public let guildId: String?
+    public let guildId: GuildID?
 
     /// The id of this webhook.
-    public let id: String
+    public let id: WebhookID
 
     /// The default name of this webhook.
     public let name: String?
@@ -44,9 +44,9 @@ public struct DiscordWebhook {
 
     init(webhookObject: [String: Any]) {
         avatar = webhookObject["avatar"] as? String
-        channelId = webhookObject.get("channel_id", or: "")
-        guildId = webhookObject["guild_id"] as? String
-        id = webhookObject.get("id", or: "")
+        channelId = Snowflake(webhookObject["channel_id"] as? String) ?? 0
+        guildId = Snowflake(webhookObject["guild_id"] as? String)
+        id = Snowflake(webhookObject["id"] as? String) ?? 0
         name = webhookObject["name"] as? String
         token = webhookObject.get("token", or: "")
 

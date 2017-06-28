@@ -204,7 +204,7 @@ public protocol DiscordClientDelegate : class {
         - parameter didHandleGuildMemberChunk: The chunk of guild members that was handled.
         - parameter forGuild: The guild the members were added to.
     */
-    func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: DiscordLazyDictionary<String, DiscordGuildMember>,
+    func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: DiscordLazyDictionary<UserID, DiscordGuildMember>,
                 forGuild guild: DiscordGuild)
 
     /**
@@ -224,7 +224,7 @@ public protocol DiscordClientDelegate : class {
         - parameter didUpdateEmojis: The chunk of guild members that was handled.
         - parameter onGuild: The guild the emojis were updated on.
     */
-    func client(_ client: DiscordClient, didUpdateEmojis emojis: [String: DiscordEmoji],
+    func client(_ client: DiscordClient, didUpdateEmojis emojis: [EmojiID: DiscordEmoji],
                 onGuild guild: DiscordGuild)
 
     /**
@@ -305,7 +305,7 @@ public extension DiscordClientDelegate {
     func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine engine: DiscordVoiceEngine) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: DiscordLazyDictionary<String, DiscordGuildMember>,
+    func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: DiscordLazyDictionary<UserID, DiscordGuildMember>,
                 forGuild guild: DiscordGuild) { }
 
     /// Default.
@@ -313,7 +313,7 @@ public extension DiscordClientDelegate {
                 withData data: [String: Any]) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didUpdateEmojis emojis: [String: DiscordEmoji],
+    func client(_ client: DiscordClient, didUpdateEmojis emojis: [EmojiID: DiscordEmoji],
                 onGuild guild: DiscordGuild) { }
 
     /// Default.

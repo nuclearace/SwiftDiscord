@@ -50,85 +50,85 @@ public enum DiscordEndpoint: CustomStringConvertible {
 
     /* Channels */
     /// The base channel endpoint.
-    case channel(id: String)
+    case channel(id: ChannelID)
 
     // Messages
     /// The base channel messages endpoint.
-    case messages(channel: String)
+    case messages(channel: ChannelID)
 
     /// The channel bulk delete endpoint.
-    case bulkMessageDelete(channel: String)
+    case bulkMessageDelete(channel: ChannelID)
 
     /// The base channel message endpoint.
-    case channelMessage(channel: String, message: String)
+    case channelMessage(channel: ChannelID, message: MessageID)
 
     /// Same as channelMessage, separate for rate limiting purposes
-    case channelMessageDelete(channel: String, message: String)
+    case channelMessageDelete(channel: ChannelID, message: MessageID)
 
     /// The channel typing endpoint.
-    case typing(channel: String)
+    case typing(channel: ChannelID)
 
     // Permissions
     /// The base channel permissions endpoint.
-    case permissions(channel: String)
+    case permissions(channel: ChannelID)
 
     /// The channel permission endpoint.
-    case channelPermission(channel: String, overwrite: String)
+    case channelPermission(channel: ChannelID, overwrite: OverwriteID)
 
     // Invites
     /// The base endpoint for invites.
     case invites(code: String)
 
     /// The base endpoint for channel invites.
-    case channelInvites(channel: String)
+    case channelInvites(channel: ChannelID)
 
     // Pinned Messages
     /// The base endpoint for pinned channel messages.
-    case pins(channel: String)
+    case pins(channel: ChannelID)
 
     /// The channel pinned message endpoint.
-    case pinnedMessage(channel: String, message: String)
+    case pinnedMessage(channel: ChannelID, message: MessageID)
 
     // Webhooks
     /// The channel webhooks endpoint.
-    case channelWebhooks(channel: String)
+    case channelWebhooks(channel: ChannelID)
     /* End channels */
 
     /* Guilds */
     /// The base guild endpoint.
-    case guilds(id: String)
+    case guilds(id: GuildID)
 
     // Guild Channels
     /// The base endpoint for guild channels.
-    case guildChannels(guild: String)
+    case guildChannels(guild: GuildID)
 
     // Guild Members
     /// The base guild members endpoint.
-    case guildMembers(guild: String)
+    case guildMembers(guild: GuildID)
 
     /// The guild member endpoint.
-    case guildMember(guild: String, user: String)
+    case guildMember(guild: GuildID, user: UserID)
 
     /// The guild member roles enpoint.
-    case guildMemberRole(guild: String, user: String, role: String)
+    case guildMemberRole(guild: GuildID, user: UserID, role: RoleID)
 
     // Guild Bans
     /// The base guild bans endpoint.
-    case guildBans(guild: String)
+    case guildBans(guild: GuildID)
 
     /// The guild ban user endpoint.
-    case guildBanUser(guild: String, user: String)
+    case guildBanUser(guild: GuildID, user: UserID)
 
     // Guild Roles
     /// The base guild roles endpoint.
-    case guildRoles(guild: String)
+    case guildRoles(guild: GuildID)
 
     /// The guild role endpoint.
-    case guildRole(guild: String, role: String)
+    case guildRole(guild: GuildID, role: RoleID)
 
     // Webhooks
     /// The guilds webhooks endpoint.
-    case guildWebhooks(guild: String)
+    case guildWebhooks(guild: GuildID)
     /* End Guilds */
 
     /* User */
@@ -140,16 +140,16 @@ public enum DiscordEndpoint: CustomStringConvertible {
 
     /* Webhooks */
     /// The single webhook endpoint.
-    case webhook(id: String)
+    case webhook(id: WebhookID)
 
     /// The single webhook with token endpoint.
-    case webhookWithToken(id: String, token: String)
+    case webhookWithToken(id: WebhookID, token: String)
 
     /// A slack compatible webhook.
-    case webhookSlack(id: String, token: String)
+    case webhookSlack(id: WebhookID, token: String)
 
     /// A GitHub compatible webhook.
-    case webhookGithub(id: String, token: String)
+    case webhookGithub(id: WebhookID, token: String)
     /* End Webhooks */
 
     var combined: String {

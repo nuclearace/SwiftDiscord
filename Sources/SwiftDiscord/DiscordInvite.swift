@@ -47,7 +47,7 @@ public struct DiscordInviteGuild {
     // MARK: Properties
 
     /// The snowflake id of the guild this invite is for.
-    public let id: String
+    public let id: GuildID
 
     /// The name of the guild this invite is for.
     public let name: String
@@ -56,7 +56,7 @@ public struct DiscordInviteGuild {
     public let splashHash: String
 
     init(inviteGuildObject: [String: Any]) {
-        id = inviteGuildObject.get("id", or: "")
+        id = Snowflake(inviteGuildObject["id"] as? String) ?? 0
         name = inviteGuildObject.get("name", or: "")
         splashHash = inviteGuildObject.get("splash_hash", or: "")
     }
@@ -67,7 +67,7 @@ public struct DiscordInviteChannel {
     // MARK: Properties
 
     /// The snowflake id of the channel this invite is for.
-    public let id: String
+    public let id: ChannelID
 
     /// The name of the channel this invite is for.
     public let name: String
@@ -76,7 +76,7 @@ public struct DiscordInviteChannel {
     public let type: DiscordChannelType
 
     init(inviteChannelObject: [String: Any]) {
-        id = inviteChannelObject.get("id", or: "")
+        id = Snowflake(inviteChannelObject["id"] as? String) ?? 0
         name = inviteChannelObject.get("name", or: "")
         type = DiscordChannelType(rawValue: inviteChannelObject.get("type", or: 0)) ?? .text
     }

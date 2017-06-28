@@ -22,7 +22,7 @@ public struct DiscordGuildMember {
     // MARK: Properties
 
     /// The id of the guild of this member.
-    public let guildId: String
+    public let guildId: GuildID
 
     /// The date this member joined the guild.
     public let joinedAt: Date
@@ -76,7 +76,7 @@ public struct DiscordGuildMember {
     }
 
     /// An array of role snowflake ids that this user has.
-    public var roleIds: [String]
+    public var roleIds: [RoleID]
 
     /// The guild this member is on
     public internal(set) weak var guild: DiscordGuild?
@@ -85,18 +85,18 @@ public struct DiscordGuildMember {
     private var _mute: Bool
     private var _nick: String?
 
-    init(guildMemberObject: [String: Any], guildId: String, guild: DiscordGuild? = nil) {
+    init(guildMemberObject: [String: Any], guildId: GuildID, guild: DiscordGuild? = nil) {
         self.guildId = guildId
         user = DiscordUser(userObject: guildMemberObject.get("user", or: [String: Any]()))
         _deaf = guildMemberObject.get("deaf", or: false)
         _mute = guildMemberObject.get("mute", or: false)
         _nick = guildMemberObject["nick"] as? String
-        roleIds = guildMemberObject.get("roles", or: [String]())
+        roleIds = (guildMemberObject["roles"] as? [String])?.flatMap(Snowflake.init) ?? []
         joinedAt = DiscordDateFormatter.format(guildMemberObject.get("joined_at", or: "")) ?? Date()
         self.guild = guild
     }
 
-    init(guildId: String, user: DiscordUser, deaf: Bool, mute: Bool, nick: String?, roles: [String], joinedAt: Date, guild: DiscordGuild? = nil) {
+    init(guildId: GuildID, user: DiscordUser, deaf: Bool, mute: Bool, nick: String?, roles: [RoleID], joinedAt: Date, guild: DiscordGuild? = nil) {
         self.user = user
         self._deaf = deaf
         self._mute = mute
@@ -107,14 +107,15 @@ public struct DiscordGuildMember {
         self.guildId = guildId
     }
 
-    static func guildMembersFromArray(_ guildMembersArray: [[String: Any]], withGuildId guildId: String,
+    static func guildMembersFromArray(_ guildMembersArray: [[String: Any]], withGuildId guildId: GuildID,
                                       guild: DiscordGuild?)
-            -> DiscordLazyDictionary<String, DiscordGuildMember> {
-        var guildMembers = DiscordLazyDictionary<String, DiscordGuildMember>()
+            -> DiscordLazyDictionary<UserID, DiscordGuildMember> {
+        var guildMembers = DiscordLazyDictionary<UserID, DiscordGuildMember>()
 
         for guildMember in guildMembersArray {
-            guard let user = guildMember["user"] as? [String: Any], let id = user["id"] as? String else {
-                fatalError("Couldn't extract userId")
+            guard let user = guildMember["user"] as? [String: Any], let id = Snowflake(user["id"] as? String) else {
+                DefaultDiscordLogger.Logger.error("Couldn't extract userId from user JSON", type: "GuildMembersFromArray")
+                continue
             }
 
             guildMembers[lazy: id] = .lazy({[weak guild] in
@@ -127,7 +128,7 @@ public struct DiscordGuildMember {
 
     mutating func updateMember(_ updateObject: [String: Any]) -> DiscordGuildMember {
         if let roles = updateObject["roles"] as? [String] {
-            self.roleIds = roles
+            self.roleIds = roles.flatMap(Snowflake.init)
         }
 
         _nick = updateObject["nick"] as? String

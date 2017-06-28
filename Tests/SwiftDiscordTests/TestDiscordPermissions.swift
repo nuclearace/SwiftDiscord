@@ -14,10 +14,10 @@ let permissionsTestUsers = ["23416345", "32564235", "4359835345", "32499342123",
 
 let permissionsTestUserPermissions: DiscordPermission = [.createInstantInvite, .addReactions, .readMessages, .sendMessages, .readMessageHistory, .useExternalEmojis, .connect, .speak, .useVAD, .changeNickname]
 let permissionsTestRoles: [DiscordRole] = [
-    DiscordRole(id: "2349683489545", color: 10181046, hoist: true, managed: false, mentionable: true, name: "Admin", permissions: .administrator, position: 3),
-    DiscordRole(id: "32423425264343", color: 10718666, hoist: true, managed: false, mentionable: true, name: "Mod", permissions: permissionsTestUserPermissions.union([.kickMembers, .manageChannels, .viewAuditLog, .sendTTSMessages, .embedLinks, .attachFiles, .mentionEveryone, .muteMembers, .deafenMembers, .moveMembers, .manageNicknames, .manageRoles]), position: 2),
-    DiscordRole(id: "34634634534564", color: 567526, hoist: true, managed: false, mentionable: true, name: "Test", permissions: permissionsTestUserPermissions, position: 1),
-    DiscordRole(id: "34029736498534", color: 0, hoist: false, managed: false, mentionable: false, name: "Muted", permissions: permissionsTestUserPermissions, position: 0)
+    DiscordRole(id: 2349683489545, color: 10181046, hoist: true, managed: false, mentionable: true, name: "Admin", permissions: .administrator, position: 3),
+    DiscordRole(id: 32423425264343, color: 10718666, hoist: true, managed: false, mentionable: true, name: "Mod", permissions: permissionsTestUserPermissions.union([.kickMembers, .manageChannels, .viewAuditLog, .sendTTSMessages, .embedLinks, .attachFiles, .mentionEveryone, .muteMembers, .deafenMembers, .moveMembers, .manageNicknames, .manageRoles]), position: 2),
+    DiscordRole(id: 34634634534564, color: 567526, hoist: true, managed: false, mentionable: true, name: "Test", permissions: permissionsTestUserPermissions, position: 1),
+    DiscordRole(id: 34029736498534, color: 0, hoist: false, managed: false, mentionable: false, name: "Muted", permissions: permissionsTestUserPermissions, position: 0)
 ]
 
 class PermissionsTestClientDelegate: DiscordClientDelegate { }
@@ -26,14 +26,14 @@ let permissionsTestClient = DiscordClient(token: "Testing", delegate: permission
 
 let permissionsTestGuildJSON = { () -> [String: Any] in
     var tmp = testGuild
-    tmp["owner_id"] = permissionsTestUsers[0].id
+	tmp["owner_id"] = String(describing: permissionsTestUsers[0].id)
     tmp["roles"] = try! permissionsTestRoles.jsonValue()
     return tmp
 }()
 
 let permissionsTestGuild = DiscordGuild(guildObject: permissionsTestGuildJSON, client: permissionsTestClient)
 
-let permissionTestMemberRoles: [[String]] = [
+let permissionTestMemberRoles: [[RoleID]] = [
     [permissionsTestRoles[3].id],
     [permissionsTestRoles[0].id, permissionsTestRoles[2].id],
     [permissionsTestRoles[1].id],
@@ -48,9 +48,9 @@ let permissionsTestMembers = zip(permissionsTestUsers, permissionTestMemberRoles
 func createPermissionTestChannel(overwrites: [DiscordPermissionOverwrite]) -> DiscordGuildTextChannel {
     var channelData = testGuildTextChannel
     channelData["permission_overwrites"] = try? overwrites.jsonValue()
-    channelData["guild_id"] = permissionsTestGuild.id
+	channelData["guild_id"] = String(describing: permissionsTestGuild.id)
     permissionsTestClient.handleChannelCreate(with: channelData)
-    return permissionsTestClient.findChannel(fromId: channelData["id"] as! String) as! DiscordGuildTextChannel
+    return permissionsTestClient.findChannel(fromId: Snowflake(channelData["id"] as! String)!) as! DiscordGuildTextChannel
 }
 
 class TestDiscordPermissions : XCTestCase {

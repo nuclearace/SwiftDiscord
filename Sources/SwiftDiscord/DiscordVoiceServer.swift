@@ -23,14 +23,14 @@ public struct DiscordVoiceServerInformation {
     public let endpoint: String
 
     /// The guild id that is associated with this update.
-    public let guildId: String
+    public let guildId: GuildID
 
     /// The token for the voice connection.
     public let token: String
 
     init(voiceServerInformationObject: [String: Any]) {
         endpoint = voiceServerInformationObject.get("endpoint", or: "")
-        guildId = voiceServerInformationObject.get("guild_id", or: "")
+        guildId = Snowflake(voiceServerInformationObject["guild_id"] as? String) ?? 0
         token = voiceServerInformationObject.get("token", or: "")
     }
 }

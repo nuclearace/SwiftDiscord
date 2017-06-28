@@ -10,7 +10,7 @@ class TestDiscordGuild : XCTestCase {
     func testCreatingGuildSetsId() {
         let guild = DiscordGuild(guildObject: testGuild, client: nil)
 
-        XCTAssertEqual(guild.id, "testGuild", "init should set id")
+        XCTAssertEqual(guild.id, 100, "init should set id")
     }
 
     func testCreatingGuildSetsName() {
@@ -34,11 +34,11 @@ class TestDiscordGuild : XCTestCase {
     }
 
     func testCreatingGuildSetsEmbedChannel() {
-        tGuild["embed_channel_id"] = "testChannel"
+        tGuild["embed_channel_id"] = "200"
 
         let guild = DiscordGuild(guildObject: tGuild, client: nil)
 
-        XCTAssertEqual(guild.embedChannelId, "testChannel", "init should set the embed channel id")
+        XCTAssertEqual(guild.embedChannelId, 200, "init should set the embed channel id")
     }
 
     func testCreatingGuildSetsIcon() {
@@ -74,11 +74,11 @@ class TestDiscordGuild : XCTestCase {
     }
 
     func testCreatingGuildSetsOwnerId() {
-        tGuild["owner_id"] = "someowner"
+        tGuild["owner_id"] = "601"
 
         let guild = DiscordGuild(guildObject: tGuild, client: nil)
 
-        XCTAssertEqual(guild.ownerId, "someowner", "init should set owner id")
+        XCTAssertEqual(guild.ownerId, 601, "init should set owner id")
     }
 
     func testCreatingGuildSetsRegion() {
@@ -117,7 +117,7 @@ class TestDiscordGuild : XCTestCase {
         var tMember = testMember
         var role2 = testRole
 
-        role2["id"] = "testRole2"
+        role2["id"] = "401"
         role2["name"] = "A new role"
         tMember["roles"] = [testRole["id"] as! String, role2["id"] as! String]
 
@@ -131,8 +131,8 @@ class TestDiscordGuild : XCTestCase {
         let roles = guild.roles(for: member)
 
         XCTAssertEqual(roles.count, 2, "guild should find two roles for member")
-        XCTAssertNotNil(roles.first(where: { $0.id == testRole["id"] as! String }), "roles should find testrole")
-        XCTAssertNotNil(roles.first(where: { $0.id == role2["id"] as! String }), "roles should find role2")
+        XCTAssertNotNil(roles.first(where: { $0.id == Snowflake(testRole["id"] as! String)! }), "roles should find testrole")
+        XCTAssertNotNil(roles.first(where: { $0.id == Snowflake(role2["id"] as! String)! }), "roles should find role2")
     }
 
     func testCreatingGuildWithALargeNumberOfMembersIsFast() {
@@ -145,7 +145,7 @@ class TestDiscordGuild : XCTestCase {
         }
 
         XCTAssertEqual(guild.members.count, 100_000, "init should create 100_000 members")
-        XCTAssertEqual(guild.members["5000"]?.user.id, "5000", "init should create members correctly")
+        XCTAssertEqual(guild.members[5000]?.user.id, 5000, "init should create members correctly")
     }
 
     func testCreatingGuildWithALargeNumberOfPresencesIsFast() {
@@ -158,7 +158,7 @@ class TestDiscordGuild : XCTestCase {
         }
 
         XCTAssertEqual(guild.presences.count, 100_000, "init should create 100_000 presences")
-        XCTAssertEqual(guild.presences["5000"]?.user.id, "5000", "init should create presences correctly")
+        XCTAssertEqual(guild.presences[5000]?.user.id, 5000, "init should create presences correctly")
     }
 
     var tGuild: [String: Any]!
