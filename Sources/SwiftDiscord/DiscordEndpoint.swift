@@ -156,246 +156,243 @@ public enum DiscordEndpoint: CustomStringConvertible {
         return DiscordEndpoint.baseURL.description + description
     }
 
-	// MARK: Endpoint Request enum
+    // MARK: Endpoint Request enum
 
-	/**
-	* An HTTP Request for an Endpoint.  This includes any associated data.
-	*/
-	public enum EndpointRequest {
-		case get(params: [String: String]?)
-		case post(content: (Data, type: HTTPContentType)?)
-		case put(content: (Data, type: HTTPContentType)?)
-		case patch(content: (Data, type: HTTPContentType)?)
-		case delete
+    /**
+    * An HTTP Request for an Endpoint.  This includes any associated data.
+    */
+    public enum EndpointRequest {
+        case get(params: [String: String]?)
+        case post(content: (Data, type: HTTPContentType)?)
+        case put(content: (Data, type: HTTPContentType)?)
+        case patch(content: (Data, type: HTTPContentType)?)
+        case delete
 
-		var methodString: String {
-			switch self {
-			case .get:
-				return "GET"
-			case .post:
-				return "POST"
-			case .put:
-				return "PUT"
-			case .patch:
-				return "PATCH"
-			case .delete:
-				return "DELETE"
-			}
-		}
+        var methodString: String {
+            switch self {
+            case .get:
+                return "GET"
+            case .post:
+                return "POST"
+            case .put:
+                return "PUT"
+            case .patch:
+                return "PATCH"
+            case .delete:
+                return "DELETE"
+            }
+        }
 
-		/**
-		Helper method that creates the basic request for an endpoint.
+        /**
+        Helper method that creates the basic request for an endpoint.
 
-		- parameter with: A DiscordToken that will be used for authentication
-		- parameter for: The endpoint this request is for
-		- parameter getParams: An optional dictionary of get parameters.
+        - parameter with: A DiscordToken that will be used for authentication
+        - parameter for: The endpoint this request is for
+        - parameter getParams: An optional dictionary of get parameters.
 
-		- returns: a URLRequest that can be further customized
-		*/
-		public func createRequest(with token: DiscordToken, endpoint: DiscordEndpoint) -> URLRequest? {
+        - returns: a URLRequest that can be further customized
+        */
+        public func createRequest(with token: DiscordToken, endpoint: DiscordEndpoint) -> URLRequest? {
 
-			let getParams: [String: String]?
-			if case let .get(params) = self {
-				getParams = params
-			}
-			else {
-				getParams = nil
-			}
+            let getParams: [String: String]?
+            if case let .get(params) = self {
+                getParams = params
+            } else {
+                getParams = nil
+            }
 
-			guard let url = endpoint.createURL(getParams: getParams) else { return nil }
-			var request = URLRequest(url: url)
+            guard let url = endpoint.createURL(getParams: getParams) else { return nil }
+            var request = URLRequest(url: url)
 
-			request.setValue(token.token, forHTTPHeaderField: "Authorization")
-			request.httpMethod = self.methodString
+            request.setValue(token.token, forHTTPHeaderField: "Authorization")
+            request.httpMethod = self.methodString
 
-			var content: (Data, type: HTTPContentType)? = nil
-			if case let .post(optionalContent) = self {
-				content = optionalContent
-			}
-			else if case let .put(optionalContent) = self {
-				content = optionalContent
-			}
-			else if case let .patch(optionalContent) = self {
-				content = optionalContent
-			}
-			if let content = content {
-				request.httpBody = content.0
-				request.setValue(content.type.description, forHTTPHeaderField: "Content-Type")
-				request.setValue(content.0.count.description, forHTTPHeaderField: "Content-Length")
-			}
+            var content: (Data, type: HTTPContentType)? = nil
+            if case let .post(optionalContent) = self {
+                content = optionalContent
+            } else if case let .put(optionalContent) = self {
+                content = optionalContent
+            } else if case let .patch(optionalContent) = self {
+                content = optionalContent
+            }
+            if let content = content {
+                request.httpBody = content.0
+                request.setValue(content.type.description, forHTTPHeaderField: "Content-Type")
+                request.setValue(content.0.count.description, forHTTPHeaderField: "Content-Length")
+            }
 
-			return request
-		}
-	}
+            return request
+        }
+    }
 
     // MARK: Endpoint string calculation
 
     public var description: String {
         switch self {
         case .baseURL:
-			return "https://discordapp.com/api/v6"
+            return "https://discordapp.com/api/v6"
 
         // -- Channels --
         case let .channel(id):
-			return "/channels/\(id)"
+            return "/channels/\(id)"
         // Messages
         case let .messages(channel):
-			return "/channels/\(channel)/messages"
+            return "/channels/\(channel)/messages"
         case let .bulkMessageDelete(channel):
-			return "/channels/\(channel)/messages/bulk_delete"
+            return "/channels/\(channel)/messages/bulk_delete"
         case let .channelMessage(channel, message):
-			return "/channels/\(channel)/messages/\(message)"
+            return "/channels/\(channel)/messages/\(message)"
         case let .channelMessageDelete(channel, message):
-			return "/channels/\(channel)/messages/\(message)"
+            return "/channels/\(channel)/messages/\(message)"
         case let .typing(channel):
-			return "/channels/\(channel)/typing"
+            return "/channels/\(channel)/typing"
         // Permissions
         case let .permissions(channel):
-			return "/channels/\(channel)/permissions"
+            return "/channels/\(channel)/permissions"
         case let .channelPermission(channel, overwrite):
-			return "/channels/\(channel)/permissions/\(overwrite)"
+            return "/channels/\(channel)/permissions/\(overwrite)"
         // Invites
         case let .invites(code):
-			return "/invites/\(code)"
+            return "/invites/\(code)"
         case let .channelInvites(channel):
-			return "/channels/\(channel)/invites"
+            return "/channels/\(channel)/invites"
         // Pinned Messages
         case let .pins(channel):
-			return "/channels/\(channel)/pins"
+            return "/channels/\(channel)/pins"
         case let .pinnedMessage(channel, message):
-			return "/channels/\(channel)/pins/\(message)"
+            return "/channels/\(channel)/pins/\(message)"
         // Webhooks
         case let .channelWebhooks(channel):
-			return "/channels/\(channel)/webhooks"
+            return "/channels/\(channel)/webhooks"
 
         // -- Guilds --
         case let .guilds(id):
-			return "/guilds/\(id)"
+            return "/guilds/\(id)"
         // Guild Channels
         case let .guildChannels(guild):
-			return "/guilds/\(guild)/channels"
+            return "/guilds/\(guild)/channels"
         // Guild Members
         case let .guildMembers(guild):
-			return "/guilds/\(guild)/members"
+            return "/guilds/\(guild)/members"
         case let .guildMember(guild, user):
-			return "/guilds/\(guild)/members/\(user)"
+            return "/guilds/\(guild)/members/\(user)"
         case let .guildMemberRole(guild, user, role):
-			return "/guilds/\(guild)/members/\(user)/roles/\(role)"
+            return "/guilds/\(guild)/members/\(user)/roles/\(role)"
         // Guild Bans
         case let .guildBans(guild):
-			return "/guilds/\(guild)/bans"
+            return "/guilds/\(guild)/bans"
         case let .guildBanUser(guild, user):
-			return "/guilds/\(guild)/bans/\(user)"
+            return "/guilds/\(guild)/bans/\(user)"
         // Guild Roles
         case let .guildRoles(guild):
-			return "/guilds/\(guild)/roles"
+            return "/guilds/\(guild)/roles"
         case let .guildRole(guild, role):
-			return "/guilds/\(guild)/roles/\(role)"
+            return "/guilds/\(guild)/roles/\(role)"
         // Webhooks
         case let .guildWebhooks(guild):
-			return "/guilds/\(guild)/webhooks"
+            return "/guilds/\(guild)/webhooks"
 
         // -- User --
         case .userChannels:
-			return "/users/@me/channels"
+            return "/users/@me/channels"
         case .userGuilds:
-			return "/users/@me/guilds"
+            return "/users/@me/guilds"
 
         // -- Webhooks --
         case let .webhook(id):
-			return "/webhooks/\(id)"
+            return "/webhooks/\(id)"
         case let .webhookWithToken(id, token):
-			return "/webhooks/\(id)/\(token)"
+            return "/webhooks/\(id)/\(token)"
         case let .webhookSlack(id, token):
-			return "/webhooks/\(id)/\(token)/slack"
+            return "/webhooks/\(id)/\(token)/slack"
         case let .webhookGithub(id, token):
-			return "/webhooks/\(id)/\(token)/github"
+            return "/webhooks/\(id)/\(token)/github"
         }
     }
 
-	internal var endpointForRateLimiter: DiscordEndpoint {
-		switch self {
-		case .baseURL:
-			DefaultDiscordLogger.Logger.error("Attempted to get rate limit key for base URL", type: "DiscordEndpoint")
-			return self
+    internal var endpointForRateLimiter: DiscordEndpoint {
+        switch self {
+        case .baseURL:
+            DefaultDiscordLogger.Logger.error("Attempted to get rate limit key for base URL", type: "DiscordEndpoint")
+            return self
 
-		// -- Channels --
-		case .channel:
-			return self
-		// Messages
-		case .messages:
-			return self
-		case .bulkMessageDelete:
-			return self
-		case let .channelMessage(channel, _):
-			return .messages(channel: channel)
-		case .channelMessageDelete:
-			return self // Special case for the rate limiter
-		case .typing:
-			return self
-		// Permissions
-		case .permissions:
-			return self
-		case let .channelPermission(channel, _):
-			return .permissions(channel: channel)
-		// Invites
-		case .invites:
-			return self
-		case .channelInvites:
-			return self
-		// Pinned Messages
-		case .pins:
-			return self
-		case let .pinnedMessage(channel, _):
-			return .pins(channel: channel)
-		// Webhooks
-		case .channelWebhooks:
-			return self
+        // -- Channels --
+        case .channel:
+            return self
+        // Messages
+        case .messages:
+            return self
+        case .bulkMessageDelete:
+            return self
+        case let .channelMessage(channel, _):
+            return .messages(channel: channel)
+        case .channelMessageDelete:
+            return self // Special case for the rate limiter
+        case .typing:
+            return self
+        // Permissions
+        case .permissions:
+            return self
+        case let .channelPermission(channel, _):
+            return .permissions(channel: channel)
+        // Invites
+        case .invites:
+            return self
+        case .channelInvites:
+            return self
+        // Pinned Messages
+        case .pins:
+            return self
+        case let .pinnedMessage(channel, _):
+            return .pins(channel: channel)
+        // Webhooks
+        case .channelWebhooks:
+            return self
 
-		// -- Guilds --
-		case .guilds:
-			return self
-		// Guild Channels
-		case .guildChannels:
-			return self
-		// Guild Members
-		case .guildMembers:
-			return self
-		case let .guildMember(guild, _):
-			return .guildMembers(guild: guild)
-		case .guildMemberRole:
-			return self // This is way too specific but there isn't a better one
-		// Guild Bans
-		case .guildBans:
-			return self
-		case let .guildBanUser(guild, _):
-			return .guildBans(guild: guild)
-		// Guild Roles
-		case .guildRoles:
-			return self
-		case let .guildRole(guild, _):
-			return .guildRoles(guild: guild)
-		// Webhooks
-		case .guildWebhooks:
-			return self
+        // -- Guilds --
+        case .guilds:
+            return self
+        // Guild Channels
+        case .guildChannels:
+            return self
+        // Guild Members
+        case .guildMembers:
+            return self
+        case let .guildMember(guild, _):
+            return .guildMembers(guild: guild)
+        case .guildMemberRole:
+            return self // This is way too specific but there isn't a better one
+        // Guild Bans
+        case .guildBans:
+            return self
+        case let .guildBanUser(guild, _):
+            return .guildBans(guild: guild)
+        // Guild Roles
+        case .guildRoles:
+            return self
+        case let .guildRole(guild, _):
+            return .guildRoles(guild: guild)
+        // Webhooks
+        case .guildWebhooks:
+            return self
 
-		// -- User --
-		case .userChannels:
-			return self
-		case .userGuilds:
-			return self
+        // -- User --
+        case .userChannels:
+            return self
+        case .userGuilds:
+            return self
 
-		// -- Webhooks --
-		case .webhook:
-			return self
-		case let .webhookWithToken(id, _):
-			return .webhook(id: id)
-		case let .webhookSlack(id, _):
-			return .webhook(id: id)
-		case let .webhookGithub(id, _):
-			return .webhook(id: id)
-		}
-	}
+        // -- Webhooks --
+        case .webhook:
+            return self
+        case let .webhookWithToken(id, _):
+            return .webhook(id: id)
+        case let .webhookSlack(id, _):
+            return .webhook(id: id)
+        case let .webhookGithub(id, _):
+            return .webhook(id: id)
+        }
+    }
 
     // MARK: Methods
 
