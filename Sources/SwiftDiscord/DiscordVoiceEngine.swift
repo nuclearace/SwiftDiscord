@@ -22,7 +22,7 @@ import Starscream
 #else
 import WebSockets
 #endif
-import SocksCore
+import Sockets
 import Sodium
 
 enum DiscordVoiceEngineError : Error {
@@ -197,7 +197,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             return
         }
 
-        DefaultDiscordLogger.Logger.debug("Sleeping %@ %@", type: logType, args: waitTime, audioCount)
+        DefaultDiscordLogger.Logger.debug("Sleeping \(waitTime) \(audioCount)", type: logType)
 
         Thread.sleep(forTimeInterval: waitTime)
 
@@ -218,11 +218,9 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func createRTPHeader() -> [UInt8] {
-        let header: UnsafeMutableRawBufferPointer
+        let header = UnsafeMutableRawBufferPointer.allocate(count: 12)
 
         defer { header.deallocate() }
-
-        header = UnsafeMutableRawBufferPointer.allocate(count: 12)
 
         header.storeBytes(of: 0x80, as: UInt8.self)
         header.storeBytes(of: 0x78, toByteOffset: 1, as: UInt8.self)
@@ -248,15 +246,13 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func createVoicePacket(_ data: [UInt8]) throws -> [UInt8] {
-        let encrypted: UnsafeMutablePointer<UInt8>
-
-        defer { free(encrypted) }
-
         let packetSize = Int(crypto_secretbox_MACBYTES) + data.count
-        encrypted = UnsafeMutablePointer.allocate(capacity: packetSize)
+        let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: packetSize)
         let rtpHeader = createRTPHeader()
         var nonce = rtpHeader + padding
         var buf = data
+
+        defer { free(encrypted) }
 
         let success = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &secret!)
 
@@ -266,15 +262,13 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func decryptVoiceData(_ data: [UInt8]) throws -> [UInt8] {
-        let unencrypted: UnsafeMutablePointer<UInt8>
-
-        defer { free(unencrypted) }
-
         let rtpHeader = Array(data.prefix(12))
         let voiceData = Array(data.dropFirst(12))
         let audioSize = voiceData.count - Int(crypto_secretbox_MACBYTES)
-        unencrypted = UnsafeMutablePointer.allocate(capacity: audioSize)
+        let unencrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
         var nonce = rtpHeader + padding
+
+        defer { free(unencrypted) }
 
         let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &secret!)
 
@@ -296,7 +290,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func extractIPAndPort(from bytes: [UInt8]) throws -> (String, Int) {
-        DefaultDiscordLogger.Logger.debug("Extracting ip and port from %@", type: logType, args: bytes)
+        DefaultDiscordLogger.Logger.debug("Extracting ip and port from \(bytes)", type: logType)
 
         let ipData = Data(bytes: bytes.dropLast(2))
         let portBytes = Array(bytes.suffix(from: bytes.endIndex.advanced(by: -2)))
@@ -378,9 +372,9 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             udpQueueWrite.sync { self.handleVoiceSessionDescription(with: payload.payload) }
             sendSilence()
         case .speaking:
-            DefaultDiscordLogger.Logger.debug("Got speaking", type: logType, args: payload)
+            DefaultDiscordLogger.Logger.debug("Got speaking \(payload)", type: logType)
         default:
-            DefaultDiscordLogger.Logger.debug("Unhandled voice payload %@", type: logType, args: payload)
+            DefaultDiscordLogger.Logger.debug("Unhandled voice payload \(payload)", type: logType)
         }
     }
 
@@ -423,7 +417,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     */
     public func parseGatewayMessage(_ string: String) {
         guard let decoded = DiscordGatewayPayload.payloadFromString(string, fromGateway: false) else {
-            DefaultDiscordLogger.Logger.log("Got unknown payload %@", type: logType, args: string)
+            DefaultDiscordLogger.Logger.log("Got unknown payload \(string)", type: logType)
 
             return
         }
@@ -445,7 +439,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
                 return
             }
 
-            DefaultDiscordLogger.Logger.debug("Read %@ bytes", type: this.logType, args: data.count)
+            DefaultDiscordLogger.Logger.debug("Read \(data.count) bytes", type: this.logType)
 
             this.sendVoiceData(data)
             this.readData()
@@ -459,7 +453,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             do {
                 let (data, _) = try socket.recvfrom(maxBytes: 4096)
 
-                DefaultDiscordLogger.Logger.debug("Received data %@", type: "DiscordVoiceEngine", args: data)
+                DefaultDiscordLogger.Logger.debug("Received data \(data)", type: "DiscordVoiceEngine")
 
                 guard let this = self else { return }
 
@@ -581,7 +575,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         func _sendVoiceData() {
             guard let udpSocket = self.udpSocket, secret != nil else { return }
 
-            DefaultDiscordLogger.Logger.debug("Should send voice data: %@ bytes", type: logType, args: data.count)
+            DefaultDiscordLogger.Logger.debug("Should send voice data: \(data.count) bytes", type: logType)
 
             do {
                 try udpSocket.sendto(data: createVoicePacket(data))

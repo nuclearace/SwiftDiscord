@@ -171,18 +171,15 @@ open class DiscordVoiceEncoder {
     open func read() -> (Bool, [UInt8]) {
         guard !closed else { return (true, []) }
 
-        let buf: UnsafeMutableRawPointer
+        let maxFrameSize = opusEncoder.maxFrameSize(assumingSize: frameSize)
+        let fd = pipe.fileHandleForReading.fileDescriptor
+        let buf = UnsafeMutableRawPointer.allocate(bytes: maxFrameSize, alignedTo: MemoryLayout<UInt8>.alignment)
+        // Read one frame
+        let bytesRead = Foundation.read(fd, buf, maxFrameSize)
 
         defer { free(buf) }
 
-        let maxFrameSize = opusEncoder.maxFrameSize(assumingSize: frameSize)
-        let fd = pipe.fileHandleForReading.fileDescriptor
-
-        // Read one frame
-        buf = UnsafeMutableRawPointer.allocate(bytes: maxFrameSize, alignedTo: MemoryLayout<UInt8>.alignment)
-        let bytesRead = Foundation.read(fd, buf, maxFrameSize)
-
-        DefaultDiscordLogger.Logger.debug("Read %@ bytes", type: "DiscordVoiceEncoder", args: bytesRead)
+        DefaultDiscordLogger.Logger.debug("Read \(bytesRead) bytes", type: "DiscordVoiceEncoder")
 
         guard bytesRead > 0, !closed else {
             return (true, [])
@@ -254,7 +251,7 @@ open class DiscordOpusEncoder : DiscordOpusCodeable {
     public let channels: Int
 
     /// The maximum size of a opus packet.
-    public let maxPacketSize = 4000
+    public var maxPacketSize: Int { return 4000 }
 
     /// The sampling rate.
     public let sampleRate: Int
@@ -305,12 +302,10 @@ open class DiscordOpusEncoder : DiscordOpusCodeable {
         - returns: An opus encoded packet.
     */
     open func encode(_ audio: UnsafePointer<opus_int16>, frameSize: Int) throws -> [UInt8] {
-        let output: UnsafeMutablePointer<UInt8>
+        let output = UnsafeMutablePointer<UInt8>.allocate(capacity: maxPacketSize)
+        let lenPacket = opus_encode(encoderState, audio, Int32(frameSize), output, opus_int32(maxPacketSize))
 
         defer { free(output) }
-
-        output = UnsafeMutablePointer<UInt8>.allocate(capacity: maxPacketSize)
-        let lenPacket = opus_encode(encoderState, audio, Int32(frameSize), output, opus_int32(maxPacketSize))
 
         guard lenPacket > 0 else { throw DiscordVoiceError.encodeFail }
 

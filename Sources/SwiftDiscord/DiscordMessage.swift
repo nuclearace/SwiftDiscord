@@ -81,8 +81,8 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     public let tts: Bool
 
     /// The channel that this message originated from. Can return nil if the channel couldn't be found.
-    public var channel: DiscordChannel? {
-        return client?.findChannel(fromId: channelId)
+    public var channel: DiscordTextChannel? {
+        return client?.findChannel(fromId: channelId) as? DiscordTextChannel
     }
 
     let files: [DiscordFileUpload]

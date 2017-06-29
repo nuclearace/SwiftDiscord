@@ -43,12 +43,10 @@ open class DiscordVoiceSessionDecoder {
         let decoder: DiscordOpusDecoder
 
         if let previous = decoders[ssrc] {
-            DefaultDiscordLogger.Logger.debug("Reusing decoder for ssrc: %@, seqNum: %@, timestamp: %@",
-                                              type: "DiscordVoiceSessionDecoder", args: ssrc, seqNum, timestamp)
+            DefaultDiscordLogger.Logger.debug("Reusing decoder for ssrc: \(ssrc), seqNum: \(seqNum), timestamp: \(timestamp)", type: "DiscordVoiceSessionDecoder")
             decoder = previous
         } else {
-            DefaultDiscordLogger.Logger.debug("New decoder for ssrc: %@, seqNum: %@, timestamp: %@",
-                                              type: "DiscordVoiceSessionDecoder", args: ssrc, seqNum, timestamp)
+            DefaultDiscordLogger.Logger.debug("New decoder for ssrc: \(ssrc), seqNum: \(seqNum), timestamp: \(timestamp)", type: "DiscordVoiceSessionDecoder")
             decoder = try DiscordOpusDecoder(sampleRate: 48_000, channels: 2)
             decoders[ssrc] = decoder
         }
@@ -70,8 +68,7 @@ open class DiscordVoiceSessionDecoder {
             timestamps[ssrc] = timestamp
 
             DefaultDiscordLogger.Logger.debug("Out of order packet", type: "DiscordVoiceSessionDecoder")
-            DefaultDiscordLogger.Logger.debug("Looks to have a sequence difference of %@",
-                                              type: "DiscordVoiceSessionDecoder", args: seqNum - previousSeqNum)
+            DefaultDiscordLogger.Logger.debug("Looks to have a sequence difference of \(seqNum - previousSeqNum)", type: "DiscordVoiceSessionDecoder")
 
             for _ in 0..<seqNum-previousSeqNum {
                 // TODO Don't hardcode the frameSize
@@ -154,14 +151,12 @@ open class DiscordOpusDecoder : DiscordOpusCodeable {
         - returns: An opus encoded packet.
     */
     open func decode(_ audio: UnsafePointer<UInt8>?, packetSize: Int, frameSize: Int) throws -> [opus_int16] {
-        let output: UnsafeMutablePointer<opus_int16>
-
-        defer { free(output) }
-
         let maxSize = maxFrameSize(assumingSize: frameSize)
-        output = UnsafeMutablePointer<opus_int16>.allocate(capacity: maxSize)
+        let output = UnsafeMutablePointer<opus_int16>.allocate(capacity: maxSize)
         let decodedSize = Int(opus_decode(decoderState, audio, Int32(packetSize), output, Int32(frameSize), 0))
         let totalSize = decodedSize * channels
+
+        defer { free(output) }
 
         guard decodedSize > 0, totalSize <= maxSize else { throw DiscordVoiceError.decodeFail }
 

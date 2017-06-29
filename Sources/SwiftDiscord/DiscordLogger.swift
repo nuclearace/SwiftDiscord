@@ -39,55 +39,47 @@ public protocol DiscordLogger {
     // MARK: Methods
 
     /// Normal log messages.
-    func log(_ message: String, type: String, args: Any...)
+    func log( _ message: @autoclosure () -> String, type: String)
 
     /// More info on log messages.
-    func verbose(_ message: String, type: String, args: Any...)
+    func verbose(_ message: @autoclosure () -> String, type: String)
 
     /// Debug messages.
-    func debug(_ message: String, type: String, args: Any...)
+    func debug(_ message: @autoclosure () -> String, type: String)
 
     /// Error Messages.
-    func error(_ message: String, type: String, args: Any...)
+    func error(_ message: @autoclosure () -> String, type: String)
 }
 
 public extension DiscordLogger {
     /// Normal log messages.
-    func log(_ message: String, type: String, args: Any...) {
+    func log(_ message: @autoclosure () -> String, type: String) {
         guard level == .info || level == .verbose || level == .debug else { return }
 
-        abstractLog("LOG", message: message, type: type, args: args)
+        abstractLog("LOG", message: message(), type: type)
     }
 
     /// More info on log messages.
-    func verbose(_ message: String, type: String, args: Any...) {
+    func verbose(_ message: @autoclosure () -> String, type: String) {
         guard level == .verbose || level == .debug else { return }
 
-        abstractLog("VERBOSE", message: message, type: type, args: args)
+        abstractLog("VERBOSE", message: message(), type: type)
     }
 
     /// Debug messages.
-    func debug(_ message: String, type: String, args: Any...) {
+    func debug(_ message: @autoclosure () -> String, type: String) {
         guard level == .debug else { return }
 
-        abstractLog("DEBUG", message: message, type: type, args: args)
+        abstractLog("DEBUG", message: message(), type: type)
     }
 
     /// Error Messages.
-    func error(_ message: String, type: String, args: Any...) {
-        abstractLog("ERROR", message: message, type: type, args: args)
+    func error(_ message: @autoclosure () -> String, type: String) {
+        abstractLog("ERROR", message: message(), type: type)
     }
 
-    private func abstractLog(_ logType: String, message: String, type: String, args: [Any]) {
-        var message = "\(logType): \(type): \(message)"
-
-        for arg in args {
-            guard let range = message.range(of: "%@") else { break }
-
-            message.replaceSubrange(range, with: String(describing: arg))
-        }
-
-        NSLog(message)
+    private func abstractLog(_ logType: String, message: String, type: String) {
+        NSLog("\(logType): \(type): \(message)")
     }
 }
 

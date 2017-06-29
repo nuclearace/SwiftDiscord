@@ -32,14 +32,14 @@ public struct DiscordUserGuild {
     public let owner: Bool
 
     /// Bitwise of the user's enabled/disabled permissions.
-    public let permissions: Int
+    public let permissions: DiscordPermission
 
     init(userGuildObject: [String: Any]) {
         id = userGuildObject.get("id", or: "")
         name = userGuildObject.get("name", or: "")
         icon = userGuildObject.get("icon", or: "")
         owner = userGuildObject.get("owner", or: false)
-        permissions = userGuildObject.get("permissions", or: 0)
+        permissions = DiscordPermission(rawValue: userGuildObject.get("permissions", or: 0))
     }
 
     static func userGuildsFromArray(_ guilds: [[String: Any]]) -> [String: DiscordUserGuild] {

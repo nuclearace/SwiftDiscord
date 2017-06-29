@@ -60,14 +60,26 @@ let testPresence: [String: Any] = [
     "status": "offline"
 ]
 
-let testGuildChannel: [String: Any] = [
-    "id": "guildChannel",
+let testGuildTextChannel: [String: Any] = [
+    "id": "guildTextChannel",
     "guild_id": "testGuild",
     "type": 0,
-    "name": "TestChannel",
+    "name": "TestTextChannel",
     "permission_overwrites": [[String: Any]](),
     "position": 0
 ]
+
+let testGuildVoiceChannel: [String: Any] = [
+    "id": "guildVoiceChannel",
+    "guild_id": "testGuild",
+    "type": 2,
+    "name": "TestVoiceChannel",
+    "is_private": false,
+    "permission_overwrites": [[String: Any]](),
+    "position": 5,
+    "bitrate": 64000
+]
+
 
 let testGuild: [String: Any] = [
     "channels": [[String: Any]](),
@@ -115,7 +127,7 @@ let testEmbed: [String: Any] = [:]
 let testMessage: [String: Any] = [
     "attachments": [testAttachment],
     "author": testUser,
-    "channel_id": testGuildChannel["id"] as! String,
+    "channel_id": testGuildTextChannel["id"] as! String,
     "content": "This is a test message",
     "embeds": [testEmbed],
     "id": "testMessage",
@@ -180,7 +192,7 @@ func createEmojiObjects(n: Int) -> [[String: Any]] {
 let testGuildJSON: [String: Any] = {
     var tGuild = testGuild
 
-    tGuild["channels"] = [testGuildChannel]
+    tGuild["channels"] = [testGuildTextChannel, testGuildVoiceChannel]
     tGuild["members"] = createGuildMemberObjects(n: 20)
     tGuild["presences"] = createPresenceObjects(n: 20)
     tGuild["member_count"] = 20

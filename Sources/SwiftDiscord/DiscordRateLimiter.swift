@@ -18,8 +18,8 @@
 import Foundation
 import Dispatch
 
-private typealias RequestCallback = (Data?, HTTPURLResponse?, Error?) -> ()
-private typealias RateLimitedRequest = (request: URLRequest, callback: RequestCallback)
+internal typealias DiscordRequestCallback = (Data?, HTTPURLResponse?, Error?) -> ()
+private typealias RateLimitedRequest = (request: URLRequest, callback: DiscordRequestCallback)
 
 /// The DiscordRateLimiter is in charge of making sure we don't flood Discord with requests.
 /// It keeps a dictionary of DiscordRateLimitKeys and DiscordRateLimits.
@@ -55,7 +55,7 @@ public final class DiscordRateLimiter {
             let rateLimit = endpointLimits[endpointKey]!
 
             if rateLimit.atLimit {
-                DefaultDiscordLogger.Logger.debug("Hit rate limit: %@", type: "DiscordRateLimiter", args: rateLimit)
+                DefaultDiscordLogger.Logger.debug("Hit rate limit: \(rateLimit)", type: "DiscordRateLimiter")
 
                 // We've hit a rate limit, enqueue this request for later
                 rateLimit.queue.append(RateLimitedRequest(request: request, callback: callback))
@@ -65,8 +65,7 @@ public final class DiscordRateLimiter {
 
             rateLimit.remaining -= 1
 
-            DefaultDiscordLogger.Logger.debug("Doing request: %@, remaining: %@", type: "DiscordRateLimiter",
-                                              args: request, rateLimit.remaining)
+            DefaultDiscordLogger.Logger.debug("Doing request: \(request), remaining: \(rateLimit.remaining)", type: "DiscordRateLimiter")
 
             session.dataTask(with: request,
                              completionHandler: createResponseHandler(for: request, endpointKey: endpointKey,
@@ -76,8 +75,21 @@ public final class DiscordRateLimiter {
         limitQueue.async(execute: _executeRequest)
     }
 
+    public func executeRequest(endpoint: DiscordEndpoint,
+                               token: DiscordToken,
+                               requestInfo: DiscordEndpoint.EndpointRequest,
+                               callback: @escaping (Data?, HTTPURLResponse?, Error?) -> ()) {
+        let rateLimitKey = DiscordRateLimitKey(endpoint: endpoint.endpointForRateLimiter)
+        guard let request = requestInfo.createRequest(with: token, endpoint: endpoint) else {
+            // Error is logged by createRequest
+            return
+        }
+
+        executeRequest(request, for: rateLimitKey, callback: callback)
+    }
+
     private func createResponseHandler(for request: URLRequest, endpointKey: DiscordRateLimitKey,
-                                       callback: @escaping RequestCallback) -> (Data?, URLResponse?, Error?) -> () {
+                                       callback: @escaping DiscordRequestCallback) -> (Data?, URLResponse?, Error?) -> () {
         func _createResponseHandler(data: Data?, response: URLResponse?, error: Error?) {
             func _responseHandler() {
                 let rateLimit = endpointLimits[endpointKey]!
@@ -113,10 +125,9 @@ public final class DiscordRateLimiter {
                                            reset: Int(reset as! String)!)
                 }
 
-                DefaultDiscordLogger.Logger.debug("New limit: %@", type: "DiscordRateLimiter", args: rateLimit.limit)
-                DefaultDiscordLogger.Logger.debug("New remaining: %@", type: "DiscordRateLimiter",
-                                                  args: rateLimit.remaining)
-                DefaultDiscordLogger.Logger.debug("New reset: %@", type: "DiscordRateLimiter", args: rateLimit.reset)
+                DefaultDiscordLogger.Logger.debug("New limit: \(rateLimit.limit)", type: "DiscordRateLimiter")
+                DefaultDiscordLogger.Logger.debug("New remaining: \(rateLimit.remaining)", type: "DiscordRateLimiter")
+                DefaultDiscordLogger.Logger.debug("New reset: \(rateLimit.reset)", type: "DiscordRateLimiter")
 
                 callback(data, response, error)
             }
@@ -134,7 +145,7 @@ public final class DiscordRateLimiter {
 public struct DiscordRateLimitKey: Hashable {
     // MARK: Properties
 
-    /// The raw key for this endpoint.
+    /// The guild or channel ID in this endpoint (or "" if neither)
     public let key: String
 
     /// The hash of the key.
@@ -145,14 +156,12 @@ public struct DiscordRateLimitKey: Hashable {
     // MARK: Initializers
 
     /// Creates a new endpoint key.
-    public init(endpoint: DiscordEndpoint, parameters: [String: String]) {
-        var key = endpoint.rawValue
-
-        for (param, value) in parameters {
-            key = key.replacingOccurrences(of: param, with: value)
+    public init(endpoint: DiscordEndpoint) {
+        if case let .channelMessageDelete(channel, _) = endpoint {
+            self.key = DiscordEndpoint.messages(channel: channel).description + "d"
+        } else {
+            self.key = endpoint.description
         }
-
-        self.key = key
     }
 
     /// Whether two keys are equal.
@@ -200,7 +209,7 @@ private final class DiscordRateLimit {
         scheduledReset = true
 
         queue.asyncAfter(deadline: deadlineForReset) {
-            DefaultDiscordLogger.Logger.debug("Reset triggered: %@", type: "RateLimit", args: self.endpointKey)
+            DefaultDiscordLogger.Logger.debug("Reset triggered: \(self.endpointKey)", type: "RateLimit")
             self.remaining = self.limit
             self.scheduledReset = false
 
@@ -216,8 +225,7 @@ private final class DiscordRateLimit {
                 removed += 1
             } while removed < self.remaining && self.queue.count != 0
 
-            DefaultDiscordLogger.Logger.debug("Sent %@ requests for limit: %@", type: "RateLimit",
-                args: removed, self.endpointKey)
+            DefaultDiscordLogger.Logger.debug("Sent \(removed) requests for limit: \(self.endpointKey)", type: "RateLimit")
         }
     }
 

@@ -20,56 +20,41 @@ import Foundation
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     public func createDM(with: String, callback: @escaping (DiscordDMChannel?) -> ()) {
-        guard let user = self.user, let contentData = JSON.encodeJSONData(["recipient_id": with]) else { return }
+        guard let contentData = JSON.encodeJSONData(["recipient_id": with]) else { return }
 
-        var request = DiscordEndpoint.createRequest(with: token, for: .userChannels, replacing: ["me": user.id])
-
-        request.httpMethod = "POST"
-        request.httpBody = contentData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(String(contentData.count), forHTTPHeaderField: "Content-Length")
-
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .userChannels, parameters: ["me": user.id])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(channel)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
-
                 return
             }
-
             callback(DiscordDMChannel(dmObject: channel))
-        })
+        }
+        rateLimiter.executeRequest(endpoint: .userChannels,
+                                   token: token,
+                                   requestInfo: .post(content: (contentData, type: .json)),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
     public func getDMs(callback: @escaping ([String: DiscordDMChannel]) -> ()) {
-        guard let user = self.user else { return callback([:]) }
-
-        let request = DiscordEndpoint.createRequest(with: token, for: .userChannels, replacing: ["me": user.id])
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .userChannels, parameters: ["me": user.id])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(channels)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([:])
 
                 return
             }
-
-            DefaultDiscordLogger.Logger.debug("Got DMChannels: %@", type: "DiscordEndpointUser", args: channels)
-
+            DefaultDiscordLogger.Logger.debug("Got DMChannels: \(channels)", type: "DiscordEndpointUser")
             callback(DiscordDMChannel.DMsfromArray(channels as! [[String: Any]]))
-        })
+        }
+        rateLimiter.executeRequest(endpoint: .userChannels,
+                                   token: token,
+                                   requestInfo: .get(params: nil),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
     public func getGuilds(callback: @escaping ([String: DiscordUserGuild]) -> ()) {
-        guard let user = self.user else { return callback([:]) }
-
-        let request = DiscordEndpoint.createRequest(with: token, for: .userGuilds, replacing: ["me": user.id])
-        let rateLimiterKey = DiscordRateLimitKey(endpoint: .userGuilds, parameters: ["me": user.id])
-
-        rateLimiter.executeRequest(request, for: rateLimiterKey, callback: {data, response, error in
+        let requestCallback: DiscordRequestCallback = {data, response, error in
             guard case let .array(guilds)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([:])
 
@@ -77,6 +62,10 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
 
             callback(DiscordUserGuild.userGuildsFromArray(guilds as! [[String: Any]]))
-        })
+        }
+        rateLimiter.executeRequest(endpoint: .userGuilds,
+                                   token: token,
+                                   requestInfo: .get(params: nil),
+                                   callback: requestCallback)
     }
 }

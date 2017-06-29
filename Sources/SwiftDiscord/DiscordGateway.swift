@@ -97,7 +97,7 @@ public extension DiscordGatewayable where Self: DiscordWebSocketable {
             return
         }
 
-        DefaultDiscordLogger.Logger.debug("Sending ws: %@", type: description, args: payloadString)
+        DefaultDiscordLogger.Logger.debug("Sending ws: \(payloadString)", type: description)
 
         #if !os(Linux)
         websocket?.write(string: payloadString)

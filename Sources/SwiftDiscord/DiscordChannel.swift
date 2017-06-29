@@ -24,8 +24,15 @@ public protocol DiscordChannel : DiscordClientHolder {
     /// The id of the channel.
     var id: String { get }
 
-    /// The type of the channel
-    var type: DiscordChannelType { get }
+    /// Whether or not the channel is private
+    var isPrivate: Bool { get }
+}
+
+/// Protocol that declares a type will be a Discord text-based channel.
+public protocol DiscordTextChannel : DiscordChannel {
+
+    /// The snowflake id of the last received message on this channel.
+    var lastMessageId: String { get }
 }
 
 /// Represents the type of a channel.
@@ -54,25 +61,42 @@ public extension DiscordChannel {
     // MARK: Methods
 
     /**
-        Pins a message to this channel.
-
-        - parameter message: The message to pin
-    */
-    public func pinMessage(_ message: DiscordMessage) {
-        guard let client = self.client else { return }
-
-        client.addPinnedMessage(message.id, on: id)
-    }
-
-    /**
         Deletes this channel.
     */
     public func delete() {
         guard let client = self.client else { return }
 
-        DefaultDiscordLogger.Logger.log("Deleting channel: %@", type: "DiscordChannel", args: id)
+        DefaultDiscordLogger.Logger.log("Deleting channel: \(id)", type: "DiscordChannel")
 
         client.deleteChannel(id)
+    }
+
+    /**
+        Modifies this channel with `options`.
+
+        - parameter options: An array of `DiscordEndpointOptions.ModifyChannel`
+    */
+    public func modifyChannel(options: [DiscordEndpoint.Options.ModifyChannel]) {
+        guard let client = self.client else { return }
+
+        client.modifyChannel(id, options: options)
+    }
+
+
+}
+
+public extension DiscordTextChannel {
+    // MARK: Text Channel Methods
+
+    /**
+     Pins a message to this channel.
+
+     - parameter message: The message to pin
+     */
+    public func pinMessage(_ message: DiscordMessage) {
+        guard let client = self.client else { return }
+
+        client.addPinnedMessage(message.id, on: id)
     }
 
     /**
@@ -113,17 +137,6 @@ public extension DiscordChannel {
     }
 
     /**
-        Modifies this channel with `options`.
-
-        - parameter options: An array of `DiscordEndpointOptions.ModifyChannel`
-    */
-    public func modifyChannel(options: [DiscordEndpoint.Options.ModifyChannel]) {
-        guard let client = self.client else { return }
-
-        client.modifyChannel(id, options: options)
-    }
-
-    /**
         Sends a message to this channel. Can be used to send embeds and files as well.
 
         ```swift
@@ -145,7 +158,7 @@ public extension DiscordChannel {
         - parameter message: The message to send.
     */
     public func send(_ message: DiscordMessage) {
-        guard let client = self.client, type != .voice else { return }
+        guard let client = self.client else { return }
 
         client.sendMessage(message, to: id)
     }
@@ -171,22 +184,22 @@ public extension DiscordChannel {
     }
 }
 
-func channelFromObject(_ object: [String: Any], withClient client: DiscordClient) -> DiscordChannel? {
+func channelFromObject(_ object: [String: Any], withClient client: DiscordClient?) -> DiscordChannel? {
     guard let type = DiscordChannelType(rawValue: object.get("type", or: -1)) else { return nil }
 
     switch type {
-    case .text:     fallthrough
-    case .voice:    return DiscordGuildChannel(guildChannelObject: object, client: client)
+    case .text:     return DiscordGuildTextChannel(guildChannelObject: object, client: client)
+    case .voice:    return DiscordGuildVoiceChannel(guildChannelObject: object, client: client)
     case .direct:   return DiscordDMChannel(dmReadyObject: object, client: client)
     case .groupDM:  return DiscordGroupDMChannel(dmReadyObject: object, client: client)
     }
 }
 
-func privateChannelsFromArray(_ channels: [[String: Any]], client: DiscordClient) -> [String: DiscordChannel] {
-    var channelDict = [String: DiscordChannel]()
+func privateChannelsFromArray(_ channels: [[String: Any]], client: DiscordClient) -> [String: DiscordTextChannel] {
+    var channelDict = [String: DiscordTextChannel]()
 
     for channel in channels {
-        guard let channel = channelFromObject(channel, withClient: client) else { continue }
+        guard let channel = channelFromObject(channel, withClient: client) as? DiscordTextChannel else { continue }
 
         channelDict[channel.id] = channel
     }
