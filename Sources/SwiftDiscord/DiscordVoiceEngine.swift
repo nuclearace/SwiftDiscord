@@ -197,7 +197,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             return
         }
 
-        DefaultDiscordLogger.Logger.debug("Sleeping %@ %@", type: logType, args: waitTime, audioCount)
+        DefaultDiscordLogger.Logger.debug("Sleeping \(waitTime) \(audioCount)", type: logType)
 
         Thread.sleep(forTimeInterval: waitTime)
 
@@ -290,7 +290,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func extractIPAndPort(from bytes: [UInt8]) throws -> (String, Int) {
-        DefaultDiscordLogger.Logger.debug("Extracting ip and port from %@", type: logType, args: bytes)
+        DefaultDiscordLogger.Logger.debug("Extracting ip and port from \(bytes)", type: logType)
 
         let ipData = Data(bytes: bytes.dropLast(2))
         let portBytes = Array(bytes.suffix(from: bytes.endIndex.advanced(by: -2)))
@@ -372,9 +372,9 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             udpQueueWrite.sync { self.handleVoiceSessionDescription(with: payload.payload) }
             sendSilence()
         case .speaking:
-            DefaultDiscordLogger.Logger.debug("Got speaking", type: logType, args: payload)
+            DefaultDiscordLogger.Logger.debug("Got speaking \(payload)", type: logType)
         default:
-            DefaultDiscordLogger.Logger.debug("Unhandled voice payload %@", type: logType, args: payload)
+            DefaultDiscordLogger.Logger.debug("Unhandled voice payload \(payload)", type: logType)
         }
     }
 
@@ -417,7 +417,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     */
     public func parseGatewayMessage(_ string: String) {
         guard let decoded = DiscordGatewayPayload.payloadFromString(string, fromGateway: false) else {
-            DefaultDiscordLogger.Logger.log("Got unknown payload %@", type: logType, args: string)
+            DefaultDiscordLogger.Logger.log("Got unknown payload \(string)", type: logType)
 
             return
         }
@@ -439,7 +439,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
                 return
             }
 
-            DefaultDiscordLogger.Logger.debug("Read %@ bytes", type: this.logType, args: data.count)
+            DefaultDiscordLogger.Logger.debug("Read \(data.count) bytes", type: this.logType)
 
             this.sendVoiceData(data)
             this.readData()
@@ -453,7 +453,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             do {
                 let (data, _) = try socket.recvfrom(maxBytes: 4096)
 
-                DefaultDiscordLogger.Logger.debug("Received data %@", type: "DiscordVoiceEngine", args: data)
+                DefaultDiscordLogger.Logger.debug("Received data \(data)", type: "DiscordVoiceEngine")
 
                 guard let this = self else { return }
 
@@ -575,7 +575,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         func _sendVoiceData() {
             guard let udpSocket = self.udpSocket, secret != nil else { return }
 
-            DefaultDiscordLogger.Logger.debug("Should send voice data: %@ bytes", type: logType, args: data.count)
+            DefaultDiscordLogger.Logger.debug("Should send voice data: \(data.count) bytes", type: logType)
 
             do {
                 try udpSocket.sendto(data: createVoicePacket(data))

@@ -90,8 +90,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         websocket?.onConnect = {[weak self] in
             guard let this = self else { return }
 
-            DefaultDiscordLogger.Logger.log("WebSocket Connected, %@", type: "DiscordWebSocketable",
-                                            args: this.description)
+            DefaultDiscordLogger.Logger.log("WebSocket Connected, \(this.description)", type: "DiscordWebSocketable")
 
             this.connectUUID = UUID()
 
@@ -101,8 +100,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         websocket?.onDisconnect = {[weak self] err in
             guard let this = self else { return }
 
-            DefaultDiscordLogger.Logger.log("WebSocket disconnected %@, %@", type: "DiscordWebSocketable",
-                                            args: String(describing: err), this.description)
+            DefaultDiscordLogger.Logger.log("WebSocket disconnected \(String(describing: err)), \(this.description)", type: "DiscordWebSocketable")
 
             this.handleClose(reason: err)
         }
@@ -110,8 +108,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         websocket?.onText = {[weak self] string in
             guard let this = self else { return }
 
-            DefaultDiscordLogger.Logger.debug("%@ Got text: %@", type: "DiscordWebSocketable",
-                                              args: this.description, string)
+            DefaultDiscordLogger.Logger.debug("\(this.description) Got text: \(string)", type: "DiscordWebSocketable")
 
             this.parseGatewayMessage(string)
         }
@@ -119,8 +116,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         websocket?.onText = {[weak self] ws, text in
             guard let this = self else { return }
 
-            DefaultDiscordLogger.Logger.debug("%@, Got text: %@", type: "DiscordWebSocketable",
-                                              args: this.description, text)
+            DefaultDiscordLogger.Logger.debug("\(this.description), Got text: \(text)", type: "DiscordWebSocketable")
 
             this.parseGatewayMessage(text)
         }
@@ -128,8 +124,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         websocket?.onClose = {[weak self] _, _, _, _ in
             guard let this = self else { return }
 
-            DefaultDiscordLogger.Logger.log("WebSocket closed, %@", type: "DiscordWebSocketable",
-                                            args: this.description)
+            DefaultDiscordLogger.Logger.log("WebSocket closed, \(this.description)", type: "DiscordWebSocketable")
 
             this.handleClose()
         }
@@ -140,10 +135,8 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         Starts the connection to the Discord gateway.
     */
     public func connect() {
-        DefaultDiscordLogger.Logger.log("Connecting to %@, %@", type: "DiscordWebSocketable",
-                                        args: connectURL, description)
-        DefaultDiscordLogger.Logger.log("Attaching WebSocket, shard: %@", type: "DiscordWebSocketable",
-                                        args: description)
+        DefaultDiscordLogger.Logger.log("Connecting to \(connectURL), \(description)", type: "DiscordWebSocketable")
+        DefaultDiscordLogger.Logger.log("Attaching WebSocket, shard: \(description)", type: "DiscordWebSocketable")
 
         #if !os(Linux)
         websocket = WebSocket(url: URL(string: connectURL)!)
@@ -154,8 +147,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         #else
         try? WebSocket.background(to: connectURL) {[weak self] ws in
             guard let this = self else { return }
-            DefaultDiscordLogger.Logger.log("Websocket connected, shard: ", type: "DiscordWebSocketable",
-                                            args: this.description)
+            DefaultDiscordLogger.Logger.log("Websocket connected, shard: \(this.description)", type: "DiscordWebSocketable")
 
             this.websocket = ws
             this.connectUUID = UUID()
