@@ -39,7 +39,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     public let author: DiscordUser
 
     /// The snowflake id of the channel this message is on.
-    public let channelId: String
+    public let channelId: ChannelID
 
     /// A reference to the client.
     public weak var client: DiscordClient?
@@ -54,7 +54,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     public let embeds: [DiscordEmbed]
 
     /// The snowflake id of this message.
-    public let id: String
+    public let id: MessageID
 
     /// Whether or not this message mentioned everyone.
     public let mentionEveryone: Bool
@@ -66,7 +66,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     public let mentions: [DiscordUser]
 
     /// Used for validating a message was sent.
-    public let nonce: String
+    public let nonce: Snowflake
 
     /// Whether this message is pinned.
     public let pinned: Bool
@@ -92,14 +92,14 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     init(messageObject: [String: Any], client: DiscordClient?) {
         attachments = DiscordAttachment.attachmentsFromArray(messageObject.get("attachments", or: JSONArray()))
         author = DiscordUser(userObject: messageObject.get("author", or: [String: Any]()))
-        channelId = messageObject.get("channel_id", or: "")
+        channelId = Snowflake(messageObject["channel_id"] as? String) ?? 0
         content = messageObject.get("content", or: "")
         embeds = DiscordEmbed.embedsFromArray(messageObject.get("embeds", or: JSONArray()))
-        id = messageObject.get("id", or: "")
+        id = Snowflake(messageObject["id"] as? String) ?? 0
         mentionEveryone = messageObject.get("mention_everyone", or: false)
         mentionRoles = messageObject.get("mention_roles", or: [String]())
         mentions = DiscordUser.usersFromArray(messageObject.get("mentions", or: JSONArray()))
-        nonce = messageObject.get("nonce", or: "")
+        nonce = Snowflake(messageObject["nonce"] as? String) ?? 0
         pinned = messageObject.get("pinned", or: false)
         reactions = DiscordReaction.reactionsFromArray(messageObject.get("reactions", or: []))
         tts = messageObject.get("tts", or: false)
@@ -124,12 +124,12 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.tts = tts
         self.attachments = []
         self.author = DiscordUser(userObject: [:])
-        self.channelId = ""
-        self.id = ""
+        self.channelId = 0
+        self.id = 0
         self.mentionEveryone = false
         self.mentionRoles = []
         self.mentions = []
-        self.nonce = ""
+        self.nonce = 0
         self.pinned = false
         self.reactions = []
         self.editedTimestamp = Date()

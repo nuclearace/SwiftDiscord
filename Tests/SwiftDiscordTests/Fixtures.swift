@@ -4,13 +4,15 @@
 
 import Foundation
 
+// IDs: Guild: 1xx, Channel: 2xx, User: 3xx, Role: 4xx, Emoji: 5xx, Message: 6xx
+
 let helloPacket = "{\"t\":null,\"s\":null,\"op\":10,\"d\":{\"heartbeat_interval\":41250,\"_trace\":[\"discord-gateway-prd-1-24\"]}}"
 let readyPacket = "{\"t\":\"READY\",\"s\":null,\"op\":0,\"d\":{\"session_id\": \"hello_world\"}}"
 
 let testRole: [String: Any] = [
     "color": 0,
     "hoist": false,
-    "id": "testRole",
+    "id": "400",
     "managed": false,
     "mentionable": true,
     "name": "My Test Role",
@@ -21,7 +23,7 @@ let testRole: [String: Any] = [
 let testEmoji: [String: Any] = [
     "id": "testEmoji",
     "managed": false,
-    "name": "test_emoji",
+    "name": "500",
     "require_colons": true,
     "roles": [] as [String]
 ]
@@ -31,7 +33,7 @@ let testUser: [String: Any] = [
     "bot": false,
     "discriminator": "",
     "email": "",
-    "id": "testuser",
+    "id": "300",
     "mfa_enabled": false,
     "username": "TestUser",
     "verified": true
@@ -42,7 +44,7 @@ let testMember: [String: Any] = [
     "deaf": false,
     "mute": false,
     "nick": "",
-    "roles": ["testRole"],
+    "roles": ["400"],
     "joined_at": ""
 ]
 
@@ -53,7 +55,7 @@ let testGame: [String: Any] = [
 ]
 
 let testPresence: [String: Any] = [
-    "guild_id": "testGuild",
+    "guild_id": "100",
     "user": testUser,
     "game": testGame,
     "nick": "",
@@ -61,8 +63,8 @@ let testPresence: [String: Any] = [
 ]
 
 let testGuildTextChannel: [String: Any] = [
-    "id": "guildTextChannel",
-    "guild_id": "testGuild",
+    "id": "200",
+    "guild_id": "100",
     "type": 0,
     "name": "TestTextChannel",
     "permission_overwrites": [[String: Any]](),
@@ -70,7 +72,7 @@ let testGuildTextChannel: [String: Any] = [
 ]
 
 let testGuildVoiceChannel: [String: Any] = [
-    "id": "guildVoiceChannel",
+    "id": "202",
     "guild_id": "testGuild",
     "type": 2,
     "name": "TestVoiceChannel",
@@ -89,7 +91,7 @@ let testGuild: [String: Any] = [
     "emojis": [[String: Any]](),
     "features": [Any](),
     "icon": "",
-    "id": "testGuild",
+    "id": "100",
     "large": false,
     "member_count": 0,
     "mfa_level": 0,
@@ -130,7 +132,7 @@ let testMessage: [String: Any] = [
     "channel_id": testGuildTextChannel["id"] as! String,
     "content": "This is a test message",
     "embeds": [testEmbed],
-    "id": "testMessage",
+    "id": "600",
     "mention_everyone": false,
     "mention_roles": [String](),
     "mentions": [[String: Any]](),
@@ -180,7 +182,7 @@ func createEmojiObjects(n: Int) -> [[String: Any]] {
     for i in 0..<n {
         var emoji = testUser
 
-        emoji["id"] = String("emoji\(i)")
+        emoji["id"] = String("500\(i)")
         emoji["name"] = String("Custom emoji \(i)")
 
         emojis.append(emoji)

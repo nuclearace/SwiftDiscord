@@ -19,36 +19,39 @@
 public struct DiscordEmoji {
     // MARK: Properties
 
-    /// The snowflake id of the emoji.
-    public let id: String
+    /// The snowflake id of the emoji.  Nil if the emoji is a unicode emoji
+    public let id: EmojiID?
 
     /// Whether this is a managed emoji.
     public let managed: Bool
 
-    /// The name of the emoji.
+    /// The name of the emoji or unicode representation if it's a unicode emoji.
     public let name: String
 
     /// Whether this emoji requires colons.
     public let requireColons: Bool
 
     /// An array of role snowflake ids this emoji is active for.
-    public let roles: [String]
+    public let roles: [RoleID]
 
     init(emojiObject: [String: Any]) {
-        id = emojiObject.get("id", or: "")
+        id = Snowflake(emojiObject["id"] as? String)
         managed = emojiObject.get("managed", or: false)
         name = emojiObject.get("name", or: "")
         requireColons = emojiObject.get("require_colons", or: false)
-        roles = emojiObject.get("roles", or: [String]())
+        roles = (emojiObject["roles"] as? [String])?.flatMap(Snowflake.init) ?? []
     }
 
-    static func emojisFromArray(_ emojiArray: [[String: Any]]) -> [String: DiscordEmoji] {
-        var emojis = [String: DiscordEmoji]()
+    static func emojisFromArray(_ emojiArray: [[String: Any]]) -> [EmojiID: DiscordEmoji] {
+        var emojis = [EmojiID: DiscordEmoji]()
 
         for emoji in emojiArray {
             let emoji = DiscordEmoji(emojiObject: emoji)
-
-            emojis[emoji.id] = emoji
+            if let emojiID = emoji.id {
+                emojis[emojiID] = emoji
+            } else {
+                DefaultDiscordLogger.Logger.debug("EmojisFromArray used on array with non-custom emoji", type: "DiscordEmoji")
+            }
         }
 
         return emojis

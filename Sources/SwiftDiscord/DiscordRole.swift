@@ -20,7 +20,7 @@ public struct DiscordRole : JSONAble, Equatable {
     // MARK: Properties
 
     /// The snowflake id of the role.
-    public let id: String
+    public let id: RoleID
 
     /// The display color of this role.
     public var color: Int
@@ -46,7 +46,7 @@ public struct DiscordRole : JSONAble, Equatable {
     init(roleObject: [String: Any]) {
         color = roleObject.get("color", or: 0)
         hoist = roleObject.get("hoist", or: false)
-        id = roleObject.get("id", or: "")
+        id = Snowflake(roleObject["id"] as? String) ?? 0
         managed = roleObject.get("managed", or: false)
         mentionable = roleObject.get("mentionable", or: false)
         name = roleObject.get("name", or: "")
@@ -54,7 +54,7 @@ public struct DiscordRole : JSONAble, Equatable {
         position = roleObject.get("position", or: 0)
     }
 
-    init(id: String, color: Int, hoist: Bool, managed: Bool, mentionable: Bool, name: String, permissions: DiscordPermission, position: Int) {
+    init(id: RoleID, color: Int, hoist: Bool, managed: Bool, mentionable: Bool, name: String, permissions: DiscordPermission, position: Int) {
         self.id = id
         self.color = color
         self.hoist = hoist
@@ -65,8 +65,8 @@ public struct DiscordRole : JSONAble, Equatable {
         self.position = position
     }
 
-    static func rolesFromArray(_ rolesArray: [[String: Any]]) -> [String: DiscordRole] {
-        var roles = [String: DiscordRole]()
+    static func rolesFromArray(_ rolesArray: [[String: Any]]) -> [RoleID: DiscordRole] {
+        var roles = [RoleID: DiscordRole]()
 
         for role in rolesArray {
             let role = DiscordRole(roleObject: role)

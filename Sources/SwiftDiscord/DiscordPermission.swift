@@ -115,7 +115,7 @@ public struct DiscordPermissionOverwrite : JSONAble {
     // MARK: Properties
 
     /// The snowflake id of this permission overwrite.
-    public let id: String
+    public let id: OverwriteID
 
     /// The type of this overwrite.
     public let type: DiscordPermissionOverwriteType
@@ -136,7 +136,7 @@ public struct DiscordPermissionOverwrite : JSONAble {
         - parameter allow: The permissions allowed
         - parameter deny: The permissions denied
     */
-    public init(id: String, type: DiscordPermissionOverwriteType, allow: DiscordPermission, deny: DiscordPermission) {
+    public init(id: OverwriteID, type: DiscordPermissionOverwriteType, allow: DiscordPermission, deny: DiscordPermission) {
         self.id = id
         self.type = type
         self.allow = allow
@@ -144,14 +144,14 @@ public struct DiscordPermissionOverwrite : JSONAble {
     }
 
     init(permissionOverwriteObject: [String: Any]) {
-        id = permissionOverwriteObject.get("id", or: "")
+        id = Snowflake(permissionOverwriteObject["id"] as? String) ?? 0
         type = DiscordPermissionOverwriteType(rawValue: permissionOverwriteObject.get("type", or: "")) ?? .role
         allow = DiscordPermission(rawValue: permissionOverwriteObject.get("allow", or: 0))
         deny = DiscordPermission(rawValue: permissionOverwriteObject.get("deny", or: 0))
     }
 
-    static func overwritesFromArray(_ permissionOverwritesArray: [[String: Any]]) -> [String: DiscordPermissionOverwrite] {
-        var overwrites = [String: DiscordPermissionOverwrite]()
+    static func overwritesFromArray(_ permissionOverwritesArray: [[String: Any]]) -> [OverwriteID: DiscordPermissionOverwrite] {
+        var overwrites = [OverwriteID: DiscordPermissionOverwrite]()
 
         for overwriteObject in permissionOverwritesArray {
             let overwrite = DiscordPermissionOverwrite(permissionOverwriteObject: overwriteObject)

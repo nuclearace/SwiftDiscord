@@ -29,7 +29,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public let features: [Any]
 
     /// The snowflake id of the guild.
-    public let id: String
+    public let id: GuildID
 
     /// Whether or not this a "large" guild.
     public let large: Bool
@@ -49,16 +49,16 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     }
 
     /// A `DiscordLazyDictionary` of guild members. The key is the snowflake id of the user.
-    public var members = DiscordLazyDictionary<String, DiscordGuildMember>()
+    public var members = DiscordLazyDictionary<UserID, DiscordGuildMember>()
 
     /// Reference to the client.
     public weak var client: DiscordClient?
 
     /// A dictionary of this guild's channels. The key is the snowflake id of the channel.
-    public internal(set) var channels: [String: DiscordGuildChannel]
+    public internal(set) var channels: [ChannelID: DiscordGuildChannel]
 
     /// A dictionary of this guild's emojis. The key is the snowflake id of the emoji.
-    public internal(set) var emojis: [String: DiscordEmoji]
+    public internal(set) var emojis: [EmojiID: DiscordEmoji]
 
     /// The number of members in this guild.
     ///
@@ -66,20 +66,20 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public internal(set) var memberCount: Int
 
     /// A `DiscordLazyDictionary` of presences. The key is the snowflake id of the user.
-    public internal(set) var presences = DiscordLazyDictionary<String, DiscordPresence>()
+    public internal(set) var presences = DiscordLazyDictionary<UserID, DiscordPresence>()
 
     /// A dictionary of this guild's roles. The key is the snowflake id of the role.
-    public internal(set) var roles: [String: DiscordRole]
+    public internal(set) var roles: [RoleID: DiscordRole]
 
     /// A dictionary of this guild's current voice states. The key is the snowflake id of the user for this voice
     /// state.
-    public internal(set) var voiceStates: [String: DiscordVoiceState]
+    public internal(set) var voiceStates: [UserID: DiscordVoiceState]
 
     /// The default message notification setting.
     public private(set) var defaultMessageNotifications: Int
 
     /// The snowflake id of the embed channel for this guild.
-    public private(set) var embedChannelId: String
+    public private(set) var embedChannelId: ChannelID
 
     /// Whether this guild has embed enabled.
     public private(set) var embedEnabled: Bool
@@ -94,7 +94,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public private(set) var name: String
 
     /// The snowflake id of this guild's owner.
-    public private(set) var ownerId: String
+    public private(set) var ownerId: UserID
 
     /// The region this guild is in.
     public private(set) var region: String
@@ -107,16 +107,16 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
             client: client)
         defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
         embedEnabled = guildObject.get("embed_enabled", or: false)
-        embedChannelId = guildObject.get("embed_channel_id", or: "")
+        embedChannelId = Snowflake(guildObject["embed_channel_id"] as? String) ?? 0
         emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: JSONArray()))
         features = guildObject.get("features", or: Array<Any>())
         icon = guildObject.get("icon", or: "")
-        id = guildObject.get("id", or: "")
+        id = Snowflake(guildObject["id"] as? String) ?? 0
         large = guildObject.get("large", or: false)
         memberCount = guildObject.get("member_count", or: 0)
         mfaLevel = guildObject.get("mfa_level", or: -1)
         name = guildObject.get("name", or: "")
-        ownerId = guildObject.get("owner_id", or: "")
+        ownerId = Snowflake(guildObject["owner_id"] as? String) ?? 0
 
         if !(client?.discardPresences ?? false) {
             presences = DiscordPresence.presencesFromArray(guildObject.get("presences", or: JSONArray()), guildId: id)
@@ -197,7 +197,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         - parameter userId: The user id of the member to get
         - returns: The guild member, if one was found
     */
-    public func getGuildMember(_ userId: String) -> DiscordGuildMember? {
+    public func getGuildMember(_ userId: UserID) -> DiscordGuildMember? {
         guard let client = self.client else { return nil }
 
         let lock = DispatchSemaphore(value: 0)
@@ -217,8 +217,8 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     }
 
     // Used to setup initial guilds
-    static func guildsFromArray(_ guilds: [[String: Any]], client: DiscordClient? = nil) -> [String: DiscordGuild] {
-        var guildDictionary = [String: DiscordGuild]()
+    static func guildsFromArray(_ guilds: [[String: Any]], client: DiscordClient? = nil) -> [GuildID: DiscordGuild] {
+        var guildDictionary = [GuildID: DiscordGuild]()
 
         for guildObject in guilds {
             let guild = DiscordGuild(guildObject: guildObject, client: client)
@@ -269,7 +269,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     }
 
     func shardNumber(assuming numOfShards: Int) -> Int {
-        return (Int(id)! >> 22) % numOfShards
+        return Int(id.id >> 22) % numOfShards
     }
 
     func updateGuild(fromPresence presence: DiscordPresence, fillingUsers fillUsers: Bool,
@@ -286,10 +286,10 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 
             members[lazy: userId] = .lazy({[weak self] in
                 guard let this = self else {
-                    return DiscordGuildMember(guildMemberObject: [:], guildId: "")
+                    return DiscordGuildMember(guildMemberObject: [:], guildId: 0)
                 }
 
-                return this.getGuildMember(userId) ?? DiscordGuildMember(guildMemberObject: [:], guildId: "")
+                return this.getGuildMember(userId) ?? DiscordGuildMember(guildMemberObject: [:], guildId: 0)
             })
         }
     }
@@ -300,7 +300,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
             self.defaultMessageNotifications = defaultMessageNotifications
         }
 
-        if let embedChannelId = newGuild["embed_channel_id"] as? String {
+        if let embedChannelId = Snowflake(newGuild["embed_channel_id"] as? String) {
             self.embedChannelId = embedChannelId
         }
 
@@ -324,7 +324,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
             self.name = name
         }
 
-        if let ownerId = newGuild["owner_id"] as? String {
+        if let ownerId = Snowflake(newGuild["owner_id"] as? String) {
             self.ownerId = ownerId
         }
 

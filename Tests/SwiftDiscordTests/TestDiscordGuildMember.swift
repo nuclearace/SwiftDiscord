@@ -33,7 +33,7 @@ class TestDiscordGuildMember : XCTestCase {
         var member = DiscordGuildMember(guildMemberObject: testMember, guildId: guild.id, guild: guild)
 
         _ = member.updateMember(["nick": "A new nick",
-                                 "roles": ["testRole", "testRole2"]
+                                 "roles": ["400", "401"]
                                 ])
 
         XCTAssertEqual(member.nick, "A new nick", "Member should have a new nick")

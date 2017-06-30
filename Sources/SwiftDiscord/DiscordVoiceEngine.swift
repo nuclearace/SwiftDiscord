@@ -60,7 +60,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     /// The id of the guild this voice engine is for.
-    public var guildId: String {
+    public var guildId: GuildID {
         return voiceState.guildId
     }
 

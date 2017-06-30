@@ -99,7 +99,7 @@ public struct DiscordPresence {
     // MARK: Properties
 
     /// The snowflake of the guild this presence belongs on.
-    public let guildId: String
+    public let guildId: GuildID
 
     /// The user associated with this presence.
     public let user: DiscordUser
@@ -116,7 +116,7 @@ public struct DiscordPresence {
     /// The status of this user.
     public var status: DiscordPresenceStatus
 
-    init(presenceObject: [String: Any], guildId: String) {
+    init(presenceObject: [String: Any], guildId: GuildID) {
         self.guildId = guildId
         user = DiscordUser(userObject: presenceObject.get("user", or: [String: Any]()))
         game = DiscordGame(gameObject: presenceObject["game"] as? [String: Any])
@@ -145,12 +145,12 @@ public struct DiscordPresence {
         }
     }
 
-    static func presencesFromArray(_ presencesArray: [[String: Any]], guildId: String)
-            -> DiscordLazyDictionary<String, DiscordPresence> {
-        var presences = DiscordLazyDictionary<String, DiscordPresence>()
+    static func presencesFromArray(_ presencesArray: [[String: Any]], guildId: GuildID)
+            -> DiscordLazyDictionary<UserID, DiscordPresence> {
+        var presences = DiscordLazyDictionary<UserID, DiscordPresence>()
 
         for presence in presencesArray {
-            guard let user = presence["user"] as? [String: Any], let id = user["id"] as? String else {
+            guard let user = presence["user"] as? [String: Any], let id = Snowflake(user["id"] as? String) else {
                 fatalError("Couldn't extract userId")
             }
 

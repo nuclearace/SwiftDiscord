@@ -19,7 +19,7 @@ import Foundation
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
-    public func addGuildMemberRole(_ roleId: String, to userId: String, on guildId: String,
+    public func addGuildMemberRole(_ roleId: RoleID, to userId: UserID, on guildId: GuildID,
                                    callback: ((Bool) -> ())?) {
         rateLimiter.executeRequest(endpoint: .guildMemberRole(guild: guildId, user: userId, role: roleId),
                                    token: token,
@@ -28,7 +28,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func createGuildChannel(on guildId: String, options: [DiscordEndpoint.Options.GuildCreateChannel],
+    public func createGuildChannel(on guildId: GuildID, options: [DiscordEndpoint.Options.GuildCreateChannel],
                                    callback: ((DiscordGuildChannel?) -> ())? = nil) {
         var createJSON: [String: Any] = [:]
 
@@ -65,7 +65,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func createGuildRole(on guildId: String, withOptions options: [DiscordEndpoint.Options.CreateRole] = [],
+    public func createGuildRole(on guildId: GuildID, withOptions options: [DiscordEndpoint.Options.CreateRole] = [],
                                 callback: @escaping (DiscordRole?) -> ()) {
         var roleData: [String: Any] = [:]
 
@@ -105,7 +105,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func deleteGuild(_ guildId: String, callback: ((DiscordGuild?) -> ())? = nil) {
+    public func deleteGuild(_ guildId: GuildID, callback: ((DiscordGuild?) -> ())? = nil) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(guild)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback?(nil)
@@ -122,7 +122,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getGuildBans(for guildId: String, callback: @escaping ([DiscordBan]) -> ()) {
+    public func getGuildBans(for guildId: GuildID, callback: @escaping ([DiscordBan]) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(bans)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([])
@@ -138,7 +138,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getGuildChannels(_ guildId: String, callback: @escaping ([DiscordGuildChannel]) -> ()) {
+    public func getGuildChannels(_ guildId: GuildID, callback: @escaping ([DiscordGuildChannel]) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(channels)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([])
@@ -153,7 +153,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getGuildMember(by id: String, on guildId: String, callback: @escaping (DiscordGuildMember?) -> ()) {
+    public func getGuildMember(by id: UserID, on guildId: GuildID, callback: @escaping (DiscordGuildMember?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(member)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
@@ -168,7 +168,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getGuildMembers(on guildId: String, options: [DiscordEndpoint.Options.GuildGetMembers],
+    public func getGuildMembers(on guildId: GuildID, options: [DiscordEndpoint.Options.GuildGetMembers],
                                 callback: @escaping ([DiscordGuildMember]) -> ()) {
         var getParams: [String: String] = [:]
 
@@ -197,7 +197,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getGuildRoles(for guildId: String, callback: @escaping ([DiscordRole]) -> ()) {
+    public func getGuildRoles(for guildId: GuildID, callback: @escaping ([DiscordRole]) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(roles)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([])
@@ -212,7 +212,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func guildBan(userId: String, on guildId: String, deleteMessageDays: Int = 7,
+    public func guildBan(userId: UserID, on guildId: GuildID, deleteMessageDays: Int = 7,
                          callback: ((Bool) -> ())? = nil) {
         guard let contentData = JSON.encodeJSONData(["delete-message-days": deleteMessageDays]) else { return }
 
@@ -223,7 +223,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
 
     /// Default implementation
-    public func modifyGuild(_ guildId: String, options: [DiscordEndpoint.Options.ModifyGuild],
+    public func modifyGuild(_ guildId: GuildID, options: [DiscordEndpoint.Options.ModifyGuild],
                             callback: ((DiscordGuild?) -> ())? = nil) {
         var modifyJSON: [String: Any] = [:]
 
@@ -268,7 +268,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func modifyGuildChannelPositions(on guildId: String, channelPositions: [[String: Any]],
+    public func modifyGuildChannelPositions(on guildId: GuildID, channelPositions: [[String: Any]],
                                             callback: (([DiscordGuildChannel]) -> ())? = nil) {
         guard let contentData = JSON.encodeJSONData(channelPositions) else { return }
 
@@ -288,7 +288,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    func modifyGuildMember(_ id: String, on guildId: String, options: [DiscordEndpoint.Options.ModifyMember],
+    func modifyGuildMember(_ id: UserID, on guildId: GuildID, options: [DiscordEndpoint.Options.ModifyMember],
                            callback: ((Bool) -> ())? = nil) {
         var patchParams: [String: Any] = [:]
 
@@ -314,7 +314,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func modifyGuildRole(_ role: DiscordRole, on guildId: String, callback: ((DiscordRole?) -> ())? = nil) {
+    public func modifyGuildRole(_ role: DiscordRole, on guildId: GuildID, callback: ((DiscordRole?) -> ())? = nil) {
         guard let contentData = JSON.encodeJSONData(role.json) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
@@ -331,7 +331,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func removeGuildBan(for userId: String, on guildId: String, callback: ((Bool) -> ())? = nil) {
+    public func removeGuildBan(for userId: UserID, on guildId: GuildID, callback: ((Bool) -> ())? = nil) {
         DefaultDiscordLogger.Logger.log("Unbanning \(userId) on \(guildId)", type: "DiscordEndpointGuild")
 
         rateLimiter.executeRequest(endpoint: .guildBanUser(guild: guildId, user: userId),
@@ -341,7 +341,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation.
-    public func removeGuildMemberRole(_ roleId: String, from userId: String, on guildId: String,
+    public func removeGuildMemberRole(_ roleId: RoleID, from userId: UserID, on guildId: GuildID,
                                       callback: ((Bool) -> ())?) {
         rateLimiter.executeRequest(endpoint: .guildMemberRole(guild: guildId, user: userId, role: roleId),
                                    token: token,
@@ -350,7 +350,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func removeGuildRole(_ roleId: String, on guildId: String, callback: ((DiscordRole?) -> ())? = nil) {
+    public func removeGuildRole(_ roleId: RoleID, on guildId: GuildID, callback: ((DiscordRole?) -> ())? = nil) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(role)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback?(nil)

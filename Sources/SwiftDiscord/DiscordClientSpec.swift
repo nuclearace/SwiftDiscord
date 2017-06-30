@@ -59,14 +59,14 @@ public protocol DiscordClientSpec : class, DiscordVoiceManagerDelegate, DiscordS
 
 		- parameter channelId: The snowflake of the voice channel you would like to join
 	*/
-	func joinVoiceChannel(_ channelId: String)
+	func joinVoiceChannel(_ channelId: ChannelID)
 
 	/**
 		Leaves the currently connected voice channel.
 
 		- parameter onGuild: The snowflake of the guild whose voice channel you would like to leave.
 	*/
-	func leaveVoiceChannel(onGuild guildId: String)
+	func leaveVoiceChannel(onGuild guildId: GuildID)
 
 	/**
 		Requests all users from Discord for the guild specified. Use this when you need to get all users on a large
@@ -74,7 +74,7 @@ public protocol DiscordClientSpec : class, DiscordVoiceManagerDelegate, DiscordS
 
 		- parameter on: The snowflake of the guild you wish to request all users.
 	*/
-	func requestAllUsers(on guildId: String)
+	func requestAllUsers(on guildId: GuildID)
 
 	/**
 		Sets the user's presence.
