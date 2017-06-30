@@ -207,7 +207,7 @@ public struct DiscordAttachment {
     // MARK: Properties
 
     /// The snowflake id of this attachment.
-    public let id: String
+    public let id: AttachmentID
 
     /// The name of the file.
     public let filename: String
@@ -228,7 +228,7 @@ public struct DiscordAttachment {
     public let width: Int?
 
     init(attachmentObject: [String: Any]) {
-        id = attachmentObject.get("id", or: "")
+        id = Snowflake(attachmentObject.get("id", or: "")) ?? 0
         filename = attachmentObject.get("filename", or: "")
         height = attachmentObject["height"] as? Int
         proxyUrl = URL(string: attachmentObject.get("proxy_url", or: "")) ?? URL.localhost
