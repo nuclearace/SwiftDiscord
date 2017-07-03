@@ -375,7 +375,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         handleQueue.async {
             guard let shardNum = self.guilds[engine.guildId]?.shardNumber(assuming: self.shards) else { return }
 
-            let payload = DiscordGatewayPayloadData.object(["guild_id": engine.guildId,
+            let payload = DiscordGatewayPayloadData.object(["guild_id": String(describing: engine.guildId),
                                                             "channel_id": NSNull(),
                                                             "self_mute": false,
                                                             "self_deaf": false])
