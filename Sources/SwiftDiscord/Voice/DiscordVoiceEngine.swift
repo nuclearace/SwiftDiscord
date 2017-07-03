@@ -68,8 +68,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     public var handshakeObject: [String: Any] {
         return [
             "session_id": voiceState.sessionId,
-            "server_id": voiceState.guildId,
-            "user_id": voiceState.userId,
+            "server_id": String(describing: voiceState.guildId),
+            "user_id": String(describing: voiceState.userId),
             "token": voiceServerInformation.token
         ]
     }

@@ -19,10 +19,10 @@
 public protocol DiscordGuildChannel : DiscordChannel {
     /// The snowflake id of the guild this channel is on.
     var guildId: GuildID { get }
-    
+
     /// The name of this channel.
     var name: String { get }
-    
+
     /// The position of this channel. Mostly for UI purpose.
     var position: Int { get }
 
@@ -65,7 +65,7 @@ extension DiscordGuildChannel {
 
         client.editChannelPermission(overwrite, on: id)
     }
-    
+
     /**
         Gets the permission overwrites for a user.
 
@@ -137,15 +137,15 @@ func guildChannelFromObject(_ channelObject: [String: Any], client: DiscordClien
     }
 }
 
-func guildChannelsFromArray(_ guildChannelArray: [[String: Any]], client: DiscordClient? = nil)
-    -> [ChannelID: DiscordGuildChannel] {
+func guildChannelsFromArray(_ guildChannelArray: [[String: Any]],
+                            client: DiscordClient? = nil) -> [ChannelID: DiscordGuildChannel] {
         var guildChannels = [ChannelID: DiscordGuildChannel]()
 
         for guildChannelObject in guildChannelArray {
-            let guildChannel = guildChannelFromObject(guildChannelObject)
+            let guildChannel = guildChannelFromObject(guildChannelObject, client: client)
             guildChannels[guildChannel.id] = guildChannel
         }
-        
+
         return guildChannels
 }
 
@@ -197,34 +197,34 @@ public struct DiscordGuildTextChannel : DiscordTextChannel, DiscordGuildChannel 
 
 public struct DiscordGuildVoiceChannel : DiscordGuildChannel {
     // MARK: Guild Voice Channel Properties
-    
+
     /// The snowflake id of the channel.
     public let id: ChannelID
-    
+
     /// Whether this is a private channel. Should always be false for GuildChannels.
     public var isPrivate: Bool { return false }
-    
+
     /// The snowflake id of the guild this channel is on.
     public let guildId: GuildID
-    
+
     /// The bitrate of this channel, if this is a voice channel.
     public var bitrate: Int
-    
+
     /// Reference to the client.
     public weak var client: DiscordClient?
-    
+
     /// The name of this channel.
     public var name: String
-    
+
     /// The permissions specifics to this channel.
     public var permissionOverwrites: [OverwriteID: DiscordPermissionOverwrite]
-    
+
     /// The position of this channel. Mostly for UI purpose.
     public var position: Int
-    
+
     /// The user limit of this channel, if this is a voice channel.
     public var userLimit: Int
-    
+
     init(guildChannelObject: [String: Any], client: DiscordClient? = nil) {
         id = Snowflake(guildChannelObject["id"] as? String) ?? 0
         guildId = Snowflake(guildChannelObject["guild_id"] as? String) ?? 0

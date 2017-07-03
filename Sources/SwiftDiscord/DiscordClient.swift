@@ -269,8 +269,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         DefaultDiscordLogger.Logger.log("Joining voice channel: \(channel)", type: self.logType)
 
         shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
-                                                       payload: .object(["guild_id": guild.id,
-                                                                         "channel_id": channel.id,
+                                                       payload: .object(["guild_id": String(describing: guild.id),
+                                                                         "channel_id": String(describing: channel.id),
                                                                          "self_mute": false,
                                                                          "self_deaf": false
                                                                         ])
