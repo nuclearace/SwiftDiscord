@@ -21,6 +21,8 @@ import Foundation
 import Starscream
 #else
 import WebSockets
+import Sockets
+import URI
 #endif
 
 /// Declares that a type will be an Engine for the Discord Gateway.
@@ -126,7 +128,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
 
             DefaultDiscordLogger.Logger.log("WebSocket closed, \(this.description)", type: "DiscordWebSocketable")
 
-            this.handleClose()
+            this.handleClose(reason: nil)
         }
         #endif
     }
@@ -145,7 +147,11 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         attachWebSocketHandlers()
         websocket?.connect()
         #else
-        try? WebSocket.background(to: connectURL) {[weak self] ws in
+        let uri = URI(hostname: connectURL)
+        try? WebSocket.background(to: uri,
+                                  using: TCPInternetSocket(scheme: uri.scheme,
+                                                           hostname: uri.hostname,
+                                                           port: uri.port ?? 80)) {[weak self] ws in
             guard let this = self else { return }
             DefaultDiscordLogger.Logger.log("Websocket connected, shard: \(this.description)", type: "DiscordWebSocketable")
 
