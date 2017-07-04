@@ -120,6 +120,7 @@ public enum DiscordEndpoint : CustomStringConvertible {
 
     /// The user guilds endpoint.
     case userGuilds
+    /* End User */
 
     /* Webhooks */
     /// The single webhook endpoint.
@@ -229,7 +230,7 @@ public extension DiscordEndpoint {
         case .baseURL:
             return "https://discordapp.com/api/v6"
 
-        /* -- Channels -- */
+        /* Channels */
         case let .channel(id):
             return "/channels/\(id)"
         // Messages
@@ -261,8 +262,9 @@ public extension DiscordEndpoint {
         // Webhooks
         case let .channelWebhooks(channel):
             return "/channels/\(channel)/webhooks"
+        /* End Channels */
 
-        /* -- Guilds -- */
+        /* Guilds */
         case let .guilds(id):
             return "/guilds/\(id)"
         // Guild Channels
@@ -288,14 +290,16 @@ public extension DiscordEndpoint {
         // Webhooks
         case let .guildWebhooks(guild):
             return "/guilds/\(guild)/webhooks"
+        /* End Guilds */
 
-        /* -- User -- */
+        /* User */
         case .userChannels:
             return "/users/@me/channels"
         case .userGuilds:
             return "/users/@me/guilds"
+        /* End User */
 
-        /* -- Webhooks -- */
+        /* Webhooks */
         case let .webhook(id):
             return "/webhooks/\(id)"
         case let .webhookWithToken(id, token):
@@ -304,55 +308,94 @@ public extension DiscordEndpoint {
             return "/webhooks/\(id)/\(token)/slack"
         case let .webhookGithub(id, token):
             return "/webhooks/\(id)/\(token)/github"
+        /* End Webhooks */
         }
     }
 
-    var endpointForRateLimiter: DiscordEndpoint {
+    internal var rateLimitKey: DiscordRateLimitKey {
         switch self {
-        // Unspecialized endpoints
-        case .channel:              return self
-        case .messages:             return self
-        case .bulkMessageDelete:    return self
-        case .channelMessageDelete: return self // Special case for the rate limiter
-        case .typing:               return self
-        case .permissions:          return self
-        case .invites:              return self
-        case .channelInvites:       return self
-        case .pins:                 return self
-        case .channelWebhooks:      return self
-        case .guilds:               return self
-        case .guildChannels:        return self
-        case .guildMembers:         return self
-        case .guildMemberRole:      return self
-        case .guildBans:            return self
-        case .guildRoles:           return self
-        case .guildWebhooks:        return self
-        case .userChannels:         return self
-        case .userGuilds:           return self
-        case .webhook:              return self
-
-        // Specialized endpoints
-        case let .channelMessage(channel, _):
-            return .messages(channel: channel)
-        case let .channelPermission(channel, _):
-            return .permissions(channel: channel)
-        case let .pinnedMessage(channel, _):
-            return .pins(channel: channel)
-        case let .guildMember(guild, _):
-            return .guildMembers(guild: guild)
-        case let .guildBanUser(guild, _):
-            return .guildBans(guild: guild)
-        case let .guildRole(guild, _):
-            return .guildRoles(guild: guild)
-        case let .webhookWithToken(id, _):
-            return .webhook(id: id)
-        case let .webhookSlack(id, _):
-            return .webhook(id: id)
-        case let .webhookGithub(id, _):
-            return .webhook(id: id)
-
         case .baseURL:
             fatalError("Attempted to get rate limit key for base URL")
+
+        /* Channels */
+        case let .channel(id):
+            return DiscordRateLimitKey(id: id, urlParts: [.channels, .channelID])
+        // Messages
+        case let .messages(channel):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .messages])
+        case let .bulkMessageDelete(channel):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .bulkDelete])
+        case let .channelMessage(channel, _):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .messages, .messageID])
+        case let .channelMessageDelete(channel, _):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .messagesDelete, .messageID])
+        case let .typing(channel):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .typing])
+        // Permissions
+        case let .permissions(channel):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .permissions])
+        case let .channelPermission(channel, _):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .permissions, .overwriteID])
+        // Invites
+        case .invites:
+            return DiscordRateLimitKey(urlParts: [.invites, .inviteCode])
+        case let .channelInvites(channel):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .invites])
+        // Pinned Messages
+        case let .pins(channel):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .pins])
+        case let .pinnedMessage(channel, _):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .pins, .messageID])
+        // Webhooks
+        case let .channelWebhooks(channel):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .webhooks])
+        /* End Channels */
+
+        /* Guilds */
+        case let .guilds(id):
+            return DiscordRateLimitKey(id: id, urlParts: [.guilds, .guildID])
+        // Guild Channels
+        case let .guildChannels(guild):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .channels])
+        // Guild Members
+        case let .guildMembers(guild):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .members])
+        case let .guildMember(guild, _):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .members, .userID])
+        case let .guildMemberRole(guild, _, _):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .members, .userID, .roles, .roleID])
+        // Guild Bans
+        case let .guildBans(guild):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .bans])
+        case let .guildBanUser(guild, _):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .bans, .userID])
+        // Guild Roles
+        case let .guildRoles(guild):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .roles])
+        case let .guildRole(guild, _):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .roles, .roleID])
+        // Webhooks
+        case let .guildWebhooks(guild):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .webhooks])
+        /* End Guilds */
+
+        /* User */
+        case .userChannels:
+            return DiscordRateLimitKey(urlParts: [.users, .userID, .channels])
+        case .userGuilds:
+            return DiscordRateLimitKey(urlParts: [.users, .userID, .guilds])
+        /* End User */
+
+        /* Webhooks */
+        case .webhook:
+            return DiscordRateLimitKey(urlParts: [.webhooks, .webhookID])
+        case .webhookWithToken:
+            return DiscordRateLimitKey(urlParts: [.webhooks, .webhookID, .webhookToken])
+        case .webhookSlack:
+            return DiscordRateLimitKey(urlParts: [.webhooks, .webhookID, .webhookToken, .slack])
+        case .webhookGithub:
+            return DiscordRateLimitKey(urlParts: [.webhooks, .webhookID, .webhookToken, .github])
+        /* End Webhooks */
         }
     }
 
