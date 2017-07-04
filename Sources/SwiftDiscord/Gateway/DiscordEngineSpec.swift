@@ -22,7 +22,7 @@ import Starscream
 #else
 import WebSockets
 import Sockets
-import URI
+import TLS
 #endif
 
 /// Declares that a type will be an Engine for the Discord Gateway.
@@ -147,11 +147,11 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         attachWebSocketHandlers()
         websocket?.connect()
         #else
-        let uri = URI(hostname: connectURL)
-        try? WebSocket.background(to: uri,
-                                  using: TCPInternetSocket(scheme: uri.scheme,
-                                                           hostname: uri.hostname,
-                                                           port: uri.port ?? 80)) {[weak self] ws in
+        let url = URL(string: connectURL)!
+        let socket = try! TCPInternetSocket(scheme: "https", hostname: url.host ?? "gateway.discord.gg",
+                                            port: Port(url.port ?? 443))
+        let stream = try! TLS.InternetSocket(socket, TLS.Context(.client))
+        try! WebSocket.connect(to: connectURL, using: stream) {[weak self] ws in
             guard let this = self else { return }
             DefaultDiscordLogger.Logger.log("Websocket connected, shard: \(this.description)", type: "DiscordWebSocketable")
 
