@@ -23,10 +23,6 @@ public struct Snowflake {
     /// The internal ID storage for a snowflake
     public let rawValue: UInt64
 
-    /// For backwards compatibility, use rawValue instead
-    @available(*, deprecated, obsoleted: 4, renamed: "rawValue")
-    public var id: UInt64 { return rawValue }
-
     /// Initialize from a UInt64
     public init(_ snowflake: UInt64) {
         rawValue = snowflake
