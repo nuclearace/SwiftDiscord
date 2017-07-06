@@ -15,22 +15,23 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Foundation
+
 /// The stored type of a Discord Snowflake ID
 public struct Snowflake {
 
-
     /// The internal ID storage for a snowflake
-    public let id: UInt64
+    public let rawValue: UInt64
 
     /// Initialize from a UInt64
     public init(_ snowflake: UInt64) {
-        self.id = snowflake
+        rawValue = snowflake
     }
 
     /// Initialize from a string
     public init?(_ string: String) {
         guard let snowflake = UInt64(string) else { return nil }
-        self.id = snowflake
+        rawValue = snowflake
     }
 
     /// Initialize from an optional string (returns nil if the input was nil or if it failed to initialize)
@@ -72,6 +73,41 @@ public typealias IntegrationID = Snowflake
 /// A Snowflake ID representing an Attachment
 public typealias AttachmentID = Snowflake
 
+// MARK: Extra snowflake information
+
+extension Snowflake {
+
+    /// Discord's epoch
+    public static let epoch = Date(timeIntervalSince1970: 1420070400)
+
+    /// Time when snowflake was created
+    public var timestamp: Date { return Date(timeInterval: Double((rawValue & 0xFFFFFFFFFFC00000) >> 22) / 1000, since: Snowflake.epoch) }
+
+    /// Discord's internal worker ID that generated this snowflake
+    public var workerId: Int { return Int((rawValue & 0x3E0000) >> 17) }
+
+    /// Discord's internal process under worker that generated this snowflake
+    public var processId: Int { return Int((rawValue & 0x1F000) >> 12) }
+
+    /// Number of generated ID's for the process
+    public var numberInProcess: Int { return Int(rawValue & 0xFFF) }
+
+    /**
+     * Creates a fake snowflake that would have been created at the specified date
+     * Useful for things like the messages before/after/around endpoint
+     *
+     * - parameter date: The date to make a fake snowflake for
+     * - returns: A fake snowflake with the specified date, or nil if the specified date will not make a valid snowflake
+     */
+    public static func fakeSnowflake(date: Date) -> Snowflake? {
+        let intervalSinceDiscordEpoch = Int64(date.timeIntervalSince(Snowflake.epoch) * 1000)
+        guard intervalSinceDiscordEpoch > 0 else { return nil }
+        guard intervalSinceDiscordEpoch < (1 << 41) else { return nil }
+        return Snowflake(UInt64(intervalSinceDiscordEpoch) << 22)
+    }
+
+}
+
 // MARK: Snowflake Conformances
 
 /// Snowflake conformance to JSONRepresentable
@@ -88,7 +124,7 @@ extension Snowflake : ExpressibleByIntegerLiteral {
 
     /// Initialize from an integer literal
     public init(integerLiteral value: UInt64) {
-        self.id = value
+        self.rawValue = value
     }
 }
 
@@ -97,24 +133,26 @@ extension Snowflake : CustomStringConvertible {
 
     /// Description for string Conversion
     public var description: String {
-        return self.id.description
+        return self.rawValue.description
     }
 
 }
 
-/// Snowflake conformance to Comparable
-extension Snowflake : Comparable {
+/// Snowflake conformance to RawRepresentable and Comparable
+extension Snowflake : RawRepresentable, Comparable {
 
-    /// Used to check whether two Snowflakes are equal
-    public static func ==(lhs: Snowflake, rhs: Snowflake) -> Bool {
-        return lhs.id == rhs.id
+    public typealias RawValue = UInt64
+
+    /// Init for rawValue conformance
+    public init(rawValue: UInt64) {
+        self.init(rawValue)
     }
 
     /// Used to compare Snowflakes (which is useful because a greater Snowflake was made later)
     public static func <(lhs: Snowflake, rhs: Snowflake) -> Bool {
-        return lhs.id < rhs.id
+        return lhs.rawValue < rhs.rawValue
     }
-
+    
 }
 
 /// Snowflake conformance to Hashable
@@ -122,7 +160,7 @@ extension Snowflake : Hashable {
 
     /// The hash value of the Snowflake
     public var hashValue: Int {
-        return self.id.hashValue
+        return self.rawValue.hashValue
     }
 
 }

@@ -268,7 +268,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     }
 
     func shardNumber(assuming numOfShards: Int) -> Int {
-        return Int(id.id >> 22) % numOfShards
+        return Int(id.rawValue >> 22) % numOfShards
     }
 
     func updateGuild(fromPresence presence: DiscordPresence, fillingUsers fillUsers: Bool,
