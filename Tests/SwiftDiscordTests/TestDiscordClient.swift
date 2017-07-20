@@ -7,6 +7,7 @@ import XCTest
 @testable import SwiftDiscord
 
 class TestDiscordClient : XCTestCase {
+
     func testClientCreatesGuild() {
         expectations[.guildCreate] = expectation(description: "Client should call guild create method")
 
@@ -20,7 +21,7 @@ class TestDiscordClient : XCTestCase {
         expectations[.guildUpdate] = expectation(description: "Client should call guild update method")
 
         let updateJSON: [String: Any] = [
-            "id": "testGuild",
+            "id": "100",
             "name": "A new name"
         ]
 
@@ -35,7 +36,13 @@ class TestDiscordClient : XCTestCase {
         expectations[.guildDelete] = expectation(description: "Client should call guild delete method")
 
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
-        client.handleDispatch(event: .guildDelete, data: .object(["id": "testGuild"]))
+
+        // Force guild's channels into the channel cache
+        for channel in (testGuildJSON["channels"] as! [[String: Any]]).map({ Snowflake($0["id"] as! String)! }) {
+            _ = client.findChannel(fromId: channel)
+        }
+
+        client.handleDispatch(event: .guildDelete, data: .object(["id": "100"]))
 
         waitForExpectations(timeout: 0.2)
     }
@@ -48,7 +55,7 @@ class TestDiscordClient : XCTestCase {
         var tUser = testUser
 
         tUser["id"] = "30"
-        tMember["guild_id"] = "testGuild"
+        tMember["guild_id"] = "100"
         tMember["user"] = tUser
         tMember["nick"] = "test nick"
 
@@ -66,7 +73,7 @@ class TestDiscordClient : XCTestCase {
         var tUser = testUser
 
         tUser["id"] = "15"
-        tMember["guild_id"] = "testGuild"
+        tMember["guild_id"] = "100"
         tMember["user"] = tUser
         tMember["nick"] = "a new nick"
 
@@ -84,7 +91,7 @@ class TestDiscordClient : XCTestCase {
         var tUser = testUser
 
         tUser["id"] = "15"
-        tMember["guild_id"] = "testGuild"
+        tMember["guild_id"] = "100"
         tMember["user"] = tUser
 
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
@@ -97,9 +104,9 @@ class TestDiscordClient : XCTestCase {
         expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
         expectations[.channelCreate] = expectation(description: "Client should call create create method")
 
-        var tChannel = testGuildChannel
+        var tChannel = testGuildTextChannel
 
-        tChannel["id"] = "testChannel2"
+        tChannel["id"] = "205"
         tChannel["name"] = "A new channel"
 
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
@@ -129,9 +136,9 @@ class TestDiscordClient : XCTestCase {
         expectations[.channelCreate] = expectation(description: "Client should call channel create method")
         expectations[.channelDelete] = expectation(description: "Client should call delete channel method")
 
-        var tChannel = testGuildChannel
+        var tChannel = testGuildTextChannel
 
-        tChannel["id"] = "testChannel2"
+        tChannel["id"] = "205"
         tChannel["name"] = "A new channel"
 
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
@@ -165,7 +172,7 @@ class TestDiscordClient : XCTestCase {
         expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
         expectations[.channelUpdate] = expectation(description: "Client should call update channel method")
 
-        var tChannel = testGuildChannel
+        var tChannel = testGuildTextChannel
 
         tChannel["name"] = "A new channel"
 
@@ -180,7 +187,7 @@ class TestDiscordClient : XCTestCase {
         expectations[.guildEmojisUpdate] = expectation(description: "Client should call guild emoji update method")
 
         let emojiUpdate: [String: Any] = [
-            "guild_id": "testGuild",
+            "guild_id": "100",
             "emojis": createEmojiObjects(n: 20)
         ]
 
@@ -195,7 +202,7 @@ class TestDiscordClient : XCTestCase {
         expectations[.guildRoleCreate] = expectation(description: "Client should call guild role create method")
 
         let roleCreate: [String: Any] = [
-            "guild_id": "testGuild",
+            "guild_id": "100",
             "role": testRole
         ]
 
@@ -212,7 +219,7 @@ class TestDiscordClient : XCTestCase {
 
         var tRole = testRole
         var roleUpdate: [String: Any] = [
-            "guild_id": "testGuild",
+            "guild_id": "100",
             "role": testRole
         ]
 
@@ -233,13 +240,13 @@ class TestDiscordClient : XCTestCase {
         expectations[.guildRoleDelete] = expectation(description: "Client should call guild role delete method")
 
         let roleCreate: [String: Any] = [
-            "guild_id": "testGuild",
+            "guild_id": "100",
             "role": testRole
         ]
 
         let roleDelete: [String: Any] = [
-            "guild_id": "testGuild",
-            "role_id": "testRole"
+            "guild_id": "100",
+            "role_id": "400"
         ]
 
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
@@ -257,12 +264,22 @@ class TestDiscordClient : XCTestCase {
         waitForExpectations(timeout: 0.2)
     }
 
-    func testClientFindsGuildChannel() {
+    func testClientFindsGuildTextChannel() {
         expectations[.guildCreate] = expectation(description: "Client should call guild create method")
 
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
 
-        assertFindChannel(channelFixture: testGuildChannel, channelType: DiscordGuildChannel.self)
+        assertFindChannel(channelFixture: testGuildTextChannel, channelType: DiscordGuildTextChannel.self)
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientFindsGuildVoiceChannel() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
+
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
+
+        assertFindChannel(channelFixture: testGuildVoiceChannel, channelType: DiscordGuildVoiceChannel.self)
 
         waitForExpectations(timeout: 0.2)
     }
@@ -348,8 +365,7 @@ extension TestDiscordClient {
             XCTAssertNil(client.directChannels[channel.id], "Deleted DM Channel should not be in direct channels")
         }
 
-        XCTAssertEqual(channel.type, .direct, "Create channel should correctly type direct channels")
-        XCTAssertEqual(channel.id, testUser["id"] as! String, "Channel create should index channels by "
+        XCTAssertEqual(channel.id, Snowflake(testUser["id"] as! String)!, "Channel create should index channels by "
                                                               + "recipient id")
     }
 
@@ -361,18 +377,17 @@ extension TestDiscordClient {
             XCTAssertNil(client.directChannels[channel.id], "Deleted Group DM Channel should not be in direct channels")
         }
 
-        XCTAssertEqual(channel.type, .groupDM, "Create channel should correctly type direct channels")
         XCTAssertEqual(channel.name, "A Group DM", "Channel create should index channels by recipient id")
     }
 
     func assertFindChannel<T: DiscordChannel>(channelFixture: [String: Any], channelType: T.Type) {
-        guard let channel = client.findChannel(fromId: channelFixture["id"] as! String) as? T else {
+        guard let channel = client.findChannel(fromId: Snowflake(channelFixture["id"] as! String)!) as? T else {
             XCTFail("Client did not find channel")
 
             return
         }
 
-        XCTAssertEqual(channel.id, channelFixture["id"] as! String, "findChannel should find the correct channel")
+        XCTAssertEqual(channel.id, Snowflake(channelFixture["id"] as! String)!, "findChannel should find the correct channel")
         XCTAssertNotNil(client.channelCache[channel.id], "Found channel should be in cache")
     }
 }
@@ -383,7 +398,7 @@ extension TestDiscordClient : DiscordClientDelegate {
     func client(_ client: DiscordClient, didCreateChannel channel: DiscordChannel) {
         switch channel {
         case let guildChannel as DiscordGuildChannel:
-            assertGuildChannel(guildChannel, expectedGuildChannels: 2, testType: .create)
+            assertGuildChannel(guildChannel, expectedGuildChannels: 3, testType: .create)
         case let dmChannel as DiscordDMChannel:
             assertDMChannel(dmChannel, testType: .create)
         case let groupDmChannel as DiscordGroupDMChannel:
@@ -398,7 +413,7 @@ extension TestDiscordClient : DiscordClientDelegate {
     func client(_ client: DiscordClient, didDeleteChannel channel: DiscordChannel) {
         switch channel {
         case let guildChannel as DiscordGuildChannel:
-            assertGuildChannel(guildChannel, expectedGuildChannels: 1, testType: .delete)
+            assertGuildChannel(guildChannel, expectedGuildChannels: 2, testType: .delete)
         case let dmChannel as DiscordDMChannel:
             assertDMChannel(dmChannel, testType: .delete)
         case let groupDmChannel as DiscordGroupDMChannel:
@@ -423,7 +438,7 @@ extension TestDiscordClient : DiscordClientDelegate {
             return
         }
 
-        XCTAssertEqual(clientGuild.channels.count, 1, "Guild should only have one channel")
+        XCTAssertEqual(clientGuild.channels.count, 2, "Guild should have two channels")
         XCTAssertEqual(guildChannel.name, "A new channel", "A new channel should have been updated")
 
         expectations[.channelUpdate]?.fulfill()
@@ -477,7 +492,7 @@ extension TestDiscordClient : DiscordClientDelegate {
             return
         }
 
-        XCTAssertEqual(clientGuild.channels.count, 1, "Created guild should have one channel")
+        XCTAssertEqual(clientGuild.channels.count, 2, "Created guild should have two channels")
         XCTAssertEqual(clientGuild.members.count, 20, "Created guild should have 20 members")
         XCTAssertEqual(clientGuild.presences.count, 20, "Created guild should have 20 presences")
         XCTAssert(guild === clientGuild, "Guild on the client should be the same as one passed to handler")
@@ -487,7 +502,10 @@ extension TestDiscordClient : DiscordClientDelegate {
 
     func client(_ client: DiscordClient, didDeleteGuild guild: DiscordGuild) {
         XCTAssertEqual(client.guilds.count, 0, "Client should have no guilds")
-        XCTAssertEqual(guild.id, "testGuild", "Test guild should be removed")
+        for channel in guild.channels.keys {
+            XCTAssertNil(client.channelCache[channel], "Removing a guild should remove its channels from the channel cache")
+        }
+        XCTAssertEqual(guild.id, 100, "Test guild should be removed")
 
         expectations[.guildDelete]?.fulfill()
     }
@@ -505,7 +523,7 @@ extension TestDiscordClient : DiscordClientDelegate {
         expectations[.guildUpdate]?.fulfill()
     }
 
-    func client(_ client: DiscordClient, didUpdateEmojis emojis: [String: DiscordEmoji],
+    func client(_ client: DiscordClient, didUpdateEmojis emojis: [EmojiID: DiscordEmoji],
                 onGuild guild: DiscordGuild) {
         XCTAssertEqual(guild.emojis.count, 20, "Update should have 20 emoji")
 
@@ -514,13 +532,13 @@ extension TestDiscordClient : DiscordClientDelegate {
 
     func client(_ client: DiscordClient, didCreateMessage message: DiscordMessage) {
         XCTAssertEqual(message.content, testMessage["content"] as! String, "Message content should be the same")
-        XCTAssertEqual(message.channelId, testMessage["channel_id"] as! String, "Channel id should be the same")
+        XCTAssertEqual(message.channelId, Snowflake(testMessage["channel_id"] as! String)!, "Channel id should be the same")
 
         expectations[.messageCreate]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didReceivePresenceUpdate presence: DiscordPresence) {
-        XCTAssertEqual(presence.user.id, testUser["id"] as! String, "Presence should be for the test user")
+        XCTAssertEqual(presence.user.id, Snowflake(testUser["id"] as! String)!, "Presence should be for the test user")
         XCTAssertNotNil(client.guilds[presence.guildId]?.presences[presence.user.id])
 
         expectations[.presenceUpdate]?.fulfill()

@@ -1,5 +1,5 @@
 // The MIT License (MIT)
-// Copyright (c) 2016 Erik Little
+// Copyright (c) 2017 Erik Little
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -15,17 +15,22 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-import PackageDescription
+/// Represents the information sent in a VoiceServerUpdate.
+public struct DiscordVoiceServerInformation {
+    // MARK: Properties
+    
+    /// The voice endpoint.
+    public let endpoint: String
 
-let package = Package(
-    name: "SwiftDiscord",
-    targets: [
-        Target(name: "SwiftDiscord", dependencies: ["DiscordOpus"])
-    ],
-    dependencies: [
-        .Package(url: "https://github.com/nuclearace/copus", majorVersion: 1),
-    	.Package(url: "https://github.com/nuclearace/Sodium", majorVersion: 1),
-        .Package(url: "https://github.com/nuclearace/Starscream", majorVersion: 2),
-        .Package(url: "https://github.com/vapor/engine", majorVersion: 2),
-    ]
-)
+    /// The guild id that is associated with this update.
+    public let guildId: GuildID
+
+    /// The token for the voice connection.
+    public let token: String
+
+    init(voiceServerInformationObject: [String: Any]) {
+        endpoint = voiceServerInformationObject.get("endpoint", or: "")
+        guildId = Snowflake(voiceServerInformationObject["guild_id"] as? String) ?? 0
+        token = voiceServerInformationObject.get("token", or: "")
+    }
+}

@@ -22,12 +22,11 @@ enum JSON {
     case object([String: Any])
 
     static func encodeJSONData(_ object: Any) -> Data? {
-        return encodeJSON(object)?.data(using: .utf8)
+        return try? JSONSerialization.data(withJSONObject: object)
     }
 
     static func encodeJSON(_ object: Any) -> String? {
-        guard let data = try? JSONSerialization.data(withJSONObject: object) else { return nil }
-
+        guard let data = encodeJSONData(object) else { return nil }
         return String(data: data, encoding: .utf8)
     }
 
@@ -118,7 +117,7 @@ extension JSONAble {
                 do {
                     json[name.snakecase] = try sendable.jsonValue()
                 } catch {
-                    DefaultDiscordLogger.Logger.error("Couldn't json property %@", type: "JSONAble", args: name)
+                    DefaultDiscordLogger.Logger.error("Couldn't json property \(name)", type: "JSONAble")
                 }
             }
         }
