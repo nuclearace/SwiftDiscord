@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DiscordEngine Class Reference</title>
+    <title>DiscordPermission Struct Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/DiscordEngine" class="dashAnchor"></a>
-    <a title="DiscordEngine Class Reference"></a>
+    <a name="//apple_ref/swift/Struct/DiscordPermission" class="dashAnchor"></a>
+    <a title="DiscordPermission Struct Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        DiscordEngine Class Reference
+        DiscordPermission Struct Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -374,32 +374,25 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>DiscordEngine</h1>
+            <h1>DiscordPermission</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordEngine</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordEngineSpec.html">DiscordEngineSpec</a></span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordPermission</span> <span class="p">:</span> <span class="kt">OptionSet</span><span class="p">,</span> <span class="kt">JSONRepresentable</span></code></pre>
 
                 </div>
               </div>
-            <p>The base class for Discord WebSocket communications.</p>
+            <p>Represents a Discord Permission. Calculating Permissions involves bitwise operations.</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Properties"></a>
-                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
-                <a href="#/Properties">
-                  <h3 class="section-name">Properties</h3>
-                </a>
-              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine10connectURLSS"></a>
-                    <a name="//apple_ref/swift/Property/connectURL" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine10connectURLSS">connectURL</a>
+                    <a name="/s:vPs16RawRepresentable8rawValuewx8RawValue"></a>
+                    <a name="//apple_ref/swift/Property/rawValue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vPs16RawRepresentable8rawValuewx8RawValue">rawValue</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -407,14 +400,13 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The url for the gateway.</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">connectURL</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">rawValue</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
@@ -424,9 +416,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine11descriptionSS"></a>
-                    <a name="//apple_ref/swift/Property/description" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine11descriptionSS">description</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission19createInstantInviteS0_"></a>
+                    <a name="//apple_ref/swift/Variable/createInstantInvite" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission19createInstantInviteS0_">createInstantInvite</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -434,14 +426,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The type of DiscordEngineSpec. Used to correctly fire events.</p>
+                        <p>This user can create invites.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">createInstantInvite</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000001</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -451,9 +443,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine15handshakeObjectGVs10DictionarySSP__"></a>
-                    <a name="//apple_ref/swift/Property/handshakeObject" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine15handshakeObjectGVs10DictionarySSP__">handshakeObject</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission11kickMembersS0_"></a>
+                    <a name="//apple_ref/swift/Variable/kickMembers" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission11kickMembersS0_">kickMembers</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -461,15 +453,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Creates the handshake object that Discord expects.
-Override if you need to customize the handshake object.</p>
+                        <p>This user can kick members.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">handshakeObject</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">kickMembers</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000002</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -479,9 +470,9 @@ Override if you need to customize the handshake object.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine12resumeObjectGVs10DictionarySSP__"></a>
-                    <a name="//apple_ref/swift/Property/resumeObject" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine12resumeObjectGVs10DictionarySSP__">resumeObject</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission10banMembersS0_"></a>
+                    <a name="//apple_ref/swift/Variable/banMembers" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission10banMembersS0_">banMembers</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -489,15 +480,14 @@ Override if you need to customize the handshake object.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Creates the resume object that Discord expects.
-Override if you need to customize the resume object.</p>
+                        <p>This user can ban members.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">resumeObject</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">banMembers</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000004</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -507,9 +497,9 @@ Override if you need to customize the resume object.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine14heartbeatQueueCSo13DispatchQueue"></a>
-                    <a name="//apple_ref/swift/Property/heartbeatQueue" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine14heartbeatQueueCSo13DispatchQueue">heartbeatQueue</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission13administratorS0_"></a>
+                    <a name="//apple_ref/swift/Variable/administrator" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission13administratorS0_">administrator</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -517,14 +507,14 @@ Override if you need to customize the resume object.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The dispatch queue that heartbeats are sent on.</p>
+                        <p>This user is an admin.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">heartbeatQueue</span> <span class="o">=</span> <span class="kt">DispatchQueue</span><span class="p">(</span><span class="nv">label</span><span class="p">:</span> <span class="s">"discordEngine.heartbeatQueue"</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">administrator</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000008</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -534,9 +524,9 @@ Override if you need to customize the resume object.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine9numShardsSi"></a>
-                    <a name="//apple_ref/swift/Property/numShards" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine9numShardsSi">numShards</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission14manageChannelsS0_"></a>
+                    <a name="//apple_ref/swift/Variable/manageChannels" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission14manageChannelsS0_">manageChannels</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -544,14 +534,14 @@ Override if you need to customize the resume object.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The total number of shards.</p>
+                        <p>This user can manage channels.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">numShards</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageChannels</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000010</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -561,9 +551,9 @@ Override if you need to customize the resume object.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine8shardNumSi"></a>
-                    <a name="//apple_ref/swift/Property/shardNum" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine8shardNumSi">shardNum</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission11manageGuildS0_"></a>
+                    <a name="//apple_ref/swift/Variable/manageGuild" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission11manageGuildS0_">manageGuild</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -571,14 +561,14 @@ Override if you need to customize the resume object.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The shard number of this engine.</p>
+                        <p>This user can manage the guild.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">shardNum</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageGuild</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000020</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -588,9 +578,9 @@ Override if you need to customize the resume object.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine10parseQueueCSo13DispatchQueue"></a>
-                    <a name="//apple_ref/swift/Property/parseQueue" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine10parseQueueCSo13DispatchQueue">parseQueue</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission12addReactionsS0_"></a>
+                    <a name="//apple_ref/swift/Variable/addReactions" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission12addReactionsS0_">addReactions</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -598,14 +588,14 @@ Override if you need to customize the resume object.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The queue that WebSockets use to parse things.</p>
+                        <p>This user can add reactions.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">parseQueue</span> <span class="o">=</span> <span class="kt">DispatchQueue</span><span class="p">(</span><span class="nv">label</span><span class="p">:</span> <span class="s">"discordEngine.parseQueue"</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">addReactions</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000040</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -615,9 +605,9 @@ Override if you need to customize the resume object.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine11connectUUIDV10Foundation4UUID"></a>
-                    <a name="//apple_ref/swift/Property/connectUUID" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine11connectUUIDV10Foundation4UUID">connectUUID</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission12viewAuditLogS0_"></a>
+                    <a name="//apple_ref/swift/Variable/viewAuditLog" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission12viewAuditLogS0_">viewAuditLog</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -625,14 +615,14 @@ Override if you need to customize the resume object.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The UUID of this WebSocketable.</p>
+                        <p>This user can view the audit log.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">connectUUID</span> <span class="o">=</span> <span class="kt">UUID</span><span class="p">()</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">viewAuditLog</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000080</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -642,9 +632,9 @@ Override if you need to customize the resume object.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine9sessionIdGSqSS_"></a>
-                    <a name="//apple_ref/swift/Property/sessionId" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine9sessionIdGSqSS_">sessionId</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission12readMessagesS0_"></a>
+                    <a name="//apple_ref/swift/Variable/readMessages" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission12readMessagesS0_">readMessages</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -652,14 +642,14 @@ Override if you need to customize the resume object.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>This engine&rsquo;s session id.</p>
+                        <p>This user can read messages.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sessionId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">readMessages</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000400</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -669,9 +659,9 @@ Override if you need to customize the resume object.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine9websocketGSqC10Starscream9WebSocket_"></a>
-                    <a name="//apple_ref/swift/Property/websocket" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine9websocketGSqC10Starscream9WebSocket_">websocket</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission12sendMessagesS0_"></a>
+                    <a name="//apple_ref/swift/Variable/sendMessages" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission12sendMessagesS0_">sendMessages</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -679,16 +669,14 @@ Override if you need to customize the resume object.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The underlying WebSocket.</p>
-
-<p>On Linux this is a WebSockets.WebSocket. While on macOS/iOS this is a Starscream.WebSocket</p>
+                        <p>This user can send messages.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">websocket</span><span class="p">:</span> <span class="kt">WebSocket</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">sendMessages</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000800</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -698,9 +686,9 @@ Override if you need to customize the resume object.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine9connectedSb"></a>
-                    <a name="//apple_ref/swift/Property/connected" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine9connectedSb">connected</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission15sendTTSMessagesS0_"></a>
+                    <a name="//apple_ref/swift/Variable/sendTTSMessages" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission15sendTTSMessagesS0_">sendTTSMessages</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -708,14 +696,14 @@ Override if you need to customize the resume object.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Whether this engine is connected to the gateway.</p>
+                        <p>This user can send tts messages.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">connected</span> <span class="o">=</span> <span class="kc">false</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">sendTTSMessages</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00001000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -725,9 +713,9 @@ Override if you need to customize the resume object.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine17heartbeatIntervalSi"></a>
-                    <a name="//apple_ref/swift/Property/heartbeatInterval" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine17heartbeatIntervalSi">heartbeatInterval</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission14manageMessagesS0_"></a>
+                    <a name="//apple_ref/swift/Variable/manageMessages" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission14manageMessagesS0_">manageMessages</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -735,14 +723,14 @@ Override if you need to customize the resume object.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The interval (in seconds) to send heartbeats.</p>
+                        <p>This user can manage messages.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">heartbeatInterval</span> <span class="o">=</span> <span class="mi">0</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageMessages</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00002000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -752,9 +740,9 @@ Override if you need to customize the resume object.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine8delegateXwGSqPS_20DiscordShardDelegate__"></a>
-                    <a name="//apple_ref/swift/Property/delegate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine8delegateXwGSqPS_20DiscordShardDelegate__">delegate</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission10embedLinksS0_"></a>
+                    <a name="//apple_ref/swift/Variable/embedLinks" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission10embedLinksS0_">embedLinks</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -762,14 +750,14 @@ Override if you need to customize the resume object.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The delegate that this engine is associated with.</p>
+                        <p>This user can embed links.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShardDelegate.html">DiscordShardDelegate</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">embedLinks</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00004000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -779,9 +767,9 @@ Override if you need to customize the resume object.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC12SwiftDiscord13DiscordEngine18lastSequenceNumberSi"></a>
-                    <a name="//apple_ref/swift/Property/lastSequenceNumber" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC12SwiftDiscord13DiscordEngine18lastSequenceNumberSi">lastSequenceNumber</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission11attachFilesS0_"></a>
+                    <a name="//apple_ref/swift/Variable/attachFiles" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission11attachFilesS0_">attachFiles</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -789,14 +777,392 @@ Override if you need to customize the resume object.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The last sequence number received. Will be used for session resumes.</p>
+                        <p>This user can attach files.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">lastSequenceNumber</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">attachFiles</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00008000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission18readMessageHistoryS0_"></a>
+                    <a name="//apple_ref/swift/Variable/readMessageHistory" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission18readMessageHistoryS0_">readMessageHistory</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This user read the message history.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">readMessageHistory</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00010000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission15mentionEveryoneS0_"></a>
+                    <a name="//apple_ref/swift/Variable/mentionEveryone" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission15mentionEveryoneS0_">mentionEveryone</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This user can mention everyone.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">mentionEveryone</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00020000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission17useExternalEmojisS0_"></a>
+                    <a name="//apple_ref/swift/Variable/useExternalEmojis" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission17useExternalEmojisS0_">useExternalEmojis</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This user can can add external emojis.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">useExternalEmojis</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00040000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission7connectS0_"></a>
+                    <a name="//apple_ref/swift/Variable/connect" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission7connectS0_">connect</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This user can connect to a voice channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">connect</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00100000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission5speakS0_"></a>
+                    <a name="//apple_ref/swift/Variable/speak" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission5speakS0_">speak</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This user can speak on a voice channel.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">speak</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00200000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission11muteMembersS0_"></a>
+                    <a name="//apple_ref/swift/Variable/muteMembers" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission11muteMembersS0_">muteMembers</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This user can mute members.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">muteMembers</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00400000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission13deafenMembersS0_"></a>
+                    <a name="//apple_ref/swift/Variable/deafenMembers" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission13deafenMembersS0_">deafenMembers</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This user can deafen members.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">deafenMembers</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00800000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission11moveMembersS0_"></a>
+                    <a name="//apple_ref/swift/Variable/moveMembers" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission11moveMembersS0_">moveMembers</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This user can move members.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">moveMembers</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x01000000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission6useVADS0_"></a>
+                    <a name="//apple_ref/swift/Variable/useVAD" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission6useVADS0_">useVAD</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This user can use VAD.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">useVAD</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x02000000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission14changeNicknameS0_"></a>
+                    <a name="//apple_ref/swift/Variable/changeNickname" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission14changeNicknameS0_">changeNickname</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This user can change their nickname.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">changeNickname</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x04000000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission15manageNicknamesS0_"></a>
+                    <a name="//apple_ref/swift/Variable/manageNicknames" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission15manageNicknamesS0_">manageNicknames</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This user can manage nicknames.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageNicknames</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x08000000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission11manageRolesS0_"></a>
+                    <a name="//apple_ref/swift/Variable/manageRoles" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission11manageRolesS0_">manageRoles</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This user can manage roles.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageRoles</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x10000000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission14manageWebhooksS0_"></a>
+                    <a name="//apple_ref/swift/Variable/manageWebhooks" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission14manageWebhooksS0_">manageWebhooks</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This user can manage WebHooks</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageWebhooks</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x20000000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission12manageEmojisS0_"></a>
+                    <a name="//apple_ref/swift/Variable/manageEmojis" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission12manageEmojisS0_">manageEmojis</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This user can manage emojis</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageEmojis</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x40000000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -807,19 +1173,19 @@ Override if you need to customize the resume object.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Initializers"></a>
-                <a name="//apple_ref/swift/Section/Initializers" class="dashAnchor"></a>
-                <a href="#/Initializers">
-                  <h3 class="section-name">Initializers</h3>
+                <a name="/Composite%20permissions"></a>
+                <a name="//apple_ref/swift/Section/Composite permissions" class="dashAnchor"></a>
+                <a href="#/Composite%20permissions">
+                  <h3 class="section-name">Composite permissions</h3>
                 </a>
               </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordEnginecFT8delegatePS_20DiscordShardDelegate_8shardNumSi9numShardsSi_S0_"></a>
-                    <a name="//apple_ref/swift/Method/init(delegate:shardNum:numShards:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordEnginecFT8delegatePS_20DiscordShardDelegate_8shardNumSi9numShardsSi_S0_">init(delegate:shardNum:numShards:)</a>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission10allChannelS0_"></a>
+                    <a name="//apple_ref/swift/Variable/allChannel" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission10allChannelS0_">allChannel</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -827,14 +1193,94 @@ Override if you need to customize the resume object.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Creates a new DiscordEngine.</p>
+                        <p>All the channel permissions set to true.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">required</span> <span class="nf">init</span><span class="p">(</span><span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShardDelegate.html">DiscordShardDelegate</a></span><span class="p">,</span> <span class="nv">shardNum</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">numShards</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">allChannel</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x33F7FC51</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission5voiceS0_"></a>
+                    <a name="//apple_ref/swift/Variable/voice" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission5voiceS0_">voice</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>All voice permissions set to true</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">voice</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x3F00000</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvV12SwiftDiscord17DiscordPermission3allS0_"></a>
+                    <a name="//apple_ref/swift/Variable/all" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvV12SwiftDiscord17DiscordPermission3allS0_">all</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>User has all permissions.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">all</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FPs9OptionSetcFT8rawValuewx8RawValue_x"></a>
+                    <a name="//apple_ref/swift/Method/init(rawValue:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FPs9OptionSetcFT8rawValuewx8RawValue_x">init(rawValue:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -845,443 +1291,12 @@ Override if you need to customize the resume object.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>delegate</em>
+                                <em>rawValue</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The DiscordClientSpec this engine should be associated with.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Methods"></a>
-                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
-                <a href="#/Methods">
-                  <h3 class="section-name">Methods</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordEngine10disconnectFT_T_"></a>
-                    <a name="//apple_ref/swift/Method/disconnect()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordEngine10disconnectFT_T_">disconnect()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Disconnects the engine. An <code>engine.disconnect</code> is fired on disconnection.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">disconnect</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordEngine11handleCloseFT6reasonGSqCSo7NSError__T_"></a>
-                    <a name="//apple_ref/swift/Method/handleClose(reason:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordEngine11handleCloseFT6reasonGSqCSo7NSError__T_">handleClose(reason:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Handles a close from the WebSocket.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleClose</span><span class="p">(</span><span class="nv">reason</span><span class="p">:</span> <span class="kt">NSError</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>reason</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The reason the socket closed.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordEngine14handleDispatchFVS_21DiscordGatewayPayloadT_"></a>
-                    <a name="//apple_ref/swift/Method/handleDispatch(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordEngine14handleDispatchFVS_21DiscordGatewayPayloadT_">handleDispatch(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Handles a dispatch payload.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleDispatch</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>payload</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The dispatch payload</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordEngine20handleGatewayPayloadFVS_21DiscordGatewayPayloadT_"></a>
-                    <a name="//apple_ref/swift/Method/handleGatewayPayload(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordEngine20handleGatewayPayloadFVS_21DiscordGatewayPayloadT_">handleGatewayPayload(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Handles a DiscordGatewayPayload. You shouldn&rsquo;t need to call this directly.</p>
-
-<p>Override this method if you need to customize payload handling.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleGatewayPayload</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>payload</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The payload object</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordEngine11handleHelloFVS_21DiscordGatewayPayloadT_"></a>
-                    <a name="//apple_ref/swift/Method/handleHello(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordEngine11handleHelloFVS_21DiscordGatewayPayloadT_">handleHello(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Handles the hello event.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleHello</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>payload</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The dispatch payload</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordEngine13handleResumedFVS_21DiscordGatewayPayloadT_"></a>
-                    <a name="//apple_ref/swift/Method/handleResumed(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordEngine13handleResumedFVS_21DiscordGatewayPayloadT_">handleResumed(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Handles the resumed event. You shouldn&rsquo;t call this directly.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">handleResumed</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordEngine19parseGatewayMessageFSST_"></a>
-                    <a name="//apple_ref/swift/Method/parseGatewayMessage(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordEngine19parseGatewayMessageFSST_">parseGatewayMessage(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Parses a raw message from the WebSocket. This is the entry point for all Discord events.
-You shouldn&rsquo;t call this directly.</p>
-
-<p>Override this method if you need to customize parsing.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">parseGatewayMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">string</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>string</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The raw payload string</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordEngine13resumeGatewayFT_T_"></a>
-                    <a name="//apple_ref/swift/Method/resumeGateway()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordEngine13resumeGatewayFT_T_">resumeGateway()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Tries to resume a disconnected gateway connection.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">resumeGateway</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordEngine13sendHeartbeatFT_T_"></a>
-                    <a name="//apple_ref/swift/Method/sendHeartbeat()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordEngine13sendHeartbeatFT_T_">sendHeartbeat()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Sends a heartbeat to Discord. You shouldn&rsquo;t need to call this directly.</p>
-
-<p>Override this method if you need to customize heartbeats.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">sendHeartbeat</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordEngine14startHandshakeFT_T_"></a>
-                    <a name="//apple_ref/swift/Method/startHandshake()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordEngine14startHandshakeFT_T_">startHandshake()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Starts the handshake with the Discord server. You shouldn&rsquo;t need to call this directly.</p>
-
-<p>Override this method if you need to customize the handshake process.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">startHandshake</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC12SwiftDiscord13DiscordEngine14startHeartbeatFT7secondsSi_T_"></a>
-                    <a name="//apple_ref/swift/Method/startHeartbeat(seconds:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC12SwiftDiscord13DiscordEngine14startHeartbeatFT7secondsSi_T_">startHeartbeat(seconds:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Starts the engine&rsquo;s heartbeat. You should call this method when you know the interval that Discord expects.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">startHeartbeat</span><span class="p">(</span><span class="nv">seconds</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>seconds</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The heartbeat interval</p>
+                                  
                                 </div>
                               </td>
                             </tr>

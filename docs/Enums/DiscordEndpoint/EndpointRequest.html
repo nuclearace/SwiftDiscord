@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Field Struct Reference</title>
+    <title>EndpointRequest Enum Reference</title>
     <link rel="stylesheet" type="text/css" href="../../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/Field" class="dashAnchor"></a>
-    <a title="Field Struct Reference"></a>
+    <a name="//apple_ref/swift/Enum/EndpointRequest" class="dashAnchor"></a>
+    <a title="EndpointRequest Enum Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../../index.html"> Reference</a>
         <img id="carat" src="../../img/carat.png" />
-        Field Struct Reference
+        EndpointRequest Enum Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -374,32 +374,25 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Field</h1>
+            <h1>EndpointRequest</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Field</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">EndpointRequest</span></code></pre>
 
                 </div>
               </div>
-            <p>Represents an Embed&rsquo;s fields.</p>
+            <p>An HTTP Request for an Endpoint.  This includes any associated data.</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Properties"></a>
-                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
-                <a href="#/Properties">
-                  <h3 class="section-name">Properties</h3>
-                </a>
-              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vVV12SwiftDiscord12DiscordEmbed5Field4nameSS"></a>
-                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vVV12SwiftDiscord12DiscordEmbed5Field4nameSS">name</a>
+                    <a name="/s:FOO12SwiftDiscord15DiscordEndpoint15EndpointRequest3getFMS1_FT6paramsGSqGVs10DictionarySSSS___S1_"></a>
+                    <a name="//apple_ref/swift/Element/get" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOO12SwiftDiscord15DiscordEndpoint15EndpointRequest3getFMS1_FT6paramsGSqGVs10DictionarySSSS___S1_">get</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -407,68 +400,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The name of the field.</p>
+                        <p>A GET request.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vVV12SwiftDiscord12DiscordEmbed5Field5valueSS"></a>
-                    <a name="//apple_ref/swift/Property/value" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vVV12SwiftDiscord12DiscordEmbed5Field5valueSS">value</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The value of the field.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vVV12SwiftDiscord12DiscordEmbed5Field6inlineSb"></a>
-                    <a name="//apple_ref/swift/Property/inline" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vVV12SwiftDiscord12DiscordEmbed5Field6inlineSb">inline</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Whether this field should be inlined</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">inline</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">get</span><span class="p">(</span><span class="nv">params</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]?)</span></code></pre>
 
                         </div>
                       </div>
@@ -478,20 +417,13 @@
               </ul>
             </div>
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Initializers"></a>
-                <a name="//apple_ref/swift/Section/Initializers" class="dashAnchor"></a>
-                <a href="#/Initializers">
-                  <h3 class="section-name">Initializers</h3>
-                </a>
-              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FVV12SwiftDiscord12DiscordEmbed5FieldcFT4nameSS5valueSS6inlineSb_S1_"></a>
-                    <a name="//apple_ref/swift/Method/init(name:value:inline:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FVV12SwiftDiscord12DiscordEmbed5FieldcFT4nameSS5valueSS6inlineSb_S1_">init(name:value:inline:)</a>
+                    <a name="/s:FOO12SwiftDiscord15DiscordEndpoint15EndpointRequest4postFMS1_FT7contentGSqTV10Foundation4Data4typeOS_15HTTPContentType___S1_"></a>
+                    <a name="//apple_ref/swift/Element/post" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOO12SwiftDiscord15DiscordEndpoint15EndpointRequest4postFMS1_FT7contentGSqTV10Foundation4Data4typeOS_15HTTPContentType___S1_">post</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -499,14 +431,138 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Creates a Field object.</p>
+                        <p>A POST request.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">inline</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">post</span><span class="p">(</span><span class="nv">content</span><span class="p">:</span> <span class="p">(</span><span class="kt">Data</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../../Enums/HTTPContentType.html">HTTPContentType</a></span><span class="p">)?)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOO12SwiftDiscord15DiscordEndpoint15EndpointRequest3putFMS1_FT7contentGSqTV10Foundation4Data4typeOS_15HTTPContentType___S1_"></a>
+                    <a name="//apple_ref/swift/Element/put" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOO12SwiftDiscord15DiscordEndpoint15EndpointRequest3putFMS1_FT7contentGSqTV10Foundation4Data4typeOS_15HTTPContentType___S1_">put</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A POST request.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">put</span><span class="p">(</span><span class="nv">content</span><span class="p">:</span> <span class="p">(</span><span class="kt">Data</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../../Enums/HTTPContentType.html">HTTPContentType</a></span><span class="p">)?)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOO12SwiftDiscord15DiscordEndpoint15EndpointRequest5patchFMS1_FT7contentGSqTV10Foundation4Data4typeOS_15HTTPContentType___S1_"></a>
+                    <a name="//apple_ref/swift/Element/patch" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOO12SwiftDiscord15DiscordEndpoint15EndpointRequest5patchFMS1_FT7contentGSqTV10Foundation4Data4typeOS_15HTTPContentType___S1_">patch</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A PATCH request.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">patch</span><span class="p">(</span><span class="nv">content</span><span class="p">:</span> <span class="p">(</span><span class="kt">Data</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../../Enums/HTTPContentType.html">HTTPContentType</a></span><span class="p">)?)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOO12SwiftDiscord15DiscordEndpoint15EndpointRequest6deleteFMS1_S1_"></a>
+                    <a name="//apple_ref/swift/Element/delete" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOO12SwiftDiscord15DiscordEndpoint15EndpointRequest6deleteFMS1_S1_">delete</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A DELETE request.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">delete</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOO12SwiftDiscord15DiscordEndpoint15EndpointRequest13createRequestFT4withVS_12DiscordToken8endpointS0__GSqV10Foundation10URLRequest_"></a>
+                    <a name="//apple_ref/swift/Method/createRequest(with:endpoint:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOO12SwiftDiscord15DiscordEndpoint15EndpointRequest13createRequestFT4withVS_12DiscordToken8endpointS0__GSqV10Foundation10URLRequest_">createRequest(with:endpoint:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Helper method that creates the basic request for an endpoint.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">createRequest</span><span class="p">(</span><span class="n">with</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">endpoint</span><span class="p">:</span> <span class="kt"><a href="../../Enums/DiscordEndpoint.html">DiscordEndpoint</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">URLRequest</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -517,41 +573,45 @@
                             <tr>
                               <td>
                                 <code>
-                                <em>name</em>
+                                <em>with</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The name of this field.</p>
+                                  <p>A DiscordToken that will be used for authentication</p>
                                 </div>
                               </td>
                             </tr>
                             <tr>
                               <td>
                                 <code>
-                                <em>value</em>
+                                <em>for</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The value of this field.</p>
+                                  <p>The endpoint this request is for</p>
                                 </div>
                               </td>
                             </tr>
                             <tr>
                               <td>
                                 <code>
-                                <em>inline</em>
+                                <em>getParams</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>Whether this field can be inlined.</p>
+                                  <p>An optional dictionary of get parameters.</p>
                                 </div>
                               </td>
                             </tr>
                           </tbody>
                         </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>a URLRequest that can be further customized</p>
                       </div>
                     </section>
                   </div>

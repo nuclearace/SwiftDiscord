@@ -4,341 +4,376 @@
     <title>DiscordVoiceManagerDelegate Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
-    <script src="../js/lunr.min.js" defer></script>
-    <script src="../js/typeahead.jquery.js" defer></script>
-    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
-
     <a name="//apple_ref/swift/Protocol/DiscordVoiceManagerDelegate" class="dashAnchor"></a>
-
     <a title="DiscordVoiceManagerDelegate Protocol Reference"></a>
-
-    <header class="header">
-      <p class="header-col header-col--primary">
-        <a class="header-link" href="../index.html">
-           Docs
-        </a>
-         (100% documented)
-      </p>
-    
-      <p class="header-col--secondary">
-        <form role="search" action="../search.json">
-          <input type="text" placeholder="Search documentation" data-typeahead>
-        </form>
-      </p>
-    
-    
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a> (100% documented)</p>
+      </div>
     </header>
-
-    <p class="breadcrumbs">
-      <a class="breadcrumb" href="../index.html"> Reference</a>
-      <img class="carat" src="../img/carat.png" />
-      DiscordVoiceManagerDelegate Protocol Reference
-    </p>
-
     <div class="content-wrapper">
-      <nav class="navigation">
+      <p id="breadcrumbs">
+        <a href="../index.html"> Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        DiscordVoiceManagerDelegate Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
         <ul class="nav-groups">
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Guides.html">Guides</a>
+            <a href="../Guides.html">Guides</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../getting-started.html">Getting Started</a>
+                <a href="../getting-started.html">Getting Started</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <a href="../Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DiscordClient.html">DiscordClient</a>
+                <a href="../Classes/DiscordClient.html">DiscordClient</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DiscordEncoderMiddleware.html">DiscordEncoderMiddleware</a>
+                <a href="../Classes/DiscordEncoderMiddleware.html">DiscordEncoderMiddleware</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DiscordEngine.html">DiscordEngine</a>
+                <a href="../Classes/DiscordEngine.html">DiscordEngine</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DiscordGuild.html">DiscordGuild</a>
+                <a href="../Classes/DiscordGuild.html">DiscordGuild</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DiscordLazyValue.html">DiscordLazyValue</a>
+                <a href="../Classes/DiscordLazyValue.html">DiscordLazyValue</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DiscordOpusDecoder.html">DiscordOpusDecoder</a>
+                <a href="../Classes/DiscordOpusDecoder.html">DiscordOpusDecoder</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DiscordOpusEncoder.html">DiscordOpusEncoder</a>
+                <a href="../Classes/DiscordOpusEncoder.html">DiscordOpusEncoder</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DiscordRateLimiter.html">DiscordRateLimiter</a>
+                <a href="../Classes/DiscordRateLimiter.html">DiscordRateLimiter</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DiscordShardManager.html">DiscordShardManager</a>
+                <a href="../Classes/DiscordShardManager.html">DiscordShardManager</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a>
+                <a href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
+                <a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DiscordVoiceManager.html">DiscordVoiceManager</a>
+                <a href="../Classes/DiscordVoiceManager.html">DiscordVoiceManager</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DiscordVoiceSessionDecoder.html">DiscordVoiceSessionDecoder</a>
+                <a href="../Classes/DiscordVoiceSessionDecoder.html">DiscordVoiceSessionDecoder</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Enums.html">Enums</a>
+            <a href="../Enums.html">Enums</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordChannelType.html">DiscordChannelType</a>
+                <a href="../Enums/DiscordChannelType.html">DiscordChannelType</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordClientOption.html">DiscordClientOption</a>
+                <a href="../Enums/DiscordClientOption.html">DiscordClientOption</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a>
+                <a href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a>
+                <a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordEndpoint/Options.html">– Options</a>
+                <a href="../Enums/DiscordEndpoint/EndpointRequest.html">– EndpointRequest</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordGameType.html">DiscordGameType</a>
+                <a href="../Enums/DiscordEndpoint/Options.html">– Options</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordGatewayCloseReason.html">DiscordGatewayCloseReason</a>
+                <a href="../Enums/DiscordGameType.html">DiscordGameType</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordGatewayCode.html">DiscordGatewayCode</a>
+                <a href="../Enums/DiscordGatewayCloseReason.html">DiscordGatewayCloseReason</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordGatewayPayloadData.html">DiscordGatewayPayloadData</a>
+                <a href="../Enums/DiscordGatewayCode.html">DiscordGatewayCode</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordLogLevel.html">DiscordLogLevel</a>
+                <a href="../Enums/DiscordGatewayPayloadData.html">DiscordGatewayPayloadData</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordNormalGatewayCode.html">DiscordNormalGatewayCode</a>
+                <a href="../Enums/DiscordLogLevel.html">DiscordLogLevel</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordOAuthEndpoint.html">DiscordOAuthEndpoint</a>
+                <a href="../Enums/DiscordNormalGatewayCode.html">DiscordNormalGatewayCode</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordPermission.html">DiscordPermission</a>
+                <a href="../Enums/DiscordOAuthEndpoint.html">DiscordOAuthEndpoint</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordPermissionOverwriteType.html">DiscordPermissionOverwriteType</a>
+                <a href="../Enums/DiscordPermissionOverwriteType.html">DiscordPermissionOverwriteType</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordPresenceStatus.html">DiscordPresenceStatus</a>
+                <a href="../Enums/DiscordPresenceStatus.html">DiscordPresenceStatus</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordVoiceError.html">DiscordVoiceError</a>
+                <a href="../Enums/DiscordVoiceError.html">DiscordVoiceError</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordVoiceGatewayCode.html">DiscordVoiceGatewayCode</a>
+                <a href="../Enums/DiscordVoiceGatewayCode.html">DiscordVoiceGatewayCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/HTTPContentType.html">HTTPContentType</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordChannel.html">DiscordChannel</a>
+                <a href="../Protocols/DiscordChannel.html">DiscordChannel</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordClientDelegate.html">DiscordClientDelegate</a>
+                <a href="../Protocols/DiscordClientDelegate.html">DiscordClientDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordClientHolder.html">DiscordClientHolder</a>
+                <a href="../Protocols/DiscordClientHolder.html">DiscordClientHolder</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordClientSpec.html">DiscordClientSpec</a>
+                <a href="../Protocols/DiscordClientSpec.html">DiscordClientSpec</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordDispatchEventHandler.html">DiscordDispatchEventHandler</a>
+                <a href="../Protocols/DiscordDispatchEventHandler.html">DiscordDispatchEventHandler</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordEndpointConsumer.html">DiscordEndpointConsumer</a>
+                <a href="../Protocols/DiscordEndpointConsumer.html">DiscordEndpointConsumer</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordEngineHeartbeatable.html">DiscordEngineHeartbeatable</a>
+                <a href="../Protocols/DiscordEngineHeartbeatable.html">DiscordEngineHeartbeatable</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordEngineSpec.html">DiscordEngineSpec</a>
+                <a href="../Protocols/DiscordEngineSpec.html">DiscordEngineSpec</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordGatewayable.html">DiscordGatewayable</a>
+                <a href="../Protocols/DiscordGatewayable.html">DiscordGatewayable</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordLogger.html">DiscordLogger</a>
+                <a href="../Protocols/DiscordGuildChannel.html">DiscordGuildChannel</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordOpusCodeable.html">DiscordOpusCodeable</a>
+                <a href="../Protocols/DiscordLogger.html">DiscordLogger</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordShard.html">DiscordShard</a>
+                <a href="../Protocols/DiscordOpusCodeable.html">DiscordOpusCodeable</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordShardDelegate.html">DiscordShardDelegate</a>
+                <a href="../Protocols/DiscordShard.html">DiscordShard</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a>
+                <a href="../Protocols/DiscordShardDelegate.html">DiscordShardDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordTokenBearer.html">DiscordTokenBearer</a>
+                <a href="../Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordUserActor.html">DiscordUserActor</a>
+                <a href="../Protocols/DiscordTextChannel.html">DiscordTextChannel</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a>
+                <a href="../Protocols/DiscordTokenBearer.html">DiscordTokenBearer</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordVoiceEngineSpec.html">DiscordVoiceEngineSpec</a>
+                <a href="../Protocols/DiscordUserActor.html">DiscordUserActor</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordVoiceManagerDelegate.html">DiscordVoiceManagerDelegate</a>
+                <a href="../Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/DiscordWebSocketable.html">DiscordWebSocketable</a>
+                <a href="../Protocols/DiscordVoiceEngineSpec.html">DiscordVoiceEngineSpec</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordVoiceManagerDelegate.html">DiscordVoiceManagerDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DiscordWebSocketable.html">DiscordWebSocketable</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Structs.html">Structs</a>
+            <a href="../Structs.html">Structs</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordAttachment.html">DiscordAttachment</a>
+                <a href="../Structs/DiscordAttachment.html">DiscordAttachment</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordBan.html">DiscordBan</a>
+                <a href="../Structs/DiscordBan.html">DiscordBan</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordDMChannel.html">DiscordDMChannel</a>
+                <a href="../Structs/DiscordDMChannel.html">DiscordDMChannel</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordEmbed.html">DiscordEmbed</a>
+                <a href="../Structs/DiscordEmbed.html">DiscordEmbed</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordEmbed/Author.html">– Author</a>
+                <a href="../Structs/DiscordEmbed/Author.html">– Author</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordEmbed/Field.html">– Field</a>
+                <a href="../Structs/DiscordEmbed/Field.html">– Field</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordEmbed/Footer.html">– Footer</a>
+                <a href="../Structs/DiscordEmbed/Footer.html">– Footer</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordEmbed/Image.html">– Image</a>
+                <a href="../Structs/DiscordEmbed/Image.html">– Image</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordEmbed/Provider.html">– Provider</a>
+                <a href="../Structs/DiscordEmbed/Provider.html">– Provider</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordEmbed/Thumbnail.html">– Thumbnail</a>
+                <a href="../Structs/DiscordEmbed/Thumbnail.html">– Thumbnail</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordEmoji.html">DiscordEmoji</a>
+                <a href="../Structs/DiscordEmoji.html">DiscordEmoji</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordFileUpload.html">DiscordFileUpload</a>
+                <a href="../Structs/DiscordFileUpload.html">DiscordFileUpload</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordGame.html">DiscordGame</a>
+                <a href="../Structs/DiscordGame.html">DiscordGame</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a>
+                <a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordGroupDMChannel.html">DiscordGroupDMChannel</a>
+                <a href="../Structs/DiscordGroupDMChannel.html">DiscordGroupDMChannel</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordGuildChannel.html">DiscordGuildChannel</a>
+                <a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a>
+                <a href="../Structs/DiscordGuildTextChannel.html">DiscordGuildTextChannel</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordInvite.html">DiscordInvite</a>
+                <a href="../Structs/DiscordGuildVoiceChannel.html">DiscordGuildVoiceChannel</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordInviteChannel.html">DiscordInviteChannel</a>
+                <a href="../Structs/DiscordInvite.html">DiscordInvite</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordInviteGuild.html">DiscordInviteGuild</a>
+                <a href="../Structs/DiscordInviteChannel.html">DiscordInviteChannel</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a>
+                <a href="../Structs/DiscordInviteGuild.html">DiscordInviteGuild</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordLazyDictionaryIndex.html">DiscordLazyDictionaryIndex</a>
+                <a href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordMessage.html">DiscordMessage</a>
+                <a href="../Structs/DiscordLazyDictionaryIndex.html">DiscordLazyDictionaryIndex</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a>
+                <a href="../Structs/DiscordMessage.html">DiscordMessage</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordPresence.html">DiscordPresence</a>
+                <a href="../Structs/DiscordPermission.html">DiscordPermission</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordPresenceUpdate.html">DiscordPresenceUpdate</a>
+                <a href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordRateLimitKey.html">DiscordRateLimitKey</a>
+                <a href="../Structs/DiscordPresence.html">DiscordPresence</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordReaction.html">DiscordReaction</a>
+                <a href="../Structs/DiscordPresenceUpdate.html">DiscordPresenceUpdate</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordRole.html">DiscordRole</a>
+                <a href="../Structs/DiscordRateLimitKey.html">DiscordRateLimitKey</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordShardInformation.html">DiscordShardInformation</a>
+                <a href="../Structs/DiscordReaction.html">DiscordReaction</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordToken.html">DiscordToken</a>
+                <a href="../Structs/DiscordRole.html">DiscordRole</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordUser.html">DiscordUser</a>
+                <a href="../Structs/DiscordShardInformation.html">DiscordShardInformation</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordUserGuild.html">DiscordUserGuild</a>
+                <a href="../Structs/DiscordToken.html">DiscordToken</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordVoiceData.html">DiscordVoiceData</a>
+                <a href="../Structs/DiscordUser.html">DiscordUser</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a>
+                <a href="../Structs/DiscordUserGuild.html">DiscordUserGuild</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a>
+                <a href="../Structs/DiscordVoiceData.html">DiscordVoiceData</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordWebhook.html">DiscordWebhook</a>
+                <a href="../Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DiscordWebhook.html">DiscordWebhook</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Snowflake.html">Snowflake</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Typealiases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12SwiftDiscord12AttachmentID">AttachmentID</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12SwiftDiscord9ChannelID">ChannelID</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12SwiftDiscord7EmojiID">EmojiID</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12SwiftDiscord13IntegrationID">IntegrationID</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12SwiftDiscord9MessageID">MessageID</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12SwiftDiscord11OverwriteID">OverwriteID</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12SwiftDiscord6RoleID">RoleID</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12SwiftDiscord6UserID">UserID</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:12SwiftDiscord9WebhookID">WebhookID</a>
               </li>
             </ul>
           </li>
         </ul>
       </nav>
       <article class="main-content">
-
-        <section class="section">
-          <div class="section-content">
+        <section>
+          <section class="section">
             <h1>DiscordVoiceManagerDelegate</h1>
               <div class="declaration">
                 <div class="language">
@@ -348,11 +383,8 @@
               </div>
             <p>A delegate for a VoiceManager.</p>
 
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="section-content">
+          </section>
+          <section class="section task-group-section">
             <div class="task-group">
               <div class="task-name-container">
                 <a name="/Methods"></a>
@@ -361,7 +393,7 @@
                   <h3 class="section-name">Methods</h3>
                 </a>
               </div>
-              <ul class="item-container">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -399,7 +431,6 @@
                               <td>
                                 <div>
                                   <p>The manager.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -412,7 +443,6 @@
                               <td>
                                 <div>
                                   <p>The engine that disconnected.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -459,7 +489,6 @@
                               <td>
                                 <div>
                                   <p>The manager.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -472,7 +501,6 @@
                               <td>
                                 <div>
                                   <p>The data received.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -485,7 +513,6 @@
                               <td>
                                 <div>
                                   <p>The engine that received the data.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -532,7 +559,6 @@
                               <td>
                                 <div>
                                   <p>The manager.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -544,8 +570,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>The engine that’s ready.</p>
-
+                                  <p>The engine that&rsquo;s ready.</p>
                                 </div>
                               </td>
                             </tr>
@@ -592,7 +617,6 @@
                               <td>
                                 <div>
                                   <p>The manager that is requesting an encoder.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -605,7 +629,6 @@
                               <td>
                                 <div>
                                   <p>The engine that needs an encoder</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -615,22 +638,20 @@
                       <div>
                         <h4>Return Value</h4>
                         <p>An encoder.</p>
-
                       </div>
                     </section>
                   </div>
                 </li>
               </ul>
             </div>
-          </div>
+          </section>
         </section>
-
+        <section id="footer">
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-07-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
       </article>
     </div>
-    <section class="footer">
-      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-04-23)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
-    </section>
   </body>
 </div>
 </html>
