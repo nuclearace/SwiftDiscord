@@ -195,6 +195,7 @@ public struct DiscordGuildTextChannel : DiscordTextChannel, DiscordGuildChannel 
     }
 }
 
+/// Represents a voice channel.
 public struct DiscordGuildVoiceChannel : DiscordGuildChannel {
     // MARK: Guild Voice Channel Properties
 

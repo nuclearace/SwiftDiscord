@@ -21,7 +21,10 @@ import Foundation
  * An HTTP content-type.  Common options are available as enum values, but if you need something special, use .other("My-Special-Type")
  */
 public enum HTTPContentType: CustomStringConvertible {
+    /// JSON Content-Type.
     case json
+
+    /// Other Content-Type.
     case other(String)
 
     public var description: String {
@@ -162,10 +165,19 @@ public enum DiscordEndpoint: CustomStringConvertible {
     * An HTTP Request for an Endpoint.  This includes any associated data.
     */
     public enum EndpointRequest {
+        /// A GET request.
         case get(params: [String: String]?)
+
+        /// A POST request.
         case post(content: (Data, type: HTTPContentType)?)
+
+        /// A POST request.
         case put(content: (Data, type: HTTPContentType)?)
+
+        /// A PATCH request.
         case patch(content: (Data, type: HTTPContentType)?)
+
+        /// A DELETE request.
         case delete
 
         var methodString: String {
