@@ -31,7 +31,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         guard let contentData = JSON.encodeJSONData(["messages": messages.map({ $0.description })]) else { return }
         rateLimiter.executeRequest(endpoint: .bulkMessageDelete(channel: channelId),
                                    token: token,
-                                   requestInfo: .post(content: (contentData, type: .json)),
+                                   requestInfo: .post(content: .json(contentData)),
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
@@ -66,7 +66,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         rateLimiter.executeRequest(endpoint: .channelInvites(channel: channelId),
                                    token: token,
-                                   requestInfo: .post(content: (contentData, type: .json)),
+                                   requestInfo: .post(content: .json(contentData)),
                                    callback: requestCallback)
     }
 
@@ -109,7 +109,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         rateLimiter.executeRequest(endpoint: .channelPermission(channel: channelId, overwrite: permissionOverwrite.id),
                                    token: token,
-                                   requestInfo: .put(content: (contentData, type: .json)),
+                                   requestInfo: .put(content: .json(contentData)),
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
@@ -121,6 +121,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 callback([])
                 return
             }
+
             callback(DiscordInvite.invitesFromArray(inviteArray: invites as! [[String: Any]]))
         }
 
@@ -140,11 +141,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 callback?(nil)
                 return
             }
+
             callback?(DiscordMessage(messageObject: message, client: nil))
         }
+
         rateLimiter.executeRequest(endpoint: .channelMessage(channel: channelId, message: messageId),
                                    token: token,
-                                   requestInfo: .patch(content: (contentData, type: .json)),
+                                   requestInfo: .patch(content: .json(contentData)),
                                    callback: requestCallback)
     }
 
@@ -155,8 +158,10 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 callback(nil)
                 return
             }
+
             callback(channelFromObject(channel, withClient: nil))
         }
+
         rateLimiter.executeRequest(endpoint: .channel(id: channelId),
                                    token: token,
                                    requestInfo: .get(params: nil),
@@ -186,8 +191,10 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 callback([])
                 return
             }
+
             callback(DiscordMessage.messagesFromArray(messages as! [[String: Any]]))
         }
+
         rateLimiter.executeRequest(endpoint: .messages(channel: channelId),
                                    token: token,
                                    requestInfo: .get(params: getParams),
@@ -201,8 +208,10 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 callback([])
                 return
             }
+
             callback(DiscordMessage.messagesFromArray(messages as! [[String: Any]]))
         }
+
         rateLimiter.executeRequest(endpoint: .pins(channel: channelId),
                                    token: token,
                                    requestInfo: .get(params: nil),
@@ -234,13 +243,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         let requestCallback: DiscordRequestCallback = {data, response, error in
             guard case let .object(channel)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback?(nil)
+
                 return
             }
+
             callback?(guildChannelFromObject(channel))
         }
+
         rateLimiter.executeRequest(endpoint: .channel(id: channelId),
                                    token: token,
-                                   requestInfo: .patch(content: (contentData, type: .json)),
+                                   requestInfo: .patch(content: .json(contentData)),
                                    callback: requestCallback)
     }
 
@@ -248,22 +260,27 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     public func sendMessage(_ message: DiscordMessage, to channelId: ChannelID,
                             callback: ((DiscordMessage?) -> ())? = nil) {
         let requestInfo: DiscordEndpoint.EndpointRequest
+
         switch message.createDataForSending() {
         case let .left(data):
-            requestInfo = .post(content: (data, type: .json))
+            requestInfo = .post(content: .json(data))
         case let .right((boundary, body)):
-            requestInfo = .post(content: (body, type: .other("multipart/form-data; boundary=\(boundary)")))
+            requestInfo = .post(content: .other(type: "multipart/form-data; boundary=\(boundary)", body: body))
         }
+
         DefaultDiscordLogger.Logger.log("Sending message to: \(channelId)", type: "DiscordEndpointChannels")
         DefaultDiscordLogger.Logger.verbose("Message: \(message)", type: "DiscordEndpointChannels")
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(message)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback?(nil)
+
                 return
             }
+
             callback?(DiscordMessage(messageObject: message, client: nil))
         }
+
         rateLimiter.executeRequest(endpoint: .messages(channel: channelId),
                                    token: token,
                                    requestInfo: requestInfo,

@@ -17,26 +17,6 @@
 
 import Foundation
 
-/**
- * An HTTP content-type.  Common options are available as enum values, but if you need something special, use .other("My-Special-Type")
- */
-public enum HTTPContentType: CustomStringConvertible {
-    /// JSON Content-Type.
-    case json
-
-    /// Other Content-Type.
-    case other(String)
-
-    public var description: String {
-        switch self {
-        case .json:
-            return "application/json"
-        case let .other(type):
-            return type
-        }
-    }
-}
-
 // TODO Group DM
 // TODO Add guild member
 // TODO Guild integrations
@@ -47,7 +27,7 @@ public enum HTTPContentType: CustomStringConvertible {
 /**
     This enum defines the endpoints used to interact with the Discord API.
 */
-public enum DiscordEndpoint: CustomStringConvertible {
+public enum DiscordEndpoint : CustomStringConvertible {
     /// The base url for the Discord REST API.
     case baseURL
 
@@ -158,7 +138,9 @@ public enum DiscordEndpoint: CustomStringConvertible {
     var combined: String {
         return DiscordEndpoint.baseURL.description + description
     }
+}
 
+public extension DiscordEndpoint {
     // MARK: Endpoint Request enum
 
     /**
@@ -169,29 +151,24 @@ public enum DiscordEndpoint: CustomStringConvertible {
         case get(params: [String: String]?)
 
         /// A POST request.
-        case post(content: (Data, type: HTTPContentType)?)
+        case post(content: HTTPContent?)
 
         /// A POST request.
-        case put(content: (Data, type: HTTPContentType)?)
+        case put(content: HTTPContent?)
 
         /// A PATCH request.
-        case patch(content: (Data, type: HTTPContentType)?)
+        case patch(content: HTTPContent?)
 
         /// A DELETE request.
         case delete
 
         var methodString: String {
             switch self {
-            case .get:
-                return "GET"
-            case .post:
-                return "POST"
-            case .put:
-                return "PUT"
-            case .patch:
-                return "PATCH"
-            case .delete:
-                return "DELETE"
+            case .get:      return "GET"
+            case .post:     return "POST"
+            case .put:      return "PUT"
+            case .patch:    return "PATCH"
+            case .delete:   return "DELETE"
             }
         }
 
@@ -205,8 +182,8 @@ public enum DiscordEndpoint: CustomStringConvertible {
         - returns: a URLRequest that can be further customized
         */
         public func createRequest(with token: DiscordToken, endpoint: DiscordEndpoint) -> URLRequest? {
-
             let getParams: [String: String]?
+
             if case let .get(params) = self {
                 getParams = params
             } else {
@@ -219,7 +196,8 @@ public enum DiscordEndpoint: CustomStringConvertible {
             request.setValue(token.token, forHTTPHeaderField: "Authorization")
             request.httpMethod = self.methodString
 
-            var content: (Data, type: HTTPContentType)? = nil
+            var content: HTTPContent? = nil
+
             if case let .post(optionalContent) = self {
                 content = optionalContent
             } else if case let .put(optionalContent) = self {
@@ -227,10 +205,18 @@ public enum DiscordEndpoint: CustomStringConvertible {
             } else if case let .patch(optionalContent) = self {
                 content = optionalContent
             }
-            if let content = content {
-                request.httpBody = content.0
-                request.setValue(content.type.description, forHTTPHeaderField: "Content-Type")
-                request.setValue(content.0.count.description, forHTTPHeaderField: "Content-Length")
+
+            switch content {
+            case let .json(data)?:
+                request.httpBody = data
+                request.setValue(HTTPContent.jsonType, forHTTPHeaderField: "Content-Type")
+                request.setValue(String(data.count), forHTTPHeaderField: "Content-Length")
+            case let .other(type, body)?:
+                request.httpBody = body
+                request.setValue(type, forHTTPHeaderField: "Content-Type")
+                request.setValue(String(body.count), forHTTPHeaderField: "Content-Length")
+            default:
+                break
             }
 
             return request
@@ -244,7 +230,7 @@ public enum DiscordEndpoint: CustomStringConvertible {
         case .baseURL:
             return "https://discordapp.com/api/v6"
 
-        // -- Channels --
+        /* -- Channels -- */
         case let .channel(id):
             return "/channels/\(id)"
         // Messages
@@ -277,7 +263,7 @@ public enum DiscordEndpoint: CustomStringConvertible {
         case let .channelWebhooks(channel):
             return "/channels/\(channel)/webhooks"
 
-        // -- Guilds --
+        /* -- Guilds -- */
         case let .guilds(id):
             return "/guilds/\(id)"
         // Guild Channels
@@ -304,13 +290,13 @@ public enum DiscordEndpoint: CustomStringConvertible {
         case let .guildWebhooks(guild):
             return "/guilds/\(guild)/webhooks"
 
-        // -- User --
+        /* -- User -- */
         case .userChannels:
             return "/users/@me/channels"
         case .userGuilds:
             return "/users/@me/guilds"
 
-        // -- Webhooks --
+        /* -- Webhooks -- */
         case let .webhook(id):
             return "/webhooks/\(id)"
         case let .webhookWithToken(id, token):
@@ -322,7 +308,7 @@ public enum DiscordEndpoint: CustomStringConvertible {
         }
     }
 
-    internal var endpointForRateLimiter: DiscordEndpoint {
+    var endpointForRateLimiter: DiscordEndpoint {
         switch self {
         // Unspecialized endpoints
         case .channel:              return self
@@ -374,16 +360,17 @@ public enum DiscordEndpoint: CustomStringConvertible {
     // MARK: Methods
 
     private func createURL(getParams: [String: String]?) -> URL? {
-
         // This can fail, specifically if you try to include a non-url-encoded emoji in it
         guard let url = URL(string: self.combined) else {
-            DefaultDiscordLogger.Logger.error("Couldn't convert \"\(self.combined)\" to a URL.  This shouldn't happen.", type: "DiscordEndpoint")
+            DefaultDiscordLogger.Logger.error("Couldn't convert \"\(self.combined)\" to a URL.  This shouldn't happen.",
+                                              type: "DiscordEndpoint")
             return nil
         }
 
         if let getParams = getParams {
             guard var com = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-                DefaultDiscordLogger.Logger.error("Couldn't convert \"\(url)\" to URLComponents.  This shouldn't happen.", type: "DiscordEndpoint")
+                DefaultDiscordLogger.Logger.error("Couldn't convert \"\(url)\" to URLComponents.  This shouldn't happen.",
+                                                  type: "DiscordEndpoint")
                 return nil
             }
 
@@ -392,6 +379,29 @@ public enum DiscordEndpoint: CustomStringConvertible {
             return com.url!
         } else {
             return url
+        }
+    }
+}
+
+/**
+ * A type representing HTTP content.
+ */
+public enum HTTPContent: CustomStringConvertible {
+    /// JSON Content-Type.
+    case json(Data)
+
+    /// Other Content-Type.
+    case other(type: String, body: Data)
+
+    /// JSON MIME-type.
+    public static let jsonType = "application/json"
+
+    public var description: String {
+        switch self {
+        case .json:
+            return HTTPContent.jsonType
+        case let .other(type, _):
+            return type
         }
     }
 }

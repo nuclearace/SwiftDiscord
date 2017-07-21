@@ -39,13 +39,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
+
                 return
             }
+
             callback(DiscordWebhook(webhookObject: webhook))
         }
+
         rateLimiter.executeRequest(endpoint: .channelWebhooks(channel: channelId),
                                    token: token,
-                                   requestInfo: .post(content: (contentData, type: .json)),
+                                   requestInfo: .post(content: .json(contentData)),
                                    callback: requestCallback)
     }
 
@@ -62,10 +65,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
+
                 return
             }
+
             callback(DiscordWebhook(webhookObject: webhook))
         }
+
         rateLimiter.executeRequest(endpoint: .webhook(id: webhookId),
                                    token: token,
                                    requestInfo: .get(params: nil),
@@ -125,13 +131,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
+
                 return
             }
+
             callback(DiscordWebhook(webhookObject: webhook))
         }
+
         rateLimiter.executeRequest(endpoint: .webhook(id: webhookId),
                                    token: token,
-                                   requestInfo: .patch(content: (contentData, type: .json)),
+                                   requestInfo: .patch(content: .json(contentData)),
                                    callback: requestCallback)
     }
 }
