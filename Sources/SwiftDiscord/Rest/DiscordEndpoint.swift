@@ -324,85 +324,50 @@ public enum DiscordEndpoint: CustomStringConvertible {
 
     internal var endpointForRateLimiter: DiscordEndpoint {
         switch self {
-        case .baseURL:
-            DefaultDiscordLogger.Logger.error("Attempted to get rate limit key for base URL", type: "DiscordEndpoint")
-            return self
+        // Unspecialized endpoints
+        case .channel:              return self
+        case .messages:             return self
+        case .bulkMessageDelete:    return self
+        case .channelMessageDelete: return self // Special case for the rate limiter
+        case .typing:               return self
+        case .permissions:          return self
+        case .invites:              return self
+        case .channelInvites:       return self
+        case .pins:                 return self
+        case .channelWebhooks:      return self
+        case .guilds:               return self
+        case .guildChannels:        return self
+        case .guildMembers:         return self
+        case .guildMemberRole:      return self
+        case .guildBans:            return self
+        case .guildRoles:           return self
+        case .guildWebhooks:        return self
+        case .userChannels:         return self
+        case .userGuilds:           return self
+        case .webhook:              return self
 
-        // -- Channels --
-        case .channel:
-            return self
-        // Messages
-        case .messages:
-            return self
-        case .bulkMessageDelete:
-            return self
+        // Specialized endpoints
         case let .channelMessage(channel, _):
             return .messages(channel: channel)
-        case .channelMessageDelete:
-            return self // Special case for the rate limiter
-        case .typing:
-            return self
-        // Permissions
-        case .permissions:
-            return self
         case let .channelPermission(channel, _):
             return .permissions(channel: channel)
-        // Invites
-        case .invites:
-            return self
-        case .channelInvites:
-            return self
-        // Pinned Messages
-        case .pins:
-            return self
         case let .pinnedMessage(channel, _):
             return .pins(channel: channel)
-        // Webhooks
-        case .channelWebhooks:
-            return self
-
-        // -- Guilds --
-        case .guilds:
-            return self
-        // Guild Channels
-        case .guildChannels:
-            return self
-        // Guild Members
-        case .guildMembers:
-            return self
         case let .guildMember(guild, _):
             return .guildMembers(guild: guild)
-        case .guildMemberRole:
-            return self // This is way too specific but there isn't a better one
-        // Guild Bans
-        case .guildBans:
-            return self
         case let .guildBanUser(guild, _):
             return .guildBans(guild: guild)
-        // Guild Roles
-        case .guildRoles:
-            return self
         case let .guildRole(guild, _):
             return .guildRoles(guild: guild)
-        // Webhooks
-        case .guildWebhooks:
-            return self
-
-        // -- User --
-        case .userChannels:
-            return self
-        case .userGuilds:
-            return self
-
-        // -- Webhooks --
-        case .webhook:
-            return self
         case let .webhookWithToken(id, _):
             return .webhook(id: id)
         case let .webhookSlack(id, _):
             return .webhook(id: id)
         case let .webhookGithub(id, _):
             return .webhook(id: id)
+
+        case .baseURL:
+            fatalError("Attempted to get rate limit key for base URL")
         }
     }
 
