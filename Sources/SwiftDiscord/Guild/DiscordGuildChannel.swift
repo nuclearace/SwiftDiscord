@@ -156,9 +156,6 @@ public struct DiscordGuildTextChannel : DiscordTextChannel, DiscordGuildChannel 
     /// The snowflake id of the channel.
     public let id: ChannelID
 
-    /// Whether this is a private channel. Should always be false for GuildChannels.
-    public var isPrivate: Bool { return false }
-
     /// The snowflake id of the guild this channel is on.
     public let guildId: GuildID
 
@@ -201,9 +198,6 @@ public struct DiscordGuildVoiceChannel : DiscordGuildChannel {
 
     /// The snowflake id of the channel.
     public let id: ChannelID
-
-    /// Whether this is a private channel. Should always be false for GuildChannels.
-    public var isPrivate: Bool { return false }
 
     /// The snowflake id of the guild this channel is on.
     public let guildId: GuildID

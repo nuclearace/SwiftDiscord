@@ -167,7 +167,7 @@ public struct DiscordPresenceUpdate : JSONAble {
     // MARK: Properties
 
     /// The time we've been idle for. Nil if not idle
-    public let idleSince: Int?
+    public let since: Int?
 
     /// The game we are currently playing. Nil if not playing a game.
     public let game: DiscordGame?
@@ -177,11 +177,11 @@ public struct DiscordPresenceUpdate : JSONAble {
     /**
         Creates a new DiscordPresenceUpdate
 
-        - parameter idleSince: The time we've been idle for. Nil if not idle
+        - parameter since: The time we've been idle for. Nil if not idle
         - parameter game: The game we are currently playing. Nil if not playing a game.
     */
-    public init(idleSince: Int?, game: DiscordGame?) {
-        self.idleSince = idleSince
+    public init(since: Int?, game: DiscordGame?) {
+        self.since = since
         self.game = game
     }
 }

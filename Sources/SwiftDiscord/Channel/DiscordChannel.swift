@@ -23,9 +23,6 @@ public protocol DiscordChannel : DiscordClientHolder {
 
     /// The id of the channel.
     var id: ChannelID { get }
-
-    /// Whether or not the channel is private
-    var isPrivate: Bool { get }
 }
 
 /// Protocol that declares a type will be a Discord text-based channel.
