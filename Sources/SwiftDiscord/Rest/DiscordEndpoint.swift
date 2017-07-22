@@ -207,6 +207,7 @@ public extension DiscordEndpoint {
             }
 
             switch content {
+            case nil:   break
             case let .json(data)?:
                 request.httpBody = data
                 request.setValue(HTTPContent.jsonType, forHTTPHeaderField: "Content-Type")
@@ -215,8 +216,6 @@ public extension DiscordEndpoint {
                 request.httpBody = body
                 request.setValue(type, forHTTPHeaderField: "Content-Type")
                 request.setValue(String(body.count), forHTTPHeaderField: "Content-Length")
-            default:
-                break
             }
 
             return request
@@ -367,26 +366,23 @@ public extension DiscordEndpoint {
             return nil
         }
 
-        if let getParams = getParams {
-            guard var com = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-                DefaultDiscordLogger.Logger.error("Couldn't convert \"\(url)\" to URLComponents.  This shouldn't happen.",
-                                                  type: "DiscordEndpoint")
-                return nil
-            }
-
-            com.queryItems = getParams.map({ URLQueryItem(name: $0.key, value: $0.value) })
-
-            return com.url!
-        } else {
-            return url
+        guard let getParams = getParams else { return url }
+        guard var com = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            DefaultDiscordLogger.Logger.error("Couldn't convert \"\(url)\" to URLComponents. This shouldn't happen.",
+                                              type: "DiscordEndpoint")
+            return nil
         }
+
+        com.queryItems = getParams.map({ URLQueryItem(name: $0.key, value: $0.value) })
+
+        return com.url!
     }
 }
 
 /**
  * A type representing HTTP content.
  */
-public enum HTTPContent: CustomStringConvertible {
+public enum HTTPContent : CustomStringConvertible {
     /// JSON Content-Type.
     case json(Data)
 
