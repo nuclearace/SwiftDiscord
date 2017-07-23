@@ -197,7 +197,7 @@ public struct DiscordRateLimitKey: Hashable {
 
     /// The hash of the key.
     public var hashValue: Int {
-        return (urlParts.rawValue &* 33) &+ id.hashValue
+        return urlParts.rawValue &+ id.hashValue
     }
 
     // MARK: Initializers
