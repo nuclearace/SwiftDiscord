@@ -114,7 +114,7 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
     public typealias Iterator = Dictionary<Key, Value>.Iterator
 
     /// The subsequence type.
-    public typealias SubSequence =  Dictionary<Key, Value>.SubSequence
+    public typealias SubSequence =  Slice<DiscordLazyDictionary<Key, Value>>
 
     // MARK: Properties
 
@@ -200,14 +200,7 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         - returns: A slice of dictionary with `bounds`
     */
     public subscript(bounds: Range<Index>) -> SubSequence {
-        var base = [Key: Value]()
-        let backingRange = backingDictionary[bounds.lowerBound.backingIndex...bounds.upperBound.backingIndex]
-
-        for (key, value) in backingRange {
-            base[key] = value.value
-        }
-
-        return Slice(base: base, bounds: base.startIndex..<base.endIndex)
+        return Slice(base: self, bounds: bounds)
     }
 
     // MARK: Initializers
@@ -268,14 +261,7 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         - returns: A slice of dictionary up to `upTo`
     */
     public func prefix(upTo end: Index) -> SubSequence {
-        var base = [Key: Value]()
-        let backingPrefix = backingDictionary.prefix(upTo: end.backingIndex)
-
-        for (key, value) in backingPrefix {
-            base[key] = value.value
-        }
-
-        return Slice(base: base, bounds: base.startIndex..<base.endIndex)
+        return Slice(base: self, bounds: self.startIndex..<end)
     }
 
     /**
@@ -284,14 +270,7 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         - returns: A slice of dictionary through `upTo`
     */
     public func prefix(through position: Index) -> SubSequence {
-        var base = [Key: Value]()
-        let backingPrefix = backingDictionary.prefix(through: position.backingIndex)
-
-        for (key, value) in backingPrefix {
-            base[key] = value.value
-        }
-
-        return Slice(base: base, bounds: base.startIndex..<base.endIndex)
+        return Slice(base: self, bounds: self.startIndex..<self.index(after: position))
     }
 
     /**
@@ -309,14 +288,7 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         - returns: A slice of dictionary from `from`
     */
     public func suffix(from start: Index) -> SubSequence {
-        var base = [Key: Value]()
-        let backingSuffix = backingDictionary.suffix(from: start.backingIndex)
-
-        for (key, value) in backingSuffix {
-            base[key] = value.value
-        }
-
-        return Slice(base: base, bounds: base.startIndex..<base.endIndex)
+        return Slice(base: self, bounds: start..<self.endIndex)
     }
 
     /**
