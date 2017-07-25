@@ -129,20 +129,21 @@ extension DiscordGuildChannel {
     }
 }
 
-func guildChannelFromObject(_ channelObject: [String: Any], client: DiscordClient? = nil) -> DiscordGuildChannel {
+func guildChannelFromObject(_ channelObject: [String: Any], guildID: GuildID?, client: DiscordClient? = nil) -> DiscordGuildChannel {
     if channelObject["type"] as? Int == DiscordChannelType.voice.rawValue {
-        return DiscordGuildVoiceChannel(guildChannelObject: channelObject, client: client)
+        return DiscordGuildVoiceChannel(guildChannelObject: channelObject, guildID: guildID, client: client)
     } else {
-        return DiscordGuildTextChannel(guildChannelObject: channelObject, client: client)
+        return DiscordGuildTextChannel(guildChannelObject: channelObject, guildID: guildID, client: client)
     }
 }
 
 func guildChannelsFromArray(_ guildChannelArray: [[String: Any]],
+                            guildID: GuildID?,
                             client: DiscordClient? = nil) -> [ChannelID: DiscordGuildChannel] {
         var guildChannels = [ChannelID: DiscordGuildChannel]()
 
         for guildChannelObject in guildChannelArray {
-            let guildChannel = guildChannelFromObject(guildChannelObject, client: client)
+            let guildChannel = guildChannelFromObject(guildChannelObject, guildID: guildID, client: client)
             guildChannels[guildChannel.id] = guildChannel
         }
 
@@ -179,9 +180,9 @@ public struct DiscordGuildTextChannel : DiscordTextChannel, DiscordGuildChannel 
     /// The topic of this channel, if this is a text channel.
     public var topic: String
 
-    init(guildChannelObject: [String: Any], client: DiscordClient? = nil) {
+    init(guildChannelObject: [String: Any], guildID: GuildID?, client: DiscordClient? = nil) {
         id = Snowflake(guildChannelObject["id"] as? String) ?? 0
-        guildId = Snowflake(guildChannelObject["guild_id"] as? String) ?? 0
+        guildId = guildID ?? Snowflake(guildChannelObject["guild_id"] as? String) ?? 0
         lastMessageId = Snowflake(guildChannelObject["last_message_id"] as? String) ?? 0
         name = guildChannelObject.get("name", or: "")
         permissionOverwrites = DiscordPermissionOverwrite.overwritesFromArray(
@@ -220,9 +221,9 @@ public struct DiscordGuildVoiceChannel : DiscordGuildChannel {
     /// The user limit of this channel, if this is a voice channel.
     public var userLimit: Int
 
-    init(guildChannelObject: [String: Any], client: DiscordClient? = nil) {
+    init(guildChannelObject: [String: Any], guildID: GuildID?, client: DiscordClient? = nil) {
         id = Snowflake(guildChannelObject["id"] as? String) ?? 0
-        guildId = Snowflake(guildChannelObject["guild_id"] as? String) ?? 0
+        guildId = guildID ?? Snowflake(guildChannelObject["guild_id"] as? String) ?? 0
         bitrate = guildChannelObject.get("bitrate", or: 0) as Int
         name = guildChannelObject.get("name", or: "")
         permissionOverwrites = DiscordPermissionOverwrite.overwritesFromArray(

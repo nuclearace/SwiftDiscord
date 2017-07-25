@@ -185,8 +185,8 @@ func channelFromObject(_ object: [String: Any], withClient client: DiscordClient
     guard let type = DiscordChannelType(rawValue: object.get("type", or: -1)) else { return nil }
 
     switch type {
-    case .text:     return DiscordGuildTextChannel(guildChannelObject: object, client: client)
-    case .voice:    return DiscordGuildVoiceChannel(guildChannelObject: object, client: client)
+    case .text:     return DiscordGuildTextChannel(guildChannelObject: object, guildID: nil, client: client)
+    case .voice:    return DiscordGuildVoiceChannel(guildChannelObject: object, guildID: nil, client: client)
     case .direct:   return DiscordDMChannel(dmReadyObject: object, client: client)
     case .groupDM:  return DiscordGroupDMChannel(dmReadyObject: object, client: client)
     }
