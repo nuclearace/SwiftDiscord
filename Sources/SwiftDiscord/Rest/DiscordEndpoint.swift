@@ -312,7 +312,17 @@ public extension DiscordEndpoint {
         }
     }
 
+    /// Gets a rate limit key for the endpoint
     internal var rateLimitKey: DiscordRateLimitKey {
+        // To add a new endpoint's rate limit key:
+        // If the endpoint includes a channel id or guild id, supply that as that as the id parameter.
+        // Otherwise, skip it.  Since a channel id implies a guild id, we should never need both
+        // For the urlParts, go through the list of slash-separated pieces of the endpoint URL and add
+        // the enum case associated with each of them, adding a case to the enum if it doesn't already exist
+        // Example: "/webhooks/\(id)/\(token)/github" -> [.webhooks, .webhookID, .webhookToken, .github]
+        // Example: "/guilds/\(guild)/channels" -> [.guilds, .guildID, .channels]
+        // Example: "/users/@me/guilds" -> [.users, .userID, .guilds] ("@me" is a user id)
+
         switch self {
         case .baseURL:
             fatalError("Attempted to get rate limit key for base URL")

@@ -155,6 +155,9 @@ public struct DiscordRateLimitKey: Hashable {
 	/// URL Parts for the purpose of rate limiting.
     /// Combine all the parts of the URL into a list of which parts exist
     /// Ex. /channels/232184444340011009/messages would be represented by [.channels, .channelID, .messages]
+    /// Anything that ends in "ID" represents the existence of a snowflake id, but the actual ID should be
+    /// stored separately if needed.  Technically, the .guildID and .channelID fields aren't needed since
+    /// the full ID will also be stored, but they're included to make the system more straightforward.
     public struct DiscordRateLimitURLParts: OptionSet {
         public let rawValue: Int
 
@@ -192,6 +195,8 @@ public struct DiscordRateLimitKey: Hashable {
     // MARK: Properties
 
     /// The guild or channel ID in this endpoint (or 0 if neither)
+    /// There should never be a time when you need both the channel and guild id
+    /// since every channel is bound to exactly one guild
     public let id: Snowflake
     public let urlParts: DiscordRateLimitURLParts
 
