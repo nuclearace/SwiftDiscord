@@ -502,7 +502,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     open func handleChannelUpdate(with data: [String: Any]) {
         DefaultDiscordLogger.Logger.log("Handling channel update", type: logType)
 
-        let channel = guildChannelFromObject(data, client: self)
+        let channel = guildChannelFromObject(data, guildID: nil, client: self)
 
         DefaultDiscordLogger.Logger.verbose("Updated channel: \(channel)", type: logType)
 

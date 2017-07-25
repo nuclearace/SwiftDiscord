@@ -247,7 +247,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 return
             }
 
-            callback?(guildChannelFromObject(channel))
+            callback?(guildChannelFromObject(channel, guildID: nil))
         }
 
         rateLimiter.executeRequest(endpoint: .channel(id: channelId),
