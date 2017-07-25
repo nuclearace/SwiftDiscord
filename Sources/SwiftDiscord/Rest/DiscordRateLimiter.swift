@@ -198,6 +198,8 @@ public struct DiscordRateLimitKey: Hashable {
     /// There should never be a time when you need both the channel and guild id
     /// since every channel is bound to exactly one guild
     public let id: Snowflake
+
+    /// The list of parts that the URL contains
     public let urlParts: DiscordRateLimitURLParts
 
     /// The hash of the key.
