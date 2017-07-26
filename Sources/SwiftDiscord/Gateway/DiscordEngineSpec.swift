@@ -168,7 +168,11 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         #if !os(Linux)
         websocket?.disconnect()
         #else
-        try? websocket?.close()
+        do {
+            try websocket?.close()
+        } catch {
+            self.handleClose(reason: nil)
+        }
         #endif
     }
 
