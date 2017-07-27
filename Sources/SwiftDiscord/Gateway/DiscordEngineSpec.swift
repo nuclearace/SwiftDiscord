@@ -165,12 +165,16 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
     }
 
     internal func closeWebSockets() {
+        DefaultDiscordLogger.Logger.log("Closing WebSocket, shard: \(description)", type: "DiscordWebSocketable")
+
         #if !os(Linux)
         websocket?.disconnect()
         #else
         do {
             try websocket?.close()
         } catch {
+            DefaultDiscordLogger.Logger.log("Error in closing: \(error)", type: "DiscordWebSocketable")
+
             self.handleClose(reason: nil)
         }
         #endif
