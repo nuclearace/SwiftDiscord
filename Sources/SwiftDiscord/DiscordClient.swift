@@ -283,6 +283,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         - parameter onGuild: The snowflake of the guild that you want to leave.
     */
     open func leaveVoiceChannel(onGuild guildId: GuildID) {
+        DefaultDiscordLogger.Logger.log("Leaving voice channel on guild: \(guildId)", type: logType)
+
         voiceManager.leaveVoiceChannel(onGuild: guildId)
     }
 

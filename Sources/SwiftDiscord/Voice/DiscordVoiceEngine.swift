@@ -284,8 +284,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         DefaultDiscordLogger.Logger.log("Disconnecting VoiceEngine", type: logType)
 
         closeWebSockets()
-
         closeOutEngine()
+
         voiceDelegate?.voiceEngineDidDisconnect(self)
     }
 
