@@ -149,24 +149,34 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         websocket?.connect()
         #else
         let url = URL(string: connectURL)!
-        let socket = try! TCPInternetSocket(scheme: "https", hostname: url.host ?? "gateway.discord.gg",
-                                            port: Port(url.port ?? 443))
-        let stream = try! TLS.InternetSocket(socket, TLS.Context(.client))
-        try! WebSocket.connect(to: connectURL, using: stream) {[weak self] ws in
-            guard let this = self else { return }
-            DefaultDiscordLogger.Logger.log("Websocket connected, shard: \(this.description)", type: "DiscordWebSocketable")
+        do {
+            let socket = try TCPInternetSocket(scheme: "https", hostname: url.host ?? "gateway.discord.gg",
+                                               port: Port(url.port ?? 443))
+            let stream = try TLS.InternetSocket(socket, TLS.Context(.client))
+            try WebSocket.background(to: connectURL, using: stream) {[weak self] ws in
+                guard let this = self else { return }
+                DefaultDiscordLogger.Logger.log("Websocket connected, shard: \(this.description)", type: "DiscordWebSocketable")
 
-            this.websocket = ws
-            this.connectUUID = UUID()
+                this.websocket = ws
+                this.connectUUID = UUID()
 
-            this.attachWebSocketHandlers()
-            this.startHandshake()
+                this.attachWebSocketHandlers()
+                this.startHandshake()
+            }
+        } catch {
+            DefaultDiscordLogger.Logger.error("\(error)", type: "DiscordWebSocketable")
         }
         #endif
     }
 
-    internal func closeWebSockets() {
+    internal func closeWebSockets(fast: Bool = false) {
         DefaultDiscordLogger.Logger.log("Closing WebSocket, shard: \(description)", type: "DiscordWebSocketable")
+
+        guard !fast else {
+            handleClose(reason: nil)
+
+            return
+        }
 
         #if !os(Linux)
         websocket?.disconnect()
