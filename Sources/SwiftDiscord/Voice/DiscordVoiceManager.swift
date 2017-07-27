@@ -111,6 +111,8 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
 
         // Make sure everything is cleaned out
 
+        DefaultDiscordLogger.Logger.verbose("Rejoining voice channels after leave", type: logType)
+
         for (guildId, _) in voiceEngines {
             startVoiceConnection(guildId)
         }
