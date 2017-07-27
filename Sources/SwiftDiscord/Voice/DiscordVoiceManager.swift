@@ -154,8 +154,8 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
 
         DefaultDiscordLogger.Logger.log("Connecting voice engine", type: logType)
 
-        DispatchQueue.global().async {
-            self.protected { self.voiceEngines[guildId]?.connect() }
+        DispatchQueue.global().async {[weak engine = voiceEngines[guildId]!] in
+            engine?.connect()
         }
     }
 
