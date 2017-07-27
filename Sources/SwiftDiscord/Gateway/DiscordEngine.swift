@@ -306,7 +306,7 @@ open class DiscordEngine : DiscordEngineSpec {
     */
     open func resumeGateway() {
         guard !resuming && !closed else {
-            DefaultDiscordLogger.Logger.debug("Already trying to resume or closed, ignoring", type: logType)
+            DefaultDiscordLogger.Logger.log("Already trying to resume or closed, ignoring", type: logType)
 
             return
         }

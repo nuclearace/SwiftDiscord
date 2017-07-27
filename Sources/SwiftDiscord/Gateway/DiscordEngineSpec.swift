@@ -123,10 +123,11 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
             this.parseGatewayMessage(text)
         }
 
-        websocket?.onClose = {[weak self] _, _, _, _ in
+        websocket?.onClose = {[weak self] _, _, reason, clean in
             guard let this = self else { return }
 
-            DefaultDiscordLogger.Logger.log("WebSocket closed, \(this.description)", type: "DiscordWebSocketable")
+            DefaultDiscordLogger.Logger.log("WebSocket closed, \(this.description); clean: \(clean); reason: \(reason ?? "")",
+                                            type: "DiscordWebSocketable")
 
             this.handleClose(reason: nil)
         }
@@ -175,7 +176,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         } catch {
             DefaultDiscordLogger.Logger.log("Error in closing: \(error)", type: "DiscordWebSocketable")
 
-            self.handleClose(reason: nil)
+            handleClose(reason: nil)
         }
         #endif
     }
