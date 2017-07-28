@@ -19,7 +19,6 @@ import Foundation
 
 /// The stored type of a Discord Snowflake ID
 public struct Snowflake {
-
     /// The internal ID storage for a snowflake
     public let rawValue: UInt64
 
@@ -76,7 +75,6 @@ public typealias AttachmentID = Snowflake
 // MARK: Extra snowflake information
 
 extension Snowflake {
-
     /// Discord's epoch
     public static let epoch = Date(timeIntervalSince1970: 1420070400)
 
@@ -130,7 +128,6 @@ extension Snowflake : ExpressibleByIntegerLiteral {
 
 /// Snowflake conformance to CustomStringConvertible
 extension Snowflake : CustomStringConvertible {
-
     /// Description for string Conversion
     public var description: String {
         return self.rawValue.description
@@ -140,7 +137,6 @@ extension Snowflake : CustomStringConvertible {
 
 /// Snowflake conformance to RawRepresentable and Comparable
 extension Snowflake : RawRepresentable, Comparable {
-
     public typealias RawValue = UInt64
 
     /// Init for rawValue conformance
@@ -152,12 +148,11 @@ extension Snowflake : RawRepresentable, Comparable {
     public static func <(lhs: Snowflake, rhs: Snowflake) -> Bool {
         return lhs.rawValue < rhs.rawValue
     }
-    
+
 }
 
 /// Snowflake conformance to Hashable
 extension Snowflake : Hashable {
-
     /// The hash value of the Snowflake
     public var hashValue: Int {
         return self.rawValue.hashValue

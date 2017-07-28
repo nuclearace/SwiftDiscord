@@ -55,29 +55,39 @@ public protocol DiscordEndpointConsumer {
     /**
         Creates an invite for a channel/guild.
 
-        - parameter for: The channel that we are creating for
-        - parameter options: An array of `DiscordEndpointOptions.CreateInvite` options
+        - parameter for: The channel that we are creating for.
+        - parameter options: An array of `DiscordEndpointOptions.CreateInvite` options.
+        - parameter reason: The reason this invite was created.
         - parameter callback: The callback function. Takes an optional `DiscordInvite`
     */
-    func createInvite(for channelId: ChannelID, options: [DiscordEndpoint.Options.CreateInvite],
+    func createInvite(for channelId: ChannelID,
+                      options: [DiscordEndpoint.Options.CreateInvite],
+                      reason: String?,
                       callback: @escaping (DiscordInvite?) -> ())
 
     /**
         Deletes the specified channel.
 
-        - parameter channelId: The snowflake id of the channel
+        - parameter channelId: The snowflake id of the channel.
+        - parameter reason: The reason this channel is being deleted.
         - parameter callback: An optional callback indicating whether the channel was deleted.
     */
-    func deleteChannel(_ channelId: ChannelID, callback: ((Bool) -> ())?)
+    func deleteChannel(_ channelId: ChannelID,
+                       reason: String?,
+                       callback: ((Bool) -> ())?)
 
     /**
         Deletes a channel permission
 
-        - parameter overwriteId: The permission overwrite that is to be deleted's snowflake id
-        - parameter on: The channel that we are deleting on
+        - parameter overwriteId: The permission overwrite that is to be deleted's snowflake id.
+        - parameter on: The channel that we are deleting on.
+        - parameter reason: The reason this overwrite was deleted.
         - parameter callback: An optional callback indicating whether the permission was deleted.
     */
-    func deleteChannelPermission(_ overwriteId: OverwriteID, on channelId: ChannelID, callback: ((Bool) -> ())?)
+    func deleteChannelPermission(_ overwriteId: OverwriteID,
+                                 on channelId: ChannelID,
+                                 reason: String?,
+                                 callback: ((Bool) -> ())?)
 
     /**
         Deletes a single message
@@ -118,11 +128,14 @@ public protocol DiscordEndpointConsumer {
     /**
         Edits the specified permission overwrite.
 
-        - parameter permissionOverwrite: The new DiscordPermissionOverwrite
-        - parameter on: The channel that we are editing on
+        - parameter permissionOverwrite: The new DiscordPermissionOverwrite.
+        - parameter on: The channel that we are editing on.
+        - parameter reason: The reason this edit was made.
         - parameter callback: An optional callback indicating whether the edit was successful.
     */
-    func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: ChannelID,
+    func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite,
+                               on channelId: ChannelID,
+                               reason: String?,
                                callback: ((Bool) -> ())?)
 
     /**
@@ -146,11 +159,14 @@ public protocol DiscordEndpointConsumer {
     /**
         Modifies the specified channel.
 
-        - parameter channelId: The snowflake id of the channel
-        - parameter options: An array of `DiscordEndpointOptions.ModifyChannel` options
+        - parameter channelId: The snowflake id of the channel.
+        - parameter options: An array of `DiscordEndpointOptions.ModifyChannel` options.
+        - parameter reason: The reason this modification is being made.
         - parameter callback: An optional callback containing the edited guild channel, if successful.
     */
-    func modifyChannel(_ channelId: ChannelID, options: [DiscordEndpoint.Options.ModifyChannel],
+    func modifyChannel(_ channelId: ChannelID,
+                       options: [DiscordEndpoint.Options.ModifyChannel],
+                       reason: String?,
                        callback: ((DiscordGuildChannel?) -> ())?)
 
     /**
@@ -207,19 +223,26 @@ public protocol DiscordEndpointConsumer {
         - parameter roleId: The id of the role to add.
         - parameter to: The id of the member to add this role to.
         - parameter on: The id of the guild this member is on.
-        - parameter with: The token to authenticate to Discord with.
+        - parameter reason: The reason this member is getting this role.
         - parameter callback: An optional callback indicating whether the role was added successfully.
     */
-    func addGuildMemberRole(_ roleId: RoleID, to userId: UserID, on guildId: GuildID, callback: ((Bool) -> ())?)
+    func addGuildMemberRole(_ roleId: RoleID,
+                            to userId: UserID,
+                            on guildId: GuildID,
+                            reason: String?,
+                            callback: ((Bool) -> ())?)
 
     /**
         Creates a guild channel.
 
-        - parameter guildId: The snowflake id of the guild
-        - parameter options: An array of `DiscordEndpointOptions.GuildCreateChannel` options
+        - parameter guildId: The snowflake id of the guild.
+        - parameter options: An array of `DiscordEndpointOptions.GuildCreateChannel` options.
+        - parameter reason: The reason this channel is being created.
         - parameter callback: An optional callback containing the new channel, if successful.
     */
-    func createGuildChannel(on guildId: GuildID, options: [DiscordEndpoint.Options.GuildCreateChannel],
+    func createGuildChannel(on guildId: GuildID,
+                            options: [DiscordEndpoint.Options.GuildCreateChannel],
+                            reason: String?,
                             callback: ((DiscordGuildChannel?) -> ())?)
 
     /**
@@ -227,9 +250,12 @@ public protocol DiscordEndpointConsumer {
 
         - parameter on: The snowflake id of the guild.
         - parameter withOptions: The options for the new role. Optional in the default implementation.
+        - parameter reason: The reason this role is being created.
         - parameter callback: The callback function, taking an optional `DiscordRole`.
     */
-    func createGuildRole(on guildId: GuildID, withOptions options: [DiscordEndpoint.Options.CreateRole],
+    func createGuildRole(on guildId: GuildID,
+                         withOptions options: [DiscordEndpoint.Options.CreateRole],
+                         reason: String?,
                          callback: @escaping (DiscordRole?) -> ())
 
     /**
@@ -239,6 +265,16 @@ public protocol DiscordEndpointConsumer {
         - parameter callback: An optional callback containing the deleted guild, if successful.
     */
     func deleteGuild(_ guildId: GuildID, callback: ((DiscordGuild?) -> ())?)
+
+    /**
+        Gets a guild's audit log.
+
+        - parameter guildId: The snowflake id of the guild.
+        - parameter options: Options for getting the audit log.
+        - parameter callback: A callback with the audit log.
+    */
+    func getGuildAuditLog(for guildId: GuildID, withOptions options: [DiscordEndpoint.Options.AuditLog],
+                          callback: @escaping (DiscordAuditLog?) -> ())
 
     /**
         Gets the bans on a guild.
@@ -286,21 +322,29 @@ public protocol DiscordEndpointConsumer {
     /**
         Creates a guild ban.
 
-        - parameter userId: The snowflake id of the user
-        - parameter on: The snowflake id of the guild
-        - parameter deleteMessageDays: The number of days to delete this user's messages
+        - parameter userId: The snowflake id of the user.
+        - parameter on: The snowflake id of the guild.
+        - parameter deleteMessageDays: The number of days to delete this user's messages.
+        - parameter reason: The reason for this ban.
         - parameter callback: An optional callback indicating whether the ban was successful.
     */
-    func guildBan(userId: UserID, on guildId: GuildID, deleteMessageDays: Int, callback: ((Bool) -> ())?)
+    func guildBan(userId: UserID,
+                  on guildId: GuildID,
+                  deleteMessageDays: Int,
+                  reason: String?,
+                  callback: ((Bool) -> ())?)
 
     /**
         Modifies the specified guild.
 
-        - parameter guildId: The snowflake id of the guild
-        - parameter options: An array of `DiscordEndpointOptions.ModifyGuild` options
+        - parameter guildId: The snowflake id of the guild.
+        - parameter options: An array of `DiscordEndpointOptions.ModifyGuild` options.
+        - parameter reason: The reason for this modification.
         - parameter callback: An optional callback containing the modified guild, if successful.
     */
-    func modifyGuild(_ guildId: GuildID, options: [DiscordEndpoint.Options.ModifyGuild],
+    func modifyGuild(_ guildId: GuildID,
+                     options: [DiscordEndpoint.Options.ModifyGuild],
+                     reason: String?,
                      callback: ((DiscordGuild?) -> ())?)
 
     /**
@@ -311,7 +355,8 @@ public protocol DiscordEndpointConsumer {
                                       in the form `["id": channelId, "position": position]`
         - parameter callback: An optional callback containing the modified channels, if successful.
     */
-    func modifyGuildChannelPositions(on guildId: GuildID, channelPositions: [[String: Any]],
+    func modifyGuildChannelPositions(on guildId: GuildID,
+                                     channelPositions: [[String: Any]],
                                      callback: (([DiscordGuildChannel]) -> ())?)
 
     /**
@@ -320,28 +365,40 @@ public protocol DiscordEndpointConsumer {
         - parameter id: The snowflake id of the member.
         - parameter on: The snowflake id of the member to modify.
         - parameter options: The options for this member.
+        - parameter reason: The reason for this change.
         - parameter callback: The callback function, indicating whether the modify succeeded.
     */
-    func modifyGuildMember(_ id: UserID, on guildId: GuildID, options: [DiscordEndpoint.Options.ModifyMember],
+    func modifyGuildMember(_ id: UserID,
+                           on guildId: GuildID,
+                           options: [DiscordEndpoint.Options.ModifyMember],
+                           reason: String?,
                            callback: ((Bool) -> ())?)
 
     /**
         Edits the specified role.
 
-        - parameter permissionOverwrite: The new DiscordRole
-        - parameter on: The guild that we are editing on
+        - parameter permissionOverwrite: The new DiscordRole.
+        - parameter on: The guild that we are editing on.
+        - parameter reason: The reason for this edit.
         - parameter callback: An optional callback containing the modified role, if successful.
     */
-    func modifyGuildRole(_ role: DiscordRole, on guildId: GuildID, callback: ((DiscordRole?) -> ())?)
+    func modifyGuildRole(_ role: DiscordRole,
+                         on guildId: GuildID,
+                         reason: String?,
+                         callback: ((DiscordRole?) -> ())?)
 
     /**
         Removes a guild ban.
 
-        - parameter for: The snowflake id of the user
-        - parameter on: The snowflake id of the guild
+        - parameter for: The snowflake id of the user.
+        - parameter on: The snowflake id of the guild.
+        - parameter reason: The reason for this unban.
         - parameter callback: An optional callback indicating whether the ban was successfully removed.
     */
-    func removeGuildBan(for userId: UserID, on guildId: GuildID, callback: ((Bool) -> ())?)
+    func removeGuildBan(for userId: UserID,
+                        on guildId: GuildID,
+                        reason: String?,
+                        callback: ((Bool) -> ())?)
 
     /**
         Removes a role from a guild member.
@@ -349,47 +406,62 @@ public protocol DiscordEndpointConsumer {
         - parameter roleId: The id of the role to add.
         - parameter from: The id of the member to add this role to.
         - parameter on: The id of the guild this member is on.
-        - parameter with: The token to authenticate to Discord with.
+        - parameter reason: The reason for removing this role.
         - parameter callback: An optional callback indicating whether the role was removed successfully.
     */
-    func removeGuildMemberRole(_ roleId: RoleID, from userId: UserID, on guildId: GuildID, callback: ((Bool) -> ())?)
+    func removeGuildMemberRole(_ roleId: RoleID,
+                               from userId: UserID,
+                               on guildId: GuildID,
+                               reason: String?,
+                               callback: ((Bool) -> ())?)
 
     /**
         Removes a guild role.
 
-        - parameter roleId: The snowflake id of the role
-        - parameter on: The snowflake id of the guild
+        - parameter roleId: The snowflake id of the role.
+        - parameter on: The snowflake id of the guild.
+        - parameter reason: The reason for removing this role.
         - parameter callback: An optional callback containing the removed role, if successful.
     */
-    func removeGuildRole(_ roleId: RoleID, on guildId: GuildID, callback: ((DiscordRole?) -> ())?)
+    func removeGuildRole(_ roleId: RoleID,
+                         on guildId: GuildID,
+                         reason: String?,
+                         callback: ((DiscordRole?) -> ())?)
 
     // MARK: Webhooks
 
     /**
         Creates a webhook for a given channel.
 
-        - parameter forChannel: The channel to create the webhook for
-        - parameter options: The options for this webhook
+        - parameter forChannel: The channel to create the webhook for.
+        - parameter options: The options for this webhook.
+        - parameter reason: The reason this webhook was created.
         - parameter callback: A callback that returns the webhook created, if successful.
     */
-    func createWebhook(forChannel channelId: ChannelID, options: [DiscordEndpoint.Options.WebhookOption],
+    func createWebhook(forChannel channelId: ChannelID,
+                       options: [DiscordEndpoint.Options.WebhookOption],
+                       reason: String?,
                        callback: @escaping (DiscordWebhook?) -> ())
 
     /**
         Deletes a webhook. The user must be the owner of the webhook.
 
-        - parameter webhookId: The id of the webhook
-        - paramter callback: An optional callback function that indicates whether the delete was successful
+        - parameter webhookId: The id of the webhook.
+        - parameter reason: The reason for deleting this webhook.
+        - paramter callback: An optional callback function that indicates whether the delete was successful.
     */
-    func deleteWebhook(_ webhookId: WebhookID, callback: ((Bool) -> ())?)
+    func deleteWebhook(_ webhookId: WebhookID,
+                       reason: String?,
+                       callback: ((Bool) -> ())?)
 
     /**
         Gets the specified webhook.
 
-        - parameter webhookId: The snowflake id of the webhook
-        - parameter callback: The callback function containing an optional `DiscordToken`
+        - parameter webhookId: The snowflake id of the webhook.
+        - parameter callback: The callback function containing an optional `DiscordToken`.
     */
-    func getWebhook(_ webhookId: WebhookID, callback: @escaping (DiscordWebhook?) -> ())
+    func getWebhook(_ webhookId: WebhookID,
+                    callback: @escaping (DiscordWebhook?) -> ())
 
     /**
         Gets the webhooks for a specified channel.
@@ -410,11 +482,14 @@ public protocol DiscordEndpointConsumer {
     /**
         Modifies a webhook.
 
-        - parameter webhookId: The webhook to modify
-        - parameter options: The options for this webhook
+        - parameter webhookId: The webhook to modify.
+        - parameter options: The options for this webhook.
+        - parameter reason: The reason for this modification.
         - parameter callback: A callback that returns the updated webhook, if successful.
     */
-    func modifyWebhook(_ webhookId: WebhookID, options: [DiscordEndpoint.Options.WebhookOption],
+    func modifyWebhook(_ webhookId: WebhookID,
+                       options: [DiscordEndpoint.Options.WebhookOption],
+                       reason: String?,
                        callback: @escaping (DiscordWebhook?) -> ())
 
     // MARK: Invites
@@ -430,10 +505,13 @@ public protocol DiscordEndpointConsumer {
     /**
         Deletes an invite.
 
-        - parameter invite: The invite code to delete
-        - parameter callback: An optional callback containing the deleted invite, if successful
+        - parameter invite: The invite code to delete.
+        - parameter reason: The reason this invite was deleted.
+        - parameter callback: An optional callback containing the deleted invite, if successful.
     */
-    func deleteInvite(_ invite: String, callback: ((DiscordInvite?) -> ())?)
+    func deleteInvite(_ invite: String,
+                      reason: String?,
+                      callback: ((DiscordInvite?) -> ())?)
 
     /**
         Gets an invite.

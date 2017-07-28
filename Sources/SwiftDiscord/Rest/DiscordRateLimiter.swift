@@ -88,13 +88,12 @@ public final class DiscordRateLimiter {
                                token: DiscordToken,
                                requestInfo: DiscordEndpoint.EndpointRequest,
                                callback: @escaping (Data?, HTTPURLResponse?, Error?) -> ()) {
-        let rateLimitKey = endpoint.rateLimitKey
         guard let request = requestInfo.createRequest(with: token, endpoint: endpoint) else {
             // Error is logged by createRequest
             return
         }
 
-        executeRequest(request, for: rateLimitKey, callback: callback)
+        executeRequest(request, for: endpoint.rateLimitKey, callback: callback)
     }
 
     private func createResponseHandler(for request: URLRequest, endpointKey: DiscordRateLimitKey,
@@ -151,14 +150,14 @@ public final class DiscordRateLimiter {
 /// An endpoint is made up of a REST api endpoint and any major parameters in that endpoint.
 /// Ex. /channels/232184444340011009/messages and /channels/186926276592795659/messages
 /// Are considered different endpoints
-public struct DiscordRateLimitKey: Hashable {
+public struct DiscordRateLimitKey : Hashable {
 	/// URL Parts for the purpose of rate limiting.
     /// Combine all the parts of the URL into a list of which parts exist
     /// Ex. /channels/232184444340011009/messages would be represented by [.channels, .channelID, .messages]
     /// Anything that ends in "ID" represents the existence of a snowflake id, but the actual ID should be
     /// stored separately if needed.  Technically, the .guildID and .channelID fields aren't needed since
     /// the full ID will also be stored, but they're included to make the system more straightforward.
-    public struct DiscordRateLimitURLParts: OptionSet {
+    public struct DiscordRateLimitURLParts : OptionSet {
         public let rawValue: Int
 
         static let         guilds = DiscordRateLimitURLParts(rawValue: 1 << 0)
@@ -186,6 +185,7 @@ public struct DiscordRateLimitKey: Hashable {
         static let   webhookToken = DiscordRateLimitURLParts(rawValue: 1 << 22)
         static let          slack = DiscordRateLimitURLParts(rawValue: 1 << 23)
         static let         github = DiscordRateLimitURLParts(rawValue: 1 << 24)
+        static let       auditLog = DiscordRateLimitURLParts(rawValue: 1 << 25)
 
         public init(rawValue: Int) {
             self.rawValue = rawValue
