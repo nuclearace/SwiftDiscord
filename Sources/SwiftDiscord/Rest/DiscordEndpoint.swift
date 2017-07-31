@@ -81,6 +81,9 @@ public enum DiscordEndpoint : CustomStringConvertible {
     /// The base guild endpoint.
     case guilds(id: GuildID)
 
+    /// Guild audit log
+    case guildAuditLog(id: GuildID)
+
     // Guild Channels
     /// The base endpoint for guild channels.
     case guildChannels(guild: GuildID)
@@ -149,19 +152,19 @@ public extension DiscordEndpoint {
     */
     public enum EndpointRequest {
         /// A GET request.
-        case get(params: [String: String]?)
+        case get(params: [String: String]?, extraHeaders: [DiscordHeader: String]?)
 
         /// A POST request.
-        case post(content: HTTPContent?)
+        case post(content: HTTPContent?, extraHeaders: [DiscordHeader: String]?)
 
         /// A POST request.
-        case put(content: HTTPContent?)
+        case put(content: HTTPContent?, extraHeaders: [DiscordHeader: String]?)
 
         /// A PATCH request.
-        case patch(content: HTTPContent?)
+        case patch(content: HTTPContent?, extraHeaders: [DiscordHeader: String]?)
 
         /// A DELETE request.
-        case delete
+        case delete(content: HTTPContent?, extraHeaders: [DiscordHeader: String]?)
 
         var methodString: String {
             switch self {
@@ -177,15 +180,15 @@ public extension DiscordEndpoint {
         Helper method that creates the basic request for an endpoint.
 
         - parameter with: A DiscordToken that will be used for authentication
-        - parameter for: The endpoint this request is for
-        - parameter getParams: An optional dictionary of get parameters.
+        - parameter endpoint: The endpoint this request is for
 
         - returns: a URLRequest that can be further customized
         */
-        public func createRequest(with token: DiscordToken, endpoint: DiscordEndpoint) -> URLRequest? {
+        public func createRequest(with token: DiscordToken,
+                                  endpoint: DiscordEndpoint) -> URLRequest? {
             let getParams: [String: String]?
 
-            if case let .get(params) = self {
+            if case let .get(params, _) = self {
                 getParams = params
             } else {
                 getParams = nil
@@ -195,16 +198,35 @@ public extension DiscordEndpoint {
             var request = URLRequest(url: url)
 
             request.setValue(token.token, forHTTPHeaderField: "Authorization")
-            request.httpMethod = self.methodString
+            request.httpMethod = methodString
 
-            var content: HTTPContent? = nil
+            addContent(to: &request)
 
-            if case let .post(optionalContent) = self {
-                content = optionalContent
-            } else if case let .put(optionalContent) = self {
-                content = optionalContent
-            } else if case let .patch(optionalContent) = self {
-                content = optionalContent
+            return request
+        }
+
+        private func addContent(to request: inout URLRequest) {
+            let content: HTTPContent?
+            let extraHeaders: [DiscordHeader: String]?
+
+            switch self {
+            case let .get(_, headers?):
+                (content, extraHeaders) = (nil, headers)
+            case let .post(optionalContent, headers):
+                (content, extraHeaders) = (optionalContent, headers)
+            case let .put(optionalContent, headers):
+                (content, extraHeaders) = (optionalContent, headers)
+            case let .patch(optionalContent, headers):
+                (content, extraHeaders) = (optionalContent, headers)
+            case let .delete(optionalContent, headers):
+                (content, extraHeaders) = (optionalContent, headers)
+            default:
+                (content, extraHeaders) = (nil, nil)
+            }
+
+            for (header, value) in extraHeaders ?? [:] {
+                request.setValue(value.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed),
+                                 forHTTPHeaderField: header.rawValue)
             }
 
             switch content {
@@ -218,8 +240,6 @@ public extension DiscordEndpoint {
                 request.setValue(type, forHTTPHeaderField: "Content-Type")
                 request.setValue(String(body.count), forHTTPHeaderField: "Content-Length")
             }
-
-            return request
         }
     }
 
@@ -267,6 +287,8 @@ public extension DiscordEndpoint {
         /* Guilds */
         case let .guilds(id):
             return "/guilds/\(id)"
+        case let .guildAuditLog(id):
+            return "/guilds/\(id)/audit-logs"
         // Guild Channels
         case let .guildChannels(guild):
             return "/guilds/\(guild)/channels"
@@ -364,6 +386,8 @@ public extension DiscordEndpoint {
         /* Guilds */
         case let .guilds(id):
             return DiscordRateLimitKey(id: id, urlParts: [.guilds, .guildID])
+        case let .guildAuditLog(id):
+            return DiscordRateLimitKey(id: id, urlParts: [.guilds, .guildID, .auditLog])
         // Guild Channels
         case let .guildChannels(guild):
             return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .channels])
@@ -455,10 +479,31 @@ public enum HTTPContent : CustomStringConvertible {
     }
 }
 
+/// Represents the custom headers that Discord uses.
+public enum DiscordHeader : String {
+    /// The header that adds audit log reasons.
+    case auditReason = "X-Audit-Log-Reason"
+}
+
 public extension DiscordEndpoint {
     /// A namespace struct for endpoint options.
     public struct Options {
         private init() {}
+
+        /// Options when getting an audit log.
+        public enum AuditLog {
+            /// Action type.
+            case actionType(DiscordAuditLogActionType)
+
+            /// Actions before a specific time.
+            case before(Snowflake)
+
+            /// The max num of entries. Default 50. Min 1. Max 100.
+            case limit(Int)
+
+            /// Filters for a specific user.
+            case userId(Snowflake)
+        }
 
         /// Create invite options.
         public enum CreateInvite {

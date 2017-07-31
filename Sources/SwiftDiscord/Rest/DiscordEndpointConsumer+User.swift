@@ -34,7 +34,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         rateLimiter.executeRequest(endpoint: .userChannels,
                                    token: token,
-                                   requestInfo: .post(content: .json(contentData)),
+                                   requestInfo: .post(content: .json(contentData), extraHeaders: nil),
                                    callback: requestCallback)
     }
 
@@ -53,7 +53,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         rateLimiter.executeRequest(endpoint: .userChannels,
                                    token: token,
-                                   requestInfo: .get(params: nil),
+                                   requestInfo: .get(params: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
 
@@ -71,7 +71,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         rateLimiter.executeRequest(endpoint: .userGuilds,
                                    token: token,
-                                   requestInfo: .get(params: nil),
+                                   requestInfo: .get(params: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
 }

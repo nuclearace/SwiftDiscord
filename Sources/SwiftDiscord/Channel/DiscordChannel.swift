@@ -60,12 +60,12 @@ public extension DiscordChannel {
     /**
         Deletes this channel.
     */
-    public func delete() {
+    public func delete(reason: String? = nil) {
         guard let client = self.client else { return }
 
         DefaultDiscordLogger.Logger.log("Deleting channel: \(id)", type: "DiscordChannel")
 
-        client.deleteChannel(id)
+        client.deleteChannel(id, reason: reason)
     }
 
     /**
@@ -73,10 +73,10 @@ public extension DiscordChannel {
 
         - parameter options: An array of `DiscordEndpointOptions.ModifyChannel`
     */
-    public func modifyChannel(options: [DiscordEndpoint.Options.ModifyChannel]) {
+    public func modifyChannel(options: [DiscordEndpoint.Options.ModifyChannel], reason: String? = nil) {
         guard let client = self.client else { return }
 
-        client.modifyChannel(id, options: options)
+        client.modifyChannel(id, options: options, reason: reason)
     }
 
 
