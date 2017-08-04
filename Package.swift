@@ -17,15 +17,20 @@
 
 import PackageDescription
 
+var deps: [Package.Dependency] = [
+    .Package(url: "https://github.com/nuclearace/copus", majorVersion: 1),
+    .Package(url: "https://github.com/nuclearace/Sodium", majorVersion: 1),
+    .Package(url: "https://github.com/vapor/engine", majorVersion: 2),
+]
+
+#if !os(Linux)
+deps += [.Package(url: "https://github.com/nuclearace/Starscream", majorVersion: 2),]
+#endif
+
 let package = Package(
     name: "SwiftDiscord",
     targets: [
         Target(name: "SwiftDiscord", dependencies: ["DiscordOpus"])
     ],
-    dependencies: [
-        .Package(url: "https://github.com/nuclearace/copus", majorVersion: 1),
-    	.Package(url: "https://github.com/nuclearace/Sodium", majorVersion: 1),
-        .Package(url: "https://github.com/nuclearace/Starscream", majorVersion: 2),
-        .Package(url: "https://github.com/vapor/engine", majorVersion: 2),
-    ]
+    dependencies: deps
 )
