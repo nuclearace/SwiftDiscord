@@ -591,7 +591,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             }
 
             sequenceNum = sequenceNum &+ 1
-            timestamp = timestamp &+ 960
+            timestamp = timestamp &+ UInt32(encoder.frameSize)
 
             audioSleep()
         }
