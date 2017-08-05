@@ -4,376 +4,412 @@
     <title>DiscordEndpointConsumer Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
+
     <a name="//apple_ref/swift/Protocol/DiscordEndpointConsumer" class="dashAnchor"></a>
+
     <a title="DiscordEndpointConsumer Protocol Reference"></a>
-    <header>
-      <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (100% documented)</p>
-      </div>
-    </header>
-    <div class="content-wrapper">
-      <p id="breadcrumbs">
-        <a href="../index.html"> Reference</a>
-        <img id="carat" src="../img/carat.png" />
-        DiscordEndpointConsumer Protocol Reference
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+           Docs
+        </a>
+         (100% documented)
       </p>
-    </div>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html"> Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      DiscordEndpointConsumer Protocol Reference
+    </p>
+
     <div class="content-wrapper">
-      <nav class="sidebar">
+      <nav class="navigation">
         <ul class="nav-groups">
           <li class="nav-group-name">
-            <a href="../Guides.html">Guides</a>
+            <a class="nav-group-name-link" href="../Guides.html">Guides</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../getting-started.html">Getting Started</a>
+                <a class="nav-group-task-link" href="../getting-started.html">Getting Started</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Classes.html">Classes</a>
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Classes/DiscordClient.html">DiscordClient</a>
+                <a class="nav-group-task-link" href="../Classes/DiscordAuditLog.html">DiscordAuditLog</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/DiscordEncoderMiddleware.html">DiscordEncoderMiddleware</a>
+                <a class="nav-group-task-link" href="../Classes/DiscordClient.html">DiscordClient</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/DiscordEngine.html">DiscordEngine</a>
+                <a class="nav-group-task-link" href="../Classes/DiscordEncoderMiddleware.html">DiscordEncoderMiddleware</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/DiscordGuild.html">DiscordGuild</a>
+                <a class="nav-group-task-link" href="../Classes/DiscordEngine.html">DiscordEngine</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/DiscordLazyValue.html">DiscordLazyValue</a>
+                <a class="nav-group-task-link" href="../Classes/DiscordGuild.html">DiscordGuild</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/DiscordOpusDecoder.html">DiscordOpusDecoder</a>
+                <a class="nav-group-task-link" href="../Classes/DiscordLazyValue.html">DiscordLazyValue</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/DiscordOpusEncoder.html">DiscordOpusEncoder</a>
+                <a class="nav-group-task-link" href="../Classes/DiscordOpusDecoder.html">DiscordOpusDecoder</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/DiscordRateLimiter.html">DiscordRateLimiter</a>
+                <a class="nav-group-task-link" href="../Classes/DiscordOpusEncoder.html">DiscordOpusEncoder</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/DiscordShardManager.html">DiscordShardManager</a>
+                <a class="nav-group-task-link" href="../Classes/DiscordRateLimiter.html">DiscordRateLimiter</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a>
+                <a class="nav-group-task-link" href="../Classes/DiscordShardManager.html">DiscordShardManager</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
+                <a class="nav-group-task-link" href="../Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/DiscordVoiceManager.html">DiscordVoiceManager</a>
+                <a class="nav-group-task-link" href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/DiscordVoiceSessionDecoder.html">DiscordVoiceSessionDecoder</a>
+                <a class="nav-group-task-link" href="../Classes/DiscordVoiceManager.html">DiscordVoiceManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/DiscordVoiceSessionDecoder.html">DiscordVoiceSessionDecoder</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Enums.html">Enums</a>
+            <a class="nav-group-name-link" href="../Enums.html">Enums</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Enums/DiscordChannelType.html">DiscordChannelType</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordAuditLogActionType.html">DiscordAuditLogActionType</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordClientOption.html">DiscordClientOption</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordChannelType.html">DiscordChannelType</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordClientOption.html">DiscordClientOption</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordEndpoint/EndpointRequest.html">– EndpointRequest</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordEndpoint/Options.html">– Options</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordEndpoint/EndpointRequest.html">– EndpointRequest</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordGameType.html">DiscordGameType</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordEndpoint/Options.html">– Options</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordGatewayCloseReason.html">DiscordGatewayCloseReason</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordGameType.html">DiscordGameType</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordGatewayCode.html">DiscordGatewayCode</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordGatewayCloseReason.html">DiscordGatewayCloseReason</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordGatewayPayloadData.html">DiscordGatewayPayloadData</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordGatewayCode.html">DiscordGatewayCode</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordLogLevel.html">DiscordLogLevel</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordGatewayPayloadData.html">DiscordGatewayPayloadData</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordNormalGatewayCode.html">DiscordNormalGatewayCode</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordHeader.html">DiscordHeader</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordOAuthEndpoint.html">DiscordOAuthEndpoint</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordLogLevel.html">DiscordLogLevel</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordPermissionOverwriteType.html">DiscordPermissionOverwriteType</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordNormalGatewayCode.html">DiscordNormalGatewayCode</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordPresenceStatus.html">DiscordPresenceStatus</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordOAuthEndpoint.html">DiscordOAuthEndpoint</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordVoiceError.html">DiscordVoiceError</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordPermissionOverwriteType.html">DiscordPermissionOverwriteType</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/DiscordVoiceGatewayCode.html">DiscordVoiceGatewayCode</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordPresenceStatus.html">DiscordPresenceStatus</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/HTTPContentType.html">HTTPContentType</a>
+                <a class="nav-group-task-link" href="../Enums/DiscordVoiceError.html">DiscordVoiceError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/DiscordVoiceGatewayCode.html">DiscordVoiceGatewayCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/HTTPContent.html">HTTPContent</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Protocols.html">Protocols</a>
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordChannel.html">DiscordChannel</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordChannel.html">DiscordChannel</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordClientDelegate.html">DiscordClientDelegate</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordClientDelegate.html">DiscordClientDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordClientHolder.html">DiscordClientHolder</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordClientHolder.html">DiscordClientHolder</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordClientSpec.html">DiscordClientSpec</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordClientSpec.html">DiscordClientSpec</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordDispatchEventHandler.html">DiscordDispatchEventHandler</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordDispatchEventHandler.html">DiscordDispatchEventHandler</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordEndpointConsumer.html">DiscordEndpointConsumer</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordEndpointConsumer.html">DiscordEndpointConsumer</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordEngineHeartbeatable.html">DiscordEngineHeartbeatable</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordEngineHeartbeatable.html">DiscordEngineHeartbeatable</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordEngineSpec.html">DiscordEngineSpec</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordEngineSpec.html">DiscordEngineSpec</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordGatewayable.html">DiscordGatewayable</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordGatewayable.html">DiscordGatewayable</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordGuildChannel.html">DiscordGuildChannel</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordGuildChannel.html">DiscordGuildChannel</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordLogger.html">DiscordLogger</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordLogger.html">DiscordLogger</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordOpusCodeable.html">DiscordOpusCodeable</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordOpusCodeable.html">DiscordOpusCodeable</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordShard.html">DiscordShard</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordShard.html">DiscordShard</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordShardDelegate.html">DiscordShardDelegate</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordShardDelegate.html">DiscordShardDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordTextChannel.html">DiscordTextChannel</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordTextChannel.html">DiscordTextChannel</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordTokenBearer.html">DiscordTokenBearer</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordTokenBearer.html">DiscordTokenBearer</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordUserActor.html">DiscordUserActor</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordUserActor.html">DiscordUserActor</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordVoiceEngineSpec.html">DiscordVoiceEngineSpec</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordVoiceEngineSpec.html">DiscordVoiceEngineSpec</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordVoiceManagerDelegate.html">DiscordVoiceManagerDelegate</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordVoiceManagerDelegate.html">DiscordVoiceManagerDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/DiscordWebSocketable.html">DiscordWebSocketable</a>
+                <a class="nav-group-task-link" href="../Protocols/DiscordWebSocketable.html">DiscordWebSocketable</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Structs.html">Structs</a>
+            <a class="nav-group-name-link" href="../Structs.html">Structs</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Structs/DiscordAttachment.html">DiscordAttachment</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordAttachment.html">DiscordAttachment</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordBan.html">DiscordBan</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordAuditLogChange.html">DiscordAuditLogChange</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordDMChannel.html">DiscordDMChannel</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordAuditLogEntry.html">DiscordAuditLogEntry</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordEmbed.html">DiscordEmbed</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordBan.html">DiscordBan</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordEmbed/Author.html">– Author</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordDMChannel.html">DiscordDMChannel</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordEmbed/Field.html">– Field</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordEmbed.html">DiscordEmbed</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordEmbed/Footer.html">– Footer</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordEmbed/Author.html">– Author</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordEmbed/Image.html">– Image</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordEmbed/Field.html">– Field</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordEmbed/Provider.html">– Provider</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordEmbed/Footer.html">– Footer</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordEmbed/Thumbnail.html">– Thumbnail</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordEmbed/Image.html">– Image</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordEmoji.html">DiscordEmoji</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordEmbed/Provider.html">– Provider</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordFileUpload.html">DiscordFileUpload</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordEmbed/Thumbnail.html">– Thumbnail</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordGame.html">DiscordGame</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordEmoji.html">DiscordEmoji</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordFileUpload.html">DiscordFileUpload</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordGroupDMChannel.html">DiscordGroupDMChannel</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordGame.html">DiscordGame</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordGuildTextChannel.html">DiscordGuildTextChannel</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordGroupDMChannel.html">DiscordGroupDMChannel</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordGuildVoiceChannel.html">DiscordGuildVoiceChannel</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordInvite.html">DiscordInvite</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordGuildTextChannel.html">DiscordGuildTextChannel</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordInviteChannel.html">DiscordInviteChannel</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordGuildVoiceChannel.html">DiscordGuildVoiceChannel</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordInviteGuild.html">DiscordInviteGuild</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordInvite.html">DiscordInvite</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordInviteChannel.html">DiscordInviteChannel</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordLazyDictionaryIndex.html">DiscordLazyDictionaryIndex</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordInviteGuild.html">DiscordInviteGuild</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordMessage.html">DiscordMessage</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordPermission.html">DiscordPermission</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordLazyDictionaryIndex.html">DiscordLazyDictionaryIndex</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordMessage.html">DiscordMessage</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordPresence.html">DiscordPresence</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordPermission.html">DiscordPermission</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordPresenceUpdate.html">DiscordPresenceUpdate</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordRateLimitKey.html">DiscordRateLimitKey</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordPresence.html">DiscordPresence</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordReaction.html">DiscordReaction</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordPresenceUpdate.html">DiscordPresenceUpdate</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordRole.html">DiscordRole</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordRateLimitKey.html">DiscordRateLimitKey</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordShardInformation.html">DiscordShardInformation</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordRateLimitKey/DiscordRateLimitURLParts.html">– DiscordRateLimitURLParts</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordToken.html">DiscordToken</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordReaction.html">DiscordReaction</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordUser.html">DiscordUser</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordRole.html">DiscordRole</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordUserGuild.html">DiscordUserGuild</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordShardInformation.html">DiscordShardInformation</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordVoiceData.html">DiscordVoiceData</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordToken.html">DiscordToken</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordUser.html">DiscordUser</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordUserGuild.html">DiscordUserGuild</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/DiscordWebhook.html">DiscordWebhook</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordVoiceData.html">DiscordVoiceData</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/Snowflake.html">Snowflake</a>
+                <a class="nav-group-task-link" href="../Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DiscordWebhook.html">DiscordWebhook</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Snowflake.html">Snowflake</a>
               </li>
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Typealiases.html">Typealiases</a>
+            <a class="nav-group-name-link" href="../Typealiases.html">Typealiases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:12SwiftDiscord12AttachmentID">AttachmentID</a>
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord12AttachmentID">AttachmentID</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:12SwiftDiscord9ChannelID">ChannelID</a>
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord9ChannelID">ChannelID</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:12SwiftDiscord7EmojiID">EmojiID</a>
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord7EmojiID">EmojiID</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a>
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:12SwiftDiscord13IntegrationID">IntegrationID</a>
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord13IntegrationID">IntegrationID</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:12SwiftDiscord9MessageID">MessageID</a>
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord9MessageID">MessageID</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:12SwiftDiscord11OverwriteID">OverwriteID</a>
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord11OverwriteID">OverwriteID</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:12SwiftDiscord6RoleID">RoleID</a>
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord6RoleID">RoleID</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:12SwiftDiscord6UserID">UserID</a>
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord6UserID">UserID</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:12SwiftDiscord9WebhookID">WebhookID</a>
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord9WebhookID">WebhookID</a>
               </li>
             </ul>
           </li>
         </ul>
       </nav>
       <article class="main-content">
-        <section>
-          <section class="section">
+
+        <section class="section">
+          <div class="section-content">
             <h1>DiscordEndpointConsumer</h1>
               <div class="declaration">
                 <div class="language">
@@ -389,8 +425,11 @@ All requests through from a consumer should be rate limited.</p>
 <p><strong>NOTE</strong>: Callbacks from the default implementations are <em>NOT</em> executed on the client&rsquo;s handleQueue. So it is important
 that if you make modifications to the client inside of a callback, you first dispatch back on the handleQueue.</p>
 
-          </section>
-          <section class="section task-group-section">
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
             <div class="task-group">
               <div class="task-name-container">
                 <a name="/Properties"></a>
@@ -399,7 +438,7 @@ that if you make modifications to the client inside of a callback, you first dis
                   <h3 class="section-name">Properties</h3>
                 </a>
               </div>
-              <ul>
+              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
@@ -437,7 +476,7 @@ that if you make modifications to the client inside of a callback, you first dis
                   <h3 class="section-name">Channels</h3>
                 </a>
               </div>
-              <ul>
+              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
@@ -597,9 +636,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer12createInviteFT3forVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options12CreateInvite_8callbackFGSqVS_13DiscordInvite_T__T_"></a>
-                    <a name="//apple_ref/swift/Method/createInvite(for:options:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer12createInviteFT3forVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options12CreateInvite_8callbackFGSqVS_13DiscordInvite_T__T_">createInvite(for:options:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer12createInviteFT3forVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options12CreateInvite_6reasonGSqSS_8callbackFGSqVS_13DiscordInvite_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/createInvite(for:options:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer12createInviteFT3forVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options12CreateInvite_6reasonGSqSS_8callbackFGSqVS_13DiscordInvite_T__T_">createInvite(for:options:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -622,7 +661,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">createInvite</span><span class="p">(</span><span class="k">for</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelID">ChannelID</a></span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a></span><span class="o">.</span><span class="kt">Options</span><span class="o">.</span><span class="kt">CreateInvite</span><span class="p">],</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">createInvite</span><span class="p">(</span><span class="k">for</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelID">ChannelID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -638,7 +677,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The channel that we are creating for</p>
+                                  <p>The channel that we are creating for.</p>
                                 </div>
                               </td>
                             </tr>
@@ -650,7 +689,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>An array of <code>DiscordEndpointOptions.CreateInvite</code> options</p>
+                                  <p>An array of <code>DiscordEndpointOptions.CreateInvite</code> options.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this invite was created.</p>
                                 </div>
                               </td>
                             </tr>
@@ -675,9 +726,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteChannelFTVS_9Snowflake8callbackGSqFSbT___T_"></a>
-                    <a name="//apple_ref/swift/Method/deleteChannel(_:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteChannelFTVS_9Snowflake8callbackGSqFSbT___T_">deleteChannel(_:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteChannelFTVS_9Snowflake6reasonGSqSS_8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteChannel(_:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteChannelFTVS_9Snowflake6reasonGSqSS_8callbackGSqFSbT___T_">deleteChannel(_:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -700,7 +751,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelID">ChannelID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelID">ChannelID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -716,7 +767,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The snowflake id of the channel</p>
+                                  <p>The snowflake id of the channel.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this channel is being deleted.</p>
                                 </div>
                               </td>
                             </tr>
@@ -741,9 +804,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer23deleteChannelPermissionFTVS_9Snowflake2onS1_8callbackGSqFSbT___T_"></a>
-                    <a name="//apple_ref/swift/Method/deleteChannelPermission(_:on:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer23deleteChannelPermissionFTVS_9Snowflake2onS1_8callbackGSqFSbT___T_">deleteChannelPermission(_:on:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer23deleteChannelPermissionFTVS_9Snowflake2onS1_6reasonGSqSS_8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteChannelPermission(_:on:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer23deleteChannelPermissionFTVS_9Snowflake2onS1_6reasonGSqSS_8callbackGSqFSbT___T_">deleteChannelPermission(_:on:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -766,7 +829,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteChannelPermission</span><span class="p">(</span><span class="n">_</span> <span class="nv">overwriteId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord11OverwriteID">OverwriteID</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelID">ChannelID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteChannelPermission</span><span class="p">(</span><span class="n">_</span> <span class="nv">overwriteId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord11OverwriteID">OverwriteID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -782,7 +845,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The permission overwrite that is to be deleted&rsquo;s snowflake id</p>
+                                  <p>The permission overwrite that is to be deleted&rsquo;s snowflake id.</p>
                                 </div>
                               </td>
                             </tr>
@@ -794,7 +857,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The channel that we are deleting on</p>
+                                  <p>The channel that we are deleting on.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this overwrite was deleted.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1131,9 +1206,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer21editChannelPermissionFTVS_26DiscordPermissionOverwrite2onVS_9Snowflake8callbackGSqFSbT___T_"></a>
-                    <a name="//apple_ref/swift/Method/editChannelPermission(_:on:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer21editChannelPermissionFTVS_26DiscordPermissionOverwrite2onVS_9Snowflake8callbackGSqFSbT___T_">editChannelPermission(_:on:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer21editChannelPermissionFTVS_26DiscordPermissionOverwrite2onVS_9Snowflake6reasonGSqSS_8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/editChannelPermission(_:on:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer21editChannelPermissionFTVS_26DiscordPermissionOverwrite2onVS_9Snowflake6reasonGSqSS_8callbackGSqFSbT___T_">editChannelPermission(_:on:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -1156,7 +1231,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">editChannelPermission</span><span class="p">(</span><span class="n">_</span> <span class="nv">permissionOverwrite</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelID">ChannelID</a></span><span class="p">,</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">editChannelPermission</span><span class="p">(</span><span class="n">_</span> <span class="nv">permissionOverwrite</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -1172,7 +1247,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The new DiscordPermissionOverwrite</p>
+                                  <p>The new DiscordPermissionOverwrite.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1184,7 +1259,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The channel that we are editing on</p>
+                                  <p>The channel that we are editing on.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this edit was made.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1353,9 +1440,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13modifyChannelFTVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options13ModifyChannel_8callbackGSqFGSqPS_19DiscordGuildChannel__T___T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyChannel(_:options:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13modifyChannelFTVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options13ModifyChannel_8callbackGSqFGSqPS_19DiscordGuildChannel__T___T_">modifyChannel(_:options:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13modifyChannelFTVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options13ModifyChannel_6reasonGSqSS_8callbackGSqFGSqPS_19DiscordGuildChannel__T___T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyChannel(_:options:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13modifyChannelFTVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options13ModifyChannel_6reasonGSqSS_8callbackGSqFGSqPS_19DiscordGuildChannel__T___T_">modifyChannel(_:options:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -1378,7 +1465,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelID">ChannelID</a></span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a></span><span class="o">.</span><span class="kt">Options</span><span class="o">.</span><span class="kt">ModifyChannel</span><span class="p">],</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelID">ChannelID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -1394,7 +1481,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The snowflake id of the channel</p>
+                                  <p>The snowflake id of the channel.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1406,7 +1493,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>An array of <code>DiscordEndpointOptions.ModifyChannel</code> options</p>
+                                  <p>An array of <code>DiscordEndpointOptions.ModifyChannel</code> options.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this modification is being made.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1663,13 +1762,13 @@ that if you make modifications to the client inside of a callback, you first dis
                   <h3 class="section-name">Guilds</h3>
                 </a>
               </div>
-              <ul>
+              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer18addGuildMemberRoleFTVS_9Snowflake2toS1_2onS1_8callbackGSqFSbT___T_"></a>
-                    <a name="//apple_ref/swift/Method/addGuildMemberRole(_:to:on:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer18addGuildMemberRoleFTVS_9Snowflake2toS1_2onS1_8callbackGSqFSbT___T_">addGuildMemberRole(_:to:on:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer18addGuildMemberRoleFTVS_9Snowflake2toS1_2onS1_6reasonGSqSS_8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/addGuildMemberRole(_:to:on:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer18addGuildMemberRoleFTVS_9Snowflake2toS1_2onS1_6reasonGSqSS_8callbackGSqFSbT___T_">addGuildMemberRole(_:to:on:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -1692,7 +1791,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">addGuildMemberRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6RoleID">RoleID</a></span><span class="p">,</span> <span class="n">to</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6UserID">UserID</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">addGuildMemberRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6RoleID">RoleID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -1739,12 +1838,12 @@ that if you make modifications to the client inside of a callback, you first dis
                             <tr>
                               <td>
                                 <code>
-                                <em>with</em>
+                                <em>reason</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The token to authenticate to Discord with.</p>
+                                  <p>The reason this member is getting this role.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1769,9 +1868,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer18createGuildChannelFT2onVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options18GuildCreateChannel_8callbackGSqFGSqPS_19DiscordGuildChannel__T___T_"></a>
-                    <a name="//apple_ref/swift/Method/createGuildChannel(on:options:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer18createGuildChannelFT2onVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options18GuildCreateChannel_8callbackGSqFGSqPS_19DiscordGuildChannel__T___T_">createGuildChannel(on:options:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer18createGuildChannelFT2onVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options18GuildCreateChannel_6reasonGSqSS_8callbackGSqFGSqPS_19DiscordGuildChannel__T___T_"></a>
+                    <a name="//apple_ref/swift/Method/createGuildChannel(on:options:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer18createGuildChannelFT2onVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options18GuildCreateChannel_6reasonGSqSS_8callbackGSqFGSqPS_19DiscordGuildChannel__T___T_">createGuildChannel(on:options:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -1794,7 +1893,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">createGuildChannel</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a></span><span class="o">.</span><span class="kt">Options</span><span class="o">.</span><span class="kt">GuildCreateChannel</span><span class="p">],</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">createGuildChannel</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -1810,7 +1909,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The snowflake id of the guild</p>
+                                  <p>The snowflake id of the guild.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1822,7 +1921,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>An array of <code>DiscordEndpointOptions.GuildCreateChannel</code> options</p>
+                                  <p>An array of <code>DiscordEndpointOptions.GuildCreateChannel</code> options.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this channel is being created.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1847,9 +1958,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer15createGuildRoleFT2onVS_9Snowflake11withOptionsGSaOVOS_15DiscordEndpoint7Options10CreateRole_8callbackFGSqVS_11DiscordRole_T__T_"></a>
-                    <a name="//apple_ref/swift/Method/createGuildRole(on:withOptions:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer15createGuildRoleFT2onVS_9Snowflake11withOptionsGSaOVOS_15DiscordEndpoint7Options10CreateRole_8callbackFGSqVS_11DiscordRole_T__T_">createGuildRole(on:withOptions:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer15createGuildRoleFT2onVS_9Snowflake11withOptionsGSaOVOS_15DiscordEndpoint7Options10CreateRole_6reasonGSqSS_8callbackFGSqVS_11DiscordRole_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/createGuildRole(on:withOptions:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer15createGuildRoleFT2onVS_9Snowflake11withOptionsGSaOVOS_15DiscordEndpoint7Options10CreateRole_6reasonGSqSS_8callbackFGSqVS_11DiscordRole_T__T_">createGuildRole(on:withOptions:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -1872,7 +1983,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">createGuildRole</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span> <span class="n">withOptions</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a></span><span class="o">.</span><span class="kt">Options</span><span class="o">.</span><span class="kt">CreateRole</span><span class="p">],</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">createGuildRole</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -1901,6 +2012,18 @@ that if you make modifications to the client inside of a callback, you first dis
                               <td>
                                 <div>
                                   <p>The options for the new role. Optional in the default implementation.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this role is being created.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1979,6 +2102,84 @@ that if you make modifications to the client inside of a callback, you first dis
                               <td>
                                 <div>
                                   <p>An optional callback containing the deleted guild, if successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer16getGuildAuditLogFT3forVS_9Snowflake11withOptionsGSaOVOS_15DiscordEndpoint7Options8AuditLog_8callbackFGSqCS_15DiscordAuditLog_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/getGuildAuditLog(for:withOptions:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer16getGuildAuditLogFT3forVS_9Snowflake11withOptionsGSaOVOS_15DiscordEndpoint7Options8AuditLog_8callbackFGSqCS_15DiscordAuditLog_T__T_">getGuildAuditLog(for:withOptions:callback:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Gets a guild&rsquo;s audit log.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Default implementation.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getGuildAuditLog</span><span class="p">(</span><span class="k">for</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span> <span class="n">withOptions</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a></span><span class="o">.</span><span class="kt">Options</span><span class="o">.</span><span class="kt">AuditLog</span><span class="p">],</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>guildId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Options for getting the audit log.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A callback with the audit log.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2345,9 +2546,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer8guildBanFT6userIdVS_9Snowflake2onS1_17deleteMessageDaysSi8callbackGSqFSbT___T_"></a>
-                    <a name="//apple_ref/swift/Method/guildBan(userId:on:deleteMessageDays:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer8guildBanFT6userIdVS_9Snowflake2onS1_17deleteMessageDaysSi8callbackGSqFSbT___T_">guildBan(userId:on:deleteMessageDays:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer8guildBanFT6userIdVS_9Snowflake2onS1_17deleteMessageDaysSi6reasonGSqSS_8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/guildBan(userId:on:deleteMessageDays:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer8guildBanFT6userIdVS_9Snowflake2onS1_17deleteMessageDaysSi6reasonGSqSS_8callbackGSqFSbT___T_">guildBan(userId:on:deleteMessageDays:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -2370,7 +2571,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">guildBan</span><span class="p">(</span><span class="nv">userId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6UserID">UserID</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span> <span class="nv">deleteMessageDays</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">guildBan</span><span class="p">(</span><span class="nv">userId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6UserID">UserID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -2386,7 +2587,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The snowflake id of the user</p>
+                                  <p>The snowflake id of the user.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2398,7 +2599,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The snowflake id of the guild</p>
+                                  <p>The snowflake id of the guild.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2410,7 +2611,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The number of days to delete this user&rsquo;s messages</p>
+                                  <p>The number of days to delete this user&rsquo;s messages.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for this ban.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2435,9 +2648,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11modifyGuildFTVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options11ModifyGuild_8callbackGSqFGSqCS_12DiscordGuild_T___T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyGuild(_:options:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11modifyGuildFTVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options11ModifyGuild_8callbackGSqFGSqCS_12DiscordGuild_T___T_">modifyGuild(_:options:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer11modifyGuildFTVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options11ModifyGuild_6reasonGSqSS_8callbackGSqFGSqCS_12DiscordGuild_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuild(_:options:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer11modifyGuildFTVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options11ModifyGuild_6reasonGSqSS_8callbackGSqFGSqCS_12DiscordGuild_T___T_">modifyGuild(_:options:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -2460,7 +2673,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuild</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a></span><span class="o">.</span><span class="kt">Options</span><span class="o">.</span><span class="kt">ModifyGuild</span><span class="p">],</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuild</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -2476,7 +2689,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The snowflake id of the guild</p>
+                                  <p>The snowflake id of the guild.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2488,7 +2701,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>An array of <code>DiscordEndpointOptions.ModifyGuild</code> options</p>
+                                  <p>An array of <code>DiscordEndpointOptions.ModifyGuild</code> options.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for this modification.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2538,7 +2763,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuildChannelPositions</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span> <span class="nv">channelPositions</span><span class="p">:</span> <span class="p">[[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]],</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuildChannelPositions</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -2592,9 +2817,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer17modifyGuildMemberFTVS_9Snowflake2onS1_7optionsGSaOVOS_15DiscordEndpoint7Options12ModifyMember_8callbackGSqFSbT___T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyGuildMember(_:on:options:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer17modifyGuildMemberFTVS_9Snowflake2onS1_7optionsGSaOVOS_15DiscordEndpoint7Options12ModifyMember_8callbackGSqFSbT___T_">modifyGuildMember(_:on:options:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer17modifyGuildMemberFTVS_9Snowflake2onS1_7optionsGSaOVOS_15DiscordEndpoint7Options12ModifyMember_6reasonGSqSS_8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuildMember(_:on:options:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer17modifyGuildMemberFTVS_9Snowflake2onS1_7optionsGSaOVOS_15DiscordEndpoint7Options12ModifyMember_6reasonGSqSS_8callbackGSqFSbT___T_">modifyGuildMember(_:on:options:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -2617,7 +2842,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuildMember</span><span class="p">(</span><span class="n">_</span> <span class="nv">id</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6UserID">UserID</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a></span><span class="o">.</span><span class="kt">Options</span><span class="o">.</span><span class="kt">ModifyMember</span><span class="p">],</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuildMember</span><span class="p">(</span><span class="n">_</span> <span class="nv">id</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6UserID">UserID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -2664,6 +2889,18 @@ that if you make modifications to the client inside of a callback, you first dis
                             <tr>
                               <td>
                                 <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for this change.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
                                 <em>callback</em>
                                 </code>
                               </td>
@@ -2682,9 +2919,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer15modifyGuildRoleFTVS_11DiscordRole2onVS_9Snowflake8callbackGSqFGSqS1__T___T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyGuildRole(_:on:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer15modifyGuildRoleFTVS_11DiscordRole2onVS_9Snowflake8callbackGSqFGSqS1__T___T_">modifyGuildRole(_:on:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer15modifyGuildRoleFTVS_11DiscordRole2onVS_9Snowflake6reasonGSqSS_8callbackGSqFGSqS1__T___T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyGuildRole(_:on:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer15modifyGuildRoleFTVS_11DiscordRole2onVS_9Snowflake6reasonGSqSS_8callbackGSqFGSqS1__T___T_">modifyGuildRole(_:on:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -2707,7 +2944,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">role</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">role</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -2723,7 +2960,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The new DiscordRole</p>
+                                  <p>The new DiscordRole.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2735,7 +2972,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The guild that we are editing on</p>
+                                  <p>The guild that we are editing on.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for this edit.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2760,9 +3009,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer14removeGuildBanFT3forVS_9Snowflake2onS1_8callbackGSqFSbT___T_"></a>
-                    <a name="//apple_ref/swift/Method/removeGuildBan(for:on:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer14removeGuildBanFT3forVS_9Snowflake2onS1_8callbackGSqFSbT___T_">removeGuildBan(for:on:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer14removeGuildBanFT3forVS_9Snowflake2onS1_6reasonGSqSS_8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/removeGuildBan(for:on:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer14removeGuildBanFT3forVS_9Snowflake2onS1_6reasonGSqSS_8callbackGSqFSbT___T_">removeGuildBan(for:on:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -2785,7 +3034,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">removeGuildBan</span><span class="p">(</span><span class="k">for</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6UserID">UserID</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">removeGuildBan</span><span class="p">(</span><span class="k">for</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6UserID">UserID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -2801,7 +3050,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The snowflake id of the user</p>
+                                  <p>The snowflake id of the user.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2813,7 +3062,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The snowflake id of the guild</p>
+                                  <p>The snowflake id of the guild.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for this unban.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2838,9 +3099,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer21removeGuildMemberRoleFTVS_9Snowflake4fromS1_2onS1_8callbackGSqFSbT___T_"></a>
-                    <a name="//apple_ref/swift/Method/removeGuildMemberRole(_:from:on:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer21removeGuildMemberRoleFTVS_9Snowflake4fromS1_2onS1_8callbackGSqFSbT___T_">removeGuildMemberRole(_:from:on:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer21removeGuildMemberRoleFTVS_9Snowflake4fromS1_2onS1_6reasonGSqSS_8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/removeGuildMemberRole(_:from:on:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer21removeGuildMemberRoleFTVS_9Snowflake4fromS1_2onS1_6reasonGSqSS_8callbackGSqFSbT___T_">removeGuildMemberRole(_:from:on:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -2863,7 +3124,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">removeGuildMemberRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6RoleID">RoleID</a></span><span class="p">,</span> <span class="n">from</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6UserID">UserID</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">removeGuildMemberRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6RoleID">RoleID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -2910,12 +3171,12 @@ that if you make modifications to the client inside of a callback, you first dis
                             <tr>
                               <td>
                                 <code>
-                                <em>with</em>
+                                <em>reason</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The token to authenticate to Discord with.</p>
+                                  <p>The reason for removing this role.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2940,9 +3201,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer15removeGuildRoleFTVS_9Snowflake2onS1_8callbackGSqFGSqVS_11DiscordRole_T___T_"></a>
-                    <a name="//apple_ref/swift/Method/removeGuildRole(_:on:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer15removeGuildRoleFTVS_9Snowflake2onS1_8callbackGSqFGSqVS_11DiscordRole_T___T_">removeGuildRole(_:on:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer15removeGuildRoleFTVS_9Snowflake2onS1_6reasonGSqSS_8callbackGSqFGSqVS_11DiscordRole_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/removeGuildRole(_:on:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer15removeGuildRoleFTVS_9Snowflake2onS1_6reasonGSqSS_8callbackGSqFGSqVS_11DiscordRole_T___T_">removeGuildRole(_:on:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -2965,7 +3226,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">removeGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6RoleID">RoleID</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildID">GuildID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">removeGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6RoleID">RoleID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -2981,7 +3242,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The snowflake id of the role</p>
+                                  <p>The snowflake id of the role.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2993,7 +3254,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The snowflake id of the guild</p>
+                                  <p>The snowflake id of the guild.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for removing this role.</p>
                                 </div>
                               </td>
                             </tr>
@@ -3025,13 +3298,13 @@ that if you make modifications to the client inside of a callback, you first dis
                   <h3 class="section-name">Webhooks</h3>
                 </a>
               </div>
-              <ul>
+              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13createWebhookFT10forChannelVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options13WebhookOption_8callbackFGSqVS_14DiscordWebhook_T__T_"></a>
-                    <a name="//apple_ref/swift/Method/createWebhook(forChannel:options:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13createWebhookFT10forChannelVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options13WebhookOption_8callbackFGSqVS_14DiscordWebhook_T__T_">createWebhook(forChannel:options:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13createWebhookFT10forChannelVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options13WebhookOption_6reasonGSqSS_8callbackFGSqVS_14DiscordWebhook_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/createWebhook(forChannel:options:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13createWebhookFT10forChannelVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options13WebhookOption_6reasonGSqSS_8callbackFGSqVS_14DiscordWebhook_T__T_">createWebhook(forChannel:options:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -3054,7 +3327,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">createWebhook</span><span class="p">(</span><span class="n">forChannel</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelID">ChannelID</a></span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a></span><span class="o">.</span><span class="kt">Options</span><span class="o">.</span><span class="kt">WebhookOption</span><span class="p">],</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">createWebhook</span><span class="p">(</span><span class="n">forChannel</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelID">ChannelID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -3070,7 +3343,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The channel to create the webhook for</p>
+                                  <p>The channel to create the webhook for.</p>
                                 </div>
                               </td>
                             </tr>
@@ -3082,7 +3355,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The options for this webhook</p>
+                                  <p>The options for this webhook.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this webhook was created.</p>
                                 </div>
                               </td>
                             </tr>
@@ -3107,9 +3392,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteWebhookFTVS_9Snowflake8callbackGSqFSbT___T_"></a>
-                    <a name="//apple_ref/swift/Method/deleteWebhook(_:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteWebhookFTVS_9Snowflake8callbackGSqFSbT___T_">deleteWebhook(_:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteWebhookFTVS_9Snowflake6reasonGSqSS_8callbackGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteWebhook(_:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13deleteWebhookFTVS_9Snowflake6reasonGSqSS_8callbackGSqFSbT___T_">deleteWebhook(_:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -3123,7 +3408,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <p>Deletes a webhook. The user must be the owner of the webhook.</p>
 
 <ul>
-<li>paramter callback: An optional callback function that indicates whether the delete was successful</li>
+<li>paramter callback: An optional callback function that indicates whether the delete was successful.</li>
 </ul>
 
                       </div>
@@ -3136,7 +3421,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9WebhookID">WebhookID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9WebhookID">WebhookID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -3152,7 +3437,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The id of the webhook</p>
+                                  <p>The id of the webhook.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for deleting this webhook.</p>
                                 </div>
                               </td>
                             </tr>
@@ -3190,7 +3487,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9WebhookID">WebhookID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordWebhook.html">DiscordWebhook</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9WebhookID">WebhookID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -3206,7 +3503,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The snowflake id of the webhook</p>
+                                  <p>The snowflake id of the webhook.</p>
                                 </div>
                               </td>
                             </tr>
@@ -3218,7 +3515,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The callback function containing an optional <code>DiscordToken</code></p>
+                                  <p>The callback function containing an optional <code>DiscordToken</code>.</p>
                                 </div>
                               </td>
                             </tr>
@@ -3363,9 +3660,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13modifyWebhookFTVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options13WebhookOption_8callbackFGSqVS_14DiscordWebhook_T__T_"></a>
-                    <a name="//apple_ref/swift/Method/modifyWebhook(_:options:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13modifyWebhookFTVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options13WebhookOption_8callbackFGSqVS_14DiscordWebhook_T__T_">modifyWebhook(_:options:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer13modifyWebhookFTVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options13WebhookOption_6reasonGSqSS_8callbackFGSqVS_14DiscordWebhook_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/modifyWebhook(_:options:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer13modifyWebhookFTVS_9Snowflake7optionsGSaOVOS_15DiscordEndpoint7Options13WebhookOption_6reasonGSqSS_8callbackFGSqVS_14DiscordWebhook_T__T_">modifyWebhook(_:options:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -3388,7 +3685,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9WebhookID">WebhookID</a></span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a></span><span class="o">.</span><span class="kt">Options</span><span class="o">.</span><span class="kt">WebhookOption</span><span class="p">],</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9WebhookID">WebhookID</a></span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -3404,7 +3701,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The webhook to modify</p>
+                                  <p>The webhook to modify.</p>
                                 </div>
                               </td>
                             </tr>
@@ -3416,7 +3713,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The options for this webhook</p>
+                                  <p>The options for this webhook.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for this modification.</p>
                                 </div>
                               </td>
                             </tr>
@@ -3448,7 +3757,7 @@ that if you make modifications to the client inside of a callback, you first dis
                   <h3 class="section-name">Invites</h3>
                 </a>
               </div>
-              <ul>
+              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
@@ -3518,9 +3827,9 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer12deleteInviteFTSS8callbackGSqFGSqVS_13DiscordInvite_T___T_"></a>
-                    <a name="//apple_ref/swift/Method/deleteInvite(_:callback:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer12deleteInviteFTSS8callbackGSqFGSqVS_13DiscordInvite_T___T_">deleteInvite(_:callback:)</a>
+                    <a name="/s:FP12SwiftDiscord23DiscordEndpointConsumer12deleteInviteFTSS6reasonGSqSS_8callbackGSqFGSqVS_13DiscordInvite_T___T_"></a>
+                    <a name="//apple_ref/swift/Method/deleteInvite(_:reason:callback:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP12SwiftDiscord23DiscordEndpointConsumer12deleteInviteFTSS6reasonGSqSS_8callbackGSqFGSqVS_13DiscordInvite_T___T_">deleteInvite(_:reason:callback:)</a>
                     </code>
                       <span class="declaration-note">
                         Default implementation
@@ -3543,7 +3852,7 @@ that if you make modifications to the client inside of a callback, you first dis
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteInvite</span><span class="p">(</span><span class="n">_</span> <span class="nv">invite</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteInvite</span><span class="p">(</span><span class="n">_</span> <span class="nv">invite</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span></code></pre>
 
                         </div>
                       </div>
@@ -3559,7 +3868,19 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>The invite code to delete</p>
+                                  <p>The invite code to delete.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this invite was deleted.</p>
                                 </div>
                               </td>
                             </tr>
@@ -3571,7 +3892,7 @@ that if you make modifications to the client inside of a callback, you first dis
                               </td>
                               <td>
                                 <div>
-                                  <p>An optional callback containing the deleted invite, if successful</p>
+                                  <p>An optional callback containing the deleted invite, if successful.</p>
                                 </div>
                               </td>
                             </tr>
@@ -3657,7 +3978,7 @@ that if you make modifications to the client inside of a callback, you first dis
                   <h3 class="section-name">Users</h3>
                 </a>
               </div>
-              <ul>
+              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
@@ -3879,7 +4200,7 @@ that if you make modifications to the client inside of a callback, you first dis
                   <h3 class="section-name">Misc</h3>
                 </a>
               </div>
-              <ul>
+              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
@@ -3936,14 +4257,15 @@ that if you make modifications to the client inside of a callback, you first dis
                 </li>
               </ul>
             </div>
-          </section>
+          </div>
         </section>
-        <section id="footer">
-          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-07-20)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
-        </section>
+
       </article>
     </div>
+    <section class="footer">
+      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-08-05)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
   </body>
 </div>
 </html>
