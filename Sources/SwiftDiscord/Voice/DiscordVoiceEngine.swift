@@ -284,8 +284,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         DefaultDiscordLogger.Logger.log("Disconnecting VoiceEngine", type: logType)
 
         closeWebSockets()
-
         closeOutEngine()
+
         voiceDelegate?.voiceEngineDidDisconnect(self)
     }
 
@@ -490,7 +490,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     // currently only xsalsa20_poly1305 is supported
     // After this point we are good to go in sending encrypted voice packets
     private func selectProtocol(with ip: String, on port: Int) {
-        // print("Selecting UDP protocol with ip: \(ip) on port: \(port)")
+        DefaultDiscordLogger.Logger.debug("Selecting UDP protocol with ip: \(ip) on port: \(port)", type: logType)
 
         let payloadData: [String: Any] = [
             "protocol": "udp",
@@ -515,6 +515,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             self.error(message: "Failed creating encoder \(err)")
             self.disconnect()
         }
+
+        DefaultDiscordLogger.Logger.debug("VoiceEngine is ready!", type: logType)
 
         readSocket()
     }
@@ -618,6 +620,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
     */
     public func setupMiddleware(_ middleware: Process, terminationHandler: (() -> ())?) {
+        DefaultDiscordLogger.Logger.debug("Setting up middleware", type: logType)
+
         encoder.middleware = DiscordEncoderMiddleware(encoder: encoder,
                                                       middleware: middleware,
                                                       terminationHandler: terminationHandler)
@@ -652,6 +656,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         let base = voiceServerInformation.endpoint.components(separatedBy: ":")[0]
         let udpEndpoint = InternetAddress(hostname: base, port: UInt16(udpPort))
+
+        DefaultDiscordLogger.Logger.debug("Starting voice UDP connection", type: logType)
 
         guard let client = try? UDPInternetSocket(address: udpEndpoint) else {
             disconnect()

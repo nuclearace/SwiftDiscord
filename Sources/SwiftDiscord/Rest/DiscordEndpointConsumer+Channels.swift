@@ -22,23 +22,31 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     public func addPinnedMessage(_ messageId: MessageID, on channelId: ChannelID, callback: ((Bool) -> ())? = nil) {
         rateLimiter.executeRequest(endpoint: .pinnedMessage(channel: channelId, message: messageId),
                                    token: token,
-                                   requestInfo: .put(content: nil),
+                                   requestInfo: .put(content: nil, extraHeaders: nil),
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
     /// Default implementation
     public func bulkDeleteMessages(_ messages: [MessageID], on channelId: ChannelID, callback: ((Bool) -> ())? = nil) {
         guard let contentData = JSON.encodeJSONData(["messages": messages.map({ $0.description })]) else { return }
+
         rateLimiter.executeRequest(endpoint: .bulkMessageDelete(channel: channelId),
                                    token: token,
-                                   requestInfo: .post(content: (contentData, type: .json)),
+                                   requestInfo: .post(content: .json(contentData), extraHeaders: nil),
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
     /// Default implementation
-    public func createInvite(for channelId: ChannelID, options: [DiscordEndpoint.Options.CreateInvite],
+    public func createInvite(for channelId: ChannelID,
+                             options: [DiscordEndpoint.Options.CreateInvite],
+                             reason: String? = nil,
                              callback: @escaping (DiscordInvite?) -> ()) {
         var inviteJSON: [String: Any] = [:]
+        var extraHeaders = [DiscordHeader: String]()
+
+        if let modifyReason = reason {
+            extraHeaders[.auditReason] = modifyReason
+        }
 
         for option in options {
             switch option {
@@ -61,28 +69,46 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
                 return
             }
+
             callback(DiscordInvite(inviteObject: invite))
         }
 
         rateLimiter.executeRequest(endpoint: .channelInvites(channel: channelId),
                                    token: token,
-                                   requestInfo: .post(content: (contentData, type: .json)),
+                                   requestInfo: .post(content: .json(contentData), extraHeaders: extraHeaders),
                                    callback: requestCallback)
     }
 
     /// Default implementation
-    public func deleteChannel(_ channelId: ChannelID, callback: ((Bool) -> ())? = nil) {
+    public func deleteChannel(_ channelId: ChannelID,
+                              reason: String? = nil,
+                              callback: ((Bool) -> ())? = nil) {
+        var extraHeaders = [DiscordHeader: String]()
+
+        if let modifyReason = reason {
+            extraHeaders[.auditReason] = modifyReason
+        }
+
         rateLimiter.executeRequest(endpoint: .channel(id: channelId),
                                    token: token,
-                                   requestInfo: .delete,
+                                   requestInfo: .delete(content: nil, extraHeaders: extraHeaders),
                                    callback: { _, response, _ in callback?(response?.statusCode == 200) })
     }
 
     /// Default implementation
-    public func deleteChannelPermission(_ overwriteId: OverwriteID, on channelId: ChannelID, callback: ((Bool) -> ())? = nil) {
+    public func deleteChannelPermission(_ overwriteId: OverwriteID,
+                                        on channelId: ChannelID,
+                                        reason: String? = nil,
+                                        callback: ((Bool) -> ())? = nil) {
+        var extraHeaders = [DiscordHeader: String]()
+
+        if let modifyReason = reason {
+            extraHeaders[.auditReason] = modifyReason
+        }
+
         rateLimiter.executeRequest(endpoint: .channelPermission(channel: channelId, overwrite: overwriteId),
                                    token: token,
-                                   requestInfo: .delete,
+                                   requestInfo: .delete(content: nil, extraHeaders: extraHeaders),
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
@@ -90,7 +116,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     public func deleteMessage(_ messageId: MessageID, on channelId: ChannelID, callback: ((Bool) -> ())? = nil) {
         rateLimiter.executeRequest(endpoint: .channelMessageDelete(channel: channelId, message: messageId),
                                    token: token,
-                                   requestInfo: .delete,
+                                   requestInfo: .delete(content: nil, extraHeaders: nil),
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
@@ -98,18 +124,26 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     public func deletePinnedMessage(_ messageId: MessageID, on channelId: ChannelID, callback: ((Bool) -> ())? = nil) {
         rateLimiter.executeRequest(endpoint: .pinnedMessage(channel: channelId, message: messageId),
                                    token: token,
-                                   requestInfo: .delete,
+                                   requestInfo: .delete(content: nil, extraHeaders: nil),
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
     /// Default implementation
-    public func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite, on channelId: ChannelID,
+    public func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite,
+                                      on channelId: ChannelID,
+                                      reason: String? = nil,
                                       callback: ((Bool) -> ())? = nil) {
+        var extraHeaders = [DiscordHeader: String]()
+
+        if let modifyReason = reason {
+            extraHeaders[.auditReason] = modifyReason
+        }
+
         guard let contentData = JSON.encodeJSONData(permissionOverwrite.json) else { return }
 
         rateLimiter.executeRequest(endpoint: .channelPermission(channel: channelId, overwrite: permissionOverwrite.id),
                                    token: token,
-                                   requestInfo: .put(content: (contentData, type: .json)),
+                                   requestInfo: .put(content: .json(contentData), extraHeaders: extraHeaders),
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
@@ -121,12 +155,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 callback([])
                 return
             }
+
             callback(DiscordInvite.invitesFromArray(inviteArray: invites as! [[String: Any]]))
         }
 
         rateLimiter.executeRequest(endpoint: .channelInvites(channel: channelId),
                                    token: token,
-                                   requestInfo: .get(params: nil),
+                                   requestInfo: .get(params: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
 
@@ -140,11 +175,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 callback?(nil)
                 return
             }
+
             callback?(DiscordMessage(messageObject: message, client: nil))
         }
+
         rateLimiter.executeRequest(endpoint: .channelMessage(channel: channelId, message: messageId),
                                    token: token,
-                                   requestInfo: .patch(content: (contentData, type: .json)),
+                                   requestInfo: .patch(content: .json(contentData), extraHeaders: nil),
                                    callback: requestCallback)
     }
 
@@ -155,11 +192,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 callback(nil)
                 return
             }
+
             callback(channelFromObject(channel, withClient: nil))
         }
+
         rateLimiter.executeRequest(endpoint: .channel(id: channelId),
                                    token: token,
-                                   requestInfo: .get(params: nil),
+                                   requestInfo: .get(params: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
 
@@ -186,11 +225,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 callback([])
                 return
             }
+
             callback(DiscordMessage.messagesFromArray(messages as! [[String: Any]]))
         }
+
         rateLimiter.executeRequest(endpoint: .messages(channel: channelId),
                                    token: token,
-                                   requestInfo: .get(params: getParams),
+                                   requestInfo: .get(params: getParams, extraHeaders: nil),
                                    callback: requestCallback)
     }
 
@@ -201,18 +242,27 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 callback([])
                 return
             }
+
             callback(DiscordMessage.messagesFromArray(messages as! [[String: Any]]))
         }
+
         rateLimiter.executeRequest(endpoint: .pins(channel: channelId),
                                    token: token,
-                                   requestInfo: .get(params: nil),
+                                   requestInfo: .get(params: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
 
     /// Default implementation
-    public func modifyChannel(_ channelId: ChannelID, options: [DiscordEndpoint.Options.ModifyChannel],
+    public func modifyChannel(_ channelId: ChannelID,
+                              options: [DiscordEndpoint.Options.ModifyChannel],
+                              reason: String? = nil,
                               callback: ((DiscordGuildChannel?) -> ())? = nil) {
         var modifyJSON: [String: Any] = [:]
+        var extraHeaders = [DiscordHeader: String]()
+
+        if let modifyReason = reason {
+            extraHeaders[.auditReason] = modifyReason
+        }
 
         for option in options {
             switch option {
@@ -234,13 +284,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         let requestCallback: DiscordRequestCallback = {data, response, error in
             guard case let .object(channel)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback?(nil)
+
                 return
             }
-            callback?(guildChannelFromObject(channel))
+
+            callback?(guildChannelFromObject(channel, guildID: nil))
         }
+
         rateLimiter.executeRequest(endpoint: .channel(id: channelId),
                                    token: token,
-                                   requestInfo: .patch(content: (contentData, type: .json)),
+                                   requestInfo: .patch(content: .json(contentData), extraHeaders: extraHeaders),
                                    callback: requestCallback)
     }
 
@@ -248,22 +301,28 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     public func sendMessage(_ message: DiscordMessage, to channelId: ChannelID,
                             callback: ((DiscordMessage?) -> ())? = nil) {
         let requestInfo: DiscordEndpoint.EndpointRequest
+
         switch message.createDataForSending() {
         case let .left(data):
-            requestInfo = .post(content: (data, type: .json))
+            requestInfo = .post(content: .json(data), extraHeaders: nil)
         case let .right((boundary, body)):
-            requestInfo = .post(content: (body, type: .other("multipart/form-data; boundary=\(boundary)")))
+            requestInfo = .post(content: .other(type: "multipart/form-data; boundary=\(boundary)", body: body),
+                                extraHeaders: nil)
         }
+
         DefaultDiscordLogger.Logger.log("Sending message to: \(channelId)", type: "DiscordEndpointChannels")
         DefaultDiscordLogger.Logger.verbose("Message: \(message)", type: "DiscordEndpointChannels")
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(message)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback?(nil)
+
                 return
             }
+
             callback?(DiscordMessage(messageObject: message, client: nil))
         }
+
         rateLimiter.executeRequest(endpoint: .messages(channel: channelId),
                                    token: token,
                                    requestInfo: requestInfo,
@@ -274,7 +333,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     public func triggerTyping(on channelId: ChannelID, callback: ((Bool) -> ())? = nil) {
         rateLimiter.executeRequest(endpoint: .typing(channel: channelId),
                                    token: token,
-                                   requestInfo: .post(content: nil),
+                                   requestInfo: .post(content: nil, extraHeaders: nil),
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 }

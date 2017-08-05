@@ -96,7 +96,8 @@ public struct DiscordGuildMember {
         self.guild = guild
     }
 
-    init(guildId: GuildID, user: DiscordUser, deaf: Bool, mute: Bool, nick: String?, roles: [RoleID], joinedAt: Date, guild: DiscordGuild? = nil) {
+    init(guildId: GuildID, user: DiscordUser, deaf: Bool, mute: Bool, nick: String?, roles: [RoleID], joinedAt: Date,
+         guild: DiscordGuild? = nil) {
         self.user = user
         self._deaf = deaf
         self._mute = mute
@@ -108,8 +109,7 @@ public struct DiscordGuildMember {
     }
 
     static func guildMembersFromArray(_ guildMembersArray: [[String: Any]], withGuildId guildId: GuildID,
-                                      guild: DiscordGuild?)
-            -> DiscordLazyDictionary<UserID, DiscordGuildMember> {
+                                      guild: DiscordGuild?) -> DiscordLazyDictionary<UserID, DiscordGuildMember> {
         var guildMembers = DiscordLazyDictionary<UserID, DiscordGuildMember>()
 
         for guildMember in guildMembersArray {

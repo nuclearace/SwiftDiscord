@@ -25,13 +25,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(channel)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
+
                 return
             }
+
             callback(DiscordDMChannel(dmObject: channel))
         }
+
         rateLimiter.executeRequest(endpoint: .userChannels,
                                    token: token,
-                                   requestInfo: .post(content: (contentData, type: .json)),
+                                   requestInfo: .post(content: .json(contentData), extraHeaders: nil),
                                    callback: requestCallback)
     }
 
@@ -43,12 +46,14 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
                 return
             }
+
             DefaultDiscordLogger.Logger.debug("Got DMChannels: \(channels)", type: "DiscordEndpointUser")
             callback(DiscordDMChannel.DMsfromArray(channels as! [[String: Any]]))
         }
+
         rateLimiter.executeRequest(endpoint: .userChannels,
                                    token: token,
-                                   requestInfo: .get(params: nil),
+                                   requestInfo: .get(params: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
 
@@ -63,9 +68,10 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
             callback(DiscordUserGuild.userGuildsFromArray(guilds as! [[String: Any]]))
         }
+
         rateLimiter.executeRequest(endpoint: .userGuilds,
                                    token: token,
-                                   requestInfo: .get(params: nil),
+                                   requestInfo: .get(params: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
 }

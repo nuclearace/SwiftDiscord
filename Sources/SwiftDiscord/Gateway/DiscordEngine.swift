@@ -163,7 +163,6 @@ open class DiscordEngine : DiscordEngineSpec {
         let closeReason = DiscordGatewayCloseReason(error: reason) ?? .unknown
 
         connected = false
-        heartbeatQueue.sync { self.pongsMissed = 0 }
 
         DefaultDiscordLogger.Logger.log("Disconnected, shard: \(shardNum)", type: logType)
 
@@ -266,6 +265,7 @@ open class DiscordEngine : DiscordEngineSpec {
             fatalError("Got bad heartbeat interval")
         }
 
+        heartbeatQueue.sync { self.pongsMissed = 0 }
         connected = true
 
         startHeartbeat(seconds: milliseconds / 1000)
@@ -278,6 +278,7 @@ open class DiscordEngine : DiscordEngineSpec {
     open func handleResumed(_ payload: DiscordGatewayPayload) {
         DefaultDiscordLogger.Logger.log("Resumed gateway session on shard: \(shardNum)", type: logType)
 
+        heartbeatQueue.sync { self.pongsMissed = 0 }
         resuming = false
 
         sendHeartbeat()
@@ -306,7 +307,7 @@ open class DiscordEngine : DiscordEngineSpec {
     */
     open func resumeGateway() {
         guard !resuming && !closed else {
-            DefaultDiscordLogger.Logger.debug("Already trying to resume or closed, ignoring", type: logType)
+            DefaultDiscordLogger.Logger.log("Already trying to resume or closed, ignoring", type: logType)
 
             return
         }
@@ -323,10 +324,9 @@ open class DiscordEngine : DiscordEngineSpec {
             guard let this = self, this.resuming else { return }
 
             DefaultDiscordLogger.Logger.debug("Calling engine connect for gateway resume with wait: \(wait)",
-                type: this.logType)
+                                              type: this.logType)
 
             this.connect()
-
             this._resumeGateway(wait: 10)
         }
     }
@@ -338,7 +338,8 @@ open class DiscordEngine : DiscordEngineSpec {
     */
     open func sendHeartbeat() {
         guard connected else {
-            DefaultDiscordLogger.Logger.debug("Tried heartbeating on disconnected shard, shard: \(shardNum)", type: logType)
+            DefaultDiscordLogger.Logger.error("Tried heartbeating on disconnected shard, shard: \(shardNum)",
+                                              type: logType)
 
             return
         }
@@ -347,7 +348,7 @@ open class DiscordEngine : DiscordEngineSpec {
             DefaultDiscordLogger.Logger.log("Too many pongs missed; closing, shard: \(shardNum)", type: logType)
 
             pongsMissed = 0
-            closeWebSockets()
+            closeWebSockets(fast: true)
 
             return
         }

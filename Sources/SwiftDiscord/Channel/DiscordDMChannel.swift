@@ -22,9 +22,6 @@ public struct DiscordDMChannel : DiscordTextChannel {
     /// The snowflake id of the channel.
     public let id: ChannelID
 
-    /// Whether this channel is private. Should always be true for DMChannels
-    public var isPrivate: Bool { return true }
-
     /// The user this channel is with.
     public let recipient: DiscordUser
 
@@ -66,9 +63,6 @@ public struct DiscordGroupDMChannel : DiscordTextChannel {
 
     /// The snowflake id of the channel.
     public let id: ChannelID
-
-    /// Whether this channel is private. Should always be true for DMChannels
-    public var isPrivate: Bool { return true }
 
     /// The users in this channel.
     public let recipients: [DiscordUser]

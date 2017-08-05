@@ -17,26 +17,6 @@
 
 import Foundation
 
-/**
- * An HTTP content-type.  Common options are available as enum values, but if you need something special, use .other("My-Special-Type")
- */
-public enum HTTPContentType: CustomStringConvertible {
-    /// JSON Content-Type.
-    case json
-
-    /// Other Content-Type.
-    case other(String)
-
-    public var description: String {
-        switch self {
-        case .json:
-            return "application/json"
-        case let .other(type):
-            return type
-        }
-    }
-}
-
 // TODO Group DM
 // TODO Add guild member
 // TODO Guild integrations
@@ -47,7 +27,7 @@ public enum HTTPContentType: CustomStringConvertible {
 /**
     This enum defines the endpoints used to interact with the Discord API.
 */
-public enum DiscordEndpoint: CustomStringConvertible {
+public enum DiscordEndpoint : CustomStringConvertible {
     /// The base url for the Discord REST API.
     case baseURL
 
@@ -101,6 +81,9 @@ public enum DiscordEndpoint: CustomStringConvertible {
     /// The base guild endpoint.
     case guilds(id: GuildID)
 
+    /// Guild audit log
+    case guildAuditLog(id: GuildID)
+
     // Guild Channels
     /// The base endpoint for guild channels.
     case guildChannels(guild: GuildID)
@@ -140,6 +123,7 @@ public enum DiscordEndpoint: CustomStringConvertible {
 
     /// The user guilds endpoint.
     case userGuilds
+    /* End User */
 
     /* Webhooks */
     /// The single webhook endpoint.
@@ -158,7 +142,9 @@ public enum DiscordEndpoint: CustomStringConvertible {
     var combined: String {
         return DiscordEndpoint.baseURL.description + description
     }
+}
 
+public extension DiscordEndpoint {
     // MARK: Endpoint Request enum
 
     /**
@@ -166,32 +152,27 @@ public enum DiscordEndpoint: CustomStringConvertible {
     */
     public enum EndpointRequest {
         /// A GET request.
-        case get(params: [String: String]?)
+        case get(params: [String: String]?, extraHeaders: [DiscordHeader: String]?)
 
         /// A POST request.
-        case post(content: (Data, type: HTTPContentType)?)
+        case post(content: HTTPContent?, extraHeaders: [DiscordHeader: String]?)
 
         /// A POST request.
-        case put(content: (Data, type: HTTPContentType)?)
+        case put(content: HTTPContent?, extraHeaders: [DiscordHeader: String]?)
 
         /// A PATCH request.
-        case patch(content: (Data, type: HTTPContentType)?)
+        case patch(content: HTTPContent?, extraHeaders: [DiscordHeader: String]?)
 
         /// A DELETE request.
-        case delete
+        case delete(content: HTTPContent?, extraHeaders: [DiscordHeader: String]?)
 
         var methodString: String {
             switch self {
-            case .get:
-                return "GET"
-            case .post:
-                return "POST"
-            case .put:
-                return "PUT"
-            case .patch:
-                return "PATCH"
-            case .delete:
-                return "DELETE"
+            case .get:      return "GET"
+            case .post:     return "POST"
+            case .put:      return "PUT"
+            case .patch:    return "PATCH"
+            case .delete:   return "DELETE"
             }
         }
 
@@ -199,15 +180,15 @@ public enum DiscordEndpoint: CustomStringConvertible {
         Helper method that creates the basic request for an endpoint.
 
         - parameter with: A DiscordToken that will be used for authentication
-        - parameter for: The endpoint this request is for
-        - parameter getParams: An optional dictionary of get parameters.
+        - parameter endpoint: The endpoint this request is for
 
         - returns: a URLRequest that can be further customized
         */
-        public func createRequest(with token: DiscordToken, endpoint: DiscordEndpoint) -> URLRequest? {
-
+        public func createRequest(with token: DiscordToken,
+                                  endpoint: DiscordEndpoint) -> URLRequest? {
             let getParams: [String: String]?
-            if case let .get(params) = self {
+
+            if case let .get(params, _) = self {
                 getParams = params
             } else {
                 getParams = nil
@@ -217,23 +198,48 @@ public enum DiscordEndpoint: CustomStringConvertible {
             var request = URLRequest(url: url)
 
             request.setValue(token.token, forHTTPHeaderField: "Authorization")
-            request.httpMethod = self.methodString
+            request.httpMethod = methodString
 
-            var content: (Data, type: HTTPContentType)? = nil
-            if case let .post(optionalContent) = self {
-                content = optionalContent
-            } else if case let .put(optionalContent) = self {
-                content = optionalContent
-            } else if case let .patch(optionalContent) = self {
-                content = optionalContent
-            }
-            if let content = content {
-                request.httpBody = content.0
-                request.setValue(content.type.description, forHTTPHeaderField: "Content-Type")
-                request.setValue(content.0.count.description, forHTTPHeaderField: "Content-Length")
-            }
+            addContent(to: &request)
 
             return request
+        }
+
+        private func addContent(to request: inout URLRequest) {
+            let content: HTTPContent?
+            let extraHeaders: [DiscordHeader: String]?
+
+            switch self {
+            case let .get(_, headers?):
+                (content, extraHeaders) = (nil, headers)
+            case let .post(optionalContent, headers):
+                (content, extraHeaders) = (optionalContent, headers)
+            case let .put(optionalContent, headers):
+                (content, extraHeaders) = (optionalContent, headers)
+            case let .patch(optionalContent, headers):
+                (content, extraHeaders) = (optionalContent, headers)
+            case let .delete(optionalContent, headers):
+                (content, extraHeaders) = (optionalContent, headers)
+            default:
+                (content, extraHeaders) = (nil, nil)
+            }
+
+            for (header, value) in extraHeaders ?? [:] {
+                request.setValue(value.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed),
+                                 forHTTPHeaderField: header.rawValue)
+            }
+
+            switch content {
+            case nil:   break
+            case let .json(data)?:
+                request.httpBody = data
+                request.setValue(HTTPContent.jsonType, forHTTPHeaderField: "Content-Type")
+                request.setValue(String(data.count), forHTTPHeaderField: "Content-Length")
+            case let .other(type, body)?:
+                request.httpBody = body
+                request.setValue(type, forHTTPHeaderField: "Content-Type")
+                request.setValue(String(body.count), forHTTPHeaderField: "Content-Length")
+            }
         }
     }
 
@@ -244,7 +250,7 @@ public enum DiscordEndpoint: CustomStringConvertible {
         case .baseURL:
             return "https://discordapp.com/api/v6"
 
-        // -- Channels --
+        /* Channels */
         case let .channel(id):
             return "/channels/\(id)"
         // Messages
@@ -276,10 +282,13 @@ public enum DiscordEndpoint: CustomStringConvertible {
         // Webhooks
         case let .channelWebhooks(channel):
             return "/channels/\(channel)/webhooks"
+        /* End Channels */
 
-        // -- Guilds --
+        /* Guilds */
         case let .guilds(id):
             return "/guilds/\(id)"
+        case let .guildAuditLog(id):
+            return "/guilds/\(id)/audit-logs"
         // Guild Channels
         case let .guildChannels(guild):
             return "/guilds/\(guild)/channels"
@@ -303,14 +312,16 @@ public enum DiscordEndpoint: CustomStringConvertible {
         // Webhooks
         case let .guildWebhooks(guild):
             return "/guilds/\(guild)/webhooks"
+        /* End Guilds */
 
-        // -- User --
+        /* User */
         case .userChannels:
             return "/users/@me/channels"
         case .userGuilds:
             return "/users/@me/guilds"
+        /* End User */
 
-        // -- Webhooks --
+        /* Webhooks */
         case let .webhook(id):
             return "/webhooks/\(id)"
         case let .webhookWithToken(id, token):
@@ -319,122 +330,180 @@ public enum DiscordEndpoint: CustomStringConvertible {
             return "/webhooks/\(id)/\(token)/slack"
         case let .webhookGithub(id, token):
             return "/webhooks/\(id)/\(token)/github"
+        /* End Webhooks */
         }
     }
 
-    internal var endpointForRateLimiter: DiscordEndpoint {
+    /// Gets a rate limit key for the endpoint
+    internal var rateLimitKey: DiscordRateLimitKey {
+        // To add a new endpoint's rate limit key:
+        // If the endpoint includes a channel id or guild id, supply that as that as the id parameter.
+        // Otherwise, skip it.  Since a channel id implies a guild id, we should never need both
+        // For the urlParts, go through the list of slash-separated pieces of the endpoint URL and add
+        // the enum case associated with each of them, adding a case to the enum if it doesn't already exist
+        // Example: "/webhooks/\(id)/\(token)/github" -> [.webhooks, .webhookID, .webhookToken, .github]
+        // Example: "/guilds/\(guild)/channels" -> [.guilds, .guildID, .channels]
+        // Example: "/users/@me/guilds" -> [.users, .userID, .guilds] ("@me" is a user id)
+
         switch self {
         case .baseURL:
-            DefaultDiscordLogger.Logger.error("Attempted to get rate limit key for base URL", type: "DiscordEndpoint")
-            return self
+            fatalError("Attempted to get rate limit key for base URL")
 
-        // -- Channels --
-        case .channel:
-            return self
+        /* Channels */
+        case let .channel(id):
+            return DiscordRateLimitKey(id: id, urlParts: [.channels, .channelID])
         // Messages
-        case .messages:
-            return self
-        case .bulkMessageDelete:
-            return self
+        case let .messages(channel):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .messages])
+        case let .bulkMessageDelete(channel):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .bulkDelete])
         case let .channelMessage(channel, _):
-            return .messages(channel: channel)
-        case .channelMessageDelete:
-            return self // Special case for the rate limiter
-        case .typing:
-            return self
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .messages, .messageID])
+        case let .channelMessageDelete(channel, _):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .messagesDelete, .messageID])
+        case let .typing(channel):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .typing])
         // Permissions
-        case .permissions:
-            return self
+        case let .permissions(channel):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .permissions])
         case let .channelPermission(channel, _):
-            return .permissions(channel: channel)
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .permissions, .overwriteID])
         // Invites
         case .invites:
-            return self
-        case .channelInvites:
-            return self
+            return DiscordRateLimitKey(urlParts: [.invites, .inviteCode])
+        case let .channelInvites(channel):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .invites])
         // Pinned Messages
-        case .pins:
-            return self
+        case let .pins(channel):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .pins])
         case let .pinnedMessage(channel, _):
-            return .pins(channel: channel)
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .pins, .messageID])
         // Webhooks
-        case .channelWebhooks:
-            return self
+        case let .channelWebhooks(channel):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .webhooks])
+        /* End Channels */
 
-        // -- Guilds --
-        case .guilds:
-            return self
+        /* Guilds */
+        case let .guilds(id):
+            return DiscordRateLimitKey(id: id, urlParts: [.guilds, .guildID])
+        case let .guildAuditLog(id):
+            return DiscordRateLimitKey(id: id, urlParts: [.guilds, .guildID, .auditLog])
         // Guild Channels
-        case .guildChannels:
-            return self
+        case let .guildChannels(guild):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .channels])
         // Guild Members
-        case .guildMembers:
-            return self
+        case let .guildMembers(guild):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .members])
         case let .guildMember(guild, _):
-            return .guildMembers(guild: guild)
-        case .guildMemberRole:
-            return self // This is way too specific but there isn't a better one
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .members, .userID])
+        case let .guildMemberRole(guild, _, _):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .members, .userID, .roles, .roleID])
         // Guild Bans
-        case .guildBans:
-            return self
+        case let .guildBans(guild):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .bans])
         case let .guildBanUser(guild, _):
-            return .guildBans(guild: guild)
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .bans, .userID])
         // Guild Roles
-        case .guildRoles:
-            return self
+        case let .guildRoles(guild):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .roles])
         case let .guildRole(guild, _):
-            return .guildRoles(guild: guild)
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .roles, .roleID])
         // Webhooks
-        case .guildWebhooks:
-            return self
+        case let .guildWebhooks(guild):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .webhooks])
+        /* End Guilds */
 
-        // -- User --
+        /* User */
         case .userChannels:
-            return self
+            return DiscordRateLimitKey(urlParts: [.users, .userID, .channels])
         case .userGuilds:
-            return self
+            return DiscordRateLimitKey(urlParts: [.users, .userID, .guilds])
+        /* End User */
 
-        // -- Webhooks --
+        /* Webhooks */
         case .webhook:
-            return self
-        case let .webhookWithToken(id, _):
-            return .webhook(id: id)
-        case let .webhookSlack(id, _):
-            return .webhook(id: id)
-        case let .webhookGithub(id, _):
-            return .webhook(id: id)
+            return DiscordRateLimitKey(urlParts: [.webhooks, .webhookID])
+        case .webhookWithToken:
+            return DiscordRateLimitKey(urlParts: [.webhooks, .webhookID, .webhookToken])
+        case .webhookSlack:
+            return DiscordRateLimitKey(urlParts: [.webhooks, .webhookID, .webhookToken, .slack])
+        case .webhookGithub:
+            return DiscordRateLimitKey(urlParts: [.webhooks, .webhookID, .webhookToken, .github])
+        /* End Webhooks */
         }
     }
 
     // MARK: Methods
 
     private func createURL(getParams: [String: String]?) -> URL? {
-
         // This can fail, specifically if you try to include a non-url-encoded emoji in it
         guard let url = URL(string: self.combined) else {
-            DefaultDiscordLogger.Logger.error("Couldn't convert \"\(self.combined)\" to a URL.  This shouldn't happen.", type: "DiscordEndpoint")
+            DefaultDiscordLogger.Logger.error("Couldn't convert \"\(self.combined)\" to a URL.  This shouldn't happen.",
+                                              type: "DiscordEndpoint")
             return nil
         }
 
-        if let getParams = getParams {
-            guard var com = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-                DefaultDiscordLogger.Logger.error("Couldn't convert \"\(url)\" to URLComponents.  This shouldn't happen.", type: "DiscordEndpoint")
-                return nil
-            }
+        guard let getParams = getParams else { return url }
+        guard var com = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            DefaultDiscordLogger.Logger.error("Couldn't convert \"\(url)\" to URLComponents. This shouldn't happen.",
+                                              type: "DiscordEndpoint")
+            return nil
+        }
 
-            com.queryItems = getParams.map({ URLQueryItem(name: $0.key, value: $0.value) })
+        com.queryItems = getParams.map({ URLQueryItem(name: $0.key, value: $0.value) })
 
-            return com.url!
-        } else {
-            return url
+        return com.url!
+    }
+}
+
+/**
+ * A type representing HTTP content.
+ */
+public enum HTTPContent : CustomStringConvertible {
+    /// JSON Content-Type.
+    case json(Data)
+
+    /// Other Content-Type.
+    case other(type: String, body: Data)
+
+    /// JSON MIME-type.
+    public static let jsonType = "application/json"
+
+    public var description: String {
+        switch self {
+        case .json:
+            return HTTPContent.jsonType
+        case let .other(type, _):
+            return type
         }
     }
+}
+
+/// Represents the custom headers that Discord uses.
+public enum DiscordHeader : String {
+    /// The header that adds audit log reasons.
+    case auditReason = "X-Audit-Log-Reason"
 }
 
 public extension DiscordEndpoint {
     /// A namespace struct for endpoint options.
     public struct Options {
         private init() {}
+
+        /// Options when getting an audit log.
+        public enum AuditLog {
+            /// Action type.
+            case actionType(DiscordAuditLogActionType)
+
+            /// Actions before a specific time.
+            case before(Snowflake)
+
+            /// The max num of entries. Default 50. Min 1. Max 100.
+            case limit(Int)
+
+            /// Filters for a specific user.
+            case userId(Snowflake)
+        }
 
         /// Create invite options.
         public enum CreateInvite {

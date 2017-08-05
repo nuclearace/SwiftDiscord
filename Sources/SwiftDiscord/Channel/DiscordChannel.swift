@@ -23,9 +23,6 @@ public protocol DiscordChannel : DiscordClientHolder {
 
     /// The id of the channel.
     var id: ChannelID { get }
-
-    /// Whether or not the channel is private
-    var isPrivate: Bool { get }
 }
 
 /// Protocol that declares a type will be a Discord text-based channel.
@@ -63,12 +60,12 @@ public extension DiscordChannel {
     /**
         Deletes this channel.
     */
-    public func delete() {
+    public func delete(reason: String? = nil) {
         guard let client = self.client else { return }
 
         DefaultDiscordLogger.Logger.log("Deleting channel: \(id)", type: "DiscordChannel")
 
-        client.deleteChannel(id)
+        client.deleteChannel(id, reason: reason)
     }
 
     /**
@@ -76,10 +73,10 @@ public extension DiscordChannel {
 
         - parameter options: An array of `DiscordEndpointOptions.ModifyChannel`
     */
-    public func modifyChannel(options: [DiscordEndpoint.Options.ModifyChannel]) {
+    public func modifyChannel(options: [DiscordEndpoint.Options.ModifyChannel], reason: String? = nil) {
         guard let client = self.client else { return }
 
-        client.modifyChannel(id, options: options)
+        client.modifyChannel(id, options: options, reason: reason)
     }
 
 
@@ -188,8 +185,8 @@ func channelFromObject(_ object: [String: Any], withClient client: DiscordClient
     guard let type = DiscordChannelType(rawValue: object.get("type", or: -1)) else { return nil }
 
     switch type {
-    case .text:     return DiscordGuildTextChannel(guildChannelObject: object, client: client)
-    case .voice:    return DiscordGuildVoiceChannel(guildChannelObject: object, client: client)
+    case .text:     return DiscordGuildTextChannel(guildChannelObject: object, guildID: nil, client: client)
+    case .voice:    return DiscordGuildVoiceChannel(guildChannelObject: object, guildID: nil, client: client)
     case .direct:   return DiscordDMChannel(dmReadyObject: object, client: client)
     case .groupDM:  return DiscordGroupDMChannel(dmReadyObject: object, client: client)
     }

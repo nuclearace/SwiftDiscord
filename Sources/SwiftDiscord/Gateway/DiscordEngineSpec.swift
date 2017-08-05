@@ -123,10 +123,11 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
             this.parseGatewayMessage(text)
         }
 
-        websocket?.onClose = {[weak self] _, _, _, _ in
+        websocket?.onClose = {[weak self] _, _, reason, clean in
             guard let this = self else { return }
 
-            DefaultDiscordLogger.Logger.log("WebSocket closed, \(this.description)", type: "DiscordWebSocketable")
+            DefaultDiscordLogger.Logger.log("WebSocket closed, \(this.description); clean: \(clean); reason: \(reason ?? "")",
+                                            type: "DiscordWebSocketable")
 
             this.handleClose(reason: nil)
         }
@@ -148,27 +149,45 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         websocket?.connect()
         #else
         let url = URL(string: connectURL)!
-        let socket = try! TCPInternetSocket(scheme: "https", hostname: url.host ?? "gateway.discord.gg",
-                                            port: Port(url.port ?? 443))
-        let stream = try! TLS.InternetSocket(socket, TLS.Context(.client))
-        try! WebSocket.connect(to: connectURL, using: stream) {[weak self] ws in
-            guard let this = self else { return }
-            DefaultDiscordLogger.Logger.log("Websocket connected, shard: \(this.description)", type: "DiscordWebSocketable")
+        do {
+            let socket = try TCPInternetSocket(scheme: "https", hostname: url.host ?? "gateway.discord.gg",
+                                               port: Port(url.port ?? 443))
+            let stream = try TLS.InternetSocket(socket, TLS.Context(.client))
+            try WebSocket.background(to: connectURL, using: stream) {[weak self] ws in
+                guard let this = self else { return }
+                DefaultDiscordLogger.Logger.log("Websocket connected, shard: \(this.description)", type: "DiscordWebSocketable")
 
-            this.websocket = ws
-            this.connectUUID = UUID()
+                this.websocket = ws
+                this.connectUUID = UUID()
 
-            this.attachWebSocketHandlers()
-            this.startHandshake()
+                this.attachWebSocketHandlers()
+                this.startHandshake()
+            }
+        } catch {
+            DefaultDiscordLogger.Logger.error("\(error)", type: "DiscordWebSocketable")
         }
         #endif
     }
 
-    internal func closeWebSockets() {
+    internal func closeWebSockets(fast: Bool = false) {
+        DefaultDiscordLogger.Logger.log("Closing WebSocket, shard: \(description)", type: "DiscordWebSocketable")
+
+        guard !fast else {
+            handleClose(reason: nil)
+
+            return
+        }
+
         #if !os(Linux)
         websocket?.disconnect()
         #else
-        try? websocket?.close()
+        do {
+            try websocket?.close()
+        } catch {
+            DefaultDiscordLogger.Logger.log("Error in closing: \(error)", type: "DiscordWebSocketable")
+
+            handleClose(reason: nil)
+        }
         #endif
     }
 

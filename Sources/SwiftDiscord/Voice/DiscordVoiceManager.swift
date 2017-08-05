@@ -100,16 +100,24 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
         - parameter onGuild: The snowflake of the guild that you want to leave.
     */
     open func leaveVoiceChannel(onGuild guildId: GuildID) {
-        guard let engine = get(voiceEngines[guildId]) else { return }
+        guard let engine = get(voiceEngines[guildId]) else {
+            DefaultDiscordLogger.Logger.error("Could not find a voice engine for guild \(guildId)", type: logType)
+
+            return
+        }
 
         protected {
             voiceStates[guildId] = nil
             voiceServerInformations[guildId] = nil
         }
 
+        DefaultDiscordLogger.Logger.verbose("Disconnecting voice engine for guild \(guildId)", type: logType)
+
         engine.disconnect()
 
         // Make sure everything is cleaned out
+
+        DefaultDiscordLogger.Logger.verbose("Rejoining voice channels after leave", type: logType)
 
         for (guildId, _) in voiceEngines {
             startVoiceConnection(guildId)
@@ -146,7 +154,9 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
 
         DefaultDiscordLogger.Logger.log("Connecting voice engine", type: logType)
 
-        voiceEngines[guildId]?.connect()
+        DispatchQueue.global().async {[weak engine = voiceEngines[guildId]!] in
+            engine?.connect()
+        }
     }
 
     /**

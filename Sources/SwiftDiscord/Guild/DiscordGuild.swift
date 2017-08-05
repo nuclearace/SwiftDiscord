@@ -103,14 +103,14 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public private(set) var verificationLevel: Int
 
     init(guildObject: [String: Any], client: DiscordClient?) {
-        channels = guildChannelsFromArray(guildObject.get("channels", or: JSONArray()), client: client)
+        id = Snowflake(guildObject["id"] as? String) ?? 0
+        channels = guildChannelsFromArray(guildObject.get("channels", or: JSONArray()), guildID: id, client: client)
         defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
         embedEnabled = guildObject.get("embed_enabled", or: false)
         embedChannelId = Snowflake(guildObject["embed_channel_id"] as? String) ?? 0
         emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: JSONArray()))
         features = guildObject.get("features", or: Array<Any>())
         icon = guildObject.get("icon", or: "")
-        id = Snowflake(guildObject["id"] as? String) ?? 0
         large = guildObject.get("large", or: false)
         memberCount = guildObject.get("member_count", or: 0)
         mfaLevel = guildObject.get("mfa_level", or: -1)
@@ -139,13 +139,14 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     /**
         Bans this user from the guild.
 
-        - parameter member: The member to ban
-        - parameter deleteMessageDays: The number of days going back to delete messages. Defaults to 7
+        - parameter member: The member to ban.
+        - parameter deleteMessageDays: The number of days going back to delete messages. Defaults to 7.
+        - parameter reason: The reason for this ban.
     */
-    public func ban(_ member: DiscordGuildMember, deleteMessageDays: Int = 7) {
+    public func ban(_ member: DiscordGuildMember, deleteMessageDays: Int = 7, reason: String? = nil) {
         guard let client = self.client else { return }
 
-        client.guildBan(userId: member.user.id, on: id, deleteMessageDays: deleteMessageDays)
+        client.guildBan(userId: member.user.id, on: id, deleteMessageDays: deleteMessageDays, reason: reason)
     }
 
     /**
@@ -153,13 +154,39 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         channel create event.
 
         - parameter with: The options for this new channel
+        - parameter reason: The reason this channel is being created.
     */
-    public func createChannel(with options: [DiscordEndpoint.Options.GuildCreateChannel]) {
+    public func createChannel(with options: [DiscordEndpoint.Options.GuildCreateChannel], reason: String? = nil) {
         guard let client = self.client else { return }
 
         DefaultDiscordLogger.Logger.log("Creating guild channel on \(id)", type: "DiscordGuild")
 
-        client.createGuildChannel(on: id, options: options)
+        client.createGuildChannel(on: id, options: options, reason: reason)
+    }
+
+    /**
+        Gets the audit log for this guild.
+
+        **NOTE** This is a blocking method. If you need an async version use the `getGuildAuditLog` method from
+        `DiscordEndpointConsumer`, which is available on `DiscordClient`.
+
+        - returns: A `DiscordAuditLog` for this guild.
+    */
+    public func getAuditLog(withOptions options: [DiscordEndpoint.Options.AuditLog] = []) -> DiscordAuditLog? {
+        guard let client = self.client else { return nil }
+
+        let lock = DispatchSemaphore(value: 0)
+        var auditLog: DiscordAuditLog?
+
+        client.getGuildAuditLog(for: id, withOptions: options, callback: {log in
+            auditLog = log
+
+            lock.signal()
+        })
+
+        lock.wait()
+
+        return auditLog
     }
 
     /**
@@ -231,12 +258,13 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     /**
         Modifies this guild with `options`.
 
-        - parameter options: An array of options to change
+        - parameter options: An array of options to change.
+        - parameter reason: The reason for this change.
     */
-    public func modifyGuild(options: [DiscordEndpoint.Options.ModifyGuild]) {
+    public func modifyGuild(options: [DiscordEndpoint.Options.ModifyGuild], reason: String? = nil) {
         guard let client = self.client else { return }
 
-        client.modifyGuild(id, options: options)
+        client.modifyGuild(id, options: options, reason: reason)
     }
 
     /**
@@ -271,7 +299,8 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         return Int(id.rawValue >> 22) % numOfShards
     }
 
-    func updateGuild(fromPresence presence: DiscordPresence, fillingUsers fillUsers: Bool,
+    func updateGuild(fromPresence presence: DiscordPresence,
+                     fillingUsers fillUsers: Bool,
                      pruningUsers pruneUsers: Bool) {
         let userId = presence.user.id
 

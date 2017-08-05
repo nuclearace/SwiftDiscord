@@ -19,9 +19,16 @@ import Foundation
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
-    public func createWebhook(forChannel channelId: ChannelID, options: [DiscordEndpoint.Options.WebhookOption],
+    public func createWebhook(forChannel channelId: ChannelID,
+                              options: [DiscordEndpoint.Options.WebhookOption],
+                              reason: String? = nil,
                               callback: @escaping (DiscordWebhook?) -> () = {_ in }) {
         var createJSON: [String: Any] = [:]
+        var extraHeaders = [DiscordHeader: String]()
+
+        if let modifyReason = reason {
+            extraHeaders[.auditReason] = modifyReason
+        }
 
         for option in options {
             switch option {
@@ -39,21 +46,32 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
+
                 return
             }
+
             callback(DiscordWebhook(webhookObject: webhook))
         }
+
         rateLimiter.executeRequest(endpoint: .channelWebhooks(channel: channelId),
                                    token: token,
-                                   requestInfo: .post(content: (contentData, type: .json)),
+                                   requestInfo: .post(content: .json(contentData), extraHeaders: extraHeaders),
                                    callback: requestCallback)
     }
 
     /// Default implementation
-    public func deleteWebhook(_ webhookId: WebhookID, callback: ((Bool) -> ())? = nil) {
+    public func deleteWebhook(_ webhookId: WebhookID,
+                              reason: String? = nil,
+                              callback: ((Bool) -> ())? = nil) {
+        var extraHeaders = [DiscordHeader: String]()
+
+        if let modifyReason = reason {
+            extraHeaders[.auditReason] = modifyReason
+        }
+
         rateLimiter.executeRequest(endpoint: .webhook(id: webhookId),
                                    token: token,
-                                   requestInfo: .delete,
+                                   requestInfo: .delete(content: nil, extraHeaders: extraHeaders),
                                    callback: { _, response, _ in callback?(response?.statusCode == 204) })
     }
 
@@ -62,13 +80,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
+
                 return
             }
+
             callback(DiscordWebhook(webhookObject: webhook))
         }
+
         rateLimiter.executeRequest(endpoint: .webhook(id: webhookId),
                                    token: token,
-                                   requestInfo: .get(params: nil),
+                                   requestInfo: .get(params: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
 
@@ -77,13 +98,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(webhooks)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([])
+
                 return
             }
+
             callback(DiscordWebhook.webhooksFromArray(webhooks as! [[String: Any]]))
         }
+
         rateLimiter.executeRequest(endpoint: .channelWebhooks(channel: channelId),
                                    token: token,
-                                   requestInfo: .get(params: nil),
+                                   requestInfo: .get(params: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
 
@@ -94,20 +118,30 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(webhooks)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([])
+
                 return
             }
+
             callback(DiscordWebhook.webhooksFromArray(webhooks as! [[String: Any]]))
         }
+
         rateLimiter.executeRequest(endpoint: .guildWebhooks(guild: guildId),
                                    token: token,
-                                   requestInfo: .get(params: nil),
+                                   requestInfo: .get(params: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
 
     /// Default implementation
-    public func modifyWebhook(_ webhookId: WebhookID, options: [DiscordEndpoint.Options.WebhookOption],
+    public func modifyWebhook(_ webhookId: WebhookID,
+                              options: [DiscordEndpoint.Options.WebhookOption],
+                              reason: String? = nil,
                               callback: @escaping (DiscordWebhook?) -> () = {_ in }) {
         var createJSON: [String: Any] = [:]
+        var extraHeaders = [DiscordHeader: String]()
+
+        if let modifyReason = reason {
+            extraHeaders[.auditReason] = modifyReason
+        }
 
         for option in options {
             switch option {
@@ -125,13 +159,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil)
+
                 return
             }
+
             callback(DiscordWebhook(webhookObject: webhook))
         }
+
         rateLimiter.executeRequest(endpoint: .webhook(id: webhookId),
                                    token: token,
-                                   requestInfo: .patch(content: (contentData, type: .json)),
+                                   requestInfo: .patch(content: .json(contentData), extraHeaders: extraHeaders),
                                    callback: requestCallback)
     }
 }

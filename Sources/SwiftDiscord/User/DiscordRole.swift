@@ -54,7 +54,8 @@ public struct DiscordRole : JSONAble, Equatable {
         position = roleObject.get("position", or: 0)
     }
 
-    init(id: RoleID, color: Int, hoist: Bool, managed: Bool, mentionable: Bool, name: String, permissions: DiscordPermission, position: Int) {
+    init(id: RoleID, color: Int, hoist: Bool, managed: Bool, mentionable: Bool, name: String,
+         permissions: DiscordPermission, position: Int) {
         self.id = id
         self.color = color
         self.hoist = hoist

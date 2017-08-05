@@ -88,13 +88,12 @@ public final class DiscordRateLimiter {
                                token: DiscordToken,
                                requestInfo: DiscordEndpoint.EndpointRequest,
                                callback: @escaping (Data?, HTTPURLResponse?, Error?) -> ()) {
-        let rateLimitKey = DiscordRateLimitKey(endpoint: endpoint.endpointForRateLimiter)
         guard let request = requestInfo.createRequest(with: token, endpoint: endpoint) else {
             // Error is logged by createRequest
             return
         }
 
-        executeRequest(request, for: rateLimitKey, callback: callback)
+        executeRequest(request, for: endpoint.rateLimitKey, callback: callback)
     }
 
     private func createResponseHandler(for request: URLRequest, endpointKey: DiscordRateLimitKey,
@@ -151,31 +150,74 @@ public final class DiscordRateLimiter {
 /// An endpoint is made up of a REST api endpoint and any major parameters in that endpoint.
 /// Ex. /channels/232184444340011009/messages and /channels/186926276592795659/messages
 /// Are considered different endpoints
-public struct DiscordRateLimitKey: Hashable {
+public struct DiscordRateLimitKey : Hashable {
+	/// URL Parts for the purpose of rate limiting.
+    /// Combine all the parts of the URL into a list of which parts exist
+    /// Ex. /channels/232184444340011009/messages would be represented by [.channels, .channelID, .messages]
+    /// Anything that ends in "ID" represents the existence of a snowflake id, but the actual ID should be
+    /// stored separately if needed.  Technically, the .guildID and .channelID fields aren't needed since
+    /// the full ID will also be stored, but they're included to make the system more straightforward.
+    public struct DiscordRateLimitURLParts : OptionSet {
+        public let rawValue: Int
+
+        static let         guilds = DiscordRateLimitURLParts(rawValue: 1 << 0)
+        static let        guildID = DiscordRateLimitURLParts(rawValue: 1 << 1)
+        static let       channels = DiscordRateLimitURLParts(rawValue: 1 << 2)
+        static let      channelID = DiscordRateLimitURLParts(rawValue: 1 << 3)
+        static let       messages = DiscordRateLimitURLParts(rawValue: 1 << 4)
+        static let messagesDelete = DiscordRateLimitURLParts(rawValue: 1 << 5)
+        static let      messageID = DiscordRateLimitURLParts(rawValue: 1 << 6)
+        static let     bulkDelete = DiscordRateLimitURLParts(rawValue: 1 << 7)
+        static let         typing = DiscordRateLimitURLParts(rawValue: 1 << 8)
+        static let    permissions = DiscordRateLimitURLParts(rawValue: 1 << 9)
+        static let    overwriteID = DiscordRateLimitURLParts(rawValue: 1 << 10)
+        static let        invites = DiscordRateLimitURLParts(rawValue: 1 << 11)
+        static let     inviteCode = DiscordRateLimitURLParts(rawValue: 1 << 12)
+        static let           pins = DiscordRateLimitURLParts(rawValue: 1 << 13)
+        static let       webhooks = DiscordRateLimitURLParts(rawValue: 1 << 14)
+        static let        members = DiscordRateLimitURLParts(rawValue: 1 << 15)
+        static let         userID = DiscordRateLimitURLParts(rawValue: 1 << 16)
+        static let          roles = DiscordRateLimitURLParts(rawValue: 1 << 17)
+        static let         roleID = DiscordRateLimitURLParts(rawValue: 1 << 18)
+        static let           bans = DiscordRateLimitURLParts(rawValue: 1 << 19)
+        static let          users = DiscordRateLimitURLParts(rawValue: 1 << 20)
+        static let      webhookID = DiscordRateLimitURLParts(rawValue: 1 << 21)
+        static let   webhookToken = DiscordRateLimitURLParts(rawValue: 1 << 22)
+        static let          slack = DiscordRateLimitURLParts(rawValue: 1 << 23)
+        static let         github = DiscordRateLimitURLParts(rawValue: 1 << 24)
+        static let       auditLog = DiscordRateLimitURLParts(rawValue: 1 << 25)
+
+        public init(rawValue: Int) {
+            self.rawValue = rawValue
+        }
+    }
+
     // MARK: Properties
 
-    /// The guild or channel ID in this endpoint (or "" if neither)
-    public let key: String
+    /// The guild or channel ID in this endpoint (or 0 if neither)
+    /// There should never be a time when you need both the channel and guild id
+    /// since every channel is bound to exactly one guild
+    public let id: Snowflake
+
+    /// The list of parts that the URL contains
+    public let urlParts: DiscordRateLimitURLParts
 
     /// The hash of the key.
     public var hashValue: Int {
-        return key.hashValue
+        return urlParts.rawValue &+ id.hashValue
     }
 
     // MARK: Initializers
 
     /// Creates a new endpoint key.
-    public init(endpoint: DiscordEndpoint) {
-        if case let .channelMessageDelete(channel, _) = endpoint {
-            self.key = DiscordEndpoint.messages(channel: channel).description + "d"
-        } else {
-            self.key = endpoint.description
-        }
+    public init(id: Snowflake = 0, urlParts: DiscordRateLimitURLParts) {
+        self.id = id
+        self.urlParts = urlParts
     }
 
     /// Whether two keys are equal.
     public static func ==(lhs: DiscordRateLimitKey, rhs: DiscordRateLimitKey) -> Bool {
-        return lhs.key == rhs.key
+        return lhs.id == rhs.id && lhs.urlParts == rhs.urlParts
     }
 }
 
