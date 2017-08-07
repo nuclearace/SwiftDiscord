@@ -558,10 +558,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         guard let guildId = Snowflake(data["id"] as? String) else { return }
         guard let removedGuild = guilds.removeValue(forKey: guildId) else { return }
 
-        if let client = removedGuild.client {
-            for channel in removedGuild.channels.keys {
-                client.channelCache[channel] = nil
-            }
+        for channel in removedGuild.channels.keys {
+            channelCache[channel] = nil
         }
 
         DefaultDiscordLogger.Logger.verbose("Removed guild: \(removedGuild)", type: logType)
