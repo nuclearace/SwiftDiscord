@@ -60,7 +60,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     public let mentionEveryone: Bool
 
     /// List of snowflake ids of roles that were mentioned in this message.
-    public let mentionRoles: [String]
+    public let mentionRoles: [RoleID]
 
     /// List of users that were mentioned in this message.
     public let mentions: [DiscordUser]
@@ -97,7 +97,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         embeds = DiscordEmbed.embedsFromArray(messageObject.get("embeds", or: JSONArray()))
         id = Snowflake(messageObject["id"] as? String) ?? 0
         mentionEveryone = messageObject.get("mention_everyone", or: false)
-        mentionRoles = messageObject.get("mention_roles", or: [String]())
+        mentionRoles = messageObject.get("mention_roles", or: [String]()).flatMap(Snowflake.init)
         mentions = DiscordUser.usersFromArray(messageObject.get("mentions", or: JSONArray()))
         nonce = Snowflake(messageObject["nonce"] as? String) ?? 0
         pinned = messageObject.get("pinned", or: false)
@@ -177,16 +177,18 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
 
     func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
         if let file = files.first {
-            var fields: [String: String] = [
+            var fields: [String: Any] = [
                 "content": content,
-                "tts": String(tts),
+                "tts": tts,
             ]
 
-            if let embed = embeds.first, let encoded = JSON.encodeJSON(["embed": embed.json]) {
-                fields["payload_json"] = encoded
+            if let embed = embeds.first {
+                fields["embed"] = embed.json
             }
 
-            return .right(createMultipartBody(fields: fields, file: file))
+            let encoded = JSON.encodeJSON(fields) ?? ""
+
+            return .right(createMultipartBody(fields: ["payload_json": encoded], file: file))
         } else {
             let messageObject: [String: Any] = [
                 "content": content,
