@@ -117,10 +117,20 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         - parameter files: The files to send with this message.
         - parameter tts: Whether this message should be text-to-speach.
     */
-    public init(content: String, embeds: [DiscordEmbed] = [], files: [DiscordFileUpload] = [], tts: Bool = false) {
+    public init(content: String, embed: DiscordEmbed? = nil, file: DiscordFileUpload? = nil, tts: Bool = false) {
         self.content = content
-        self.embeds = embeds
-        self.files = files
+        if let embed = embed {
+            self.embeds = [embed]
+        }
+        else {
+            self.embeds = []
+        }
+        if let file = file {
+            self.files = [file]
+        }
+        else {
+            self.files = []
+        }
         self.tts = tts
         self.attachments = []
         self.author = DiscordUser(userObject: [:])
@@ -244,6 +254,7 @@ public struct DiscordAttachment {
 
 /// Represents an embeded entity.
 public struct DiscordEmbed : JSONAble {
+    var shouldIncludeNilsInJSON: Bool { return false }
     // MARK: Nested Types
 
     /// Represents an Embed's author.
@@ -488,7 +499,8 @@ public struct DiscordEmbed : JSONAble {
                 image: Image? = nil,
                 thumbnail: Thumbnail? = nil,
                 color: Int? = nil,
-                footer: Footer? = nil) {
+                footer: Footer? = nil,
+                fields: [Field] = []) {
         self.title = title
         self.author = author
         self.description = description
