@@ -121,14 +121,12 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.content = content
         if let embed = embed {
             self.embeds = [embed]
-        }
-        else {
+        } else {
             self.embeds = []
         }
         if let file = file {
             self.files = [file]
-        }
-        else {
+        } else {
             self.files = []
         }
         self.tts = tts
@@ -291,11 +289,11 @@ public struct DiscordEmbed : JSONAble {
         }
 
         /// For testing
-        internal init(name: String, iconURL: URL?, url: URL?, proxyURL: URL?) {
+        init(name: String, iconURL: URL?, url: URL?, proxyIconURL: URL?) {
             self.name = name
             self.iconUrl = iconURL
             self.url = url
-            self.proxyIconUrl = proxyURL
+            self.proxyIconUrl = proxyIconURL
         }
     }
 
@@ -355,10 +353,10 @@ public struct DiscordEmbed : JSONAble {
         }
 
         /// For testing
-        internal init(text: String?, iconURL: URL?, proxyURL: URL?) {
+        init(text: String?, iconURL: URL?, proxyIconURL: URL?) {
             self.text = text
             self.iconUrl = iconURL
-            self.proxyIconUrl = proxyURL
+            self.proxyIconUrl = proxyIconURL
         }
     }
 
@@ -387,7 +385,7 @@ public struct DiscordEmbed : JSONAble {
         }
 
         /// For Testing
-        internal init(url: URL, width: Int, height: Int) {
+        init(url: URL, width: Int, height: Int) {
             self.url = url
             self.width = width
             self.height = height
@@ -436,7 +434,7 @@ public struct DiscordEmbed : JSONAble {
         }
 
         /// For testing
-        internal init(url: URL, width: Int, height: Int, proxyURL: URL?) {
+        init(url: URL, width: Int, height: Int, proxyURL: URL?) {
             self.url = url
             self.width = width
             self.height = height
