@@ -113,7 +113,7 @@ public enum DiscordAuditLogActionType : Int {
     case memberPrune = 21
 
     /// Member ban add.
-    case memberBanAdd =	22
+    case memberBanAdd = 22
 
     /// Member ban remove.
     case memberBanRemove = 23

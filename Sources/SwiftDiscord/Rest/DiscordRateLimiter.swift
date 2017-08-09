@@ -151,7 +151,7 @@ public final class DiscordRateLimiter {
 /// Ex. /channels/232184444340011009/messages and /channels/186926276592795659/messages
 /// Are considered different endpoints
 public struct DiscordRateLimitKey : Hashable {
-	/// URL Parts for the purpose of rate limiting.
+    /// URL Parts for the purpose of rate limiting.
     /// Combine all the parts of the URL into a list of which parts exist
     /// Ex. /channels/232184444340011009/messages would be represented by [.channels, .channelID, .messages]
     /// Anything that ends in "ID" represents the existence of a snowflake id, but the actual ID should be
