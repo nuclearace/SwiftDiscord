@@ -92,7 +92,7 @@ extension Snowflake {
 
     ///
     /// Creates a fake snowflake that would have been created at the specified date
-    /// Useful for things like the messages beforeafteraround endpoint
+    /// Useful for things like the messages before/after/around endpoint
     ///
     /// - parameter date: The date to make a fake snowflake for
     /// - returns: A fake snowflake with the specified date, or nil if the specified date will not make a valid snowflake

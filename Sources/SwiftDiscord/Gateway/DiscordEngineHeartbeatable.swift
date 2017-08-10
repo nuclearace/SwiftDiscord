@@ -38,7 +38,7 @@ public protocol DiscordEngineHeartbeatable {
     func startHeartbeat(seconds: Int)
 
     ///
-    /// Sends a heartbeat to the gateway. This should be called from a timerdispatch.after.
+    /// Sends a heartbeat to the gateway. This should be called from a timer/dispatch.after.
     ///
     func sendHeartbeat()
 }

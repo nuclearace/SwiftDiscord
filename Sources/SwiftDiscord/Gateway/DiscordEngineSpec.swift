@@ -59,7 +59,7 @@ public protocol DiscordWebSocketable : class {
     // MARK: Methods
 
     ///
-    /// Attaches the WebSocket handlers that listen for textconnectsdisconnectsetc
+    /// Attaches the WebSocket handlers that listen for text/connects/disconnects/etc
     ///
     /// Override if you need to provide custom handlers.
     ///
