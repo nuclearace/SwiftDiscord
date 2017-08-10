@@ -53,7 +53,7 @@ class TestDiscordDataStructures : XCTestCase {
 
         let embed1 = DiscordEmbed(title: "Title",
                                   description: "Description",
-                                  author: DiscordEmbed.Author(name: "Author", iconURL: dummyIconA, url: dummyURL, proxyURL: dummyIconB),
+                                  author: DiscordEmbed.Author(name: "Author", iconURL: dummyIconA, url: dummyURL, proxyIconURL: dummyIconB),
                                   url: dummyURL,
                                   image: DiscordEmbed.Image(url: dummyIconA, width: 3245, height: 1493),
                                   thumbnail: DiscordEmbed.Thumbnail(url: dummyIconB, width: 2934, height: 9534, proxyURL: dummyIconA),
