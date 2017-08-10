@@ -28,12 +28,12 @@ open class DiscordVoiceSessionDecoder {
 
     // MARK: Methods
 
-    /**
-        Decodes an opus encoded packet into raw PCM. The first 12 bytes of the packet should be the RTP header.
-
-        - parameter packet: The full voice packet, including RTP header.
-        - returns: A `DiscordVoiceData`.
-    */
+    ///
+    /// Decodes an opus encoded packet into raw PCM. The first 12 bytes of the packet should be the RTP header.
+    ///
+    /// - parameter packet: The full voice packet, including RTP header.
+    /// - returns: A `DiscordVoiceData`.
+    ///
     open func decode(_ packet: [UInt8]) throws -> DiscordVoiceData {
         let rtpHeader = Array(packet.prefix(12)).map(Int.init(_:))
         let voiceData = Array(packet.dropFirst(12))
@@ -91,11 +91,11 @@ open class DiscordVoiceSessionDecoder {
     }
 }
 
-/**
-    An Opus decoder.
-
-    Takes Opus packets and returns raw PCM 16-bit-le/sample data.
-*/
+///
+/// An Opus decoder.
+///
+/// Takes Opus packets and returns raw PCM 16-bit-lesample data.
+///
 open class DiscordOpusDecoder : DiscordOpusCodeable {
     // MARK: Properties
 
@@ -109,13 +109,13 @@ open class DiscordOpusDecoder : DiscordOpusCodeable {
 
     // MARK: Initializers
 
-    /**
-        Creates a Decoder that takes Opus encoded data and outputs raw PCM 16-bit-le/sample data.
-
-        - parameter sampleRate: The sample rate for the decoder. Discord expects this to be 48k.
-        - parameter channels: The number of channels in the stream to decode, should always be 2.
-        - parameter gain: The gain for this decoder.
-    */
+    ///
+    /// Creates a Decoder that takes Opus encoded data and outputs raw PCM 16-bit-lesample data.
+    ///
+    /// - parameter sampleRate: The sample rate for the decoder. Discord expects this to be 48k.
+    /// - parameter channels: The number of channels in the stream to decode, should always be 2.
+    /// - parameter gain: The gain for this decoder.
+    ///
     public init(sampleRate: Int, channels: Int, gain: Int = 0) throws {
         self.sampleRate = sampleRate
         self.channels = channels
@@ -142,14 +142,14 @@ open class DiscordOpusDecoder : DiscordOpusCodeable {
         opus_decoder_destroy(decoderState)
     }
 
-    /**
-        Decodes Opus data into raw PCM 16-bit-le/sample data.
-
-        - parameter audio: A pointer to the audio data.
-        - parameter packetSize: The number of bytes in this packet.
-        - parameter frameSize: The size of the frame in samples per channel.
-        - returns: An opus encoded packet.
-    */
+    ///
+    /// Decodes Opus data into raw PCM 16-bit-lesample data.
+    ///
+    /// - parameter audio: A pointer to the audio data.
+    /// - parameter packetSize: The number of bytes in this packet.
+    /// - parameter frameSize: The size of the frame in samples per channel.
+    /// - returns: An opus encoded packet.
+    ///
     open func decode(_ audio: UnsafePointer<UInt8>?, packetSize: Int, frameSize: Int) throws -> [opus_int16] {
         let maxSize = maxFrameSize(assumingSize: frameSize)
         let output = UnsafeMutablePointer<opus_int16>.allocate(capacity: maxSize)

@@ -31,60 +31,60 @@ public protocol DiscordGatewayable : DiscordEngineHeartbeatable {
 
     // MARK: Methods
 
-    /**
-        Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
-
-        Override this method if you need to customize payload handling.
-
-        - parameter payload: The payload object
-    */
+    ///
+    /// Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
+    ///
+    /// Override this method if you need to customize payload handling.
+    ///
+    /// - parameter payload: The payload object
+    ///
     func handleGatewayPayload(_ payload: DiscordGatewayPayload)
 
     // MARK: Methods
 
-    /**
-        Handles a dispatch payload.
-
-        - parameter payload: The dispatch payload
-    */
+    ///
+    /// Handles a dispatch payload.
+    ///
+    /// - parameter payload: The dispatch payload
+    ///
     func handleDispatch(_ payload: DiscordGatewayPayload)
 
-    /**
-        Handles the hello event.
-
-        - parameter payload: The dispatch payload
-    */
+    ///
+    /// Handles the hello event.
+    ///
+    /// - parameter payload: The dispatch payload
+    ///
     func handleHello(_ payload: DiscordGatewayPayload)
 
-    /**
-        Handles the resumed event.
-
-        - parameter payload: The payload for the event.
-    */
+    ///
+    /// Handles the resumed event.
+    ///
+    /// - parameter payload: The payload for the event.
+    ///
     func handleResumed(_ payload: DiscordGatewayPayload)
 
-    /**
-        Parses a raw message from the WebSocket. This is the entry point for all Discord events.
-        You shouldn't call this directly.
-
-        Override this method if you need to customize parsing.
-
-        - parameter string: The raw payload string
-    */
+    ///
+    /// Parses a raw message from the WebSocket. This is the entry point for all Discord events.
+    /// You shouldn't call this directly.
+    ///
+    /// Override this method if you need to customize parsing.
+    ///
+    /// - parameter string: The raw payload string
+    ///
     func parseGatewayMessage(_ string: String)
 
-    /**
-        Sends a payload to Discord.
-
-        - parameter payload: The payload to send.
-    */
+    ///
+    /// Sends a payload to Discord.
+    ///
+    /// - parameter payload: The payload to send.
+    ///
     func sendPayload(_ payload: DiscordGatewayPayload)
 
-    /**
-        Starts the handshake with the Discord server. You shouldn't need to call this directly.
-
-        Override this method if you need to customize the handshake process.
-    */
+    ///
+    /// Starts the handshake with the Discord server. You shouldn't need to call this directly.
+    ///
+    /// Override this method if you need to customize the handshake process.
+    ///
     func startHandshake()
 }
 
@@ -99,11 +99,11 @@ public extension DiscordGatewayable where Self: DiscordWebSocketable {
 
         DefaultDiscordLogger.Logger.debug("Sending ws: \(payloadString)", type: description)
 
-        #if !os(Linux)
+#if !os(Linux)
         websocket?.write(string: payloadString)
-        #else
+#else
         try? websocket?.send(payloadString)
-        #endif
+#endif
     }
 }
 
@@ -166,14 +166,14 @@ public struct DiscordGatewayPayload {
     /// The name of this dispatch.
     public let name: String?
 
-    /**
-        Creates a new DiscordGatewayPayload.
-
-        - parameter code: The code of this payload
-        - parameter payload: The data of this payload
-        - parameter sequenceNumber: An optional sequence number for this dispatch
-        - parameter name: The name of this dispatch
-    */
+    ///
+    /// Creates a new DiscordGatewayPayload.
+    ///
+    /// - parameter code: The code of this payload
+    /// - parameter payload: The data of this payload
+    /// - parameter sequenceNumber: An optional sequence number for this dispatch
+    /// - parameter name: The name of this dispatch
+    ///
     public init(code: DiscordGatewayCode, payload: DiscordGatewayPayloadData, sequenceNumber: Int? = nil,
                 name: String? = nil) {
         self.code = code

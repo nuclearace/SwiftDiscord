@@ -78,9 +78,9 @@ public struct DiscordRole : JSONAble, Equatable {
         return roles
     }
 
-    /**
-        Whether two roles are the same.
-    */
+    ///
+    /// Whether two roles are the same.
+    ///
     public static func ==(lhs: DiscordRole, rhs: DiscordRole) -> Bool {
         return lhs.id == rhs.id
     }

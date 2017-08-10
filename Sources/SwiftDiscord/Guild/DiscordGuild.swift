@@ -126,7 +126,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         splash = guildObject.get("splash", or: "")
         verificationLevel = guildObject.get("verification_level", or: -1)
         voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject.get("voice_states", or: JSONArray()),
-            guildId: id)
+                                                             guildId: id)
         unavailable = guildObject.get("unavailable", or: false)
         joinedAt = DiscordDateFormatter.format(guildObject.get("joined_at", or: "")) ?? Date()
         self.client = client
@@ -136,26 +136,26 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 
     // MARK: Methods
 
-    /**
-        Bans this user from the guild.
-
-        - parameter member: The member to ban.
-        - parameter deleteMessageDays: The number of days going back to delete messages. Defaults to 7.
-        - parameter reason: The reason for this ban.
-    */
+    ///
+    /// Bans this user from the guild.
+    ///
+    /// - parameter member: The member to ban.
+    /// - parameter deleteMessageDays: The number of days going back to delete messages. Defaults to 7.
+    /// - parameter reason: The reason for this ban.
+    ///
     public func ban(_ member: DiscordGuildMember, deleteMessageDays: Int = 7, reason: String? = nil) {
         guard let client = self.client else { return }
 
         client.guildBan(userId: member.user.id, on: id, deleteMessageDays: deleteMessageDays, reason: reason)
     }
 
-    /**
-        Creates a channel on this guild with `options`. The channel will not be immediately available; wait for a
-        channel create event.
-
-        - parameter with: The options for this new channel
-        - parameter reason: The reason this channel is being created.
-    */
+    ///
+    /// Creates a channel on this guild with `options`. The channel will not be immediately available; wait for a
+    /// channel create event.
+    ///
+    /// - parameter with: The options for this new channel
+    /// - parameter reason: The reason this channel is being created.
+    ///
     public func createChannel(with options: [DiscordEndpoint.Options.GuildCreateChannel], reason: String? = nil) {
         guard let client = self.client else { return }
 
@@ -164,14 +164,14 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         client.createGuildChannel(on: id, options: options, reason: reason)
     }
 
-    /**
-        Gets the audit log for this guild.
-
-        **NOTE** This is a blocking method. If you need an async version use the `getGuildAuditLog` method from
-        `DiscordEndpointConsumer`, which is available on `DiscordClient`.
-
-        - returns: A `DiscordAuditLog` for this guild.
-    */
+    ///
+    /// Gets the audit log for this guild.
+    ///
+    /// **NOTE** This is a blocking method. If you need an async version use the `getGuildAuditLog` method from
+    /// `DiscordEndpointConsumer`, which is available on `DiscordClient`.
+    ///
+    /// - returns: A `DiscordAuditLog` for this guild.
+    ///
     public func getAuditLog(withOptions options: [DiscordEndpoint.Options.AuditLog] = []) -> DiscordAuditLog? {
         guard let client = self.client else { return nil }
 
@@ -189,14 +189,14 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         return auditLog
     }
 
-    /**
-        Gets the bans for this guild.
-
-        **NOTE**: This is a blocking method. If you need an async version use the `getGuildBans` method from
-        `DiscordEndpointConsumer`, which is available on `DiscordClient`.
-
-        - returns: An array of `DiscordUser`s who are banned on this guild
-    */
+    ///
+    /// Gets the bans for this guild.
+    ///
+    /// **NOTE**: This is a blocking method. If you need an async version use the `getGuildBans` method from
+    /// `DiscordEndpointConsumer`, which is available on `DiscordClient`.
+    ///
+    /// - returns: An array of `DiscordUser`s who are banned on this guild
+    ///
     public func getBans() -> [DiscordBan] {
         guard let client = self.client else { return [] }
 
@@ -214,15 +214,15 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         return bannedUsers
     }
 
-    /**
-        Gets a guild member by their user id.
-
-        **NOTE**: This is a blocking method. If you need an async version user the `getGuildMember` method from
-        `DiscordEndpointConsumer`, which is available on `DiscordClient`.
-
-        - parameter userId: The user id of the member to get
-        - returns: The guild member, if one was found
-    */
+    ///
+    /// Gets a guild member by their user id.
+    ///
+    /// **NOTE**: This is a blocking method. If you need an async version user the `getGuildMember` method from
+    /// `DiscordEndpointConsumer`, which is available on `DiscordClient`.
+    ///
+    /// - parameter userId: The user id of the member to get
+    /// - returns: The guild member, if one was found
+    ///
     public func getGuildMember(_ userId: UserID) -> DiscordGuildMember? {
         guard let client = self.client else { return nil }
 
@@ -255,36 +255,36 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         return guildDictionary
     }
 
-    /**
-        Modifies this guild with `options`.
-
-        - parameter options: An array of options to change.
-        - parameter reason: The reason for this change.
-    */
+    ///
+    /// Modifies this guild with `options`.
+    ///
+    /// - parameter options: An array of options to change.
+    /// - parameter reason: The reason for this change.
+    ///
     public func modifyGuild(options: [DiscordEndpoint.Options.ModifyGuild], reason: String? = nil) {
         guard let client = self.client else { return }
 
         client.modifyGuild(id, options: options, reason: reason)
     }
 
-    /**
-        Modifies a guild member.
-
-        - parameter member: The member to modify.
-        - parameter options: The options to set.
-    */
+    ///
+    /// Modifies a guild member.
+    ///
+    /// - parameter member: The member to modify.
+    /// - parameter options: The options to set.
+    ///
     public func modifyMember(_ member: DiscordGuildMember, options: [DiscordEndpoint.Options.ModifyMember]) {
         guard let client = self.client else { return }
 
         client.modifyGuildMember(member.user.id, on: id, options: options)
     }
 
-    /**
-        Gets the roles that this member has on this guild.
-
-        - parameter member: The member whose roles we are getting.
-        - returns: An array containing the roles they have.
-    */
+    ///
+    /// Gets the roles that this member has on this guild.
+    ///
+    /// - parameter member: The member whose roles we are getting.
+    /// - returns: An array containing the roles they have.
+    ///
     public func roles(for member: DiscordGuildMember) -> [DiscordRole] {
         var roles = [DiscordRole]()
 
@@ -367,11 +367,11 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         return self
     }
 
-    /**
-        Unbans the specified user from the guild.
-
-        - parameter user: The user to unban
-    */
+    ///
+    /// Unbans the specified user from the guild.
+    ///
+    /// - parameter user: The user to unban
+    ///
     public func unban(_ user: DiscordUser) {
         guard let client = self.client else { return }
 

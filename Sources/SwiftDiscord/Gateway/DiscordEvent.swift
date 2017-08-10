@@ -15,12 +15,12 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/**
-    An enum that represents the dispatch events Discord sends.
-
-    If one of these events is handled specifically by the client then it will be turned into an event with the form
-    `myEventName`. If it is not handled, then the associated enum string will be the event name.
-*/
+///
+/// An enum that represents the dispatch events Discord sends.
+///
+/// If one of these events is handled specifically by the client then it will be turned into an event with the form
+/// `myEventName`. If it is not handled, then the associated enum string will be the event name.
+///
 public enum DiscordDispatchEvent : String {
     /// Ready (Handled)
     case ready = "READY"

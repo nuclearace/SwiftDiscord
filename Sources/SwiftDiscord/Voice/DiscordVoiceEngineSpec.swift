@@ -30,53 +30,53 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
 
     // MARK: Methods
 
-    /**
-        Stops encoding and requests a new encoder. A `voiceEngine.ready` event will be fired when the encoder is ready.
-    */
+    ///
+    /// Stops encoding and requests a new encoder. A `voiceEngine.ready` event will be fired when the encoder is ready.
+    ///
     func requestNewEncoder() throws
 
-    /**
-        An async write to the encoder.
-
-        - parameter data: Raw audio data that should be turned into OPUS encoded data.
-        - parameter doneHandler: An optional handler that will be called when we are done writing.
-    */
+    ///
+    /// An async write to the encoder.
+    ///
+    /// - parameter data: Raw audio data that should be turned into OPUS encoded data.
+    /// - parameter doneHandler: An optional handler that will be called when we are done writing.
+    ///
     func send(_ data: Data, doneHandler: (() -> ())?)
 
-    /**
-        Sends whether we are speaking or not.
-
-        - parameter speaking: Our speaking status.
-    */
+    ///
+    /// Sends whether we are speaking or not.
+    ///
+    /// - parameter speaking: Our speaking status.
+    ///
     func sendSpeaking(_ speaking: Bool)
 
-    /**
-        Sends OPUS encoded voice data to Discord.
-
-        - parameter data: An array of OPUS encoded voice data.
-    */
+    ///
+    /// Sends OPUS encoded voice data to Discord.
+    ///
+    /// - parameter data: An array of OPUS encoded voice data.
+    ///
     func sendVoiceData(_ data: [UInt8])
 
     #if !os(iOS)
-    /**
-        Takes a process that outputs random audio data, and sends it to a hidden FFmpeg process that turns the data
-        into raw PCM.
-
-        Example setting up youtube-dl to play music.
-
-        ```swift
-        youtube = EncoderProcess()
-        youtube.launchPath = "/usr/local/bin/youtube-dl"
-        youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
-
-        voiceEngine.setupMiddleware(youtube) {
-            print("youtube died")
-        }
-        ```
-
-        - parameter middleware: The process that will output audio data.
-        - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
-    */
+    ///
+    /// Takes a process that outputs random audio data, and sends it to a hidden FFmpeg process that turns the data
+    /// into raw PCM.
+    ///
+    /// Example setting up youtube-dl to play music.
+    ///
+    /// ```swift
+    /// youtube = EncoderProcess()
+    /// youtube.launchPath = "usrlocalbinyoutube-dl"
+    /// youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
+    ///
+    /// voiceEngine.setupMiddleware(youtube) {
+    ///     print("youtube died")
+    /// }
+    /// ```
+    ///
+    /// - parameter middleware: The process that will output audio data.
+    /// - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
+    ///
     func setupMiddleware(_ middleware: Process, terminationHandler: (() -> ())?)
     #endif
 }
@@ -85,33 +85,33 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
 public protocol DiscordVoiceEngineDelegate : class {
     // MARK: Methods
 
-    /**
-        Handles received voice data from a voice engine.
-
-        - parameter data: The voice data that was received
-    */
+    ///
+    /// Handles received voice data from a voice engine.
+    ///
+    /// - parameter data: The voice data that was received
+    ///
     func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveVoiceData data: DiscordVoiceData)
 
-    /**
-        Called when the voice engine disconnects.
-
-        - parameter engine: The engine that disconnected.
-    */
+    ///
+    /// Called when the voice engine disconnects.
+    ///
+    /// - parameter engine: The engine that disconnected.
+    ///
     func voiceEngineDidDisconnect(_ engine: DiscordVoiceEngine)
 
-    /**
-        Called when the voice engine needs an encoder.
-
-        - parameter engine: The engine that needs an encoder.
-        - returns: An encoder.
-    */
+    ///
+    /// Called when the voice engine needs an encoder.
+    ///
+    /// - parameter engine: The engine that needs an encoder.
+    /// - returns: An encoder.
+    ///
     func voiceEngineNeedsEncoder(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder?
 
-    /**
-        Called when the voice engine is ready.
-
-        - parameter engine: The engine that's ready.
-    */
+    ///
+    /// Called when the voice engine is ready.
+    ///
+    /// - parameter engine: The engine that's ready.
+    ///
     func voiceEngineReady(_ engine: DiscordVoiceEngine)
 }
 
@@ -127,24 +127,24 @@ public protocol DiscordOpusCodeable {
 
     // MARK: Methods
 
-    /**
-        Returns the maximum number of bytes that a frame can contain given a
-        frame size in number of samples per channel.
-
-        - parameter assumingSize: The size of the frame, in number of samples per channel.
-        - returns: The number of bytes in this frame.
-    */
+    ///
+    /// Returns the maximum number of bytes that a frame can contain given a
+    /// frame size in number of samples per channel.
+    ///
+    /// - parameter assumingSize: The size of the frame, in number of samples per channel.
+    /// - returns: The number of bytes in this frame.
+    ///
     func maxFrameSize(assumingSize size: Int) -> Int
 }
 
 public extension DiscordOpusCodeable {
-    /**
-        Returns the maximum number of bytes that a frame can contain given a
-        frame size in number of samples per channel.
-
-        - parameter assumingSize: The size of the frame, in number of samples per channel.
-        - returns: The number of bytes in this frame.
-    */
+    ///
+    /// Returns the maximum number of bytes that a frame can contain given a
+    /// frame size in number of samples per channel.
+    ///
+    /// - parameter assumingSize: The size of the frame, in number of samples per channel.
+    /// - returns: The number of bytes in this frame.
+    ///
     public func maxFrameSize(assumingSize size: Int) -> Int {
         return size * channels * MemoryLayout<opus_int16>.size
     }

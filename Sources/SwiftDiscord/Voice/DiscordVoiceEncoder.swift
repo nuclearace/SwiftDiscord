@@ -36,11 +36,11 @@ public enum DiscordVoiceError : Error {
 }
 
 #if !os(iOS)
-/**
-    A wrapper class for a process that spits out audio data that can be fed into an FFmpeg process that is then sent
-    to the engine.
-
-*/
+///
+/// A wrapper class for a process that spits out audio data that can be fed into an FFmpeg process that is then sent
+/// to the engine.
+///
+///
 public class DiscordEncoderMiddleware {
     // MARK: Properties
 
@@ -55,9 +55,9 @@ public class DiscordEncoderMiddleware {
 
     // MARK: Initializers
 
-    /**
-        An intializer that sets up a middleware ffmpeg process that encodes some audio data.
-    */
+    ///
+    /// An intializer that sets up a middleware ffmpeg process that encodes some audio data.
+    ///
     public init(encoder: DiscordVoiceEncoder, middleware: Process, terminationHandler: (() -> ())?) {
         self.middleware = middleware
         ffmpeg = Process()
@@ -69,7 +69,7 @@ public class DiscordEncoderMiddleware {
         ffmpeg.standardInput = pipe
         ffmpeg.standardOutput = encoder.writeToHandler
         ffmpeg.arguments = ["-hide_banner", "-loglevel", "quiet", "-i", "pipe:0", "-f", "s16le", "-map", "0:a",
-            "-ar", "48000", "-ac", "2", "-b:a", "128000", "-acodec", "pcm_s16le", "pipe:1"]
+                            "-ar", "48000", "-ac", "2", "-b:a", "128000", "-acodec", "pcm_s16le", "pipe:1"]
 
         middleware.terminationHandler = {_ in
             terminationHandler?()
@@ -80,9 +80,9 @@ public class DiscordEncoderMiddleware {
         }
     }
 
-    /**
-        Starts the middleware.
-    */
+    ///
+    /// Starts the middleware.
+    ///
     public func start() {
         ffmpeg.launch()
         middleware.launch()
@@ -90,9 +90,9 @@ public class DiscordEncoderMiddleware {
 }
 #endif
 
-/**
-    DiscordVoiceEncoder is responsible for turning audio data into Opus packets.
-*/
+///
+/// DiscordVoiceEncoder is responsible for turning audio data into Opus packets.
+///
 open class DiscordVoiceEncoder {
     // MARK: Properties
 
@@ -121,11 +121,11 @@ open class DiscordVoiceEncoder {
 
     // MARK: Initializers
 
-    /**
-        Sets up a raw encoder. This contains no FFmpeg middleware, so you must write raw PCM data to the encoder.
-
-        - parameter opusEncoder: The Opus encoder to use.
-    */
+    ///
+    /// Sets up a raw encoder. This contains no FFmpeg middleware, so you must write raw PCM data to the encoder.
+    ///
+    /// - parameter opusEncoder: The Opus encoder to use.
+    ///
     public init(opusEncoder: DiscordOpusEncoder) {
         self.pipe = Pipe()
         self.opusEncoder = opusEncoder
@@ -161,13 +161,13 @@ open class DiscordVoiceEncoder {
         writeToHandler.closeFile()
     }
 
-    /**
-        A read from the encoder. If there is no data available, this method blocks.
-
-        - returns: A tuple that contains the results of the read.
-                   First parameter is a Bool indicating whether the encoder is done.
-                   Second is an Opus encoded packet.
-    */
+    ///
+    /// A read from the encoder. If there is no data available, this method blocks.
+    ///
+    /// - returns: A tuple that contains the results of the read.
+    /// First parameter is a Bool indicating whether the encoder is done.
+    /// Second is an Opus encoded packet.
+    ///
     open func read() -> (Bool, [UInt8]) {
         guard !closed else { return (true, []) }
 
@@ -199,12 +199,12 @@ open class DiscordVoiceEncoder {
         pipe = Pipe()
     }
 
-    /**
-        Writes to the encoder.
-
-        - parameter data: Raw audio data that should be turned into OPUS encoded data.
-        - parameter doneHandler: An optional handler that will be called when we are done writing.
-    */
+    ///
+    /// Writes to the encoder.
+    ///
+    /// - parameter data: Raw audio data that should be turned into OPUS encoded data.
+    /// - parameter doneHandler: An optional handler that will be called when we are done writing.
+    ///
     open func write(_ data: Data, doneHandler: (() -> ())? = nil) {
         guard !closed else { return }
 
@@ -236,11 +236,11 @@ open class DiscordVoiceEncoder {
     }
 }
 
-/**
-    An Opus encoder.
-
-    Takes raw PCM 16-bit-le/sample data and returns Opus encoded voice packets.
-*/
+///
+/// An Opus encoder.
+///
+/// Takes raw PCM 16-bit-lesample data and returns Opus encoded voice packets.
+///
 open class DiscordOpusEncoder : DiscordOpusCodeable {
     // MARK: Properties
 
@@ -260,13 +260,13 @@ open class DiscordOpusEncoder : DiscordOpusCodeable {
 
     // MARK: Initializers
 
-    /**
-        Creates an Encoder that can take raw PCM data and create Opus packets.
-
-        - parameter bitrate: The target bitrate for this encoder.
-        - parameter sampleRate: The sample rate for the encoder. Discord expects this to be 48k.
-        - parameter channels: The number of channels in the stream to encode, should always be 2.
-    */
+    ///
+    /// Creates an Encoder that can take raw PCM data and create Opus packets.
+    ///
+    /// - parameter bitrate: The target bitrate for this encoder.
+    /// - parameter sampleRate: The sample rate for the encoder. Discord expects this to be 48k.
+    /// - parameter channels: The number of channels in the stream to encode, should always be 2.
+    ///
     public init(bitrate: Int, sampleRate: Int, channels: Int, vbr: Bool = false) throws {
         self.bitrate = bitrate
         self.sampleRate = sampleRate
@@ -294,13 +294,13 @@ open class DiscordOpusEncoder : DiscordOpusCodeable {
         opus_encoder_destroy(encoderState)
     }
 
-    /**
-        Encodes a single frame of raw PCM 16-bit-le/sample LE data into Opus format.
-
-        - parameter audio: A pointer to the audio data. Use `maxFrameSize(assumingSize:)` to find the length.
-        - parameter frameSize: The size of the frame in samples per channel.
-        - returns: An opus encoded packet.
-    */
+    ///
+    /// Encodes a single frame of raw PCM 16-bit-lesample LE data into Opus format.
+    ///
+    /// - parameter audio: A pointer to the audio data. Use `maxFrameSize(assumingSize:)` to find the length.
+    /// - parameter frameSize: The size of the frame in samples per channel.
+    /// - returns: An opus encoded packet.
+    ///
     open func encode(_ audio: UnsafePointer<opus_int16>, frameSize: Int) throws -> [UInt8] {
         let output = UnsafeMutablePointer<UInt8>.allocate(capacity: maxPacketSize)
         let lenPacket = opus_encode(encoderState, audio, Int32(frameSize), output, opus_int32(maxPacketSize))

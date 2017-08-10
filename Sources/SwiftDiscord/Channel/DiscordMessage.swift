@@ -109,14 +109,14 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.client = client
     }
 
-    /**
-        Creates a message that can be used to send.
-
-        - parameter content: The content of this message.
-        - parameter embeds: The embeds for this message.
-        - parameter files: The files to send with this message.
-        - parameter tts: Whether this message should be text-to-speach.
-    */
+    ///
+    /// Creates a message that can be used to send.
+    ///
+    /// - parameter content: The content of this message.
+    /// - parameter embeds: The embeds for this message.
+    /// - parameter files: The files to send with this message.
+    /// - parameter tts: Whether this message should be text-to-speach.
+    ///
     public init(content: String, embed: DiscordEmbed? = nil, file: DiscordFileUpload? = nil, tts: Bool = false) {
         self.content = content
         if let embed = embed {
@@ -144,29 +144,29 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.timestamp = Date()
     }
 
-    /**
-        ExpressibleByStringLiteral conformance.
-
-        - parameter unicodeScalarLiteral: The unicode scalar literal
-    */
+    ///
+    /// ExpressibleByStringLiteral conformance.
+    ///
+    /// - parameter unicodeScalarLiteral: The unicode scalar literal
+    ///
     public init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
         self.init(stringLiteral: String(extendedGraphemeClusterLiteral: value))
     }
 
-    /**
-        ExpressibleByStringLiteral conformance.
-
-        - parameter extendedGraphemeClusterLiteral: The grapheme scalar literal
-    */
+    ///
+    /// ExpressibleByStringLiteral conformance.
+    ///
+    /// - parameter extendedGraphemeClusterLiteral: The grapheme scalar literal
+    ///
     public init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
         self.init(stringLiteral: String(extendedGraphemeClusterLiteral: value))
     }
 
-    /**
-        ExpressibleByStringLiteral conformance.
-
-        - parameter stringLiteral: The string literal
-    */
+    ///
+    /// ExpressibleByStringLiteral conformance.
+    ///
+    /// - parameter stringLiteral: The string literal
+    ///
     public init(stringLiteral value: StringLiteralType) {
         self.init(content: value)
     }
@@ -200,9 +200,9 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         }
     }
 
-    /**
-        Deletes this message from Discord.
-    */
+    ///
+    /// Deletes this message from Discord.
+    ///
     public func delete() {
         channel?.deleteMessage(self)
     }
@@ -274,13 +274,13 @@ public struct DiscordEmbed : JSONAble {
         /// The url of this author.
         public var url: URL?
 
-        /**
-            Creates an Author object.
-
-            - parameter name: The name of this author.
-            - parameter iconUrl: The iconUrl for this author's icon.
-            - parameter url: The url for this author.
-        */
+        ///
+        /// Creates an Author object.
+        ///
+        /// - parameter name: The name of this author.
+        /// - parameter iconUrl: The iconUrl for this author's icon.
+        /// - parameter url: The url for this author.
+        ///
         public init(name: String, iconUrl: URL? = nil, url: URL? = nil) {
             self.name = name
             self.iconUrl = iconUrl
@@ -312,13 +312,13 @@ public struct DiscordEmbed : JSONAble {
 
         // MARK: Initializers
 
-        /**
-            Creates a Field object.
-
-            - parameter name: The name of this field.
-            - parameter value: The value of this field.
-            - parameter inline: Whether this field can be inlined.
-        */
+        ///
+        /// Creates a Field object.
+        ///
+        /// - parameter name: The name of this field.
+        /// - parameter value: The value of this field.
+        /// - parameter inline: Whether this field can be inlined.
+        ///
         public init(name: String, value: String, inline: Bool = false) {
             self.name = name
             self.value = value
@@ -340,12 +340,12 @@ public struct DiscordEmbed : JSONAble {
         /// The proxy url for the icon.
         public let proxyIconUrl: URL?
 
-        /**
-            Creates a Footer object.
-
-            - parameter text: The text of this field.
-            - parameter iconUrl: The iconUrl of this field.
-        */
+        ///
+        /// Creates a Footer object.
+        ///
+        /// - parameter text: The text of this field.
+        /// - parameter iconUrl: The iconUrl of this field.
+        ///
         public init(text: String?, iconUrl: URL?) {
             self.text = text
             self.iconUrl = iconUrl
@@ -373,11 +373,11 @@ public struct DiscordEmbed : JSONAble {
         /// The width of this image.
         public let width: Int
 
-        /**
-            Creates an Image object.
-
-            - parameter url: The url for this field.
-        */
+        ///
+        /// Creates an Image object.
+        ///
+        /// - parameter url: The url for this field.
+        ///
         public init(url: URL) {
             self.height = -1
             self.url = url
@@ -421,11 +421,11 @@ public struct DiscordEmbed : JSONAble {
         /// The width of this image.
         public let width: Int
 
-        /**
-            Creates a Thumbnail object.
-
-        - parameter url: The url for this field
-        */
+        ///
+        /// Creates a Thumbnail object.
+        ///
+        /// - parameter url: The url for this field
+        ///
         public init(url: URL) {
             self.url = url
             self.height = -1
@@ -479,19 +479,19 @@ public struct DiscordEmbed : JSONAble {
 
     // MARK: Initializers
 
-    /**
-        Creates an Embed object.
-
-        - parameter title: The title of this embed.
-        - parameter description: The description of this embed.
-        - parameter author: The author of this embed.
-        - parameter url: The url for this embed, if there is one.
-        - parameter image: The image for the embed, if there is one.
-        - parameter thumbnail: The thumbnail of this embed, if there is one.
-        - parameter color: The color of this embed.
-        - parameter footer: The footer for this embed, if there is one.
-        - parameter fields: The list of fields for this embed, if there are any.
-    */
+    ///
+    /// Creates an Embed object.
+    ///
+    /// - parameter title: The title of this embed.
+    /// - parameter description: The description of this embed.
+    /// - parameter author: The author of this embed.
+    /// - parameter url: The url for this embed, if there is one.
+    /// - parameter image: The image for the embed, if there is one.
+    /// - parameter thumbnail: The thumbnail of this embed, if there is one.
+    /// - parameter color: The color of this embed.
+    /// - parameter footer: The footer for this embed, if there is one.
+    /// - parameter fields: The list of fields for this embed, if there are any.
+    ///
     public init(title: String? = nil,
                 description: String? = nil,
                 author: Author? = nil,
@@ -611,13 +611,13 @@ public struct DiscordFileUpload {
 
     // MARK: Initializers
 
-    /**
-        Constructs a new DiscordFileUpload.
-
-        - parameter data: The file data
-        - parameter filename: The filename
-        - parameter mimeType: The mime type
-    */
+    ///
+    /// Constructs a new DiscordFileUpload.
+    ///
+    /// - parameter data: The file data
+    /// - parameter filename: The filename
+    /// - parameter mimeType: The mime type
+    ///
     public init(data: Data, filename: String, mimeType: String) {
         self.data = data
         self.filename = filename

@@ -86,7 +86,7 @@ public struct DiscordPermission : OptionSet, JSONRepresentable {
 
     /// User has all permissions.
     public static let all = DiscordPermission(rawValue: -1)
-    
+
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
@@ -128,14 +128,14 @@ public struct DiscordPermissionOverwrite : JSONAble {
 
     // MARK: Initializers
 
-    /**
-        Creates a new DiscordPermissionOverwrite
-
-        - parameter id: The id of this overwrite
-        - parameter type: The type of this overwrite
-        - parameter allow: The permissions allowed
-        - parameter deny: The permissions denied
-    */
+    ///
+    /// Creates a new DiscordPermissionOverwrite
+    ///
+    /// - parameter id: The id of this overwrite
+    /// - parameter type: The type of this overwrite
+    /// - parameter allow: The permissions allowed
+    /// - parameter deny: The permissions denied
+    ///
     public init(id: OverwriteID, type: DiscordPermissionOverwriteType, allow: DiscordPermission, deny: DiscordPermission) {
         self.id = id
         self.type = type

@@ -23,20 +23,20 @@ public protocol DiscordTokenBearer {
     var token: DiscordToken { get }
 }
 
-/**
-    A type that represents a Discord JWT.
-
-    This type conforms to `ExpressibleByStringLiteral` so it can be created via string literals.
-
-    For example:
-
-    ```swift
-    let token = "Bot adfadf.adfdafdafdfa.afdaf" as DiscordToken
-    ```
-
-    The "Bot" prefix indicates that this token is a bot. This must included if the token is for a bot.
-    Likewise, if the token is an OAuth token, it must be preceded by "Bearer". User tokens can omit a prefix.
-*/
+///
+/// A type that represents a Discord JWT.
+///
+/// This type conforms to `ExpressibleByStringLiteral` so it can be created via string literals.
+///
+/// For example:
+///
+/// ```swift
+/// let token = "Bot adfadf.adfdafdafdfa.afdaf" as DiscordToken
+/// ```
+///
+/// The "Bot" prefix indicates that this token is a bot. This must included if the token is for a bot.
+/// Likewise, if the token is an OAuth token, it must be preceded by "Bearer". User tokens can omit a prefix.
+///
 public struct DiscordToken : ExpressibleByStringLiteral, CustomStringConvertible {
     // MARK: Typealiases
 
@@ -76,29 +76,29 @@ public struct DiscordToken : ExpressibleByStringLiteral, CustomStringConvertible
 
     // MARK: Initializers
 
-    /**
-        ExpressibleByStringLiteral conformance.
-
-        - parameter unicodeScalarLiteral: The unicode scalar literal
-    */
+    ///
+    /// ExpressibleByStringLiteral conformance.
+    ///
+    /// - parameter unicodeScalarLiteral: The unicode scalar literal
+    ///
     public init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
         token = String(unicodeScalarLiteral: value)
     }
 
-    /**
-        ExpressibleByStringLiteral conformance.
-
-        - parameter extendedGraphemeClusterLiteral: The grapheme scalar literal
-    */
+    ///
+    /// ExpressibleByStringLiteral conformance.
+    ///
+    /// - parameter extendedGraphemeClusterLiteral: The grapheme scalar literal
+    ///
     public init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
         token = String(extendedGraphemeClusterLiteral: value)
     }
 
-    /**
-        ExpressibleByStringLiteral conformance.
-
-        - parameter stringLiteral: The string literal
-    */
+    ///
+    /// ExpressibleByStringLiteral conformance.
+    ///
+    /// - parameter stringLiteral: The string literal
+    ///
     public init(stringLiteral value: StringLiteralType) {
         token = value
     }

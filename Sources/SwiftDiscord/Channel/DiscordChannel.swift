@@ -57,9 +57,9 @@ public extension DiscordChannel {
 
     // MARK: Methods
 
-    /**
-        Deletes this channel.
-    */
+    ///
+    /// Deletes this channel.
+    ///
     public func delete(reason: String? = nil) {
         guard let client = self.client else { return }
 
@@ -68,11 +68,11 @@ public extension DiscordChannel {
         client.deleteChannel(id, reason: reason)
     }
 
-    /**
-        Modifies this channel with `options`.
-
-        - parameter options: An array of `DiscordEndpointOptions.ModifyChannel`
-    */
+    ///
+    /// Modifies this channel with `options`.
+    ///
+    /// - parameter options: An array of `DiscordEndpointOptions.ModifyChannel`
+    ///
     public func modifyChannel(options: [DiscordEndpoint.Options.ModifyChannel], reason: String? = nil) {
         guard let client = self.client else { return }
 
@@ -85,36 +85,36 @@ public extension DiscordChannel {
 public extension DiscordTextChannel {
     // MARK: Text Channel Methods
 
-    /**
-     Pins a message to this channel.
-
-     - parameter message: The message to pin
-     */
+    ///
+    /// Pins a message to this channel.
+    ///
+    /// - parameter message: The message to pin
+    ///
     public func pinMessage(_ message: DiscordMessage) {
         guard let client = self.client else { return }
 
         client.addPinnedMessage(message.id, on: id)
     }
 
-    /**
-        Deletes a message from this channel.
-
-        - parameter message: The message to delete
-    */
+    ///
+    /// Deletes a message from this channel.
+    ///
+    /// - parameter message: The message to delete
+    ///
     public func deleteMessage(_ message: DiscordMessage) {
         guard let client = self.client else { return }
 
         client.deleteMessage(message.id, on: id)
     }
 
-    /**
-        Gets the pinned messages for this channel.
-
-        **NOTE**: This is a blocking method. If you need an async method, use the `.getPinnedMessages` from
-        `DiscordEndpointConsumer` which is available on `DiscordClient`.
-
-        - returns: An Array of pinned messages
-    */
+    ///
+    /// Gets the pinned messages for this channel.
+    ///
+    /// **NOTE**: This is a blocking method. If you need an async method, use the `.getPinnedMessages` from
+    /// `DiscordEndpointConsumer` which is available on `DiscordClient`.
+    ///
+    /// - returns: An Array of pinned messages
+    ///
     public func getPinnedMessages() -> [DiscordMessage] {
         guard let client = self.client else { return [] }
 
@@ -133,47 +133,47 @@ public extension DiscordTextChannel {
         return messages
     }
 
-    /**
-        Sends a message to this channel. Can be used to send embeds and files as well.
-
-        ```swift
-        channel.send("This is just a simple message")
-        ```
-
-        Sending a message with an embed:
-
-        ```swift
-        channel.send(DiscordMessage(content: "This message also comes with an embed", embeds: [embed]))
-        ```
-
-        Sending a fully loaded message:
-
-         ```swift
-        channel.send(DiscordMessage(content: "This message has it all", embeds: [embed], files: [file]))
-        ```
-
-        - parameter message: The message to send.
-    */
+    ///
+    /// Sends a message to this channel. Can be used to send embeds and files as well.
+    ///
+    /// ```swift
+    /// channel.send("This is just a simple message")
+    /// ```
+    ///
+    /// Sending a message with an embed:
+    ///
+    /// ```swift
+    /// channel.send(DiscordMessage(content: "This message also comes with an embed", embeds: [embed]))
+    /// ```
+    ///
+    /// Sending a fully loaded message:
+    ///
+    /// ```swift
+    /// channel.send(DiscordMessage(content: "This message has it all", embeds: [embed], files: [file]))
+    /// ```
+    ///
+    /// - parameter message: The message to send.
+    ///
     public func send(_ message: DiscordMessage) {
         guard let client = self.client else { return }
 
         client.sendMessage(message, to: id)
     }
 
-    /**
-        Sends that this user is typing on this channel.
-    */
+    ///
+    /// Sends that this user is typing on this channel.
+    ///
     public func triggerTyping() {
         guard let client = self.client else { return }
 
         client.triggerTyping(on: id)
     }
 
-    /**
-        Unpins a message from this channel.
-
-        - parameter message: The message to unpin.
-    */
+    ///
+    /// Unpins a message from this channel.
+    ///
+    /// - parameter message: The message to unpin.
+    ///
     public func unpinMessage(_ message: DiscordMessage) {
         guard let client = self.client else { return }
 

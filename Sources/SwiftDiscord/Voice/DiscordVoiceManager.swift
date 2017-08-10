@@ -22,39 +22,39 @@ import Foundation
 public protocol DiscordVoiceManagerDelegate : class, DiscordTokenBearer {
     // MARK: Methods
 
-    /**
-        Called when an engine disconnects.
-
-        - parameter manager: The manager.
-        - parameter engine: The engine that disconnected.
-    */
+    ///
+    /// Called when an engine disconnects.
+    ///
+    /// - parameter manager: The manager.
+    /// - parameter engine: The engine that disconnected.
+    ///
     func voiceManager(_ manager: DiscordVoiceManager, didDisconnectEngine engine: DiscordVoiceEngine)
 
-    /**
-        Called when a voice engine receives voice data.
-
-        - parameter manager: The manager.
-        - parameter didReceiveVoiceData: The data received.
-        - parameter fromEngine: The engine that received the data.
-    */
+    ///
+    /// Called when a voice engine receives voice data.
+    ///
+    /// - parameter manager: The manager.
+    /// - parameter didReceiveVoiceData: The data received.
+    /// - parameter fromEngine: The engine that received the data.
+    ///
     func voiceManager(_ manager: DiscordVoiceManager, didReceiveVoiceData data: DiscordVoiceData,
                       fromEngine engine: DiscordVoiceEngine)
 
-    /**
-        Called when a voice engine is ready.
-
-        - parameter manager: The manager.
-        - parameter engine: The engine that's ready.
-    */
+    ///
+    /// Called when a voice engine is ready.
+    ///
+    /// - parameter manager: The manager.
+    /// - parameter engine: The engine that's ready.
+    ///
     func voiceManager(_ manager: DiscordVoiceManager, engineIsReady engine: DiscordVoiceEngine)
 
-    /**
-        Called when a voice engine needs an encoder.
-
-        - parameter manager: The manager that is requesting an encoder.
-        - parameter engine: The engine that needs an encoder
-        - returns: An encoder.
-    */
+    ///
+    /// Called when a voice engine needs an encoder.
+    ///
+    /// - parameter manager: The manager that is requesting an encoder.
+    /// - parameter engine: The engine that needs an encoder
+    /// - returns: An encoder.
+    ///
     func voiceManager(_ manager: DiscordVoiceManager,
                       needsEncoderForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder?
 }
@@ -85,20 +85,20 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
 
     // MARK: Initializers
 
-    /**
-        Creates a new manager with the delegate set.
-    */
+    ///
+    /// Creates a new manager with the delegate set.
+    ///
     public init(delegate: DiscordVoiceManagerDelegate) {
         self.delegate = delegate
     }
 
     // MARK: Methods
 
-    /**
-        Leaves the voice channel that is associated with the guild specified.
-
-        - parameter onGuild: The snowflake of the guild that you want to leave.
-    */
+    ///
+    /// Leaves the voice channel that is associated with the guild specified.
+    ///
+    /// - parameter onGuild: The snowflake of the guild that you want to leave.
+    ///
     open func leaveVoiceChannel(onGuild guildId: GuildID) {
         guard let engine = get(voiceEngines[guildId]) else {
             DefaultDiscordLogger.Logger.error("Could not find a voice engine for guild \(guildId)", type: logType)
@@ -124,12 +124,12 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
         }
     }
 
-    /**
-        Tries to open a voice connection to the specified guild.
-        Only succeeds if we have both a voice state and the voice server info for this guild.
-
-        - parameter guildId: The id of the guild to connect to.
-    */
+    ///
+    /// Tries to open a voice connection to the specified guild.
+    /// Only succeeds if we have both a voice state and the voice server info for this guild.
+    ///
+    /// - parameter guildId: The id of the guild to connect to.
+    ///
     open func startVoiceConnection(_ guildId: GuildID) {
         protected {
             _startVoiceConnection(guildId)
@@ -159,41 +159,41 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
         }
     }
 
-    /**
-        Called when the voice engine disconnects.
-
-        - parameter engine: The engine that disconnected.
-    */
+    ///
+    /// Called when the voice engine disconnects.
+    ///
+    /// - parameter engine: The engine that disconnected.
+    ///
     open func voiceEngineDidDisconnect(_ engine: DiscordVoiceEngine) {
         delegate?.voiceManager(self, didDisconnectEngine: engine)
 
         protected { voiceEngines[engine.guildId] = nil }
     }
 
-    /**
-        Handles voice data received from a VoiceEngine
-
-        - parameter didReceiveVoiceData: A DiscordVoiceData tuple
-    */
+    ///
+    /// Handles voice data received from a VoiceEngine
+    ///
+    /// - parameter didReceiveVoiceData: A DiscordVoiceData tuple
+    ///
     open func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveVoiceData data: DiscordVoiceData) {
         delegate?.voiceManager(self, didReceiveVoiceData: data, fromEngine: engine)
     }
 
-    /**
-        Called when the voice engine needs an encoder.
-
-        - parameter engine: The engine that needs an encoder
-        - returns: An encoder.
-    */
+    ///
+    /// Called when the voice engine needs an encoder.
+    ///
+    /// - parameter engine: The engine that needs an encoder
+    /// - returns: An encoder.
+    ///
     open func voiceEngineNeedsEncoder(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder? {
         return try delegate?.voiceManager(self, needsEncoderForEngine: engine)
     }
 
-    /**
-        Called when the voice engine is ready.
-
-        - parameter engine: The engine that's ready.
-    */
+    ///
+    /// Called when the voice engine is ready.
+    ///
+    /// - parameter engine: The engine that's ready.
+    ///
     open func voiceEngineReady(_ engine: DiscordVoiceEngine) {
         delegate?.voiceManager(self, engineIsReady: engine)
     }

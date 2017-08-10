@@ -30,15 +30,15 @@ public protocol DiscordEngineHeartbeatable {
 
     // MARK: Methods
 
-    /**
-        Starts sending heartbeats. After calling this heartbeating should be automatic.
-
-        - parameter seconds: The number of seconds between heartbeats
-    */
+    ///
+    /// Starts sending heartbeats. After calling this heartbeating should be automatic.
+    ///
+    /// - parameter seconds: The number of seconds between heartbeats
+    ///
     func startHeartbeat(seconds: Int)
 
-    /**
-        Sends a heartbeat to the gateway. This should be called from a timer/dispatch.after.
-    */
+    ///
+    /// Sends a heartbeat to the gateway. This should be called from a timerdispatch.after.
+    ///
     func sendHeartbeat()
 }

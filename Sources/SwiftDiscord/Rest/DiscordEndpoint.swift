@@ -24,9 +24,9 @@ import Foundation
 // TODO Guild embeds
 // TODO Guild batch modify roles
 
-/**
-    This enum defines the endpoints used to interact with the Discord API.
-*/
+///
+/// This enum defines the endpoints used to interact with the Discord API.
+///
 public enum DiscordEndpoint : CustomStringConvertible {
     /// The base url for the Discord REST API.
     case baseURL
@@ -147,9 +147,9 @@ public enum DiscordEndpoint : CustomStringConvertible {
 public extension DiscordEndpoint {
     // MARK: Endpoint Request enum
 
-    /**
-    * An HTTP Request for an Endpoint.  This includes any associated data.
-    */
+    ///
+    /// * An HTTP Request for an Endpoint.  This includes any associated data.
+    ///
     public enum EndpointRequest {
         /// A GET request.
         case get(params: [String: String]?, extraHeaders: [DiscordHeader: String]?)
@@ -176,14 +176,14 @@ public extension DiscordEndpoint {
             }
         }
 
-        /**
-        Helper method that creates the basic request for an endpoint.
-
-        - parameter with: A DiscordToken that will be used for authentication
-        - parameter endpoint: The endpoint this request is for
-
-        - returns: a URLRequest that can be further customized
-        */
+        ///
+        /// Helper method that creates the basic request for an endpoint.
+        ///
+        /// - parameter with: A DiscordToken that will be used for authentication
+        /// - parameter endpoint: The endpoint this request is for
+        ///
+        /// - returns: a URLRequest that can be further customized
+        ///
         public func createRequest(with token: DiscordToken,
                                   endpoint: DiscordEndpoint) -> URLRequest? {
             let getParams: [String: String]?
@@ -348,7 +348,6 @@ public extension DiscordEndpoint {
         switch self {
         case .baseURL:
             fatalError("Attempted to get rate limit key for base URL")
-
         /* Channels */
         case let .channel(id):
             return DiscordRateLimitKey(id: id, urlParts: [.channels, .channelID])
@@ -456,9 +455,9 @@ public extension DiscordEndpoint {
     }
 }
 
-/**
- * A type representing HTTP content.
- */
+///
+/// * A type representing HTTP content.
+///
 public enum HTTPContent : CustomStringConvertible {
     /// JSON Content-Type.
     case json(Data)

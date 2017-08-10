@@ -58,30 +58,30 @@ public protocol DiscordWebSocketable : class {
 
     // MARK: Methods
 
-    /**
-        Attaches the WebSocket handlers that listen for text/connects/disconnects/etc
-
-        Override if you need to provide custom handlers.
-
-        Note: You should handle both WebSockets.WebSocket and Starscream.WebSocket handlers.
-    */
+    ///
+    /// Attaches the WebSocket handlers that listen for textconnectsdisconnectsetc
+    ///
+    /// Override if you need to provide custom handlers.
+    ///
+    /// Note: You should handle both WebSockets.WebSocket and Starscream.WebSocket handlers.
+    ///
     func attachWebSocketHandlers()
 
-    /**
-        Starts the connection to the Discord gateway.
-    */
+    ///
+    /// Starts the connection to the Discord gateway.
+    ///
     func connect()
 
-    /**
-        Disconnects the engine. An `engine.disconnect` is fired on disconnection.
-    */
+    ///
+    /// Disconnects the engine. An `engine.disconnect` is fired on disconnection.
+    ///
     func disconnect()
 
-    /**
-        Handles a close from the WebSocket.
-
-        - parameter reason: The reason the socket closed.
-    */
+    ///
+    /// Handles a close from the WebSocket.
+    ///
+    /// - parameter reason: The reason the socket closed.
+    ///
     func handleClose(reason: NSError?)
 }
 
@@ -134,9 +134,9 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         #endif
     }
 
-    /**
-        Starts the connection to the Discord gateway.
-    */
+    ///
+    /// Starts the connection to the Discord gateway.
+    ///
     public func connect() {
         DefaultDiscordLogger.Logger.log("Connecting to \(connectURL), \(description)", type: "DiscordWebSocketable")
         DefaultDiscordLogger.Logger.log("Attaching WebSocket, shard: \(description)", type: "DiscordWebSocketable")
@@ -191,11 +191,11 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable {
         #endif
     }
 
-    /**
-        Logs that an error occured.
-
-        - parameter message: The error message
-    */
+    ///
+    /// Logs that an error occured.
+    ///
+    /// - parameter message: The error message
+    ///
     public func error(message: String) {
         DefaultDiscordLogger.Logger.error(message, type: description)
     }

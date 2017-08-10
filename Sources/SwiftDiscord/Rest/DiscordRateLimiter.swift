@@ -35,14 +35,14 @@ public final class DiscordRateLimiter {
 
     // MARK: Methods
 
-    /**
-        Executes a request through the rate limiter. If the rate limit is hit, the request is put in a queue
-        and executed later.
-
-        - parameter request: The request to execute.
-        - parameter for: The endpoint key.
-        - parameter callback: The callback for this request.
-    */
+    ///
+    /// Executes a request through the rate limiter. If the rate limit is hit, the request is put in a queue
+    /// and executed later.
+    ///
+    /// - parameter request: The request to execute.
+    /// - parameter for: The endpoint key.
+    /// - parameter callback: The callback for this request.
+    ///
     public func executeRequest(_ request: URLRequest, for endpointKey: DiscordRateLimitKey,
                                callback: @escaping (Data?, HTTPURLResponse?, Error?) -> ()) {
         func _executeRequest() {
@@ -75,15 +75,15 @@ public final class DiscordRateLimiter {
         limitQueue.async(execute: _executeRequest)
     }
 
-    /**
-        Executes a request through the rate limiter. If the rate limit is hit, the request is put in a queue
-        and executed later.
-
-        - parameter endpoint: The endpoint for this request.
-        - parameter token: The token to use in this request.
-        - parameter requestInfo: A `DiscordEndpoint.EndpointRequest` specifying the request info.
-        - parameter callback: The callback for this request.
-    */
+    ///
+    /// Executes a request through the rate limiter. If the rate limit is hit, the request is put in a queue
+    /// and executed later.
+    ///
+    /// - parameter endpoint: The endpoint for this request.
+    /// - parameter token: The token to use in this request.
+    /// - parameter requestInfo: A `DiscordEndpoint.EndpointRequest` specifying the request info.
+    /// - parameter callback: The callback for this request.
+    ///
     public func executeRequest(endpoint: DiscordEndpoint,
                                token: DiscordToken,
                                requestInfo: DiscordEndpoint.EndpointRequest,

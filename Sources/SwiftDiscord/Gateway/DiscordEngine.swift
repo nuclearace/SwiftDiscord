@@ -31,9 +31,9 @@ private let os = "iOS"
 private let os = "Linux"
 #endif
 
-/**
-    The base class for Discord WebSocket communications.
-*/
+///
+/// The base class for Discord WebSocket communications.
+///
 open class DiscordEngine : DiscordEngineSpec {
     // MARK: Properties
 
@@ -130,11 +130,11 @@ open class DiscordEngine : DiscordEngineSpec {
 
     // MARK: Initializers
 
-    /**
-        Creates a new DiscordEngine.
-
-        - parameter delegate: The DiscordClientSpec this engine should be associated with.
-    */
+    ///
+    /// Creates a new DiscordEngine.
+    ///
+    /// - parameter delegate: The DiscordClientSpec this engine should be associated with.
+    ///
     public required init(delegate: DiscordShardDelegate, shardNum: Int = 0, numShards: Int = 1) {
         self.delegate = delegate
         self.shardNum = shardNum
@@ -143,9 +143,9 @@ open class DiscordEngine : DiscordEngineSpec {
 
     // MARK: Methods
 
-    /**
-        Disconnects the engine. An `engine.disconnect` is fired on disconnection.
-    */
+    ///
+    /// Disconnects the engine. An `engine.disconnect` is fired on disconnection.
+    ///
     public func disconnect() {
         DefaultDiscordLogger.Logger.log("Disconnecting, \(description)", type: "DiscordWebSocketable")
 
@@ -154,11 +154,11 @@ open class DiscordEngine : DiscordEngineSpec {
         closeWebSockets()
     }
 
-    /**
-        Handles a close from the WebSocket.
-
-        - parameter reason: The reason the socket closed.
-    */
+    ///
+    /// Handles a close from the WebSocket.
+    ///
+    /// - parameter reason: The reason the socket closed.
+    ///
     open func handleClose(reason: NSError? = nil) {
         let closeReason = DiscordGatewayCloseReason(error: reason) ?? .unknown
 
@@ -179,11 +179,11 @@ open class DiscordEngine : DiscordEngineSpec {
         resumeGateway()
     }
 
-    /**
-        Handles a dispatch payload.
-
-        - parameter payload: The dispatch payload
-    */
+    ///
+    /// Handles a dispatch payload.
+    ///
+    /// - parameter payload: The dispatch payload
+    ///
     open func handleDispatch(_ payload: DiscordGatewayPayload) {
         guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
             DefaultDiscordLogger.Logger.error("Could not create dispatch event \(payload)", type: logType)
@@ -202,13 +202,13 @@ open class DiscordEngine : DiscordEngineSpec {
         delegate?.shard(self, didReceiveEvent: event, with: payload)
     }
 
-    /**
-        Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
-
-        Override this method if you need to customize payload handling.
-
-        - parameter payload: The payload object
-    */
+    ///
+    /// Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
+    ///
+    /// Override this method if you need to customize payload handling.
+    ///
+    /// - parameter payload: The payload object
+    ///
     open func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
         handleQueue.async {
             self._handleGatewayPayload(payload)
@@ -254,11 +254,11 @@ open class DiscordEngine : DiscordEngineSpec {
         }
     }
 
-    /**
-        Handles the hello event.
-
-        - parameter payload: The dispatch payload
-    */
+    ///
+    /// Handles the hello event.
+    ///
+    /// - parameter payload: The dispatch payload
+    ///
     open func handleHello(_ payload: DiscordGatewayPayload) {
         guard case let .object(eventData) = payload.payload else { fatalError("Got bad hello payload") }
         guard let milliseconds = eventData["heartbeat_interval"] as? Int else {
@@ -272,9 +272,9 @@ open class DiscordEngine : DiscordEngineSpec {
         delegate?.shard(self, gotHelloWithPayload: payload)
     }
 
-    /**
-        Handles the resumed event. You shouldn't call this directly.
-    */
+    ///
+    /// Handles the resumed event. You shouldn't call this directly.
+    ///
     open func handleResumed(_ payload: DiscordGatewayPayload) {
         DefaultDiscordLogger.Logger.log("Resumed gateway session on shard: \(shardNum)", type: logType)
 
@@ -284,14 +284,14 @@ open class DiscordEngine : DiscordEngineSpec {
         sendHeartbeat()
     }
 
-    /**
-        Parses a raw message from the WebSocket. This is the entry point for all Discord events.
-        You shouldn't call this directly.
-
-        Override this method if you need to customize parsing.
-
-        - parameter string: The raw payload string
-    */
+    ///
+    /// Parses a raw message from the WebSocket. This is the entry point for all Discord events.
+    /// You shouldn't call this directly.
+    ///
+    /// Override this method if you need to customize parsing.
+    ///
+    /// - parameter string: The raw payload string
+    ///
     open func parseGatewayMessage(_ string: String) {
         guard let decoded = DiscordGatewayPayload.payloadFromString(string) else {
             error(message: "Got unknown payload \(string)")
@@ -302,9 +302,9 @@ open class DiscordEngine : DiscordEngineSpec {
         handleGatewayPayload(decoded)
     }
 
-    /**
-        Tries to resume a disconnected gateway connection.
-    */
+    ///
+    /// Tries to resume a disconnected gateway connection.
+    ///
     open func resumeGateway() {
         guard !resuming && !closed else {
             DefaultDiscordLogger.Logger.log("Already trying to resume or closed, ignoring", type: logType)
@@ -331,11 +331,11 @@ open class DiscordEngine : DiscordEngineSpec {
         }
     }
 
-    /**
-        Sends a heartbeat to Discord. You shouldn't need to call this directly.
-
-        Override this method if you need to customize heartbeats.
-    */
+    ///
+    /// Sends a heartbeat to Discord. You shouldn't need to call this directly.
+    ///
+    /// Override this method if you need to customize heartbeats.
+    ///
     open func sendHeartbeat() {
         guard connected else {
             DefaultDiscordLogger.Logger.error("Tried heartbeating on disconnected shard, shard: \(shardNum)",
@@ -367,11 +367,11 @@ open class DiscordEngine : DiscordEngineSpec {
         }
     }
 
-    /**
-        Starts the handshake with the Discord server. You shouldn't need to call this directly.
-
-        Override this method if you need to customize the handshake process.
-    */
+    ///
+    /// Starts the handshake with the Discord server. You shouldn't need to call this directly.
+    ///
+    /// Override this method if you need to customize the handshake process.
+    ///
     open func startHandshake() {
         guard delegate != nil else {
             error(message: "delegate nil before handshaked")
@@ -390,11 +390,11 @@ open class DiscordEngine : DiscordEngineSpec {
         }
     }
 
-    /**
-        Starts the engine's heartbeat. You should call this method when you know the interval that Discord expects.
-
-        - parameter seconds: The heartbeat interval
-    */
+    ///
+    /// Starts the engine's heartbeat. You should call this method when you know the interval that Discord expects.
+    ///
+    /// - parameter seconds: The heartbeat interval
+    ///
     public func startHeartbeat(seconds: Int) {
         heartbeatInterval = seconds
 
