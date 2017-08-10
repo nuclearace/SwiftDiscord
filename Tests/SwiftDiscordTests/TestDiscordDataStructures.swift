@@ -45,4 +45,56 @@ class TestDiscordDataStructures : XCTestCase {
         XCTAssertEqual(game3.type, game4.type, "Type should survive JSONification")
         XCTAssertEqual(game3.url, game4.url, "URL should survive JSONification")
     }
+
+    func testEmbedJSONification() {
+        let dummyIconA = URL(string: "https://cdn.discordapp.com/embed/avatars/0.png")!
+        let dummyIconB = URL(string: "https://cdn.discordapp.com/embed/avatars/1.png")!
+        let dummyURL = URL(string: "https://discordapp.com")!
+
+        let embed1 = DiscordEmbed(title: "Title",
+                                  description: "Description",
+                                  author: DiscordEmbed.Author(name: "Author", iconURL: dummyIconA, url: dummyURL, proxyIconURL: dummyIconB),
+                                  url: dummyURL,
+                                  image: DiscordEmbed.Image(url: dummyIconA, width: 3245, height: 1493),
+                                  thumbnail: DiscordEmbed.Thumbnail(url: dummyIconB, width: 2934, height: 9534, proxyURL: dummyIconA),
+                                  color: 423,
+                                  footer: DiscordEmbed.Footer(text: "Footer", iconUrl: dummyIconB),
+                                  fields: [DiscordEmbed.Field(name: "Field Name", value: "Field Value", inline: true)])
+        let embed2 = DiscordEmbed(embedObject: embed1.json)
+        var currentCompare = "embed1 and embed2"
+        func check<T: Equatable>(_ lhs: T?, _ rhs: T?, _ name: String) {
+            XCTAssertEqual(lhs, rhs, "\(name) should survive JSONification (comparing \(currentCompare))")
+        }
+        func compare(_ embed1: DiscordEmbed, _ embed2: DiscordEmbed) {
+            check(embed1.title, embed2.title, "Title")
+            check(embed1.description, embed2.description, "Description")
+            check(embed1.author?.name, embed2.author?.name, "Author name")
+            check(embed1.author?.iconUrl, embed2.author?.iconUrl, "Author icon URL")
+            check(embed1.author?.url, embed2.author?.url, "Author URL")
+            check(embed1.author?.proxyIconUrl, embed2.author?.proxyIconUrl, "Author proxy url")
+            check(embed1.url, embed2.url, "URL")
+            check(embed1.image?.url, embed2.image?.url, "Image URL")
+            check(embed1.image?.width, embed2.image?.width, "Image width")
+            check(embed1.image?.height, embed2.image?.height, "Image height")
+            check(embed1.thumbnail?.url, embed2.thumbnail?.url, "Thumbnail URL")
+            check(embed1.thumbnail?.width, embed2.thumbnail?.width, "Thumbnail width")
+            check(embed1.thumbnail?.height, embed2.thumbnail?.height, "Thumbnail height")
+            check(embed1.thumbnail?.proxyUrl, embed2.thumbnail?.proxyUrl, "Thumbnail proxy URL")
+            check(embed1.color, embed2.color, "Color")
+            check(embed1.footer?.text, embed2.footer?.text, "Footer text")
+            check(embed1.footer?.iconUrl, embed2.footer?.iconUrl, "Footer icon URL")
+            check(embed1.footer?.proxyIconUrl, embed2.footer?.proxyIconUrl, "Footer proxy URL")
+            check(embed1.fields.count, embed2.fields.count, "Field count")
+            check(embed1.fields.first?.name, embed2.fields.first?.name, "Field name")
+            check(embed1.fields.first?.value, embed2.fields.first?.value, "Field value")
+            check(embed1.fields.first?.inline, embed2.fields.first?.inline, "Field inline")
+        }
+        compare(embed1, embed2)
+        let embed3 = DiscordEmbed(author: DiscordEmbed.Author(name: "Author"), image: DiscordEmbed.Image(url: dummyIconA), thumbnail: DiscordEmbed.Thumbnail(url: dummyIconA), footer: DiscordEmbed.Footer(text: "Footer", iconUrl: nil))
+        let embed4 = DiscordEmbed(embedObject: embed3.json)
+        currentCompare = "embed3 and embed4"
+        compare(embed3, embed4)
+        let nilJSONTest = JSON.encodeJSON(embed3.json)!
+        XCTAssertFalse(nilJSONTest.contains("null"), "JSON-encoded embed should not have any null fields")
+    }
 }

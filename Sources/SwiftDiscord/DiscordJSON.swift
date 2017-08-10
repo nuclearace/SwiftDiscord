@@ -63,6 +63,7 @@ protocol JSONRepresentable {
 }
 
 protocol JSONAble : JSONRepresentable {
+    var shouldIncludeNilsInJSON: Bool { get }
     var json: [String: JSONRepresentable] { get }
 }
 
@@ -104,13 +105,34 @@ extension JSONRepresentable {
     }
 }
 
+// For checking if a value should be included in JSON
+fileprivate protocol Emptyable {
+    var isEmpty: Bool { get }
+}
+extension Optional : Emptyable {
+    fileprivate var isEmpty: Bool {
+        switch self {
+        case .none: return true
+        case .some: return false
+        }
+    }
+}
+extension Array : Emptyable {}
+extension Dictionary : Emptyable {}
+
 extension JSONAble {
+    var shouldIncludeNilsInJSON: Bool { return true }
+
     var json: [String: JSONRepresentable] {
         var json = [String: JSONRepresentable]()
 
         let mirror = Mirror(reflecting: self)
 
         for case let (name?, value) in mirror.children {
+            guard shouldIncludeNilsInJSON || (value as? Emptyable)?.isEmpty != true else {
+                continue
+            }
+
             if let nested = value as? JSONAble {
                 json[name.snakecase] = nested.json
             } else if let sendable = value as? JSONRepresentable {

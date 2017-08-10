@@ -60,7 +60,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     public let mentionEveryone: Bool
 
     /// List of snowflake ids of roles that were mentioned in this message.
-    public let mentionRoles: [String]
+    public let mentionRoles: [RoleID]
 
     /// List of users that were mentioned in this message.
     public let mentions: [DiscordUser]
@@ -97,7 +97,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         embeds = DiscordEmbed.embedsFromArray(messageObject.get("embeds", or: JSONArray()))
         id = Snowflake(messageObject["id"] as? String) ?? 0
         mentionEveryone = messageObject.get("mention_everyone", or: false)
-        mentionRoles = messageObject.get("mention_roles", or: [String]())
+        mentionRoles = messageObject.get("mention_roles", or: [String]()).flatMap(Snowflake.init)
         mentions = DiscordUser.usersFromArray(messageObject.get("mentions", or: JSONArray()))
         nonce = Snowflake(messageObject["nonce"] as? String) ?? 0
         pinned = messageObject.get("pinned", or: false)
@@ -117,10 +117,18 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         - parameter files: The files to send with this message.
         - parameter tts: Whether this message should be text-to-speach.
     */
-    public init(content: String, embeds: [DiscordEmbed] = [], files: [DiscordFileUpload] = [], tts: Bool = false) {
+    public init(content: String, embed: DiscordEmbed? = nil, file: DiscordFileUpload? = nil, tts: Bool = false) {
         self.content = content
-        self.embeds = embeds
-        self.files = files
+        if let embed = embed {
+            self.embeds = [embed]
+        } else {
+            self.embeds = []
+        }
+        if let file = file {
+            self.files = [file]
+        } else {
+            self.files = []
+        }
         self.tts = tts
         self.attachments = []
         self.author = DiscordUser(userObject: [:])
@@ -167,16 +175,18 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
 
     func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
         if let file = files.first {
-            var fields: [String: String] = [
+            var fields: [String: Any] = [
                 "content": content,
-                "tts": String(tts),
+                "tts": tts,
             ]
 
-            if let embed = embeds.first, let encoded = JSON.encodeJSON(["embed": embed.json]) {
-                fields["payload_json"] = encoded
+            if let embed = embeds.first {
+                fields["embed"] = embed.json
             }
 
-            return .right(createMultipartBody(fields: fields, file: file))
+            let encoded = JSON.encodeJSON(fields) ?? ""
+
+            return .right(createMultipartBody(fields: ["payload_json": encoded], file: file))
         } else {
             let messageObject: [String: Any] = [
                 "content": content,
@@ -244,23 +254,25 @@ public struct DiscordAttachment {
 
 /// Represents an embeded entity.
 public struct DiscordEmbed : JSONAble {
+    var shouldIncludeNilsInJSON: Bool { return false }
     // MARK: Nested Types
 
     /// Represents an Embed's author.
     public struct Author : JSONAble {
+        var shouldIncludeNilsInJSON: Bool { return false }
         // MARK: Properties
 
         /// The name for this author.
-        public let name: String?
+        public var name: String
 
         /// The icon for this url.
-        public let iconUrl: URL?
+        public var iconUrl: URL?
 
         /// The proxy url for the icon.
-        public let proxyUrl: URL?
+        public let proxyIconUrl: URL?
 
         /// The url of this author.
-        public let url: URL?
+        public var url: URL?
 
         /**
             Creates an Author object.
@@ -269,11 +281,19 @@ public struct DiscordEmbed : JSONAble {
             - parameter iconUrl: The iconUrl for this author's icon.
             - parameter url: The url for this author.
         */
-        public init(name: String?, iconUrl: URL?, url: URL?) {
+        public init(name: String, iconUrl: URL? = nil, url: URL? = nil) {
             self.name = name
             self.iconUrl = iconUrl
             self.url = url
-            self.proxyUrl = nil
+            self.proxyIconUrl = nil
+        }
+
+        /// For testing
+        init(name: String, iconURL: URL?, url: URL?, proxyIconURL: URL?) {
+            self.name = name
+            self.iconUrl = iconURL
+            self.url = url
+            self.proxyIconUrl = proxyIconURL
         }
     }
 
@@ -282,13 +302,13 @@ public struct DiscordEmbed : JSONAble {
         // MARK: Properties
 
         /// The name of the field.
-        public let name: String
+        public var name: String
 
         /// The value of the field.
-        public let value: String
+        public var value: String
 
         /// Whether this field should be inlined
-        public let inline: Bool
+        public var inline: Bool
 
         // MARK: Initializers
 
@@ -299,7 +319,7 @@ public struct DiscordEmbed : JSONAble {
             - parameter value: The value of this field.
             - parameter inline: Whether this field can be inlined.
         */
-        public init(name: String, value: String, inline: Bool) {
+        public init(name: String, value: String, inline: Bool = false) {
             self.name = name
             self.value = value
             self.inline = inline
@@ -308,16 +328,17 @@ public struct DiscordEmbed : JSONAble {
 
     /// Represents an Embed's footer.
     public struct Footer : JSONAble {
+        var shouldIncludeNilsInJSON: Bool { return false }
         // MARK: Properties
 
         /// The text for this footer.
-        public let text: String?
+        public var text: String?
 
         /// The icon for this url.
-        public let iconUrl: URL?
+        public var iconUrl: URL?
 
         /// The proxy url for the icon.
-        public let proxyUrl: URL?
+        public let proxyIconUrl: URL?
 
         /**
             Creates a Footer object.
@@ -328,7 +349,14 @@ public struct DiscordEmbed : JSONAble {
         public init(text: String?, iconUrl: URL?) {
             self.text = text
             self.iconUrl = iconUrl
-            self.proxyUrl = nil
+            self.proxyIconUrl = nil
+        }
+
+        /// For testing
+        init(text: String?, iconURL: URL?, proxyIconURL: URL?) {
+            self.text = text
+            self.iconUrl = iconURL
+            self.proxyIconUrl = proxyIconURL
         }
     }
 
@@ -339,8 +367,8 @@ public struct DiscordEmbed : JSONAble {
         /// The height of this image.
         public let height: Int
 
-        /// The text for this footer.
-        public let url: String
+        /// The url of this image.
+        public var url: URL
 
         /// The width of this image.
         public let width: Int
@@ -350,15 +378,23 @@ public struct DiscordEmbed : JSONAble {
 
             - parameter url: The url for this field.
         */
-        public init(url: String) {
+        public init(url: URL) {
             self.height = -1
             self.url = url
             self.width = -1
+        }
+
+        /// For Testing
+        init(url: URL, width: Int, height: Int) {
+            self.url = url
+            self.width = width
+            self.height = height
         }
     }
 
     /// Represents what is providing the content of an embed.
     public struct Provider : JSONAble {
+        var shouldIncludeNilsInJSON: Bool { return false }
         // MARK: Properties
 
         /// The name of this provider.
@@ -370,62 +406,81 @@ public struct DiscordEmbed : JSONAble {
 
     /// Represents the thumbnail of an embed.
     public struct Thumbnail : JSONAble {
+        var shouldIncludeNilsInJSON: Bool { return false }
         // MARK: Properties
 
         /// The height of this image.
         public let height: Int
 
         /// The proxy url for this image.
-        public let proxyUrl: URL
+        public let proxyUrl: URL?
 
         /// The url for this image.
-        public let url: URL
+        public var url: URL
 
         /// The width of this image.
         public let width: Int
+
+        /**
+            Creates a Thumbnail object.
+
+        - parameter url: The url for this field
+        */
+        public init(url: URL) {
+            self.url = url
+            self.height = -1
+            self.width = -1
+            self.proxyUrl = nil
+        }
+
+        /// For testing
+        init(url: URL, width: Int, height: Int, proxyURL: URL?) {
+            self.url = url
+            self.width = width
+            self.height = height
+            self.proxyUrl = proxyURL
+        }
     }
 
     // MARK: Properties
 
     /// The author of this embed.
-    public let author: Author?
+    public var author: Author?
 
     /// The color of this embed.
-    public let color: Int?
+    public var color: Int?
 
     /// The description of this embed.
-    public let description: String
+    public var description: String?
 
     /// The footer for this embed.
-    public let footer: Footer?
+    public var footer: Footer?
 
     /// The image for this embed.
-    public let image: Image?
+    public var image: Image?
 
     /// The provider of this embed.
     public let provider: Provider?
 
     /// The thumbnail of this embed.
-    public let thumbnail: Thumbnail?
+    public var thumbnail: Thumbnail?
 
     /// The title of this embed.
-    public let title: String
+    public var title: String?
 
     /// The type of this embed.
     public let type: String
 
     /// The url of this embed.
-    public let url: URL?
+    public var url: URL?
 
     /// The embed's fields
-    public var fields = [Field]()
+    public var fields: [Field]
 
     // MARK: Initializers
 
     /**
         Creates an Embed object.
-
-        `Field`s can be added after intialization.
 
         - parameter title: The title of this embed.
         - parameter description: The description of this embed.
@@ -435,15 +490,17 @@ public struct DiscordEmbed : JSONAble {
         - parameter thumbnail: The thumbnail of this embed, if there is one.
         - parameter color: The color of this embed.
         - parameter footer: The footer for this embed, if there is one.
+        - parameter fields: The list of fields for this embed, if there are any.
     */
-    public init(title: String,
-                description: String,
+    public init(title: String? = nil,
+                description: String? = nil,
                 author: Author? = nil,
                 url: URL? = nil,
                 image: Image? = nil,
                 thumbnail: Thumbnail? = nil,
                 color: Int? = nil,
-                footer: Footer? = nil) {
+                footer: Footer? = nil,
+                fields: [Field] = []) {
         self.title = title
         self.author = author
         self.description = description
@@ -454,14 +511,15 @@ public struct DiscordEmbed : JSONAble {
         self.image = image
         self.color = color
         self.footer = footer
+        self.fields = fields
     }
 
     init(embedObject: [String: Any]) {
         author = Author(authorObject: embedObject.get("author", or: nil))
-        description = embedObject.get("description", or: "")
+        description = embedObject.get("description", or: nil)
         provider = Provider(providerObject: embedObject.get("provider", or: nil))
-        thumbnail = Thumbnail(thumbnailObject: embedObject.get("provider", or: nil))
-        title = embedObject.get("title", or: "")
+        thumbnail = Thumbnail(thumbnailObject: embedObject.get("thumbnail", or: nil))
+        title = embedObject.get("title", or: nil)
         type = embedObject.get("type", or: "")
         url = URL(string: embedObject.get("url", or: ""))
         image = Image(imageObject: embedObject.get("image", or: nil))
@@ -493,7 +551,7 @@ extension DiscordEmbed.Author {
 
         name = authorObject.get("name", or: "")
         iconUrl = URL(string: authorObject.get("icon_url", or: ""))
-        proxyUrl = URL(string: authorObject.get("proxy_icon_url", or: ""))
+        proxyIconUrl = URL(string: authorObject.get("proxy_icon_url", or: ""))
         url = URL(string: authorObject.get("url", or: ""))
     }
 }
@@ -503,8 +561,8 @@ extension DiscordEmbed.Footer {
         guard let footerObject = footerObject else { return nil }
 
         text = footerObject.get("text", or: "")
-        iconUrl = URL(string: footerObject.get("iconUrl", or: ""))
-        proxyUrl = URL(string: footerObject.get("proxy_icon_url", or: ""))
+        iconUrl = URL(string: footerObject.get("icon_url", or: ""))
+        proxyIconUrl = URL(string: footerObject.get("proxy_icon_url", or: ""))
     }
 }
 
@@ -513,7 +571,7 @@ extension DiscordEmbed.Image {
         guard let imageObject = imageObject else { return nil }
 
         height = imageObject.get("height", or: -1)
-        url = imageObject.get("url", or: "")
+        url = URL(string: imageObject.get("url", or: "")) ?? URL.localhost
         width = imageObject.get("width", or: -1)
     }
 }
@@ -532,7 +590,7 @@ extension DiscordEmbed.Thumbnail {
         guard let thumbnailObject = thumbnailObject else { return nil }
 
         height = thumbnailObject.get("height", or: 0)
-        proxyUrl = URL(string: thumbnailObject.get("proxy_url", or: "")) ?? URL.localhost
+        proxyUrl = URL(string: thumbnailObject.get("proxy_url", or: ""))
         url = URL(string: thumbnailObject.get("url", or: "")) ?? URL.localhost
         width = thumbnailObject.get("width", or: 0)
     }
