@@ -877,9 +877,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
     ///
     /// Handles voice server updates from Discord. You shouldn't need to call this method directly.
-///
+    ///
     /// Override to provide additional customization around this event.
-///
+    ///
     /// - parameter with: The data from the event
     /// *
     open func handleVoiceServerUpdate(with data: [String: Any]) {
