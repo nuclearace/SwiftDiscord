@@ -89,13 +89,17 @@ extension DiscordGuildChannel {
         guard guild.ownerId != member.user.id else { return DiscordPermission.all } // Owner has all permissions
 
         var workingPermissions = guild.roles(for: member).reduce([] as DiscordPermission, { $0.union($1.permissions) })
+        if let everybodyRole = guild.roles[guild.id] {
+            workingPermissions.formUnion(everybodyRole.permissions)
+        }
 
         if workingPermissions.contains(.administrator) {
             // Admin has all permissions
             return DiscordPermission.all
         }
 
-        let overwrites = self.overwrites(for: member)
+        let everybodyOverwrite = [self.permissionOverwrites[guild.id]].flatMap { $0 }
+        let overwrites = self.overwrites(for: member) + everybodyOverwrite
         let (allowRole, denyRole, allowMember, denyMember) = overwrites.reduce(([], [], [], []) as (DiscordPermission, DiscordPermission, DiscordPermission, DiscordPermission), {cur, overwrite in
             switch overwrite.type {
             case .role:
