@@ -98,7 +98,7 @@ extension DiscordGuildChannel {
             return DiscordPermission.all
         }
 
-        let everybodyOverwrite = [self.permissionOverwrites[guild.id]].flatMap { $0 }
+        let everybodyOverwrite = [self.permissionOverwrites[guild.id]].flatMap({ $0 })
         let overwrites = self.overwrites(for: member) + everybodyOverwrite
         let (allowRole, denyRole, allowMember, denyMember) = overwrites.reduce(([], [], [], []) as (DiscordPermission, DiscordPermission, DiscordPermission, DiscordPermission), {cur, overwrite in
             switch overwrite.type {
