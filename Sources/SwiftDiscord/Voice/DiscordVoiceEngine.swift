@@ -130,13 +130,13 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     private var connected = false
     private var closed = false
 
-#if !os(Linux)
+    #if !os(Linux)
     private var sequenceNum = UInt16(arc4random() >> 16)
     private var timestamp = arc4random()
-#else
+    #else
     private var sequenceNum = UInt16(random() >> 16)
     private var timestamp = UInt32(random())
-#endif
+    #endif
 
     private var startTime = 0
 

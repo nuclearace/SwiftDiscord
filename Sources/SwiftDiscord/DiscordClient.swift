@@ -36,7 +36,7 @@ import Dispatch
 /// ```
 ///
 /// See `DiscordClientDelegate` for a list of delegate methods that can be implemented.
-/// *
+///
 open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, DiscordEndpointConsumer {
     // MARK: Properties
 
