@@ -49,7 +49,7 @@ public protocol DiscordShard : DiscordWebSocketable, DiscordGatewayable {
     var connected: Bool { get }
 
     /// A reference to the client this engine is associated with.
-    weak var delegate: DiscordShardDelegate? { get }
+    var delegate: DiscordShardDelegate? { get }
 
     /// The total number of shards.
     var numShards: Int { get }
