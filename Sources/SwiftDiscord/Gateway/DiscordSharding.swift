@@ -183,19 +183,16 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     /// **Note** This method is an async method.
     ///
     open func connect() {
-        func _connect() {
-            let shards = get(self.shards)
+        protected { closed = false }
+        let shards = get(self.shards)
 
-            protected { closed = false }
-
-            for shard in shards where get(!closed) {
-                shard.connect()
-
-                Thread.sleep(forTimeInterval: 5.0)
+        for (i, shard) in shards.enumerated() {
+            let deadline = DispatchTime(secondsFromNow: Double(5 * i))
+            DispatchQueue.global().asyncAfter(deadline: deadline) { [weak self, weak shard] in
+                guard let this = self, this.get(!this.closed) else { return }
+                shard?.connect()
             }
         }
-
-        DispatchQueue.global().async(execute: _connect)
     }
 
     ///
