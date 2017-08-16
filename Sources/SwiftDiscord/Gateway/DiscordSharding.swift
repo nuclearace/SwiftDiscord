@@ -189,8 +189,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
         for (i, shard) in shards.enumerated() {
             let deadline = DispatchTime(secondsFromNow: Double(5 * i))
             DispatchQueue.global().asyncAfter(deadline: deadline) { [weak self, weak shard] in
-                guard let this = self else { return }
-                guard this.get(!this.closed) else { return }
+                guard let this = self, this.get(!this.closed) else { return }
                 shard?.connect()
             }
         }
