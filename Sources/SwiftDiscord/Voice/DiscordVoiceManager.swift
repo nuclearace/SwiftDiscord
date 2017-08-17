@@ -34,7 +34,7 @@ public protocol DiscordVoiceManagerDelegate : class, DiscordTokenBearer {
     /// Called when a voice engine receives opus voice data.
     ///
     /// - parameter manager: The manager.
-    /// - parameter didReceiveVoiceData: The data received.
+    /// - parameter didReceiveOpusVoiceData: The data received.
     /// - parameter fromEngine: The engine that received the data.
     ///
     func voiceManager(_ manager: DiscordVoiceManager, didReceiveOpusVoiceData data: DiscordOpusVoiceData,
@@ -44,7 +44,7 @@ public protocol DiscordVoiceManagerDelegate : class, DiscordTokenBearer {
     /// Called when a voice engine receives raw voice data.
     ///
     /// - parameter manager: The manager.
-    /// - parameter didReceiveVoiceData: The data received.
+    /// - parameter didReceiveRawVoiceData: The data received.
     /// - parameter fromEngine: The engine that received the data.
     ///
     func voiceManager(_ manager: DiscordVoiceManager, didReceiveRawVoiceData data: DiscordRawVoiceData,
@@ -189,7 +189,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     ///
     /// Handles opus voice data received from a VoiceEngine
     ///
-    /// - parameter didReceiveVoiceData: A DiscordVoiceData tuple
+    /// - parameter didReceiveOpusVoiceData: A `DiscordOpusVoiceData` instance containing opus encoded voice data.
     ///
     open func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveOpusVoiceData data: DiscordOpusVoiceData) {
         delegate?.voiceManager(self, didReceiveOpusVoiceData: data, fromEngine: engine)
@@ -198,7 +198,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     ///
     /// Handles raw voice data received from a VoiceEngine
     ///
-    /// - parameter didReceiveVoiceData: A DiscordVoiceData tuple
+    /// - parameter didReceiveRawVoiceData: A `DiscordRawVoiceData` instance containing raw voice data.
     ///
     open func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveRawVoiceData data: DiscordRawVoiceData) {
         delegate?.voiceManager(self, didReceiveRawVoiceData: data, fromEngine: engine)

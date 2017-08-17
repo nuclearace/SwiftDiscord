@@ -191,7 +191,7 @@ public protocol DiscordClientDelegate : class {
     /// **Note** This is called from a queue that is dedicated to voice data, not the `handleQueue`.
     ///
     /// - parameter client: The client that is calling.
-    /// - parameter didReceiveVoiceData: The voice data that was received.
+    /// - parameter didReceiveOpusVoiceData: The voice data that was received.
     /// - parameter fromEngine: The voice engine that received the data.
     ///
     func client(_ client: DiscordClient, didReceiveOpusVoiceData voiceData: DiscordOpusVoiceData,
@@ -203,7 +203,7 @@ public protocol DiscordClientDelegate : class {
     /// **Note** This is called from a queue that is dedicated to voice data, not the `handleQueue`.
     ///
     /// - parameter client: The client that is calling.
-    /// - parameter didReceiveVoiceData: The voice data that was received.
+    /// - parameter didReceiveRawVoiceData: The voice data that was received.
     /// - parameter fromEngine: The voice engine that received the data.
     ///
     func client(_ client: DiscordClient, didReceiveRawVoiceData voiceData: DiscordRawVoiceData,
