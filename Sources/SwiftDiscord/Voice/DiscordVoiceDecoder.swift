@@ -29,10 +29,10 @@ open class DiscordVoiceSessionDecoder {
     // MARK: Methods
 
     ///
-    /// Decodes an opus encoded packet into raw PCM. The first 12 bytes of the packet should be the RTP header.
+    /// Decodes an opus encoded packet into raw PCM.
     ///
-    /// - parameter packet: The full voice packet, including RTP header.
-    /// - returns: A `DiscordVoiceData`.
+    /// - parameter packet: The Opus encoded packet.
+    /// - returns: A `DiscordRawVoiceData`.
     ///
     open func decode(_ packet: DiscordOpusVoiceData) throws -> DiscordRawVoiceData {
         let decoder: DiscordOpusDecoder
