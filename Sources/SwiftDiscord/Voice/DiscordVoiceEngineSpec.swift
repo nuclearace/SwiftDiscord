@@ -86,11 +86,18 @@ public protocol DiscordVoiceEngineDelegate : class {
     // MARK: Methods
 
     ///
-    /// Handles received voice data from a voice engine.
+    /// Handles received opus voice data from a voice engine.
     ///
     /// - parameter data: The voice data that was received
     ///
-    func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveVoiceData data: DiscordVoiceData)
+    func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveOpusVoiceData data: DiscordOpusVoiceData)
+
+    ///
+    /// Handles received raw voice data from a voice engine.
+    ///
+    /// - parameter data: The voice data that was received
+    ///
+    func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveRawVoiceData data: DiscordRawVoiceData)
 
     ///
     /// Called when the voice engine disconnects.
@@ -148,4 +155,13 @@ public extension DiscordOpusCodeable {
     public func maxFrameSize(assumingSize size: Int) -> Int {
         return size * channels * MemoryLayout<opus_int16>.size
     }
+}
+
+/// A struct that is used to configure the high-level functions of a VoiceEngine
+public struct DiscordVoiceEngineConfiguration {
+    /// Whether or not this engine should capture voice.
+    public var captureVoice = true
+
+    /// Whether or not this engine should try and decode incoming voice into raw PCM.
+    public var decodeVoice = false
 }

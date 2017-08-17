@@ -31,13 +31,23 @@ public protocol DiscordVoiceManagerDelegate : class, DiscordTokenBearer {
     func voiceManager(_ manager: DiscordVoiceManager, didDisconnectEngine engine: DiscordVoiceEngine)
 
     ///
-    /// Called when a voice engine receives voice data.
+    /// Called when a voice engine receives opus voice data.
     ///
     /// - parameter manager: The manager.
     /// - parameter didReceiveVoiceData: The data received.
     /// - parameter fromEngine: The engine that received the data.
     ///
-    func voiceManager(_ manager: DiscordVoiceManager, didReceiveVoiceData data: DiscordVoiceData,
+    func voiceManager(_ manager: DiscordVoiceManager, didReceiveOpusVoiceData data: DiscordOpusVoiceData,
+                      fromEngine engine: DiscordVoiceEngine)
+
+    ///
+    /// Called when a voice engine receives raw voice data.
+    ///
+    /// - parameter manager: The manager.
+    /// - parameter didReceiveVoiceData: The data received.
+    /// - parameter fromEngine: The engine that received the data.
+    ///
+    func voiceManager(_ manager: DiscordVoiceManager, didReceiveRawVoiceData data: DiscordRawVoiceData,
                       fromEngine engine: DiscordVoiceEngine)
 
     ///
@@ -66,6 +76,9 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     /// The delegate for this manager.
     public weak var delegate: DiscordVoiceManagerDelegate?
 
+    /// The configuration for engines.
+    public var engineConfiguration: DiscordVoiceEngineConfiguration
+
     /// The token for the user.
     public var token: DiscordToken {
         return delegate!.token
@@ -88,8 +101,10 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     ///
     /// Creates a new manager with the delegate set.
     ///
-    public init(delegate: DiscordVoiceManagerDelegate) {
+    public init(delegate: DiscordVoiceManagerDelegate,
+                engineConfiguration: DiscordVoiceEngineConfiguration = DiscordVoiceEngineConfiguration()) {
         self.delegate = delegate
+        self.engineConfiguration = engineConfiguration
     }
 
     // MARK: Methods
@@ -147,6 +162,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
         // Reuse a previous engine's encoder if possible
         let previousEngine = voiceEngines[guildId]
         voiceEngines[guildId] = DiscordVoiceEngine(delegate: self,
+                                                   config: engineConfiguration,
                                                    voiceServerInformation: serverInfo,
                                                    voiceState: voiceState,
                                                    encoder: previousEngine?.encoder,
@@ -171,12 +187,21 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     }
 
     ///
-    /// Handles voice data received from a VoiceEngine
+    /// Handles opus voice data received from a VoiceEngine
     ///
     /// - parameter didReceiveVoiceData: A DiscordVoiceData tuple
     ///
-    open func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveVoiceData data: DiscordVoiceData) {
-        delegate?.voiceManager(self, didReceiveVoiceData: data, fromEngine: engine)
+    open func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveOpusVoiceData data: DiscordOpusVoiceData) {
+        delegate?.voiceManager(self, didReceiveOpusVoiceData: data, fromEngine: engine)
+    }
+
+    ///
+    /// Handles raw voice data received from a VoiceEngine
+    ///
+    /// - parameter didReceiveVoiceData: A DiscordVoiceData tuple
+    ///
+    open func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveRawVoiceData data: DiscordRawVoiceData) {
+        delegate?.voiceManager(self, didReceiveRawVoiceData: data, fromEngine: engine)
     }
 
     ///

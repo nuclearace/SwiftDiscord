@@ -123,6 +123,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
                 self.shards = shards
             case let .singleShard(shardInfo):
                 self.singleShardInformation = shardInfo
+            case let .voiceConfiguration(config):
+                self.voiceManager.engineConfiguration = config
             case .discardPresences:
                 discardPresences = true
             case .fillLargeGuilds:
@@ -388,16 +390,30 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     }
 
     ///
-    /// Called when a voice engine receives voice data.
+    /// Called when a voice engine receives opus voice data.
     ///
     /// - parameter manager: The manager.
     /// - parameter didReceiveVoiceData: The data received.
     /// - parameter fromEngine: The engine that received the data.
     ///
-    open func voiceManager(_ manager: DiscordVoiceManager, didReceiveVoiceData data: DiscordVoiceData,
+    open func voiceManager(_ manager: DiscordVoiceManager, didReceiveOpusVoiceData data: DiscordOpusVoiceData,
                            fromEngine engine: DiscordVoiceEngine) {
         voiceQueue.async {
-            self.delegate?.client(self, didReceiveVoiceData: data, fromEngine: engine)
+            self.delegate?.client(self, didReceiveOpusVoiceData: data, fromEngine: engine)
+        }
+    }
+
+    ///
+    /// Called when a voice engine receives raw voice data.
+    ///
+    /// - parameter manager: The manager.
+    /// - parameter didReceiveVoiceData: The data received.
+    /// - parameter fromEngine: The engine that received the data.
+    ///
+    open func voiceManager(_ manager: DiscordVoiceManager, didReceiveRawVoiceData data: DiscordRawVoiceData,
+                           fromEngine engine: DiscordVoiceEngine) {
+        voiceQueue.async {
+            self.delegate?.client(self, didReceiveRawVoiceData: data, fromEngine: engine)
         }
     }
 

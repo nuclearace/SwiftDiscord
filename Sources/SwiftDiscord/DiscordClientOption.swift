@@ -50,25 +50,25 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
     /// The number of shards this client should spawn. Defaults to 1.
     case shards(Int)
 
+    /// The settings for voice engines. See `DiscordVoiceEngineConfiguration` for defaults.
+    case voiceConfiguration(DiscordVoiceEngineConfiguration)
+
     // MARK: Properties
 
     /// - returns: A description of this option
     public var description: String {
-        let description: String
-
         switch self {
-        case .discardPresences: description = "discardPresences"
-        case .fillLargeGuilds:  description = "fillLargeGuilds"
-        case .fillUsers:        description = "fillUsers"
-        case .handleQueue:      description = "handleQueue"
-        case .log:              description = "log"
-        case .logger:           description = "logger"
-        case .shards:           description = "shards"
-        case .singleShard:      description = "singleShard"
-        case .pruneUsers:       description = "pruneUsers"
+        case .discardPresences:     return "discardPresences"
+        case .fillLargeGuilds:      return "fillLargeGuilds"
+        case .fillUsers:            return "fillUsers"
+        case .handleQueue:          return "handleQueue"
+        case .log:                  return "log"
+        case .logger:               return "logger"
+        case .shards:               return "shards"
+        case .singleShard:          return "singleShard"
+        case .pruneUsers:           return "pruneUsers"
+        case .voiceConfiguration:   return "voiceConfiguration"
         }
-
-        return description
     }
 
     /// Compares two DiscordClientOption's descriptions.
