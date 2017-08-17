@@ -186,7 +186,7 @@ public protocol DiscordClientDelegate : class {
     func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine engine: DiscordVoiceEngine)
 
     ///
-    /// Called when the client receives voice data.
+    /// Called when the client receives opus voice data.
     ///
     /// **Note** This is called from a queue that is dedicated to voice data, not the `handleQueue`.
     ///
@@ -194,7 +194,19 @@ public protocol DiscordClientDelegate : class {
     /// - parameter didReceiveVoiceData: The voice data that was received.
     /// - parameter fromEngine: The voice engine that received the data.
     ///
-    func client(_ client: DiscordClient, didReceiveVoiceData voiceData: DiscordVoiceData,
+    func client(_ client: DiscordClient, didReceiveOpusVoiceData voiceData: DiscordOpusVoiceData,
+                fromEngine engine: DiscordVoiceEngine)
+
+    ///
+    /// Called when the client receives raw voice data.
+    ///
+    /// **Note** This is called from a queue that is dedicated to voice data, not the `handleQueue`.
+    ///
+    /// - parameter client: The client that is calling.
+    /// - parameter didReceiveVoiceData: The voice data that was received.
+    /// - parameter fromEngine: The voice engine that received the data.
+    ///
+    func client(_ client: DiscordClient, didReceiveRawVoiceData voiceData: DiscordRawVoiceData,
                 fromEngine engine: DiscordVoiceEngine)
 
     ///
@@ -317,7 +329,11 @@ public extension DiscordClientDelegate {
                 onGuild guild: DiscordGuild) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didReceiveVoiceData voiceData: DiscordVoiceData,
+    func client(_ client: DiscordClient, didReceiveOpusVoiceData voiceData: DiscordOpusVoiceData,
+                fromEngine engine: DiscordVoiceEngine) { }
+
+    /// Default.
+    func client(_ client: DiscordClient, didReceiveRawVoiceData voiceData: DiscordRawVoiceData,
                 fromEngine engine: DiscordVoiceEngine) { }
 
     #if !os(iOS)

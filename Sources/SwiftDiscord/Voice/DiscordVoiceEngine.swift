@@ -40,6 +40,9 @@ enum DiscordVoiceEngineError : Error {
 public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     // MARK: Properties
 
+    /// The configuration for this engine.
+    public let config: DiscordVoiceEngineConfiguration
+
     /// The heartbeat queue.
     public let heartbeatQueue = DispatchQueue(label: "discordVoiceEngine.heartbeatQueue")
 
@@ -114,9 +117,10 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
     let logType = "DiscordVoiceEngine"
 
+    private static let padding = [UInt8](repeating: 0x00, count: 12)
+
     private let decoderSession = DiscordVoiceSessionDecoder()
     private let encoderSemaphore = DispatchSemaphore(value: 1)
-    private let padding = [UInt8](repeating: 0x00, count: 12)
     private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
     private let udpQueueWrite = DispatchQueue(label: "discordVoiceEngine.udpQueueWrite")
     private let udpQueueRead = DispatchQueue(label: "discordVoiceEngine.udpQueueRead")
@@ -152,11 +156,13 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// - parameter secret: The secret from a previous engine.
     ///
     public init(delegate: DiscordVoiceEngineDelegate,
+                config: DiscordVoiceEngineConfiguration,
                 voiceServerInformation: DiscordVoiceServerInformation,
                 voiceState: DiscordVoiceState,
                 encoder: DiscordVoiceEncoder?,
                 secret: [UInt8]?) {
         self.voiceDelegate = delegate
+        self.config = config
 
         _ = sodium_init()
 
@@ -249,7 +255,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         let packetSize = Int(crypto_secretbox_MACBYTES) + data.count
         let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: packetSize)
         let rtpHeader = createRTPHeader()
-        var nonce = rtpHeader + padding
+        var nonce = rtpHeader + DiscordVoiceEngine.padding
         var buf = data
 
         defer { free(encrypted) }
@@ -266,7 +272,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         let voiceData = Array(data.dropFirst(12))
         let audioSize = voiceData.count - Int(crypto_secretbox_MACBYTES)
         let unencrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
-        var nonce = rtpHeader + padding
+        var nonce = rtpHeader + DiscordVoiceEngine.padding
 
         defer { free(unencrypted) }
 
@@ -457,10 +463,14 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
                 guard let this = self else { return }
 
-                let voicePacket = try this.decryptVoiceData(data)
-                let packet = try this.decoderSession.decode(voicePacket)
+                let packet = DiscordOpusVoiceData(voicePacket: try this.decryptVoiceData(data))
 
-                this.voiceDelegate?.voiceEngine(this, didReceiveVoiceData: packet)
+                if this.config.decodeVoice {
+                    this.voiceDelegate?.voiceEngine(this,
+                                                    didReceiveRawVoiceData: try this.decoderSession.decode(packet))
+                } else {
+                    this.voiceDelegate?.voiceEngine(this, didReceiveOpusVoiceData: packet)
+                }
             } catch DiscordVoiceError.initialPacket {
                 DefaultDiscordLogger.Logger.debug("Got initial packet", type: "DiscordVoiceEngine")
             } catch DiscordVoiceError.decodeFail {
@@ -517,6 +527,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         }
 
         DefaultDiscordLogger.Logger.debug("VoiceEngine is ready!", type: logType)
+
+        guard config.captureVoice else { return }
 
         readSocket()
     }
