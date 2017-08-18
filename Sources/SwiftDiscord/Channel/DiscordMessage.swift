@@ -109,6 +109,17 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.client = client
     }
 
+    @available(*, deprecated, message: "SwiftDiscord now supports multiple files per message.\nUse init(content:embed:files:tts:) with an array of files instead.")
+    public init(content: String, embed: DiscordEmbed? = nil, file: DiscordFileUpload?, tts: Bool = false) {
+        let files: [DiscordFileUpload]
+        if let file = file {
+            files = [file]
+        } else {
+            files = []
+        }
+        self.init(content: content, embed: embed, files: files, tts: tts)
+    }
+
     ///
     /// Creates a message that can be used to send.
     ///
@@ -117,18 +128,14 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// - parameter files: The files to send with this message.
     /// - parameter tts: Whether this message should be text-to-speach.
     ///
-    public init(content: String, embed: DiscordEmbed? = nil, file: DiscordFileUpload? = nil, tts: Bool = false) {
+    public init(content: String, embed: DiscordEmbed? = nil, files: [DiscordFileUpload] = [], tts: Bool = false) {
         self.content = content
         if let embed = embed {
             self.embeds = [embed]
         } else {
             self.embeds = []
         }
-        if let file = file {
-            self.files = [file]
-        } else {
-            self.files = []
-        }
+        self.files = files
         self.tts = tts
         self.attachments = []
         self.author = DiscordUser(userObject: [:])
@@ -174,7 +181,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     // MARK: Methods
 
     func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
-        if let file = files.first {
+        if files.count > 0 {
             var fields: [String: Any] = [
                 "content": content,
                 "tts": tts,
@@ -184,9 +191,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
                 fields["embed"] = embed.json
             }
 
-            let encoded = JSON.encodeJSON(fields) ?? ""
-
-            return .right(createMultipartBody(fields: ["payload_json": encoded], file: file))
+            return .right(createMultipartBody(json: fields, files: files))
         } else {
             let messageObject: [String: Any] = [
                 "content": content,
