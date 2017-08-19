@@ -109,6 +109,12 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.client = client
     }
 
+    /// For compatibility
+    @available(*, deprecated, message: "Bots on Discord do not actually have the ability to include more than one embed in a message.  To reflect that, this init has been changed to init(content:embed:files:tts:), which only takes one embed.")
+    public init(content: String, embeds: [DiscordEmbed], files: [DiscordFileUpload] = [], tts: Bool = false) {
+        self.init(content: content, embed: embeds.first, files: files, tts: tts)
+    }
+
     ///
     /// Creates a message that can be used to send.
     ///
