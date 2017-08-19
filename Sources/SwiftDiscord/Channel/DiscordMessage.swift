@@ -109,17 +109,6 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.client = client
     }
 
-    @available(*, deprecated, message: "SwiftDiscord now supports multiple files per message.\nUse init(content:embed:files:tts:) with an array of files instead.")
-    public init(content: String, embed: DiscordEmbed? = nil, file: DiscordFileUpload?, tts: Bool = false) {
-        let files: [DiscordFileUpload]
-        if let file = file {
-            files = [file]
-        } else {
-            files = []
-        }
-        self.init(content: content, embed: embed, files: files, tts: tts)
-    }
-
     ///
     /// Creates a message that can be used to send.
     ///
