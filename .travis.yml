@@ -15,4 +15,4 @@ branches:
 before_install:
   - ./.travis/before_install.sh
 script:
-  - ./.travis/install.sh
+  - ./.travis/run.sh
