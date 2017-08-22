@@ -6,85 +6,7 @@ import Foundation
 import XCTest
 @testable import SwiftDiscord
 
-let permissionsTestUsers = ["23416345", "32564235", "4359835345", "32499342123", "234234120985"].map({ id -> DiscordUser in
-    var tmp = testUser
-    tmp["id"] = id
-    return DiscordUser(userObject: tmp)
-})
-
-let permissionsTestUserPermissions: DiscordPermission = [.createInstantInvite, .addReactions, .readMessages, .sendMessages, .readMessageHistory, .useExternalEmojis, .connect, .speak, .useVAD, .changeNickname]
-let permissionsTestRoles: [DiscordRole] = [
-    DiscordRole(id: 2349683489545, color: 10181046, hoist: true, managed: false, mentionable: true, name: "Admin", permissions: .administrator, position: 3),
-    DiscordRole(id: 32423425264343, color: 10718666, hoist: true, managed: false, mentionable: true, name: "Mod", permissions: permissionsTestUserPermissions.union([.kickMembers, .manageChannels, .viewAuditLog, .sendTTSMessages, .embedLinks, .attachFiles, .mentionEveryone, .muteMembers, .deafenMembers, .moveMembers, .manageNicknames, .manageRoles]), position: 2),
-    DiscordRole(id: 34634634534564, color: 567526, hoist: true, managed: false, mentionable: true, name: "Test", permissions: permissionsTestUserPermissions, position: 1),
-    DiscordRole(id: 34029736498534, color: 0, hoist: false, managed: false, mentionable: false, name: "Muted", permissions: permissionsTestUserPermissions, position: 0)
-]
-
-class PermissionsTestClientDelegate: DiscordClientDelegate { }
-let permissionsTestClientDelegate = PermissionsTestClientDelegate()
-let permissionsTestClient = DiscordClient(token: "Testing", delegate: permissionsTestClientDelegate)
-
-let permissionsTestGuildJSON = { () -> [String: Any] in
-    var tmp = testGuild
-	tmp["owner_id"] = String(describing: permissionsTestUsers[0].id)
-    tmp["roles"] = try! permissionsTestRoles.jsonValue()
-    return tmp
-}()
-
-let permissionsTestGuild = DiscordGuild(guildObject: permissionsTestGuildJSON, client: permissionsTestClient)
-
-let permissionTestMemberRoles: [[RoleID]] = [
-    [permissionsTestRoles[3].id],
-    [permissionsTestRoles[0].id, permissionsTestRoles[2].id],
-    [permissionsTestRoles[1].id],
-    [permissionsTestRoles[1].id, permissionsTestRoles[2].id],
-    [permissionsTestRoles[2].id, permissionsTestRoles[3].id]
-]
-
-let permissionsTestMembers = zip(permissionsTestUsers, permissionTestMemberRoles).map({ (user, roles) -> DiscordGuildMember in
-    return DiscordGuildMember(guildId: permissionsTestGuild.id, user: user, deaf: false, mute: false, nick: nil, roles: roles, joinedAt: DiscordDateFormatter.format("2017-04-25T20:00:00.000000+00:00")!, guild: permissionsTestGuild)
-})
-
-func createPermissionTestChannel(overwrites: [DiscordPermissionOverwrite]) -> DiscordGuildTextChannel {
-    var channelData = testGuildTextChannel
-    channelData["permission_overwrites"] = try? overwrites.jsonValue()
-	channelData["guild_id"] = String(describing: permissionsTestGuild.id)
-    permissionsTestClient.handleChannelCreate(with: channelData)
-    return permissionsTestClient.findChannel(fromId: Snowflake(channelData["id"] as! String)!) as! DiscordGuildTextChannel
-}
-
-class TestDiscordPermissions : XCTestCase {
-    let roleOverwrites = [
-        DiscordPermissionOverwrite(id: permissionsTestRoles[3].id, type: .role, allow: [], deny: [.sendMessages, .addReactions]),
-        DiscordPermissionOverwrite(id: permissionsTestRoles[2].id, type: .role, allow: .addReactions, deny: []),
-        DiscordPermissionOverwrite(id: permissionsTestRoles[0].id, type: .role, allow: [], deny: .readMessages),
-        DiscordPermissionOverwrite(id: permissionsTestRoles[1].id, type: .role, allow: [], deny: .addReactions)
-    ]
-
-    let userOverwrites = [
-        DiscordPermissionOverwrite(id: permissionsTestUsers[0].id, type: .member, allow: [], deny: .manageMessages),
-        DiscordPermissionOverwrite(id: permissionsTestUsers[1].id, type: .member, allow: [], deny: .manageWebhooks),
-        DiscordPermissionOverwrite(id: permissionsTestUsers[2].id, type: .member, allow: .addReactions, deny: .manageMessages),
-        DiscordPermissionOverwrite(id: permissionsTestUsers[3].id, type: .member, allow: [], deny: .addReactions),
-        DiscordPermissionOverwrite(id: permissionsTestUsers[4].id, type: .member, allow: [.embedLinks, .sendMessages], deny: [])
-    ]
-
-    let depencencyOverwrites = [
-        DiscordPermissionOverwrite(id: permissionsTestRoles[2].id, type: .role, allow: [], deny: .readMessages),
-        DiscordPermissionOverwrite(id: permissionsTestUsers[4].id, type: .member, allow: [.createInstantInvite, .manageChannels, .addReactions, .sendMessages, .sendTTSMessages, .manageMessages, .embedLinks, .attachFiles, .readMessageHistory, .mentionEveryone, .useExternalEmojis], deny: []),
-        DiscordPermissionOverwrite(id: permissionsTestUsers[3].id, type: .member, allow: .readMessages, deny: []),
-        DiscordPermissionOverwrite(id: permissionsTestUsers[2].id, type: .member, allow: [.sendTTSMessages, .embedLinks, .attachFiles, .mentionEveryone], deny: .sendMessages)
-    ]
-
-    override func setUp() {
-        permissionsTestClient.handleGuildCreate(with: permissionsTestGuildJSON)
-    }
-
-    override func tearDown() {
-        permissionsTestClient.handleGuildDelete(with: permissionsTestGuildJSON)
-        XCTAssertEqual(permissionsTestClient.channelCache.count, 0, "Removing guild should clear its channels from the channel cache")
-    }
-
+public class TestDiscordPermissions : XCTestCase {
     func testBasicPermissions() {
         let channel = createPermissionTestChannel(overwrites: [])
 
@@ -98,7 +20,7 @@ class TestDiscordPermissions : XCTestCase {
 
     func testRoleOverrides() {
         let channel = createPermissionTestChannel(overwrites: roleOverwrites)
-        
+
         XCTAssertEqual(channel.permissionOverwrites.count, roleOverwrites.count, "There should be the same number of permission overwrites in this channel as we put in")
 
         XCTAssertTrue(channel.canMember(permissionsTestMembers[0], .sendMessages), "Owner should override all permissions")
@@ -134,7 +56,91 @@ class TestDiscordPermissions : XCTestCase {
         XCTAssertTrue(channel.canMember(permissionsTestMembers[3], .sendMessages), "A user who has conflicting read messages permissions where the allow is used shouldn't have dependencies blocked")
         XCTAssertEqual(channel.permissions(for: permissionsTestMembers[2]).intersection([.sendTTSMessages, .embedLinks, .attachFiles, .mentionEveryone]), [], "A user who can't send messages shouldn't be able to send TTS messages, embed links, attach files, or mention everyone")
     }
+
+    let roleOverwrites = [
+        DiscordPermissionOverwrite(id: permissionsTestRoles[3].id, type: .role, allow: [], deny: [.sendMessages, .addReactions]),
+        DiscordPermissionOverwrite(id: permissionsTestRoles[2].id, type: .role, allow: .addReactions, deny: []),
+        DiscordPermissionOverwrite(id: permissionsTestRoles[0].id, type: .role, allow: [], deny: .readMessages),
+        DiscordPermissionOverwrite(id: permissionsTestRoles[1].id, type: .role, allow: [], deny: .addReactions)
+    ]
+
+    let userOverwrites = [
+        DiscordPermissionOverwrite(id: permissionsTestUsers[0].id, type: .member, allow: [], deny: .manageMessages),
+        DiscordPermissionOverwrite(id: permissionsTestUsers[1].id, type: .member, allow: [], deny: .manageWebhooks),
+        DiscordPermissionOverwrite(id: permissionsTestUsers[2].id, type: .member, allow: .addReactions, deny: .manageMessages),
+        DiscordPermissionOverwrite(id: permissionsTestUsers[3].id, type: .member, allow: [], deny: .addReactions),
+        DiscordPermissionOverwrite(id: permissionsTestUsers[4].id, type: .member, allow: [.embedLinks, .sendMessages], deny: [])
+    ]
+
+    let depencencyOverwrites = [
+        DiscordPermissionOverwrite(id: permissionsTestRoles[2].id, type: .role, allow: [], deny: .readMessages),
+        DiscordPermissionOverwrite(id: permissionsTestUsers[4].id, type: .member, allow: [.createInstantInvite, .manageChannels, .addReactions, .sendMessages, .sendTTSMessages, .manageMessages, .embedLinks, .attachFiles, .readMessageHistory, .mentionEveryone, .useExternalEmojis], deny: []),
+        DiscordPermissionOverwrite(id: permissionsTestUsers[3].id, type: .member, allow: .readMessages, deny: []),
+        DiscordPermissionOverwrite(id: permissionsTestUsers[2].id, type: .member, allow: [.sendTTSMessages, .embedLinks, .attachFiles, .mentionEveryone], deny: .sendMessages)
+    ]
+
+    public static var allTests: [(String, (TestDiscordPermissions) -> () -> ())] {
+        return [
+            ("testBasicPermissions", testBasicPermissions),
+            ("testRoleOverrides", testRoleOverrides),
+            ("testUserOverrides", testUserOverrides),
+            ("testOverwritesWithDependencies", testOverwritesWithDependencies),
+        ]
+    }
+
+    public override func setUp() {
+        permissionsTestClient.handleGuildCreate(with: permissionsTestGuildJSON)
+    }
+
+    public override func tearDown() {
+        permissionsTestClient.handleGuildDelete(with: permissionsTestGuildJSON)
+        XCTAssertEqual(permissionsTestClient.channelCache.count, 0, "Removing guild should clear its channels from the channel cache")
+    }
 }
 
+let permissionsTestUsers = ["23416345", "32564235", "4359835345", "32499342123", "234234120985"].map({ id -> DiscordUser in
+    var tmp = testUser
+    tmp["id"] = id
+    return DiscordUser(userObject: tmp)
+})
 
+let permissionsTestUserPermissions: DiscordPermission = [.createInstantInvite, .addReactions, .readMessages, .sendMessages, .readMessageHistory, .useExternalEmojis, .connect, .speak, .useVAD, .changeNickname]
+let permissionsTestRoles: [DiscordRole] = [
+    DiscordRole(id: 2349683489545, color: 10181046, hoist: true, managed: false, mentionable: true, name: "Admin", permissions: .administrator, position: 3),
+    DiscordRole(id: 32423425264343, color: 10718666, hoist: true, managed: false, mentionable: true, name: "Mod", permissions: permissionsTestUserPermissions.union([.kickMembers, .manageChannels, .viewAuditLog, .sendTTSMessages, .embedLinks, .attachFiles, .mentionEveryone, .muteMembers, .deafenMembers, .moveMembers, .manageNicknames, .manageRoles]), position: 2),
+    DiscordRole(id: 34634634534564, color: 567526, hoist: true, managed: false, mentionable: true, name: "Test", permissions: permissionsTestUserPermissions, position: 1),
+    DiscordRole(id: 34029736498534, color: 0, hoist: false, managed: false, mentionable: false, name: "Muted", permissions: permissionsTestUserPermissions, position: 0)
+]
 
+class PermissionsTestClientDelegate: DiscordClientDelegate { }
+let permissionsTestClientDelegate = PermissionsTestClientDelegate()
+let permissionsTestClient = DiscordClient(token: "Testing", delegate: permissionsTestClientDelegate)
+
+let permissionsTestGuildJSON = { () -> [String: Any] in
+    var tmp = testGuild
+    tmp["owner_id"] = String(describing: permissionsTestUsers[0].id)
+    tmp["roles"] = try! permissionsTestRoles.jsonValue()
+    return tmp
+}()
+
+let permissionsTestGuild = DiscordGuild(guildObject: permissionsTestGuildJSON, client: permissionsTestClient)
+
+let permissionTestMemberRoles: [[RoleID]] = [
+    [permissionsTestRoles[3].id],
+    [permissionsTestRoles[0].id, permissionsTestRoles[2].id],
+    [permissionsTestRoles[1].id],
+    [permissionsTestRoles[1].id, permissionsTestRoles[2].id],
+    [permissionsTestRoles[2].id, permissionsTestRoles[3].id]
+]
+
+let permissionsTestMembers = zip(permissionsTestUsers, permissionTestMemberRoles).map({ (user, roles) -> DiscordGuildMember in
+    return DiscordGuildMember(guildId: permissionsTestGuild.id, user: user, deaf: false, mute: false, nick: nil, roles: roles, joinedAt: DiscordDateFormatter.format("2017-04-25T20:00:00.000000+00:00")!, guild: permissionsTestGuild)
+})
+
+func createPermissionTestChannel(overwrites: [DiscordPermissionOverwrite]) -> DiscordGuildTextChannel {
+    var channelData = testGuildTextChannel
+    channelData["permission_overwrites"] = try? overwrites.jsonValue()
+    channelData["guild_id"] = String(describing: permissionsTestGuild.id)
+    permissionsTestClient.handleChannelCreate(with: channelData)
+    return permissionsTestClient.findChannel(fromId: Snowflake(channelData["id"] as! String)!) as! DiscordGuildTextChannel
+}

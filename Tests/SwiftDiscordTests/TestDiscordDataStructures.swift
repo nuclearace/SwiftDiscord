@@ -5,7 +5,7 @@
 import XCTest
 @testable import SwiftDiscord
 
-class TestDiscordDataStructures : XCTestCase {
+public class TestDiscordDataStructures : XCTestCase {
     func testRoleJSONification() {
         let role1 = DiscordRole(id: 324, color: 43, hoist: false, managed: true, mentionable: false, name: "Test Role", permissions: [.addReactions], position: 4)
         let role2 = DiscordRole(roleObject: role1.json)
@@ -97,4 +97,14 @@ class TestDiscordDataStructures : XCTestCase {
         let nilJSONTest = JSON.encodeJSON(embed3.json)!
         XCTAssertFalse(nilJSONTest.contains("null"), "JSON-encoded embed should not have any null fields")
     }
+
+    public static var allTests: [(String, (TestDiscordDataStructures) -> () -> ())] {
+        return [
+            ("testRoleJSONification", testRoleJSONification),
+            ("testPermissionOverwriteJSONification", testPermissionOverwriteJSONification),
+            ("testGameJSONification", testGameJSONification),
+            ("testEmbedJSONification", testEmbedJSONification),
+        ]
+    }
+
 }

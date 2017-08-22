@@ -6,8 +6,7 @@ import Foundation
 import XCTest
 @testable import SwiftDiscord
 
-class TestDiscordClient : XCTestCase {
-
+public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     func testClientCreatesGuild() {
         expectations[.guildCreate] = expectation(description: "Client should call guild create method")
 
@@ -325,7 +324,36 @@ class TestDiscordClient : XCTestCase {
     var client: DiscordClient!
     var expectations = [DiscordDispatchEvent: XCTestExpectation]()
 
-    override func setUp() {
+    public static var allTests: [(String, (TestDiscordClient) -> () -> ())] {
+        return [
+            ("testClientCreatesGuild", testClientCreatesGuild),
+            ("testClientUpdatesGuild", testClientUpdatesGuild),
+            ("testClientDeletesGuild", testClientDeletesGuild),
+            ("testClientHandlesGuildMemberAdd", testClientHandlesGuildMemberAdd),
+            ("testClientHandlesGuildMemberUpdate", testClientHandlesGuildMemberUpdate),
+            ("testClientHandlesGuildMemberRemove", testClientHandlesGuildMemberRemove),
+            ("testClientCreatesGuildChannel", testClientCreatesGuildChannel),
+            ("testClientCreatesDMChannel", testClientCreatesDMChannel),
+            ("testClientCreatesGroupDMChannel", testClientCreatesGroupDMChannel),
+            ("testClientDeletesGuildChannel", testClientDeletesGuildChannel),
+            ("testClientDeletesDirectChannel", testClientDeletesDirectChannel),
+            ("testClientDeletesGroupDMChannel", testClientDeletesGroupDMChannel),
+            ("testClientUpdatesGuildChannel", testClientUpdatesGuildChannel),
+            ("testClientHandlesGuildEmojiUpdate", testClientHandlesGuildEmojiUpdate),
+            ("testClientHandlesRoleCreate", testClientHandlesRoleCreate),
+            ("testClientHandlesRoleUpdate", testClientHandlesRoleUpdate),
+            ("testClientHandlesRoleRemove", testClientHandlesRoleRemove),
+            ("testClientCallsUnhandledEventMethod", testClientCallsUnhandledEventMethod),
+            ("testClientFindsGuildTextChannel", testClientFindsGuildTextChannel),
+            ("testClientFindsGuildVoiceChannel", testClientFindsGuildVoiceChannel),
+            ("testClientFindsDirectChannel", testClientFindsDirectChannel),
+            ("testClientFindsGroupDMChannel", testClientFindsGroupDMChannel),
+            ("testClientCorrectlyAddsPresenceToGuild", testClientCorrectlyAddsPresenceToGuild),
+            ("testClientCorrectlyCreatesMessage", testClientCorrectlyCreatesMessage)
+        ]
+    }
+
+    public override func setUp() {
         client = DiscordClient(token: "Testing", delegate: self)
         expectations = [DiscordDispatchEvent: XCTestExpectation]()
     }
@@ -392,7 +420,7 @@ extension TestDiscordClient {
     }
 }
 
-extension TestDiscordClient : DiscordClientDelegate {
+public extension TestDiscordClient {
     // MARK: DiscordClientDelegate
 
     func client(_ client: DiscordClient, didCreateChannel channel: DiscordChannel) {

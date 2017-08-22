@@ -6,7 +6,7 @@ import Foundation
 import XCTest
 @testable import SwiftDiscord
 
-class TestDiscordGuild : XCTestCase {
+public class TestDiscordGuild : XCTestCase {
     func testCreatingGuildSetsId() {
         let guild = DiscordGuild(guildObject: testGuild, client: nil)
 
@@ -163,7 +163,29 @@ class TestDiscordGuild : XCTestCase {
 
     var tGuild: [String: Any]!
 
-    override func setUp() {
+    public static var allTests: [(String, (TestDiscordGuild) -> () -> ())] {
+        return [
+            ("testCreatingGuildSetsId", testCreatingGuildSetsId),
+            ("testCreatingGuildSetsName", testCreatingGuildSetsName),
+            ("testCreatingGuildSetsDefaultMessageNotifications", testCreatingGuildSetsDefaultMessageNotifications),
+            ("testCreatingGuildSetsEmbedEnabled", testCreatingGuildSetsEmbedEnabled),
+            ("testCreatingGuildSetsEmbedChannel", testCreatingGuildSetsEmbedChannel),
+            ("testCreatingGuildSetsIcon", testCreatingGuildSetsIcon),
+            ("testCreatingGuildSetsLarge", testCreatingGuildSetsLarge),
+            ("testCreatingGuildSetsMemberCount", testCreatingGuildSetsMemberCount),
+            ("testCreatingGuildSetsMFALevel", testCreatingGuildSetsMFALevel),
+            ("testCreatingGuildSetsOwnerId", testCreatingGuildSetsOwnerId),
+            ("testCreatingGuildSetsRegion", testCreatingGuildSetsRegion),
+            ("testCreatingGuildSetsSplash", testCreatingGuildSetsSplash),
+            ("testCreatingGuildSetsVerificationLevel", testCreatingGuildSetsVerificationLevel),
+            ("testCreatingGuildSetsUnavailable", testCreatingGuildSetsUnavailable),
+            ("testGuildCorrectlyGetsRolesForMember", testGuildCorrectlyGetsRolesForMember),
+            ("testCreatingGuildWithALargeNumberOfMembersIsFast", testCreatingGuildWithALargeNumberOfMembersIsFast),
+            ("testCreatingGuildWithALargeNumberOfPresencesIsFast", testCreatingGuildWithALargeNumberOfPresencesIsFast),
+        ]
+    }
+
+    public override func setUp() {
         tGuild = testGuild
     }
 }
