@@ -6,7 +6,7 @@ import Foundation
 import XCTest
 @testable import SwiftDiscord
 
-class TestDiscordGuildMember : XCTestCase {
+public class TestDiscordGuildMember : XCTestCase {
     func testCreatingGuildMember() {
         var tMember = testMember
         tMember["mute"] = true
@@ -42,7 +42,15 @@ class TestDiscordGuildMember : XCTestCase {
 
     var guild: DiscordGuild!
 
-    override func setUp() {
+    public static var allTests: [(String, (TestDiscordGuildMember) -> () -> ())] {
+        return [
+            ("testCreatingGuildMember", testCreatingGuildMember),
+            ("testGettingRolesFromGuild", testGettingRolesFromGuild),
+            ("testUpdatingMember", testUpdatingMember),
+        ]
+    }
+
+    public override func setUp() {
         guild = DiscordGuild(guildObject: [
             "id": "guildid",
             "roles": [testRole]
