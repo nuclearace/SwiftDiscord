@@ -23,7 +23,7 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
     // MARK: Properties
 
     /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data.
-    var encoder: DiscordVoiceEncoder! { get }
+    var encoder: DiscordVoiceEngineDataSource! { get }
 
     /// The secret key used for encryption.
     var secret: [UInt8]! { get }
@@ -112,7 +112,7 @@ public protocol DiscordVoiceEngineDelegate : class {
     /// - parameter engine: The engine that needs an encoder.
     /// - returns: An encoder.
     ///
-    func voiceEngineNeedsEncoder(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder?
+    func voiceEngineNeedsDataSource(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceEngineDataSource?
 
     ///
     /// Called when the voice engine is ready.
@@ -120,6 +120,45 @@ public protocol DiscordVoiceEngineDelegate : class {
     /// - parameter engine: The engine that's ready.
     ///
     func voiceEngineReady(_ engine: DiscordVoiceEngine)
+}
+
+/// Specifies that a type will be a data source for a VoiceEngine.
+public protocol DiscordVoiceEngineDataSource {
+    /// The size of a frame in samples per channel. Needed to calculate the maximum size of a frame.
+    var frameSize: Int { get }
+
+    #if !os(iOS)
+    /// A middleware process that spits out raw PCM for the encoder.
+    var middleware: DiscordEncoderMiddleware? { get set }
+    #endif
+
+    ///
+    /// Called when the engine needs voice data. If there is no more data left,
+    /// a `DiscordVoiceEngineDataSourceStatus.done` error should be thrown.
+    ///
+    /// - parameter engine: The voice engine that needs data.
+    /// - returns: An array of Opus encoded bytes.
+    func engineNeedsData(_ engine: DiscordVoiceEngine) throws -> [UInt8]
+
+    ///
+    /// Call when you want data collection to stop.
+    ///
+    func finishUpAndClose()
+
+    /// Causes the internal `DispatchIO` to start reading.
+    func startReading()
+}
+
+/// Used to report the status of a data request if data could not be returned.
+public enum DiscordVoiceEngineDataSourceStatus : Error {
+    /// Thrown when there is no more data left to be consumed.
+    case done
+
+    /// Thrown when an error occurs during a request.
+    case error
+
+    /// Thrown when there is no data to be read.
+    case noData
 }
 
 /// Declares that a type has enough information to encode/decode Opus data.

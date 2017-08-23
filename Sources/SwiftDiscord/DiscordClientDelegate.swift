@@ -240,19 +240,19 @@ public protocol DiscordClientDelegate : class {
                 onGuild guild: DiscordGuild)
 
     ///
-    /// Called when a voice engine is requesting a new encoder, can be used to override the default encoder with
-    /// different bitratesample rateetc.
+    /// Called when a voice engine is requesting a new data source, can be used to override the default encoder with
+    /// different bitrate/sample rate/etc.
     ///
-    /// This should return the encoder to use.
+    /// This should return the data source to use.
     ///
     /// **Note**: This method is not called on the main queue.
     /// **Note**: This method must be implemented on iOS; there is no FFmpeg middleware on iOS.
     ///
     /// - parameter client: The client that is calling.
-    /// - parameter needsVoiceEncoderForEngine: The engine that needs an encoder.
+    /// - parameter needsDataSourceForEngine: The engine that needs an encoder.
     /// - returns: A DiscordVoiceEncoder to use to encode with.
     ///
-    func client(_ client: DiscordClient, needsVoiceEncoderForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder
+    func client(_ client: DiscordClient, needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEngineDataSource
 }
 
 public extension DiscordClientDelegate {
@@ -338,7 +338,7 @@ public extension DiscordClientDelegate {
 
     #if !os(iOS)
     /// Default
-    func client(_ client: DiscordClient, needsVoiceEncoderForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder {
+    func client(_ client: DiscordClient, needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEngineDataSource {
         return try DiscordVoiceEncoder(opusEncoder: DiscordOpusEncoder(bitrate: 128_000,
                                                                        sampleRate: 48_000,
                                                                        channels: 2))

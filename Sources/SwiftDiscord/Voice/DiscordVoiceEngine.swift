@@ -91,8 +91,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// The heartbeat interval for this engine.
     public private(set) var heartbeatInterval = -1
 
-    /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data
-    public private(set) var encoder: DiscordVoiceEncoder!
+    /// The data source for this engine. This source is responsible for giving us Opus data that is ready to send.
+    public private(set) var encoder: DiscordVoiceEngineDataSource!
 
     /// The modes that are available for communication. Only xsalsa20_poly1305 is supported currently
     public private(set) var modes = [String]()
@@ -120,7 +120,6 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
     private let decoderSession = DiscordVoiceSessionDecoder()
     private let encoderSemaphore = DispatchSemaphore(value: 1)
-    private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
     private let udpQueueWrite = DispatchQueue(label: "discordVoiceEngine.udpQueueWrite")
     private let udpQueueRead = DispatchQueue(label: "discordVoiceEngine.udpQueueRead")
     private let writeQueue = DispatchQueue(label: "discordVoiceEngine.writeQueue")
@@ -141,6 +140,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     private var timestamp = UInt32(random())
     #endif
 
+    private var sendTimer: DispatchSourceTimer!
     private var startTime = 0
 
     // MARK: Initializers
@@ -158,7 +158,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
                 config: DiscordVoiceEngineConfiguration,
                 voiceServerInformation: DiscordVoiceServerInformation,
                 voiceState: DiscordVoiceState,
-                encoder: DiscordVoiceEncoder?,
+                encoder: DiscordVoiceEngineDataSource?,
                 secret: [UInt8]?) {
         self.voiceDelegate = delegate
         self.config = config
@@ -215,11 +215,37 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         // Guard against trying to create multiple encoders at once
         encoderSemaphore.wait()
 
-        encoder = try voiceDelegate?.voiceEngineNeedsEncoder(self)
+        createTimer()
+
+        encoder = try voiceDelegate?.voiceEngineNeedsDataSource(self)
 
         readData()
 
         voiceDelegate?.voiceEngineReady(self)
+    }
+
+    private func createTimer() {
+        self.sendTimer = DispatchSource.makeTimerSource(flags: .strict, queue: udpQueueWrite)
+        self.sendTimer.setEventHandler {[weak self] in
+            guard let this = self else { return }
+
+            do {
+                this.sendVoiceData(try this.encoder.engineNeedsData(this))
+            } catch DiscordVoiceEngineDataSourceStatus.done {
+                DefaultDiscordLogger.Logger.debug("Voice Engine done", type: DiscordVoiceEngine.logType)
+
+                this.handleDoneReading()
+            } catch {
+                DefaultDiscordLogger.Logger.error("Error getting voice data: \(error)",
+                    type: DiscordVoiceEngine.logType)
+            }
+        }
+
+        self.sendTimer.scheduleRepeating(wallDeadline: .now(), interval: .milliseconds(20))
+
+        // TODO this is wasteful, figure out if there's a smart way to start and stop the timer.
+        // Maybe let the user decide?
+        sendTimer.resume()
     }
 
     private func createRTPHeader() -> [UInt8] {
@@ -247,7 +273,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         closed = true
         connected = false
-        encoder.finishEncodingAndClose()
+        encoder.finishUpAndClose()
     }
 
     private func createVoicePacket(_ data: [UInt8]) throws -> [UInt8] {
@@ -348,13 +374,17 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     public func handleHello(_ payload: DiscordGatewayPayload) { }
 
     private func handleDoneReading() {
-        encoderSemaphore.wait()
         sendSilence()
         // Add a new pipe on the encoder and put a read on it.
-        encoder.setupPipe()
-        readData()
+         do {
+             try requestNewEncoder()
+         } catch let err {
+             error(message: "Error getting new data source: \(err)")
+             disconnect()
 
-        encoderSemaphore.signal()
+             return
+         }
+
         voiceDelegate?.voiceEngineReady(self)
     }
 
@@ -431,27 +461,11 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func readData() {
-        readQueue.async {[weak self, weak encoder] in
-            // Perform a blocking read; in the meantime the whole shabang could be deinint'd, so don't capture self
-            // strongly until after we're sure we've read something
-            guard let (done, data) = encoder?.read(), let this = self, !this.closed else { return }
-
-            guard !done else {
-                DefaultDiscordLogger.Logger.debug("No data, reader probably closed", type: DiscordVoiceEngine.logType)
-
-                this.handleDoneReading()
-
-                return
-            }
-
-            DefaultDiscordLogger.Logger.debug("Read \(data.count) bytes", type: DiscordVoiceEngine.logType)
-
-            this.sendVoiceData(data)
-            this.readData()
-        }
+        encoder.startReading()
     }
 
     private func readSocket() {
+        // TODO refactor to be non-blocking
         udpQueueRead.async {[weak self] in
             guard let socket = self?.udpSocket, self?.connected ?? false else { return }
 
@@ -519,6 +533,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             if encoder == nil {
                 try createEncoder()
             } else {
+                createTimer()
                 readData()
             }
         } catch let err {
@@ -539,9 +554,10 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// - parameter data: The data to write to the encoder.
     ///
     public func send(_ data: Data, doneHandler: (() -> ())? = nil) {
-        writeQueue.async {[weak self] in
-            self?.encoder.write(data, doneHandler: doneHandler)
-        }
+        // TODO Figure out this
+//        writeQueue.async {[weak self] in
+//            self?.encoder.write(data, doneHandler: doneHandler)
+//        }
     }
 
     ///
@@ -560,6 +576,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     private func sendSilence() {
         for _ in 0..<5 {
             sendVoiceData([0xF8, 0xFF, 0xFE])
+            audioSleep()
         }
 
         sendSpeaking(false)
@@ -583,33 +600,29 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     ///
     /// Sends Opus encoded voice data to Discord.
     ///
+    /// **This should be called on the udpWriteQueue**.
+    ///
     /// - parameter data: An Opus encoded packet.
     ///
     public func sendVoiceData(_ data: [UInt8]) {
-        func _sendVoiceData() {
-            guard let udpSocket = self.udpSocket, secret != nil else { return }
+        guard let udpSocket = self.udpSocket, secret != nil else { return }
 
-            DefaultDiscordLogger.Logger.debug("Should send voice data: \(data.count) bytes",
-                                              type: DiscordVoiceEngine.logType)
+        DefaultDiscordLogger.Logger.debug("Should send voice data: \(data.count) bytes",
+                                          type: DiscordVoiceEngine.logType)
 
-            do {
-                try udpSocket.sendto(data: createVoicePacket(data))
-            } catch DiscordVoiceEngineError.encryptionError {
-                error(message: "Error encyrpting packet")
-            } catch let err {
-                error(message: "Failed sending voice packet \(err)")
-                disconnect()
+        do {
+            try udpSocket.sendto(data: createVoicePacket(data))
+        } catch DiscordVoiceEngineError.encryptionError {
+            error(message: "Error encyrpting packet")
+        } catch let err {
+            error(message: "Failed sending voice packet \(err)")
+            disconnect()
 
-                return
-            }
-
-            sequenceNum = sequenceNum &+ 1
-            timestamp = timestamp &+ UInt32(encoder.frameSize)
-
-            audioSleep()
+            return
         }
 
-        udpQueueWrite.sync(execute: _sendVoiceData)
+        sequenceNum = sequenceNum &+ 1
+        timestamp = timestamp &+ UInt32(encoder.frameSize)
     }
 
     #if !os(iOS)
@@ -634,6 +647,9 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     ///
     public func setupMiddleware(_ middleware: Process, terminationHandler: (() -> ())?) {
         DefaultDiscordLogger.Logger.debug("Setting up middleware", type: DiscordVoiceEngine.logType)
+
+        // TODO this is bad, fix the types here
+        guard let encoder = self.encoder as? DiscordVoiceEncoder else { return }
 
         encoder.middleware = DiscordEncoderMiddleware(encoder: encoder,
                                                       middleware: middleware,

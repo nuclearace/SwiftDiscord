@@ -76,7 +76,7 @@ public class DiscordEncoderMiddleware {
         }
 
         ffmpeg.terminationHandler = {[weak encoder] _ in
-            encoder?.finishEncodingAndClose()
+            encoder?.finishUpAndClose()
         }
     }
 
@@ -93,8 +93,10 @@ public class DiscordEncoderMiddleware {
 ///
 /// DiscordVoiceEncoder is responsible for turning audio data into Opus packets.
 ///
-open class DiscordVoiceEncoder {
+open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
     // MARK: Properties
+
+    private static let logType =  "DiscordVoiceEncoder"
 
     /// The Opus encoder.
     public let opusEncoder: DiscordOpusEncoder
@@ -104,7 +106,7 @@ open class DiscordVoiceEncoder {
 
     #if !os(iOS)
     /// A middleware process that spits out raw PCM for the encoder.
-    public internal(set) var middleware: DiscordEncoderMiddleware?
+    public var middleware: DiscordEncoderMiddleware?
     #endif
 
     /// What the encoder reads from, and what a consumer writes to to have things encoded into Opus
@@ -117,7 +119,11 @@ open class DiscordVoiceEncoder {
         return pipe.fileHandleForWriting
     }
 
+    private let readQueue = DispatchQueue(label: "discordVoiceEncoder.readQueue")
     private var closed = false
+    private var done = false
+    private var source: DispatchIO!
+    private var readBuffer = [[UInt8]]()
 
     // MARK: Initializers
 
@@ -129,6 +135,7 @@ open class DiscordVoiceEncoder {
     public init(opusEncoder: DiscordOpusEncoder) {
         self.pipe = Pipe()
         self.opusEncoder = opusEncoder
+        createDispatchIO()
     }
 
     deinit {
@@ -141,7 +148,6 @@ open class DiscordVoiceEncoder {
 
     // MARK: Methods
 
-
     /// Abrubtly halts encoding and kills the encoder
     open func closeEncoder() {
         defer { closed = true }
@@ -151,9 +157,44 @@ open class DiscordVoiceEncoder {
         pipe.fileHandleForWriting.closeFile()
     }
 
+    private func createDispatchIO() {
+        self.source = DispatchIO(type: .stream, fileDescriptor: pipe.fileHandleForReading.fileDescriptor,
+                                 queue: readQueue, cleanupHandler: {[weak self] code in
+            self?.setupPipe()
+        })
+    }
+
+    ///
+    /// Called when the engine needs voice data. If there is no more data left,
+    /// a `DiscordVoiceEngineDataSourceStatus.done` error should be thrown.
+    ///
+    /// - parameter engine: The voice engine that needs data.
+    /// - returns: An array of Opus encoded bytes.
+    open func engineNeedsData(_ engine: DiscordVoiceEngine) throws -> [UInt8] {
+        var data: [UInt8]!
+        var done: Bool!
+
+        readQueue.sync {
+            done = self.done
+            guard self.readBuffer.count != 0 else { return }
+
+            data = self.readBuffer.removeFirst()
+        }
+
+        guard data != nil else {
+            if done {
+                throw DiscordVoiceEngineDataSourceStatus.done
+            } else {
+                throw DiscordVoiceEngineDataSourceStatus.noData
+            }
+        }
+
+        return data
+    }
+
     /// Call only when you know you've finished writing data, but ffmpeg is still encoding, or has data we haven't read
     /// This should cause ffmpeg to get an EOF on input, which will cause it to close once its output buffer is empty
-    open func finishEncodingAndClose() {
+    open func finishUpAndClose() {
         guard !closed else { return }
 
         DefaultDiscordLogger.Logger.debug("Closing pipe for writing", type: "DiscordVoiceEncoder")
@@ -162,41 +203,57 @@ open class DiscordVoiceEncoder {
     }
 
     ///
-    /// A read from the encoder. If there is no data available, this method blocks.
+    /// Starts listening to the writePipe.
     ///
-    /// - returns: A tuple that contains the results of the read.
-    /// First parameter is a Bool indicating whether the encoder is done.
-    /// Second is an Opus encoded packet.
-    ///
-    open func read() -> (Bool, [UInt8]) {
-        guard !closed else { return (true, []) }
+    open func startReading() {
+        guard !closed else { return }
 
-        let maxFrameSize = opusEncoder.maxFrameSize(assumingSize: frameSize)
-        let fd = pipe.fileHandleForReading.fileDescriptor
-        let buf = UnsafeMutableRawPointer.allocate(bytes: maxFrameSize, alignedTo: MemoryLayout<UInt8>.alignment)
-        // Read one frame
-        let bytesRead = Foundation.read(fd, buf, maxFrameSize)
-
-        defer { free(buf) }
-
-        DefaultDiscordLogger.Logger.debug("Read \(bytesRead) bytes", type: "DiscordVoiceEncoder")
-
-        guard bytesRead > 0, !closed else {
-            return (true, [])
-        }
-
-        let pointer = buf.assumingMemoryBound(to: opus_int16.self)
-
-        do {
-            return (false, try opusEncoder.encode(pointer, frameSize: frameSize))
-        } catch {
-            return (true, [])
-        }
+        _read()
     }
 
-    /// Sets up a new pipe for reading/writing.
+    private func _read() {
+        let maxFrameSize = opusEncoder.maxFrameSize(assumingSize: frameSize)
+
+        source.read(offset: 0, length: maxFrameSize, queue: readQueue, ioHandler: {[weak self] done, data, code in
+            guard let this = self else { return }
+
+            guard let data = data, data.count > 0 else {
+                DefaultDiscordLogger.Logger.debug("No data, reader probably closed", type: DiscordVoiceEncoder.logType)
+                // EOF reached
+                if done && code == 0 {
+                    DefaultDiscordLogger.Logger.debug("Reader done", type: DiscordVoiceEncoder.logType)
+                    this.done = true
+
+                    return
+                }
+
+                this._read()
+                return
+            }
+
+            DefaultDiscordLogger.Logger.debug("Read \(data.count) bytes", type: DiscordVoiceEncoder.logType)
+
+            do {
+                try data.withUnsafeBytes {(bytes: UnsafePointer<opus_int16>) in
+                    // TODO don't bloat the buffer to huge sizes
+                    this.readBuffer.append(try this.opusEncoder.encode(bytes, frameSize: this.frameSize))
+                }
+
+                this._read()
+            } catch {
+                DefaultDiscordLogger.Logger.error("Error encoding bytes", type: DiscordVoiceEncoder.logType)
+            }
+        })
+    }
+
+    // Sets up a new pipe for reading/writing.
+    // TODO Does this make sense anymore?
     func setupPipe() {
-        pipe = Pipe()
+        readQueue.sync {
+            self.done = false
+            self.pipe = Pipe()
+            self.createDispatchIO()
+        }
     }
 
     ///
