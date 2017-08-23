@@ -92,7 +92,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     public private(set) var heartbeatInterval = -1
 
     /// The data source for this engine. This source is responsible for giving us Opus data that is ready to send.
-    public private(set) var encoder: DiscordVoiceEngineDataSource!
+    public private(set) var source: DiscordVoiceEngineDataSource!
 
     /// The modes that are available for communication. Only xsalsa20_poly1305 is supported currently
     public private(set) var modes = [String]()
@@ -158,7 +158,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
                 config: DiscordVoiceEngineConfiguration,
                 voiceServerInformation: DiscordVoiceServerInformation,
                 voiceState: DiscordVoiceState,
-                encoder: DiscordVoiceEngineDataSource?,
+                source: DiscordVoiceEngineDataSource?,
                 secret: [UInt8]?) {
         self.voiceDelegate = delegate
         self.config = config
@@ -169,7 +169,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         self.voiceState = voiceState
         self.voiceServerInformation = voiceServerInformation
-        self.encoder = encoder
+        self.source = source
         self.secret = secret
     }
 
@@ -209,7 +209,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         audioCount += 1
     }
 
-    private func createEncoder() throws {
+    private func getNewSource() throws {
         defer { encoderSemaphore.signal() }
 
         // Guard against trying to create multiple encoders at once
@@ -217,7 +217,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         createTimer()
 
-        encoder = try voiceDelegate?.voiceEngineNeedsDataSource(self)
+        source = try voiceDelegate?.voiceEngineNeedsDataSource(self)
 
         readData()
 
@@ -230,14 +230,16 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             guard let this = self else { return }
 
             do {
-                this.sendVoiceData(try this.encoder.engineNeedsData(this))
+                this.sendVoiceData(try this.source.engineNeedsData(this))
             } catch DiscordVoiceEngineDataSourceStatus.done {
                 DefaultDiscordLogger.Logger.debug("Voice Engine done", type: DiscordVoiceEngine.logType)
 
                 this.handleDoneReading()
+            } catch DiscordVoiceEngineDataSourceStatus.noData {
+                DefaultDiscordLogger.Logger.debug("No data", type: DiscordVoiceEngine.logType)
             } catch {
                 DefaultDiscordLogger.Logger.error("Error getting voice data: \(error)",
-                    type: DiscordVoiceEngine.logType)
+                                                  type: DiscordVoiceEngine.logType)
             }
         }
 
@@ -273,7 +275,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         closed = true
         connected = false
-        encoder.finishUpAndClose()
+        source.finishUpAndClose()
     }
 
     private func createVoicePacket(_ data: [UInt8]) throws -> [UInt8] {
@@ -461,7 +463,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func readData() {
-        encoder.startReading()
+        source.startReading()
     }
 
     private func readSocket() {
@@ -506,7 +508,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// the new encoder is ready.
     ///
     public func requestNewEncoder() throws {
-        try createEncoder()
+        try getNewSource()
     }
 
     // Tells the voice websocket what our ip and port is, and what encryption mode we will use
@@ -530,8 +532,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         connected = true
 
         do {
-            if encoder == nil {
-                try createEncoder()
+            if source == nil {
+                try getNewSource()
             } else {
                 createTimer()
                 readData()
@@ -622,7 +624,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         }
 
         sequenceNum = sequenceNum &+ 1
-        timestamp = timestamp &+ UInt32(encoder.frameSize)
+        timestamp = timestamp &+ UInt32(source.frameSize)
     }
 
     #if !os(iOS)
@@ -649,7 +651,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         DefaultDiscordLogger.Logger.debug("Setting up middleware", type: DiscordVoiceEngine.logType)
 
         // TODO this is bad, fix the types here
-        guard let encoder = self.encoder as? DiscordVoiceEncoder else { return }
+        guard let encoder = self.source as? DiscordVoiceEncoder else { return }
 
         encoder.middleware = DiscordEncoderMiddleware(encoder: encoder,
                                                       middleware: middleware,

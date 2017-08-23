@@ -23,7 +23,7 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
     // MARK: Properties
 
     /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data.
-    var encoder: DiscordVoiceEngineDataSource! { get }
+    var source: DiscordVoiceEngineDataSource! { get }
 
     /// The secret key used for encryption.
     var secret: [UInt8]! { get }
@@ -124,6 +124,8 @@ public protocol DiscordVoiceEngineDelegate : class {
 
 /// Specifies that a type will be a data source for a VoiceEngine.
 public protocol DiscordVoiceEngineDataSource {
+    // MARK: Properties
+
     /// The size of a frame in samples per channel. Needed to calculate the maximum size of a frame.
     var frameSize: Int { get }
 
@@ -132,12 +134,15 @@ public protocol DiscordVoiceEngineDataSource {
     var middleware: DiscordEncoderMiddleware? { get set }
     #endif
 
+    // MARK: Methods
+
     ///
     /// Called when the engine needs voice data. If there is no more data left,
     /// a `DiscordVoiceEngineDataSourceStatus.done` error should be thrown.
     ///
     /// - parameter engine: The voice engine that needs data.
     /// - returns: An array of Opus encoded bytes.
+    ///
     func engineNeedsData(_ engine: DiscordVoiceEngine) throws -> [UInt8]
 
     ///

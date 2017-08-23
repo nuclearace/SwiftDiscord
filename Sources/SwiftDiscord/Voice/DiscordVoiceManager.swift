@@ -165,7 +165,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
                                                    config: engineConfiguration,
                                                    voiceServerInformation: serverInfo,
                                                    voiceState: voiceState,
-                                                   encoder: previousEngine?.encoder,
+                                                   source: previousEngine?.source,
                                                    secret: previousEngine?.secret)
 
         DefaultDiscordLogger.Logger.log("Connecting voice engine", type: logType)

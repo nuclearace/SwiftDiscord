@@ -119,7 +119,8 @@ open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
         return pipe.fileHandleForWriting
     }
 
-    private let readQueue = DispatchQueue(label: "discordVoiceEncoder.readQueue")
+    private let encoderQueue = DispatchQueue(label: "discordVoiceEncoder.encoderQueue")
+
     private var closed = false
     private var done = false
     private var source: DispatchIO!
@@ -159,7 +160,7 @@ open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
 
     private func createDispatchIO() {
         self.source = DispatchIO(type: .stream, fileDescriptor: pipe.fileHandleForReading.fileDescriptor,
-                                 queue: readQueue, cleanupHandler: {[weak self] code in
+                                 queue: encoderQueue, cleanupHandler: {[weak self] code in
             self?.setupPipe()
         })
     }
@@ -170,11 +171,12 @@ open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
     ///
     /// - parameter engine: The voice engine that needs data.
     /// - returns: An array of Opus encoded bytes.
+    ///
     open func engineNeedsData(_ engine: DiscordVoiceEngine) throws -> [UInt8] {
         var data: [UInt8]!
         var done: Bool!
 
-        readQueue.sync {
+        encoderQueue.sync {
             done = self.done
             guard self.readBuffer.count != 0 else { return }
 
@@ -214,7 +216,7 @@ open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
     private func _read() {
         let maxFrameSize = opusEncoder.maxFrameSize(assumingSize: frameSize)
 
-        source.read(offset: 0, length: maxFrameSize, queue: readQueue, ioHandler: {[weak self] done, data, code in
+        source.read(offset: 0, length: maxFrameSize, queue: encoderQueue, ioHandler: {[weak self] done, data, code in
             guard let this = self else { return }
 
             guard let data = data, data.count > 0 else {
@@ -249,7 +251,7 @@ open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
     // Sets up a new pipe for reading/writing.
     // TODO Does this make sense anymore?
     func setupPipe() {
-        readQueue.sync {
+        encoderQueue.sync {
             self.done = false
             self.pipe = Pipe()
             self.createDispatchIO()
