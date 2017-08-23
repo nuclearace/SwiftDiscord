@@ -572,7 +572,6 @@ public extension TestDiscordClient {
         expectations[.presenceUpdate]?.fulfill()
     }
 
-
     func client(_ client: DiscordClient, didCreateRole role: DiscordRole, onGuild guild: DiscordGuild) {
         guard let clientGuild = client.guilds[guild.id] else {
             XCTFail("Guild should be in guilds")

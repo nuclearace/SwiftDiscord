@@ -535,7 +535,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
     ///
     /// Sends raw PCM data to the encoder async.
-///
+    ///
     /// - parameter data: The data to write to the encoder.
     ///
     public func send(_ data: Data, doneHandler: (() -> ())? = nil) {
