@@ -96,6 +96,9 @@ public class DiscordEncoderMiddleware {
 open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
     // MARK: Properties
 
+    // TODO make these configurable?
+    private static let bufferLimit = 10_000
+    private static let drainThreshhold = 7_500
     private static let logType =  "DiscordVoiceEncoder"
 
     /// The Opus encoder.
@@ -123,6 +126,7 @@ open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
 
     private var closed = false
     private var done = false
+    private var drain = false
     private var source: DispatchIO!
     private var readBuffer = [[UInt8]]()
 
@@ -178,6 +182,15 @@ open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
 
         encoderQueue.sync {
             done = self.done
+
+            if self.drain && self.readBuffer.count <= DiscordVoiceEncoder.drainThreshhold {
+                // The swamp has been drained, start reading again
+                DefaultDiscordLogger.Logger.debug("Buffer drained, scheduling read", type: DiscordVoiceEncoder.logType)
+
+                self.drain = false
+                self.startReading()
+            }
+
             guard self.readBuffer.count != 0 else { return }
 
             data = self.readBuffer.removeFirst()
@@ -199,7 +212,7 @@ open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
     open func finishUpAndClose() {
         guard !closed else { return }
 
-        DefaultDiscordLogger.Logger.debug("Closing pipe for writing", type: "DiscordVoiceEncoder")
+        DefaultDiscordLogger.Logger.debug("Closing pipe for writing", type: DiscordVoiceEncoder.logType)
 
         writeToHandler.closeFile()
     }
@@ -221,8 +234,10 @@ open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
 
             guard let data = data, data.count > 0 else {
                 DefaultDiscordLogger.Logger.debug("No data, reader probably closed", type: DiscordVoiceEncoder.logType)
-                // EOF reached
+
                 if done && code == 0 {
+                    // EOF reached
+
                     DefaultDiscordLogger.Logger.debug("Reader done", type: DiscordVoiceEncoder.logType)
                     this.done = true
 
@@ -239,6 +254,16 @@ open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
                 try data.withUnsafeBytes {(bytes: UnsafePointer<opus_int16>) in
                     // TODO don't bloat the buffer to huge sizes
                     this.readBuffer.append(try this.opusEncoder.encode(bytes, frameSize: this.frameSize))
+                }
+
+                guard this.readBuffer.count < DiscordVoiceEncoder.bufferLimit else {
+                    // Buffer is full; wait till it's drained
+                    // Whatever is in charge of taking from the buffer should queue up more reading
+                    DefaultDiscordLogger.Logger.debug("Buffer full, not reading again",
+                                                      type: DiscordVoiceEncoder.logType)
+                    this.drain = true
+
+                    return
                 }
 
                 this._read()
