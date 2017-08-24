@@ -58,7 +58,7 @@ public class DiscordEncoderMiddleware {
     ///
     /// An intializer that sets up a middleware ffmpeg process that encodes some audio data.
     ///
-    public init(encoder: DiscordVoiceEncoder, middleware: Process, terminationHandler: (() -> ())?) {
+    public init(encoder: DiscordBufferedVoiceDataSource, middleware: Process, terminationHandler: (() -> ())?) {
         self.middleware = middleware
         ffmpeg = Process()
         pipe = Pipe()
@@ -91,14 +91,17 @@ public class DiscordEncoderMiddleware {
 #endif
 
 ///
-/// DiscordVoiceEncoder is responsible for turning audio data into Opus packets.
+/// DiscordBufferedVoiceDataSource is generic data source around a pipe. The only condition is that it expects raw
+/// PCM 16-bit-le out of the pipe.
 ///
-open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
+/// It buffers ~5 minutes worth of voice data
+///
+open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
     // MARK: Properties
 
     // TODO make these configurable?
-    private static let bufferLimit = 10_000
-    private static let drainThreshhold = 7_500
+    private static let bufferLimit = 15_000 // Buffer ~5 minutes worth data
+    private static let drainThreshold = 13_500 // Drain off ~30 seconds worth of data
     private static let logType =  "DiscordVoiceEncoder"
 
     /// The Opus encoder.
@@ -183,9 +186,12 @@ open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
         encoderQueue.sync {
             done = self.done
 
-            if self.drain && self.readBuffer.count <= DiscordVoiceEncoder.drainThreshhold {
+            DefaultDiscordLogger.Logger.debug("Buffer state: count: \(self.readBuffer.count) drain: \(self.drain)",
+                                              type: DiscordBufferedVoiceDataSource.logType)
+
+            if self.drain && self.readBuffer.count <= DiscordBufferedVoiceDataSource.drainThreshold {
                 // The swamp has been drained, start reading again
-                DefaultDiscordLogger.Logger.debug("Buffer drained, scheduling read", type: DiscordVoiceEncoder.logType)
+                DefaultDiscordLogger.Logger.debug("Buffer drained, scheduling read", type: DiscordBufferedVoiceDataSource.logType)
 
                 self.drain = false
                 self.startReading()
@@ -212,7 +218,7 @@ open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
     open func finishUpAndClose() {
         guard !closed else { return }
 
-        DefaultDiscordLogger.Logger.debug("Closing pipe for writing", type: DiscordVoiceEncoder.logType)
+        DefaultDiscordLogger.Logger.debug("Closing pipe for writing", type: DiscordBufferedVoiceDataSource.logType)
 
         writeToHandler.closeFile()
     }
@@ -233,34 +239,36 @@ open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
             guard let this = self else { return }
 
             guard let data = data, data.count > 0 else {
-                DefaultDiscordLogger.Logger.debug("No data, reader probably closed", type: DiscordVoiceEncoder.logType)
+                DefaultDiscordLogger.Logger.debug("No data, reader probably closed",
+                                                  type: DiscordBufferedVoiceDataSource.logType)
 
                 if done && code == 0 {
                     // EOF reached
 
-                    DefaultDiscordLogger.Logger.debug("Reader done", type: DiscordVoiceEncoder.logType)
+                    DefaultDiscordLogger.Logger.debug("Reader done", type: DiscordBufferedVoiceDataSource.logType)
                     this.done = true
 
                     return
                 }
 
+                DefaultDiscordLogger.Logger.debug("Not done?", type: DiscordBufferedVoiceDataSource.logType)
+
                 this._read()
                 return
             }
 
-            DefaultDiscordLogger.Logger.debug("Read \(data.count) bytes", type: DiscordVoiceEncoder.logType)
+            DefaultDiscordLogger.Logger.debug("Read \(data.count) bytes", type: DiscordBufferedVoiceDataSource.logType)
 
             do {
                 try data.withUnsafeBytes {(bytes: UnsafePointer<opus_int16>) in
-                    // TODO don't bloat the buffer to huge sizes
                     this.readBuffer.append(try this.opusEncoder.encode(bytes, frameSize: this.frameSize))
                 }
 
-                guard this.readBuffer.count < DiscordVoiceEncoder.bufferLimit else {
+                guard this.readBuffer.count < DiscordBufferedVoiceDataSource.bufferLimit else {
                     // Buffer is full; wait till it's drained
                     // Whatever is in charge of taking from the buffer should queue up more reading
                     DefaultDiscordLogger.Logger.debug("Buffer full, not reading again",
-                                                      type: DiscordVoiceEncoder.logType)
+                                                      type: DiscordBufferedVoiceDataSource.logType)
                     this.drain = true
 
                     return
@@ -268,7 +276,7 @@ open class DiscordVoiceEncoder : DiscordVoiceEngineDataSource {
 
                 this._read()
             } catch {
-                DefaultDiscordLogger.Logger.error("Error encoding bytes", type: DiscordVoiceEncoder.logType)
+                DefaultDiscordLogger.Logger.error("Error encoding bytes", type: DiscordBufferedVoiceDataSource.logType)
             }
         })
     }
@@ -379,7 +387,7 @@ open class DiscordOpusEncoder : DiscordOpusCodeable {
     }
 
     ///
-    /// Encodes a single frame of raw PCM 16-bit-lesample LE data into Opus format.
+    /// Encodes a single frame of raw PCM 16-bit-le/sample LE data into Opus format.
     ///
     /// - parameter audio: A pointer to the audio data. Use `maxFrameSize(assumingSize:)` to find the length.
     /// - parameter frameSize: The size of the frame in samples per channel.

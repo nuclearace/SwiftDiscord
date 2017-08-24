@@ -651,7 +651,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         DefaultDiscordLogger.Logger.debug("Setting up middleware", type: DiscordVoiceEngine.logType)
 
         // TODO this is bad, fix the types here
-        guard let encoder = self.source as? DiscordVoiceEncoder else { return }
+        guard let encoder = self.source as? DiscordBufferedVoiceDataSource else { return }
 
         encoder.middleware = DiscordEncoderMiddleware(encoder: encoder,
                                                       middleware: middleware,
