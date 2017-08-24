@@ -102,7 +102,7 @@ open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
     // TODO make these configurable?
     private static let bufferLimit = 15_000 // Buffer ~5 minutes worth data
     private static let drainThreshold = 13_500 // Drain off ~30 seconds worth of data
-    private static let logType =  "DiscordVoiceEncoder"
+    private static let logType =  "DiscordBufferedVoiceDataSource"
 
     /// The Opus encoder.
     public let opusEncoder: DiscordOpusEncoder
@@ -147,7 +147,7 @@ open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
     }
 
     deinit {
-        DefaultDiscordLogger.Logger.debug("deinit", type: "DiscordVoiceEncoder")
+        DefaultDiscordLogger.Logger.debug("deinit", type: DiscordBufferedVoiceDataSource.logType)
 
         guard !closed else { return }
 
