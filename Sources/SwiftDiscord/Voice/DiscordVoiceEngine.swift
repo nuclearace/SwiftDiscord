@@ -119,10 +119,9 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     private static let padding = [UInt8](repeating: 0x00, count: 12)
 
     private let decoderSession = DiscordVoiceSessionDecoder()
-    private let encoderSemaphore = DispatchSemaphore(value: 1)
+    private let dataSourceLock = DispatchSemaphore(value: 1)
     private let udpQueueWrite = DispatchQueue(label: "discordVoiceEngine.udpQueueWrite")
     private let udpQueueRead = DispatchQueue(label: "discordVoiceEngine.udpQueueRead")
-    private let writeQueue = DispatchQueue(label: "discordVoiceEngine.writeQueue")
 
     private var audioCount = -1
     private var currentUnixTime: Int {
@@ -207,21 +206,6 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         Thread.sleep(forTimeInterval: waitTime)
 
         audioCount += 1
-    }
-
-    private func getNewSource() throws {
-        defer { encoderSemaphore.signal() }
-
-        // Guard against trying to create multiple encoders at once
-        encoderSemaphore.wait()
-
-        createTimer()
-
-        source = try voiceDelegate?.voiceEngineNeedsDataSource(self)
-
-        readData()
-
-        voiceDelegate?.voiceEngineReady(self)
     }
 
     private func createTimer() {
@@ -358,6 +342,21 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         }
     }
 
+    private func getDataNewSource() throws {
+        defer { dataSourceLock.signal() }
+
+        // Guard against trying to create multiple encoders at once
+        dataSourceLock.wait()
+
+        createTimer()
+
+        source = try voiceDelegate?.voiceEngineNeedsDataSource(self)
+
+        readData()
+
+        voiceDelegate?.voiceEngineReady(self)
+    }
+
     ///
     /// Handles a close from the WebSocket.
     ///
@@ -379,7 +378,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         sendSilence()
         // Add a new pipe on the encoder and put a read on it.
          do {
-             try requestNewEncoder()
+             try requestNewDataSource()
          } catch let err {
              error(message: "Error getting new data source: \(err)")
              disconnect()
@@ -507,8 +506,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// Stops encoding and requests a new encoder. The `isReadyToSendVoiceWithEngine` delegate method is called when
     /// the new encoder is ready.
     ///
-    public func requestNewEncoder() throws {
-        try getNewSource()
+    public func requestNewDataSource() throws {
+        try getDataNewSource()
     }
 
     // Tells the voice websocket what our ip and port is, and what encryption mode we will use
@@ -533,7 +532,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         do {
             if source == nil {
-                try getNewSource()
+                try getDataNewSource()
             } else {
                 createTimer()
                 readData()
@@ -548,18 +547,6 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         guard config.captureVoice else { return }
 
         readSocket()
-    }
-
-    ///
-    /// Sends raw PCM data to the encoder async.
-    ///
-    /// - parameter data: The data to write to the encoder.
-    ///
-    public func send(_ data: Data, doneHandler: (() -> ())? = nil) {
-        // TODO Figure out this
-//        writeQueue.async {[weak self] in
-//            self?.encoder.write(data, doneHandler: doneHandler)
-//        }
     }
 
     ///

@@ -107,6 +107,9 @@ open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
     /// The Opus encoder.
     public let opusEncoder: DiscordOpusEncoder
 
+    /// A FileHandle for reading a wrapped file.
+    public let wrappedFile: FileHandle?
+
     /// The size of a frame in samples per channel. Needed to calculate the maximum size of a frame.
     public var frameSize = 960
 
@@ -143,7 +146,21 @@ open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
     public init(opusEncoder: DiscordOpusEncoder) {
         self.pipe = Pipe()
         self.opusEncoder = opusEncoder
-        createDispatchIO()
+        self.wrappedFile = nil
+        createDispatchIO(for: pipe.fileHandleForReading.fileDescriptor)
+    }
+
+    ///
+    /// Sets up a buffered source around a voice file.
+    ///
+    /// - parameter opusEncoder: The Opus encoder to use.
+    /// - parameter file: A file to buffer around.
+    ///
+    public init(opusEncoder: DiscordOpusEncoder, file: URL) throws {
+        self.pipe = Pipe()
+        self.opusEncoder = opusEncoder
+        self.wrappedFile = try FileHandle(forReadingFrom: file)
+        createDispatchIO(for: self.wrappedFile!.fileDescriptor)
     }
 
     deinit {
@@ -165,8 +182,8 @@ open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
         pipe.fileHandleForWriting.closeFile()
     }
 
-    private func createDispatchIO() {
-        self.source = DispatchIO(type: .stream, fileDescriptor: pipe.fileHandleForReading.fileDescriptor,
+    private func createDispatchIO(for fileDescriptor: Int32) {
+        self.source = DispatchIO(type: .stream, fileDescriptor: fileDescriptor,
                                  queue: encoderQueue, cleanupHandler: {[weak self] code in
             self?.setupPipe()
         })
@@ -287,43 +304,7 @@ open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
         encoderQueue.sync {
             self.done = false
             self.pipe = Pipe()
-            self.createDispatchIO()
-        }
-    }
-
-    ///
-    /// Writes to the encoder.
-    ///
-    /// - parameter data: Raw audio data that should be turned into OPUS encoded data.
-    /// - parameter doneHandler: An optional handler that will be called when we are done writing.
-    ///
-    open func write(_ data: Data, doneHandler: (() -> ())? = nil) {
-        guard !closed else { return }
-
-        // FileHandle's write doesn't play nicely with the way we use pipes
-        // It will throw an exception that we cannot catch if the write handle is closed
-        // So do basically exactly what it does, but don't explode the app when the handle is closed
-        let fd = writeToHandler.fileDescriptor
-        data.enumerateBytes {bytes, range, stop in
-            let buf = UnsafeRawPointer(bytes.baseAddress!)
-            var bytesRemaining = data.count
-
-            while bytesRemaining > 0 {
-                var bytesWritten: Int
-
-                repeat {
-                    bytesWritten = Foundation.write(fd, buf.advanced(by: data.count - bytesRemaining), bytesRemaining)
-                } while bytesWritten < 0 && errno == EINTR
-
-                if bytesWritten <= 0 {
-                    // Something went wrong
-                    break
-                } else {
-                    bytesRemaining -= bytesWritten
-                }
-            }
-
-            doneHandler?()
+            self.createDispatchIO(for: self.pipe.fileHandleForReading.fileDescriptor)
         }
     }
 }

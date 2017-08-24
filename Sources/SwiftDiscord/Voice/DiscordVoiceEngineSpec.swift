@@ -33,15 +33,7 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
     ///
     /// Stops encoding and requests a new encoder. A `voiceEngine.ready` event will be fired when the encoder is ready.
     ///
-    func requestNewEncoder() throws
-
-    ///
-    /// An async write to the encoder.
-    ///
-    /// - parameter data: Raw audio data that should be turned into OPUS encoded data.
-    /// - parameter doneHandler: An optional handler that will be called when we are done writing.
-    ///
-    func send(_ data: Data, doneHandler: (() -> ())?)
+    func requestNewDataSource() throws
 
     ///
     /// Sends whether we are speaking or not.
@@ -128,11 +120,6 @@ public protocol DiscordVoiceEngineDataSource {
 
     /// The size of a frame in samples per channel. Needed to calculate the maximum size of a frame.
     var frameSize: Int { get }
-
-    #if !os(iOS)
-    /// A middleware process that spits out raw PCM for the encoder.
-    var middleware: DiscordEncoderMiddleware? { get set }
-    #endif
 
     // MARK: Methods
 
