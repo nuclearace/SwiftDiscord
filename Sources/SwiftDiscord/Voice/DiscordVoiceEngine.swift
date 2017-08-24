@@ -563,6 +563,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func sendSilence() {
+        // TODO make this some sort of SilenceDataSource and remove `audioSleep` finally
         for _ in 0..<5 {
             sendVoiceData([0xF8, 0xFF, 0xFE])
             audioSleep()
