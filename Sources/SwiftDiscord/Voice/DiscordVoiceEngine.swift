@@ -215,11 +215,11 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
             do {
                 this.sendVoiceData(try this.source.engineNeedsData(this))
-            } catch DiscordVoiceEngineDataSourceStatus.done {
+            } catch DiscordVoiceDataSourceStatus.done {
                 DefaultDiscordLogger.Logger.debug("Voice Engine done", type: DiscordVoiceEngine.logType)
 
                 this.handleDoneReading()
-            } catch DiscordVoiceEngineDataSourceStatus.noData {
+            } catch DiscordVoiceDataSourceStatus.noData {
                 DefaultDiscordLogger.Logger.debug("No data", type: DiscordVoiceEngine.logType)
             } catch {
                 DefaultDiscordLogger.Logger.error("Error getting voice data: \(error)",

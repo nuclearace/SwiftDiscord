@@ -31,7 +31,7 @@ public protocol DiscordVoiceDataSource {
 
     ///
     /// Called when the engine needs voice data. If there is no more data left,
-    /// a `DiscordVoiceEngineDataSourceStatus.done` error should be thrown.
+    /// a `DiscordVoiceDataSourceStatus.done` error should be thrown.
     ///
     /// - parameter engine: The voice engine that needs data.
     /// - returns: An array of Opus encoded bytes.
@@ -48,7 +48,7 @@ public protocol DiscordVoiceDataSource {
 }
 
 /// Used to report the status of a data request if data could not be returned.
-public enum DiscordVoiceEngineDataSourceStatus : Error {
+public enum DiscordVoiceDataSourceStatus : Error {
     /// Thrown when there is no more data left to be consumed.
     case done
 
@@ -70,18 +70,18 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
 
     private static let logType =  "DiscordBufferedVoiceDataSource"
 
+    /// The max number of voice packets to buffer.
+    /// Roughly equal to `(nPackets * 20ms) / 1000 = seconds to buffer`.
+    public let bufferSize: Int
+
+    /// The number of packets that must be in the buffer before we start reading more into the buffer.
+    public let drainThreshold: Int
+
     /// The Opus encoder.
     public let opusEncoder: DiscordOpusEncoder
 
     /// A FileHandle for reading a wrapped file.
     public let wrappedFile: FileHandle?
-
-    /// The max number of voice packets to buffer.
-    /// Roughly equal to `(nPackets * 20ms) / 1000 = seconds to buffer`.
-    public var bufferSize: Int
-
-    /// The number of packets that must be in the buffer before we start reading more into the buffer.
-    public var drainThreshold: Int
 
     /// The size of a frame in samples per channel. Needed to calculate the maximum size of a frame.
     public var frameSize = 960
@@ -207,9 +207,9 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
 
         guard data != nil else {
             if done {
-                throw DiscordVoiceEngineDataSourceStatus.done
+                throw DiscordVoiceDataSourceStatus.done
             } else {
-                throw DiscordVoiceEngineDataSourceStatus.noData
+                throw DiscordVoiceDataSourceStatus.noData
             }
         }
 
@@ -247,8 +247,8 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
 
                 if done && code == 0 {
                     // EOF reached
-
                     DefaultDiscordLogger.Logger.debug("Reader done", type: DiscordBufferedVoiceDataSource.logType)
+
                     this.done = true
 
                     return
