@@ -92,7 +92,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     public private(set) var heartbeatInterval = -1
 
     /// The data source for this engine. This source is responsible for giving us Opus data that is ready to send.
-    public private(set) var source: DiscordVoiceEngineDataSource!
+    public private(set) var source: DiscordVoiceDataSource!
 
     /// The modes that are available for communication. Only xsalsa20_poly1305 is supported currently
     public private(set) var modes = [String]()
@@ -157,7 +157,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
                 config: DiscordVoiceEngineConfiguration,
                 voiceServerInformation: DiscordVoiceServerInformation,
                 voiceState: DiscordVoiceState,
-                source: DiscordVoiceEngineDataSource?,
+                source: DiscordVoiceDataSource?,
                 secret: [UInt8]?) {
         self.voiceDelegate = delegate
         self.config = config
@@ -603,7 +603,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         do {
             try udpSocket.sendto(data: createVoicePacket(data))
         } catch DiscordVoiceEngineError.encryptionError {
-            error(message: "Error encyrpting packet")
+            error(message: "Error encrypting packet")
         } catch let err {
             error(message: "Failed sending voice packet \(err)")
             disconnect()
@@ -632,6 +632,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// }
     /// ```
     ///
+    /// **Currently only works if using the default `DiscordBufferedVoiceDataSource`**
+    ///
     /// - parameter middleware: The process that will output audio data.
     /// - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
     ///
@@ -639,12 +641,12 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         DefaultDiscordLogger.Logger.debug("Setting up middleware", type: DiscordVoiceEngine.logType)
 
         // TODO this is bad, fix the types here
-        guard let encoder = self.source as? DiscordBufferedVoiceDataSource else { return }
+        guard let source = self.source as? DiscordBufferedVoiceDataSource else { return }
 
-        encoder.middleware = DiscordEncoderMiddleware(encoder: encoder,
-                                                      middleware: middleware,
-                                                      terminationHandler: terminationHandler)
-        encoder.middleware?.start()
+        source.middleware = DiscordEncoderMiddleware(source: source,
+                                                     middleware: middleware,
+                                                     terminationHandler: terminationHandler)
+        source.middleware?.start()
     }
     #endif
 

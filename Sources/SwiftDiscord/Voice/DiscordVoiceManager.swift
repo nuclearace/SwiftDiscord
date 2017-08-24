@@ -66,7 +66,7 @@ public protocol DiscordVoiceManagerDelegate : class, DiscordTokenBearer {
     /// - returns: A data source.
     ///
     func voiceManager(_ manager: DiscordVoiceManager,
-                      needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEngineDataSource?
+                      needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource?
 }
 
 /// A manager for voice engines.
@@ -210,7 +210,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     /// - parameter engine: The engine that needs an encoder
     /// - returns: An encoder.
     ///
-    open func voiceEngineNeedsDataSource(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceEngineDataSource? {
+    open func voiceEngineNeedsDataSource(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource? {
         return try delegate?.voiceManager(self, needsDataSourceForEngine: engine)
     }
 

@@ -252,7 +252,7 @@ public protocol DiscordClientDelegate : class {
     /// - parameter needsDataSourceForEngine: The engine that needs an encoder.
     /// - returns: A DiscordVoiceEncoder to use to encode with.
     ///
-    func client(_ client: DiscordClient, needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEngineDataSource
+    func client(_ client: DiscordClient, needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource
 }
 
 public extension DiscordClientDelegate {
@@ -338,7 +338,7 @@ public extension DiscordClientDelegate {
 
     #if !os(iOS)
     /// Default
-    func client(_ client: DiscordClient, needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEngineDataSource {
+    func client(_ client: DiscordClient, needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource {
         return try DiscordBufferedVoiceDataSource(opusEncoder: DiscordOpusEncoder(bitrate: 128_000,
                                                                                   sampleRate: 48_000,
                                                                                   channels: 2))

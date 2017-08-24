@@ -427,7 +427,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// - returns: An encoder.
     ///
     open func voiceManager(_ manager: DiscordVoiceManager,
-                           needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEngineDataSource? {
+                           needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource? {
         return try delegate?.client(self, needsDataSourceForEngine: engine)
     }
 

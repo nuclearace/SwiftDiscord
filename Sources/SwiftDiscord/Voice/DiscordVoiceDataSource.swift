@@ -20,75 +20,44 @@ import DiscordOpus
 import Dispatch
 import Foundation
 
-/// Represents an error that can occur during voice operations.
-public enum DiscordVoiceError : Error {
-    /// Thrown when a failure occurs creating an encoder.
-    case creationFail
-
-    /// Thrown when a failure occurs encoding.
-    case encodeFail
-
-    /// Thrown when a decode failure occurs.
-    case decodeFail
-
-    /// Thrown when the first packet is received.
-    case initialPacket
-}
-
-#if !os(iOS)
-///
-/// A wrapper class for a process that spits out audio data that can be fed into an FFmpeg process that is then sent
-/// to the engine.
-///
-///
-public class DiscordEncoderMiddleware {
+/// Specifies that a type will be a data source for a VoiceEngine.
+public protocol DiscordVoiceDataSource {
     // MARK: Properties
 
-    /// The FFmpeg process.
-    public let ffmpeg: Process
+    /// The size of a frame in samples per channel. Needed to calculate the maximum size of a frame.
+    var frameSize: Int { get }
 
-    /// The middleware process.
-    public let middleware: Process
-
-    /// The pipe used to connect FFmpeg to the middleware.
-    public let pipe: Pipe
-
-    // MARK: Initializers
+    // MARK: Methods
 
     ///
-    /// An intializer that sets up a middleware ffmpeg process that encodes some audio data.
+    /// Called when the engine needs voice data. If there is no more data left,
+    /// a `DiscordVoiceEngineDataSourceStatus.done` error should be thrown.
     ///
-    public init(encoder: DiscordBufferedVoiceDataSource, middleware: Process, terminationHandler: (() -> ())?) {
-        self.middleware = middleware
-        ffmpeg = Process()
-        pipe = Pipe()
-
-        middleware.standardOutput = pipe
-
-        ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
-        ffmpeg.standardInput = pipe
-        ffmpeg.standardOutput = encoder.writeToHandler
-        ffmpeg.arguments = ["-hide_banner", "-loglevel", "quiet", "-i", "pipe:0", "-f", "s16le", "-map", "0:a",
-                            "-ar", "48000", "-ac", "2", "-b:a", "128000", "-acodec", "pcm_s16le", "pipe:1"]
-
-        middleware.terminationHandler = {_ in
-            terminationHandler?()
-        }
-
-        ffmpeg.terminationHandler = {[weak encoder] _ in
-            encoder?.finishUpAndClose()
-        }
-    }
+    /// - parameter engine: The voice engine that needs data.
+    /// - returns: An array of Opus encoded bytes.
+    ///
+    func engineNeedsData(_ engine: DiscordVoiceEngine) throws -> [UInt8]
 
     ///
-    /// Starts the middleware.
+    /// Call when you want data collection to stop.
     ///
-    public func start() {
-        ffmpeg.launch()
-        middleware.launch()
-    }
+    func finishUpAndClose()
+
+    /// Signals that the source should start producing data for consumption.
+    func startReading()
 }
-#endif
+
+/// Used to report the status of a data request if data could not be returned.
+public enum DiscordVoiceEngineDataSourceStatus : Error {
+    /// Thrown when there is no more data left to be consumed.
+    case done
+
+    /// Thrown when an error occurs during a request.
+    case error
+
+    /// Thrown when there is no data to be read.
+    case noData
+}
 
 ///
 /// DiscordBufferedVoiceDataSource is generic data source around a pipe. The only condition is that it expects raw
@@ -96,12 +65,9 @@ public class DiscordEncoderMiddleware {
 ///
 /// It buffers ~5 minutes worth of voice data
 ///
-open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
+open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
     // MARK: Properties
 
-    // TODO make these configurable?
-    private static let bufferLimit = 15_000 // Buffer ~5 minutes worth data
-    private static let drainThreshold = 13_500 // Drain off ~30 seconds worth of data
     private static let logType =  "DiscordBufferedVoiceDataSource"
 
     /// The Opus encoder.
@@ -109,6 +75,13 @@ open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
 
     /// A FileHandle for reading a wrapped file.
     public let wrappedFile: FileHandle?
+
+    /// The max number of voice packets to buffer.
+    /// Roughly equal to `(nPackets * 20ms) / 1000 = seconds to buffer`.
+    public var bufferSize: Int
+
+    /// The number of packets that must be in the buffer before we start reading more into the buffer.
+    public var drainThreshold: Int
 
     /// The size of a frame in samples per channel. Needed to calculate the maximum size of a frame.
     public var frameSize = 960
@@ -142,8 +115,13 @@ open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
     /// Sets up a raw encoder. This contains no FFmpeg middleware, so you must write raw PCM data to the encoder.
     ///
     /// - parameter opusEncoder: The Opus encoder to use.
+    /// - parameter bufferSize: The max number of voice packets to buffer.
+    /// - parameter drainThreshold: The number of packets that must be in the buffer before we start reading more
+    /// into the buffer.
     ///
-    public init(opusEncoder: DiscordOpusEncoder) {
+    public init(opusEncoder: DiscordOpusEncoder, bufferSize: Int = 15_000, drainThreshold: Int = 13_500) {
+        self.bufferSize = bufferSize
+        self.drainThreshold = drainThreshold
         self.pipe = Pipe()
         self.opusEncoder = opusEncoder
         self.wrappedFile = nil
@@ -155,8 +133,16 @@ open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
     ///
     /// - parameter opusEncoder: The Opus encoder to use.
     /// - parameter file: A file to buffer around.
+    /// - parameter bufferSize: The max number of voice packets to buffer.
+    /// - parameter drainThreshold: The number of packets that must be in the buffer before we start reading more
+    /// into the buffer.
     ///
-    public init(opusEncoder: DiscordOpusEncoder, file: URL) throws {
+    public init(opusEncoder: DiscordOpusEncoder,
+                file: URL,
+                bufferSize: Int = 15_000,
+                drainThreshold: Int = 13_500) throws {
+        self.bufferSize = bufferSize
+        self.drainThreshold = drainThreshold
         self.pipe = Pipe()
         self.opusEncoder = opusEncoder
         self.wrappedFile = try FileHandle(forReadingFrom: file)
@@ -184,8 +170,8 @@ open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
 
     private func createDispatchIO(for fileDescriptor: Int32) {
         self.source = DispatchIO(type: .stream, fileDescriptor: fileDescriptor,
-                                 queue: encoderQueue, cleanupHandler: {[weak self] code in
-            self?.setupPipe()
+                                 queue: encoderQueue, cleanupHandler: {code in
+            DefaultDiscordLogger.Logger.debug("Source spent: \(code)", type: DiscordBufferedVoiceDataSource.logType)
         })
     }
 
@@ -206,7 +192,7 @@ open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
             DefaultDiscordLogger.Logger.debug("Buffer state: count: \(self.readBuffer.count) drain: \(self.drain)",
                                               type: DiscordBufferedVoiceDataSource.logType)
 
-            if self.drain && self.readBuffer.count <= DiscordBufferedVoiceDataSource.drainThreshold {
+            if self.drain && self.readBuffer.count <= self.drainThreshold {
                 // The swamp has been drained, start reading again
                 DefaultDiscordLogger.Logger.debug("Buffer drained, scheduling read", type: DiscordBufferedVoiceDataSource.logType)
 
@@ -281,7 +267,7 @@ open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
                     this.readBuffer.append(try this.opusEncoder.encode(bytes, frameSize: this.frameSize))
                 }
 
-                guard this.readBuffer.count < DiscordBufferedVoiceDataSource.bufferLimit else {
+                guard this.readBuffer.count < this.bufferSize else {
                     // Buffer is full; wait till it's drained
                     // Whatever is in charge of taking from the buffer should queue up more reading
                     DefaultDiscordLogger.Logger.debug("Buffer full, not reading again",
@@ -297,17 +283,62 @@ open class DiscordBufferedVoiceDataSource: DiscordVoiceEngineDataSource {
             }
         })
     }
+}
 
-    // Sets up a new pipe for reading/writing.
-    // TODO Does this make sense anymore?
-    func setupPipe() {
-        encoderQueue.sync {
-            self.done = false
-            self.pipe = Pipe()
-            self.createDispatchIO(for: self.pipe.fileHandleForReading.fileDescriptor)
+#if !os(iOS)
+///
+/// A wrapper class for a process that spits out audio data that can be fed into an FFmpeg process that is then sent
+/// to the engine.
+///
+///
+public class DiscordEncoderMiddleware {
+    // MARK: Properties
+
+    /// The FFmpeg process.
+    public let ffmpeg: Process
+
+    /// The middleware process.
+    public let middleware: Process
+
+    /// The pipe used to connect FFmpeg to the middleware.
+    public let pipe: Pipe
+
+    // MARK: Initializers
+
+    ///
+    /// An intializer that sets up a middleware ffmpeg process that encodes some audio data.
+    ///
+    public init(source: DiscordBufferedVoiceDataSource, middleware: Process, terminationHandler: (() -> ())?) {
+        self.middleware = middleware
+        ffmpeg = Process()
+        pipe = Pipe()
+
+        middleware.standardOutput = pipe
+
+        ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
+        ffmpeg.standardInput = pipe
+        ffmpeg.standardOutput = source.writeToHandler
+        ffmpeg.arguments = ["-hide_banner", "-loglevel", "quiet", "-i", "pipe:0", "-f", "s16le", "-map", "0:a",
+                            "-ar", "48000", "-ac", "2", "-b:a", "128000", "-acodec", "pcm_s16le", "pipe:1"]
+
+        middleware.terminationHandler = {_ in
+            terminationHandler?()
+        }
+
+        ffmpeg.terminationHandler = {[weak source] _ in
+            source?.finishUpAndClose()
         }
     }
+
+    ///
+    /// Starts the middleware.
+    ///
+    public func start() {
+        ffmpeg.launch()
+        middleware.launch()
+    }
 }
+#endif
 
 ///
 /// An Opus encoder.
