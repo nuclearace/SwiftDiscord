@@ -139,15 +139,19 @@ public struct DiscordVoiceEngineConfiguration {
     /// Whether or not this engine should try and decode incoming voice into raw PCM.
     public var decodeVoice: Bool
 
+    ///
     /// Default configuration:
     ///     captureVoice = true
     ///     decodeVoice = false
+    ///
     public init() {
         captureVoice = true
         decodeVoice = false
     }
 
+    ///
     /// Creates a new configuration with the specified options.
+    ///
     public init(captureVoice: Bool, decodeVoice: Bool) {
         self.captureVoice = captureVoice
         self.decodeVoice = decodeVoice

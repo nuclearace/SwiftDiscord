@@ -383,8 +383,10 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         case .ready:
             handleReady(with: payload.payload)
         case .sessionDescription:
-            udpQueueWrite.sync { self.handleVoiceSessionDescription(with: payload.payload) }
-            sendSilence()
+            udpQueueWrite.sync {
+                self.handleVoiceSessionDescription(with: payload.payload)
+                self.sendSilence()
+            }
         case .speaking:
             DefaultDiscordLogger.Logger.debug("Got speaking \(payload)", type: DiscordVoiceEngine.logType)
         default:
