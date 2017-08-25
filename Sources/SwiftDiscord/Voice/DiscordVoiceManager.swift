@@ -59,14 +59,14 @@ public protocol DiscordVoiceManagerDelegate : class, DiscordTokenBearer {
     func voiceManager(_ manager: DiscordVoiceManager, engineIsReady engine: DiscordVoiceEngine)
 
     ///
-    /// Called when a voice engine needs an encoder.
+    /// Called when a voice engine needs a data source.
     ///
     /// - parameter manager: The manager that is requesting an encoder.
     /// - parameter engine: The engine that needs an encoder
-    /// - returns: An encoder.
+    /// - returns: A data source.
     ///
     func voiceManager(_ manager: DiscordVoiceManager,
-                      needsEncoderForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder?
+                      needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource?
 }
 
 /// A manager for voice engines.
@@ -165,7 +165,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
                                                    config: engineConfiguration,
                                                    voiceServerInformation: serverInfo,
                                                    voiceState: voiceState,
-                                                   encoder: previousEngine?.encoder,
+                                                   source: previousEngine?.source,
                                                    secret: previousEngine?.secret)
 
         DefaultDiscordLogger.Logger.log("Connecting voice engine", type: logType)
@@ -210,8 +210,8 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     /// - parameter engine: The engine that needs an encoder
     /// - returns: An encoder.
     ///
-    open func voiceEngineNeedsEncoder(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder? {
-        return try delegate?.voiceManager(self, needsEncoderForEngine: engine)
+    open func voiceEngineNeedsDataSource(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource? {
+        return try delegate?.voiceManager(self, needsDataSourceForEngine: engine)
     }
 
     ///

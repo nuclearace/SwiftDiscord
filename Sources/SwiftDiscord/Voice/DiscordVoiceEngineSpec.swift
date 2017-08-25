@@ -23,7 +23,7 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
     // MARK: Properties
 
     /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data.
-    var encoder: DiscordVoiceEncoder! { get }
+    var source: DiscordVoiceDataSource? { get }
 
     /// The secret key used for encryption.
     var secret: [UInt8]! { get }
@@ -33,21 +33,14 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
     ///
     /// Stops encoding and requests a new encoder. A `voiceEngine.ready` event will be fired when the encoder is ready.
     ///
-    func requestNewEncoder() throws
-
-    ///
-    /// An async write to the encoder.
-    ///
-    /// - parameter data: Raw audio data that should be turned into OPUS encoded data.
-    /// - parameter doneHandler: An optional handler that will be called when we are done writing.
-    ///
-    func send(_ data: Data, doneHandler: (() -> ())?)
+    func requestNewDataSource() throws
 
     ///
     /// Sends whether we are speaking or not.
     ///
     /// - parameter speaking: Our speaking status.
     ///
+    @available(*, deprecated, message: "This method will become unavailable in a future release")
     func sendSpeaking(_ speaking: Bool)
 
     ///
@@ -55,6 +48,7 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
     ///
     /// - parameter data: An array of OPUS encoded voice data.
     ///
+    @available(*, deprecated, message: "This method will become unavailable in a future release")
     func sendVoiceData(_ data: [UInt8])
 
     #if !os(iOS)
@@ -112,7 +106,7 @@ public protocol DiscordVoiceEngineDelegate : class {
     /// - parameter engine: The engine that needs an encoder.
     /// - returns: An encoder.
     ///
-    func voiceEngineNeedsEncoder(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder?
+    func voiceEngineNeedsDataSource(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource?
 
     ///
     /// Called when the voice engine is ready.
@@ -122,46 +116,44 @@ public protocol DiscordVoiceEngineDelegate : class {
     func voiceEngineReady(_ engine: DiscordVoiceEngine)
 }
 
-/// Declares that a type has enough information to encode/decode Opus data.
-public protocol DiscordOpusCodeable {
-    // MARK: Properties
+/// Represents an error that can occur during voice operations.
+public enum DiscordVoiceError : Error {
+    /// Thrown when a failure occurs creating an encoder.
+    case creationFail
 
-    /// The number of channels.
-    var channels: Int { get }
+    /// Thrown when a failure occurs encoding.
+    case encodeFail
 
-    /// The sampling rate.
-    var sampleRate: Int { get }
+    /// Thrown when a decode failure occurs.
+    case decodeFail
 
-    // MARK: Methods
-
-    ///
-    /// Returns the maximum number of bytes that a frame can contain given a
-    /// frame size in number of samples per channel.
-    ///
-    /// - parameter assumingSize: The size of the frame, in number of samples per channel.
-    /// - returns: The number of bytes in this frame.
-    ///
-    func maxFrameSize(assumingSize size: Int) -> Int
-}
-
-public extension DiscordOpusCodeable {
-    ///
-    /// Returns the maximum number of bytes that a frame can contain given a
-    /// frame size in number of samples per channel.
-    ///
-    /// - parameter assumingSize: The size of the frame, in number of samples per channel.
-    /// - returns: The number of bytes in this frame.
-    ///
-    public func maxFrameSize(assumingSize size: Int) -> Int {
-        return size * channels * MemoryLayout<opus_int16>.size
-    }
+    /// Thrown when the first packet is received.
+    case initialPacket
 }
 
 /// A struct that is used to configure the high-level functions of a VoiceEngine
 public struct DiscordVoiceEngineConfiguration {
     /// Whether or not this engine should capture voice.
-    public var captureVoice = true
+    public var captureVoice: Bool
 
     /// Whether or not this engine should try and decode incoming voice into raw PCM.
-    public var decodeVoice = false
+    public var decodeVoice: Bool
+
+    ///
+    /// Default configuration:
+    ///     captureVoice = true
+    ///     decodeVoice = false
+    ///
+    public init() {
+        captureVoice = true
+        decodeVoice = false
+    }
+
+    ///
+    /// Creates a new configuration with the specified options.
+    ///
+    public init(captureVoice: Bool, decodeVoice: Bool) {
+        self.captureVoice = captureVoice
+        self.decodeVoice = decodeVoice
+    }
 }

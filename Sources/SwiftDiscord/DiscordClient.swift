@@ -418,17 +418,17 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     }
 
     ///
-    /// Called when a voice engine needs an encoder.
+    /// Called when a voice engine needs a data source.
     ///
     /// **Not called on the handleQueue**
     ///
     /// - parameter manager: The manager that is requesting an encoder.
-    /// - parameter needsEncoderForEngine_: The engine that needs an encoder
+    /// - parameter needsDataSourceForEngine: The engine that needs an encoder
     /// - returns: An encoder.
     ///
     open func voiceManager(_ manager: DiscordVoiceManager,
-                           needsEncoderForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder? {
-        return try delegate?.client(self, needsVoiceEncoderForEngine: engine)
+                           needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource? {
+        return try delegate?.client(self, needsDataSourceForEngine: engine)
     }
 
     ///
