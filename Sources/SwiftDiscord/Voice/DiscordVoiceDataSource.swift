@@ -52,8 +52,8 @@ public enum DiscordVoiceDataSourceStatus : Error {
     /// Thrown when there is no more data left to be consumed.
     case done
 
-    /// Special case used by the engine to tell itself that it should call for a new voice data source
-    case silenceDone
+    /// Special case used by the engine to tell itself that it should call for a new voice data source.
+    case silenceDone(DiscordVoiceDataSource?)
 
     /// Thrown when an error occurs during a request.
     case error
@@ -296,7 +296,18 @@ public final class DiscordSilenceVoiceDataSource : DiscordVoiceDataSource {
     /// The size of the frame.
     public let frameSize = 960
 
+    /// The source from a previous engine that is being carried over.
+    public let previousSource: DiscordVoiceDataSource?
+
     private var i = 0
+
+    ///
+    /// Creates a new silence data source. If `previousSource` is sent then when the silence data
+    /// is used it the engine will attempt to use `previousSource` rather than asking for a new source.
+    ///
+    public init(previousSource: DiscordVoiceDataSource?) {
+        self.previousSource = previousSource
+    }
 
     ///
     /// Returns silence packets.
@@ -305,7 +316,7 @@ public final class DiscordSilenceVoiceDataSource : DiscordVoiceDataSource {
     /// - returns: Opus encoded silence.
     ///
     public func engineNeedsData(_ engine: DiscordVoiceEngine) throws -> [UInt8] {
-        guard i < 5 else { throw DiscordVoiceDataSourceStatus.silenceDone }
+        guard i < 5 else { throw DiscordVoiceDataSourceStatus.silenceDone(previousSource) }
 
         i += 1
 

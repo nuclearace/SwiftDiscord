@@ -328,8 +328,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             DefaultDiscordLogger.Logger.debug("Voice source done, sending silence",
                                               type: DiscordVoiceEngine.logType)
 
-            sendSilence()
-        } catch DiscordVoiceDataSourceStatus.silenceDone {
+            sendSilence(previousSource: nil)
+        } catch let DiscordVoiceDataSourceStatus.silenceDone(source) {
             DefaultDiscordLogger.Logger.debug("Voice silence done, requesting new source",
                                               type: DiscordVoiceEngine.logType)
 
@@ -337,7 +337,13 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
                 _sendSpeaking(false)
             }
 
-            getNewDataSource()
+            if source == nil {
+                getNewDataSource()
+            } else {
+                // This silence had a source from a previous engine and we just finished sending the initial silence
+                // re-add the old source for playback
+                self.source = source
+            }
         } catch DiscordVoiceDataSourceStatus.noData {
             DefaultDiscordLogger.Logger.debug("No data", type: DiscordVoiceEngine.logType)
 
@@ -385,7 +391,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         case .sessionDescription:
             udpQueueWrite.sync {
                 self.handleVoiceSessionDescription(with: payload.payload)
-                self.sendSilence()
+                self.sendSilence(previousSource: self.source)
             }
         case .speaking:
             DefaultDiscordLogger.Logger.debug("Got speaking \(payload)", type: DiscordVoiceEngine.logType)
@@ -510,11 +516,9 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         startHeartbeat(seconds: heartbeatInterval / 1000)
         connected = true
 
-        if source == nil {
-            getNewDataSource()
-        } else {
-            readSource()
-        }
+        // No need to get ask for a source, we send silence before we get this step,
+        // which will cause an ask for a new source
+        readSource()
 
         DefaultDiscordLogger.Logger.debug("VoiceEngine is ready!", type: DiscordVoiceEngine.logType)
 
@@ -537,8 +541,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     /// Only call between new data source requests, assumes inside the udpWriteQueue.
-    private func sendSilence() {
-        source = DiscordSilenceVoiceDataSource()
+    private func sendSilence(previousSource: DiscordVoiceDataSource?) {
+        source = DiscordSilenceVoiceDataSource(previousSource: previousSource)
     }
 
     ///
