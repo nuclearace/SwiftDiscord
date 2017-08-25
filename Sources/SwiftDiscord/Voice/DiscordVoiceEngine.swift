@@ -336,7 +336,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
                 self.selectProtocol(with: ip, on: port)
             } catch {
-                self.error(message: "Something went wrong extracting the ip and port")
+                self.error(message: "Something went wrong extracting the ip and port \(error)")
                 self.disconnect()
             }
         }
@@ -352,7 +352,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         source = try voiceDelegate?.voiceEngineNeedsDataSource(self)
 
-        readData()
+        readSource()
 
         voiceDelegate?.voiceEngineReady(self)
     }
@@ -461,7 +461,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         handleGatewayPayload(decoded)
     }
 
-    private func readData() {
+    private func readSource() {
         source.startReading()
     }
 
@@ -486,9 +486,9 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
                     this.voiceDelegate?.voiceEngine(this, didReceiveOpusVoiceData: packet)
                 }
             } catch DiscordVoiceError.initialPacket {
-                DefaultDiscordLogger.Logger.debug("Got initial packet", type: "DiscordVoiceEngine")
+                DefaultDiscordLogger.Logger.debug("Got initial packet", type: DiscordVoiceEngine.logType)
             } catch DiscordVoiceError.decodeFail {
-                DefaultDiscordLogger.Logger.debug("Failed to decode a packet", type: "DiscordVoiceEngine")
+                DefaultDiscordLogger.Logger.debug("Failed to decode a packet", type: DiscordVoiceEngine.logType)
             } catch DiscordVoiceEngineError.decryptionError {
                 self?.error(message: "Error decrypting voice packet")
             } catch let err {
@@ -535,7 +535,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
                 try getDataNewSource()
             } else {
                 createTimer()
-                readData()
+                readSource()
             }
         } catch let err {
             self.error(message: "Failed creating encoder \(err)")

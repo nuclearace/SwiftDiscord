@@ -238,7 +238,7 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
     private func _read() {
         let maxFrameSize = opusEncoder.maxFrameSize(assumingSize: frameSize)
 
-        source.read(offset: 0, length: maxFrameSize, queue: encoderQueue, ioHandler: {[weak self] done, data, code in
+        source.read(offset: 0, length: maxFrameSize, queue: encoderQueue) {[weak self] done, data, code in
             guard let this = self else { return }
 
             guard let data = data, data.count > 0 else {
@@ -281,7 +281,7 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
             } catch {
                 DefaultDiscordLogger.Logger.error("Error encoding bytes", type: DiscordBufferedVoiceDataSource.logType)
             }
-        })
+        }
     }
 }
 
