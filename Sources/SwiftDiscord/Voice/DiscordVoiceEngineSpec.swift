@@ -23,7 +23,7 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
     // MARK: Properties
 
     /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data.
-    var source: DiscordVoiceDataSource! { get }
+    var source: DiscordVoiceDataSource? { get }
 
     /// The secret key used for encryption.
     var secret: [UInt8]! { get }
@@ -40,6 +40,7 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
     ///
     /// - parameter speaking: Our speaking status.
     ///
+    @available(*, deprecated, message: "This method will become unavailable in a future release")
     func sendSpeaking(_ speaking: Bool)
 
     ///
@@ -47,6 +48,7 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
     ///
     /// - parameter data: An array of OPUS encoded voice data.
     ///
+    @available(*, deprecated, message: "This method will become unavailable in a future release")
     func sendVoiceData(_ data: [UInt8])
 
     #if !os(iOS)
@@ -167,8 +169,22 @@ public extension DiscordOpusCodeable {
 /// A struct that is used to configure the high-level functions of a VoiceEngine
 public struct DiscordVoiceEngineConfiguration {
     /// Whether or not this engine should capture voice.
-    public var captureVoice = true
+    public var captureVoice: Bool
 
     /// Whether or not this engine should try and decode incoming voice into raw PCM.
-    public var decodeVoice = false
+    public var decodeVoice: Bool
+
+    /// Default configuration:
+    ///     captureVoice = true
+    ///     decodeVoice = false
+    public init() {
+        captureVoice = true
+        decodeVoice = false
+    }
+
+    /// Creates a new configuration with the specified options.
+    public init(captureVoice: Bool, decodeVoice: Bool) {
+        self.captureVoice = captureVoice
+        self.decodeVoice = decodeVoice
+    }
 }

@@ -21,7 +21,7 @@ import Dispatch
 import Foundation
 
 /// Specifies that a type will be a data source for a VoiceEngine.
-public protocol DiscordVoiceDataSource {
+public protocol DiscordVoiceDataSource : class {
     // MARK: Properties
 
     /// The size of a frame in samples per channel. Needed to calculate the maximum size of a frame.
@@ -51,6 +51,9 @@ public protocol DiscordVoiceDataSource {
 public enum DiscordVoiceDataSourceStatus : Error {
     /// Thrown when there is no more data left to be consumed.
     case done
+
+    /// Special case used by the engine to tell itself that it should call for a new voice data source
+    case silenceDone
 
     /// Thrown when an error occurs during a request.
     case error
@@ -283,6 +286,41 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
             }
         }
     }
+}
+
+///
+/// A voice source that returns Opus silence.
+/// Only sends 5 packets of silence and is then spent.
+///
+public final class DiscordSilenceVoiceDataSource : DiscordVoiceDataSource {
+    /// The size of the frame.
+    public let frameSize = 960
+
+    private var i = 0
+
+    ///
+    /// Returns silence packets.
+    ///
+    /// - parameter engine: The engine requesting data.
+    /// - returns: Opus encoded silence.
+    ///
+    public func engineNeedsData(_ engine: DiscordVoiceEngine) throws -> [UInt8] {
+        guard i < 5 else { throw DiscordVoiceDataSourceStatus.silenceDone }
+
+        i += 1
+
+        return [0xF8, 0xFF, 0xFE]
+    }
+
+    ///
+    /// Unimplemented
+    ///
+    public func finishUpAndClose() { }
+
+    ///
+    /// Unimplemented
+    ///
+    public func startReading() { }
 }
 
 #if !os(iOS)
