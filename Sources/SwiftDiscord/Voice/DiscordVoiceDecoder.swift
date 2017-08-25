@@ -88,79 +88,6 @@ open class DiscordVoiceSessionDecoder {
     }
 }
 
-///
-/// An Opus decoder.
-///
-/// Takes Opus packets and returns raw PCM 16-bit-lesample data.
-///
-open class DiscordOpusDecoder : DiscordOpusCodeable {
-    // MARK: Properties
-
-    /// The number of channels.
-    public let channels: Int
-
-    /// The sampling rate.
-    public let sampleRate: Int
-
-    private let decoderState: OpaquePointer
-
-    // MARK: Initializers
-
-    ///
-    /// Creates a Decoder that takes Opus encoded data and outputs raw PCM 16-bit-lesample data.
-    ///
-    /// - parameter sampleRate: The sample rate for the decoder. Discord expects this to be 48k.
-    /// - parameter channels: The number of channels in the stream to decode, should always be 2.
-    /// - parameter gain: The gain for this decoder.
-    ///
-    public init(sampleRate: Int, channels: Int, gain: Int = 0) throws {
-        self.sampleRate = sampleRate
-        self.channels = channels
-
-        var err = 0 as Int32
-
-        decoderState = opus_decoder_create(Int32(sampleRate), Int32(channels), &err)
-        err = configure_decoder(decoderState, Int32(gain))
-
-        guard err == 0 else {
-            destroyState()
-
-            throw DiscordVoiceError.creationFail
-        }
-    }
-
-    deinit {
-        destroyState()
-    }
-
-    // MARK: Methods
-
-    private func destroyState() {
-        opus_decoder_destroy(decoderState)
-    }
-
-    ///
-    /// Decodes Opus data into raw PCM 16-bit-lesample data.
-    ///
-    /// - parameter audio: A pointer to the audio data.
-    /// - parameter packetSize: The number of bytes in this packet.
-    /// - parameter frameSize: The size of the frame in samples per channel.
-    /// - returns: An opus encoded packet.
-    ///
-    open func decode(_ audio: UnsafePointer<UInt8>?, packetSize: Int, frameSize: Int) throws -> [opus_int16] {
-        let maxSize = maxFrameSize(assumingSize: frameSize)
-        let output = UnsafeMutablePointer<opus_int16>.allocate(capacity: maxSize)
-        let decodedSize = Int(opus_decode(decoderState, audio, Int32(packetSize), output, Int32(frameSize), 0))
-        let totalSize = decodedSize * channels
-
-        defer { free(output) }
-
-        guard decodedSize > 0, totalSize <= maxSize else { throw DiscordVoiceError.decodeFail }
-
-        return Array(UnsafeBufferPointer(start: output, count: totalSize))
-    }
-}
-
 /// A struct that contains a Discord voice packet with raw data.
 public struct DiscordRawVoiceData {
     /// The sequence number of this packet.
@@ -194,7 +121,7 @@ public struct DiscordOpusVoiceData {
     /// The timestamp of this packet.
     public let timestamp: Int
 
-    /// The raw voice data.
+    /// The opus voice data.
     public let voiceData: [UInt8]
 
     init(voicePacket: [UInt8]) {
