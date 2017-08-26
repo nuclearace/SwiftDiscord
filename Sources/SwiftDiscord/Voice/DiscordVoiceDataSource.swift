@@ -227,6 +227,11 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
         DefaultDiscordLogger.Logger.debug("Closing pipe for writing", type: DiscordBufferedVoiceDataSource.logType)
 
         writeToHandler.closeFile()
+
+        // DispatchIO on Linux doesn't seem to get EOF on pipe closes correctly
+        #if os(Linux)
+        source.close(flags: .stop)
+        #endif
     }
 
     ///
@@ -248,18 +253,16 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
                 DefaultDiscordLogger.Logger.debug("No data, reader probably closed",
                                                   type: DiscordBufferedVoiceDataSource.logType)
 
+                this.done = true
+
                 if done && code == 0 {
                     // EOF reached
                     DefaultDiscordLogger.Logger.debug("Reader done", type: DiscordBufferedVoiceDataSource.logType)
-
-                    this.done = true
-
-                    return
+                } else {
+                    DefaultDiscordLogger.Logger.debug("Something is weird \(done) \(code)",
+                                                      type: DiscordBufferedVoiceDataSource.logType)
                 }
 
-                DefaultDiscordLogger.Logger.debug("Not done?", type: DiscordBufferedVoiceDataSource.logType)
-
-                this._read()
                 return
             }
 

@@ -192,7 +192,6 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         closed = true
         connected = false
-        source?.finishUpAndClose()
     }
 
     private func configureTimer() {
