@@ -2,11 +2,6 @@
 
 **Please note that you should follow the instructions in this document rather than in the main README if you intend to build for iOS.**
 
-
-## Preamble
-
-Hi there, I'm Andi. I wanted to build an iOS app that used the Discord API and SwiftDiscord fit the bill for my usecase. Unfortunately there were no official instructions at the time so I decided to try to do it  myself and document the whole process so the rest of you don't have to struggle. I'd like to thank the lead developer (nuclearace) for providing guidance throughout the whole journey; without whom I would have undoubtedly never been able to get this working. 
-
 ## Prerequisites
 
 * SwiftDiscord **4**
@@ -18,7 +13,7 @@ I have absolutely no idea if this will continue to work with future or previous 
 
 ## Instructions
 
-You may be tempted to skip some steps or to not follow them in order. If you'd like to get this working at any point within the next few hours, I highly recommend you **do not do that**. If you do somehow get this to work without completing a certain step, please let me know so I can update the instructions.
+You may be tempted to skip some steps or to not follow them in order. If you'd like to get this working at any point within the next few hours, it is highly recommended you **do not do that**. If you do somehow get this to work without completing a certain step, please let me know so I can update the instructions.
 
 1. Install dependencies: `brew tap vapor/tap && brew install ctls && brew install opus && brew install libsodium`
 2. Make your project folder: `mkdir SwiftDiscord-iOS && cd SwiftDiscord`
@@ -40,16 +35,15 @@ You may be tempted to skip some steps or to not follow them in order. If you'd l
 5. Download SwiftDiscord: `swift package update`
 6. Build SwiftDiscord: `swift build -Xlinker -L/usr/local/lib -Xlinker -lopus -Xcc -I/usr/local/include`
 7. Now comes the hardest part: `mkdir libs`
-	
-	>But Andi, we just made a folder! That wasn't so difficult.
-	
+		
 	1. Manually compile & build the following projects:
 		* [Sodium](https://github.com/jedisct1/libsodium)
 		* [Opus for iOS](https://github.com/chrisballinger/Opus-iOS)
 		* [OpenSSL for iPhone](https://github.com/x2on/OpenSSL-for-iPhone)
 
 		
-		> I hope you like reading READMEs.
+		I hope you like reading READMEs.
+	
 	2. Move the resulting compiled libraries (.a files) into your new `libs` directory. You should have the following files in there:
 		* `libcrypto.a`
 		* `libopus.a`
@@ -120,6 +114,14 @@ You may be tempted to skip some steps or to not follow them in order. If you'd l
 	* If you have hundreds of warnings, you may want to run a Product > Clean and restart Xcode.
 19. Run!
 20. You did it. Somehow. Congratulations!
+
+## Thanks
+
+I'd like to thank the lead developer (nuclearace) for providing guidance throughout the whole journey; without whom I would have undoubtedly never been able to get this working. 
+
+Cheers,
+
+[Andi](http://twitter.com/nexuist)
 
 ## Troubleshooting
 
