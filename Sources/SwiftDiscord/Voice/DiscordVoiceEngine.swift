@@ -25,20 +25,26 @@ import WebSockets
 import Sockets
 import Sodium
 
-enum DiscordVoiceEngineError : Error {
-    case decryptionError
-    case encryptionError
-    case ipExtraction
-}
-
-/**
-    A subclass of `DiscordEngine` that provides functionality for voice communication.
-
-    Discord uses encrypted OPUS encoded voice packets. The engine is responsible for encyrpting/decrypting voice
-    packets that are sent and received.
-*/
+///
+/// A subclass of `DiscordEngine` that provides functionality for voice communication.
+///
+/// Discord uses encrypted OPUS encoded voice packets. The engine is responsible for encyrptingdecrypting voice
+/// packets that are sent and received.
+///
 public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
+    enum EngineError : Error {
+        case decryptionError
+        case encryptionError
+        case ipExtraction
+    }
+
     // MARK: Properties
+
+    private static let logType = "DiscordVoiceEngine"
+    private static let padding = [UInt8](repeating: 0x00, count: 12)
+
+    /// The configuration for this engine.
+    public let config: DiscordVoiceEngineConfiguration
 
     /// The heartbeat queue.
     public let heartbeatQueue = DispatchQueue(label: "discordVoiceEngine.heartbeatQueue")
@@ -88,8 +94,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// The heartbeat interval for this engine.
     public private(set) var heartbeatInterval = -1
 
-    /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data
-    public private(set) var encoder: DiscordVoiceEncoder!
+    /// The data source for this engine. This source is responsible for giving us Opus data that is ready to send.
+    public private(set) var source: DiscordVoiceDataSource?
 
     /// The modes that are available for communication. Only xsalsa20_poly1305 is supported currently
     public private(set) var modes = [String]()
@@ -112,17 +118,11 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// The voice state for this engine.
     public private(set) var voiceState: DiscordVoiceState!
 
-    let logType = "DiscordVoiceEngine"
-
     private let decoderSession = DiscordVoiceSessionDecoder()
-    private let encoderSemaphore = DispatchSemaphore(value: 1)
-    private let padding = [UInt8](repeating: 0x00, count: 12)
-    private let readQueue = DispatchQueue(label: "discordVoiceEngine.readQueue")
+    private let sendTimer: DispatchSourceTimer
     private let udpQueueWrite = DispatchQueue(label: "discordVoiceEngine.udpQueueWrite")
     private let udpQueueRead = DispatchQueue(label: "discordVoiceEngine.udpQueueRead")
-    private let writeQueue = DispatchQueue(label: "discordVoiceEngine.writeQueue")
 
-    private var audioCount = -1
     private var currentUnixTime: Int {
         return Int(Date().timeIntervalSince1970 * 1000)
     }
@@ -138,25 +138,27 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     private var timestamp = UInt32(random())
     #endif
 
-    private var startTime = 0
+    private var speaking = false
 
     // MARK: Initializers
 
-    /**
-        Constructs a new VoiceEngine
-
-        - parameter delegate: The client this engine should be associated with
-        - parameter voiceServerInformation: The voice server information
-        - parameter encoder: A DiscordVoiceEncoder that from a previous engine. Send if you are still encoding i.e
-                    moved channels
-        - parameter secret: The secret from a previous engine.
-    */
+    ///
+    /// Constructs a new VoiceEngine
+    ///
+    /// - parameter delegate: The client this engine should be associated with
+    /// - parameter voiceServerInformation: The voice server information
+    /// - parameter encoder: A DiscordVoiceEncoder that from a previous engine. Send if you are still encoding i.e
+    /// moved channels
+    /// - parameter secret: The secret from a previous engine.
+    ///
     public init(delegate: DiscordVoiceEngineDelegate,
+                config: DiscordVoiceEngineConfiguration,
                 voiceServerInformation: DiscordVoiceServerInformation,
                 voiceState: DiscordVoiceState,
-                encoder: DiscordVoiceEncoder?,
+                source: DiscordVoiceDataSource?,
                 secret: [UInt8]?) {
         self.voiceDelegate = delegate
+        self.config = config
 
         _ = sodium_init()
 
@@ -164,57 +166,46 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         self.voiceState = voiceState
         self.voiceServerInformation = voiceServerInformation
-        self.encoder = encoder
+        self.source = source
         self.secret = secret
+        self.sendTimer = DispatchSource.makeTimerSource(flags: .strict, queue: udpQueueWrite)
+
+        configureTimer()
     }
 
     deinit {
-        DefaultDiscordLogger.Logger.debug("deinit", type: logType)
+        DefaultDiscordLogger.Logger.debug("deinit", type: DiscordVoiceEngine.logType)
 
         closeOutEngine()
     }
 
     // MARK: Methods
 
-    private func audioSleep() {
-        guard audioCount != -1 else {
-            // First time
-            sendSpeaking(true) // Make sure we're speaking
-            audioCount = 1
-            startTime = currentUnixTime
+    private func closeOutEngine() {
+        guard !closed else { return }
 
-            return
+        do {
+            try udpSocket?.close()
+        } catch {
+            self.error(message: "Error trying to close voice engine udp socket")
         }
 
-        let inner = (startTime + audioCount * 20) - currentUnixTime
-        let waitTime = Double(20 + inner) / 1000.0
-
-        guard waitTime > 0 else {
-            // Been too long since we last sent, set a new baseline
-            audioCount = 1
-            startTime = currentUnixTime
-
-            return
-        }
-
-        DefaultDiscordLogger.Logger.debug("Sleeping \(waitTime) \(audioCount)", type: logType)
-
-        Thread.sleep(forTimeInterval: waitTime)
-
-        audioCount += 1
+        closed = true
+        connected = false
     }
 
-    private func createEncoder() throws {
-        defer { encoderSemaphore.signal() }
+    private func configureTimer() {
+        self.sendTimer.setEventHandler {[weak self] in
+            guard let this = self else { return }
 
-        // Guard against trying to create multiple encoders at once
-        encoderSemaphore.wait()
+            this.getVoiceData()
+        }
 
-        encoder = try voiceDelegate?.voiceEngineNeedsEncoder(self)
+        self.sendTimer.scheduleRepeating(wallDeadline: .now(), interval: .milliseconds(20))
 
-        readData()
-
-        voiceDelegate?.voiceEngineReady(self)
+        // TODO this is wasteful, figure out if there's a smart way to start and stop the timer.
+        // Maybe let the user decide?
+        sendTimer.resume()
     }
 
     private func createRTPHeader() -> [UInt8] {
@@ -231,32 +222,18 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         return Array(header)
     }
 
-    private func closeOutEngine() {
-        guard !closed else { return }
-
-        do {
-            try udpSocket?.close()
-        } catch {
-            self.error(message: "Error trying to close voice engine udp socket")
-        }
-
-        closed = true
-        connected = false
-        encoder.finishEncodingAndClose()
-    }
-
     private func createVoicePacket(_ data: [UInt8]) throws -> [UInt8] {
         let packetSize = Int(crypto_secretbox_MACBYTES) + data.count
         let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: packetSize)
         let rtpHeader = createRTPHeader()
-        var nonce = rtpHeader + padding
+        var nonce = rtpHeader + DiscordVoiceEngine.padding
         var buf = data
 
         defer { free(encrypted) }
 
         let success = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &secret!)
 
-        guard success != -1 else { throw DiscordVoiceEngineError.encryptionError }
+        guard success != -1 else { throw EngineError.encryptionError }
 
         return rtpHeader + Array(UnsafeBufferPointer(start: encrypted, count: packetSize))
     }
@@ -266,22 +243,22 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         let voiceData = Array(data.dropFirst(12))
         let audioSize = voiceData.count - Int(crypto_secretbox_MACBYTES)
         let unencrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
-        var nonce = rtpHeader + padding
+        var nonce = rtpHeader + DiscordVoiceEngine.padding
 
         defer { free(unencrypted) }
 
         let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &secret!)
 
-        guard success != -1 else { throw DiscordVoiceEngineError.decryptionError }
+        guard success != -1 else { throw EngineError.decryptionError }
 
         return rtpHeader + Array(UnsafeBufferPointer(start: unencrypted, count: audioSize))
     }
 
-    /**
-        Disconnects the voice engine.
-    */
+    ///
+    /// Disconnects the voice engine.
+    ///
     public func disconnect() {
-        DefaultDiscordLogger.Logger.log("Disconnecting VoiceEngine", type: logType)
+        DefaultDiscordLogger.Logger.log("Disconnecting VoiceEngine", type: DiscordVoiceEngine.logType)
 
         closeWebSockets()
         closeOutEngine()
@@ -290,14 +267,14 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func extractIPAndPort(from bytes: [UInt8]) throws -> (String, Int) {
-        DefaultDiscordLogger.Logger.debug("Extracting ip and port from \(bytes)", type: logType)
+        DefaultDiscordLogger.Logger.debug("Extracting ip and port from \(bytes)", type: DiscordVoiceEngine.logType)
 
         let ipData = Data(bytes: bytes.dropLast(2))
         let portBytes = Array(bytes.suffix(from: bytes.endIndex.advanced(by: -2)))
         let port = (Int(portBytes[0]) | Int(portBytes[1])) << 8
 
         guard let ipString = String(data: ipData, encoding: .utf8)?.replacingOccurrences(of: "\0", with: "") else {
-            throw DiscordVoiceEngineError.ipExtraction
+            throw EngineError.ipExtraction
         }
 
         return (ipString, port)
@@ -319,19 +296,72 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
                 self.selectProtocol(with: ip, on: port)
             } catch {
-                self.error(message: "Something went wrong extracting the ip and port")
+                self.error(message: "Something went wrong extracting the ip and port \(error)")
                 self.disconnect()
             }
         }
     }
 
-    /**
-        Handles a close from the WebSocket.
+    private func getNewDataSource() {
+        // Guard against trying to create multiple encoders at once
+        udpQueueWrite.async {
+            do {
+                self.source = try self.voiceDelegate?.voiceEngineNeedsDataSource(self)
 
-        - parameter reason: The reason the socket closed.
-    */
+                self.readSource()
+
+                self.voiceDelegate?.voiceEngineReady(self)
+            } catch {
+                self.error(message: "Something went wrong getting a new data source \(error)")
+                self.disconnect()
+            }
+        }
+    }
+
+    private func getVoiceData() {
+        guard let source = source else { return }
+
+        do {
+            _sendVoiceData(try source.engineNeedsData(self))
+        } catch DiscordVoiceDataSourceStatus.done {
+            DefaultDiscordLogger.Logger.debug("Voice source done, sending silence",
+                                              type: DiscordVoiceEngine.logType)
+
+            sendSilence(previousSource: nil)
+        } catch let DiscordVoiceDataSourceStatus.silenceDone(source) {
+            DefaultDiscordLogger.Logger.debug("Voice silence done, requesting new source",
+                                              type: DiscordVoiceEngine.logType)
+
+            if speaking {
+                _sendSpeaking(false)
+            }
+
+            if source == nil {
+                getNewDataSource()
+            } else {
+                // This silence had a source from a previous engine and we just finished sending the initial silence
+                // re-add the old source for playback
+                self.source = source
+            }
+        } catch DiscordVoiceDataSourceStatus.noData {
+            DefaultDiscordLogger.Logger.debug("No data", type: DiscordVoiceEngine.logType)
+
+            if speaking {
+                _sendSpeaking(false)
+            }
+        } catch {
+            DefaultDiscordLogger.Logger.error("Error getting voice data: \(error)",
+                                              type: DiscordVoiceEngine.logType)
+        }
+    }
+
+    ///
+    /// Handles a close from the WebSocket.
+    ///
+    /// - parameter reason: The reason the socket closed.
+    ///
     public func handleClose(reason: NSError? = nil) {
-        DefaultDiscordLogger.Logger.log("Voice engine closed", type: logType)
+        DefaultDiscordLogger.Logger.log("Voice engine closed", type: DiscordVoiceEngine.logType)
 
         closeOutEngine()
     }
@@ -342,24 +372,13 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// Currently unused in VoiceEngines.
     public func handleHello(_ payload: DiscordGatewayPayload) { }
 
-    private func handleDoneReading() {
-        encoderSemaphore.wait()
-        sendSilence()
-        // Add a new pipe on the encoder and put a read on it.
-        encoder.setupPipe()
-        readData()
-
-        encoderSemaphore.signal()
-        voiceDelegate?.voiceEngineReady(self)
-    }
-
-    /**
-        Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
-
-        Override this method if you need to customize payload handling.
-
-        - parameter payload: The payload object
-    */
+    ///
+    /// Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
+    ///
+    /// Override this method if you need to customize payload handling.
+    ///
+    /// - parameter payload: The payload object
+    ///
     public func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
         guard case let .voice(voiceCode) = payload.code else {
             fatalError("Got gateway payload in non gateway engine")
@@ -369,12 +388,14 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         case .ready:
             handleReady(with: payload.payload)
         case .sessionDescription:
-            udpQueueWrite.sync { self.handleVoiceSessionDescription(with: payload.payload) }
-            sendSilence()
+            udpQueueWrite.sync {
+                self.handleVoiceSessionDescription(with: payload.payload)
+                self.sendSilence(previousSource: self.source)
+            }
         case .speaking:
-            DefaultDiscordLogger.Logger.debug("Got speaking \(payload)", type: logType)
+            DefaultDiscordLogger.Logger.debug("Got speaking \(payload)", type: DiscordVoiceEngine.logType)
         default:
-            DefaultDiscordLogger.Logger.debug("Unhandled voice payload \(payload)", type: logType)
+            DefaultDiscordLogger.Logger.debug("Unhandled voice payload \(payload)", type: DiscordVoiceEngine.logType)
         }
     }
 
@@ -411,13 +432,13 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         self.secret = secret.map({ UInt8($0) })
     }
 
-    /**
-        Parses a raw message from the WebSocket. This is the entry point for voice events.
-        You shouldn't call this directly.
-    */
+    ///
+    /// Parses a raw message from the WebSocket. This is the entry point for voice events.
+    /// You shouldn't call this directly.
+    ///
     public func parseGatewayMessage(_ string: String) {
         guard let decoded = DiscordGatewayPayload.payloadFromString(string, fromGateway: false) else {
-            DefaultDiscordLogger.Logger.log("Got unknown payload \(string)", type: logType)
+            DefaultDiscordLogger.Logger.log("Got unknown payload \(string)", type: DiscordVoiceEngine.logType)
 
             return
         }
@@ -425,28 +446,12 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         handleGatewayPayload(decoded)
     }
 
-    private func readData() {
-        readQueue.async {[weak self, weak encoder] in
-            // Perform a blocking read; in the meantime the whole shabang could be deinint'd, so don't capture self
-            // strongly until after we're sure we've read something
-            guard let (done, data) = encoder?.read(), let this = self, !this.closed else { return }
-
-            guard !done else {
-                DefaultDiscordLogger.Logger.debug("No data, reader probably closed", type: this.logType)
-
-                this.handleDoneReading()
-
-                return
-            }
-
-            DefaultDiscordLogger.Logger.debug("Read \(data.count) bytes", type: this.logType)
-
-            this.sendVoiceData(data)
-            this.readData()
-        }
+    private func readSource() {
+        source?.startReading()
     }
 
     private func readSocket() {
+        // TODO refactor to be non-blocking
         udpQueueRead.async {[weak self] in
             guard let socket = self?.udpSocket, self?.connected ?? false else { return }
 
@@ -457,15 +462,19 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
                 guard let this = self else { return }
 
-                let voicePacket = try this.decryptVoiceData(data)
-                let packet = try this.decoderSession.decode(voicePacket)
+                let packet = DiscordOpusVoiceData(voicePacket: try this.decryptVoiceData(data))
 
-                this.voiceDelegate?.voiceEngine(this, didReceiveVoiceData: packet)
+                if this.config.decodeVoice {
+                    this.voiceDelegate?.voiceEngine(this,
+                                                    didReceiveRawVoiceData: try this.decoderSession.decode(packet))
+                } else {
+                    this.voiceDelegate?.voiceEngine(this, didReceiveOpusVoiceData: packet)
+                }
             } catch DiscordVoiceError.initialPacket {
-                DefaultDiscordLogger.Logger.debug("Got initial packet", type: "DiscordVoiceEngine")
+                DefaultDiscordLogger.Logger.debug("Got initial packet", type: DiscordVoiceEngine.logType)
             } catch DiscordVoiceError.decodeFail {
-                DefaultDiscordLogger.Logger.debug("Failed to decode a packet", type: "DiscordVoiceEngine")
-            } catch DiscordVoiceEngineError.decryptionError {
+                DefaultDiscordLogger.Logger.debug("Failed to decode a packet", type: DiscordVoiceEngine.logType)
+            } catch EngineError.decryptionError {
                 self?.error(message: "Error decrypting voice packet")
             } catch let err {
                 self?.error(message: "Error reading voice data from udp socket \(err)")
@@ -478,19 +487,20 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         }
     }
 
-    /**
-        Stops encoding and requests a new encoder. The `isReadyToSendVoiceWithEngine` delegate method is called when
-        the new encoder is ready.
-    */
-    public func requestNewEncoder() throws {
-        try createEncoder()
+    ///
+    /// Stops encoding and requests a new encoder. The `isReadyToSendVoiceWithEngine` delegate method is called when
+    /// the new encoder is ready.
+    ///
+    public func requestNewDataSource() throws {
+        getNewDataSource()
     }
 
     // Tells the voice websocket what our ip and port is, and what encryption mode we will use
     // currently only xsalsa20_poly1305 is supported
     // After this point we are good to go in sending encrypted voice packets
     private func selectProtocol(with ip: String, on port: Int) {
-        DefaultDiscordLogger.Logger.debug("Selecting UDP protocol with ip: \(ip) on port: \(port)", type: logType)
+        DefaultDiscordLogger.Logger.debug("Selecting UDP protocol with ip: \(ip) on port: \(port)",
+                                          type: DiscordVoiceEngine.logType)
 
         let payloadData: [String: Any] = [
             "protocol": "udp",
@@ -505,36 +515,20 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         startHeartbeat(seconds: heartbeatInterval / 1000)
         connected = true
 
-        do {
-            if encoder == nil {
-                try createEncoder()
-            } else {
-                readData()
-            }
-        } catch let err {
-            self.error(message: "Failed creating encoder \(err)")
-            self.disconnect()
-        }
+        // No need to get ask for a source, we send silence before we get this step,
+        // which will cause an ask for a new source
+        readSource()
 
-        DefaultDiscordLogger.Logger.debug("VoiceEngine is ready!", type: logType)
+        DefaultDiscordLogger.Logger.debug("VoiceEngine is ready!", type: DiscordVoiceEngine.logType)
+
+        guard config.captureVoice else { return }
 
         readSocket()
     }
 
-    /**
-        Sends raw PCM data to the encoder async.
-
-        - parameter data: The data to write to the encoder.
-    */
-    public func send(_ data: Data, doneHandler: (() -> ())? = nil) {
-        writeQueue.async {[weak self] in
-            self?.encoder.write(data, doneHandler: doneHandler)
-        }
-    }
-
-    /**
-        Sends a voice heartbeat to Discord. You shouldn't need to call this directly.
-    */
+    ///
+    /// Sends a voice heartbeat to Discord. You shouldn't need to call this directly.
+    ///
     public func sendHeartbeat() {
         guard !closed else { return }
 
@@ -545,21 +539,24 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         heartbeatQueue.asyncAfter(deadline: time) {[weak self] in self?.sendHeartbeat() }
     }
 
-    private func sendSilence() {
-        for _ in 0..<5 {
-            sendVoiceData([0xF8, 0xFF, 0xFE])
-        }
-
-        sendSpeaking(false)
-        udpQueueWrite.async { self.audioCount = -1 }
+    /// Only call between new data source requests, assumes inside the udpWriteQueue.
+    private func sendSilence(previousSource: DiscordVoiceDataSource?) {
+        source = DiscordSilenceVoiceDataSource(previousSource: previousSource)
     }
 
-    /**
-        Sends whether we are speaking or not.
-
-        - parameter speaking: Our speaking status.
-    */
+    ///
+    /// Sends whether we are speaking or not.
+    ///
+    /// - parameter speaking: Our speaking status.
+    ///
+    @available(*, deprecated, message: "This method will become unavailable in a future release")
     public func sendSpeaking(_ speaking: Bool) {
+        _sendSpeaking(speaking)
+    }
+
+    private func _sendSpeaking(_ speaking: Bool) {
+        self.speaking = speaking
+
         let speakingObject: [String: Any] = [
             "speaking": speaking,
             "delay": 0
@@ -568,83 +565,94 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         sendPayload(DiscordGatewayPayload(code: .voice(.speaking), payload: .object(speakingObject)))
     }
 
-    /**
-        Sends Opus encoded voice data to Discord.
-
-        - parameter data: An Opus encoded packet.
-    */
+    ///
+    /// Sends Opus encoded voice data to Discord.
+    ///
+    /// **This should be called on the udpWriteQueue**.
+    ///
+    /// - parameter data: An Opus encoded packet.
+    ///
+    @available(*, deprecated, message: "This method will become unavailable in a future release")
     public func sendVoiceData(_ data: [UInt8]) {
-        func _sendVoiceData() {
-            guard let udpSocket = self.udpSocket, secret != nil else { return }
+        _sendVoiceData(data)
+    }
 
-            DefaultDiscordLogger.Logger.debug("Should send voice data: \(data.count) bytes", type: logType)
+    private func _sendVoiceData(_ data: [UInt8]) {
+        guard let udpSocket = self.udpSocket, let frameSize = source?.frameSize, secret != nil else { return }
 
-            do {
-                try udpSocket.sendto(data: createVoicePacket(data))
-            } catch DiscordVoiceEngineError.encryptionError {
-                error(message: "Error encyrpting packet")
-            } catch let err {
-                error(message: "Failed sending voice packet \(err)")
-                disconnect()
+        DefaultDiscordLogger.Logger.debug("Should send voice data: \(data.count) bytes",
+                                          type: DiscordVoiceEngine.logType)
 
-                return
-            }
-
-            sequenceNum = sequenceNum &+ 1
-            timestamp = timestamp &+ 960
-
-            audioSleep()
+        if !speaking {
+            _sendSpeaking(true)
         }
 
-        udpQueueWrite.sync(execute: _sendVoiceData)
+        do {
+            try udpSocket.sendto(data: createVoicePacket(data))
+        } catch EngineError.encryptionError {
+            error(message: "Error encrypting packet")
+        } catch let err {
+            error(message: "Failed sending voice packet \(err)")
+            disconnect()
+
+            return
+        }
+
+        sequenceNum = sequenceNum &+ 1
+        timestamp = timestamp &+ UInt32(frameSize)
     }
 
     #if !os(iOS)
-    /**
-        Takes a process that outputs random audio data, and sends it to a hidden FFmpeg process that turns the data
-        into raw PCM.
-
-        Example setting up youtube-dl to play music.
-
-        ```swift
-        youtube = EncoderProcess()
-        youtube.launchPath = "/usr/local/bin/youtube-dl"
-        youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
-
-        voiceEngine.setupMiddleware(youtube) {
-            print("youtube died")
-        }
-        ```
-
-        - parameter middleware: The process that will output audio data.
-        - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
-    */
+    ///
+    /// Takes a process that outputs random audio data, and sends it to a hidden FFmpeg process that turns the data
+    /// into raw PCM.
+    ///
+    /// Example setting up youtube-dl to play music.
+    ///
+    /// ```swift
+    /// youtube = EncoderProcess()
+    /// youtube.launchPath = "usrlocalbinyoutube-dl"
+    /// youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
+    ///
+    /// voiceEngine.setupMiddleware(youtube) {
+    ///     print("youtube died")
+    /// }
+    /// ```
+    ///
+    /// **Currently only works if using the default `DiscordBufferedVoiceDataSource`**
+    ///
+    /// - parameter middleware: The process that will output audio data.
+    /// - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
+    ///
     public func setupMiddleware(_ middleware: Process, terminationHandler: (() -> ())?) {
-        DefaultDiscordLogger.Logger.debug("Setting up middleware", type: logType)
+        DefaultDiscordLogger.Logger.debug("Setting up middleware", type: DiscordVoiceEngine.logType)
 
-        encoder.middleware = DiscordEncoderMiddleware(encoder: encoder,
-                                                      middleware: middleware,
-                                                      terminationHandler: terminationHandler)
-        encoder.middleware?.start()
+        // TODO this is bad, fix the types here
+        guard let source = self.source as? DiscordBufferedVoiceDataSource else { return }
+
+        source.middleware = DiscordEncoderMiddleware(source: source,
+                                                     middleware: middleware,
+                                                     terminationHandler: terminationHandler)
+        source.middleware?.start()
     }
     #endif
 
-    /**
-        Starts the handshake with the Discord voice server. You shouldn't need to call this directly.
-    */
+    ///
+    /// Starts the handshake with the Discord voice server. You shouldn't need to call this directly.
+    ///
     public func startHandshake() {
         guard voiceDelegate != nil else { return }
 
-        DefaultDiscordLogger.Logger.log("Starting voice handshake", type: logType)
+        DefaultDiscordLogger.Logger.log("Starting voice handshake", type: DiscordVoiceEngine.logType)
 
         sendPayload(DiscordGatewayPayload(code: .voice(.identify), payload: .object(handshakeObject)))
     }
 
-    /**
-        Starts the engine's heartbeat. You should call this method when you know the interval that Discord expects.
-
-        - parameter seconds: The heartbeat interval
-    */
+    ///
+    /// Starts the engine's heartbeat. You should call this method when you know the interval that Discord expects.
+    ///
+    /// - parameter seconds: The heartbeat interval
+    ///
     public func startHeartbeat(seconds: Int) {
         heartbeatInterval = seconds
 
@@ -657,7 +665,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         let base = voiceServerInformation.endpoint.components(separatedBy: ":")[0]
         let udpEndpoint = InternetAddress(hostname: base, port: UInt16(udpPort))
 
-        DefaultDiscordLogger.Logger.debug("Starting voice UDP connection", type: logType)
+        DefaultDiscordLogger.Logger.debug("Starting voice UDP connection", type: DiscordVoiceEngine.logType)
 
         guard let client = try? UDPInternetSocket(address: udpEndpoint) else {
             disconnect()

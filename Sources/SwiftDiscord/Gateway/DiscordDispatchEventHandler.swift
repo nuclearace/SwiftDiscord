@@ -19,151 +19,151 @@
 public protocol DiscordDispatchEventHandler {
 	// MARK: Methods
 
-	/**
-		Handles channel creates from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles channel creates from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleChannelCreate(with data: [String: Any])
 
-	/**
-		Handles channel deletes from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles channel deletes from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleChannelDelete(with data: [String: Any])
 
-	/**
-		Handles channel updates from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles channel updates from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleChannelUpdate(with data: [String: Any])
 
-	/**
-		Handles a dispatch event. This will call one of the other handle methods or the standard event handler.
-
-		- parameter event: The dispatch event
-		- parameter data: The dispatch event's data
-	*/
+	///
+	/// Handles a dispatch event. This will call one of the other handle methods or the standard event handler.
+	///
+	/// - parameter event: The dispatch event
+	/// - parameter data: The dispatch event's data
+	///
 	func handleDispatch(event: DiscordDispatchEvent, data: DiscordGatewayPayloadData)
 
-	/**
-		Handles guild creates from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles guild creates from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleGuildCreate(with data: [String: Any])
 
-	/**
-		Handles guild deletes from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles guild deletes from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleGuildDelete(with data: [String: Any])
 
-	/**
-		Handles guild emoji updates from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles guild emoji updates from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleGuildEmojiUpdate(with data: [String: Any])
 
-	/**
-		Handles guild member adds from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles guild member adds from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleGuildMemberAdd(with data: [String: Any])
 
-	/**
-		Handles guild member removes from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles guild member removes from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleGuildMemberRemove(with data: [String: Any])
 
-	/**
-		Handles guild member updates from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles guild member updates from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleGuildMemberUpdate(with data: [String: Any])
 
-	/**
-		Handles guild members chunks from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles guild members chunks from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleGuildMembersChunk(with data: [String: Any])
 
-	/**
-		Handles guild role creates from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles guild role creates from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleGuildRoleCreate(with data: [String: Any])
 
-	/**
-		Handles guild role removes from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles guild role removes from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleGuildRoleRemove(with data: [String: Any])
 
-	/**
-		Handles guild member updates from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles guild member updates from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleGuildRoleUpdate(with data: [String: Any])
 
-	/**
-		Handles guild updates from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles guild updates from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleGuildUpdate(with data: [String: Any])
 
-	/**
-		Handles message creates from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles message creates from Discord.
+	///
+	/// 		- parameter with: The data from the event
+	///
 	func handleMessageCreate(with data: [String: Any])
 
-	/**
-		Handles message updates from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles message updates from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleMessageUpdate(with data: [String: Any])
 
-	/**
-		Handles presence updates from Discord.
-
-		- parameter with: The data from the event.
-	*/
+	///
+	/// Handles presence updates from Discord.
+	///
+	/// - parameter with: The data from the event.
+	///
 	func handlePresenceUpdate(with data: [String: Any])
 
-	/**
-		Handles the ready event from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles the ready event from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleReady(with data: [String: Any])
 
-	/**
-		Handles voice server updates from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles voice server updates from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleVoiceServerUpdate(with data: [String: Any])
 
-	/**
-		Handles voice state updates from Discord.
-
-		- parameter with: The data from the event
-	*/
+	///
+	/// Handles voice state updates from Discord.
+	///
+	/// - parameter with: The data from the event
+	///
 	func handleVoiceStateUpdate(with data: [String: Any])
 }

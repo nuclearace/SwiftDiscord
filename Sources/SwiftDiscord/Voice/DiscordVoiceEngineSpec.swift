@@ -23,60 +23,54 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
     // MARK: Properties
 
     /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data.
-    var encoder: DiscordVoiceEncoder! { get }
+    var source: DiscordVoiceDataSource? { get }
 
     /// The secret key used for encryption.
     var secret: [UInt8]! { get }
 
     // MARK: Methods
 
-    /**
-        Stops encoding and requests a new encoder. A `voiceEngine.ready` event will be fired when the encoder is ready.
-    */
-    func requestNewEncoder() throws
+    ///
+    /// Stops encoding and requests a new encoder. A `voiceEngine.ready` event will be fired when the encoder is ready.
+    ///
+    func requestNewDataSource() throws
 
-    /**
-        An async write to the encoder.
-
-        - parameter data: Raw audio data that should be turned into OPUS encoded data.
-        - parameter doneHandler: An optional handler that will be called when we are done writing.
-    */
-    func send(_ data: Data, doneHandler: (() -> ())?)
-
-    /**
-        Sends whether we are speaking or not.
-
-        - parameter speaking: Our speaking status.
-    */
+    ///
+    /// Sends whether we are speaking or not.
+    ///
+    /// - parameter speaking: Our speaking status.
+    ///
+    @available(*, deprecated, message: "This method will become unavailable in a future release")
     func sendSpeaking(_ speaking: Bool)
 
-    /**
-        Sends OPUS encoded voice data to Discord.
-
-        - parameter data: An array of OPUS encoded voice data.
-    */
+    ///
+    /// Sends OPUS encoded voice data to Discord.
+    ///
+    /// - parameter data: An array of OPUS encoded voice data.
+    ///
+    @available(*, deprecated, message: "This method will become unavailable in a future release")
     func sendVoiceData(_ data: [UInt8])
 
     #if !os(iOS)
-    /**
-        Takes a process that outputs random audio data, and sends it to a hidden FFmpeg process that turns the data
-        into raw PCM.
-
-        Example setting up youtube-dl to play music.
-
-        ```swift
-        youtube = EncoderProcess()
-        youtube.launchPath = "/usr/local/bin/youtube-dl"
-        youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
-
-        voiceEngine.setupMiddleware(youtube) {
-            print("youtube died")
-        }
-        ```
-
-        - parameter middleware: The process that will output audio data.
-        - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
-    */
+    ///
+    /// Takes a process that outputs random audio data, and sends it to a hidden FFmpeg process that turns the data
+    /// into raw PCM.
+    ///
+    /// Example setting up youtube-dl to play music.
+    ///
+    /// ```swift
+    /// youtube = EncoderProcess()
+    /// youtube.launchPath = "usrlocalbinyoutube-dl"
+    /// youtube.arguments = ["-f", "bestaudio", "-q", "-o", "-", link]
+    ///
+    /// voiceEngine.setupMiddleware(youtube) {
+    ///     print("youtube died")
+    /// }
+    /// ```
+    ///
+    /// - parameter middleware: The process that will output audio data.
+    /// - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
+    ///
     func setupMiddleware(_ middleware: Process, terminationHandler: (() -> ())?)
     #endif
 }
@@ -85,67 +79,81 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
 public protocol DiscordVoiceEngineDelegate : class {
     // MARK: Methods
 
-    /**
-        Handles received voice data from a voice engine.
+    ///
+    /// Handles received opus voice data from a voice engine.
+    ///
+    /// - parameter data: The voice data that was received
+    ///
+    func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveOpusVoiceData data: DiscordOpusVoiceData)
 
-        - parameter data: The voice data that was received
-    */
-    func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveVoiceData data: DiscordVoiceData)
+    ///
+    /// Handles received raw voice data from a voice engine.
+    ///
+    /// - parameter data: The voice data that was received
+    ///
+    func voiceEngine(_ engine: DiscordVoiceEngine, didReceiveRawVoiceData data: DiscordRawVoiceData)
 
-    /**
-        Called when the voice engine disconnects.
-
-        - parameter engine: The engine that disconnected.
-    */
+    ///
+    /// Called when the voice engine disconnects.
+    ///
+    /// - parameter engine: The engine that disconnected.
+    ///
     func voiceEngineDidDisconnect(_ engine: DiscordVoiceEngine)
 
-    /**
-        Called when the voice engine needs an encoder.
+    ///
+    /// Called when the voice engine needs an encoder.
+    ///
+    /// - parameter engine: The engine that needs an encoder.
+    /// - returns: An encoder.
+    ///
+    func voiceEngineNeedsDataSource(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource?
 
-        - parameter engine: The engine that needs an encoder.
-        - returns: An encoder.
-    */
-    func voiceEngineNeedsEncoder(_ engine: DiscordVoiceEngine) throws -> DiscordVoiceEncoder?
-
-    /**
-        Called when the voice engine is ready.
-
-        - parameter engine: The engine that's ready.
-    */
+    ///
+    /// Called when the voice engine is ready.
+    ///
+    /// - parameter engine: The engine that's ready.
+    ///
     func voiceEngineReady(_ engine: DiscordVoiceEngine)
 }
 
-/// Declares that a type has enough information to encode/decode Opus data.
-public protocol DiscordOpusCodeable {
-    // MARK: Properties
+/// Represents an error that can occur during voice operations.
+public enum DiscordVoiceError : Error {
+    /// Thrown when a failure occurs creating an encoder.
+    case creationFail
 
-    /// The number of channels.
-    var channels: Int { get }
+    /// Thrown when a failure occurs encoding.
+    case encodeFail
 
-    /// The sampling rate.
-    var sampleRate: Int { get }
+    /// Thrown when a decode failure occurs.
+    case decodeFail
 
-    // MARK: Methods
-
-    /**
-        Returns the maximum number of bytes that a frame can contain given a
-        frame size in number of samples per channel.
-
-        - parameter assumingSize: The size of the frame, in number of samples per channel.
-        - returns: The number of bytes in this frame.
-    */
-    func maxFrameSize(assumingSize size: Int) -> Int
+    /// Thrown when the first packet is received.
+    case initialPacket
 }
 
-public extension DiscordOpusCodeable {
-    /**
-        Returns the maximum number of bytes that a frame can contain given a
-        frame size in number of samples per channel.
+/// A struct that is used to configure the high-level functions of a VoiceEngine
+public struct DiscordVoiceEngineConfiguration {
+    /// Whether or not this engine should capture voice.
+    public var captureVoice: Bool
 
-        - parameter assumingSize: The size of the frame, in number of samples per channel.
-        - returns: The number of bytes in this frame.
-    */
-    public func maxFrameSize(assumingSize size: Int) -> Int {
-        return size * channels * MemoryLayout<opus_int16>.size
+    /// Whether or not this engine should try and decode incoming voice into raw PCM.
+    public var decodeVoice: Bool
+
+    ///
+    /// Default configuration:
+    ///     captureVoice = true
+    ///     decodeVoice = false
+    ///
+    public init() {
+        captureVoice = true
+        decodeVoice = false
+    }
+
+    ///
+    /// Creates a new configuration with the specified options.
+    ///
+    public init(captureVoice: Bool, decodeVoice: Bool) {
+        self.captureVoice = captureVoice
+        self.decodeVoice = decodeVoice
     }
 }

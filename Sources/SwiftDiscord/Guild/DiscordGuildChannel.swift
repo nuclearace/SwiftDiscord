@@ -33,69 +33,73 @@ public protocol DiscordGuildChannel : DiscordChannel {
 extension DiscordGuildChannel {
     // MARK: GuildChannel Methods
 
-    /**
-        Determines whether this user has the specified permission on this channel.
-
-        - parameter member: The member to check.
-        - parameter permission: The permission to check for.
-        - returns: Whether the user has this permission in this channel.
-    */
+    ///
+    /// Determines whether this user has the specified permission on this channel.
+    ///
+    /// - parameter member: The member to check.
+    /// - parameter permission: The permission to check for.
+    /// - returns: Whether the user has this permission in this channel.
+    ///
     public func canMember(_ member: DiscordGuildMember, _ permission: DiscordPermission) -> Bool {
         return permissions(for: member).contains(permission)
     }
 
-    /**
-        Deletes a permission overwrite from this channel.
-
-        - parameter overwrite: The permission overwrite to delete
-    */
+    ///
+    /// Deletes a permission overwrite from this channel.
+    ///
+    /// - parameter overwrite: The permission overwrite to delete
+    ///
     public func deletePermission(_ overwrite: DiscordPermissionOverwrite) {
         guard let client = self.client else { return }
 
         client.deleteChannelPermission(overwrite.id, on: id)
     }
 
-    /**
-        Edits a permission overwrite on this channel.
-
-        - parameter overwrite: The permission overwrite to edit
-    */
+    ///
+    /// Edits a permission overwrite on this channel.
+    ///
+    /// - parameter overwrite: The permission overwrite to edit
+    ///
     public func editPermission(_ overwrite: DiscordPermissionOverwrite) {
         guard let client = self.client else { return }
 
         client.editChannelPermission(overwrite, on: id)
     }
 
-    /**
-        Gets the permission overwrites for a user.
-
-        - parameter for: The member to get permission overwrites for.
-        - returns: The permission overwrites this member has.
-    */
+    ///
+    /// Gets the permission overwrites for a user.
+    ///
+    /// - parameter for: The member to get permission overwrites for.
+    /// - returns: The permission overwrites this member has.
+    ///
     public func overwrites(for member: DiscordGuildMember) -> [DiscordPermissionOverwrite] {
         return permissionOverwrites.filter({ member.roleIds.contains($0.key) || member.user.id == $0.key }).map({ $0.1 })
     }
 
-    /**
-        Gets the permissions for this member on this channel.
-
-        Takes into consideration whether they are the owner, admin, and any roles and permission overwrites they have.
-
-        - parameter member: The member to check.
-        - returns: The permissions that this user has, OR'd together.
-    */
+    ///
+    /// Gets the permissions for this member on this channel.
+    ///
+    /// Takes into consideration whether they are the owner, admin, and any roles and permission overwrites they have.
+    ///
+    /// - parameter member: The member to check.
+    /// - returns: The permissions that this user has, OR'd together.
+    ///
     public func permissions(for member: DiscordGuildMember) -> DiscordPermission {
         guard let guild = self.guild else { return [] }
         guard guild.ownerId != member.user.id else { return DiscordPermission.all } // Owner has all permissions
 
         var workingPermissions = guild.roles(for: member).reduce([] as DiscordPermission, { $0.union($1.permissions) })
+        if let everybodyRole = guild.roles[guild.id] {
+            workingPermissions.formUnion(everybodyRole.permissions)
+        }
 
         if workingPermissions.contains(.administrator) {
             // Admin has all permissions
             return DiscordPermission.all
         }
 
-        let overwrites = self.overwrites(for: member)
+        let everybodyOverwrite = [self.permissionOverwrites[guild.id]].flatMap({ $0 })
+        let overwrites = self.overwrites(for: member) + everybodyOverwrite
         let (allowRole, denyRole, allowMember, denyMember) = overwrites.reduce(([], [], [], []) as (DiscordPermission, DiscordPermission, DiscordPermission, DiscordPermission), {cur, overwrite in
             switch overwrite.type {
             case .role:
@@ -140,14 +144,14 @@ func guildChannelFromObject(_ channelObject: [String: Any], guildID: GuildID?, c
 func guildChannelsFromArray(_ guildChannelArray: [[String: Any]],
                             guildID: GuildID?,
                             client: DiscordClient? = nil) -> [ChannelID: DiscordGuildChannel] {
-        var guildChannels = [ChannelID: DiscordGuildChannel]()
+    var guildChannels = [ChannelID: DiscordGuildChannel]()
 
-        for guildChannelObject in guildChannelArray {
-            let guildChannel = guildChannelFromObject(guildChannelObject, guildID: guildID, client: client)
-            guildChannels[guildChannel.id] = guildChannel
-        }
+    for guildChannelObject in guildChannelArray {
+        let guildChannel = guildChannelFromObject(guildChannelObject, guildID: guildID, client: client)
+        guildChannels[guildChannel.id] = guildChannel
+    }
 
-        return guildChannels
+    return guildChannels
 }
 
 /// Represents a guild channel.

@@ -34,53 +34,53 @@ public protocol DiscordClientSpec : class, DiscordVoiceManagerDelegate, DiscordS
 
 	// MARK: Initializers
 
-	/**
-		- parameter token: The discord token of the user.
-		- parameter configuration: An array of DiscordClientOption that can be used to customize the client.
-		- parameter delegate: The delegate for this client.
-	*/
+	///
+	/// - parameter token: The discord token of the user.
+	/// - parameter configuration: An array of DiscordClientOption that can be used to customize the client.
+	/// - parameter delegate: The delegate for this client.
+	///
 	init(token: DiscordToken, delegate: DiscordClientDelegate, configuration: [DiscordClientOption])
 
 	// MARK: Methods
 
-	/**
-		Begins the connection to Discord. Once this is called, wait for a `connect` event before trying to interact
-		with the client.
-	*/
+	///
+	/// Begins the connection to Discord. Once this is called, wait for a `connect` event before trying to interact
+	/// with the client.
+	///
 	func connect()
 
-	/**
-		Disconnects from Discord. A `disconnect` event is fired when the client has successfully disconnected.
-	*/
+	///
+	/// Disconnects from Discord. A `disconnect` event is fired when the client has successfully disconnected.
+	///
 	func disconnect()
 
-	/**
-		Joins a voice channel. A `voiceEngine.ready` event will be fired when the client has joined the channel.
-
-		- parameter channelId: The snowflake of the voice channel you would like to join
-	*/
+	///
+	/// Joins a voice channel. A `voiceEngine.ready` event will be fired when the client has joined the channel.
+	///
+	/// - parameter channelId: The snowflake of the voice channel you would like to join
+	///
 	func joinVoiceChannel(_ channelId: ChannelID)
 
-	/**
-		Leaves the currently connected voice channel.
-
-		- parameter onGuild: The snowflake of the guild whose voice channel you would like to leave.
-	*/
+	///
+	/// Leaves the currently connected voice channel.
+	///
+	/// - parameter onGuild: The snowflake of the guild whose voice channel you would like to leave.
+	///
 	func leaveVoiceChannel(onGuild guildId: GuildID)
 
-	/**
-		Requests all users from Discord for the guild specified. Use this when you need to get all users on a large
-		guild. Multiple `guildMembersChunk` will be fired.
-
-		- parameter on: The snowflake of the guild you wish to request all users.
-	*/
+	///
+	/// Requests all users from Discord for the guild specified. Use this when you need to get all users on a large
+	/// guild. Multiple `guildMembersChunk` will be fired.
+	///
+	/// - parameter on: The snowflake of the guild you wish to request all users.
+	///
 	func requestAllUsers(on guildId: GuildID)
 
-	/**
-		Sets the user's presence.
-
-		- parameter presence: The new presence object
-	*/
+	///
+	/// Sets the user's presence.
+	///
+	/// - parameter presence: The new presence object
+	///
 	func setPresence(_ presence: DiscordPresenceUpdate)
 }
 
@@ -89,5 +89,5 @@ public protocol DiscordClientHolder {
 	// MARK: Properties
 
 	/// A reference to the client.
-	weak var client: DiscordClient? { get set }
+	var client: DiscordClient? { get set }
 }

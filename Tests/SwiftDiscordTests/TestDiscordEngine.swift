@@ -6,7 +6,7 @@ import Foundation
 import XCTest
 @testable import SwiftDiscord
 
-class TestDiscordEngine : XCTestCase {
+public class TestDiscordEngine : XCTestCase, DiscordShardDelegate {
     func testEngineCorrectlyHandlesHelloPacket() {
         expectation = expectation(description: "Engine should be connected after receiving hello packet")
 
@@ -40,12 +40,20 @@ class TestDiscordEngine : XCTestCase {
     var engine: DiscordEngine!
     var expectation: XCTestExpectation!
 
-    override func setUp() {
+    public static var allTests: [(String, (TestDiscordEngine) -> () -> ())] {
+        return [
+            ("testEngineCorrectlyHandlesHelloPacket", testEngineCorrectlyHandlesHelloPacket),
+            ("testEngineSetsSessionIdFromReadyPacket", testEngineSetsSessionIdFromReadyPacket),
+            ("testEngineUpdatesSequenceNumber", testEngineUpdatesSequenceNumber),
+        ]
+    }
+
+    public override func setUp() {
         engine = DiscordEngine(delegate: self)
     }
 }
 
-extension TestDiscordEngine : DiscordShardDelegate {
+public extension TestDiscordEngine {
     var token: DiscordToken {
         return "Testing"
     }

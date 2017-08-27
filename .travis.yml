@@ -1,13 +1,18 @@
-language: objective-c
-osx_image: xcode8.3
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      language: generic
+    - os: osx
+      osx_image: xcode8.3
+      language: objective-c
 branches:
   only:
     - master
     - development
+    - travis-linux
 before_install:
-  - brew tap vapor/tap
-  - brew update
-  - brew install ctls
-  - brew install libsodium
-  - brew install opus
-script: swift test -Xlinker -L/usr/local/lib -Xlinker -lopus -Xcc -I/usr/local/include
+  - ./.travis/before_install.sh
+script:
+  - ./.travis/run.sh

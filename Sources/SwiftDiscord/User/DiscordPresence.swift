@@ -48,13 +48,13 @@ public struct DiscordGame : JSONAble {
 
     // MARK: Initializers
 
-    /**
-        Creates a new DiscordGame.
-
-        - parameter name: The name of the game
-        - parameter type: The type of the game
-        - parameter url: The url of the stream, if a stream
-    */
+    ///
+    /// Creates a new DiscordGame.
+    ///
+    /// - parameter name: The name of the game
+    /// - parameter type: The type of the game
+    /// - parameter url: The url of the stream, if a stream
+    ///
     public init(name: String, type: DiscordGameType, url: String? = nil) {
         self.name = name
         self.type = type
@@ -62,13 +62,13 @@ public struct DiscordGame : JSONAble {
     }
 
 
-    /**
-        Creates a new DiscordGame from a json object.
-
-        Can fail if no game object was given.
-
-        - parameter gameObject: The json game
-    */
+    ///
+    /// Creates a new DiscordGame from a json object.
+    ///
+    /// Can fail if no game object was given.
+    ///
+    /// - parameter gameObject: The json game
+    ///
     public init?(gameObject: [String: Any]?) {
         guard let game = gameObject else { return nil }
         guard let name = game["name"] as? String else { return nil }
@@ -174,12 +174,12 @@ public struct DiscordPresenceUpdate : JSONAble {
 
     // MARK: Initializers
 
-    /**
-        Creates a new DiscordPresenceUpdate
-
-        - parameter since: The time we've been idle for. Nil if not idle
-        - parameter game: The game we are currently playing. Nil if not playing a game.
-    */
+    ///
+    /// Creates a new DiscordPresenceUpdate
+    ///
+    /// - parameter since: The time we've been idle for. Nil if not idle
+    /// - parameter game: The game we are currently playing. Nil if not playing a game.
+    ///
     public init(since: Int?, game: DiscordGame?) {
         self.since = since
         self.game = game

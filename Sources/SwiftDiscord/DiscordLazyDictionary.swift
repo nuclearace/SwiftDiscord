@@ -88,16 +88,16 @@ public struct DiscordLazyDictionaryIndex<K: Hashable, V> : Comparable {
     }
 }
 
-/** A value-lazy dictionary
-
- To store a lazy value into the dictionary:
-
- ```swift
- var dict = [2: 4] as DiscordLazyDictionary
-
- dict[lazy: 24] = .lazy({ 2343 + 2343 })
- ```
- */
+/// A value-lazy dictionary
+///
+/// To store a lazy value into the dictionary:
+///
+/// ```swift
+/// var dict = [2: 4] as DiscordLazyDictionary
+///
+/// dict[lazy: 24] = .lazy({ 2343 + 2343 })
+/// ```
+///
 public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLiteral, Collection {
     // MARK: Typealiases/Subscripts
 
@@ -147,12 +147,12 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         return backingDictionary.isEmpty
     }
 
-    /**
-        Used to get/set the value stored at `key`. This will force evaluation if the value hasn't been computed yet.
-        Can be used to set an already computed value.
-
-        - returns: An optional containing the value at `key`, or nil if that key is not in the dictionary
-    */
+    ///
+    /// Used to getset the value stored at `key`. This will force evaluation if the value hasn't been computed yet.
+    /// Can be used to set an already computed value.
+    ///
+    /// - returns: An optional containing the value at `key`, or nil if that key is not in the dictionary
+    ///
     public subscript(key: Key) -> Value? {
         get {
             guard let value = backingDictionary[key] else { return nil }
@@ -169,12 +169,12 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         }
     }
 
-    /**
-        Used to get/set the DiscordLazyValue stored at `key`.
-        Can be used to set a lazy value.
-
-        - returns: An optional containing the DiscordLazyValue at `key`, or nil if that key is not in the dictionary
-    */
+    ///
+    /// Used to getset the DiscordLazyValue stored at `key`.
+    /// Can be used to set a lazy value.
+    ///
+    /// - returns: An optional containing the DiscordLazyValue at `key`, or nil if that key is not in the dictionary
+    ///
     public subscript(lazy key: Key) -> DiscordLazyValue<V>? {
         get {
             return backingDictionary[key]
@@ -185,31 +185,31 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         }
     }
 
-    /**
-        Used to get the key/value pair stored at `position`.
-
-        - returns: An optional containing the key/value pair at `key`, or nil if that key is not in the dictionary
-    */
+    ///
+    /// Used to get the keyvalue pair stored at `position`.
+    ///
+    /// - returns: An optional containing the keyvalue pair at `key`, or nil if that key is not in the dictionary
+    ///
     public subscript(position: Index) -> Iterator.Element {
         let backingValues = backingDictionary[position.backingIndex]
 
         return (backingValues.key, backingValues.value.value)
     }
 
-    /**
-        - returns: A slice of dictionary with `bounds`
-    */
+    ///
+    /// - returns: A slice of dictionary with `bounds`
+    ///
     public subscript(bounds: Range<Index>) -> SubSequence {
         return Slice(base: self, bounds: bounds)
     }
 
     // MARK: Initializers
 
-    /**
-        ExpressibleByDictionaryLiteral conformance.
-
-        - parameter dictionaryLiteral: Array of key/value pairs.
-    */
+    ///
+    /// ExpressibleByDictionaryLiteral conformance.
+    ///
+    /// - parameter dictionaryLiteral: Array of keyvalue pairs.
+    ///
     public init(dictionaryLiteral elements: (Key, Value)...) {
         backingDictionary = [Key: DiscordLazyValue<Value>]()
 
@@ -220,22 +220,22 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
 
     // MARK: Methods
 
-    /**
-        Checks and sees if `key` is in this dictionary.
-        This does not evaluate the value being stored.
-
-        - parameter key: The key to check for.
-        - returns: A `Bool` indicating whether `key` is being stored.
-    */
+    ///
+    /// Checks and sees if `key` is in this dictionary.
+    /// This does not evaluate the value being stored.
+    ///
+    /// - parameter key: The key to check for.
+    /// - returns: A `Bool` indicating whether `key` is being stored.
+    ///
     public func contains(_ key: Key) -> Bool {
         return backingDictionary[key] != nil
     }
 
-    /**
-        Creates an iterator for this dictionary. Forces evaulation of all elements.
-
-        - returns: An iterator for this collection.
-    */
+    ///
+    /// Creates an iterator for this dictionary. Forces evaulation of all elements.
+    ///
+    /// - returns: An iterator for this collection.
+    ///
     public func makeIterator() -> Iterator {
         var dict = [Key: Value]()
 
@@ -246,56 +246,56 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
         return dict.makeIterator()
     }
 
-    /**
-        - parameter after: The index for which we want the successor to
-
-        - returns: The index after the specified index.
-    */
+    ///
+    /// - parameter after: The index for which we want the successor to
+    ///
+    /// - returns: The index after the specified index.
+    ///
     public func index(after i: Index) -> Index {
         return DiscordLazyDictionaryIndex(backingIndex: backingDictionary.index(after: i.backingIndex))
     }
 
-    /**
-        - parameter upTo: the end index for this slice
-
-        - returns: A slice of dictionary up to `upTo`
-    */
+    ///
+    /// - parameter upTo: the end index for this slice
+    ///
+    /// - returns: A slice of dictionary up to `upTo`
+    ///
     public func prefix(upTo end: Index) -> SubSequence {
         return Slice(base: self, bounds: self.startIndex..<end)
     }
 
-    /**
-        - parameter through: the through index for this slice
-
-        - returns: A slice of dictionary through `upTo`
-    */
+    ///
+    /// - parameter through: the through index for this slice
+    ///
+    /// - returns: A slice of dictionary through `upTo`
+    ///
     public func prefix(through position: Index) -> SubSequence {
         return Slice(base: self, bounds: self.startIndex..<self.index(after: position))
     }
 
-    /**
-        - parameter forKey: the key for the value being removed
-
-        - returns: an optional containing the value stored at `key`, or nil if key wasn't stored in this dictionary
-    */
+    ///
+    /// - parameter forKey: the key for the value being removed
+    ///
+    /// - returns: an optional containing the value stored at `key`, or nil if key wasn't stored in this dictionary
+    ///
     public mutating func removeValue(forKey key: Key) -> Value? {
         return backingDictionary.removeValue(forKey: key)?.value
     }
 
-    /**
-        - parameter from: the from index for this slice
-
-        - returns: A slice of dictionary from `from`
-    */
+    ///
+    /// - parameter from: the from index for this slice
+    ///
+    /// - returns: A slice of dictionary from `from`
+    ///
     public func suffix(from start: Index) -> SubSequence {
         return Slice(base: self, bounds: start..<self.endIndex)
     }
 
-    /**
-        Updates the values stored in self with values stored in other, without evaluating the value.
-
-        - parameter withOtherDict: The values to update with.
-    */
+    ///
+    /// Updates the values stored in self with values stored in other, without evaluating the value.
+    ///
+    /// - parameter withOtherDict: The values to update with.
+    ///
     public mutating func updateValues(withOtherDict other: DiscordLazyDictionary<Key, Value>) {
         for (key, value) in other.backingDictionary {
             backingDictionary[key] = value
