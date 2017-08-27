@@ -298,10 +298,14 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
 /// ```
 ///
 open class DiscordVoiceFileDataSource : DiscordBufferedVoiceDataSource {
+    // MARK: Properties
+
     private static let logType = "DiscordVoiceFileDataSource"
 
     /// A FileHandle for reading the wrapped file.
     public let wrappedFile: FileHandle
+
+    // MARK: Initializers
 
     ///
     /// Sets up a buffered source around a voice file.
@@ -324,6 +328,8 @@ open class DiscordVoiceFileDataSource : DiscordBufferedVoiceDataSource {
     deinit {
         DefaultDiscordLogger.Logger.debug("deinit", type: DiscordVoiceFileDataSource.logType)
     }
+
+    // MARK: Methods
 
     ///
     /// Called when it is time to setup a `DispatchIO` for reading.

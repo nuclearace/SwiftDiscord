@@ -49,6 +49,9 @@
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="getting-started.html">Getting Started</a>
               </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="installing-swiftdiscord-for-ios.html">Installing SwiftDiscord for iOS</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -56,6 +59,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/DiscordAuditLog.html">DiscordAuditLog</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/DiscordBufferedVoiceDataSource.html">DiscordBufferedVoiceDataSource</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/DiscordClient.html">DiscordClient</a>
@@ -85,10 +91,13 @@
                 <a class="nav-group-task-link" href="Classes/DiscordShardManager.html">DiscordShardManager</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a>
+                <a class="nav-group-task-link" href="Classes/DiscordSilenceVoiceDataSource.html">DiscordSilenceVoiceDataSource</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/DiscordVoiceFileDataSource.html">DiscordVoiceFileDataSource</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/DiscordVoiceManager.html">DiscordVoiceManager</a>
@@ -151,6 +160,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/DiscordPresenceStatus.html">DiscordPresenceStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/DiscordVoiceDataSourceStatus.html">DiscordVoiceDataSourceStatus</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/DiscordVoiceError.html">DiscordVoiceError</a>
@@ -219,6 +231,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/DiscordUserActor.html">DiscordUserActor</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/DiscordVoiceDataSource.html">DiscordVoiceDataSource</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a>
@@ -316,6 +331,9 @@
                 <a class="nav-group-task-link" href="Structs/DiscordMessage.html">DiscordMessage</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DiscordOpusVoiceData.html">DiscordOpusVoiceData</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/DiscordPermission.html">DiscordPermission</a>
               </li>
               <li class="nav-group-task">
@@ -332,6 +350,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/DiscordRateLimitKey/DiscordRateLimitURLParts.html">– DiscordRateLimitURLParts</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DiscordRawVoiceData.html">DiscordRawVoiceData</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/DiscordReaction.html">DiscordReaction</a>
@@ -352,7 +373,7 @@
                 <a class="nav-group-task-link" href="Structs/DiscordUserGuild.html">DiscordUserGuild</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Structs/DiscordVoiceData.html">DiscordVoiceData</a>
+                <a class="nav-group-task-link" href="Structs/DiscordVoiceEngineConfiguration.html">DiscordVoiceEngineConfiguration</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a>
@@ -986,6 +1007,70 @@ that if you make modifications to the client inside of a callback, you first dis
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:P12SwiftDiscord19DiscordOpusCodeable"></a>
+                    <a name="//apple_ref/swift/Protocol/DiscordOpusCodeable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P12SwiftDiscord19DiscordOpusCodeable">DiscordOpusCodeable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Declares that a type has enough information to encode/decode Opus data.</p>
+
+                        <a href="Protocols/DiscordOpusCodeable.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordOpusCodeable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:P12SwiftDiscord22DiscordVoiceDataSource"></a>
+                    <a name="//apple_ref/swift/Protocol/DiscordVoiceDataSource" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P12SwiftDiscord22DiscordVoiceDataSource">DiscordVoiceDataSource</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Specifies that a type will be a data source for a VoiceEngine.</p>
+
+                        <a href="Protocols/DiscordVoiceDataSource.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordVoiceDataSource</span> <span class="p">:</span> <span class="kd">class</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:P12SwiftDiscord22DiscordVoiceEngineSpec"></a>
                     <a name="//apple_ref/swift/Protocol/DiscordVoiceEngineSpec" class="dashAnchor"></a>
                     <a class="token" href="#/s:P12SwiftDiscord22DiscordVoiceEngineSpec">DiscordVoiceEngineSpec</a>
@@ -1039,34 +1124,6 @@ that if you make modifications to the client inside of a callback, you first dis
                     </section>
                   </div>
                 </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:P12SwiftDiscord19DiscordOpusCodeable"></a>
-                    <a name="//apple_ref/swift/Protocol/DiscordOpusCodeable" class="dashAnchor"></a>
-                    <a class="token" href="#/s:P12SwiftDiscord19DiscordOpusCodeable">DiscordOpusCodeable</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Declares that a type has enough information to encode/decode Opus data.</p>
-
-                        <a href="Protocols/DiscordOpusCodeable.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordOpusCodeable</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
               </ul>
             </div>
             <div class="task-group">
@@ -1107,7 +1164,7 @@ that if you make modifications to the client inside of a callback, you first dis
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-08-05)</p>
+      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-08-27)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

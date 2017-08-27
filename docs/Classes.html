@@ -49,6 +49,9 @@
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="getting-started.html">Getting Started</a>
               </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="installing-swiftdiscord-for-ios.html">Installing SwiftDiscord for iOS</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -56,6 +59,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/DiscordAuditLog.html">DiscordAuditLog</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/DiscordBufferedVoiceDataSource.html">DiscordBufferedVoiceDataSource</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/DiscordClient.html">DiscordClient</a>
@@ -85,10 +91,13 @@
                 <a class="nav-group-task-link" href="Classes/DiscordShardManager.html">DiscordShardManager</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Classes/DiscordVoiceEncoder.html">DiscordVoiceEncoder</a>
+                <a class="nav-group-task-link" href="Classes/DiscordSilenceVoiceDataSource.html">DiscordSilenceVoiceDataSource</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/DiscordVoiceFileDataSource.html">DiscordVoiceFileDataSource</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/DiscordVoiceManager.html">DiscordVoiceManager</a>
@@ -151,6 +160,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/DiscordPresenceStatus.html">DiscordPresenceStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/DiscordVoiceDataSourceStatus.html">DiscordVoiceDataSourceStatus</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/DiscordVoiceError.html">DiscordVoiceError</a>
@@ -219,6 +231,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/DiscordUserActor.html">DiscordUserActor</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/DiscordVoiceDataSource.html">DiscordVoiceDataSource</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a>
@@ -316,6 +331,9 @@
                 <a class="nav-group-task-link" href="Structs/DiscordMessage.html">DiscordMessage</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DiscordOpusVoiceData.html">DiscordOpusVoiceData</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/DiscordPermission.html">DiscordPermission</a>
               </li>
               <li class="nav-group-task">
@@ -332,6 +350,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/DiscordRateLimitKey/DiscordRateLimitURLParts.html">– DiscordRateLimitURLParts</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DiscordRawVoiceData.html">DiscordRawVoiceData</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/DiscordReaction.html">DiscordReaction</a>
@@ -352,7 +373,7 @@
                 <a class="nav-group-task-link" href="Structs/DiscordUserGuild.html">DiscordUserGuild</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Structs/DiscordVoiceData.html">DiscordVoiceData</a>
+                <a class="nav-group-task-link" href="Structs/DiscordVoiceEngineConfiguration.html">DiscordVoiceEngineConfiguration</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a>
@@ -665,9 +686,9 @@ TODO handle the global rate limit</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C12SwiftDiscord26DiscordVoiceSessionDecoder"></a>
-                    <a name="//apple_ref/swift/Class/DiscordVoiceSessionDecoder" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C12SwiftDiscord26DiscordVoiceSessionDecoder">DiscordVoiceSessionDecoder</a>
+                    <a name="/s:C12SwiftDiscord18DiscordOpusEncoder"></a>
+                    <a name="//apple_ref/swift/Class/DiscordOpusEncoder" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C12SwiftDiscord18DiscordOpusEncoder">DiscordOpusEncoder</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -675,16 +696,17 @@ TODO handle the global rate limit</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Class that decodes Opus voice data into raw PCM data for a VoiceEngine. It can decode multiple streams. Decoding is
-not thread safe, and it is up to the caller to decode safely.</p>
+                        <p>An Opus encoder.</p>
 
-                        <a href="Classes/DiscordVoiceSessionDecoder.html" class="slightly-smaller">See more</a>
+<p>Takes raw PCM 16-bit-lesample data and returns Opus encoded voice packets.</p>
+
+                        <a href="Classes/DiscordOpusEncoder.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordVoiceSessionDecoder</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordOpusEncoder</span> <span class="p">:</span> <span class="kt"><a href="Protocols/DiscordOpusCodeable.html">DiscordOpusCodeable</a></span></code></pre>
 
                         </div>
                       </div>
@@ -706,7 +728,7 @@ not thread safe, and it is up to the caller to decode safely.</p>
                       <div class="abstract">
                         <p>An Opus decoder.</p>
 
-<p>Takes Opus packets and returns raw PCM 16-bit-le/sample data.</p>
+<p>Takes Opus packets and returns raw PCM 16-bit-lesample data.</p>
 
                         <a href="Classes/DiscordOpusDecoder.html" class="slightly-smaller">See more</a>
                       </div>
@@ -725,6 +747,108 @@ not thread safe, and it is up to the caller to decode safely.</p>
             </div>
             <div class="task-group">
               <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:C12SwiftDiscord30DiscordBufferedVoiceDataSource"></a>
+                    <a name="//apple_ref/swift/Class/DiscordBufferedVoiceDataSource" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C12SwiftDiscord30DiscordBufferedVoiceDataSource">DiscordBufferedVoiceDataSource</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>DiscordBufferedVoiceDataSource is generic data source around a pipe. The only condition is that it expects raw
+PCM 16-bit-le out of the pipe.</p>
+
+<p>It buffers ~5 minutes worth of voice data</p>
+
+<p>Usage:</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt">DiscordClient</span><span class="p">,</span> <span class="n">needsDataSourceForEngine</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt">DiscordVoiceEngine</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">DiscordVoiceDataSource</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kt">DiscordBufferedVoiceDataSource</span><span class="p">(</span><span class="nv">opusEncoder</span><span class="p">:</span> <span class="k">try</span> <span class="kt">DiscordOpusEncoder</span><span class="p">(</span><span class="nv">bitrate</span><span class="p">:</span> <span class="mi">128_000</span><span class="p">))</span>
+    <span class="c1">// Somewhere down the line we setup some middleware which will use this source.</span>
+<span class="p">}</span>
+</code></pre>
+
+                        <a href="Classes/DiscordBufferedVoiceDataSource.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordBufferedVoiceDataSource</span> <span class="p">:</span> <span class="kt"><a href="Protocols/DiscordVoiceDataSource.html">DiscordVoiceDataSource</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:C12SwiftDiscord26DiscordVoiceFileDataSource"></a>
+                    <a name="//apple_ref/swift/Class/DiscordVoiceFileDataSource" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C12SwiftDiscord26DiscordVoiceFileDataSource">DiscordVoiceFileDataSource</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A subclass of <code><a href="Classes/DiscordBufferedVoiceDataSource.html">DiscordBufferedVoiceDataSource</a></code> that buffers a raw audio file.</p>
+
+<p>Usage:</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt">DiscordClient</span><span class="p">,</span> <span class="n">needsDataSourceForEngine</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt">DiscordVoiceEngine</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">DiscordVoiceDataSource</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">try</span> <span class="kt">DiscordVoiceFileDataSource</span><span class="p">(</span><span class="nv">opusEncoder</span><span class="p">:</span> <span class="k">try</span> <span class="kt">DiscordOpusEncoder</span><span class="p">(</span><span class="nv">bitrate</span><span class="p">:</span> <span class="mi">128_000</span><span class="p">),</span>
+                                          <span class="nv">file</span><span class="p">:</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"file://output.raw"</span><span class="p">)</span><span class="o">!</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+                        <a href="Classes/DiscordVoiceFileDataSource.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordVoiceFileDataSource</span> <span class="p">:</span> <span class="kt"><a href="Classes/DiscordBufferedVoiceDataSource.html">DiscordBufferedVoiceDataSource</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:C12SwiftDiscord29DiscordSilenceVoiceDataSource"></a>
+                    <a name="//apple_ref/swift/Class/DiscordSilenceVoiceDataSource" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C12SwiftDiscord29DiscordSilenceVoiceDataSource">DiscordSilenceVoiceDataSource</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A voice source that returns Opus silence.
+Only sends 5 packets of silence and is then spent.</p>
+
+                        <a href="Classes/DiscordSilenceVoiceDataSource.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">DiscordSilenceVoiceDataSource</span> <span class="p">:</span> <span class="kt"><a href="Protocols/DiscordVoiceDataSource.html">DiscordVoiceDataSource</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -754,12 +878,16 @@ to the engine.</p>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C12SwiftDiscord19DiscordVoiceEncoder"></a>
-                    <a name="//apple_ref/swift/Class/DiscordVoiceEncoder" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C12SwiftDiscord19DiscordVoiceEncoder">DiscordVoiceEncoder</a>
+                    <a name="/s:C12SwiftDiscord26DiscordVoiceSessionDecoder"></a>
+                    <a name="//apple_ref/swift/Class/DiscordVoiceSessionDecoder" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C12SwiftDiscord26DiscordVoiceSessionDecoder">DiscordVoiceSessionDecoder</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -767,45 +895,16 @@ to the engine.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>DiscordVoiceEncoder is responsible for turning audio data into Opus packets.</p>
+                        <p>Class that decodes Opus voice data into raw PCM data for a VoiceEngine. It can decode multiple streams. Decoding is
+not thread safe, and it is up to the caller to decode safely.</p>
 
-                        <a href="Classes/DiscordVoiceEncoder.html" class="slightly-smaller">See more</a>
+                        <a href="Classes/DiscordVoiceSessionDecoder.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordVoiceEncoder</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:C12SwiftDiscord18DiscordOpusEncoder"></a>
-                    <a name="//apple_ref/swift/Class/DiscordOpusEncoder" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C12SwiftDiscord18DiscordOpusEncoder">DiscordOpusEncoder</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>An Opus encoder.</p>
-
-<p>Takes raw PCM 16-bit-le/sample data and returns Opus encoded voice packets.</p>
-
-                        <a href="Classes/DiscordOpusEncoder.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordOpusEncoder</span> <span class="p">:</span> <span class="kt"><a href="Protocols/DiscordOpusCodeable.html">DiscordOpusCodeable</a></span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordVoiceSessionDecoder</span></code></pre>
 
                         </div>
                       </div>
@@ -831,7 +930,7 @@ to the engine.</p>
                       <div class="abstract">
                         <p>A subclass of <code><a href="Classes/DiscordEngine.html">DiscordEngine</a></code> that provides functionality for voice communication.</p>
 
-<p>Discord uses encrypted OPUS encoded voice packets. The engine is responsible for encyrpting/decrypting voice
+<p>Discord uses encrypted OPUS encoded voice packets. The engine is responsible for encyrptingdecrypting voice
 packets that are sent and received.</p>
 
                         <a href="Classes/DiscordVoiceEngine.html" class="slightly-smaller">See more</a>
@@ -887,7 +986,7 @@ packets that are sent and received.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-08-05)</p>
+      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-08-27)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

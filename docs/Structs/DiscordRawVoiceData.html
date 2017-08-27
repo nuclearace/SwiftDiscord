@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DiscordShardManagerDelegate Protocol Reference</title>
+    <title>DiscordRawVoiceData Struct Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Protocol/DiscordShardManagerDelegate" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Struct/DiscordRawVoiceData" class="dashAnchor"></a>
 
-    <a title="DiscordShardManagerDelegate Protocol Reference"></a>
+    <a title="DiscordRawVoiceData Struct Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -38,7 +38,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html"> Reference</a>
       <img class="carat" src="../img/carat.png" />
-      DiscordShardManagerDelegate Protocol Reference
+      DiscordRawVoiceData Struct Reference
     </p>
 
     <div class="content-wrapper">
@@ -431,14 +431,14 @@
 
         <section class="section">
           <div class="section-content">
-            <h1>DiscordShardManagerDelegate</h1>
+            <h1>DiscordRawVoiceData</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordShardManagerDelegate</span> <span class="p">:</span> <span class="kd">class</span><span class="p">,</span> <span class="kt"><a href="../Protocols/DiscordTokenBearer.html">DiscordTokenBearer</a></span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordRawVoiceData</span></code></pre>
 
                 </div>
               </div>
-            <p>The delegate for a <code><a href="../Classes/DiscordShardManager.html">DiscordShardManager</a></code>.</p>
+            <p>A struct that contains a Discord voice packet with raw data.</p>
 
           </div>
         </section>
@@ -446,20 +446,13 @@
         <section class="section">
           <div class="section-content">
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Methods"></a>
-                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
-                <a href="#/Methods">
-                  <h3 class="section-name">Methods</h3>
-                </a>
-              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord27DiscordShardManagerDelegate12shardManagerFTCS_19DiscordShardManager10didConnectSb_T_"></a>
-                    <a name="//apple_ref/swift/Method/shardManager(_:didConnect:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordShardManagerDelegate12shardManagerFTCS_19DiscordShardManager10didConnectSb_T_">shardManager(_:didConnect:)</a>
+                    <a name="/s:vV12SwiftDiscord19DiscordRawVoiceData6seqNumSi"></a>
+                    <a name="//apple_ref/swift/Property/seqNum" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord19DiscordRawVoiceData6seqNumSi">seqNum</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -467,47 +460,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Signals that the manager has finished connecting.</p>
+                        <p>The sequence number of this packet.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">shardManager</span><span class="p">(</span><span class="n">_</span> <span class="nv">manager</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordShardManager.html">DiscordShardManager</a></span><span class="p">,</span> <span class="n">didConnect</span> <span class="nv">connected</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">seqNum</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>manager</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The manager.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>didConnect</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Should always be true.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
                     </section>
                   </div>
@@ -515,9 +477,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord27DiscordShardManagerDelegate12shardManagerFTCS_19DiscordShardManager23didDisconnectWithReasonSS_T_"></a>
-                    <a name="//apple_ref/swift/Method/shardManager(_:didDisconnectWithReason:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordShardManagerDelegate12shardManagerFTCS_19DiscordShardManager23didDisconnectWithReasonSS_T_">shardManager(_:didDisconnectWithReason:)</a>
+                    <a name="/s:vV12SwiftDiscord19DiscordRawVoiceData4ssrcSi"></a>
+                    <a name="//apple_ref/swift/Property/ssrc" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord19DiscordRawVoiceData4ssrcSi">ssrc</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -525,47 +487,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Signals that the manager has disconnected.</p>
+                        <p>The source of this packet.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">shardManager</span><span class="p">(</span><span class="n">_</span> <span class="nv">manager</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordShardManager.html">DiscordShardManager</a></span><span class="p">,</span> <span class="n">didDisconnectWithReason</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">ssrc</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>manager</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The manager.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>didDisconnectWithReason</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The reason the manager disconnected.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
                     </section>
                   </div>
@@ -573,9 +504,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FP12SwiftDiscord27DiscordShardManagerDelegate12shardManagerFTCS_19DiscordShardManager17shouldHandleEventOS_20DiscordDispatchEvent11withPayloadVS_21DiscordGatewayPayload_T_"></a>
-                    <a name="//apple_ref/swift/Method/shardManager(_:shouldHandleEvent:withPayload:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FP12SwiftDiscord27DiscordShardManagerDelegate12shardManagerFTCS_19DiscordShardManager17shouldHandleEventOS_20DiscordDispatchEvent11withPayloadVS_21DiscordGatewayPayload_T_">shardManager(_:shouldHandleEvent:withPayload:)</a>
+                    <a name="/s:vV12SwiftDiscord19DiscordRawVoiceData9timestampSi"></a>
+                    <a name="//apple_ref/swift/Property/timestamp" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord19DiscordRawVoiceData9timestampSi">timestamp</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -583,59 +514,43 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Signals that the manager received an event. The client should handle this.</p>
+                        <p>The timestamp of this packet.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">shardManager</span><span class="p">(</span><span class="n">_</span> <span class="nv">manager</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordShardManager.html">DiscordShardManager</a></span><span class="p">,</span> <span class="n">shouldHandleEvent</span> <span class="nv">event</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a></span><span class="p">,</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">timestamp</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>manager</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The manager.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>shouldHandleEvent</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The event to be handled.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>withPayload</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The payload that came with the event.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vV12SwiftDiscord19DiscordRawVoiceData9voiceDataGSaVs5Int16_"></a>
+                    <a name="//apple_ref/swift/Property/voiceData" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vV12SwiftDiscord19DiscordRawVoiceData9voiceDataGSaVs5Int16_">voiceData</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The raw voice data.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">voiceData</span><span class="p">:</span> <span class="p">[</span><span class="kt">Int16</span><span class="p">]</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>

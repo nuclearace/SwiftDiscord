@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Getting Started  Reference</title>
+    <title>Installing SwiftDiscord for iOS  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset="utf-8">
@@ -15,7 +15,7 @@
   <body>
 
 
-    <a title="Getting Started  Reference"></a>
+    <a title="Installing SwiftDiscord for iOS  Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -37,7 +37,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="index.html"> Reference</a>
       <img class="carat" src="img/carat.png" />
-      Getting Started  Reference
+      Installing SwiftDiscord for iOS  Reference
     </p>
 
     <div class="content-wrapper">
@@ -431,49 +431,161 @@
         <section class="section">
           <div class="section-content">
             
-            <h1 id='getting-started' class='heading'>Getting Started</h1>
+            <h1 id='installing-swiftdiscord-for-ios' class='heading'>Installing SwiftDiscord for iOS</h1>
 
-<p>The first thing that you&rsquo;ll need is a Discord JWT. These can be obtained by going to <a href="https://discordapp.com/developers/applications/me">your apps</a> and selecting/making one. Then on the app page click <q>click to reveal</q>.</p>
+<p><strong>Please note that you should follow the instructions in this document rather than in the main README if you intend to build for iOS.</strong></p>
+<h2 id='prerequisites' class='heading'>Prerequisites</h2>
 
-<p>Once you have your token you can start writing some code.</p>
-<h2 id='configuring-the-client' class='heading'>Configuring the client</h2>
+<ul>
+<li>SwiftDiscord <strong>4</strong></li>
+<li>Xcode <strong>8.3.3</strong></li>
+<li>iOS SDK <strong>10.3</strong></li>
+<li>Homebrew</li>
+</ul>
 
-<p><em>All of these steps assume you are working inside of a class that conforms to
-<a href="./Protocols/DiscordClientDelegate.html">DiscordClientDelegate</a></em></p>
+<p>I have absolutely no idea if this will continue to work with future or previous versions of SwiftDiscord/Xcode/iOS. Your mileage may vary.</p>
+<h2 id='instructions' class='heading'>Instructions</h2>
 
-<p>Configuring the client is straightforward. The intializer for the client takes the JWT we got in the previous step, and an optinal array of configuration options.</p>
-<pre class="highlight swift"><code><span class="c1">// client must be `DiscordClient!`</span>
-<span class="k">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="kt">DiscordClient</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="s">"Bot myjwt.from.discord"</span><span class="p">,</span> <span class="nv">delegate</span><span class="p">:</span> <span class="k">self</span><span class="p">,</span> <span class="nv">configuration</span><span class="p">:</span> <span class="p">[</span><span class="o">.</span><span class="nf">log</span><span class="p">(</span><span class="o">.</span><span class="n">info</span><span class="p">)])</span>
+<p>You may be tempted to skip some steps or to not follow them in order. If you&rsquo;d like to get this working at any point within the next few hours, it is highly recommended you <strong>do not do that</strong>. If you do somehow get this to work without completing a certain step, please let me know so I can update the instructions.</p>
+
+<ol>
+<li>Install dependencies: <code>brew tap vapor/tap &amp;&amp; brew install ctls &amp;&amp; brew install opus &amp;&amp; brew install libsodium</code></li>
+<li>Make your project folder: <code>mkdir SwiftDiscord-iOS &amp;&amp; cd SwiftDiscord</code></li>
+<li>Initialize a new Swift package: <code>swift package init --type executable</code></li>
+<li><p>Modify your <code>Package.swift</code> so you have SwiftDiscord as a dependency:</p>
+<pre class="highlight swift"><code><span class="c1">// swift-tools-version:3.1</span>
+
+<span class="kd">import</span> <span class="kt">PackageDescription</span>
+
+<span class="k">let</span> <span class="nv">package</span> <span class="o">=</span> <span class="kt">Package</span><span class="p">(</span>
+    <span class="nv">name</span><span class="p">:</span> <span class="s">"SwiftDiscord-iOS"</span><span class="p">,</span>
+    <span class="nv">dependencies</span><span class="p">:</span> <span class="p">[</span>
+     <span class="o">.</span><span class="kt">Package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/nuclearace/SwiftDiscord"</span><span class="p">,</span> <span class="nv">majorVersion</span><span class="p">:</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</code></pre></li>
+<li><p>Download SwiftDiscord: <code>swift package update</code></p></li>
+<li><p>Build SwiftDiscord: <code>swift build -Xlinker -L/usr/local/lib -Xlinker -lopus -Xcc -I/usr/local/include</code></p></li>
+<li><p>Now comes the hardest part: <code>mkdir libs</code></p>
+
+<ol>
+<li><p>Manually compile &amp; build the following projects:</p>
+
+<ul>
+<li><a href="https://github.com/jedisct1/libsodium">Sodium</a></li>
+<li><a href="https://github.com/chrisballinger/Opus-iOS">Opus for iOS</a></li>
+<li><a href="https://github.com/x2on/OpenSSL-for-iPhone">OpenSSL for iPhone</a></li>
+</ul>
+
+<p>I hope you like reading READMEs.</p></li>
+<li><p>Move the resulting compiled libraries (.a files) into your new <code>libs</code> directory. You should have the following files in there:</p>
+
+<ul>
+<li><code>libcrypto.a</code></li>
+<li><code>libopus.a</code></li>
+<li><code>libsodium.a</code></li>
+<li><code>libssl.a</code></li>
+</ul></li>
+</ol></li>
+<li><p>To be honest, I&rsquo;m not expecting anyone to make it past the last step, so if by some miracle you actually managed to fill <code>libs</code> with the required libs, give yourself a pat on the back. Go make coffee or something.</p></li>
+<li><p>Generate an Xcode project and open it: <code>swift package generate-xcodeproj &amp;&amp; open SwiftDiscord-iOS</code></p></li>
+<li><p>In the Build Settings for the SwiftDiscord target:</p>
+
+<ol>
+<li>Add the following to Valid Architectures: <code>arm64</code> <code>armv7</code> <code>armv7s</code></li>
+<li>Add your <code>libs</code> folder to the Library Search Paths: <code>$(SRCROOT)/libs</code>
+
+<ul>
+<li>You may need to switch from <code>Basic</code> to <code>All</code> Build Settings in order to see this key.</li>
+</ul></li>
+<li>Also add <code>/usr/local/lib</code> to your Library Search Paths, <strong>after</strong> your own <code>libs</code> folder.</li>
+<li>Add <code>/usr/local/include</code> to your Header Search Paths.</li>
+</ol></li>
+<li><p>In the Build Settings for the DiscordOpus target:</p>
+
+<ol>
+<li>Repeat steps 2, 3, and 4 from the previous target, but for this target&rsquo;s settings of course.</li>
+</ol></li>
+<li><p>In the Build Settings for the URI target:</p>
+
+<ol>
+<li>Add your <code>libs</code> folder to the Library Search Paths: <code>$(SRCROOT)/libs</code></li>
+<li>Make sure <code>$(PROJECT_TEMP_DIR)/SymlinkLibs/</code> is still included in the search path and that it is above the <code>libs</code> path you just added.</li>
+<li>Copy the Library Search Paths (just select the row and Cmd+C).</li>
+</ol></li>
+<li><p>In the Build Settings for the Crypto, SMTP, CHTTP, HTTP, Cookies, and WebSockets targets:</p>
+
+<ol>
+<li>Overwrite the Library Search Paths with the paths stored on your clipboard (Cmd+P).</li>
+</ol></li>
+<li><p>Create a new Single View Application target (I&rsquo;ll call it TestiOS but you do you)</p></li>
+<li><p>In the Build Settings for the TestiOS target, copy and paste the Header Search Paths from the SwiftDiscord target </p></li>
+</ol>
+<pre class="highlight plaintext"><code>* Not just the one we added - grab the ones that were there before too
 </code></pre>
 
-<p>It&rsquo;s important to note that we&rsquo;ve added <q>Bot</q> in front of the token. This is tell Discord that this token represents a bot token. This is required unless the token is a user token. If the token is an OAuth token then the token should be prefaced with <q>Bearer</q>. The configuration used in this example turns on the most basic logging. More about the different configurations available can be found on the <a href="./Enums/DiscordClientOption.html">DiscordClientOption</a> page.</p>
+<ol>
+<li><p>In the Build Phases for the TestiOS target:</p>
 
-<p>Once we have the client initialized, it&rsquo;s time to add any delegate methods that we want to listen for.</p>
-<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt">DiscordClient</span><span class="p">,</span> <span class="n">didConnect</span> <span class="nv">connected</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nf">print</span><span class="p">(</span><span class="s">"Bot connected!"</span><span class="p">)</span>
-<span class="p">}</span>
+<ol>
+<li>Add SwiftDiscord to Target Dependencies</li>
+<li>Add <code>libcrypto.a</code>, <code>libopus.a</code>, <code>libsodium.a</code>, and <code>libssl.a</code> under Link Binary with Libraries.</li>
+<li>Create a new Copy Files build phase (there&rsquo;s a + button under the General tab that lets you do this).
 
-<span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt">DiscordClient</span><span class="p">,</span> <span class="n">didCreateMessage</span> <span class="nv">message</span><span class="p">:</span> <span class="kt">DiscordMessage</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="s">"$mycommand"</span> <span class="p">{</span>
-        <span class="n">message</span><span class="o">.</span><span class="n">channel</span><span class="p">?</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="s">"I got your command"</span><span class="p">)</span>
+<ul>
+<li>Set its destination to <q>Frameworks</q></li>
+<li>Add everything in the Products folder (should all be .frameworks) except for TestiOS.app</li>
+</ul></li>
+</ol></li>
+<li><p>Replace your <code>ViewController.swift</code> contents with the following code to make sure everything works correctly:</p>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
+<span class="kd">import</span> <span class="kt">SwiftDiscord</span>
+
+<span class="kd">class</span> <span class="kt">ViewController</span><span class="p">:</span> <span class="kt">UIViewController</span><span class="p">,</span> <span class="kt">DiscordClientDelegate</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">client</span><span class="p">:</span> <span class="kt">DiscordClient</span><span class="o">!</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="kt">DiscordClient</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="s">"some valid token here"</span><span class="p">,</span> <span class="nv">delegate</span><span class="p">:</span> <span class="k">self</span><span class="p">,</span> <span class="nv">configuration</span><span class="p">:</span> <span class="p">[</span><span class="o">.</span><span class="nf">log</span><span class="p">(</span><span class="o">.</span><span class="n">info</span><span class="p">)])</span>
+        <span class="n">client</span><span class="o">.</span><span class="nf">connect</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt">DiscordClient</span><span class="p">,</span> <span class="n">didConnect</span> <span class="nv">connected</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Bot connected!"</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt">DiscordClient</span><span class="p">,</span> <span class="n">didCreateMessage</span> <span class="nv">message</span><span class="p">:</span> <span class="kt">DiscordMessage</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">content</span> <span class="o">==</span> <span class="s">"$mycommand"</span> <span class="p">{</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">channel</span><span class="p">?</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="s">"I got your command"</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt">DiscordClient</span><span class="p">,</span> <span class="n">needsVoiceEncoderForEngine</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt">DiscordVoiceEngine</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">DiscordVoiceEncoder</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kt">DiscordVoiceEncoder</span><span class="p">(</span><span class="nv">opusEncoder</span><span class="p">:</span> <span class="k">try</span> <span class="kt">DiscordOpusEncoder</span><span class="p">(</span><span class="nv">bitrate</span><span class="p">:</span> <span class="mi">128_000</span><span class="p">,</span> <span class="nv">sampleRate</span><span class="p">:</span> <span class="mi">48_000</span><span class="p">,</span> <span class="nv">channels</span><span class="p">:</span> <span class="mi">2</span><span class="p">))</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
-</code></pre>
+</code></pre></li>
+<li><p>Build!</p>
 
-<p>In this code we&rsquo;ve added two delegate methods. The <code>client(_ client: DiscordClient, didConnect connected: Bool)</code> method is called once all shards have connected. It&rsquo;s best to wait until this event is received before trying to do anything with the client, otherwise the client might not be fully populated with Guild and Channel information.</p>
+<ul>
+<li>If you have hundreds of warnings, you may want to run a Product &gt; Clean and restart Xcode.</li>
+</ul></li>
+<li><p>Run!</p></li>
+<li><p>You did it. Somehow. Congratulations!</p></li>
+</ol>
+<h2 id='thanks' class='heading'>Thanks</h2>
 
-<p>The <code>client(_ client: DiscordClient, didCreateMessage message: DiscordMessage)</code> method is called whenever a message is received from the gateway. This particular implemenation just checks if the content of the message is a command, and if it is, sends a response.</p>
-<h2 id='connecting-the-client' class='heading'>Connecting the client</h2>
+<p>I&rsquo;d like to thank the lead developer (nuclearace) for providing guidance throughout the whole journey; without whom I would have undoubtedly never been able to get this working. </p>
 
-<p>Once we&rsquo;ve configured our delegate methods, we&rsquo;re ready to connect to Discord. This is as simple as:</p>
-<pre class="highlight swift"><code><span class="n">client</span><span class="o">.</span><span class="nf">connect</span><span class="p">()</span>
-</code></pre>
+<p>Cheers,</p>
 
-<p>Once the client is done connecting, the connect delegate method will be called and we&rsquo;re good to start interacting with Discord!</p>
-<h2 id='more-detail' class='heading'>More detail?</h2>
+<p><a href="http://twitter.com/nexuist">Andi</a></p>
+<h2 id='troubleshooting' class='heading'>Troubleshooting</h2>
 
-<p>A living bot example can be found <a href="https://github.com/nuclearace/SwiftBot">here</a>. This bot shows more complicated interaction with client such as getting roles for a user, getting guild channels, sending files to Discord and streaming audio to Discord.</p>
+<p>If you experience issues and you are positive you followed the instructions <em>exactly</em> (no, really, if you miss one step you&rsquo;ll probably get 400+ warnings and several build errors), I recommend you <a href="https://github.com/nuclearace/SwiftDiscord/issues/new">file an issue</a> first. You can also talk to me on <a href="(https://twitter.com/nexuist)">Twitter</a>.</p>
+
+<p>Happy Swifting! (is that a thing? I don&rsquo;t know. It is now).</p>
 
           </div>
         </section>
