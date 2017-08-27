@@ -169,6 +169,8 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
         // Cancel any reading we were doing
         pipe.fileHandleForReading.closeFile()
         pipe.fileHandleForWriting.closeFile()
+
+        source.close(flags: .stop)
     }
 
     private func createDispatchIO(for fileDescriptor: Int32) {
