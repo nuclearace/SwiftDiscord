@@ -68,6 +68,15 @@ public enum DiscordVoiceDataSourceStatus : Error {
 ///
 /// It buffers ~5 minutes worth of voice data
 ///
+/// Usage:
+///
+/// ```swift
+/// func client(_ client: DiscordClient, needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource {
+///     return DiscordBufferedVoiceDataSource(opusEncoder: try DiscordOpusEncoder(bitrate: 128_000))
+///     // Somewhere down the line we setup some middleware which will use this source.
+/// }
+/// ```
+///
 open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
     // MARK: Properties
 
@@ -80,11 +89,11 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
     /// The number of packets that must be in the buffer before we start reading more into the buffer.
     public let drainThreshold: Int
 
+    /// The queue for this encoder.
+    public let encoderQueue = DispatchQueue(label: "discordVoiceEncoder.encoderQueue")
+
     /// The Opus encoder.
     public let opusEncoder: DiscordOpusEncoder
-
-    /// A FileHandle for reading a wrapped file.
-    public let wrappedFile: FileHandle?
 
     /// The size of a frame in samples per channel. Needed to calculate the maximum size of a frame.
     public var frameSize = 960
@@ -93,6 +102,9 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
     /// A middleware process that spits out raw PCM for the encoder.
     public var middleware: DiscordEncoderMiddleware?
     #endif
+
+    /// The DispatchIO source for this buffered source.
+    public var source: DispatchIO!
 
     /// What the encoder reads from, and what a consumer writes to to have things encoded into Opus
     public private(set) var pipe: Pipe
@@ -104,12 +116,9 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
         return pipe.fileHandleForWriting
     }
 
-    private let encoderQueue = DispatchQueue(label: "discordVoiceEncoder.encoderQueue")
-
     private var closed = false
     private var done = false
     private var drain = false
-    private var source: DispatchIO!
     private var readBuffer = [[UInt8]]()
 
     // MARK: Initializers
@@ -127,29 +136,7 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
         self.drainThreshold = drainThreshold
         self.pipe = Pipe()
         self.opusEncoder = opusEncoder
-        self.wrappedFile = nil
-        createDispatchIO(for: pipe.fileHandleForReading.fileDescriptor)
-    }
-
-    ///
-    /// Sets up a buffered source around a voice file.
-    ///
-    /// - parameter opusEncoder: The Opus encoder to use.
-    /// - parameter file: A file to buffer around.
-    /// - parameter bufferSize: The max number of voice packets to buffer.
-    /// - parameter drainThreshold: The number of packets that must be in the buffer before we start reading more
-    /// into the buffer.
-    ///
-    public init(opusEncoder: DiscordOpusEncoder,
-                file: URL,
-                bufferSize: Int = 15_000,
-                drainThreshold: Int = 13_500) throws {
-        self.bufferSize = bufferSize
-        self.drainThreshold = drainThreshold
-        self.pipe = Pipe()
-        self.opusEncoder = opusEncoder
-        self.wrappedFile = try FileHandle(forReadingFrom: file)
-        createDispatchIO(for: self.wrappedFile!.fileDescriptor)
+        createDispatchIO()
     }
 
     deinit {
@@ -173,8 +160,13 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
         source.close(flags: .stop)
     }
 
-    private func createDispatchIO(for fileDescriptor: Int32) {
-        self.source = DispatchIO(type: .stream, fileDescriptor: fileDescriptor,
+    ///
+    /// Called when it is time to setup a `DispatchIO` for reading.
+    ///
+    /// Override to attach a custom file descriptor. By default it uses an internal pipe.
+    ///
+    open func createDispatchIO() {
+        self.source = DispatchIO(type: .stream, fileDescriptor: pipe.fileHandleForReading.fileDescriptor,
                                  queue: encoderQueue, cleanupHandler: {code in
             DefaultDiscordLogger.Logger.debug("Source spent: \(code)", type: DiscordBufferedVoiceDataSource.logType)
         })
@@ -290,6 +282,59 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
                 DefaultDiscordLogger.Logger.error("Error encoding bytes", type: DiscordBufferedVoiceDataSource.logType)
             }
         }
+    }
+}
+
+///
+/// A subclass of `DiscordBufferedVoiceDataSource` that buffers a raw audio file.
+///
+/// Usage:
+///
+/// ```swift
+/// func client(_ client: DiscordClient, needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource {
+///     return try DiscordVoiceFileDataSource(opusEncoder: try DiscordOpusEncoder(bitrate: 128_000),
+///                                           file: URL(string: "file://output.raw")!)
+/// }
+/// ```
+///
+open class DiscordVoiceFileDataSource : DiscordBufferedVoiceDataSource {
+    private static let logType = "DiscordVoiceFileDataSource"
+
+    /// A FileHandle for reading the wrapped file.
+    public let wrappedFile: FileHandle
+
+    ///
+    /// Sets up a buffered source around a voice file.
+    ///
+    /// - parameter opusEncoder: The Opus encoder to use.
+    /// - parameter file: A file to buffer around.
+    /// - parameter bufferSize: The max number of voice packets to buffer.
+    /// - parameter drainThreshold: The number of packets that must be in the buffer before we start reading more
+    /// into the buffer.
+    ///
+    public init(opusEncoder: DiscordOpusEncoder,
+                file: URL,
+                bufferSize: Int = 15_000,
+                drainThreshold: Int = 13_500) throws {
+        self.wrappedFile = try FileHandle(forReadingFrom: file)
+
+        super.init(opusEncoder: opusEncoder, bufferSize: bufferSize, drainThreshold: drainThreshold)
+    }
+
+    deinit {
+        DefaultDiscordLogger.Logger.debug("deinit", type: DiscordVoiceFileDataSource.logType)
+    }
+
+    ///
+    /// Called when it is time to setup a `DispatchIO` for reading.
+    ///
+    /// Override to attach a custom file descriptor. By default it uses `wrappedFile`.
+    ///
+    open override func createDispatchIO() {
+        self.source = DispatchIO(type: .stream, fileDescriptor: wrappedFile.fileDescriptor,
+                                 queue: encoderQueue, cleanupHandler: {code in
+            DefaultDiscordLogger.Logger.debug("Source spent: \(code)", type: DiscordVoiceFileDataSource.logType)
+        })
     }
 }
 

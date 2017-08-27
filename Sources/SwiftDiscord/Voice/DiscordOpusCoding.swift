@@ -85,7 +85,7 @@ open class DiscordOpusEncoder : DiscordOpusCodeable {
     /// - parameter sampleRate: The sample rate for the encoder. Discord expects this to be 48k.
     /// - parameter channels: The number of channels in the stream to encode, should always be 2.
     ///
-    public init(bitrate: Int, sampleRate: Int, channels: Int, vbr: Bool = false) throws {
+    public init(bitrate: Int, sampleRate: Int = 48_000, channels: Int = 2, vbr: Bool = false) throws {
         self.bitrate = bitrate
         self.sampleRate = sampleRate
         self.channels = channels
