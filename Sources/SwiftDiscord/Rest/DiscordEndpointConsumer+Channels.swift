@@ -203,21 +203,36 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getMessages(for channelId: ChannelID, options: [DiscordEndpoint.Options.GetMessage] = [],
+    @available(*, deprecated, message: "Replaced with getMessages(channel:selection:limit:callback:)")
+    public func getMessages(for channelId: ChannelID, options: [DiscordEndpoint.Options.GetMessage],
                             callback: @escaping ([DiscordMessage]) -> ()) {
-        var getParams: [String: String] = [:]
-
+        var selection: DiscordEndpoint.Options.MessageSelection? = nil
+        var limit: Int? = nil
         for option in options {
             switch option {
             case let .after(message):
-                getParams["after"] = String(describing: message.id)
+                selection = .after(message.id)
             case let .around(message):
-                getParams["around"] = String(describing: message.id)
+                selection = .around(message.id)
             case let .before(message):
-                getParams["before"] = String(describing: message.id)
+                selection = .before(message.id)
             case let .limit(number):
-                getParams["limit"] = String(number)
+                limit = number
             }
+        }
+        getMessages(for: channelId, selection: selection, limit: limit, callback: callback)
+    }
+
+    /// Default implementation
+    public func getMessages(for channelId: ChannelID, selection: DiscordEndpoint.Options.MessageSelection? = nil,
+                            limit: Int? = nil, callback: @escaping ([DiscordMessage]) -> ()) {
+        var getParams: [String: String] = [:]
+
+        if let (selectionType, selectionMessage) = selection?.messageParam {
+            getParams[selectionType] = String(describing: selectionMessage)
+        }
+        if let limit = limit {
+            getParams["limit"] = String(limit)
         }
 
         let requestCallback: DiscordRequestCallback = {data, response, error in
