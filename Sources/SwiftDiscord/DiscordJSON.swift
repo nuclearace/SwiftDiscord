@@ -45,8 +45,22 @@ enum JSON {
     }
 
     static func jsonFromResponse(data: Data?, response: HTTPURLResponse?) -> JSON? {
-        guard let data = data, let response = response, (response.statusCode == 200 || response.statusCode == 201),
-              let stringData = String(data: data, encoding: .utf8) else {
+        guard let response = response else {
+            DefaultDiscordLogger.Logger.error("No response from jsonFromResponse", type: "JSON")
+
+            return nil
+        }
+
+        guard let data = data, let stringData = String(data: data, encoding: .utf8) else {
+            DefaultDiscordLogger.Logger.error("Not string data? Response code: \(response.statusCode)", type: "JSON")
+
+            return nil
+        }
+
+        guard response.statusCode == 200 || response.statusCode == 201 else {
+            DefaultDiscordLogger.Logger.error("Invalid response code \(response.statusCode)", type: "JSON")
+            DefaultDiscordLogger.Logger.error("Response: \(stringData)", type: "JSON")
+
             return nil
         }
 
