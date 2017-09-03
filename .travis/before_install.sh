@@ -9,7 +9,7 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
 else
     # Vapor's scripts take care of Swift installation
     eval "$(curl -sL https://apt.vapor.sh)"
-    sudo apt-get install vapor
+    sudo apt-get install swift vapor
 
     # Opus
     sudo apt-get install libopus-dev
