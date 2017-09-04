@@ -367,7 +367,6 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// Currently unused in VoiceEngines.
     public func handleDispatch(_ payload: DiscordGatewayPayload) { }
 
-
     ///
     /// Handles the hello event.
     ///
@@ -411,6 +410,13 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             DefaultDiscordLogger.Logger.debug("Got speaking \(payload)", type: DiscordVoiceEngine.logType)
         case .hello:
             handleHello(payload)
+        case .heartbeatAck:
+            DefaultDiscordLogger.Logger.debug("Got heartbeat ack", type: DiscordVoiceEngine.logType)
+        case .resumed:
+            handleResumed(payload)
+        case .clientDisconnect:
+            // Should we tell someone about this?
+            DefaultDiscordLogger.Logger.debug("Someone left voice channel \(payload)", type: DiscordVoiceEngine.logType)
         default:
             DefaultDiscordLogger.Logger.debug("Unhandled voice payload \(payload)", type: DiscordVoiceEngine.logType)
         }
@@ -433,8 +439,15 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         startUDP()
     }
 
-    /// Currently unused in VoiceEngines.
-    public func handleResumed(_ payload: DiscordGatewayPayload) { }
+    ///
+    /// Handles the resumed event.
+    ///
+    /// - parameter payload: The payload for the event.
+    ///
+    public func handleResumed(_ payload: DiscordGatewayPayload) {
+        // TODO implement voice resume
+        DefaultDiscordLogger.Logger.debug("Should handle resumed \(payload)", type: DiscordVoiceEngine.logType)
+    }
 
     private func handleVoiceSessionDescription(with payload: DiscordGatewayPayloadData) {
         guard case let .object(voiceInformation) = payload,

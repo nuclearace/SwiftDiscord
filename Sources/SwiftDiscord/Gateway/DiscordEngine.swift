@@ -248,7 +248,7 @@ open class DiscordEngine : DiscordEngineSpec {
             sendPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
         case .heartbeatAck:
             heartbeatQueue.sync { self.pongsMissed = 0 }
-            DefaultDiscordLogger.Logger.debug("Got heartback ack", type: logType)
+            DefaultDiscordLogger.Logger.debug("Got heartbeat ack", type: logType)
         default:
             error(message: "Unhandled payload: \(payload.code)")
         }
