@@ -367,7 +367,12 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// Currently unused in VoiceEngines.
     public func handleDispatch(_ payload: DiscordGatewayPayload) { }
 
-    /// Currently unused in VoiceEngines.
+
+    ///
+    /// Handles the hello event.
+    ///
+    /// - parameter payload: The dispatch payload
+    ///
     public func handleHello(_ payload: DiscordGatewayPayload) {
         DefaultDiscordLogger.Logger.debug("Handling hello \(payload)", type: DiscordVoiceEngine.logType)
 
