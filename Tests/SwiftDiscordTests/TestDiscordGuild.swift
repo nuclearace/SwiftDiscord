@@ -135,6 +135,7 @@ public class TestDiscordGuild : XCTestCase {
         XCTAssertNotNil(roles.first(where: { $0.id == Snowflake(role2["id"] as! String)! }), "roles should find role2")
     }
 
+    #if PERFTEST
     func testCreatingGuildWithALargeNumberOfMembersIsConsistent() {
         tGuild["members"] = createGuildMemberObjects(n: 100_000)
 
@@ -160,11 +161,12 @@ public class TestDiscordGuild : XCTestCase {
         XCTAssertEqual(guild.presences.count, 100_000, "init should create 100_000 presences")
         XCTAssertEqual(guild.presences[5000]?.user.id, 5000, "init should create presences correctly")
     }
+    #endif
 
     var tGuild: [String: Any]!
 
     public static var allTests: [(String, (TestDiscordGuild) -> () -> ())] {
-        return [
+        var tests = [
             ("testCreatingGuildSetsId", testCreatingGuildSetsId),
             ("testCreatingGuildSetsName", testCreatingGuildSetsName),
             ("testCreatingGuildSetsDefaultMessageNotifications", testCreatingGuildSetsDefaultMessageNotifications),
@@ -180,9 +182,16 @@ public class TestDiscordGuild : XCTestCase {
             ("testCreatingGuildSetsVerificationLevel", testCreatingGuildSetsVerificationLevel),
             ("testCreatingGuildSetsUnavailable", testCreatingGuildSetsUnavailable),
             ("testGuildCorrectlyGetsRolesForMember", testGuildCorrectlyGetsRolesForMember),
+        ]
+
+        #if PERFTEST
+        tests += [
             ("testCreatingGuildWithALargeNumberOfMembersIsConsistent", testCreatingGuildWithALargeNumberOfMembersIsConsistent),
             ("testCreatingGuildWithALargeNumberOfPresencesIsConsistent", testCreatingGuildWithALargeNumberOfPresencesIsConsistent),
         ]
+        #endif
+
+        return tests
     }
 
     public override func setUp() {
