@@ -54,7 +54,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
     /// The voice url
     public var connectURL: String {
-        return "wss://" + voiceServerInformation.endpoint.components(separatedBy: ":")[0]
+        return "wss://" + voiceServerInformation.endpoint.components(separatedBy: ":")[0] + "?v=3"
     }
 
     /// The connect UUID of this WebSocketable.
@@ -323,9 +323,14 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         do {
             _sendVoiceData(try source.engineNeedsData(self))
+        } catch DiscordVoiceDataSourceStatus.noData {
+            DefaultDiscordLogger.Logger.debug("No data", type: DiscordVoiceEngine.logType)
+
+            if speaking {
+                _sendSpeaking(false)
+            }
         } catch DiscordVoiceDataSourceStatus.done {
-            DefaultDiscordLogger.Logger.debug("Voice source done, sending silence",
-                                              type: DiscordVoiceEngine.logType)
+            DefaultDiscordLogger.Logger.debug("Voice source done, sending silence", type: DiscordVoiceEngine.logType)
 
             sendSilence(previousSource: nil)
         } catch let DiscordVoiceDataSourceStatus.silenceDone(source) {
@@ -343,15 +348,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
                 // re-add the old source for playback
                 self.source = source
             }
-        } catch DiscordVoiceDataSourceStatus.noData {
-            DefaultDiscordLogger.Logger.debug("No data", type: DiscordVoiceEngine.logType)
-
-            if speaking {
-                _sendSpeaking(false)
-            }
         } catch {
-            DefaultDiscordLogger.Logger.error("Error getting voice data: \(error)",
-                                              type: DiscordVoiceEngine.logType)
+            DefaultDiscordLogger.Logger.error("Error getting voice data: \(error)", type: DiscordVoiceEngine.logType)
         }
     }
 
@@ -370,7 +368,19 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     public func handleDispatch(_ payload: DiscordGatewayPayload) { }
 
     /// Currently unused in VoiceEngines.
-    public func handleHello(_ payload: DiscordGatewayPayload) { }
+    public func handleHello(_ payload: DiscordGatewayPayload) {
+        DefaultDiscordLogger.Logger.debug("Handling hello \(payload)", type: DiscordVoiceEngine.logType)
+
+        guard case let .object(helloPayload) = payload.payload,
+              let heartbeat = helloPayload["heartbeat_interval"] as? Int else {
+            DefaultDiscordLogger.Logger.error("Error extracting heartbeat info \(payload)",
+                                              type: DiscordVoiceEngine.logType)
+
+            return
+        }
+
+        startHeartbeat(milliseconds: Int(Double(heartbeat) * 0.75))
+    }
 
     ///
     /// Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
@@ -394,6 +404,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             }
         case .speaking:
             DefaultDiscordLogger.Logger.debug("Got speaking \(payload)", type: DiscordVoiceEngine.logType)
+        case .hello:
+            handleHello(payload)
         default:
             DefaultDiscordLogger.Logger.debug("Unhandled voice payload \(payload)", type: DiscordVoiceEngine.logType)
         }
@@ -401,7 +413,6 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
     private func handleReady(with payload: DiscordGatewayPayloadData) {
         guard case let .object(voiceInformation) = payload,
-              let heartbeatInterval = voiceInformation["heartbeat_interval"] as? Int,
               let ssrc = voiceInformation["ssrc"] as? Int,
               let udpPort = voiceInformation["port"] as? Int,
               let modes = voiceInformation["modes"] as? [String] else {
@@ -413,7 +424,6 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         self.udpPort = udpPort
         self.modes = modes
         self.ssrc = UInt32(ssrc)
-        self.heartbeatInterval = heartbeatInterval
 
         startUDP()
     }
@@ -512,7 +522,6 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         ]
 
         sendPayload(DiscordGatewayPayload(code: .voice(.selectProtocol), payload: .object(payloadData)))
-        startHeartbeat(seconds: heartbeatInterval / 1000)
         connected = true
 
         // No need to get ask for a source, we send silence before we get this step,
@@ -534,7 +543,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         sendPayload(DiscordGatewayPayload(code: .voice(.heartbeat), payload: .integer(currentUnixTime)))
 
-        let time = DispatchTime.now() + Double(heartbeatInterval)
+        let time = DispatchTime.now() + .milliseconds(heartbeatInterval)
 
         heartbeatQueue.asyncAfter(deadline: time) {[weak self] in self?.sendHeartbeat() }
     }
@@ -653,8 +662,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     ///
     /// - parameter seconds: The heartbeat interval
     ///
-    public func startHeartbeat(seconds: Int) {
-        heartbeatInterval = seconds
+    public func startHeartbeat(milliseconds: Int) {
+        heartbeatInterval = milliseconds
 
         sendHeartbeat()
     }

@@ -268,7 +268,7 @@ open class DiscordEngine : DiscordEngineSpec {
         heartbeatQueue.sync { self.pongsMissed = 0 }
         connected = true
 
-        startHeartbeat(seconds: milliseconds / 1000)
+        startHeartbeat(milliseconds: milliseconds)
         delegate?.shard(self, gotHelloWithPayload: payload)
     }
 
@@ -358,7 +358,7 @@ open class DiscordEngine : DiscordEngineSpec {
         pongsMissed += 1
         sendPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
 
-        let time = DispatchTime.now() + Double(heartbeatInterval)
+        let time = DispatchTime.now() + .milliseconds(heartbeatInterval)
 
         heartbeatQueue.asyncAfter(deadline: time) {[weak self, uuid = connectUUID] in
             guard let this = self, uuid == this.connectUUID else { return }
@@ -395,8 +395,8 @@ open class DiscordEngine : DiscordEngineSpec {
     ///
     /// - parameter seconds: The heartbeat interval
     ///
-    public func startHeartbeat(seconds: Int) {
-        heartbeatInterval = seconds
+    public func startHeartbeat(milliseconds: Int) {
+        heartbeatInterval = milliseconds
 
         sendHeartbeat()
     }
