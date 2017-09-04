@@ -436,7 +436,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     /// - parameter manager: The manager.
     /// - parameter engine: The engine that's ready.
-    /// *
+    ///
     open func voiceManager(_ manager: DiscordVoiceManager, engineIsReady engine: DiscordVoiceEngine) {
         handleQueue.async {
             self.delegate?.client(self, isReadyToSendVoiceWithEngine: engine)
@@ -897,7 +897,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// Override to provide additional customization around this event.
     ///
     /// - parameter with: The data from the event
-    /// *
+    ///
     open func handleVoiceServerUpdate(with data: [String: Any]) {
         DefaultDiscordLogger.Logger.log("Handling voice server update", type: logType)
         DefaultDiscordLogger.Logger.verbose("Voice server update: \(data)", type: logType)
