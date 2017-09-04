@@ -33,7 +33,7 @@ public protocol DiscordEngineHeartbeatable {
     ///
     /// Starts sending heartbeats. After calling this heartbeating should be automatic.
     ///
-    /// - parameter seconds: The number of seconds between heartbeats
+    /// - parameter milliseconds: The number of milliseconds between heartbeats
     ///
     func startHeartbeat(milliseconds: Int)
 

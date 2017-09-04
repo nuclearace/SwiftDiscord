@@ -665,7 +665,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     ///
     /// Starts the engine's heartbeat. You should call this method when you know the interval that Discord expects.
     ///
-    /// - parameter seconds: The heartbeat interval
+    /// - parameter milliseconds: The heartbeat interval
     ///
     public func startHeartbeat(milliseconds: Int) {
         heartbeatInterval = milliseconds
