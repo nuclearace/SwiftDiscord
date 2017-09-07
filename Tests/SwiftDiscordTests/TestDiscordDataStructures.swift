@@ -5,6 +5,19 @@
 import XCTest
 @testable import SwiftDiscord
 
+extension DiscordGatewayPayloadData: Equatable {
+    public static func ==(lhs: DiscordGatewayPayloadData, rhs: DiscordGatewayPayloadData) -> Bool {
+        switch (lhs, rhs) {
+        case let (.bool(lhsbool), .bool(rhsbool)):
+            return lhsbool == rhsbool
+        case let (.integer(lhsint), .integer(rhsint)):
+            return lhsint == rhsint
+        default:
+            return false
+        }
+    }
+}
+
 public class TestDiscordDataStructures : XCTestCase {
     func testRoleJSONification() {
         let role1 = DiscordRole(id: 324, color: 43, hoist: false, managed: true, mentionable: false, name: "Test Role", permissions: [.addReactions], position: 4)
@@ -98,12 +111,24 @@ public class TestDiscordDataStructures : XCTestCase {
         XCTAssertFalse(nilJSONTest.contains("null"), "JSON-encoded embed should not have any null fields")
     }
 
+    func testDiscordGatewayPayloadData() {
+        let dic = try! JSONSerialization.jsonObject(with: "[true, false, 0, 1, 2, -1]".data(using: .utf8)!, options: []) as! [Any]
+        let payloadData = dic.map(DiscordGatewayPayloadData.dataFromDictionary)
+        XCTAssertEqual(payloadData[0], DiscordGatewayPayloadData.bool(true), "Discord Gateway Payload should unwrap true")
+        XCTAssertEqual(payloadData[1], DiscordGatewayPayloadData.bool(false), "Discord Gateway Payload should unwrap false")
+        XCTAssertEqual(payloadData[2], DiscordGatewayPayloadData.integer(0), "Discord Gateway Payload should unwrap 0")
+        XCTAssertEqual(payloadData[3], DiscordGatewayPayloadData.integer(1), "Discord Gateway Payload should unwrap 1")
+        XCTAssertEqual(payloadData[4], DiscordGatewayPayloadData.integer(2), "Discord Gateway Payload should unwrap 2")
+        XCTAssertEqual(payloadData[5], DiscordGatewayPayloadData.integer(-1), "Discord Gateway Payload should unwrap -1")
+    }
+
     public static var allTests: [(String, (TestDiscordDataStructures) -> () -> ())] {
         return [
             ("testRoleJSONification", testRoleJSONification),
             ("testPermissionOverwriteJSONification", testPermissionOverwriteJSONification),
             ("testGameJSONification", testGameJSONification),
             ("testEmbedJSONification", testEmbedJSONification),
+            ("testDiscordGatewayPayloadData", testDiscordGatewayPayloadData),
         ]
     }
 
