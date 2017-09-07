@@ -80,6 +80,11 @@ extension URL : JSONRepresentable {
         return absoluteString
     }
 }
+extension Date : JSONRepresentable {
+    func jsonValue() throws -> JSONRepresentable {
+        return DiscordDateFormatter.string(from: self)
+    }
+}
 
 extension JSONRepresentable {
     func jsonValue() throws -> JSONRepresentable {

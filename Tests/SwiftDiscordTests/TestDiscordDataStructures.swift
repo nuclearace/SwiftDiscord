@@ -51,15 +51,18 @@ public class TestDiscordDataStructures : XCTestCase {
         let dummyIconB = URL(string: "https://cdn.discordapp.com/embed/avatars/1.png")!
         let dummyURL = URL(string: "https://discordapp.com")!
 
-        let embed1 = DiscordEmbed(title: "Title",
-                                  description: "Description",
-                                  author: DiscordEmbed.Author(name: "Author", iconURL: dummyIconA, url: dummyURL, proxyIconURL: dummyIconB),
-                                  url: dummyURL,
-                                  image: DiscordEmbed.Image(url: dummyIconA, width: 3245, height: 1493),
-                                  thumbnail: DiscordEmbed.Thumbnail(url: dummyIconB, width: 2934, height: 9534, proxyURL: dummyIconA),
-                                  color: 423,
-                                  footer: DiscordEmbed.Footer(text: "Footer", iconUrl: dummyIconB),
-                                  fields: [DiscordEmbed.Field(name: "Field Name", value: "Field Value", inline: true)])
+        let embed1 = DiscordEmbed(
+            title: "Title",
+            description: "Description",
+            author: DiscordEmbed.Author(name: "Author", iconURL: dummyIconA, url: dummyURL, proxyIconURL: dummyIconB),
+            url: dummyURL,
+            image: DiscordEmbed.Image(url: dummyIconA, width: 3245, height: 1493),
+            timestamp: Date(timeIntervalSince1970: 429384.25), // Must be losslessly convertible to RFC3339
+            thumbnail: DiscordEmbed.Thumbnail(url: dummyIconB, width: 2934, height: 9534, proxyURL: dummyIconA),
+            color: 423,
+            footer: DiscordEmbed.Footer(text: "Footer", iconUrl: dummyIconB),
+            fields: [DiscordEmbed.Field(name: "Field Name", value: "Field Value", inline: true)]
+        )
         let embed2 = DiscordEmbed(embedObject: embed1.json)
         var currentCompare = "embed1 and embed2"
         func check<T: Equatable>(_ lhs: T?, _ rhs: T?, _ name: String) {
@@ -76,6 +79,7 @@ public class TestDiscordDataStructures : XCTestCase {
             check(embed1.image?.url, embed2.image?.url, "Image URL")
             check(embed1.image?.width, embed2.image?.width, "Image width")
             check(embed1.image?.height, embed2.image?.height, "Image height")
+            check(embed1.timestamp, embed2.timestamp, "Timestamp")
             check(embed1.thumbnail?.url, embed2.thumbnail?.url, "Thumbnail URL")
             check(embed1.thumbnail?.width, embed2.thumbnail?.width, "Thumbnail width")
             check(embed1.thumbnail?.height, embed2.thumbnail?.height, "Thumbnail height")
