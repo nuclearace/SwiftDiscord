@@ -346,7 +346,7 @@ public struct DiscordEmbed : JSONAble {
         /// - parameter text: The text of this field.
         /// - parameter iconUrl: The iconUrl of this field.
         ///
-        public init(text: String?, iconUrl: URL?) {
+        public init(text: String?, iconUrl: URL? = nil) {
             self.text = text
             self.iconUrl = iconUrl
             self.proxyIconUrl = nil
@@ -593,6 +593,16 @@ extension DiscordEmbed.Thumbnail {
         proxyUrl = URL(string: thumbnailObject.get("proxy_url", or: ""))
         url = URL(string: thumbnailObject.get("url", or: "")) ?? URL.localhost
         width = thumbnailObject.get("width", or: 0)
+    }
+}
+
+extension DiscordEmbed.Video {
+    init?(videoObject: [String: Any]?) {
+        guard let videoObject = videoObject else { return nil }
+
+        height = videoObject.get("height", or: 0)
+        url = videoObject.get("url", as: String.self).flatMap(URL.init) ?? URL.localhost
+        width = videoObject.get("width", or: 0)
     }
 }
 
