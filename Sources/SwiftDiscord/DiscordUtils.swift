@@ -25,9 +25,13 @@ enum Either<L, R> {
 
 typealias JSONArray = [[String: Any]]
 
-extension Dictionary {
+extension Dictionary where Value == Any {
     func get<T>(_ value: Key, or default: T) -> T {
         return self[value] as? T ?? `default`
+    }
+
+    func get<T>(_ value: Key, as type: T.Type) -> T? {
+        return self[value] as? T
     }
 }
 
@@ -97,6 +101,10 @@ class DiscordDateFormatter {
 
     static func format(_ string: String) -> Date? {
         return formatter.RFC3339DateFormatter.date(from: string)
+    }
+
+    static func string(from date: Date) -> String {
+        return formatter.RFC3339DateFormatter.string(from: date)
     }
 }
 

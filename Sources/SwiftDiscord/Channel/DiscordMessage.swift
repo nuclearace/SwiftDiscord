@@ -346,7 +346,7 @@ public struct DiscordEmbed : JSONAble {
         /// - parameter text: The text of this field.
         /// - parameter iconUrl: The iconUrl of this field.
         ///
-        public init(text: String?, iconUrl: URL?) {
+        public init(text: String?, iconUrl: URL? = nil) {
             self.text = text
             self.iconUrl = iconUrl
             self.proxyIconUrl = nil
@@ -442,6 +442,21 @@ public struct DiscordEmbed : JSONAble {
         }
     }
 
+    /// Represents the video of an embed.
+    /// Note: Discord does not accept these, so they are read-only
+    public struct Video : JSONAble {
+        var shouldIncludeNilsInJSON: Bool { return false }
+
+        /// The height of this video
+        public let height: Int
+
+        /// The url for this video
+        public let url: URL
+
+        /// The width of this video
+        public let width: Int
+    }
+
     // MARK: Properties
 
     /// The author of this embed.
@@ -465,6 +480,9 @@ public struct DiscordEmbed : JSONAble {
     /// The thumbnail of this embed.
     public var thumbnail: Thumbnail?
 
+    /// The timestamp of this embed.
+    public var timestamp: Date?
+
     /// The title of this embed.
     public var title: String?
 
@@ -473,6 +491,10 @@ public struct DiscordEmbed : JSONAble {
 
     /// The url of this embed.
     public var url: URL?
+
+    /// The video of this embed.
+    /// This is read-only, as bots cannot embed videos
+    public var video: Video?
 
     /// The embed's fields
     public var fields: [Field]
@@ -487,6 +509,7 @@ public struct DiscordEmbed : JSONAble {
     /// - parameter author: The author of this embed.
     /// - parameter url: The url for this embed, if there is one.
     /// - parameter image: The image for the embed, if there is one.
+    /// - parameter timestamp: The timestamp of this embed, if there is one.
     /// - parameter thumbnail: The thumbnail of this embed, if there is one.
     /// - parameter color: The color of this embed.
     /// - parameter footer: The footer for this embed, if there is one.
@@ -497,6 +520,7 @@ public struct DiscordEmbed : JSONAble {
                 author: Author? = nil,
                 url: URL? = nil,
                 image: Image? = nil,
+                timestamp: Date? = nil,
                 thumbnail: Thumbnail? = nil,
                 color: Int? = nil,
                 footer: Footer? = nil,
@@ -506,6 +530,7 @@ public struct DiscordEmbed : JSONAble {
         self.description = description
         self.provider = nil
         self.thumbnail = thumbnail
+        self.timestamp = timestamp
         self.type = "rich"
         self.url = url
         self.image = image
@@ -518,6 +543,7 @@ public struct DiscordEmbed : JSONAble {
         author = Author(authorObject: embedObject.get("author", or: nil))
         description = embedObject.get("description", or: nil)
         provider = Provider(providerObject: embedObject.get("provider", or: nil))
+        timestamp = embedObject.get("timestamp", as: String.self).flatMap(DiscordDateFormatter.format)
         thumbnail = Thumbnail(thumbnailObject: embedObject.get("thumbnail", or: nil))
         title = embedObject.get("title", or: nil)
         type = embedObject.get("type", or: "")
@@ -526,6 +552,7 @@ public struct DiscordEmbed : JSONAble {
         fields = Field.fieldsFromArray(embedObject.get("fields", or: []))
         color = embedObject.get("color", or: nil)
         footer = Footer(footerObject: embedObject.get("footer", or: nil))
+        video = Video(videoObject: embedObject.get("video", or: nil))
     }
 
     static func embedsFromArray(_ embedsArray: [[String: Any]]) -> [DiscordEmbed] {
@@ -593,6 +620,16 @@ extension DiscordEmbed.Thumbnail {
         proxyUrl = URL(string: thumbnailObject.get("proxy_url", or: ""))
         url = URL(string: thumbnailObject.get("url", or: "")) ?? URL.localhost
         width = thumbnailObject.get("width", or: 0)
+    }
+}
+
+extension DiscordEmbed.Video {
+    init?(videoObject: [String: Any]?) {
+        guard let videoObject = videoObject else { return nil }
+
+        height = videoObject.get("height", or: 0)
+        url = videoObject.get("url", as: String.self).flatMap(URL.init) ?? URL.localhost
+        width = videoObject.get("width", or: 0)
     }
 }
 
