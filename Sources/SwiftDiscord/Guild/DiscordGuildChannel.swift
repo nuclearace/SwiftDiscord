@@ -23,6 +23,9 @@ public protocol DiscordGuildChannel : DiscordChannel {
     /// The name of this channel.
     var name: String { get }
 
+    /// The parent category for this channel.
+    var parentId: ChannelID? { get }
+
     /// The position of this channel. Mostly for UI purpose.
     var position: Int { get }
 
@@ -175,6 +178,9 @@ public struct DiscordGuildTextChannel : DiscordTextChannel, DiscordGuildChannel 
     /// The name of this channel.
     public var name: String
 
+    /// The parent category for this channel.
+    public var parentId: ChannelID?
+
     /// The permissions specifics to this channel.
     public var permissionOverwrites: [OverwriteID: DiscordPermissionOverwrite]
 
@@ -193,6 +199,7 @@ public struct DiscordGuildTextChannel : DiscordTextChannel, DiscordGuildChannel 
             guildChannelObject.get("permission_overwrites", or: JSONArray()))
         position = guildChannelObject.get("position", or: 0)
         topic = guildChannelObject.get("topic", or: "")
+        parentId = Snowflake(guildChannelObject.get("parent_id", or: ""))
         self.client = client
     }
 }
@@ -216,6 +223,9 @@ public struct DiscordGuildVoiceChannel : DiscordGuildChannel {
     /// The name of this channel.
     public var name: String
 
+    /// The parent category for this channel.
+    public var parentId: ChannelID?
+
     /// The permissions specifics to this channel.
     public var permissionOverwrites: [OverwriteID: DiscordPermissionOverwrite]
 
@@ -234,6 +244,42 @@ public struct DiscordGuildVoiceChannel : DiscordGuildChannel {
             guildChannelObject.get("permission_overwrites", or: JSONArray()))
         position = guildChannelObject.get("position", or: 0)
         userLimit = guildChannelObject.get("user_limit", or: 0) as Int
+        parentId = Snowflake(guildChannelObject.get("parent_id", or: ""))
+        self.client = client
+    }
+}
+
+// TODO make this this is correct when category types are documented.
+/// A Category channel.
+public struct DiscordGuildCategoryChannel : DiscordGuildChannel {
+    /// The id for this category.
+    public let id: ChannelID
+
+    /// The id for this channel category.
+    public let guildId: GuildID
+
+    /// The name for this channel.
+    public let name: String
+
+    /// The parent category of this channel.
+    public let parentId = nil as ChannelID?
+
+    /// The position of this channel.
+    public let position: Int
+
+    /// The permission overwrites for this channel.
+    public let permissionOverwrites: [OverwriteID: DiscordPermissionOverwrite]
+
+    /// Reference to the client.
+    public weak var client: DiscordClient?
+
+    init(categoryObject: [String: Any], guildID: GuildID?, client: DiscordClient?) {
+        id = categoryObject.get("id", or: 0)
+        guildId = guildID ?? Snowflake(categoryObject["guild_id"] as? String) ?? 0
+        name = categoryObject.get("name", or: "")
+        permissionOverwrites = DiscordPermissionOverwrite.overwritesFromArray(
+            categoryObject.get("permission_overwrites", or: JSONArray()))
+        position = categoryObject.get("position", or: 0)
         self.client = client
     }
 }
