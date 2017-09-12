@@ -251,7 +251,7 @@ public struct DiscordGuildVoiceChannel : DiscordGuildChannel {
 
 // TODO make this this is correct when category types are documented.
 /// A Category channel.
-public struct DiscordGuildCategoryChannel : DiscordGuildChannel {
+public struct DiscordGuildChannelCategory: DiscordGuildChannel {
     /// The id for this category.
     public let id: ChannelID
 

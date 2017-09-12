@@ -192,7 +192,7 @@ func channelFromObject(_ object: [String: Any], withClient client: DiscordClient
     case .voice:    return DiscordGuildVoiceChannel(guildChannelObject: object, guildID: nil, client: client)
     case .direct:   return DiscordDMChannel(dmReadyObject: object, client: client)
     case .groupDM:  return DiscordGroupDMChannel(dmReadyObject: object, client: client)
-    case .category: return DiscordGuildCategoryChannel(categoryObject: object, guildID: nil, client: client)
+    case .category: return DiscordGuildChannelCategory(categoryObject: object, guildID: nil, client: client)
     }
 }
 
