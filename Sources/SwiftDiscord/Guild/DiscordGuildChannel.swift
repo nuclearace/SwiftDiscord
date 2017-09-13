@@ -249,9 +249,9 @@ public struct DiscordGuildVoiceChannel : DiscordGuildChannel {
     }
 }
 
-// TODO make this this is correct when category types are documented.
+// TODO make sure this is correct when category types are documented.
 /// A Category channel.
-public struct DiscordGuildChannelCategory: DiscordGuildChannel {
+public struct DiscordGuildChannelCategory : DiscordGuildChannel {
     /// The id for this category.
     public let id: ChannelID
 
@@ -267,6 +267,7 @@ public struct DiscordGuildChannelCategory: DiscordGuildChannel {
     /// The position of this channel.
     public let position: Int
 
+    // TODO when permissions here start affecting child channels, fix permissions
     /// The permission overwrites for this channel.
     public let permissionOverwrites: [OverwriteID: DiscordPermissionOverwrite]
 
