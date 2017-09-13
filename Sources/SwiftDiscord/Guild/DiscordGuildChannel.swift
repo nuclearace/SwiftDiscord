@@ -267,7 +267,8 @@ public struct DiscordGuildChannelCategory : DiscordGuildChannel {
     /// The position of this channel.
     public let position: Int
 
-    // TODO when permissions here start affecting child channels, fix permissions
+    // TODO if permissions here start affecting child channels, fix permissions. TODO Currently it looks like
+    // Discord syncs permissions with child channels and child permissions are what matters.
     /// The permission overwrites for this channel.
     public let permissionOverwrites: [OverwriteID: DiscordPermissionOverwrite]
 
