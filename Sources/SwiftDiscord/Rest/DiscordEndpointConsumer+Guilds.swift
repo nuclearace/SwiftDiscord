@@ -72,7 +72,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 return
             }
 
-            callback?(guildChannelFromObject(channel, guildID: guildId))
+            callback?(guildChannel(fromObject: channel, guildID: guildId))
         }
 
         rateLimiter.executeRequest(endpoint: .guildChannels(guild: guildId),
@@ -215,7 +215,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 return
             }
 
-            callback(guildChannelsFromArray(channels as! [[String: Any]], guildID: guildId).map({ $0.value }))
+            callback(guildChannels(fromArray: channels as! [[String: Any]], guildID: guildId).map({ $0.value }))
         }
 
         rateLimiter.executeRequest(endpoint: .guildChannels(guild: guildId),
@@ -376,7 +376,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 return
             }
 
-            callback?(Array(guildChannelsFromArray(channels as! [[String: Any]], guildID: guildId).values))
+            callback?(Array(guildChannels(fromArray: channels as! [[String: Any]], guildID: guildId).values))
         }
 
         rateLimiter.executeRequest(endpoint: .guildChannels(guild: guildId),

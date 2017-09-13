@@ -104,7 +104,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 
     init(guildObject: [String: Any], client: DiscordClient?) {
         id = Snowflake(guildObject["id"] as? String) ?? 0
-        channels = guildChannelsFromArray(guildObject.get("channels", or: JSONArray()), guildID: id, client: client)
+        channels = guildChannels(fromArray: guildObject.get("channels", or: JSONArray()), guildID: id, client: client)
         defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
         embedEnabled = guildObject.get("embed_enabled", or: false)
         embedChannelId = Snowflake(guildObject["embed_channel_id"] as? String) ?? 0

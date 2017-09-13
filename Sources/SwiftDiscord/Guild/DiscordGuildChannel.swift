@@ -136,21 +136,36 @@ extension DiscordGuildChannel {
     }
 }
 
-func guildChannelFromObject(_ channelObject: [String: Any], guildID: GuildID?, client: DiscordClient? = nil) -> DiscordGuildChannel {
-    if channelObject["type"] as? Int == DiscordChannelType.voice.rawValue {
-        return DiscordGuildVoiceChannel(guildChannelObject: channelObject, guildID: guildID, client: client)
-    } else {
+func guildChannel(fromObject channelObject: [String: Any],
+                  guildID: GuildID?,
+                  client: DiscordClient? = nil) -> DiscordGuildChannel? {
+    guard let typeInt = channelObject["type"] as? Int,
+          let type = DiscordChannelType(rawValue: typeInt) else {
+        return nil
+    }
+
+    switch type {
+    case .text:
         return DiscordGuildTextChannel(guildChannelObject: channelObject, guildID: guildID, client: client)
+    case .voice:
+        return DiscordGuildVoiceChannel(guildChannelObject: channelObject, guildID: guildID, client: client)
+    case .category:
+        return DiscordGuildChannelCategory(categoryObject: channelObject, guildID: guildID, client: client)
+    default:
+        DefaultDiscordLogger.Logger.error("Unhandled guild channel in guildChannelFromObject",
+                                          type: "DiscordGuildChannel")
+        return nil
     }
 }
 
-func guildChannelsFromArray(_ guildChannelArray: [[String: Any]],
-                            guildID: GuildID?,
-                            client: DiscordClient? = nil) -> [ChannelID: DiscordGuildChannel] {
+func guildChannels(fromArray guildChannelArray: [[String: Any]],
+                   guildID: GuildID?,
+                   client: DiscordClient? = nil) -> [ChannelID: DiscordGuildChannel] {
     var guildChannels = [ChannelID: DiscordGuildChannel]()
 
-    for guildChannelObject in guildChannelArray {
-        let guildChannel = guildChannelFromObject(guildChannelObject, guildID: guildID, client: client)
+    for guildChannel in guildChannelArray.flatMap({ return guildChannel(fromObject: $0,
+                                                                        guildID: guildID,
+                                                                        client: client) }) {
         guildChannels[guildChannel.id] = guildChannel
     }
 
@@ -267,7 +282,7 @@ public struct DiscordGuildChannelCategory : DiscordGuildChannel {
     /// The position of this channel.
     public let position: Int
 
-    // TODO if permissions here start affecting child channels, fix permissions. TODO Currently it looks like
+    // TODO if permissions here start affecting child channels, fix permissions. Currently it looks like
     // Discord syncs permissions with child channels and child permissions are what matters.
     /// The permission overwrites for this channel.
     public let permissionOverwrites: [OverwriteID: DiscordPermissionOverwrite]
@@ -276,7 +291,7 @@ public struct DiscordGuildChannelCategory : DiscordGuildChannel {
     public weak var client: DiscordClient?
 
     init(categoryObject: [String: Any], guildID: GuildID?, client: DiscordClient?) {
-        id = categoryObject.get("id", or: 0)
+        id = Snowflake(categoryObject.get("id", or: "0")) ?? 0
         guildId = guildID ?? Snowflake(categoryObject["guild_id"] as? String) ?? 0
         name = categoryObject.get("name", or: "")
         permissionOverwrites = DiscordPermissionOverwrite.overwritesFromArray(
