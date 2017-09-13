@@ -95,11 +95,11 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         channelId = Snowflake(messageObject["channel_id"] as? String) ?? 0
         content = messageObject.get("content", or: "")
         embeds = DiscordEmbed.embedsFromArray(messageObject.get("embeds", or: JSONArray()))
-        id = Snowflake(messageObject["id"] as? String) ?? 0
+        id = messageObject.getSnowflake()
         mentionEveryone = messageObject.get("mention_everyone", or: false)
         mentionRoles = messageObject.get("mention_roles", or: [String]()).flatMap(Snowflake.init)
         mentions = DiscordUser.usersFromArray(messageObject.get("mentions", or: JSONArray()))
-        nonce = Snowflake(messageObject["nonce"] as? String) ?? 0
+        nonce = messageObject.getSnowflake(key: "nonce")
         pinned = messageObject.get("pinned", or: false)
         reactions = DiscordReaction.reactionsFromArray(messageObject.get("reactions", or: []))
         tts = messageObject.get("tts", or: false)
@@ -238,7 +238,7 @@ public struct DiscordAttachment {
     public let width: Int?
 
     init(attachmentObject: [String: Any]) {
-        id = Snowflake(attachmentObject.get("id", or: "")) ?? 0
+        id = attachmentObject.getSnowflake()
         filename = attachmentObject.get("filename", or: "")
         height = attachmentObject["height"] as? Int
         proxyUrl = URL(string: attachmentObject.get("proxy_url", or: "")) ?? URL.localhost

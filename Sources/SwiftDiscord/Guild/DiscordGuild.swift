@@ -103,11 +103,11 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public private(set) var verificationLevel: Int
 
     init(guildObject: [String: Any], client: DiscordClient?) {
-        id = Snowflake(guildObject["id"] as? String) ?? 0
+        id = guildObject.getSnowflake()
         channels = guildChannels(fromArray: guildObject.get("channels", or: JSONArray()), guildID: id, client: client)
         defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
         embedEnabled = guildObject.get("embed_enabled", or: false)
-        embedChannelId = Snowflake(guildObject["embed_channel_id"] as? String) ?? 0
+        embedChannelId = guildObject.getSnowflake(key: "embed_channel_id")
         emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: JSONArray()))
         features = guildObject.get("features", or: Array<Any>())
         icon = guildObject.get("icon", or: "")
@@ -115,7 +115,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         memberCount = guildObject.get("member_count", or: 0)
         mfaLevel = guildObject.get("mfa_level", or: -1)
         name = guildObject.get("name", or: "")
-        ownerId = Snowflake(guildObject["owner_id"] as? String) ?? 0
+        ownerId = guildObject.getSnowflake(key: "owner_id")
 
         if !(client?.discardPresences ?? false) {
             presences = DiscordPresence.presencesFromArray(guildObject.get("presences", or: JSONArray()), guildId: id)

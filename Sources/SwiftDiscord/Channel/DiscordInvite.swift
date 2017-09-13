@@ -56,7 +56,7 @@ public struct DiscordInviteGuild {
     public let splashHash: String
 
     init(inviteGuildObject: [String: Any]) {
-        id = Snowflake(inviteGuildObject["id"] as? String) ?? 0
+        id = inviteGuildObject.getSnowflake()
         name = inviteGuildObject.get("name", or: "")
         splashHash = inviteGuildObject.get("splash_hash", or: "")
     }
@@ -76,7 +76,7 @@ public struct DiscordInviteChannel {
     public let type: DiscordChannelType
 
     init(inviteChannelObject: [String: Any]) {
-        id = Snowflake(inviteChannelObject["id"] as? String) ?? 0
+        id = inviteChannelObject.getSnowflake()
         name = inviteChannelObject.get("name", or: "")
         type = DiscordChannelType(rawValue: inviteChannelObject.get("type", or: 0)) ?? .text
     }

@@ -44,9 +44,9 @@ public struct DiscordWebhook {
 
     init(webhookObject: [String: Any]) {
         avatar = webhookObject["avatar"] as? String
-        channelId = Snowflake(webhookObject["channel_id"] as? String) ?? 0
+        channelId = webhookObject.getSnowflake(key: "channel_id")
         guildId = Snowflake(webhookObject["guild_id"] as? String)
-        id = Snowflake(webhookObject["id"] as? String) ?? 0
+        id = webhookObject.getSnowflake()
         name = webhookObject["name"] as? String
         token = webhookObject.get("token", or: "")
 

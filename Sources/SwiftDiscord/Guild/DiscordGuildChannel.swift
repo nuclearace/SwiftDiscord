@@ -291,8 +291,8 @@ public struct DiscordGuildChannelCategory : DiscordGuildChannel {
     public weak var client: DiscordClient?
 
     init(categoryObject: [String: Any], guildID: GuildID?, client: DiscordClient?) {
-        id = Snowflake(categoryObject.get("id", or: "0")) ?? 0
-        guildId = guildID ?? Snowflake(categoryObject["guild_id"] as? String) ?? 0
+        id = categoryObject.getSnowflake()
+        guildId = guildID ?? categoryObject.getSnowflake(key: "guild_id")
         name = categoryObject.get("name", or: "")
         permissionOverwrites = DiscordPermissionOverwrite.overwritesFromArray(
             categoryObject.get("permission_overwrites", or: JSONArray()))

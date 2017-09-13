@@ -35,7 +35,7 @@ public struct DiscordUserGuild {
     public let permissions: DiscordPermission
 
     init(userGuildObject: [String: Any]) {
-        id = Snowflake(userGuildObject["id"] as? String) ?? 0
+        id = userGuildObject.getSnowflake()
         name = userGuildObject.get("name", or: "")
         icon = userGuildObject.get("icon", or: "")
         owner = userGuildObject.get("owner", or: false)

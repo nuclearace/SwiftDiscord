@@ -23,15 +23,19 @@ enum Either<L, R> {
     case right(R)
 }
 
-typealias JSONArray = [[String: Any]]
-
-extension Dictionary where Value == Any {
+extension Dictionary {
     func get<T>(_ value: Key, or default: T) -> T {
         return self[value] as? T ?? `default`
     }
 
     func get<T>(_ value: Key, as type: T.Type) -> T? {
         return self[value] as? T
+    }
+}
+
+extension Dictionary where Key == String {
+    func getSnowflake(key: String = "id") -> Snowflake {
+        return Snowflake(self[key] as? String) ?? 0
     }
 }
 
@@ -83,7 +87,7 @@ func createMultipartBody(json: [String: Any], files: [DiscordFileUpload]) -> (bo
         body.append(file.data)
         body.append(crlf)
     }
-    
+
     body.append("--\(boundary)--\r\n".data(using: .utf8)!)
 
     return (boundary, body)

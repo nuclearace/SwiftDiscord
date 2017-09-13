@@ -68,6 +68,8 @@ enum JSON {
     }
 }
 
+typealias JSONArray = [[String: Any]]
+
 enum JSONError : Error {
     case collectionError // Thrown when elements in the collection are not representable by json
 }

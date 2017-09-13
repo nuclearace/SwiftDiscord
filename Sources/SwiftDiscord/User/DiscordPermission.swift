@@ -144,7 +144,7 @@ public struct DiscordPermissionOverwrite : JSONAble {
     }
 
     init(permissionOverwriteObject: [String: Any]) {
-        id = Snowflake(permissionOverwriteObject["id"] as? String) ?? 0
+        id = permissionOverwriteObject.getSnowflake()
         type = DiscordPermissionOverwriteType(rawValue: permissionOverwriteObject.get("type", or: "")) ?? .role
         allow = DiscordPermission(rawValue: permissionOverwriteObject.get("allow", or: 0))
         deny = DiscordPermission(rawValue: permissionOverwriteObject.get("deny", or: 0))
