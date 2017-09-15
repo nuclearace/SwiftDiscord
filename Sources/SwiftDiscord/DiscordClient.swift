@@ -492,13 +492,14 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         let removedChannel: DiscordChannel
 
-        if type == .text || type == .voice || type == .category, let guildId = Snowflake(data["guild_id"] as? String),
-           let guildChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) {
+        switch type {
+        case .text, .voice, .category:
+            guard let guildId = Snowflake(data["guild_id"] as? String),
+                  let guildChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) else { return }
             removedChannel = guildChannel
-        } else if type == .direct || type == .groupDM, let direct = directChannels.removeValue(forKey: channelId) {
+        case .direct, .groupDM:
+            guard let direct = directChannels.removeValue(forKey: channelId) else { return }
             removedChannel = direct
-        } else {
-            return
         }
 
         channelCache.removeValue(forKey: channelId)
