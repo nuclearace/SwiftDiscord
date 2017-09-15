@@ -147,6 +147,22 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
         waitForExpectations(timeout: 0.2)
     }
 
+    func testClientDeletesGuildChannelCategory() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[.channelCreate] = expectation(description: "Client should call channel create method")
+        expectations[.channelDelete] = expectation(description: "Client should call delete channel method")
+
+        var tChannel = testGuildChannelCategory
+
+        tChannel["id"] = "205"
+
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
+        client.handleDispatch(event: .channelCreate, data: .object(tChannel))
+        client.handleDispatch(event: .channelDelete, data: .object(tChannel))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
     func testClientDeletesDirectChannel() {
         expectations[.channelCreate] = expectation(description: "Client should call channel create method")
         expectations[.channelDelete] = expectation(description: "Client should call channel delete method")
@@ -176,6 +192,23 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
         tChannel["name"] = "A new channel"
 
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
+        client.handleDispatch(event: .channelUpdate, data: .object(tChannel))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientUpdatesGuildChannelCategory() {
+        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[.channelCreate] = expectation(description: "Client should create a category channel")
+        expectations[.channelUpdate] = expectation(description: "Client should call update channel method")
+
+        var tChannel = testGuildChannelCategory
+
+        tChannel["id"] = "205"
+        tChannel["name"] = "A new channel"
+
+        client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
+        client.handleDispatch(event: .channelCreate, data: .object(tChannel))
         client.handleDispatch(event: .channelUpdate, data: .object(tChannel))
 
         waitForExpectations(timeout: 0.2)
@@ -336,9 +369,11 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
             ("testClientCreatesDMChannel", testClientCreatesDMChannel),
             ("testClientCreatesGroupDMChannel", testClientCreatesGroupDMChannel),
             ("testClientDeletesGuildChannel", testClientDeletesGuildChannel),
+            ("testClientDeletesGuildCategoryChannel", testClientDeletesGuildChannelCategory),
             ("testClientDeletesDirectChannel", testClientDeletesDirectChannel),
             ("testClientDeletesGroupDMChannel", testClientDeletesGroupDMChannel),
             ("testClientUpdatesGuildChannel", testClientUpdatesGuildChannel),
+            ("testClientUpdatesGuildChannelCategory", testClientUpdatesGuildChannelCategory),
             ("testClientHandlesGuildEmojiUpdate", testClientHandlesGuildEmojiUpdate),
             ("testClientHandlesRoleCreate", testClientHandlesRoleCreate),
             ("testClientHandlesRoleUpdate", testClientHandlesRoleUpdate),
@@ -466,8 +501,14 @@ public extension TestDiscordClient {
             return
         }
 
-        XCTAssertEqual(clientGuild.channels.count, 2, "Guild should have two channels")
-        XCTAssertEqual(guildChannel.name, "A new channel", "A new channel should have been updated")
+        switch guildChannel {
+        case is DiscordGuildChannelCategory:
+            XCTAssertEqual(clientGuild.channels.count, 3, "Guild should have three channels")
+            XCTAssertEqual(guildChannel.name, "A new channel", "A new channel should have been updated")
+        default:
+            XCTAssertEqual(clientGuild.channels.count, 2, "Guild should have two channels")
+            XCTAssertEqual(guildChannel.name, "A new channel", "A new channel should have been updated")
+        }
 
         expectations[.channelUpdate]?.fulfill()
     }
