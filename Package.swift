@@ -1,3 +1,5 @@
+// swift-tools-version:4.0
+
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
 
@@ -18,19 +20,28 @@
 import PackageDescription
 
 var deps: [Package.Dependency] = [
-    .Package(url: "https://github.com/nuclearace/copus", majorVersion: 1),
-    .Package(url: "https://github.com/nuclearace/Sodium", majorVersion: 1),
-    .Package(url: "https://github.com/vapor/engine", majorVersion: 2),
+    .package(url: "https://github.com/nuclearace/copus", .upToNextMajor(from: "2.0.0")),
+    .package(url: "https://github.com/nuclearace/Sodium", .upToNextMajor(from: "2.0.0")),
+    .package(url: "https://github.com/vapor/engine", .upToNextMajor(from: "2.2.0")),
 ]
 
+var targetDeps: [Target.Dependency] = ["DiscordOpus", "WebSockets"]
+
 #if !os(Linux)
-deps += [.Package(url: "https://github.com/nuclearace/Starscream", majorVersion: 2),]
+deps += [.package(url: "https://github.com/nuclearace/Starscream", .upToNextMajor(from: "2.1.0")),] // TODO use 2.2.0 when it's available
+targetDeps += ["Starscream"]
 #endif
+
 
 let package = Package(
     name: "SwiftDiscord",
-    targets: [
-        Target(name: "SwiftDiscord", dependencies: ["DiscordOpus"])
+    products: [
+        .library(name: "SwiftDiscord", targets: ["SwiftDiscord"])
     ],
-    dependencies: deps
+    dependencies: deps,
+    targets: [
+        .target(name: "SwiftDiscord", dependencies: targetDeps),
+        .target(name: "DiscordOpus"),
+        .testTarget(name: "SwiftDiscordTests", dependencies: ["SwiftDiscord"]),
+    ]
 )
