@@ -34,7 +34,7 @@ public struct Snowflake {
     }
 
     /// Initialize from an optional string (returns nil if the input was nil or if it failed to initialize)
-    init?(_ optionalString: String?) {
+    public init?(_ optionalString: String?) {
         guard let string = optionalString else { return nil }
         guard let snowflake = Snowflake(string) else { return nil }
         self = snowflake

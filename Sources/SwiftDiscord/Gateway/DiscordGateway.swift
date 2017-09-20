@@ -139,16 +139,30 @@ extension DiscordGatewayPayloadData {
     static func dataFromDictionary(_ data: Any?) -> DiscordGatewayPayloadData {
         guard let data = data else { return .null }
 
+        // TODO this is very ugly. See https://bugs.swift.org/browse/SR-5863
+        #if !os(Linux)
         switch data {
         case let object as [String: Any]:
             return .object(object)
+        case let number as NSNumber where number === kCFBooleanTrue || number === kCFBooleanFalse:
+            return .bool(number.boolValue)
         case let integer as Int:
             return .integer(integer)
-        case let bool as Bool:
-            return .bool(bool)
         default:
             return .null
         }
+        #else
+        switch data {
+        case let object as [String: Any]:
+            return .object(object)
+        case let bool as Bool:
+            return .bool(bool)
+        case let integer as Int:
+            return .integer(integer)
+        default:
+            return .null
+        }
+        #endif
     }
 }
 
@@ -269,18 +283,38 @@ public enum DiscordNormalGatewayCode : Int {
 
 /// Represents a voice gateway code
 public enum DiscordVoiceGatewayCode : Int {
-    /// Identify.
-    case identify
-    /// Select Protocol.
-    case selectProtocol
-    /// Ready.
-    case ready
-    /// Heartbeat.
-    case heartbeat
-    /// Session Description.
-    case sessionDescription
-    /// Speaking.
-    case speaking
+    /// Identify. Sent by the client.
+    case identify = 0
+
+    /// Select Protocol. Sent by the client.
+    case selectProtocol = 1
+
+    /// Ready. Sent by the server.
+    case ready = 2
+
+    /// Heartbeat. Sent by the client.
+    case heartbeat = 3
+
+    /// Session Description. Sent by the server.
+    case sessionDescription = 4
+
+    /// Speaking. Sent by both client and server.
+    case speaking = 5
+
+    /// Heartbeat ACK. Sent by the server.
+    case heartbeatAck = 6
+
+    /// Resume. Sent by the client.
+    case resume = 7
+
+    /// Hello. Sent by the server.
+    case hello = 8
+
+    /// Resumed. Sent by the server.
+    case resumed = 9
+
+    /// Client disconnect. Sent by the server.
+    case clientDisconnect = 13
 }
 
 /// Represents the reason a gateway was closed.
@@ -323,6 +357,18 @@ public enum DiscordGatewayCloseReason : Int {
 
     /// We sent an invalid shard when identifing.
     case invalidShard = 4010
+
+    /// We sent a protocol Discord doesn't recognize.
+    case unknownProtocol = 4012
+
+    /// We got disconnected.
+    case disconnected = 4014
+
+    /// The voice server crashed.
+    case voiceServerCrash = 4015
+
+    /// We sent an encryption mode Discord doesn't know.
+    case unknownEncryptionMode = 4016
 
     // MARK: Initializers
 

@@ -45,11 +45,11 @@ public struct DiscordAuditLogEntry {
     init(auditEntryObject: [String: Any]) {
         actionType = DiscordAuditLogActionType(rawValue: auditEntryObject.get("action_type", or: -1)) ?? .other
         changes = DiscordAuditLogChange.changes(fromArray: auditEntryObject.get("changes", or: []))
-        id = auditEntryObject.get("id", or: 0)
+        id = auditEntryObject.getSnowflake()
         options = auditEntryObject.get("options", or: [:])
         reason = auditEntryObject.get("reason", or: "")
         targetId = auditEntryObject.get("target_id", or: "")
-        userId = auditEntryObject.get("user_id", or: 0)
+        userId = auditEntryObject.getSnowflake(key: "user_id")
     }
 
     static func entries(fromArray arr: [[String: Any]]) -> [DiscordAuditLogEntry] {

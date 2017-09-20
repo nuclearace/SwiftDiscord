@@ -82,6 +82,15 @@ let testGuildVoiceChannel: [String: Any] = [
     "bitrate": 64000
 ]
 
+let testGuildChannelCategory: [String: Any] = [
+    "id": "203",
+    "guild_id": "100",
+    "type": 4,
+    "parent_id": -1,
+    "name": "TestCategory",
+    "permission_overwrites": [[String: Any]](),
+    "position": 0
+]
 
 let testGuild: [String: Any] = [
     "channels": [[String: Any]](),

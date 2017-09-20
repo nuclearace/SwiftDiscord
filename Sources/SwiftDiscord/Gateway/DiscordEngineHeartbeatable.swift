@@ -22,7 +22,7 @@ import Dispatch
 public protocol DiscordEngineHeartbeatable {
     // MARK: Properties
 
-    /// The number of seconds between heartbeats.
+    /// The number of milliseconds between heartbeats.
     var heartbeatInterval: Int { get }
 
     /// The `DispatchQueue` that the heartbeats are sent on.
@@ -33,9 +33,9 @@ public protocol DiscordEngineHeartbeatable {
     ///
     /// Starts sending heartbeats. After calling this heartbeating should be automatic.
     ///
-    /// - parameter seconds: The number of seconds between heartbeats
+    /// - parameter milliseconds: The number of milliseconds between heartbeats
     ///
-    func startHeartbeat(seconds: Int)
+    func startHeartbeat(milliseconds: Int)
 
     ///
     /// Sends a heartbeat to the gateway. This should be called from a timer/dispatch.after.

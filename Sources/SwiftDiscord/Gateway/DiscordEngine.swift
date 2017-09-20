@@ -217,12 +217,12 @@ open class DiscordEngine : DiscordEngineSpec {
 
     func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
         func handleInvalidSession() {
-            if case let .bool(netsplit) = payload.payload, !netsplit {
+            if case let .bool(netsplit) = payload.payload, netsplit {
+                DefaultDiscordLogger.Logger.log("Netsplit recieved, trying to resume", type: logType)
+            } else {
                 DefaultDiscordLogger.Logger.log("Invalid session received. Invalidating session", type: logType)
 
                 sessionId = nil
-            } else {
-                DefaultDiscordLogger.Logger.log("Netsplit recieved, trying to resume", type: logType)
             }
 
             resuming = false
@@ -248,7 +248,7 @@ open class DiscordEngine : DiscordEngineSpec {
             sendPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
         case .heartbeatAck:
             heartbeatQueue.sync { self.pongsMissed = 0 }
-            DefaultDiscordLogger.Logger.debug("Got heartback ack", type: logType)
+            DefaultDiscordLogger.Logger.debug("Got heartbeat ack", type: logType)
         default:
             error(message: "Unhandled payload: \(payload.code)")
         }
@@ -268,7 +268,7 @@ open class DiscordEngine : DiscordEngineSpec {
         heartbeatQueue.sync { self.pongsMissed = 0 }
         connected = true
 
-        startHeartbeat(seconds: milliseconds / 1000)
+        startHeartbeat(milliseconds: milliseconds)
         delegate?.shard(self, gotHelloWithPayload: payload)
     }
 
@@ -358,7 +358,7 @@ open class DiscordEngine : DiscordEngineSpec {
         pongsMissed += 1
         sendPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
 
-        let time = DispatchTime.now() + Double(heartbeatInterval)
+        let time = DispatchTime.now() + .milliseconds(heartbeatInterval)
 
         heartbeatQueue.asyncAfter(deadline: time) {[weak self, uuid = connectUUID] in
             guard let this = self, uuid == this.connectUUID else { return }
@@ -393,10 +393,10 @@ open class DiscordEngine : DiscordEngineSpec {
     ///
     /// Starts the engine's heartbeat. You should call this method when you know the interval that Discord expects.
     ///
-    /// - parameter seconds: The heartbeat interval
+    /// - parameter milliseconds: The heartbeat interval
     ///
-    public func startHeartbeat(seconds: Int) {
-        heartbeatInterval = seconds
+    public func startHeartbeat(milliseconds: Int) {
+        heartbeatInterval = milliseconds
 
         sendHeartbeat()
     }

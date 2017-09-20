@@ -540,6 +540,7 @@ public extension DiscordEndpoint {
         /// Get message options.
         ///
         /// after, around and before are mutually exclusive. They shouldn't be in the same get request
+        @available(*, deprecated, message: "Only used for the deprecated getMessages(channel:options:callback:) method")
         public enum GetMessage {
             /// The message to get other messages after.
             case after(DiscordMessage)
@@ -552,6 +553,29 @@ public extension DiscordEndpoint {
 
             /// The number of messages to get.
             case limit(Int)
+        }
+
+        /// Options for getting messages
+        public enum MessageSelection {
+            /// Messages after the given ID
+            case after(MessageID)
+
+            /// Messages around the given ID
+            case around(MessageID)
+
+            /// Messages before the given ID
+            case before(MessageID)
+
+            internal var messageParam: (String, MessageID) {
+                switch self {
+                case let .after(message):
+                    return ("after", message)
+                case let .around(message):
+                    return ("around", message)
+                case let .before(message):
+                    return ("before", message)
+                }
+            }
         }
 
         /// Guild create channel options.

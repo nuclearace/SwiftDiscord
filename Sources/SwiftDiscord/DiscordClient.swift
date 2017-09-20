@@ -436,7 +436,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     /// - parameter manager: The manager.
     /// - parameter engine: The engine that's ready.
-    /// *
+    ///
     open func voiceManager(_ manager: DiscordVoiceManager, engineIsReady engine: DiscordVoiceEngine) {
         handleQueue.async {
             self.delegate?.client(self, isReadyToSendVoiceWithEngine: engine)
@@ -492,13 +492,14 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         let removedChannel: DiscordChannel
 
-        if type == .text || type == .voice, let guildId = Snowflake(data["guild_id"] as? String),
-           let guildChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) {
+        switch type {
+        case .text, .voice, .category:
+            guard let guildId = Snowflake(data["guild_id"] as? String),
+                  let guildChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) else { return }
             removedChannel = guildChannel
-        } else if type == .direct || type == .groupDM, let direct = directChannels.removeValue(forKey: channelId) {
+        case .direct, .groupDM:
+            guard let direct = directChannels.removeValue(forKey: channelId) else { return }
             removedChannel = direct
-        } else {
-            return
         }
 
         channelCache.removeValue(forKey: channelId)
@@ -520,7 +521,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     open func handleChannelUpdate(with data: [String: Any]) {
         DefaultDiscordLogger.Logger.log("Handling channel update", type: logType)
 
-        let channel = guildChannelFromObject(data, guildID: nil, client: self)
+        guard let channel = guildChannel(fromObject: data, guildID: nil, client: self) else {
+            return
+        }
 
         DefaultDiscordLogger.Logger.verbose("Updated channel: \(channel)", type: logType)
 
@@ -897,7 +900,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// Override to provide additional customization around this event.
     ///
     /// - parameter with: The data from the event
-    /// *
+    ///
     open func handleVoiceServerUpdate(with data: [String: Any]) {
         DefaultDiscordLogger.Logger.log("Handling voice server update", type: logType)
         DefaultDiscordLogger.Logger.verbose("Voice server update: \(data)", type: logType)

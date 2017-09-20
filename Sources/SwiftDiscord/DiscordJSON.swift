@@ -68,6 +68,8 @@ enum JSON {
     }
 }
 
+typealias JSONArray = [[String: Any]]
+
 enum JSONError : Error {
     case collectionError // Thrown when elements in the collection are not representable by json
 }
@@ -92,6 +94,11 @@ extension Bool : JSONRepresentable { }
 extension URL : JSONRepresentable {
     func jsonValue() -> JSONRepresentable {
         return absoluteString
+    }
+}
+extension Date : JSONRepresentable {
+    func jsonValue() throws -> JSONRepresentable {
+        return DiscordDateFormatter.string(from: self)
     }
 }
 

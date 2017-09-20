@@ -78,7 +78,7 @@ public struct DiscordGroupDMChannel : DiscordTextChannel {
 
     init(dmReadyObject: [String: Any], client: DiscordClient? = nil) {
         recipients = dmReadyObject.get("recipients", or: JSONArray()).map(DiscordUser.init)
-        id = Snowflake(dmReadyObject["id"] as? String) ?? 0
+        id = dmReadyObject.getSnowflake()
         lastMessageId = Snowflake(dmReadyObject["last_message_id"] as? String) ?? 0
         name = dmReadyObject["name"] as? String
         self.client = client

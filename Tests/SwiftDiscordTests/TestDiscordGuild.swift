@@ -135,7 +135,53 @@ public class TestDiscordGuild : XCTestCase {
         XCTAssertNotNil(roles.first(where: { $0.id == Snowflake(role2["id"] as! String)! }), "roles should find role2")
     }
 
-    func testCreatingGuildWithALargeNumberOfMembersIsFast() {
+    func testGuildFromObjectCorrectlyCreatesChannelCategory() {
+        switch guildChannel(fromObject: testGuildChannelCategory, guildID: nil) {
+        case let channel as DiscordGuildChannelCategory:
+            XCTAssertEqual(Snowflake(testGuildChannelCategory["id"] as! String), channel.id,
+                           "It should create a guild category id correctly")
+        default:
+            XCTFail("It should create a guild category")
+        }
+    }
+
+    func testGuildFromObjectCorrectlyCreatesTextChannel() {
+        switch guildChannel(fromObject: testGuildTextChannel, guildID: nil) {
+        case let channel as DiscordGuildTextChannel:
+            XCTAssertEqual(Snowflake(testGuildTextChannel["id"] as! String), channel.id,
+                           "It should create a guild text channel id correctly")
+        default:
+            XCTFail("It should create a guild text channel")
+        }
+    }
+
+    func testGuildFromObjectCorrectlyCreatesVoiceChannel() {
+        switch guildChannel(fromObject: testGuildVoiceChannel, guildID: nil) {
+        case let channel as DiscordGuildVoiceChannel:
+            XCTAssertEqual(Snowflake(testGuildVoiceChannel["id"] as! String), channel.id,
+                           "It should create a guild voice channel id correctly")
+            XCTAssertEqual(testGuildVoiceChannel["bitrate"] as! Int, channel.bitrate,
+                           "It should create a guild voice channel bitrate correctly")
+        default:
+            XCTFail("It should create a guild category")
+        }
+    }
+
+    func testGuildFromObjectCreatesNoChannelOnInvalidType() {
+        var newChannel = testGuildTextChannel
+
+        newChannel["type"] = 200
+
+        switch guildChannel(fromObject: newChannel, guildID: nil) {
+        case .some:
+            XCTFail("It should not crete a channel if the type is not known")
+        default:
+            break
+        }
+    }
+
+#if PERFTEST
+    func testCreatingGuildWithALargeNumberOfMembersIsConsistent() {
         tGuild["members"] = createGuildMemberObjects(n: 100_000)
 
         var guild: DiscordGuild!
@@ -148,7 +194,7 @@ public class TestDiscordGuild : XCTestCase {
         XCTAssertEqual(guild.members[5000]?.user.id, 5000, "init should create members correctly")
     }
 
-    func testCreatingGuildWithALargeNumberOfPresencesIsFast() {
+    func testCreatingGuildWithALargeNumberOfPresencesIsConsistent() {
         tGuild["presences"] = createPresenceObjects(n: 100_000)
 
         var guild: DiscordGuild!
@@ -160,11 +206,12 @@ public class TestDiscordGuild : XCTestCase {
         XCTAssertEqual(guild.presences.count, 100_000, "init should create 100_000 presences")
         XCTAssertEqual(guild.presences[5000]?.user.id, 5000, "init should create presences correctly")
     }
+    #endif
 
     var tGuild: [String: Any]!
 
     public static var allTests: [(String, (TestDiscordGuild) -> () -> ())] {
-        return [
+        var tests = [
             ("testCreatingGuildSetsId", testCreatingGuildSetsId),
             ("testCreatingGuildSetsName", testCreatingGuildSetsName),
             ("testCreatingGuildSetsDefaultMessageNotifications", testCreatingGuildSetsDefaultMessageNotifications),
@@ -180,9 +227,20 @@ public class TestDiscordGuild : XCTestCase {
             ("testCreatingGuildSetsVerificationLevel", testCreatingGuildSetsVerificationLevel),
             ("testCreatingGuildSetsUnavailable", testCreatingGuildSetsUnavailable),
             ("testGuildCorrectlyGetsRolesForMember", testGuildCorrectlyGetsRolesForMember),
-            ("testCreatingGuildWithALargeNumberOfMembersIsFast", testCreatingGuildWithALargeNumberOfMembersIsFast),
-            ("testCreatingGuildWithALargeNumberOfPresencesIsFast", testCreatingGuildWithALargeNumberOfPresencesIsFast),
+            ("testGuildFromObjectCorrectlyCreatesChannelCategory", testGuildFromObjectCorrectlyCreatesChannelCategory),
+            ("testGuildFromObjectCorrectlyCreatesTextChannel", testGuildFromObjectCorrectlyCreatesTextChannel),
+            ("testGuildFromObjectCorrectlyCreatesVoiceChannel", testGuildFromObjectCorrectlyCreatesVoiceChannel),
+            ("testGuildFromObjectCreatesNoChannelOnInvalidType", testGuildFromObjectCreatesNoChannelOnInvalidType)
         ]
+
+        #if PERFTEST
+        tests += [
+            ("testCreatingGuildWithALargeNumberOfMembersIsConsistent", testCreatingGuildWithALargeNumberOfMembersIsConsistent),
+            ("testCreatingGuildWithALargeNumberOfPresencesIsConsistent", testCreatingGuildWithALargeNumberOfPresencesIsConsistent),
+        ]
+        #endif
+
+        return tests
     }
 
     public override func setUp() {

@@ -5,6 +5,19 @@
 import XCTest
 @testable import SwiftDiscord
 
+extension DiscordGatewayPayloadData: Equatable {
+    public static func ==(lhs: DiscordGatewayPayloadData, rhs: DiscordGatewayPayloadData) -> Bool {
+        switch (lhs, rhs) {
+        case let (.bool(lhsbool), .bool(rhsbool)):
+            return lhsbool == rhsbool
+        case let (.integer(lhsint), .integer(rhsint)):
+            return lhsint == rhsint
+        default:
+            return false
+        }
+    }
+}
+
 public class TestDiscordDataStructures : XCTestCase {
     func testRoleJSONification() {
         let role1 = DiscordRole(id: 324, color: 43, hoist: false, managed: true, mentionable: false, name: "Test Role", permissions: [.addReactions], position: 4)
@@ -51,15 +64,18 @@ public class TestDiscordDataStructures : XCTestCase {
         let dummyIconB = URL(string: "https://cdn.discordapp.com/embed/avatars/1.png")!
         let dummyURL = URL(string: "https://discordapp.com")!
 
-        let embed1 = DiscordEmbed(title: "Title",
-                                  description: "Description",
-                                  author: DiscordEmbed.Author(name: "Author", iconURL: dummyIconA, url: dummyURL, proxyIconURL: dummyIconB),
-                                  url: dummyURL,
-                                  image: DiscordEmbed.Image(url: dummyIconA, width: 3245, height: 1493),
-                                  thumbnail: DiscordEmbed.Thumbnail(url: dummyIconB, width: 2934, height: 9534, proxyURL: dummyIconA),
-                                  color: 423,
-                                  footer: DiscordEmbed.Footer(text: "Footer", iconUrl: dummyIconB),
-                                  fields: [DiscordEmbed.Field(name: "Field Name", value: "Field Value", inline: true)])
+        let embed1 = DiscordEmbed(
+            title: "Title",
+            description: "Description",
+            author: DiscordEmbed.Author(name: "Author", iconURL: dummyIconA, url: dummyURL, proxyIconURL: dummyIconB),
+            url: dummyURL,
+            image: DiscordEmbed.Image(url: dummyIconA, width: 3245, height: 1493),
+            timestamp: Date(timeIntervalSince1970: 429384.25), // Must be losslessly convertible to RFC3339
+            thumbnail: DiscordEmbed.Thumbnail(url: dummyIconB, width: 2934, height: 9534, proxyURL: dummyIconA),
+            color: 423,
+            footer: DiscordEmbed.Footer(text: "Footer", iconUrl: dummyIconB),
+            fields: [DiscordEmbed.Field(name: "Field Name", value: "Field Value", inline: true)]
+        )
         let embed2 = DiscordEmbed(embedObject: embed1.json)
         var currentCompare = "embed1 and embed2"
         func check<T: Equatable>(_ lhs: T?, _ rhs: T?, _ name: String) {
@@ -76,6 +92,7 @@ public class TestDiscordDataStructures : XCTestCase {
             check(embed1.image?.url, embed2.image?.url, "Image URL")
             check(embed1.image?.width, embed2.image?.width, "Image width")
             check(embed1.image?.height, embed2.image?.height, "Image height")
+            check(embed1.timestamp, embed2.timestamp, "Timestamp")
             check(embed1.thumbnail?.url, embed2.thumbnail?.url, "Thumbnail URL")
             check(embed1.thumbnail?.width, embed2.thumbnail?.width, "Thumbnail width")
             check(embed1.thumbnail?.height, embed2.thumbnail?.height, "Thumbnail height")
@@ -98,12 +115,24 @@ public class TestDiscordDataStructures : XCTestCase {
         XCTAssertFalse(nilJSONTest.contains("null"), "JSON-encoded embed should not have any null fields")
     }
 
+    func testDiscordGatewayPayloadData() {
+        let dic = try! JSONSerialization.jsonObject(with: "[true, false, 0, 1, 2, -1]".data(using: .utf8)!, options: []) as! [Any]
+        let payloadData = dic.map(DiscordGatewayPayloadData.dataFromDictionary)
+        XCTAssertEqual(payloadData[0], DiscordGatewayPayloadData.bool(true), "Discord Gateway Payload should unwrap true")
+        XCTAssertEqual(payloadData[1], DiscordGatewayPayloadData.bool(false), "Discord Gateway Payload should unwrap false")
+        XCTAssertEqual(payloadData[2], DiscordGatewayPayloadData.integer(0), "Discord Gateway Payload should unwrap 0")
+        XCTAssertEqual(payloadData[3], DiscordGatewayPayloadData.integer(1), "Discord Gateway Payload should unwrap 1")
+        XCTAssertEqual(payloadData[4], DiscordGatewayPayloadData.integer(2), "Discord Gateway Payload should unwrap 2")
+        XCTAssertEqual(payloadData[5], DiscordGatewayPayloadData.integer(-1), "Discord Gateway Payload should unwrap -1")
+    }
+
     public static var allTests: [(String, (TestDiscordDataStructures) -> () -> ())] {
         return [
             ("testRoleJSONification", testRoleJSONification),
             ("testPermissionOverwriteJSONification", testPermissionOverwriteJSONification),
             ("testGameJSONification", testGameJSONification),
             ("testEmbedJSONification", testEmbedJSONification),
+            ("testDiscordGatewayPayloadData", testDiscordGatewayPayloadData),
         ]
     }
 

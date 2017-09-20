@@ -46,7 +46,7 @@ public struct DiscordRole : JSONAble, Equatable {
     init(roleObject: [String: Any]) {
         color = roleObject.get("color", or: 0)
         hoist = roleObject.get("hoist", or: false)
-        id = Snowflake(roleObject["id"] as? String) ?? 0
+        id = roleObject.getSnowflake()
         managed = roleObject.get("managed", or: false)
         mentionable = roleObject.get("mentionable", or: false)
         name = roleObject.get("name", or: "")
