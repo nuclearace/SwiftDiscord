@@ -201,7 +201,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             this.getVoiceData()
         }
 
-        self.sendTimer.scheduleRepeating(wallDeadline: .now(), interval: .milliseconds(20))
+        self.sendTimer.schedule(wallDeadline: .now(), repeating: .milliseconds(20))
 
         // TODO this is wasteful, figure out if there's a smart way to start and stop the timer.
         // Maybe let the user decide?
