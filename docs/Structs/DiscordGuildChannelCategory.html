@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DiscordAttachment Struct Reference</title>
+    <title>DiscordGuildChannelCategory Struct Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/DiscordAttachment" class="dashAnchor"></a>
-    <a title="DiscordAttachment Struct Reference"></a>
+    <a name="//apple_ref/swift/Struct/DiscordGuildChannelCategory" class="dashAnchor"></a>
+    <a title="DiscordGuildChannelCategory Struct Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        DiscordAttachment Struct Reference
+        DiscordGuildChannelCategory Struct Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -419,32 +419,25 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>DiscordAttachment</h1>
+            <h1>DiscordGuildChannelCategory</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordAttachment</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordGuildChannelCategory</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordGuildChannel.html">DiscordGuildChannel</a></span></code></pre>
 
                 </div>
               </div>
-            <p>Represents an attachment.</p>
+            <p>A Category channel.</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Properties"></a>
-                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
-                <a href="#/Properties">
-                  <h3 class="section-name">Properties</h3>
-                </a>
-              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B10AttachmentV2idAA9SnowflakeVv"></a>
+                    <a name="/s:12SwiftDiscord0B20GuildChannelCategoryV2idAA9SnowflakeVv"></a>
                     <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B10AttachmentV2idAA9SnowflakeVv">id</a>
+                    <a class="token" href="#/s:12SwiftDiscord0B20GuildChannelCategoryV2idAA9SnowflakeVv">id</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -452,14 +445,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The snowflake id of this attachment.</p>
+                        <p>The id for this category.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord12AttachmentIDa">AttachmentID</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelIDa">ChannelID</a></span></code></pre>
 
                         </div>
                       </div>
@@ -469,9 +462,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B10AttachmentV8filenameSSv"></a>
-                    <a name="//apple_ref/swift/Property/filename" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B10AttachmentV8filenameSSv">filename</a>
+                    <a name="/s:12SwiftDiscord0B20GuildChannelCategoryV7guildIdAA9SnowflakeVv"></a>
+                    <a name="//apple_ref/swift/Property/guildId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B20GuildChannelCategoryV7guildIdAA9SnowflakeVv">guildId</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -479,14 +472,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The name of the file.</p>
+                        <p>The id for this channel category.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">filename</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildIDa">GuildID</a></span></code></pre>
 
                         </div>
                       </div>
@@ -496,9 +489,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B10AttachmentV6heightSiSgv"></a>
-                    <a name="//apple_ref/swift/Property/height" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B10AttachmentV6heightSiSgv">height</a>
+                    <a name="/s:12SwiftDiscord0B20GuildChannelCategoryV4nameSSv"></a>
+                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B20GuildChannelCategoryV4nameSSv">name</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -506,14 +499,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The height, if this is an image.</p>
+                        <p>The name for this channel.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">height</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -523,9 +516,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B10AttachmentV8proxyUrl10Foundation3URLVv"></a>
-                    <a name="//apple_ref/swift/Property/proxyUrl" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B10AttachmentV8proxyUrl10Foundation3URLVv">proxyUrl</a>
+                    <a name="/s:12SwiftDiscord0B20GuildChannelCategoryV8parentIdAA9SnowflakeVSgv"></a>
+                    <a name="//apple_ref/swift/Property/parentId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B20GuildChannelCategoryV8parentIdAA9SnowflakeVSgv">parentId</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -533,14 +526,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The proxy url for this attachment.</p>
+                        <p>The parent category of this channel.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">proxyUrl</span><span class="p">:</span> <span class="kt">URL</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">parentId</span> <span class="o">=</span> <span class="kc">nil</span> <span class="k">as</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelIDa">ChannelID</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -550,9 +543,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B10AttachmentV4sizeSiv"></a>
-                    <a name="//apple_ref/swift/Property/size" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B10AttachmentV4sizeSiv">size</a>
+                    <a name="/s:12SwiftDiscord0B20GuildChannelCategoryV8positionSiv"></a>
+                    <a name="//apple_ref/swift/Property/position" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B20GuildChannelCategoryV8positionSiv">position</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -560,14 +553,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The size of this attachment.</p>
+                        <p>The position of this channel.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">size</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">position</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
@@ -577,9 +570,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B10AttachmentV3url10Foundation3URLVv"></a>
-                    <a name="//apple_ref/swift/Property/url" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B10AttachmentV3url10Foundation3URLVv">url</a>
+                    <a name="/s:12SwiftDiscord0B20GuildChannelCategoryV20permissionOverwritess10DictionaryVyAA9SnowflakeVAA0B19PermissionOverwriteVGv"></a>
+                    <a name="//apple_ref/swift/Property/permissionOverwrites" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B20GuildChannelCategoryV20permissionOverwritess10DictionaryVyAA9SnowflakeVAA0B19PermissionOverwriteVGv">permissionOverwrites</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -587,14 +580,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The url of this attachment.</p>
+                        <p>The permission overwrites for this channel.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">permissionOverwrites</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord11OverwriteIDa">OverwriteID</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a></span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -604,9 +597,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B10AttachmentV5widthSiSgv"></a>
-                    <a name="//apple_ref/swift/Property/width" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B10AttachmentV5widthSiSgv">width</a>
+                    <a name="/s:12SwiftDiscord0B20GuildChannelCategoryV6clientAA0B6ClientCSgXwv"></a>
+                    <a name="//apple_ref/swift/Property/client" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B20GuildChannelCategoryV6clientAA0B6ClientCSgXwv">client</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -614,14 +607,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The width, if this is an image.</p>
+                        <p>Reference to the client.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">width</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>

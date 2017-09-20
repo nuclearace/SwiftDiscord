@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Footer Struct Reference</title>
+    <title>Video Struct Reference</title>
     <link rel="stylesheet" type="text/css" href="../../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/Footer" class="dashAnchor"></a>
-    <a title="Footer Struct Reference"></a>
+    <a name="//apple_ref/swift/Struct/Video" class="dashAnchor"></a>
+    <a title="Video Struct Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../../index.html"> Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../../index.html"> Reference</a>
         <img id="carat" src="../../img/carat.png" />
-        Footer Struct Reference
+        Video Struct Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -419,32 +419,26 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Footer</h1>
+            <h1>Video</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Footer</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Video</span> <span class="p">:</span> <span class="kt">JSONAble</span></code></pre>
 
                 </div>
               </div>
-            <p>Represents an Embed&rsquo;s footer.</p>
+            <p>Represents the video of an embed.
+Note: Discord does not accept these, so they are read-only</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Properties"></a>
-                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
-                <a href="#/Properties">
-                  <h3 class="section-name">Properties</h3>
-                </a>
-              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B5EmbedV6FooterV4textSSSgv"></a>
-                    <a name="//apple_ref/swift/Property/text" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B5EmbedV6FooterV4textSSSgv">text</a>
+                    <a name="/s:12SwiftDiscord0B5EmbedV5VideoV6heightSiv"></a>
+                    <a name="//apple_ref/swift/Property/height" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B5EmbedV5VideoV6heightSiv">height</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -452,14 +446,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The text for this footer.</p>
+                        <p>The height of this video</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">text</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">height</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
@@ -469,9 +463,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B5EmbedV6FooterV7iconUrl10Foundation3URLVSgv"></a>
-                    <a name="//apple_ref/swift/Property/iconUrl" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B5EmbedV6FooterV7iconUrl10Foundation3URLVSgv">iconUrl</a>
+                    <a name="/s:12SwiftDiscord0B5EmbedV5VideoV3url10Foundation3URLVv"></a>
+                    <a name="//apple_ref/swift/Property/url" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B5EmbedV5VideoV3url10Foundation3URLVv">url</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -479,14 +473,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The icon for this url.</p>
+                        <p>The url for this video</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">iconUrl</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span></code></pre>
 
                         </div>
                       </div>
@@ -496,9 +490,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B5EmbedV6FooterV12proxyIconUrl10Foundation3URLVSgv"></a>
-                    <a name="//apple_ref/swift/Property/proxyIconUrl" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B5EmbedV6FooterV12proxyIconUrl10Foundation3URLVSgv">proxyIconUrl</a>
+                    <a name="/s:12SwiftDiscord0B5EmbedV5VideoV5widthSiv"></a>
+                    <a name="//apple_ref/swift/Property/width" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B5EmbedV5VideoV5widthSiv">width</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -506,74 +500,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The proxy url for the icon.</p>
+                        <p>The width of this video</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">proxyIconUrl</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">width</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12SwiftDiscord0B5EmbedV6FooterVAESSSg4text_10Foundation3URLVSg7iconUrltcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(text:iconUrl:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B5EmbedV6FooterVAESSSg4text_10Foundation3URLVSg7iconUrltcfc">init(text:iconUrl:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Creates a Footer object.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">iconUrl</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>text</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The text of this field.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>iconUrl</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The iconUrl of this field.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
                     </section>
                   </div>
