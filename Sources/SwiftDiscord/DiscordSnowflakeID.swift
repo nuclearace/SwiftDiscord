@@ -117,11 +117,13 @@ extension Snowflake: Codable {
         do {
             let intForm = try UInt64(from: decoder)
             self = Snowflake(intForm)
-        }
-        catch _ {
-            let stringForm = try String(from: decoder)
-            guard let snowflake = Snowflake(stringForm) else {
-                throw DecodingError.typeMismatch(Snowflake.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Failed to convert decoded string into a snowflake"))
+        } catch {
+            guard let snowflake = Snowflake(try String(from: decoder)) else {
+                let context = DecodingError.Context(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "Failed to convert decoded string into a snowflake"
+                )
+                throw DecodingError.typeMismatch(Snowflake.self, context)
             }
             self = snowflake
         }

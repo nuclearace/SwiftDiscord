@@ -91,29 +91,6 @@ struct GenericEncodableDictionary : Encodable {
     }
 }
 
-
-extension String {
-    var snakecase: String {
-        var ret = ""
-
-        for index in characters.indices {
-            let stringChar = String(self[index])
-
-            if stringChar.uppercased() == stringChar {
-                if index != startIndex {
-                    ret += "_"
-                }
-
-                ret += stringChar.lowercased()
-            } else {
-                ret += stringChar
-            }
-        }
-
-        return ret
-    }
-}
-
 extension URL {
     static let localhost = URL(string: "http://localhost/")!
 }
