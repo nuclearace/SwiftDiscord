@@ -132,6 +132,43 @@ public class TestDiscordDataStructures : XCTestCase {
         XCTAssertEqual(payloadData[5], DiscordGatewayPayloadData.integer(-1), "Discord Gateway Payload should unwrap -1")
     }
 
+    func testDiscordGatewayPayload() {
+        func testRunner(data: DiscordGatewayPayloadData, test: (Any?) -> ()) {
+            let payload = DiscordGatewayPayload(code: .gateway(.identify), payload: data, sequenceNumber: 9, name: "hi")
+            let json = payload.createPayloadString()!
+            let object = try! JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: []) as! [String: Any]
+            XCTAssertEqual(object["op"] as? Int, payload.code.rawCode)
+            XCTAssertEqual(object["s"] as? Int, payload.sequenceNumber)
+            XCTAssertEqual(object["t"] as? String, payload.name)
+            test(object["d"])
+        }
+        testRunner(data: .bool(true)) { item in
+            XCTAssertEqual(item as? Bool, true)
+        }
+        testRunner(data: .bool(false)) { item in
+            XCTAssertEqual(item as? Bool, false)
+        }
+        testRunner(data: .integer(8)) { item in
+            XCTAssertEqual(item as? Int, 8)
+        }
+        testRunner(data: .object(["hello": 4, "yay": DiscordGame(name: "A Game", type: .stream)])) { item in
+            let item = item as! [String: Any]
+            XCTAssertEqual(item["hello"] as? Int, 4)
+            XCTAssertNotNil(item["yay"])
+            let game = DiscordGame(gameObject: item["yay"] as? [String: Any])
+            XCTAssertEqual(game?.name, "A Game")
+            XCTAssertEqual(game?.type, .stream)
+        }
+        let perms = DiscordPermissionOverwrite(id: 95352, type: .member, allow: [.addReactions, .attachFiles], deny: [.changeNickname, .manageChannels])
+        testRunner(data: .customEncodable(perms)) { (item) in
+            let newPerms = DiscordPermissionOverwrite(permissionOverwriteObject: item as? [String: Any] ?? [:])
+            XCTAssertEqual(newPerms.id, perms.id)
+            XCTAssertEqual(newPerms.type, perms.type)
+            XCTAssertEqual(newPerms.allow, perms.allow)
+            XCTAssertEqual(newPerms.deny, perms.deny)
+        }
+    }
+
     public static var allTests: [(String, (TestDiscordDataStructures) -> () -> ())] {
         return [
             ("testRoleJSONification", testRoleJSONification),
