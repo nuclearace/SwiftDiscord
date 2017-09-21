@@ -173,30 +173,22 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.init(content: value)
     }
 
+    // Used for `createDataForSending`
+    private struct FieldsList : Encodable {
+        var content: String
+        var tts: Bool
+        var embed: DiscordEmbed?
+    }
+    
     // MARK: Methods
 
     func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
+        let fields = FieldsList(content: content, tts: tts, embed: embeds.first)
+        let fieldsData = JSON.encodeJSONData(fields) ?? Data()
         if files.count > 0 {
-            var fields: [String: Any] = [
-                "content": content,
-                "tts": tts,
-            ]
-
-            if let embed = embeds.first {
-                fields["embed"] = embed.json
-            }
-
-            return .right(createMultipartBody(json: fields, files: files))
+            return .right(createMultipartBody(encodedJSON: fieldsData, files: files))
         } else {
-            let messageObject: [String: Any] = [
-                "content": content,
-                "tts": tts,
-                "embed": embeds.first?.json ?? [:]
-            ]
-
-            guard let contentData = JSON.encodeJSONData(messageObject) else { return .left(Data()) }
-
-            return .left(contentData)
+            return .left(fieldsData)
         }
     }
 
@@ -253,13 +245,18 @@ public struct DiscordAttachment {
 }
 
 /// Represents an embeded entity.
-public struct DiscordEmbed : JSONAble {
+public struct DiscordEmbed : Encodable {
     var shouldIncludeNilsInJSON: Bool { return false }
     // MARK: Nested Types
 
     /// Represents an Embed's author.
-    public struct Author : JSONAble {
-        var shouldIncludeNilsInJSON: Bool { return false }
+    public struct Author : Encodable {
+        private enum CodingKeys : String, CodingKey {
+            case name
+            case iconUrl = "icon_url"
+            case proxyIconUrl = "proxy_icon_url"
+            case url
+        }
         // MARK: Properties
 
         /// The name for this author.
@@ -298,7 +295,7 @@ public struct DiscordEmbed : JSONAble {
     }
 
     /// Represents an Embed's fields.
-    public struct Field : JSONAble {
+    public struct Field : Encodable {
         // MARK: Properties
 
         /// The name of the field.
@@ -327,8 +324,12 @@ public struct DiscordEmbed : JSONAble {
     }
 
     /// Represents an Embed's footer.
-    public struct Footer : JSONAble {
-        var shouldIncludeNilsInJSON: Bool { return false }
+    public struct Footer : Encodable {
+        private enum CodingKeys : String, CodingKey {
+            case text
+            case iconUrl = "icon_url"
+            case proxyIconUrl = "proxy_icon_url"
+        }
         // MARK: Properties
 
         /// The text for this footer.
@@ -361,7 +362,7 @@ public struct DiscordEmbed : JSONAble {
     }
 
     /// Represents an Embed's image.
-    public struct Image : JSONAble {
+    public struct Image : Encodable {
         // MARK: Properties
 
         /// The height of this image.
@@ -393,8 +394,7 @@ public struct DiscordEmbed : JSONAble {
     }
 
     /// Represents what is providing the content of an embed.
-    public struct Provider : JSONAble {
-        var shouldIncludeNilsInJSON: Bool { return false }
+    public struct Provider : Encodable {
         // MARK: Properties
 
         /// The name of this provider.
@@ -405,8 +405,13 @@ public struct DiscordEmbed : JSONAble {
     }
 
     /// Represents the thumbnail of an embed.
-    public struct Thumbnail : JSONAble {
-        var shouldIncludeNilsInJSON: Bool { return false }
+    public struct Thumbnail : Encodable {
+        private enum CodingKeys : String, CodingKey {
+            case height
+            case proxyUrl = "proxy_url"
+            case url
+            case width
+        }
         // MARK: Properties
 
         /// The height of this image.
@@ -444,8 +449,7 @@ public struct DiscordEmbed : JSONAble {
 
     /// Represents the video of an embed.
     /// Note: Discord does not accept these, so they are read-only
-    public struct Video : JSONAble {
-        var shouldIncludeNilsInJSON: Bool { return false }
+    public struct Video : Encodable {
 
         /// The height of this video
         public let height: Int

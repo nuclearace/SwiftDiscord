@@ -41,7 +41,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                    options: [DiscordEndpoint.Options.GuildCreateChannel],
                                    reason: String? = nil,
                                    callback: ((DiscordGuildChannel?) -> ())? = nil) {
-        var createJSON: [String: Any] = [:]
+        var createJSON: [String: Encodable] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
@@ -55,7 +55,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             case let .name(name):
                 createJSON["name"] = name
             case let .permissionOverwrites(overwrites):
-                createJSON["permission_overwrites"] = overwrites.map({ $0.json })
+                createJSON["permission_overwrites"] = overwrites
             case let .type(type):
                 createJSON["type"] = type.rawValue
             case let .userLimit(limit):
@@ -63,7 +63,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        guard let contentData = JSON.encodeJSONData(createJSON) else { return }
+        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(createJSON)) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(channel)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -423,7 +423,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 on guildId: GuildID,
                                 reason: String? = nil,
                                 callback: ((DiscordRole?) -> ())? = nil) {
-        guard let contentData = JSON.encodeJSONData(role.json) else { return }
+        guard let contentData = JSON.encodeJSONData(role) else { return }
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {

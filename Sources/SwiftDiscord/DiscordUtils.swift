@@ -23,7 +23,7 @@ enum Either<L, R> {
     case right(R)
 }
 
-extension Dictionary {
+extension Dictionary where Value == Any {
     func get<T>(_ value: Key, or default: T) -> T {
         return self[value] as? T ?? `default`
     }
@@ -33,11 +33,64 @@ extension Dictionary {
     }
 }
 
-extension Dictionary where Key == String {
+extension Dictionary where Key == String, Value == Any {
     func getSnowflake(key: String = "id") -> Snowflake {
         return Snowflake(self[key] as? String) ?? 0
     }
 }
+
+/// Swift normally doesn't allow `[Encodable]` to be encoded
+struct GenericEncodableArray : Encodable {
+    let wrapped: [Encodable]
+    init(_ wrapped: [Encodable]) {
+        self.wrapped = wrapped
+    }
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.unkeyedContainer()
+        for item in wrapped {
+            let superEncoder = container.superEncoder()
+            switch item {
+            case let array as [Encodable]:
+                try GenericEncodableArray(array).encode(to: superEncoder)
+            case let dictionary as [String: Encodable]:
+                try GenericEncodableDictionary(dictionary).encode(to: superEncoder)
+            default:
+                try item.encode(to: superEncoder)
+            }
+        }
+    }
+}
+
+/// Swift normally doesn't allow `[String: Encodable]` to be encoded
+struct GenericEncodableDictionary : Encodable {
+    let wrapped: [String: Encodable]
+    private struct GenericEncodingKey : CodingKey {
+        var stringValue: String
+        init(stringValue: String) {
+            self.stringValue = stringValue
+        }
+        var intValue: Int? { return nil }
+        init?(intValue: Int) { return nil }
+    }
+    init(_ wrapped: [String: Encodable]) {
+        self.wrapped = wrapped
+    }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: GenericEncodingKey.self)
+        for (key, value) in wrapped {
+            let superEncoder = container.superEncoder(forKey: GenericEncodingKey(stringValue: key))
+            switch value {
+            case let array as [Encodable]:
+                try GenericEncodableArray(array).encode(to: superEncoder)
+            case let dictionary as [String: Encodable]:
+                try GenericEncodableDictionary(dictionary).encode(to: superEncoder)
+            default:
+                try value.encode(to: superEncoder)
+            }
+        }
+    }
+}
+
 
 extension String {
     var snakecase: String {
@@ -65,18 +118,16 @@ extension URL {
     static let localhost = URL(string: "http://localhost/")!
 }
 
-func createMultipartBody(json: [String: Any], files: [DiscordFileUpload]) -> (boundary: String, body: Data) {
+func createMultipartBody(encodedJSON: Data, files: [DiscordFileUpload]) -> (boundary: String, body: Data) {
     let boundary = "Boundary-\(UUID())"
     let crlf = "\r\n".data(using: .utf8)!
     var body = Data()
 
-    let encodedJson = JSON.encodeJSONData(json) ?? Data()
-
     body.append("--\(boundary)\r\n".data(using: .utf8)!)
     body.append("Content-Disposition: form-data; name=\"payload_json\"\r\n".data(using: .utf8)!)
     body.append("Content-Type: application/json\r\n".data(using: .utf8)!)
-    body.append("Content-Length: \(encodedJson.count)\r\n\r\n".data(using: .utf8)!)
-    body.append(encodedJson)
+    body.append("Content-Length: \(encodedJSON.count)\r\n\r\n".data(using: .utf8)!)
+    body.append(encodedJSON)
     body.append(crlf)
 
     for (index, file) in files.enumerated() {
@@ -93,22 +144,21 @@ func createMultipartBody(json: [String: Any], files: [DiscordFileUpload]) -> (bo
     return (boundary, body)
 }
 
-class DiscordDateFormatter {
-    private static let formatter = DiscordDateFormatter()
-
-    private let RFC3339DateFormatter = DateFormatter()
-
-    private init() {
-        RFC3339DateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"
-        RFC3339DateFormatter.locale = Locale(identifier: "en_US")
-    }
+// Enum for namespacing
+enum DiscordDateFormatter {
+    static let rfc3339DateFormatter: DateFormatter = { () -> DateFormatter in
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"
+        formatter.locale = Locale(identifier: "en_US")
+        return formatter
+    }()
 
     static func format(_ string: String) -> Date? {
-        return formatter.RFC3339DateFormatter.date(from: string)
+        return DiscordDateFormatter.rfc3339DateFormatter.date(from: string)
     }
 
     static func string(from date: Date) -> String {
-        return formatter.RFC3339DateFormatter.string(from: date)
+        return DiscordDateFormatter.rfc3339DateFormatter.string(from: date)
     }
 }
 

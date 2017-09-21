@@ -139,7 +139,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             extraHeaders[.auditReason] = modifyReason
         }
 
-        guard let contentData = JSON.encodeJSONData(permissionOverwrite.json) else { return }
+        guard let contentData = JSON.encodeJSONData(permissionOverwrite) else { return }
 
         rateLimiter.executeRequest(endpoint: .channelPermission(channel: channelId, overwrite: permissionOverwrite.id),
                                    token: token,
