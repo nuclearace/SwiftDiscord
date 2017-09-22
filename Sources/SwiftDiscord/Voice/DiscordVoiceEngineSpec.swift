@@ -35,22 +35,6 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
     ///
     func requestNewDataSource() throws
 
-    ///
-    /// Sends whether we are speaking or not.
-    ///
-    /// - parameter speaking: Our speaking status.
-    ///
-    @available(*, deprecated, message: "This method will become unavailable in a future release")
-    func sendSpeaking(_ speaking: Bool)
-
-    ///
-    /// Sends OPUS encoded voice data to Discord.
-    ///
-    /// - parameter data: An array of OPUS encoded voice data.
-    ///
-    @available(*, deprecated, message: "This method will become unavailable in a future release")
-    func sendVoiceData(_ data: [UInt8])
-
     #if !os(iOS)
     ///
     /// Takes a process that outputs random audio data, and sends it to a hidden FFmpeg process that turns the data

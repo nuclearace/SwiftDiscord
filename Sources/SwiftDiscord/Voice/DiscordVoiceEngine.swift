@@ -322,12 +322,12 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         guard let source = source else { return }
 
         do {
-            _sendVoiceData(try source.engineNeedsData(self))
+            sendVoiceData(try source.engineNeedsData(self))
         } catch DiscordVoiceDataSourceStatus.noData {
             DefaultDiscordLogger.Logger.debug("No data", type: DiscordVoiceEngine.logType)
 
             if speaking {
-                _sendSpeaking(false)
+                sendSpeaking(false)
             }
         } catch DiscordVoiceDataSourceStatus.done {
             DefaultDiscordLogger.Logger.debug("Voice source done, sending silence", type: DiscordVoiceEngine.logType)
@@ -338,7 +338,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
                                               type: DiscordVoiceEngine.logType)
 
             if speaking {
-                _sendSpeaking(false)
+                sendSpeaking(false)
             }
 
             if source == nil {
@@ -576,12 +576,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     ///
     /// - parameter speaking: Our speaking status.
     ///
-    @available(*, deprecated, message: "This method will become unavailable in a future release")
-    public func sendSpeaking(_ speaking: Bool) {
-        _sendSpeaking(speaking)
-    }
-
-    private func _sendSpeaking(_ speaking: Bool) {
+    private func sendSpeaking(_ speaking: Bool) {
         self.speaking = speaking
 
         let speakingObject: [String: Any] = [
@@ -599,19 +594,14 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     ///
     /// - parameter data: An Opus encoded packet.
     ///
-    @available(*, deprecated, message: "This method will become unavailable in a future release")
-    public func sendVoiceData(_ data: [UInt8]) {
-        _sendVoiceData(data)
-    }
-
-    private func _sendVoiceData(_ data: [UInt8]) {
+    private func sendVoiceData(_ data: [UInt8]) {
         guard let udpSocket = self.udpSocket, let frameSize = source?.frameSize, secret != nil else { return }
 
         DefaultDiscordLogger.Logger.debug("Should send voice data: \(data.count) bytes",
                                           type: DiscordVoiceEngine.logType)
 
         if !speaking {
-            _sendSpeaking(true)
+            sendSpeaking(true)
         }
 
         do {
