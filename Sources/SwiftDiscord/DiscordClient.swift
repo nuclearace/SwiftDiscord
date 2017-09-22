@@ -317,7 +317,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     open func setPresence(_ presence: DiscordPresenceUpdate) {
         shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.statusUpdate),
-                                                       payload: .object(presence.json)),
+                                                       payload: .customEncodable(presence)),
                                  onShard: 0)
     }
 

@@ -16,7 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a Discord Permission. Calculating Permissions involves bitwise operations.
-public struct DiscordPermission : OptionSet, JSONRepresentable {
+public struct DiscordPermission : OptionSet, Encodable {
     public let rawValue: Int
 
     /// This user can create invites.
@@ -90,28 +90,20 @@ public struct DiscordPermission : OptionSet, JSONRepresentable {
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
-
-    func jsonValue() throws -> JSONRepresentable {
-        return self.rawValue
-    }
 }
 
 /// Represents a permission overwrite type for a channel.
-public enum DiscordPermissionOverwriteType : String, JSONRepresentable {
+public enum DiscordPermissionOverwriteType : String, Encodable {
     /// A role overwrite.
     case role = "role"
     /// A member overwrite.
     case member = "member"
-
-    func jsonValue() -> JSONRepresentable {
-        return rawValue
-    }
 }
 
 /// Represents a permission overwrite for a channel.
 ///
 /// The `allow` and `deny` properties are bit fields.
-public struct DiscordPermissionOverwrite : JSONAble {
+public struct DiscordPermissionOverwrite : Encodable {
     // MARK: Properties
 
     /// The snowflake id of this permission overwrite.
