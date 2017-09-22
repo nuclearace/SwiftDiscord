@@ -537,24 +537,6 @@ public extension DiscordEndpoint {
             case permissions(Int)
         }
 
-        /// Get message options.
-        ///
-        /// after, around and before are mutually exclusive. They shouldn't be in the same get request
-        @available(*, deprecated, message: "Only used for the deprecated getMessages(channel:options:callback:) method")
-        public enum GetMessage {
-            /// The message to get other messages after.
-            case after(DiscordMessage)
-
-            /// The message to get other messages around.
-            case around(DiscordMessage)
-
-            /// The message to get other messages before.
-            case before(DiscordMessage)
-
-            /// The number of messages to get.
-            case limit(Int)
-        }
-
         /// Options for getting messages
         public enum MessageSelection {
             /// Messages after the given ID

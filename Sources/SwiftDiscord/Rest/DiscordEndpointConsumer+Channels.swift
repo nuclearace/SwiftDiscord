@@ -203,27 +203,6 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    @available(*, deprecated, message: "Replaced with getMessages(channel:selection:limit:callback:)")
-    public func getMessages(for channelId: ChannelID, options: [DiscordEndpoint.Options.GetMessage],
-                            callback: @escaping ([DiscordMessage]) -> ()) {
-        var selection: DiscordEndpoint.Options.MessageSelection? = nil
-        var limit: Int? = nil
-        for option in options {
-            switch option {
-            case let .after(message):
-                selection = .after(message.id)
-            case let .around(message):
-                selection = .around(message.id)
-            case let .before(message):
-                selection = .before(message.id)
-            case let .limit(number):
-                limit = number
-            }
-        }
-        getMessages(for: channelId, selection: selection, limit: limit, callback: callback)
-    }
-
-    /// Default implementation
     public func getMessages(for channelId: ChannelID, selection: DiscordEndpoint.Options.MessageSelection? = nil,
                             limit: Int? = nil, callback: @escaping ([DiscordMessage]) -> ()) {
         var getParams: [String: String] = [:]

@@ -150,17 +150,6 @@ public protocol DiscordEndpointConsumer {
     /// Gets a group of messages according to the specified options.
     ///
     /// - parameter for: The channel that we are getting on
-    /// - parameter options: An array of `DiscordEndpointOptions.GetMessage` options
-    /// - parameter callback: The callback function, taking an array of `DiscordMessages`
-    ///
-    @available(*, deprecated, message: "Replaced with getMessages(channel:selection:limit:callback:)")
-    func getMessages(for channel: ChannelID, options: [DiscordEndpoint.Options.GetMessage],
-                     callback: @escaping ([DiscordMessage]) -> ())
-
-    ///
-    /// Gets a group of messages according to the specified options.
-    ///
-    /// - parameter for: The channel that we are getting on
     /// - parameter selection: The selection to use get messages with.  A nil value will use Discord's default, which will get the most recent messages in the channel
     /// - parameter limit: The maximum number of messages to fetch.  Should be in the range 1...100.  A nil value will use Discord's default, which is currently 50.
     /// - parameter callback: The callback function, taking an array of `DiscordMessages`
