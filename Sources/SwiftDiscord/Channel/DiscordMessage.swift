@@ -19,6 +19,13 @@ import Foundation
 
 /// Represents a Discord chat message.
 public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
+    // Used for `createDataForSending`
+    private struct FieldsList : Encodable {
+        let content: String
+        let tts: Bool
+        let embed: DiscordEmbed?
+    }
+
     // MARK: Typealiases
 
     /// ExpressibleByStringLiteral conformance
@@ -173,13 +180,6 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.init(content: value)
     }
 
-    // Used for `createDataForSending`
-    private struct FieldsList : Encodable {
-        var content: String
-        var tts: Bool
-        var embed: DiscordEmbed?
-    }
-    
     // MARK: Methods
 
     func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
