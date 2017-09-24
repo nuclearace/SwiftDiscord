@@ -176,6 +176,7 @@ public class TestDiscordDataStructures : XCTestCase {
             ("testGameJSONification", testGameJSONification),
             ("testEmbedJSONification", testEmbedJSONification),
             ("testDiscordGatewayPayloadData", testDiscordGatewayPayloadData),
+            ("testDiscordGatewayPayload", testDiscordGatewayPayload),
         ]
     }
 
