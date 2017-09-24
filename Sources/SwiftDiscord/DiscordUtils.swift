@@ -42,10 +42,12 @@ extension Dictionary where Key == String, Value == Any {
 /// Swift normally doesn't allow `[Encodable]` to be encoded
 struct GenericEncodableArray : Encodable {
     let wrapped: [Encodable]
+
     init(_ wrapped: [Encodable]) {
         self.wrapped = wrapped
     }
-    public func encode(to encoder: Encoder) throws {
+
+    func encode(to encoder: Encoder) throws {
         var container = encoder.unkeyedContainer()
         for item in wrapped {
             let superEncoder = container.superEncoder()
@@ -64,17 +66,24 @@ struct GenericEncodableArray : Encodable {
 /// Swift normally doesn't allow `[String: Encodable]` to be encoded
 struct GenericEncodableDictionary : Encodable {
     let wrapped: [String: Encodable]
+
     private struct GenericEncodingKey : CodingKey {
         var stringValue: String
+        var intValue: Int? { return nil }
+
         init(stringValue: String) {
             self.stringValue = stringValue
         }
-        var intValue: Int? { return nil }
-        init?(intValue: Int) { return nil }
+
+        init?(intValue: Int) {
+            return nil
+        }
     }
+
     init(_ wrapped: [String: Encodable]) {
         self.wrapped = wrapped
     }
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: GenericEncodingKey.self)
         for (key, value) in wrapped {

@@ -113,6 +113,8 @@ extension Snowflake: Codable {
     /// This will save space in binary encoders like binary plists, but will cause encoded JSON to be
     /// incompatible with Discord. Since JSON isn't a binary encoding, it won't save much space there anyways.
     public static let encodeAsUInt64 = CodingUserInfoKey(rawValue: "snowflakeAsUInt64")!
+
+    /// Decodable implementation.
     public init(from decoder: Decoder) throws {
         do {
             let intForm = try UInt64(from: decoder)
@@ -128,6 +130,8 @@ extension Snowflake: Codable {
             self = snowflake
         }
     }
+
+    /// Encodable implementation.
     public func encode(to encoder: Encoder) throws {
         if encoder.userInfo[Snowflake.encodeAsUInt64] as? Bool ?? false {
             try self.rawValue.encode(to: encoder)
@@ -135,7 +139,7 @@ extension Snowflake: Codable {
             try self.description.encode(to: encoder)
         }
     }
-    
+
 }
 
 /// Snowflake conformance to ExpressibleByIntegerLiteral

@@ -92,7 +92,7 @@ public extension DiscordGatewayable where Self: DiscordWebSocketable {
     /// Default Implementation.
     func sendPayload(_ payload: DiscordGatewayPayload) {
         guard let payloadString = payload.createPayloadString() else {
-            error(message: "Could not create payload string")
+            error(message: "Could not create payload string for payload: \(payload)")
 
             return
         }
@@ -139,6 +139,7 @@ public enum DiscordGatewayPayloadData : Encodable {
         }
     }
 
+    /// Encodable implementation.
     public func encode(to encoder: Encoder) throws {
         switch self {
         case let .customEncodable(encodable):
@@ -230,6 +231,7 @@ public struct DiscordGatewayPayload : Encodable {
         case name = "t"
     }
 
+    /// Encodable implementation.
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: PayloadKeys.self)
         try container.encode(code.rawCode, forKey: .code)

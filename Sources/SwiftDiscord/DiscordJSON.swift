@@ -34,11 +34,11 @@ enum JSON {
             return try? encoder.encode(object)
         }
     }
-    
+
     static func encodeJSON<T: Encodable>(_ object: T) -> String? {
         return encodeJSONData(object).flatMap({ String(data: $0, encoding: .utf8) })
     }
-    
+
     static func decodeJSON(_ string: String) -> JSON? {
         guard let data = string.data(using: .utf8, allowLossyConversion: false) else { return nil }
         guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) else { return nil }
