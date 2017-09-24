@@ -26,7 +26,7 @@ import TLS
 #endif
 
 /// Declares that a type will be an Engine for the Discord Gateway.
-public protocol DiscordEngineSpec : class, DiscordShard {
+public protocol DiscordEngineSpec : DiscordShard {
     // MARK: Properties
 
     /// The last received sequence number. Used for resume/reconnect.
