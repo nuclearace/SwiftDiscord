@@ -539,6 +539,49 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>messageId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The message that is to be pinned&rsquo;s snowflake id</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that we are adding on</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the pinned message was added.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -573,6 +616,49 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">bulkDeleteMessages</span><span class="p">(</span><span class="n">_</span> <span class="nv">messages</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9MessageIDa">MessageID</a></span><span class="p">],</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelIDa">ChannelID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>messages</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of message snowflake ids that are to be deleted</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that we are deleting on</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the messages were deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -609,6 +695,61 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>for</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that we are creating for.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of <code>DiscordEndpointOptions.CreateInvite</code> options.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this invite was created.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function. Takes an optional <code>DiscordInvite</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -643,6 +784,49 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelIDa">ChannelID</a></span><span class="p">,</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>channelId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the channel.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this channel is being deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the channel was deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -679,6 +863,61 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>overwriteId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The permission overwrite that is to be deleted&rsquo;s snowflake id.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that we are deleting on.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this overwrite was deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the permission was deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -713,6 +952,49 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">messageId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9MessageIDa">MessageID</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelIDa">ChannelID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>messageId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The message that is to be deleted&rsquo;s snowflake id</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that we are deleting on</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the message was deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -749,6 +1031,49 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>messageId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The message that is to be unpinned&rsquo;s snowflake id</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that we are unpinning on</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the message was unpinned.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -783,6 +1108,37 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelIDa">ChannelID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>channelId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the channel</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function containing an optional <code>DiscordChannel</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -819,6 +1175,61 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>messageId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The message that is to be edited&rsquo;s snowflake id</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that we are editing on</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>content</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The new content of the message</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the edited message, if successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -853,6 +1264,61 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">editChannelPermission</span><span class="p">(</span><span class="n">_</span> <span class="nv">permissionOverwrite</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordPermissionOverwrite.html">DiscordPermissionOverwrite</a></span><span class="p">,</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>permissionOverwrite</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The new DiscordPermissionOverwrite.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that we are editing on.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this edit was made.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the edit was successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -889,6 +1355,37 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>for</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that we are getting on</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function, taking an array of <code>DiscordInvite</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -923,6 +1420,61 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getMessages</span><span class="p">(</span><span class="k">for</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelIDa">ChannelID</a></span><span class="p">,</span> <span class="nv">selection</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a></span><span class="o">.</span><span class="kt">Options</span><span class="o">.</span><span class="kt">MessageSelection</span><span class="p">?,</span> <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?,</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>for</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that we are getting on</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>selection</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The selection to use get messages with.  A nil value will use Discord&rsquo;s default, which will get the most recent messages in the channel</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>limit</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The maximum number of messages to fetch.  Should be in the range 1&hellip;100.  A nil value will use Discord&rsquo;s default, which is currently 50.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function, taking an array of <code>DiscordMessages</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -959,6 +1511,61 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>channelId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the channel.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of <code>DiscordEndpointOptions.ModifyChannel</code> options.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this modification is being made.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the edited guild channel, if successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -993,6 +1600,37 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getPinnedMessages</span><span class="p">(</span><span class="k">for</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelIDa">ChannelID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>for</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that we are getting the pinned messages for</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function, taking an array of <code>DiscordMessages</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1043,6 +1681,49 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>message</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The message to send.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>to</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the channel to send to.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the message, if successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1077,6 +1758,37 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">triggerTyping</span><span class="p">(</span><span class="n">on</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelIDa">ChannelID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the channel to send to</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether typing was triggered.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1124,6 +1836,73 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roleId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the role to add.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>to</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the member to add this role to.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the guild this member is on.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this member is getting this role.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the role was added successfully.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1158,6 +1937,61 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">createGuildChannel</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildIDa">GuildID</a></span><span class="p">,</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>guildId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of <code>DiscordEndpointOptions.GuildCreateChannel</code> options.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this channel is being created.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the new channel, if successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1194,6 +2028,61 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>withOptions</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The options for the new role. Optional in the default implementation.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this role is being created.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function, taking an optional <code>DiscordRole</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1228,6 +2117,37 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">deleteGuild</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildIDa">GuildID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>guildId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the deleted guild, if successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1264,6 +2184,49 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>guildId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Options for getting the audit log.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A callback with the audit log.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1298,6 +2261,37 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getGuildBans</span><span class="p">(</span><span class="k">for</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildIDa">GuildID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordBan.html">DiscordBan</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>for</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function, taking an array of <code>DiscordBan</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1334,6 +2328,37 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>guildId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function, taking an array of <code>DiscordGuildChannel</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1368,6 +2393,49 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getGuildMember</span><span class="p">(</span><span class="n">by</span> <span class="nv">id</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6UserIDa">UserID</a></span><span class="p">,</span> <span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildIDa">GuildID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>by</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the member</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function containing an optional <code>DiscordGuildMember</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1404,6 +2472,49 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of <code>DiscordEndpointOptions.GuildGetMembers</code> options</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function, taking an array of <code>DiscordGuildMember</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1438,6 +2549,37 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getGuildRoles</span><span class="p">(</span><span class="k">for</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildIDa">GuildID</a></span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>for</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function, taking an array of <code>DiscordRole</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1474,6 +2616,73 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>userId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the user.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>deleteMessageDays</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The number of days to delete this user&rsquo;s messages.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for this ban.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the ban was successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1508,6 +2717,61 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuild</span><span class="p">(</span><span class="n">_</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildIDa">GuildID</a></span><span class="p">,</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>guildId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of <code>DiscordEndpointOptions.ModifyGuild</code> options.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for this modification.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the modified guild, if successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1544,6 +2808,50 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>channelPositions</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of channels that should be reordered. Should contain a dictionary
+in the form <code>[&quot;id&quot;: channelId, &quot;position&quot;: position]</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the modified channels, if successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1578,6 +2886,73 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyGuildMember</span><span class="p">(</span><span class="n">_</span> <span class="nv">id</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6UserIDa">UserID</a></span><span class="p">,</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>id</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the member.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the member to modify.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The options for this member.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for this change.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function, indicating whether the modify succeeded.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1614,6 +2989,61 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>permissionOverwrite</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The new DiscordRole.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild that we are editing on.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for this edit.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the modified role, if successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1648,6 +3078,61 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">removeGuildBan</span><span class="p">(</span><span class="k">for</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6UserIDa">UserID</a></span><span class="p">,</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>for</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the user.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for this unban.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the ban was successfully removed.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1684,6 +3169,73 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roleId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the role to add.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>from</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the member to add this role to.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the guild this member is on.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for removing this role.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback indicating whether the role was removed successfully.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1718,6 +3270,61 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">removeGuildRole</span><span class="p">(</span><span class="n">_</span> <span class="nv">roleId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6RoleIDa">RoleID</a></span><span class="p">,</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roleId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the role.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for removing this role.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the removed role, if successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1765,6 +3372,61 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>forChannel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel to create the webhook for.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The options for this webhook.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this webhook was created.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A callback that returns the webhook created, if successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1804,6 +3466,37 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>webhookId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the webhook.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for deleting this webhook.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1838,6 +3531,37 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9WebhookIDa">WebhookID</a></span><span class="p">,</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>webhookId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the webhook.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function containing an optional <code>DiscordToken</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1874,6 +3598,37 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>forChannel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the channel.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function taking an array of <code>DiscordWebhook</code>s</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1909,6 +3664,37 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>forGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The snowflake id of the guild.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function taking an array of <code>DiscordWebhook</code>s</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1943,6 +3729,61 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">modifyWebhook</span><span class="p">(</span><span class="n">_</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9WebhookIDa">WebhookID</a></span><span class="p">,</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>webhookId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The webhook to modify.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The options for this webhook.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for this modification.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A callback that returns the updated webhook, if successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1990,6 +3831,37 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>invite</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The invite code to accept</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the accepted invite, if successful</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -2025,6 +3897,49 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>invite</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The invite code to delete.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this invite was deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional callback containing the deleted invite, if successful.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -2059,6 +3974,37 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getInvite</span><span class="p">(</span><span class="n">_</span> <span class="nv">invite</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordInvite.html">DiscordInvite</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>invite</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The invite code to accept</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function, takes an optional <code>DiscordInvite</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -2106,6 +4052,49 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The user that the channel will be opened with&rsquo;s snowflake id</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>user</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Our snowflake id</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function. Takes an optional <code>DiscordDMChannel</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -2141,6 +4130,38 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>user</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Our snowflake id</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function, taking a dictionary of <code>DiscordDMChannel</code> associated by
+                  the recipient&rsquo;s id</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -2175,6 +4196,37 @@ that if you make modifications to the client inside of a callback, you first dis
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">getGuilds</span><span class="p">(</span><span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelIDa">ChannelID</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordUserGuild.html">DiscordUserGuild</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>user</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Our snowflake id</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>callback</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The callback function, taking a dictionary of <code>DiscordUserGuild</code> associated by guild id</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -2222,6 +4274,25 @@ that if you make modifications to the client inside of a callback, you first dis
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of <code>DiscordPermission</code> that this bot should have</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -2234,7 +4305,7 @@ that if you make modifications to the client inside of a callback, you first dis
     </div>
     <section class="footer">
       <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-09-25)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

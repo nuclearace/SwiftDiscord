@@ -472,65 +472,6 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B14LazyDictionaryV9subscriptq_Sgxci"></a>
-                    <a name="//apple_ref/swift/Method/subscript(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B14LazyDictionaryV9subscriptq_Sgxci">subscript(_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Used to getset the value stored at <code>key</code>. This will force evaluation if the value hasn&rsquo;t been computed yet.
-Can be used to set an already computed value.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">subscript</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV3Keya">Key</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV5Valuea">Value</a></span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>An optional containing the value at <code>key</code>, or nil if that key is not in the dictionary</p>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12SwiftDiscord0B14LazyDictionaryV11SubSequencea"></a>
-                    <a name="//apple_ref/swift/Alias/SubSequence" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B14LazyDictionaryV11SubSequencea">SubSequence</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The subsequence type.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">SubSequence</span> <span class="o">=</span>  <span class="kt">Slice</span><span class="o">&lt;</span><span class="kt">DiscordLazyDictionary</span><span class="o">&lt;</span><span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV3Keya">Key</a></span><span class="p">,</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV5Valuea">Value</a></span><span class="o">&gt;&gt;</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:12SwiftDiscord0B14LazyDictionaryV3Keya"></a>
                     <a name="//apple_ref/swift/Alias/Key" class="dashAnchor"></a>
                     <a class="token" href="#/s:12SwiftDiscord0B14LazyDictionaryV3Keya">Key</a>
@@ -558,9 +499,9 @@ Can be used to set an already computed value.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B14LazyDictionaryV9subscripts5SliceVyACyxq_GGs5RangeVyAA0bcD5IndexVyxq_GGci"></a>
-                    <a name="//apple_ref/swift/Method/subscript(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B14LazyDictionaryV9subscripts5SliceVyACyxq_GGs5RangeVyAA0bcD5IndexVyxq_GGci">subscript(_:)</a>
+                    <a name="/s:12SwiftDiscord0B14LazyDictionaryV5Valuea"></a>
+                    <a name="//apple_ref/swift/Alias/Value" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B14LazyDictionaryV5Valuea">Value</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -568,19 +509,16 @@ Can be used to set an already computed value.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+                        <p>The value type.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">subscript</span><span class="p">(</span><span class="nv">bounds</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV5Indexa">Index</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV11SubSequencea">SubSequence</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kt">V</span></code></pre>
 
                         </div>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>A slice of dictionary with <code>bounds</code></p>
                       </div>
                     </section>
                   </div>
@@ -642,9 +580,9 @@ Can be used to set an already computed value.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B14LazyDictionaryV9subscriptx3key_q_5valuetAA0bcD5IndexVyxq_Gci"></a>
-                    <a name="//apple_ref/swift/Method/subscript(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B14LazyDictionaryV9subscriptx3key_q_5valuetAA0bcD5IndexVyxq_Gci">subscript(_:)</a>
+                    <a name="/s:12SwiftDiscord0B14LazyDictionaryV11SubSequencea"></a>
+                    <a name="//apple_ref/swift/Alias/SubSequence" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B14LazyDictionaryV11SubSequencea">SubSequence</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -652,79 +590,16 @@ Can be used to set an already computed value.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Used to get the keyvalue pair stored at <code>position</code>.</p>
+                        <p>The subsequence type.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">subscript</span><span class="p">(</span><span class="nv">position</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV5Indexa">Index</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV8Iteratora">Iterator</a></span><span class="o">.</span><span class="kt">Element</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">SubSequence</span> <span class="o">=</span>  <span class="kt">Slice</span><span class="o">&lt;</span><span class="kt">DiscordLazyDictionary</span><span class="o">&lt;</span><span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV3Keya">Key</a></span><span class="p">,</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV5Valuea">Value</a></span><span class="o">&gt;&gt;</span></code></pre>
 
                         </div>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>An optional containing the keyvalue pair at <code>key</code>, or nil if that key is not in the dictionary</p>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12SwiftDiscord0B14LazyDictionaryV5Valuea"></a>
-                    <a name="//apple_ref/swift/Alias/Value" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B14LazyDictionaryV5Valuea">Value</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The value type.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kt">V</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12SwiftDiscord0B14LazyDictionaryV9subscriptAA0bC5ValueCyq_GSgx4lazy_tci"></a>
-                    <a name="//apple_ref/swift/Method/subscript(lazy:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B14LazyDictionaryV9subscriptAA0bC5ValueCyq_GSgx4lazy_tci">subscript(lazy:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Used to getset the DiscordLazyValue stored at <code>key</code>.
-Can be used to set a lazy value.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">subscript</span><span class="p">(</span><span class="kd">lazy</span> <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV3Keya">Key</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/DiscordLazyValue.html">DiscordLazyValue</a></span><span class="o">&lt;</span><span class="kt">V</span><span class="o">&gt;</span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>An optional containing the DiscordLazyValue at <code>key</code>, or nil if that key is not in the dictionary</p>
                       </div>
                     </section>
                   </div>
@@ -890,6 +765,131 @@ Can be used to set a lazy value.</p>
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SwiftDiscord0B14LazyDictionaryV9subscriptq_Sgxci"></a>
+                    <a name="//apple_ref/swift/Method/subscript(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B14LazyDictionaryV9subscriptq_Sgxci">subscript(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Used to getset the value stored at <code>key</code>. This will force evaluation if the value hasn&rsquo;t been computed yet.
+Can be used to set an already computed value.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">subscript</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV3Keya">Key</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV5Valuea">Value</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An optional containing the value at <code>key</code>, or nil if that key is not in the dictionary</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SwiftDiscord0B14LazyDictionaryV9subscriptAA0bC5ValueCyq_GSgx4lazy_tci"></a>
+                    <a name="//apple_ref/swift/Method/subscript(lazy:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B14LazyDictionaryV9subscriptAA0bC5ValueCyq_GSgx4lazy_tci">subscript(lazy:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Used to getset the DiscordLazyValue stored at <code>key</code>.
+Can be used to set a lazy value.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">subscript</span><span class="p">(</span><span class="kd">lazy</span> <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV3Keya">Key</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/DiscordLazyValue.html">DiscordLazyValue</a></span><span class="o">&lt;</span><span class="kt">V</span><span class="o">&gt;</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An optional containing the DiscordLazyValue at <code>key</code>, or nil if that key is not in the dictionary</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SwiftDiscord0B14LazyDictionaryV9subscriptx3key_q_5valuetAA0bcD5IndexVyxq_Gci"></a>
+                    <a name="//apple_ref/swift/Method/subscript(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B14LazyDictionaryV9subscriptx3key_q_5valuetAA0bcD5IndexVyxq_Gci">subscript(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Used to get the keyvalue pair stored at <code>position</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">subscript</span><span class="p">(</span><span class="nv">position</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV5Indexa">Index</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV8Iteratora">Iterator</a></span><span class="o">.</span><span class="kt">Element</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An optional containing the keyvalue pair at <code>key</code>, or nil if that key is not in the dictionary</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SwiftDiscord0B14LazyDictionaryV9subscripts5SliceVyACyxq_GGs5RangeVyAA0bcD5IndexVyxq_GGci"></a>
+                    <a name="//apple_ref/swift/Method/subscript(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B14LazyDictionaryV9subscripts5SliceVyACyxq_GGs5RangeVyAA0bcD5IndexVyxq_GGci">subscript(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">subscript</span><span class="p">(</span><span class="nv">bounds</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV5Indexa">Index</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV11SubSequencea">SubSequence</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A slice of dictionary with <code>bounds</code></p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
             <div class="task-group">
@@ -924,6 +924,25 @@ Can be used to set a lazy value.</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">dictionaryLiteral</span> <span class="nv">elements</span><span class="p">:</span> <span class="p">(</span><span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV3Keya">Key</a></span><span class="p">,</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV5Valuea">Value</a></span><span class="p">)</span><span class="o">...</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>dictionaryLiteral</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array of keyvalue pairs.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -963,6 +982,25 @@ This does not evaluate the value being stored.</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">contains</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV3Keya">Key</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The key to check for.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                       <div>
                         <h4>Return Value</h4>
@@ -1026,6 +1064,25 @@ This does not evaluate the value being stored.</p>
                         </div>
                       </div>
                       <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>after</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index for which we want the successor to</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
                         <h4>Return Value</h4>
                         <p>The index after the specified index.</p>
                       </div>
@@ -1054,6 +1111,25 @@ This does not evaluate the value being stored.</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">prefix</span><span class="p">(</span><span class="n">upTo</span> <span class="nv">end</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV5Indexa">Index</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV11SubSequencea">SubSequence</a></span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>upTo</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the end index for this slice</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                       <div>
                         <h4>Return Value</h4>
@@ -1086,6 +1162,25 @@ This does not evaluate the value being stored.</p>
                         </div>
                       </div>
                       <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>through</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the through index for this slice</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
                         <h4>Return Value</h4>
                         <p>A slice of dictionary through <code>upTo</code></p>
                       </div>
@@ -1114,6 +1209,25 @@ This does not evaluate the value being stored.</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">removeValue</span><span class="p">(</span><span class="n">forKey</span> <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV3Keya">Key</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV5Valuea">Value</a></span><span class="p">?</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>forKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the key for the value being removed</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                       <div>
                         <h4>Return Value</h4>
@@ -1146,6 +1260,25 @@ This does not evaluate the value being stored.</p>
                         </div>
                       </div>
                       <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>from</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the from index for this slice</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
                         <h4>Return Value</h4>
                         <p>A slice of dictionary from <code>from</code></p>
                       </div>
@@ -1175,6 +1308,25 @@ This does not evaluate the value being stored.</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">updateValues</span><span class="p">(</span><span class="n">withOtherDict</span> <span class="nv">other</span><span class="p">:</span> <span class="kt">DiscordLazyDictionary</span><span class="o">&lt;</span><span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV3Keya">Key</a></span><span class="p">,</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html#/s:12SwiftDiscord0B14LazyDictionaryV5Valuea">Value</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>withOtherDict</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The values to update with.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1226,7 +1378,7 @@ This does not evaluate the value being stored.</p>
     </div>
     <section class="footer">
       <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-09-25)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

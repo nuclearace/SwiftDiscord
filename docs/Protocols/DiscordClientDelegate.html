@@ -496,6 +496,37 @@ the corresponding delegate method will be called.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didConnect</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Should always be true.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -530,6 +561,37 @@ the corresponding delegate method will be called.</p>
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didDisconnectWithReason</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didDisconnectWithReason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason the client disconnected.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -566,6 +628,37 @@ the corresponding delegate method will be called.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didCreateChannel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that was created.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -600,6 +693,37 @@ the corresponding delegate method will be called.</p>
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didDeleteChannel</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordChannel.html">DiscordChannel</a></span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didDeleteChannel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that was deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -636,6 +760,37 @@ the corresponding delegate method will be called.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didUpdateChannel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The channel that was updated.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -670,6 +825,37 @@ the corresponding delegate method will be called.</p>
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didCreateGuild</span> <span class="nv">guild</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didCreateGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild that was created.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -706,6 +892,37 @@ the corresponding delegate method will be called.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didDeleteGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild that was deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -740,6 +957,37 @@ the corresponding delegate method will be called.</p>
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didUpdateGuild</span> <span class="nv">guild</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didUpdateGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild that was updated.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -776,6 +1024,37 @@ the corresponding delegate method will be called.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didAddGuildMember</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild member that was added.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -810,6 +1089,37 @@ the corresponding delegate method will be called.</p>
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didRemoveGuildMember</span> <span class="nv">member</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didRemoveGuildMember</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild member that was removed.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -846,6 +1156,37 @@ the corresponding delegate method will be called.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didUpdateGuildMember</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild member that was updated.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -880,6 +1221,37 @@ the corresponding delegate method will be called.</p>
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didUpdateMessage</span> <span class="nv">message</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordMessage.html">DiscordMessage</a></span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didUpdateMessage</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The message that was received.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -916,6 +1288,37 @@ the corresponding delegate method will be called.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didCreateMessage</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The message that was received.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -950,6 +1353,49 @@ the corresponding delegate method will be called.</p>
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didCreateRole</span> <span class="nv">role</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">,</span> <span class="n">onGuild</span> <span class="nv">guild</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didCreateRole</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The role that was created.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>onGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild the role was created on.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -986,6 +1432,49 @@ the corresponding delegate method will be called.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didDeleteRole</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The role that was deleted.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fromGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild the role was deleted from.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1020,6 +1509,49 @@ the corresponding delegate method will be called.</p>
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didUpdateRole</span> <span class="nv">role</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">,</span> <span class="n">onGuild</span> <span class="nv">guild</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordGuild.html">DiscordGuild</a></span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didUpdateRole</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The role that was updated.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>onGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild the role was updated on.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1056,6 +1588,37 @@ the corresponding delegate method will be called.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didReceivePresenceUpdate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The presence that was received.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1090,6 +1653,37 @@ the corresponding delegate method will be called.</p>
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didReceiveReady</span> <span class="nv">readyData</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">])</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didReceiveReady</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The presence that was received.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1126,6 +1720,37 @@ the corresponding delegate method will be called.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didReceiveVoiceStateUpdate</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The voice state that was received.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1160,6 +1785,37 @@ the corresponding delegate method will be called.</p>
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">isReadyToSendVoiceWithEngine</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a></span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>isReadyToSendVoiceWithEngine</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The encoder that will be used.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1198,6 +1854,49 @@ the corresponding delegate method will be called.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didReceiveOpusVoiceData</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The voice data that was received.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fromEngine</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The voice engine that received the data.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1235,6 +1934,49 @@ the corresponding delegate method will be called.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didReceiveRawVoiceData</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The voice data that was received.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fromEngine</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The voice engine that received the data.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1269,6 +2011,49 @@ the corresponding delegate method will be called.</p>
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">didHandleGuildMemberChunk</span> <span class="nv">chunk</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordLazyDictionary.html">DiscordLazyDictionary</a></span><span class="o">&lt;</span><span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord6UserIDa">UserID</a></span><span class="p">,</span> <span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="o">&gt;</span><span class="p">,</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didHandleGuildMemberChunk</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The chunk of guild members that was handled.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>forGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild the members were added to.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1305,6 +2090,49 @@ the corresponding delegate method will be called.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didNotHandleDispatchEvent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The event that wasn&rsquo;t handled.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>withData</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data for the event.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1340,6 +2168,49 @@ the corresponding delegate method will be called.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didUpdateEmojis</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The chunk of guild members that was handled.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>onGuild</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The guild the emojis were updated on.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1371,7 +2242,6 @@ different bitrate/sample rate/etc.</p>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
                         <p>Default</p>
-<p>Default</p>
 
                       </div>
                       <div class="declaration">
@@ -1381,6 +2251,37 @@ different bitrate/sample rate/etc.</p>
                           <pre class="highlight"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordClient.html">DiscordClient</a></span><span class="p">,</span> <span class="n">needsDataSourceForEngine</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/DiscordVoiceDataSource.html">DiscordVoiceDataSource</a></span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>client</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The client that is calling.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>needsDataSourceForEngine</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The engine that needs an encoder.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                       <div>
                         <h4>Return Value</h4>
@@ -1398,7 +2299,7 @@ different bitrate/sample rate/etc.</p>
     </div>
     <section class="footer">
       <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-09-25)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

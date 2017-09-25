@@ -1152,6 +1152,49 @@ state.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>member</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The member to ban.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>deleteMessageDays</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The number of days going back to delete messages. Defaults to 7.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for this ban.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1179,6 +1222,37 @@ channel create event.</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">createChannel</span><span class="p">(</span><span class="n">with</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/DiscordEndpoint.html">DiscordEndpoint</a></span><span class="o">.</span><span class="kt">Options</span><span class="o">.</span><span class="kt">GuildCreateChannel</span><span class="p">],</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>with</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The options for this new channel</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason this channel is being created.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -1279,6 +1353,25 @@ channel create event.</p>
                         </div>
                       </div>
                       <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>userId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The user id of the member to get</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
                         <h4>Return Value</h4>
                         <p>The guild member, if one was found</p>
                       </div>
@@ -1309,6 +1402,37 @@ channel create event.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An array of options to change.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The reason for this change.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1336,6 +1460,37 @@ channel create event.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>member</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The member to modify.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The options to set.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1362,6 +1517,25 @@ channel create event.</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">roles</span><span class="p">(</span><span class="k">for</span> <span class="nv">member</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGuildMember.html">DiscordGuildMember</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/DiscordRole.html">DiscordRole</a></span><span class="p">]</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>member</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The member whose roles we are getting.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                       <div>
                         <h4>Return Value</h4>
@@ -1394,6 +1568,25 @@ channel create event.</p>
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>user</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The user to unban</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -1406,7 +1599,7 @@ channel create event.</p>
     </div>
     <section class="footer">
       <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-09-25)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>
