@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Options Struct Reference</title>
+    <title>ShardingError Enum Reference</title>
     <link rel="stylesheet" type="text/css" href="../../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Struct/Options" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Enum/ShardingError" class="dashAnchor"></a>
 
-    <a title="Options Struct Reference"></a>
+    <a title="ShardingError Enum Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -38,7 +38,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../../index.html"> Reference</a>
       <img class="carat" src="../../img/carat.png" />
-      Options Struct Reference
+      ShardingError Enum Reference
     </p>
 
     <div class="content-wrapper">
@@ -440,14 +440,14 @@
 
         <section class="section">
           <div class="section-content">
-            <h1>Options</h1>
+            <h1>ShardingError</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Options</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ShardingError</span> <span class="p">:</span> <span class="kt">Error</span></code></pre>
 
                 </div>
               </div>
-            <p>A namespace struct for endpoint options.</p>
+            <p>Sharding errors.</p>
 
           </div>
         </section>
@@ -459,9 +459,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B8EndpointO7OptionsV8AuditLogO"></a>
-                    <a name="//apple_ref/swift/Enum/AuditLog" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B8EndpointO7OptionsV8AuditLogO">AuditLog</a>
+                    <a name="/s:12SwiftDiscord0B16ShardInformationV13ShardingErrorO07invalidC5RangeA2EmF"></a>
+                    <a name="//apple_ref/swift/Element/invalidShardRange" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B16ShardInformationV13ShardingErrorO07invalidC5RangeA2EmF">invalidShardRange</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -469,267 +469,15 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Options when getting an audit log.</p>
+                        <p>Thrown when a shardRange&rsquo;s end is greater than or equal to the total number of shards.
+A range should always be <code>n..&lt;m</code> where m is &lt;= the total number of shards.</p>
 
-                        <a href="../../Enums/DiscordEndpoint/Options/AuditLog.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">AuditLog</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12SwiftDiscord0B8EndpointO7OptionsV12CreateInviteO"></a>
-                    <a name="//apple_ref/swift/Enum/CreateInvite" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B8EndpointO7OptionsV12CreateInviteO">CreateInvite</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Create invite options.</p>
-
-                        <a href="../../Enums/DiscordEndpoint/Options/CreateInvite.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">CreateInvite</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12SwiftDiscord0B8EndpointO7OptionsV10CreateRoleO"></a>
-                    <a name="//apple_ref/swift/Enum/CreateRole" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B8EndpointO7OptionsV10CreateRoleO">CreateRole</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Options for creating a role. All are optional.</p>
-
-                        <a href="../../Enums/DiscordEndpoint/Options/CreateRole.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">CreateRole</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12SwiftDiscord0B8EndpointO7OptionsV16MessageSelectionO"></a>
-                    <a name="//apple_ref/swift/Enum/MessageSelection" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B8EndpointO7OptionsV16MessageSelectionO">MessageSelection</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Options for getting messages</p>
-
-                        <a href="../../Enums/DiscordEndpoint/Options/MessageSelection.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">MessageSelection</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12SwiftDiscord0B8EndpointO7OptionsV18GuildCreateChannelO"></a>
-                    <a name="//apple_ref/swift/Enum/GuildCreateChannel" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B8EndpointO7OptionsV18GuildCreateChannelO">GuildCreateChannel</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild create channel options.</p>
-
-                        <a href="../../Enums/DiscordEndpoint/Options/GuildCreateChannel.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">GuildCreateChannel</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12SwiftDiscord0B8EndpointO7OptionsV15GuildGetMembersO"></a>
-                    <a name="//apple_ref/swift/Enum/GuildGetMembers" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B8EndpointO7OptionsV15GuildGetMembersO">GuildGetMembers</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Guild get members options.</p>
-
-                        <a href="../../Enums/DiscordEndpoint/Options/GuildGetMembers.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">GuildGetMembers</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12SwiftDiscord0B8EndpointO7OptionsV13ModifyChannelO"></a>
-                    <a name="//apple_ref/swift/Enum/ModifyChannel" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B8EndpointO7OptionsV13ModifyChannelO">ModifyChannel</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Modify channel options.</p>
-
-                        <a href="../../Enums/DiscordEndpoint/Options/ModifyChannel.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ModifyChannel</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12SwiftDiscord0B8EndpointO7OptionsV12ModifyMemberO"></a>
-                    <a name="//apple_ref/swift/Enum/ModifyMember" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B8EndpointO7OptionsV12ModifyMemberO">ModifyMember</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Modify a guild member.</p>
-
-                        <a href="../../Enums/DiscordEndpoint/Options/ModifyMember.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ModifyMember</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12SwiftDiscord0B8EndpointO7OptionsV11ModifyGuildO"></a>
-                    <a name="//apple_ref/swift/Enum/ModifyGuild" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B8EndpointO7OptionsV11ModifyGuildO">ModifyGuild</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Modify guild options.</p>
-
-                        <a href="../../Enums/DiscordEndpoint/Options/ModifyGuild.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ModifyGuild</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:12SwiftDiscord0B8EndpointO7OptionsV13WebhookOptionO"></a>
-                    <a name="//apple_ref/swift/Enum/WebhookOption" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B8EndpointO7OptionsV13WebhookOptionO">WebhookOption</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The options for creating/editing a webhook.</p>
-
-                        <a href="../../Enums/DiscordEndpoint/Options/WebhookOption.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">WebhookOption</span></code></pre>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">invalidShardRange</span></code></pre>
 
                         </div>
                       </div>
