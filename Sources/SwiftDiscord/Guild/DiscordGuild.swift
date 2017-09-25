@@ -317,7 +317,9 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
                     return DiscordGuildMember(guildMemberObject: [:], guildId: 0)
                 }
 
-                return this.getGuildMember(userId) ?? DiscordGuildMember(guildMemberObject: [:], guildId: 0)
+                return this.getGuildMember(userId) ?? DiscordGuildMember(guildMemberObject: [
+                    "user": ["id": String(describing: userId)]
+                ], guildId: this.id)
             })
         }
     }

@@ -180,6 +180,20 @@ public class TestDiscordGuild : XCTestCase {
         }
     }
 
+    func testGuildReturnsABasicMemberObjectLazyCreationFails() {
+        let guild = DiscordGuild(guildObject: tGuild, client: nil)
+        var tPresence = testPresence
+
+        tPresence["status"] = "online"
+
+        let presence = DiscordPresence(presenceObject: testPresence, guildId: guild.id)
+
+        guild.updateGuild(fromPresence: presence, fillingUsers: true, pruningUsers: false)
+
+        XCTAssertEqual(guild.members.count, 1, "It should add a placeholder member")
+        XCTAssertEqual(guild.members[presence.user.id]?.user.id, presence.user.id, "It should create a basic member")
+    }
+
 #if PERFTEST
     func testCreatingGuildWithALargeNumberOfMembersIsConsistent() {
         tGuild["members"] = createGuildMemberObjects(n: 100_000)
@@ -230,7 +244,8 @@ public class TestDiscordGuild : XCTestCase {
             ("testGuildFromObjectCorrectlyCreatesChannelCategory", testGuildFromObjectCorrectlyCreatesChannelCategory),
             ("testGuildFromObjectCorrectlyCreatesTextChannel", testGuildFromObjectCorrectlyCreatesTextChannel),
             ("testGuildFromObjectCorrectlyCreatesVoiceChannel", testGuildFromObjectCorrectlyCreatesVoiceChannel),
-            ("testGuildFromObjectCreatesNoChannelOnInvalidType", testGuildFromObjectCreatesNoChannelOnInvalidType)
+            ("testGuildFromObjectCreatesNoChannelOnInvalidType", testGuildFromObjectCreatesNoChannelOnInvalidType),
+            ("testGuildReturnsABasicMemberObjectLazyCreationFails", testGuildReturnsABasicMemberObjectLazyCreationFails)
         ]
 
         #if PERFTEST
