@@ -121,8 +121,9 @@ let permissionsTestClient = DiscordClient(token: "Testing", delegate: permission
 let permissionsTestGuildJSON = { () -> [String: Any] in
     var tmp = testGuild
     tmp["owner_id"] = String(describing: permissionsTestUsers[0].id)
-    tmp["roles"] = try! permissionsTestRoles.jsonValue()
-    return tmp
+    tmp["roles"] = permissionsTestRoles
+
+    return roundTripEncode(GenericEncodableDictionary(tmp as! [String: Encodable]))
 }()
 
 let permissionsTestGuild = DiscordGuild(guildObject: permissionsTestGuildJSON, client: permissionsTestClient)
@@ -143,8 +144,9 @@ let permissionsTestMembers = zip(permissionsTestUsers, permissionTestMemberRoles
 
 func createPermissionTestChannel(overwrites: [DiscordPermissionOverwrite]) -> DiscordGuildTextChannel {
     var channelData = testGuildTextChannel
-    channelData["permission_overwrites"] = try? overwrites.jsonValue()
+    channelData["permission_overwrites"] = overwrites
     channelData["guild_id"] = String(describing: permissionsTestGuild.id)
+    channelData = roundTripEncode(GenericEncodableDictionary(channelData as! [String: Encodable]))
     permissionsTestClient.handleChannelCreate(with: channelData)
     return permissionsTestClient.findChannel(fromId: Snowflake(channelData["id"] as! String)!) as! DiscordGuildTextChannel
 }

@@ -18,10 +18,16 @@ extension DiscordGatewayPayloadData: Equatable {
     }
 }
 
+func roundTripEncode<T: Encodable>(_ item: T) -> [String: Any] {
+    let json = JSON.encodeJSONData(item)!
+    return try! JSONSerialization.jsonObject(with: json, options: []) as! [String: Any]
+}
+
 public class TestDiscordDataStructures : XCTestCase {
+
     func testRoleJSONification() {
         let role1 = DiscordRole(id: 324, color: 43, hoist: false, managed: true, mentionable: false, name: "Test Role", permissions: [.addReactions], position: 4)
-        let role2 = DiscordRole(roleObject: role1.json)
+        let role2 = DiscordRole(roleObject: roundTripEncode(role1))
 
         XCTAssertEqual(role1.id, role2.id, "Role ID should survive JSONification")
         XCTAssertEqual(role1.color, role2.color, "Color should survive JSONification")
@@ -35,22 +41,22 @@ public class TestDiscordDataStructures : XCTestCase {
 
     func testPermissionOverwriteJSONification() {
         let overwrite1 = DiscordPermissionOverwrite(id: 5234, type: .member, allow: [.changeNickname, .voice], deny: [.manageChannels])
-        let overwrite2 = DiscordPermissionOverwrite(permissionOverwriteObject: overwrite1.json)
+        let overwrite2 = DiscordPermissionOverwrite(permissionOverwriteObject: roundTripEncode(overwrite1))
 
         XCTAssertEqual(overwrite1.id, overwrite2.id, "Permission Overwrite ID should survive JSONification")
         XCTAssertEqual(overwrite1.type, overwrite2.type, "Type should survive JSONification")
         XCTAssertEqual(overwrite1.allow, overwrite2.allow, "Allow should survive JSONification")
         XCTAssertEqual(overwrite1.deny, overwrite2.deny, "Deny should survive JSONification")
         let overwrite3 = DiscordPermissionOverwrite(id: 934, type: .role, allow: [], deny: [])
-        let overwrite4 = DiscordPermissionOverwrite(permissionOverwriteObject: overwrite3.json)
+        let overwrite4 = DiscordPermissionOverwrite(permissionOverwriteObject: roundTripEncode(overwrite3))
         XCTAssertEqual(overwrite3.type, overwrite4.type, "Type should survive JSONification")
     }
 
     func testGameJSONification() {
         let game1 = DiscordGame(name: "Game", type: .game)
-        let game2 = DiscordGame(gameObject: game1.json)!
+        let game2 = DiscordGame(gameObject: roundTripEncode(game1))!
         let game3 = DiscordGame(name: "Another Game", type: .stream, url: "http://www.twitch.tv/person")
-        let game4 = DiscordGame(gameObject: game3.json)!
+        let game4 = DiscordGame(gameObject: roundTripEncode(game3))!
         XCTAssertEqual(game1.name, game2.name, "Name should survive JSONification")
         XCTAssertEqual(game1.type, game2.type, "Type should survive JSONification")
         XCTAssertEqual(game1.url, game2.url, "Nil URL should survive JSONification")
@@ -76,7 +82,7 @@ public class TestDiscordDataStructures : XCTestCase {
             footer: DiscordEmbed.Footer(text: "Footer", iconUrl: dummyIconB),
             fields: [DiscordEmbed.Field(name: "Field Name", value: "Field Value", inline: true)]
         )
-        let embed2 = DiscordEmbed(embedObject: embed1.json)
+        let embed2 = DiscordEmbed(embedObject: roundTripEncode(embed1))
         var currentCompare = "embed1 and embed2"
         func check<T: Equatable>(_ lhs: T?, _ rhs: T?, _ name: String) {
             XCTAssertEqual(lhs, rhs, "\(name) should survive JSONification (comparing \(currentCompare))")
@@ -108,10 +114,10 @@ public class TestDiscordDataStructures : XCTestCase {
         }
         compare(embed1, embed2)
         let embed3 = DiscordEmbed(author: DiscordEmbed.Author(name: "Author"), image: DiscordEmbed.Image(url: dummyIconA), thumbnail: DiscordEmbed.Thumbnail(url: dummyIconA), footer: DiscordEmbed.Footer(text: "Footer", iconUrl: nil))
-        let embed4 = DiscordEmbed(embedObject: embed3.json)
+        let embed4 = DiscordEmbed(embedObject: roundTripEncode(embed3))
         currentCompare = "embed3 and embed4"
         compare(embed3, embed4)
-        let nilJSONTest = JSON.encodeJSON(embed3.json)!
+        let nilJSONTest = JSON.encodeJSON(embed3)!
         XCTAssertFalse(nilJSONTest.contains("null"), "JSON-encoded embed should not have any null fields")
     }
 
@@ -126,6 +132,43 @@ public class TestDiscordDataStructures : XCTestCase {
         XCTAssertEqual(payloadData[5], DiscordGatewayPayloadData.integer(-1), "Discord Gateway Payload should unwrap -1")
     }
 
+    func testDiscordGatewayPayload() {
+        func testRunner(data: DiscordGatewayPayloadData, test: (Any?) -> ()) {
+            let payload = DiscordGatewayPayload(code: .gateway(.identify), payload: data, sequenceNumber: 9, name: "hi")
+            let json = payload.createPayloadString()!
+            let object = try! JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: []) as! [String: Any]
+            XCTAssertEqual(object["op"] as? Int, payload.code.rawCode)
+            XCTAssertEqual(object["s"] as? Int, payload.sequenceNumber)
+            XCTAssertEqual(object["t"] as? String, payload.name)
+            test(object["d"])
+        }
+        testRunner(data: .bool(true)) { item in
+            XCTAssertEqual(item as? Bool, true)
+        }
+        testRunner(data: .bool(false)) { item in
+            XCTAssertEqual(item as? Bool, false)
+        }
+        testRunner(data: .integer(8)) { item in
+            XCTAssertEqual(item as? Int, 8)
+        }
+        testRunner(data: .object(["hello": 4, "yay": DiscordGame(name: "A Game", type: .stream)])) { item in
+            let item = item as! [String: Any]
+            XCTAssertEqual(item["hello"] as? Int, 4)
+            XCTAssertNotNil(item["yay"])
+            let game = DiscordGame(gameObject: item["yay"] as? [String: Any])
+            XCTAssertEqual(game?.name, "A Game")
+            XCTAssertEqual(game?.type, .stream)
+        }
+        let perms = DiscordPermissionOverwrite(id: 95352, type: .member, allow: [.addReactions, .attachFiles], deny: [.changeNickname, .manageChannels])
+        testRunner(data: .customEncodable(perms)) { (item) in
+            let newPerms = DiscordPermissionOverwrite(permissionOverwriteObject: item as? [String: Any] ?? [:])
+            XCTAssertEqual(newPerms.id, perms.id)
+            XCTAssertEqual(newPerms.type, perms.type)
+            XCTAssertEqual(newPerms.allow, perms.allow)
+            XCTAssertEqual(newPerms.deny, perms.deny)
+        }
+    }
+
     public static var allTests: [(String, (TestDiscordDataStructures) -> () -> ())] {
         return [
             ("testRoleJSONification", testRoleJSONification),
@@ -133,6 +176,7 @@ public class TestDiscordDataStructures : XCTestCase {
             ("testGameJSONification", testGameJSONification),
             ("testEmbedJSONification", testEmbedJSONification),
             ("testDiscordGatewayPayloadData", testDiscordGatewayPayloadData),
+            ("testDiscordGatewayPayload", testDiscordGatewayPayload),
         ]
     }
 

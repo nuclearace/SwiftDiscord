@@ -45,9 +45,14 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
     case pruneUsers
 
     /// If this client is going to shard into multiple instances, this tells a client the shard information.
+    @available(*, deprecated, message: "Use .shardingInformation")
     case singleShard(DiscordShardInformation)
 
+    /// Tells the client the number of shards to create. If not provided, one shard will be created.
+    case shardingInfo(DiscordShardInformation)
+
     /// The number of shards this client should spawn. Defaults to 1.
+    @available(*, deprecated, message: "Use .shardingInformation")
     case shards(Int)
 
     /// The settings for voice engines. See `DiscordVoiceEngineConfiguration` for defaults.
@@ -64,6 +69,7 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
         case .handleQueue:          return "handleQueue"
         case .log:                  return "log"
         case .logger:               return "logger"
+        case .shardingInfo:         return "shardingInfo"
         case .shards:               return "shards"
         case .singleShard:          return "singleShard"
         case .pruneUsers:           return "pruneUsers"

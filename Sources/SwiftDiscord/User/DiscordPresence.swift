@@ -16,25 +16,16 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a game type.
-public enum DiscordGameType : Int, JSONRepresentable {
+public enum DiscordGameType : Int, Encodable {
     /// A regular game.
-    case game
+    case game = 0
 
     /// A stream.
-    case stream
-
-    func jsonValue() -> JSONRepresentable {
-        switch self {
-        case .game:
-            return 0
-        case .stream:
-            return 1
-        }
-    }
+    case stream = 1
 }
 
 /// Represents a game
-public struct DiscordGame : JSONAble {
+public struct DiscordGame : Encodable {
     // MARK: Properties
 
     /// The name of the game.
@@ -163,7 +154,7 @@ public struct DiscordPresence {
 
 
 /// Used to send updates to Discord about our presence.
-public struct DiscordPresenceUpdate : JSONAble {
+public struct DiscordPresenceUpdate : Encodable {
     // MARK: Properties
 
     /// The time we've been idle for. Nil if not idle

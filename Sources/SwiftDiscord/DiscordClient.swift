@@ -60,7 +60,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     public var shardManager: DiscordShardManager!
 
     /// If we should only represent a single shard, this is the shard information.
-    public var singleShardInformation: DiscordShardInformation?
+    public var shardingInfo = try! DiscordShardInformation(shardRange: 0..<1, totalShards: 1)
 
     /// Whether large guilds should have their users fetched as soon as they are created.
     public var fillLargeGuilds = false
@@ -72,7 +72,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     public var pruneUsers = false
 
     /// How many shards this client should spawn. Default is one.
-    public var shards = 1
+    @available(*, deprecated, message: "Check shardingInformation.totalShards")
+    public var shards: Int {
+        return shardingInfo.totalShards
+    }
 
     /// Whether or not this client is connected.
     public private(set) var connected = false
@@ -119,10 +122,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
                 DefaultDiscordLogger.Logger.level = level
             case let .logger(logger):
                 DefaultDiscordLogger.Logger = logger
+            case let .shardingInfo(shardingInfo):
+                self.shardingInfo = shardingInfo
             case let .shards(shards) where shards > 0:
-                self.shards = shards
+                self.shardingInfo = try! DiscordShardInformation(shardRange: 0..<shards, totalShards: shards)
             case let .singleShard(shardInfo):
-                self.singleShardInformation = shardInfo
+                self.shardingInfo = shardInfo
             case let .voiceConfiguration(config):
                 self.voiceManager.engineConfiguration = config
             case .discardPresences:
@@ -148,12 +153,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     open func connect() {
         DefaultDiscordLogger.Logger.log("Connecting", type: logType)
 
-        if let shardInfo = singleShardInformation {
-            shards = shardInfo.totalShards
-            shardManager.manuallyShatter(withInfo: shardInfo)
-        } else {
-            shardManager.shatter(into: shards)
-        }
+        shardManager.manuallyShatter(withInfo: shardingInfo)
 
         shardManager.connect()
     }
@@ -276,7 +276,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
                                                                          "self_mute": false,
                                                                          "self_deaf": false
                                                                         ])
-        ), onShard: guild.shardNumber(assuming: shards))
+        ), onShard: guild.shardNumber(assuming: shardingInfo.totalShards))
     }
 
     ///
@@ -303,7 +303,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
             "limit": 0
         ]
 
-        guard let shardNum = guilds[guildId]?.shardNumber(assuming: shards) else { return }
+        guard let shardNum = guilds[guildId]?.shardNumber(assuming: shardingInfo.totalShards) else { return }
 
         shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.requestGuildMembers),
                                                        payload: .object(requestObject)),
@@ -317,7 +317,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     open func setPresence(_ presence: DiscordPresenceUpdate) {
         shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.statusUpdate),
-                                                       payload: .object(presence.json)),
+                                                       payload: .customEncodable(presence)),
                                  onShard: 0)
     }
 
@@ -377,10 +377,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     open func voiceManager(_ manager: DiscordVoiceManager, didDisconnectEngine engine: DiscordVoiceEngine) {
         handleQueue.async {
-            guard let shardNum = self.guilds[engine.guildId]?.shardNumber(assuming: self.shards) else { return }
+            guard let shardNum = self.guilds[engine.guildId]?.shardNumber(assuming: self.shardingInfo.totalShards) else { return }
 
             let payload = DiscordGatewayPayloadData.object(["guild_id": String(describing: engine.guildId),
-                                                            "channel_id": NSNull(),
+                                                            "channel_id": nil as Bool? as Any,
                                                             "self_mute": false,
                                                             "self_deaf": false])
 

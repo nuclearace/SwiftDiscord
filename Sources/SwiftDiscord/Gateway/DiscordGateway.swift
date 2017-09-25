@@ -92,7 +92,7 @@ public extension DiscordGatewayable where Self: DiscordWebSocketable {
     /// Default Implementation.
     func sendPayload(_ payload: DiscordGatewayPayload) {
         guard let payloadString = payload.createPayloadString() else {
-            error(message: "Could not create payload string")
+            error(message: "Could not create payload string for payload: \(payload)")
 
             return
         }
@@ -108,7 +108,10 @@ public extension DiscordGatewayable where Self: DiscordWebSocketable {
 }
 
 /// Holds a gateway payload, based on its type.
-public enum DiscordGatewayPayloadData {
+public enum DiscordGatewayPayloadData : Encodable {
+    /// Outgoing payloads only, payload is a custom encodable type
+    case customEncodable(Encodable)
+
     /// Payload is a json object.
     case object([String: Any])
 
@@ -123,6 +126,8 @@ public enum DiscordGatewayPayloadData {
 
     var value: Any {
         switch self {
+        case let .customEncodable(encodable):
+            return encodable
         case let .object(object):
             return object
         case let .integer(integer):
@@ -131,6 +136,29 @@ public enum DiscordGatewayPayloadData {
             return bool
         case .null:
             return NSNull()
+        }
+    }
+
+    /// Encodable implementation.
+    public func encode(to encoder: Encoder) throws {
+        switch self {
+        case let .customEncodable(encodable):
+            try encodable.encode(to: encoder)
+        case let .object(contents):
+            guard let encodableContents = contents as? [String: Encodable] else {
+                let context = EncodingError.Context(codingPath: encoder.codingPath, debugDescription: "Failed to convert dictionary to [String: Encodable]")
+                throw EncodingError.invalidValue(contents, context)
+            }
+            try GenericEncodableDictionary(encodableContents).encode(to: encoder)
+        case let .integer(integer):
+            var container = encoder.singleValueContainer()
+            try container.encode(integer)
+        case let .bool(bool):
+            var container = encoder.singleValueContainer()
+            try container.encode(bool)
+        case .null:
+            var container = encoder.singleValueContainer()
+            try container.encodeNil()
         }
     }
 }
@@ -167,7 +195,7 @@ extension DiscordGatewayPayloadData {
 }
 
 /// Represents a gateway payload. This is lowest level of the Discord API.
-public struct DiscordGatewayPayload {
+public struct DiscordGatewayPayload : Encodable {
     /// The payload code.
     public let code: DiscordGatewayCode
 
@@ -196,21 +224,24 @@ public struct DiscordGatewayPayload {
         self.name = name
     }
 
+    private enum PayloadKeys : String, CodingKey {
+        case code = "op"
+        case payload = "d"
+        case sequence = "s"
+        case name = "t"
+    }
+
+    /// Encodable implementation.
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: PayloadKeys.self)
+        try container.encode(code.rawCode, forKey: .code)
+        try container.encodeIfPresent(sequenceNumber, forKey: .sequence)
+        try container.encodeIfPresent(name, forKey: .name)
+        try payload.encode(to: container.superEncoder(forKey: .payload))
+    }
+
     func createPayloadString() -> String? {
-        var payload: [String: Any] = [
-            "op": code.rawCode,
-            "d": self.payload.value
-        ]
-
-        if sequenceNumber != nil {
-            payload["s"] = sequenceNumber!
-        }
-
-        if name != nil {
-            payload["t"] = name!
-        }
-
-        return JSON.encodeJSON(payload)
+        return JSON.encodeJSON(self)
     }
 }
 

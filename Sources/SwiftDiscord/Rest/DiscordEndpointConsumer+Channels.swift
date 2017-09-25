@@ -139,7 +139,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             extraHeaders[.auditReason] = modifyReason
         }
 
-        guard let contentData = JSON.encodeJSONData(permissionOverwrite.json) else { return }
+        guard let contentData = JSON.encodeJSONData(permissionOverwrite) else { return }
 
         rateLimiter.executeRequest(endpoint: .channelPermission(channel: channelId, overwrite: permissionOverwrite.id),
                                    token: token,
@@ -200,27 +200,6 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                    token: token,
                                    requestInfo: .get(params: nil, extraHeaders: nil),
                                    callback: requestCallback)
-    }
-
-    /// Default implementation
-    @available(*, deprecated, message: "Replaced with getMessages(channel:selection:limit:callback:)")
-    public func getMessages(for channelId: ChannelID, options: [DiscordEndpoint.Options.GetMessage],
-                            callback: @escaping ([DiscordMessage]) -> ()) {
-        var selection: DiscordEndpoint.Options.MessageSelection? = nil
-        var limit: Int? = nil
-        for option in options {
-            switch option {
-            case let .after(message):
-                selection = .after(message.id)
-            case let .around(message):
-                selection = .around(message.id)
-            case let .before(message):
-                selection = .before(message.id)
-            case let .limit(number):
-                limit = number
-            }
-        }
-        getMessages(for: channelId, selection: selection, limit: limit, callback: callback)
     }
 
     /// Default implementation

@@ -21,10 +21,21 @@ import Foundation
 /// Struct that represents shard information.
 /// Used when a client is doing manual sharding.
 public struct DiscordShardInformation {
+    /// Sharding errors.
+    public enum ShardingError : Error {
+        /// Thrown when a shardRange's end is greater than or equal to the total number of shards.
+        /// A range should always be `n..<m` where m is <= the total number of shards.
+        case invalidShardRange
+    }
+
     // MARK: Properties
 
     /// This client's shard number
-    public let shardNum: Int
+    @available(*, deprecated, message: "No longer meaningful, check the shardRange for a list of shards in this client")
+    public let shardNum = -1
+
+    /// The range of shards in this client.
+    public let shardRange: CountableRange<Int>
 
     /// The total number of shards this bot will have.
     public let totalShards: Int
@@ -34,8 +45,18 @@ public struct DiscordShardInformation {
     ///
     /// Creates a new DiscordShardInformation
     ///
+    @available(*, deprecated, message: "Use init(shardRange:totalShards:)")
     public init(shardNum: Int, totalShards: Int) {
-        self.shardNum = shardNum
+        try! self.init(shardRange: shardNum..<shardNum+1, totalShards: totalShards)
+    }
+
+    ///
+    /// Creates a new DiscordShardInformation telling the client the range of shards that it should spawn.
+    ///
+    public init(shardRange: CountableRange<Int>, totalShards: Int) throws {
+        guard shardRange.first! >= 0 && shardRange.last! < totalShards else { throw ShardingError.invalidShardRange }
+
+        self.shardRange = shardRange
         self.totalShards = totalShards
     }
 }
@@ -234,12 +255,14 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     open func manuallyShatter(withInfo info: DiscordShardInformation) {
         guard let delegate = self.delegate else { return }
 
-        DefaultDiscordLogger.Logger.verbose("Manually shattering shard #\(info.shardNum)", type: "DiscordShardManager")
+        DefaultDiscordLogger.Logger.verbose("Handling shard range \(info.shardRange)", type: "DiscordShardManager")
 
         cleanUp()
 
         protected {
-            shards.append(createShardWithDelegate(delegate, withShardNum: info.shardNum, totalShards: info.totalShards))
+            for shardNum in info.shardRange {
+                shards.append(createShardWithDelegate(delegate, withShardNum: shardNum, totalShards: info.totalShards))
+            }
         }
     }
 
@@ -310,6 +333,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     ///
     /// - parameter into: The number of shards to create.
     ///
+    @available(*, deprecated, message: "Use manuallyShatter(withInfo:)")
     open func shatter(into numberOfShards: Int) {
         guard let delegate = self.delegate else { return }
 
