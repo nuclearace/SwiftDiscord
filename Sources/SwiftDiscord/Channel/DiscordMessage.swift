@@ -92,6 +92,14 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         return client?.findChannel(fromId: channelId) as? DiscordTextChannel
     }
 
+    /// Returns a `DiscordGuildMember` for this author, or nil if this message is not from a guild.
+    public var guildMember: DiscordGuildMember? {
+        // TODO cache this
+        guard let guildChannel = channel, let guild = guildChannel.guild else { return nil }
+
+        return guild.members[author.id]
+    }
+
     let files: [DiscordFileUpload]
 
     // MARK: Initializers
