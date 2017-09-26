@@ -95,7 +95,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// Returns a `DiscordGuildMember` for this author, or nil if this message is not from a guild.
     public var guildMember: DiscordGuildMember? {
         // TODO cache this
-        guard let guildChannel = channel, let guild = guildChannel.guild else { return nil }
+        guard let guild = channel?.guild else { return nil }
 
         return guild.members[author.id]
     }
