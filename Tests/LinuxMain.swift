@@ -6,5 +6,6 @@ XCTMain([testCase(TestDiscordClient.allTests),
          testCase(TestDiscordEngine.allTests),
          testCase(TestDiscordGuild.allTests),
          testCase(TestDiscordGuildMember.allTests),
-         testCase(TestDiscordPermissions.allTests)
+         testCase(TestDiscordPermissions.allTests),
+         testCase(TestDiscordMessage.allTests)
         ])

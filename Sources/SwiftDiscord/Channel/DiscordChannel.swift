@@ -27,6 +27,7 @@ public protocol DiscordChannel : DiscordClientHolder {
 
 /// Protocol that declares a type will be a Discord text-based channel.
 public protocol DiscordTextChannel : DiscordChannel {
+    // MARK: Properties
 
     /// The snowflake id of the last received message on this channel.
     var lastMessageId: MessageID { get }
@@ -81,8 +82,6 @@ public extension DiscordChannel {
 
         client.modifyChannel(id, options: options, reason: reason)
     }
-
-
 }
 
 public extension DiscordTextChannel {
