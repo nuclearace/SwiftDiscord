@@ -363,7 +363,7 @@ public protocol DiscordEndpointConsumer {
     /// Modifies a guild member.
     ///
     /// - parameter id: The snowflake id of the member.
-    /// - parameter on: The snowflake id of the member to modify.
+    /// - parameter on: The snowflake id of the guild for this member.
     /// - parameter options: The options for this member.
     /// - parameter reason: The reason for this change.
     /// - parameter callback: The callback function, indicating whether the modify succeeded.
