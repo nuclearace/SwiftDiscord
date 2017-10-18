@@ -24,6 +24,8 @@ public class TestDiscordPermissions : XCTestCase {
         XCTAssertEqual(channel.permissionOverwrites.count, roleOverwrites.count, "There should be the same number of permission overwrites in this channel as we put in")
 
         XCTAssertFalse(channel.canMember(permissionsTestMembers[2], .readMessageHistory), "@everyone role should be applied to all members")
+        XCTAssertTrue(channel.canMember(permissionsTestMembers[2], .viewAuditLog), "@everyone role should be applied to all members")
+        XCTAssertFalse(channel.canMember(permissionsTestMembers[4], .viewAuditLog), "@everyone permission should be overridden by permissions for a specific role")
         XCTAssertTrue(channel.canMember(permissionsTestMembers[0], .sendMessages), "Owner should override all permissions")
         XCTAssertTrue(channel.canMember(permissionsTestMembers[1], .readMessages), "Admin role should override all permissions")
         XCTAssertTrue(channel.canMember(permissionsTestMembers[4], .addReactions), "An allow override should go over a deny of the same type")
@@ -59,8 +61,8 @@ public class TestDiscordPermissions : XCTestCase {
     }
 
     let roleOverwrites = [
-        DiscordPermissionOverwrite(id: GuildID(testGuild.get("id", as: String.self))!, type: .role, allow: [], deny: .readMessageHistory),
-        DiscordPermissionOverwrite(id: permissionsTestRoles[3].id, type: .role, allow: [], deny: [.sendMessages, .addReactions]),
+        DiscordPermissionOverwrite(id: GuildID(testGuild.get("id", as: String.self))!, type: .role, allow: .viewAuditLog, deny: .readMessageHistory),
+        DiscordPermissionOverwrite(id: permissionsTestRoles[3].id, type: .role, allow: [], deny: [.sendMessages, .addReactions, .viewAuditLog]),
         DiscordPermissionOverwrite(id: permissionsTestRoles[2].id, type: .role, allow: .addReactions, deny: []),
         DiscordPermissionOverwrite(id: permissionsTestRoles[0].id, type: .role, allow: [], deny: .readMessages),
         DiscordPermissionOverwrite(id: permissionsTestRoles[1].id, type: .role, allow: [], deny: .addReactions)
