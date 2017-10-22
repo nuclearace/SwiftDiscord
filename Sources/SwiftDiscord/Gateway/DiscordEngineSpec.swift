@@ -82,7 +82,7 @@ public protocol DiscordWebSocketable : class {
     ///
     /// - parameter reason: The reason the socket closed.
     ///
-    func handleClose(reason: NSError?)
+    func handleClose(reason: Error?)
 }
 
 public extension DiscordWebSocketable where Self: DiscordGatewayable {

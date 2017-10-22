@@ -358,7 +358,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     ///
     /// - parameter reason: The reason the socket closed.
     ///
-    public func handleClose(reason: NSError? = nil) {
+    public func handleClose(reason: Error? = nil) {
         DefaultDiscordLogger.Logger.log("Voice engine closed", type: DiscordVoiceEngine.logType)
 
         closeOutEngine()
