@@ -41,7 +41,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     // MARK: Properties
 
     /// The rate limiter for this client.
-    public let rateLimiter = DiscordRateLimiter()
+    public var rateLimiter: DiscordRateLimiterSpec!
 
     /// The Discord JWT token.
     public let token: DiscordToken
@@ -142,6 +142,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
                 continue
             }
         }
+
+        rateLimiter = rateLimiter ?? DiscordRateLimiter(callbackQueue: handleQueue)
     }
 
     // MARK: Methods

@@ -30,7 +30,7 @@ public protocol DiscordEndpointConsumer {
     // MARK: Properties
 
     /// The rate limiter for this consumer.
-    var rateLimiter: DiscordRateLimiter { get }
+    var rateLimiter: DiscordRateLimiterSpec! { get }
 
     // MARK: Channels
 
