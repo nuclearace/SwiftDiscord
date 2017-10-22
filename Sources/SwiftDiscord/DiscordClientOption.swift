@@ -44,6 +44,9 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
     /// However this means that invsible users will also be pruned.
     case pruneUsers
 
+    /// A DiscordRateLimiter for this client. All REST calls will be put through this limiter.
+    case rateLimiter(DiscordRateLimiterSpec)
+
     /// If this client is going to shard into multiple instances, this tells a client the shard information.
     @available(*, deprecated, message: "Use .shardingInformation")
     case singleShard(DiscordShardInformation)
@@ -69,6 +72,7 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
         case .handleQueue:          return "handleQueue"
         case .log:                  return "log"
         case .logger:               return "logger"
+        case .rateLimiter:          return "rateLimiter"
         case .shardingInfo:         return "shardingInfo"
         case .shards:               return "shards"
         case .singleShard:          return "singleShard"

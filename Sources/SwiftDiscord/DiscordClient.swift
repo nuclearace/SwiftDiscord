@@ -122,6 +122,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
                 DefaultDiscordLogger.Logger.level = level
             case let .logger(logger):
                 DefaultDiscordLogger.Logger = logger
+            case let .rateLimiter(limiter):
+                self.rateLimiter = limiter
             case let .shardingInfo(shardingInfo):
                 self.shardingInfo = shardingInfo
             case let .shards(shards) where shards > 0:
