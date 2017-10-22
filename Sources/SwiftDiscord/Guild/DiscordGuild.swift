@@ -167,79 +167,44 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     ///
     /// Gets the audit log for this guild.
     ///
-    /// **NOTE** This is a blocking method. If you need an async version use the `getGuildAuditLog` method from
-    /// `DiscordEndpointConsumer`, which is available on `DiscordClient`.
+    /// - parameter withOptions: The options to use when getting the logs.
+    /// - parameter callback: The callback.
     ///
-    /// - returns: A `DiscordAuditLog` for this guild.
-    ///
-    public func getAuditLog(withOptions options: [DiscordEndpoint.Options.AuditLog] = []) -> DiscordAuditLog? {
-        guard let client = self.client else { return nil }
-
-        let lock = DispatchSemaphore(value: 0)
-        var auditLog: DiscordAuditLog?
+    public func getAuditLog(withOptions options: [DiscordEndpoint.Options.AuditLog] = [],
+                            callback: @escaping (DiscordAuditLog?) -> ()) {
+        guard let client = self.client else { return callback(nil) }
 
         client.getGuildAuditLog(for: id, withOptions: options, callback: {log in
-            auditLog = log
-
-            lock.signal()
+            callback(log)
         })
-
-        lock.wait()
-
-        return auditLog
     }
 
     ///
     /// Gets the bans for this guild.
     ///
-    /// **NOTE**: This is a blocking method. If you need an async version use the `getGuildBans` method from
-    /// `DiscordEndpointConsumer`, which is available on `DiscordClient`.
+    /// - parameter callback: The callback.
     ///
-    /// - returns: An array of `DiscordUser`s who are banned on this guild
-    ///
-    public func getBans() -> [DiscordBan] {
-        guard let client = self.client else { return [] }
-
-        let lock = DispatchSemaphore(value: 0)
-        var bannedUsers: [DiscordBan]!
+    public func getBans(callback: @escaping ([DiscordBan]) -> ()) {
+        guard let client = self.client else { return callback([]) }
 
         client.getGuildBans(for: id) {bans in
-            bannedUsers = bans
-
-            lock.signal()
+            callback(bans)
         }
-
-        lock.wait()
-
-        return bannedUsers
     }
 
     ///
     /// Gets a guild member by their user id.
     ///
-    /// **NOTE**: This is a blocking method. If you need an async version user the `getGuildMember` method from
-    /// `DiscordEndpointConsumer`, which is available on `DiscordClient`.
-    ///
     /// - parameter userId: The user id of the member to get
-    /// - returns: The guild member, if one was found
     ///
-    public func getGuildMember(_ userId: UserID) -> DiscordGuildMember? {
-        guard let client = self.client else { return nil }
-
-        let lock = DispatchSemaphore(value: 0)
-        var guildMember: DiscordGuildMember?
+    public func getGuildMember(_ userId: UserID, callback: @escaping (DiscordGuildMember?) -> ()) {
+        guard let client = self.client else { return callback(nil) }
 
         client.getGuildMember(by: userId, on: id) {member in
             DefaultDiscordLogger.Logger.debug("Got member: \(userId)", type: "DiscordGuild")
 
-            guildMember = member
-
-            lock.signal()
+            callback(member)
         }
-
-        lock.wait()
-
-        return guildMember
     }
 
     // Used to setup initial guilds
@@ -317,9 +282,16 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
                     return DiscordGuildMember(guildMemberObject: [:], guildId: 0)
                 }
 
-                return this.getGuildMember(userId) ?? DiscordGuildMember(guildMemberObject: [
-                    "user": ["id": String(describing: userId)]
-                ], guildId: this.id)
+                // Call out for the member
+                this.getGuildMember(userId) {member in
+                    guard let member = member else { return }
+
+                    self?.members[userId] = member
+                }
+
+                // Return a placeholder
+                return DiscordGuildMember(guildMemberObject: ["user": ["id": String(describing: userId)]],
+                                          guildId: this.id)
             })
         }
     }

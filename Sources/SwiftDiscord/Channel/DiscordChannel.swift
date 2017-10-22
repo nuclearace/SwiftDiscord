@@ -112,27 +112,14 @@ public extension DiscordTextChannel {
     ///
     /// Gets the pinned messages for this channel.
     ///
-    /// **NOTE**: This is a blocking method. If you need an async method, use the `.getPinnedMessages` from
-    /// `DiscordEndpointConsumer` which is available on `DiscordClient`.
+    /// - parameter callback: The callback.
     ///
-    /// - returns: An Array of pinned messages
-    ///
-    public func getPinnedMessages() -> [DiscordMessage] {
-        guard let client = self.client else { return [] }
-
-        let lock = DispatchSemaphore(value: 0)
-
-        var messages: [DiscordMessage]!
+    public func getPinnedMessages(callback: @escaping ([DiscordMessage]) -> ()) {
+        guard let client = self.client else { return }
 
         client.getPinnedMessages(for: id) {pins in
-            messages = pins
-
-            lock.signal()
+            callback(pins)
         }
-
-        lock.wait()
-
-        return messages
     }
 
     ///
