@@ -31,6 +31,9 @@ public final class DiscordRateLimiter : DiscordRateLimiterSpec {
     /// The queue that request responses are called on.
     public let callbackQueue: DispatchQueue
 
+    /// Whether or not this rate limiter should immediately callback on rate limits.
+    public let failFast: Bool
+
     private let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue())
 
     private var limitQueue = DispatchQueue(label: "limitQueue")
@@ -39,8 +42,9 @@ public final class DiscordRateLimiter : DiscordRateLimiterSpec {
     // MARK: Initializers
 
     /// Creates a new DiscordRateLimiter with the specified callback queue.
-    public init(callbackQueue: DispatchQueue) {
+    public init(callbackQueue: DispatchQueue, failFast: Bool) {
         self.callbackQueue = callbackQueue
+        self.failFast = failFast
     }
 
     // MARK: Methods
@@ -66,6 +70,12 @@ public final class DiscordRateLimiter : DiscordRateLimiterSpec {
 
             if rateLimit.atLimit {
                 DefaultDiscordLogger.Logger.debug("Hit rate limit: \(rateLimit)", type: "DiscordRateLimiter")
+
+                guard !failFast else {
+                    callbackQueue.async { callback(nil, nil, nil) }
+
+                    return
+                }
 
                 // We've hit a rate limit, enqueue this request for later
                 rateLimit.queue.append(RateLimitedRequest(request: request, callback: callback))
@@ -166,6 +176,9 @@ public protocol DiscordRateLimiterSpec {
 
     /// The queue that request responses are called on.
     var callbackQueue: DispatchQueue { get }
+
+    /// Whether or not this rate limiter should immediately callback on rate limits.
+    var failFast: Bool { get }
 
     // MARK: Methods
 

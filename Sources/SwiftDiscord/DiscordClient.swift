@@ -145,7 +145,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
             }
         }
 
-        rateLimiter = rateLimiter ?? DiscordRateLimiter(callbackQueue: handleQueue)
+        rateLimiter = rateLimiter ?? DiscordRateLimiter(callbackQueue: handleQueue, failFast: false)
     }
 
     // MARK: Methods
