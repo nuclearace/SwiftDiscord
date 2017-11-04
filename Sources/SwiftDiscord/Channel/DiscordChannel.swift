@@ -115,7 +115,7 @@ public extension DiscordTextChannel {
     /// - parameter callback: The callback.
     ///
     public func getPinnedMessages(callback: @escaping ([DiscordMessage]) -> ()) {
-        guard let client = self.client else { return }
+        guard let client = self.client else { return callback([]) }
 
         client.getPinnedMessages(for: id) {pins in
             callback(pins)
