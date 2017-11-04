@@ -242,6 +242,9 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         let rtpHeader = Array(data.prefix(12))
         let voiceData = Array(data.dropFirst(12))
         let audioSize = voiceData.count - Int(crypto_secretbox_MACBYTES)
+
+        guard audioSize > 0 else { throw EngineError.decryptionError }
+
         let unencrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
         var nonce = rtpHeader + DiscordVoiceEngine.padding
 
@@ -519,7 +522,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// Stops encoding and requests a new encoder. The `isReadyToSendVoiceWithEngine` delegate method is called when
     /// the new encoder is ready.
     ///
-    public func requestNewDataSource() throws {
+    public func requestNewDataSource() {
         getNewDataSource()
     }
 

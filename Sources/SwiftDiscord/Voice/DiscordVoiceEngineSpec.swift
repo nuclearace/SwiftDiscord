@@ -33,7 +33,7 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
     ///
     /// Stops encoding and requests a new encoder. A `voiceEngine.ready` event will be fired when the encoder is ready.
     ///
-    func requestNewDataSource() throws
+    func requestNewDataSource()
 
     #if !os(iOS)
     ///
