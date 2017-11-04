@@ -203,6 +203,9 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         client.getGuildMember(by: userId, on: id) {member in
             DefaultDiscordLogger.Logger.debug("Got member: \(userId)", type: "DiscordGuild")
 
+            var member = member
+            member?.guild = self
+
             callback(member)
         }
     }
