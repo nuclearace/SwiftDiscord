@@ -239,6 +239,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func decryptVoiceData(_ data: [UInt8]) throws -> [UInt8] {
+        // TODO this isn't totally correct, there might be an extension after the rtp header
         let rtpHeader = Array(data.prefix(12))
         let voiceData = Array(data.dropFirst(12))
         let audioSize = voiceData.count - Int(crypto_secretbox_MACBYTES)
