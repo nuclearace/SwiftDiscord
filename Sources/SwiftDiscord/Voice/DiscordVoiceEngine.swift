@@ -192,6 +192,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         closed = true
         connected = false
+        sendTimer.cancel()
     }
 
     private func configureTimer() {
@@ -601,12 +602,12 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     private func sendVoiceData(_ data: [UInt8]) {
         guard let udpSocket = self.udpSocket, let frameSize = source?.frameSize, secret != nil else { return }
 
-        DefaultDiscordLogger.Logger.debug("Should send voice data: \(data.count) bytes",
-                                          type: DiscordVoiceEngine.logType)
-
         if !speaking {
             sendSpeaking(true)
         }
+
+        DefaultDiscordLogger.Logger.debug("Should send voice data: \(data.count) bytes",
+                                          type: DiscordVoiceEngine.logType)
 
         do {
             try udpSocket.sendto(data: createVoicePacket(data))
