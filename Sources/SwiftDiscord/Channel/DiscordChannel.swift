@@ -15,6 +15,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Foundation
 import class Dispatch.DispatchSemaphore
 
 /// Protocol that declares a type will be a Discord channel.
@@ -114,11 +115,11 @@ public extension DiscordTextChannel {
     ///
     /// - parameter callback: The callback.
     ///
-    public func getPinnedMessages(callback: @escaping ([DiscordMessage]) -> ()) {
-        guard let client = self.client else { return callback([]) }
+    public func getPinnedMessages(callback: @escaping ([DiscordMessage], HTTPURLResponse?) -> ()) {
+        guard let client = self.client else { return callback([], nil) }
 
-        client.getPinnedMessages(for: id) {pins in
-            callback(pins)
+        client.getPinnedMessages(for: id) {pins, response in
+            callback(pins, response)
         }
     }
 

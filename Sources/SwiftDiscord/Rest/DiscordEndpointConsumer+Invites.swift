@@ -19,15 +19,16 @@ import Foundation
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
-    public func acceptInvite(_ invite: String, callback: ((DiscordInvite?) -> ())? = nil) {
+    public func acceptInvite(_ invite: String,
+                             callback: ((DiscordInvite?, HTTPURLResponse?) -> ())? = nil) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(invite)? = JSON.jsonFromResponse(data: data, response: response) else {
-                callback?(nil)
+                callback?(nil, response)
 
                 return
             }
 
-            callback?(DiscordInvite(inviteObject: invite))
+            callback?(DiscordInvite(inviteObject: invite), response)
         }
 
         rateLimiter.executeRequest(endpoint: .invites(code: invite),
@@ -39,7 +40,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     public func deleteInvite(_ invite: String,
                              reason: String? = nil,
-                             callback: ((DiscordInvite?) -> ())? = nil) {
+                             callback: ((DiscordInvite?, HTTPURLResponse?) -> ())? = nil) {
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
@@ -48,12 +49,12 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(invite)? = JSON.jsonFromResponse(data: data, response: response) else {
-                callback?(nil)
+                callback?(nil, response)
 
                 return
             }
 
-            callback?(DiscordInvite(inviteObject: invite))
+            callback?(DiscordInvite(inviteObject: invite), response)
         }
 
         rateLimiter.executeRequest(endpoint: .invites(code: invite),
@@ -63,15 +64,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getInvite(_ invite: String, callback: @escaping (DiscordInvite?) -> ()) {
+    public func getInvite(_ invite: String,
+                          callback: @escaping (DiscordInvite?, HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(invite)? = JSON.jsonFromResponse(data: data, response: response) else {
-                callback(nil)
+                callback(nil, response)
 
                 return
             }
 
-            callback(DiscordInvite(inviteObject: invite))
+            callback(DiscordInvite(inviteObject: invite), response)
         }
 
         rateLimiter.executeRequest(endpoint: .invites(code: invite),

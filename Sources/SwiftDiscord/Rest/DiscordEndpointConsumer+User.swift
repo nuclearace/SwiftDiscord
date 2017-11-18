@@ -19,17 +19,18 @@ import Foundation
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
-    public func createDM(with: UserID, callback: @escaping (DiscordDMChannel?) -> ()) {
+    public func createDM(with: UserID,
+                         callback: @escaping (DiscordDMChannel?, HTTPURLResponse?) -> ()) {
         guard let contentData = JSON.encodeJSONData(["recipient_id": with]) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(channel)? = JSON.jsonFromResponse(data: data, response: response) else {
-                callback(nil)
+                callback(nil, response)
 
                 return
             }
 
-            callback(DiscordDMChannel(dmObject: channel))
+            callback(DiscordDMChannel(dmObject: channel), response)
         }
 
         rateLimiter.executeRequest(endpoint: .userChannels,
@@ -39,16 +40,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getDMs(callback: @escaping ([ChannelID: DiscordDMChannel]) -> ()) {
+    public func getDMs(callback: @escaping ([ChannelID: DiscordDMChannel], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(channels)? = JSON.jsonFromResponse(data: data, response: response) else {
-                callback([:])
+                callback([:], response)
 
                 return
             }
 
             DefaultDiscordLogger.Logger.debug("Got DMChannels: \(channels)", type: "DiscordEndpointUser")
-            callback(DiscordDMChannel.DMsfromArray(channels as! [[String: Any]]))
+            callback(DiscordDMChannel.DMsfromArray(channels as! [[String: Any]]), response)
         }
 
         rateLimiter.executeRequest(endpoint: .userChannels,
@@ -58,15 +59,15 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getGuilds(callback: @escaping ([GuildID: DiscordUserGuild]) -> ()) {
+    public func getGuilds(callback: @escaping ([GuildID: DiscordUserGuild], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = {data, response, error in
             guard case let .array(guilds)? = JSON.jsonFromResponse(data: data, response: response) else {
-                callback([:])
+                callback([:], response)
 
                 return
             }
 
-            callback(DiscordUserGuild.userGuildsFromArray(guilds as! [[String: Any]]))
+            callback(DiscordUserGuild.userGuildsFromArray(guilds as! [[String: Any]]), response)
         }
 
         rateLimiter.executeRequest(endpoint: .userGuilds,

@@ -171,11 +171,11 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     /// - parameter callback: The callback.
     ///
     public func getAuditLog(withOptions options: [DiscordEndpoint.Options.AuditLog] = [],
-                            callback: @escaping (DiscordAuditLog?) -> ()) {
-        guard let client = self.client else { return callback(nil) }
+                            callback: @escaping (DiscordAuditLog?, HTTPURLResponse?) -> ()) {
+        guard let client = self.client else { return callback(nil, nil) }
 
-        client.getGuildAuditLog(for: id, withOptions: options, callback: {log in
-            callback(log)
+        client.getGuildAuditLog(for: id, withOptions: options, callback: {log, response in
+            callback(log, response)
         })
     }
 
@@ -184,11 +184,11 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     ///
     /// - parameter callback: The callback.
     ///
-    public func getBans(callback: @escaping ([DiscordBan]) -> ()) {
-        guard let client = self.client else { return callback([]) }
+    public func getBans(callback: @escaping ([DiscordBan], HTTPURLResponse?) -> ()) {
+        guard let client = self.client else { return callback([], nil) }
 
-        client.getGuildBans(for: id) {bans in
-            callback(bans)
+        client.getGuildBans(for: id) {bans, response in
+            callback(bans, response)
         }
     }
 
@@ -197,16 +197,16 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     ///
     /// - parameter userId: The user id of the member to get
     ///
-    public func getGuildMember(_ userId: UserID, callback: @escaping (DiscordGuildMember?) -> ()) {
-        guard let client = self.client else { return callback(nil) }
+    public func getGuildMember(_ userId: UserID, callback: @escaping (DiscordGuildMember?, HTTPURLResponse?) -> ()) {
+        guard let client = self.client else { return callback(nil, nil) }
 
-        client.getGuildMember(by: userId, on: id) {member in
+        client.getGuildMember(by: userId, on: id) {member, response in
             DefaultDiscordLogger.Logger.debug("Got member: \(userId)", type: "DiscordGuild")
 
             var member = member
             member?.guild = self
 
-            callback(member)
+            callback(member, response)
         }
     }
 
@@ -286,7 +286,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
                 }
 
                 // Call out for the member
-                this.getGuildMember(userId) {member in
+                this.getGuildMember(userId) {member, _ in
                     guard let member = member else { return }
 
                     self?.members[userId] = member
