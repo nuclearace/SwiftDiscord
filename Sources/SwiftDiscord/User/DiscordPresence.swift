@@ -15,6 +15,8 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Foundation
+
 /// Represents a game type.
 public enum DiscordGameType : Int, Encodable {
     /// A regular game.
@@ -157,22 +159,67 @@ public struct DiscordPresence {
 public struct DiscordPresenceUpdate : Encodable {
     // MARK: Properties
 
-    /// The time we've been idle for. Nil if not idle
-    public let since: Int?
+    @available(*, deprecated, message: "Use afkSince instead")
+    public var since: Int? {
+        return (afkSince?.timeIntervalSince1970).map({ Int($0 * 1000) })
+    }
+
+    /// The time at which we went idle. Nil if not idle
+    public var afkSince: Date?
 
     /// The game we are currently playing. Nil if not playing a game.
-    public let game: DiscordGame?
+    public var game: DiscordGame?
+
+    public var status: DiscordPresenceStatus
 
     // MARK: Initializers
+
+    @available(*, deprecated, message: "Use init(game:afkSince:) instead")
+    public init(since: Int?, game: DiscordGame?) {
+        self.afkSince = since.map({ Date(timeIntervalSince1970: Double($0) / 1000) })
+        self.game = game
+        self.status = .online
+    }
 
     ///
     /// Creates a new DiscordPresenceUpdate
     ///
-    /// - parameter since: The time we've been idle for. Nil if not idle
-    /// - parameter game: The game we are currently playing. Nil if not playing a game.
+    /// - parameter game: The game we are currently playing. Nil if not playing a game
+    /// - parameter status: The current status
+    /// - parameter afkSince: The time the user went afk. Nil if the user is not afk
     ///
-    public init(since: Int?, game: DiscordGame?) {
-        self.since = since
+    public init(game: DiscordGame?, status: DiscordPresenceStatus = .online, afkSince: Date? = nil) {
+        self.afkSince = afkSince
         self.game = game
+        self.status = status
+    }
+
+    // Apparently Discord doesn't like it when we don't send null fields to gateway
+    // Sadly, there's no way to tell swift's auto-generated encode to encode nil fields as null
+    // So we need a manual encode function for it.
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        if let afkSince = afkSince {
+            try container.encode(Int(afkSince.timeIntervalSince1970 * 1000), forKey: .since)
+            try container.encode(true, forKey: .afk)
+        } else {
+            try container.encodeNil(forKey: .since)
+            try container.encode(false, forKey: .afk)
+        }
+        if let game = game {
+            let gameEncoder = container.superEncoder(forKey: .game)
+            try game.encode(to: gameEncoder)
+        } else {
+            try container.encodeNil(forKey: .game)
+        }
+        try container.encode(status.rawValue, forKey: .status)
+    }
+
+    // For encoding
+    enum CodingKeys : CodingKey {
+        case since
+        case game
+        case status
+        case afk
     }
 }
