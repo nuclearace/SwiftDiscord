@@ -20,15 +20,15 @@
 import PackageDescription
 
 var deps: [Package.Dependency] = [
-    .package(url: "https://github.com/nuclearace/copus", .upToNextMajor(from: "2.0.0")),
-    .package(url: "https://github.com/nuclearace/Sodium", .upToNextMajor(from: "2.0.0")),
-    .package(url: "https://github.com/vapor/engine", .upToNextMajor(from: "2.2.0")),
+    .package(url: "https://github.com/nuclearace/copus.git", .upToNextMajor(from: "2.0.0")),
+    .package(url: "https://github.com/nuclearace/Sodium.git", .upToNextMajor(from: "2.0.0")),
+    .package(url: "https://github.com/vapor/engine.git", .upToNextMajor(from: "2.2.0")),
 ]
 
 var targetDeps: [Target.Dependency] = ["DiscordOpus", "WebSockets"]
 
 #if !os(Linux)
-deps += [.package(url: "https://github.com/nuclearace/Starscream", .upToNextMajor(from: "2.1.0")),] // TODO use 2.2.0 when it's available
+deps += [.package(url: "https://github.com/nuclearace/Starscream.git", .upToNextMajor(from: "2.1.0")),] // TODO use 2.2.0 when it's available
 targetDeps += ["Starscream"]
 #endif
 
