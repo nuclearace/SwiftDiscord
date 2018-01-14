@@ -159,6 +159,7 @@ public struct DiscordPresence {
 public struct DiscordPresenceUpdate : Encodable {
     // MARK: Properties
 
+    /// Deprecated. Use afkSince instead.
     @available(*, deprecated, message: "Use afkSince instead")
     public var since: Int? {
         return (afkSince?.timeIntervalSince1970).map({ Int($0 * 1000) })
@@ -170,10 +171,12 @@ public struct DiscordPresenceUpdate : Encodable {
     /// The game we are currently playing. Nil if not playing a game.
     public var game: DiscordGame?
 
+    /// The status for this update.
     public var status: DiscordPresenceStatus
 
     // MARK: Initializers
 
+    /// Deprecated. Use init(game:afkSince:) instead.
     @available(*, deprecated, message: "Use init(game:afkSince:) instead")
     public init(since: Int?, game: DiscordGame?) {
         self.afkSince = since.map({ Date(timeIntervalSince1970: Double($0) / 1000) })
