@@ -403,9 +403,13 @@ public enum DiscordGatewayCloseReason : Int {
 
     // MARK: Initializers
 
-    init?(error: NSError?) {
-        guard let code = error?.code else { return nil }
+    init?(error: Error?) {
+        #if !os(Linux)
+        guard let error = error else { return nil }
 
-        self.init(rawValue: code)
+        self.init(rawValue: (error as NSError).code)
+        #else
+        self = .unknown
+        #endif
     }
 }

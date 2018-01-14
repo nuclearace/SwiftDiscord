@@ -15,6 +15,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Foundation
 import class Dispatch.DispatchSemaphore
 
 /// Protocol that declares a type will be a Discord channel.
@@ -27,6 +28,7 @@ public protocol DiscordChannel : DiscordClientHolder {
 
 /// Protocol that declares a type will be a Discord text-based channel.
 public protocol DiscordTextChannel : DiscordChannel {
+    // MARK: Properties
 
     /// The snowflake id of the last received message on this channel.
     var lastMessageId: MessageID { get }
@@ -81,8 +83,6 @@ public extension DiscordChannel {
 
         client.modifyChannel(id, options: options, reason: reason)
     }
-
-
 }
 
 public extension DiscordTextChannel {
@@ -113,27 +113,14 @@ public extension DiscordTextChannel {
     ///
     /// Gets the pinned messages for this channel.
     ///
-    /// **NOTE**: This is a blocking method. If you need an async method, use the `.getPinnedMessages` from
-    /// `DiscordEndpointConsumer` which is available on `DiscordClient`.
+    /// - parameter callback: The callback.
     ///
-    /// - returns: An Array of pinned messages
-    ///
-    public func getPinnedMessages() -> [DiscordMessage] {
-        guard let client = self.client else { return [] }
+    public func getPinnedMessages(callback: @escaping ([DiscordMessage], HTTPURLResponse?) -> ()) {
+        guard let client = self.client else { return callback([], nil) }
 
-        let lock = DispatchSemaphore(value: 0)
-
-        var messages: [DiscordMessage]!
-
-        client.getPinnedMessages(for: id) {pins in
-            messages = pins
-
-            lock.signal()
+        client.getPinnedMessages(for: id) {pins, response in
+            callback(pins, response)
         }
-
-        lock.wait()
-
-        return messages
     }
 
     ///

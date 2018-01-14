@@ -159,7 +159,7 @@ open class DiscordEngine : DiscordEngineSpec {
     ///
     /// - parameter reason: The reason the socket closed.
     ///
-    open func handleClose(reason: NSError? = nil) {
+    open func handleClose(reason: Error? = nil) {
         let closeReason = DiscordGatewayCloseReason(error: reason) ?? .unknown
 
         connected = false

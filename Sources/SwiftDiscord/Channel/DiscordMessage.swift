@@ -92,6 +92,14 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         return client?.findChannel(fromId: channelId) as? DiscordTextChannel
     }
 
+    /// Returns a `DiscordGuildMember` for this author, or nil if this message is not from a guild.
+    public var guildMember: DiscordGuildMember? {
+        // TODO cache this
+        guard let guild = channel?.guild else { return nil }
+
+        return guild.members[author.id]
+    }
+
     let files: [DiscordFileUpload]
 
     // MARK: Initializers
@@ -114,12 +122,6 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         timestamp = DiscordDateFormatter.format(messageObject.get("timestamp", or: "")) ?? Date()
         files = []
         self.client = client
-    }
-
-    /// For compatibility
-    @available(*, deprecated, message: "Bots on Discord do not actually have the ability to include more than one embed in a message.  To reflect that, this init has been changed to init(content:embed:files:tts:), which only takes one embed.")
-    public init(content: String, embeds: [DiscordEmbed], files: [DiscordFileUpload] = [], tts: Bool = false) {
-        self.init(content: content, embed: embeds.first, files: files, tts: tts)
     }
 
     ///

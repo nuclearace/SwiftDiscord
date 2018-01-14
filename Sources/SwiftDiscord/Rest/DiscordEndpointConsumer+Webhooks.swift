@@ -22,7 +22,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     public func createWebhook(forChannel channelId: ChannelID,
                               options: [DiscordEndpoint.Options.WebhookOption],
                               reason: String? = nil,
-                              callback: @escaping (DiscordWebhook?) -> () = {_ in }) {
+                              callback: @escaping (DiscordWebhook?, HTTPURLResponse?) -> () = {_, _ in }) {
         var createJSON: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
@@ -45,12 +45,12 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
-                callback(nil)
+                callback(nil, response)
 
                 return
             }
 
-            callback(DiscordWebhook(webhookObject: webhook))
+            callback(DiscordWebhook(webhookObject: webhook), response)
         }
 
         rateLimiter.executeRequest(endpoint: .channelWebhooks(channel: channelId),
@@ -62,7 +62,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     public func deleteWebhook(_ webhookId: WebhookID,
                               reason: String? = nil,
-                              callback: ((Bool) -> ())? = nil) {
+                              callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
@@ -72,19 +72,20 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         rateLimiter.executeRequest(endpoint: .webhook(id: webhookId),
                                    token: token,
                                    requestInfo: .delete(content: nil, extraHeaders: extraHeaders),
-                                   callback: { _, response, _ in callback?(response?.statusCode == 204) })
+                                   callback: { _, response, _ in callback?(response?.statusCode == 204, response) })
     }
 
     /// Default implementation
-    public func getWebhook(_ webhookId: WebhookID, callback: @escaping (DiscordWebhook?) -> ()) {
+    public func getWebhook(_ webhookId: WebhookID,
+                           callback: @escaping (DiscordWebhook?, HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
-                callback(nil)
+                callback(nil, response)
 
                 return
             }
 
-            callback(DiscordWebhook(webhookObject: webhook))
+            callback(DiscordWebhook(webhookObject: webhook), response)
         }
 
         rateLimiter.executeRequest(endpoint: .webhook(id: webhookId),
@@ -94,15 +95,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getWebhooks(forChannel channelId: ChannelID, callback: @escaping ([DiscordWebhook]) -> ()) {
+    public func getWebhooks(forChannel channelId: ChannelID,
+                            callback: @escaping ([DiscordWebhook], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(webhooks)? = JSON.jsonFromResponse(data: data, response: response) else {
-                callback([])
+                callback([], response)
 
                 return
             }
 
-            callback(DiscordWebhook.webhooksFromArray(webhooks as! [[String: Any]]))
+            callback(DiscordWebhook.webhooksFromArray(webhooks as! [[String: Any]]), response)
         }
 
         rateLimiter.executeRequest(endpoint: .channelWebhooks(channel: channelId),
@@ -112,17 +114,18 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getWebhooks(forGuild guildId: GuildID, callback: @escaping ([DiscordWebhook]) -> ()) {
+    public func getWebhooks(forGuild guildId: GuildID,
+                            callback: @escaping ([DiscordWebhook], HTTPURLResponse?) -> ()) {
         DefaultDiscordLogger.Logger.debug("Getting webhooks for guild: \(guildId)", type: "DiscordEndpointWebhooks")
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(webhooks)? = JSON.jsonFromResponse(data: data, response: response) else {
-                callback([])
+                callback([], response)
 
                 return
             }
 
-            callback(DiscordWebhook.webhooksFromArray(webhooks as! [[String: Any]]))
+            callback(DiscordWebhook.webhooksFromArray(webhooks as! [[String: Any]]), response)
         }
 
         rateLimiter.executeRequest(endpoint: .guildWebhooks(guild: guildId),
@@ -135,7 +138,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     public func modifyWebhook(_ webhookId: WebhookID,
                               options: [DiscordEndpoint.Options.WebhookOption],
                               reason: String? = nil,
-                              callback: @escaping (DiscordWebhook?) -> () = {_ in }) {
+                              callback: @escaping (DiscordWebhook?, HTTPURLResponse?) -> () = {_, _ in }) {
         var createJSON: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
@@ -158,12 +161,12 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
-                callback(nil)
+                callback(nil, response)
 
                 return
             }
 
-            callback(DiscordWebhook(webhookObject: webhook))
+            callback(DiscordWebhook(webhookObject: webhook), response)
         }
 
         rateLimiter.executeRequest(endpoint: .webhook(id: webhookId),

@@ -19,6 +19,8 @@ import Foundation
 
 /// Represents an audit entry.
 public struct DiscordAuditLogEntry {
+    // MARK: Properties
+
     /// The type of this entry.
     public let actionType: DiscordAuditLogActionType
 
@@ -60,6 +62,8 @@ public struct DiscordAuditLogEntry {
 // TODO Better types for this
 /// Represents a change.
 public struct DiscordAuditLogChange {
+    // MARK: Properties
+
     /// The key for this change. Determines the types of the values.
     public let key: String
 
@@ -82,6 +86,8 @@ public struct DiscordAuditLogChange {
 
 /// The types of audit actions.
 public enum DiscordAuditLogActionType : Int {
+    // MARK: Cases
+
     /// Other
     case other = -1
 

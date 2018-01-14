@@ -46,6 +46,7 @@ public struct DiscordGuildMember {
     /// If a guild is unavailable, you can call `roles(for:)` on this member's guild directly.
     /// - returns: An Array of `DiscordRole` or nil if there is no guild attached to this member.
     public var roles: [DiscordRole]? {
+        // TODO cache this
         guard let guild = self.guild else { return nil }
 
         return guild.roles(for: self)
@@ -124,6 +125,18 @@ public struct DiscordGuildMember {
         }
 
         return guildMembers
+    }
+
+    ///
+    /// Searches this member for a role with a name that matches.
+    ///
+    /// - parameter role: The role's name to look for.
+    /// - return: Whether or not they have this role.
+    ///
+    public func hasRole(_ role: String) -> Bool {
+        guard let roles = self.roles else { return false }
+
+        return roles.contains(where: { $0.name == role })
     }
 
     mutating func updateMember(_ updateObject: [String: Any]) -> DiscordGuildMember {

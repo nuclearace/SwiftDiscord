@@ -40,6 +40,14 @@ public class TestDiscordGuildMember : XCTestCase {
         XCTAssertEqual(member.roleIds.count, 2, "Should have new roles")
     }
 
+    func testHasRole() {
+        let member = DiscordGuildMember(guildMemberObject: testMember, guildId: guild.id, guild: guild)
+        let role = DiscordRole(roleObject: testRole)
+
+        XCTAssertTrue(member.hasRole(role.name), "Member should have the test role")
+        XCTAssertFalse(member.hasRole("Some role"), "Member should not have random role")
+    }
+
     var guild: DiscordGuild!
 
     public static var allTests: [(String, (TestDiscordGuildMember) -> () -> ())] {
@@ -47,6 +55,7 @@ public class TestDiscordGuildMember : XCTestCase {
             ("testCreatingGuildMember", testCreatingGuildMember),
             ("testGettingRolesFromGuild", testGettingRolesFromGuild),
             ("testUpdatingMember", testUpdatingMember),
+            ("testHasRole", testHasRole)
         ]
     }
 

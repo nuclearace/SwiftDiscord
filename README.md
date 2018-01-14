@@ -45,7 +45,7 @@ Checkout the [getting started](https://nuclearace.github.io/SwiftDiscord/getting
 ============================================================
 Docs are generated with [jazzy](https://github.com/realm/jazzy) using the magical command:
 
-`jazzy --xcodebuild-arguments -project,SwiftDiscord.xcodeproj/,-scheme,SwiftDiscord --documentation=UsageDocs/*.md`
+`jazzy --xcodebuild-arguments -project,SwiftDiscord.xcodeproj/,-scheme,SwiftDiscord-Package --documentation=UsageDocs/*.md --theme fullwidth --module SwiftDiscord`
 
 *Must have setup an Xcode project*
 

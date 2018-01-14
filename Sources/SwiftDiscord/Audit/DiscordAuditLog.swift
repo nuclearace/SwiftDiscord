@@ -19,6 +19,8 @@ import Foundation
 
 /// Represents an audit log.
 public class DiscordAuditLog {
+    // MARK: Properties
+
     /// List of audit log entries.
     public let auditLogEntries: [DiscordAuditLogEntry]
 

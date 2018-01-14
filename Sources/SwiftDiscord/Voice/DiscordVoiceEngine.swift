@@ -54,7 +54,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
     /// The voice url
     public var connectURL: String {
-        return "wss://" + voiceServerInformation.endpoint.components(separatedBy: ":")[0] + "?v=3"
+        return "wss://\(voiceServerInformation.endpoint.components(separatedBy: ":")[0])?v=3"
     }
 
     /// The connect UUID of this WebSocketable.
@@ -192,6 +192,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         closed = true
         connected = false
+        sendTimer.cancel()
     }
 
     private func configureTimer() {
@@ -239,9 +240,13 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func decryptVoiceData(_ data: [UInt8]) throws -> [UInt8] {
+        // TODO this isn't totally correct, there might be an extension after the rtp header
         let rtpHeader = Array(data.prefix(12))
         let voiceData = Array(data.dropFirst(12))
         let audioSize = voiceData.count - Int(crypto_secretbox_MACBYTES)
+
+        guard audioSize > 0 else { throw EngineError.decryptionError }
+
         let unencrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
         var nonce = rtpHeader + DiscordVoiceEngine.padding
 
@@ -358,7 +363,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     ///
     /// - parameter reason: The reason the socket closed.
     ///
-    public func handleClose(reason: NSError? = nil) {
+    public func handleClose(reason: Error? = nil) {
         DefaultDiscordLogger.Logger.log("Voice engine closed", type: DiscordVoiceEngine.logType)
 
         closeOutEngine()
@@ -519,7 +524,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// Stops encoding and requests a new encoder. The `isReadyToSendVoiceWithEngine` delegate method is called when
     /// the new encoder is ready.
     ///
-    public func requestNewDataSource() throws {
+    public func requestNewDataSource() {
         getNewDataSource()
     }
 
@@ -597,12 +602,12 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     private func sendVoiceData(_ data: [UInt8]) {
         guard let udpSocket = self.udpSocket, let frameSize = source?.frameSize, secret != nil else { return }
 
-        DefaultDiscordLogger.Logger.debug("Should send voice data: \(data.count) bytes",
-                                          type: DiscordVoiceEngine.logType)
-
         if !speaking {
             sendSpeaking(true)
         }
+
+        DefaultDiscordLogger.Logger.debug("Should send voice data: \(data.count) bytes",
+                                          type: DiscordVoiceEngine.logType)
 
         do {
             try udpSocket.sendto(data: createVoicePacket(data))

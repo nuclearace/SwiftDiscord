@@ -27,11 +27,25 @@ private typealias RateLimitedRequest = (request: URLRequest, callback: DiscordRe
 /// If a DiscordRateLimit determines we have hit a limit, we add the request and its callback to the limit's queue.
 /// After that it is up to the DiscordRateLimit to decide when to make the request.
 /// TODO handle the global rate limit
-public final class DiscordRateLimiter {
+public final class DiscordRateLimiter : DiscordRateLimiterSpec {
+    /// The queue that request responses are called on.
+    public let callbackQueue: DispatchQueue
+
+    /// Whether or not this rate limiter should immediately callback on rate limits.
+    public let failFast: Bool
+
     private let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue())
 
     private var limitQueue = DispatchQueue(label: "limitQueue")
     private var endpointLimits = [DiscordRateLimitKey: DiscordRateLimit]()
+
+    // MARK: Initializers
+
+    /// Creates a new DiscordRateLimiter with the specified callback queue.
+    public init(callbackQueue: DispatchQueue, failFast: Bool) {
+        self.callbackQueue = callbackQueue
+        self.failFast = failFast
+    }
 
     // MARK: Methods
 
@@ -56,6 +70,12 @@ public final class DiscordRateLimiter {
 
             if rateLimit.atLimit {
                 DefaultDiscordLogger.Logger.debug("Hit rate limit: \(rateLimit)", type: "DiscordRateLimiter")
+
+                guard !failFast else {
+                    callbackQueue.async { callback(nil, nil, nil) }
+
+                    return
+                }
 
                 // We've hit a rate limit, enqueue this request for later
                 rateLimit.queue.append(RateLimitedRequest(request: request, callback: callback))
@@ -106,13 +126,13 @@ public final class DiscordRateLimiter {
 
                 guard let response = response as? HTTPURLResponse else {
                     // Not quite sure what happened
-                    callback(data, nil, error)
+                    callbackQueue.async { callback(data, nil, error) }
 
                     return
                 }
 
                 guard error == nil else {
-                    callback(data, response, error)
+                    callbackQueue.async { callback(data, response, error) }
 
                     return
                 }
@@ -137,7 +157,7 @@ public final class DiscordRateLimiter {
                 DefaultDiscordLogger.Logger.debug("New remaining: \(rateLimit.remaining)", type: "DiscordRateLimiter")
                 DefaultDiscordLogger.Logger.debug("New reset: \(rateLimit.reset)", type: "DiscordRateLimiter")
 
-                callback(data, response, error)
+                callbackQueue.async { callback(data, response, error) }
             }
 
             limitQueue.async(execute: _responseHandler)
@@ -145,6 +165,45 @@ public final class DiscordRateLimiter {
 
         return _createResponseHandler
     }
+}
+
+
+/// A DiscordRateLimiterSpec is in charge of making sure we don't flood Discord with requests.
+/// It keeps a dictionary of DiscordRateLimitKeys and DiscordRateLimits.
+/// All requests to the REST api should be routed through a DiscordRateLimiterSpec.
+public protocol DiscordRateLimiterSpec {
+    // MARK: Properties
+
+    /// The queue that request responses are called on.
+    var callbackQueue: DispatchQueue { get }
+
+    /// Whether or not this rate limiter should immediately callback on rate limits.
+    var failFast: Bool { get }
+
+    // MARK: Methods
+
+    ///
+    /// Executes a request through the rate limiter.
+    ///
+    /// - parameter request: The request to execute.
+    /// - parameter for: The endpoint key.
+    /// - parameter callback: The callback for this request.
+    ///
+    func executeRequest(_ request: URLRequest, for endpointKey: DiscordRateLimitKey,
+                        callback: @escaping (Data?, HTTPURLResponse?, Error?) -> ())
+
+    ///
+    /// Executes a request through the rate limiter.
+    ///
+    /// - parameter endpoint: The endpoint for this request.
+    /// - parameter token: The token to use in this request.
+    /// - parameter requestInfo: A `DiscordEndpoint.EndpointRequest` specifying the request info.
+    /// - parameter callback: The callback for this request.
+    ///
+    func executeRequest(endpoint: DiscordEndpoint,
+                        token: DiscordToken,
+                        requestInfo: DiscordEndpoint.EndpointRequest,
+                        callback: @escaping (Data?, HTTPURLResponse?, Error?) -> ())
 }
 
 /// An endpoint is made up of a REST api endpoint and any major parameters in that endpoint.

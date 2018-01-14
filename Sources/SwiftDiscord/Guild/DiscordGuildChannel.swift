@@ -101,21 +101,22 @@ extension DiscordGuildChannel {
             return DiscordPermission.all
         }
 
-        let everybodyOverwrite = [self.permissionOverwrites[guild.id]].flatMap({ $0 })
-        let overwrites = self.overwrites(for: member) + everybodyOverwrite
-        let (allowRole, denyRole, allowMember, denyMember) = overwrites.reduce(([], [], [], []) as (DiscordPermission, DiscordPermission, DiscordPermission, DiscordPermission), {cur, overwrite in
-            switch overwrite.type {
-            case .role:
-                return (cur.0.union(overwrite.allow), cur.1.union(overwrite.deny), cur.2, cur.3)
-            case .member:
-                return (cur.0, cur.1, cur.2.union(overwrite.allow), cur.3.union(overwrite.deny))
-            }
-        })
+        if let everybodyOverwrite = self.permissionOverwrites[guild.id] {
+            workingPermissions.subtract(everybodyOverwrite.deny)
+            workingPermissions.formUnion(everybodyOverwrite.allow)
+        }
 
+        let roleOverwrites = permissionOverwrites.values.lazy.filter({ member.roleIds.contains($0.id) })
+        let (allowRole, denyRole) = roleOverwrites.reduce(([], []) as (DiscordPermission, DiscordPermission), {cur, overwrite in
+            return (cur.0.union(overwrite.allow), cur.1.union(overwrite.deny))
+        })
         workingPermissions.subtract(denyRole)
         workingPermissions.formUnion(allowRole)
-        workingPermissions.subtract(denyMember)
-        workingPermissions.formUnion(allowMember)
+
+        if let memberOverwrite = self.permissionOverwrites[member.user.id] {
+            workingPermissions.subtract(memberOverwrite.deny)
+            workingPermissions.formUnion(memberOverwrite.allow)
+        }
 
         if !workingPermissions.contains(.sendMessages) {
             // If they can't send messages, they automatically lose some permissions

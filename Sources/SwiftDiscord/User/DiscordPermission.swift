@@ -85,7 +85,7 @@ public struct DiscordPermission : OptionSet, Encodable {
     public static let voice = DiscordPermission(rawValue: 0x3F00000)
 
     /// User has all permissions.
-    public static let all = DiscordPermission(rawValue: -1)
+    public static let all = DiscordPermission(rawValue: Int.max >> 10)
 
     public init(rawValue: Int) {
         self.rawValue = rawValue
