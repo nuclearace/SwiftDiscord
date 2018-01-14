@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-           Docs
+          SwiftDiscord Docs
         </a>
          (100% documented)
       </p>
@@ -36,7 +36,7 @@
     </header>
 
     <p class="breadcrumbs">
-      <a class="breadcrumb" href="../index.html"> Reference</a>
+      <a class="breadcrumb" href="../index.html">SwiftDiscord Reference</a>
       <img class="carat" src="../img/carat.png" />
       DiscordShardManager Class Reference
     </p>
@@ -109,7 +109,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Enums.html">Enums</a>
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/DiscordAuditLogActionType.html">DiscordAuditLogActionType</a>
@@ -216,6 +216,9 @@
                 <a class="nav-group-task-link" href="../Protocols/DiscordOpusCodeable.html">DiscordOpusCodeable</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/DiscordRateLimiterSpec.html">DiscordRateLimiterSpec</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/DiscordShard.html">DiscordShard</a>
               </li>
               <li class="nav-group-task">
@@ -251,7 +254,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Structs.html">Structs</a>
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DiscordAttachment.html">DiscordAttachment</a>
@@ -400,7 +403,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Typealiases.html">Typealiases</a>
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord12AttachmentIDa">AttachmentID</a>
@@ -443,7 +446,7 @@
             <h1>DiscordShardManager</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordShardManager</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShardDelegate.html">DiscordShardDelegate</a></span><span class="p">,</span> <span class="kt">Lockable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">DiscordShardManager</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShardDelegate.html">DiscordShardDelegate</a></span><span class="p">,</span> <span class="kt">Lockable</span></code></pre>
 
                 </div>
               </div>
@@ -484,7 +487,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">subscript</span><span class="p">(</span><span class="nv">n</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">subscript</span><span class="p">(</span><span class="nv">n</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span></code></pre>
 
                         </div>
                       </div>
@@ -515,7 +518,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span></code></pre>
 
                         </div>
                       </div>
@@ -542,7 +545,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">shards</span> <span class="o">=</span> <span class="p">[</span><span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span><span class="p">]()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">shards</span> <span class="o">=</span> <span class="p">[</span><span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span><span class="p">]()</span></code></pre>
 
                         </div>
                       </div>
@@ -582,7 +585,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">connect</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">connect</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -609,8 +612,8 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">createShardWithDelegate</span><span class="p">(</span><span class="n">_</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a></span><span class="p">,</span> <span class="n">withShardNum</span> <span class="nv">shardNum</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span>
-                                      <span class="nv">totalShards</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">createShardWithDelegate</span><span class="p">(</span><span class="n">_</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a></span><span class="p">,</span> <span class="n">withShardNum</span> <span class="nv">shardNum</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span>
+                                  <span class="nv">totalShards</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span></code></pre>
 
                         </div>
                       </div>
@@ -684,7 +687,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">disconnect</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">disconnect</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -711,7 +714,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">manuallyShatter</span><span class="p">(</span><span class="n">withInfo</span> <span class="nv">info</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordShardInformation.html">DiscordShardInformation</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">manuallyShatter</span><span class="p">(</span><span class="n">withInfo</span> <span class="nv">info</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordShardInformation.html">DiscordShardInformation</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -757,7 +760,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">sendPayload</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">,</span> <span class="n">onShard</span> <span class="nv">shard</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">sendPayload</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">,</span> <span class="n">onShard</span> <span class="nv">shard</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -817,8 +820,8 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">shard</span><span class="p">(</span><span class="n">_</span> <span class="nv">shard</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span><span class="p">,</span> <span class="n">didReceiveEvent</span> <span class="nv">event</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a></span><span class="p">,</span>
-                    <span class="n">with</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">shard</span><span class="p">(</span><span class="n">_</span> <span class="nv">shard</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span><span class="p">,</span> <span class="n">didReceiveEvent</span> <span class="nv">event</span><span class="p">:</span> <span class="kt"><a href="../Enums/DiscordDispatchEvent.html">DiscordDispatchEvent</a></span><span class="p">,</span>
+                <span class="n">with</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -858,7 +861,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
                               </td>
                               <td>
                                 <div>
-                                  <p>A <code>DiscordGatewayPayload</code> containing the dispatch information.</p>
+                                  <p>A <code><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></code> containing the dispatch information.</p>
                                 </div>
                               </td>
                             </tr>
@@ -892,7 +895,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">shard</span><span class="p">(</span><span class="n">_</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span><span class="p">,</span> <span class="n">gotHelloWithPayload</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">shard</span><span class="p">(</span><span class="n">_</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span><span class="p">,</span> <span class="n">gotHelloWithPayload</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -938,7 +941,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">shardDidConnect</span><span class="p">(</span><span class="n">_</span> <span class="nv">shard</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">shardDidConnect</span><span class="p">(</span><span class="n">_</span> <span class="nv">shard</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -984,7 +987,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">shardDidDisconnect</span><span class="p">(</span><span class="n">_</span> <span class="nv">shard</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">shardDidDisconnect</span><span class="p">(</span><span class="n">_</span> <span class="nv">shard</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordShard.html">DiscordShard</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1030,7 +1033,7 @@ decides when a client has fully disconnected. Disconnected being when all shards
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">shatter</span><span class="p">(</span><span class="n">into</span> <span class="nv">numberOfShards</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">shatter</span><span class="p">(</span><span class="n">into</span> <span class="nv">numberOfShards</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1064,8 +1067,8 @@ decides when a client has fully disconnected. Disconnected being when all shards
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-09-25)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-01-14)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

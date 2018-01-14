@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DiscordPermission Struct Reference</title>
+    <title>DiscordPermission Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -16,12 +16,12 @@
 
     <a name="//apple_ref/swift/Struct/DiscordPermission" class="dashAnchor"></a>
 
-    <a title="DiscordPermission Struct Reference"></a>
+    <a title="DiscordPermission Structure Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-           Docs
+          SwiftDiscord Docs
         </a>
          (100% documented)
       </p>
@@ -36,9 +36,9 @@
     </header>
 
     <p class="breadcrumbs">
-      <a class="breadcrumb" href="../index.html"> Reference</a>
+      <a class="breadcrumb" href="../index.html">SwiftDiscord Reference</a>
       <img class="carat" src="../img/carat.png" />
-      DiscordPermission Struct Reference
+      DiscordPermission Structure Reference
     </p>
 
     <div class="content-wrapper">
@@ -109,7 +109,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Enums.html">Enums</a>
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/DiscordAuditLogActionType.html">DiscordAuditLogActionType</a>
@@ -216,6 +216,9 @@
                 <a class="nav-group-task-link" href="../Protocols/DiscordOpusCodeable.html">DiscordOpusCodeable</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/DiscordRateLimiterSpec.html">DiscordRateLimiterSpec</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/DiscordShard.html">DiscordShard</a>
               </li>
               <li class="nav-group-task">
@@ -251,7 +254,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Structs.html">Structs</a>
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DiscordAttachment.html">DiscordAttachment</a>
@@ -400,7 +403,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Typealiases.html">Typealiases</a>
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord12AttachmentIDa">AttachmentID</a>
@@ -443,7 +446,7 @@
             <h1>DiscordPermission</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordPermission</span> <span class="p">:</span> <span class="kt">OptionSet</span><span class="p">,</span> <span class="kt">Encodable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordPermission</span> <span class="p">:</span> <span class="kt">OptionSet</span><span class="p">,</span> <span class="kt">Encodable</span></code></pre>
 
                 </div>
               </div>
@@ -475,7 +478,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">rawValue</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">rawValue</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
@@ -502,7 +505,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">createInstantInvite</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000001</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">createInstantInvite</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000001</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -529,7 +532,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">kickMembers</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000002</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">kickMembers</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000002</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -556,7 +559,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">banMembers</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000004</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">banMembers</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000004</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -583,7 +586,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">administrator</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000008</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">administrator</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000008</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -610,7 +613,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageChannels</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000010</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageChannels</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000010</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -637,7 +640,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageGuild</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000020</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageGuild</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000020</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -664,7 +667,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">addReactions</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000040</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">addReactions</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000040</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -691,7 +694,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">viewAuditLog</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000080</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">viewAuditLog</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000080</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -718,7 +721,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">readMessages</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000400</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">readMessages</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000400</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -745,7 +748,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">sendMessages</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000800</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">sendMessages</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00000800</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -772,7 +775,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">sendTTSMessages</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00001000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">sendTTSMessages</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00001000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -799,7 +802,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageMessages</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00002000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageMessages</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00002000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -826,7 +829,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">embedLinks</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00004000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">embedLinks</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00004000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -853,7 +856,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">attachFiles</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00008000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">attachFiles</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00008000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -880,7 +883,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">readMessageHistory</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00010000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">readMessageHistory</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00010000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -907,7 +910,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">mentionEveryone</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00020000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">mentionEveryone</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00020000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -934,7 +937,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">useExternalEmojis</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00040000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">useExternalEmojis</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00040000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -961,7 +964,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">connect</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00100000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">connect</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00100000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -988,7 +991,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">speak</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00200000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">speak</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00200000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1015,7 +1018,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">muteMembers</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00400000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">muteMembers</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00400000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1042,7 +1045,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">deafenMembers</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00800000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">deafenMembers</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x00800000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1069,7 +1072,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">moveMembers</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x01000000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">moveMembers</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x01000000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1096,7 +1099,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">useVAD</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x02000000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">useVAD</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x02000000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1123,7 +1126,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">changeNickname</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x04000000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">changeNickname</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x04000000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1150,7 +1153,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageNicknames</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x08000000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageNicknames</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x08000000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1177,7 +1180,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageRoles</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x10000000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageRoles</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x10000000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1204,7 +1207,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageWebhooks</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x20000000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageWebhooks</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x20000000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1231,7 +1234,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageEmojis</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x40000000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">manageEmojis</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x40000000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1269,7 +1272,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">allChannel</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x33F7FC51</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">allChannel</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x33F7FC51</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1296,7 +1299,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">voice</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x3F00000</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">voice</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mh">0x3F00000</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1323,7 +1326,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">all</span> <span class="o">=</span> <span class="kt">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">all</span> <span class="o">=</span> <span class="nf">DiscordPermission</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="kt">Int</span><span class="o">.</span><span class="n">max</span> <span class="o">&gt;&gt;</span> <span class="mi">10</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1349,28 +1352,9 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
 
                         </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>rawValue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
                     </section>
                   </div>
@@ -1383,8 +1367,8 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-09-25)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-01-14)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

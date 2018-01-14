@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-           Docs
+          SwiftDiscord Docs
         </a>
          (100% documented)
       </p>
@@ -36,7 +36,7 @@
     </header>
 
     <p class="breadcrumbs">
-      <a class="breadcrumb" href="../index.html"> Reference</a>
+      <a class="breadcrumb" href="../index.html">SwiftDiscord Reference</a>
       <img class="carat" src="../img/carat.png" />
       DiscordBufferedVoiceDataSource Class Reference
     </p>
@@ -109,7 +109,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Enums.html">Enums</a>
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/DiscordAuditLogActionType.html">DiscordAuditLogActionType</a>
@@ -216,6 +216,9 @@
                 <a class="nav-group-task-link" href="../Protocols/DiscordOpusCodeable.html">DiscordOpusCodeable</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/DiscordRateLimiterSpec.html">DiscordRateLimiterSpec</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/DiscordShard.html">DiscordShard</a>
               </li>
               <li class="nav-group-task">
@@ -251,7 +254,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Structs.html">Structs</a>
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DiscordAttachment.html">DiscordAttachment</a>
@@ -400,7 +403,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Typealiases.html">Typealiases</a>
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord12AttachmentIDa">AttachmentID</a>
@@ -443,7 +446,7 @@
             <h1>DiscordBufferedVoiceDataSource</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">DiscordBufferedVoiceDataSource</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceDataSource.html">DiscordVoiceDataSource</a></span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">DiscordBufferedVoiceDataSource</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceDataSource.html">DiscordVoiceDataSource</a></span></code></pre>
 
                 </div>
               </div>
@@ -453,8 +456,8 @@ PCM 16-bit-le out of the pipe.</p>
 <p>It buffers ~5 minutes worth of voice data</p>
 
 <p>Usage:</p>
-<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt">DiscordClient</span><span class="p">,</span> <span class="n">needsDataSourceForEngine</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt">DiscordVoiceEngine</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">DiscordVoiceDataSource</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="kt">DiscordBufferedVoiceDataSource</span><span class="p">(</span><span class="nv">opusEncoder</span><span class="p">:</span> <span class="k">try</span> <span class="kt">DiscordOpusEncoder</span><span class="p">(</span><span class="nv">bitrate</span><span class="p">:</span> <span class="mi">128_000</span><span class="p">))</span>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">client</span><span class="p">(</span><span class="n">_</span> <span class="nv">client</span><span class="p">:</span> <span class="kt">DiscordClient</span><span class="p">,</span> <span class="n">needsDataSourceForEngine</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt">DiscordVoiceEngine</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="nf">DiscordVoiceDataSource</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nf">DiscordBufferedVoiceDataSource</span><span class="p">(</span><span class="nv">opusEncoder</span><span class="p">:</span> <span class="k">try</span> <span class="nf">DiscordOpusEncoder</span><span class="p">(</span><span class="nv">bitrate</span><span class="p">:</span> <span class="mi">128_000</span><span class="p">))</span>
     <span class="c1">// Somewhere down the line we setup some middleware which will use this source.</span>
 <span class="p">}</span>
 </code></pre>
@@ -494,7 +497,7 @@ Roughly equal to <code>(nPackets * 20ms) / 1000 = seconds to buffer</code>.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">bufferSize</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">bufferSize</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
@@ -521,7 +524,7 @@ Roughly equal to <code>(nPackets * 20ms) / 1000 = seconds to buffer</code>.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">drainThreshold</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">drainThreshold</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
@@ -548,7 +551,7 @@ Roughly equal to <code>(nPackets * 20ms) / 1000 = seconds to buffer</code>.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">encoderQueue</span> <span class="o">=</span> <span class="kt">DispatchQueue</span><span class="p">(</span><span class="nv">label</span><span class="p">:</span> <span class="s">"discordVoiceEncoder.encoderQueue"</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">encoderQueue</span> <span class="o">=</span> <span class="nf">DispatchQueue</span><span class="p">(</span><span class="nv">label</span><span class="p">:</span> <span class="s">"discordVoiceEncoder.encoderQueue"</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -575,7 +578,7 @@ Roughly equal to <code>(nPackets * 20ms) / 1000 = seconds to buffer</code>.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">opusEncoder</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordOpusEncoder.html">DiscordOpusEncoder</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">opusEncoder</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordOpusEncoder.html">DiscordOpusEncoder</a></span></code></pre>
 
                         </div>
                       </div>
@@ -602,7 +605,7 @@ Roughly equal to <code>(nPackets * 20ms) / 1000 = seconds to buffer</code>.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">frameSize</span> <span class="o">=</span> <span class="mi">960</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">frameSize</span> <span class="o">=</span> <span class="mi">960</span></code></pre>
 
                         </div>
                       </div>
@@ -629,7 +632,7 @@ Roughly equal to <code>(nPackets * 20ms) / 1000 = seconds to buffer</code>.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">middleware</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordEncoderMiddleware.html">DiscordEncoderMiddleware</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">middleware</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordEncoderMiddleware.html">DiscordEncoderMiddleware</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -656,7 +659,7 @@ Roughly equal to <code>(nPackets * 20ms) / 1000 = seconds to buffer</code>.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">source</span><span class="p">:</span> <span class="kt">DispatchIO</span><span class="o">!</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">source</span><span class="p">:</span> <span class="kt">DispatchIO</span><span class="o">!</span></code></pre>
 
                         </div>
                       </div>
@@ -683,7 +686,7 @@ Roughly equal to <code>(nPackets * 20ms) / 1000 = seconds to buffer</code>.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">pipe</span><span class="p">:</span> <span class="kt">Pipe</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">pipe</span><span class="p">:</span> <span class="kt">Pipe</span></code></pre>
 
                         </div>
                       </div>
@@ -710,7 +713,7 @@ Roughly equal to <code>(nPackets * 20ms) / 1000 = seconds to buffer</code>.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">writeToHandler</span><span class="p">:</span> <span class="kt">FileHandle</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">writeToHandler</span><span class="p">:</span> <span class="kt">FileHandle</span></code></pre>
 
                         </div>
                       </div>
@@ -752,7 +755,7 @@ Roughly equal to <code>(nPackets * 20ms) / 1000 = seconds to buffer</code>.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">opusEncoder</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordOpusEncoder.html">DiscordOpusEncoder</a></span><span class="p">,</span> <span class="nv">bufferSize</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">15_000</span><span class="p">,</span> <span class="nv">drainThreshold</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">13_500</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">opusEncoder</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordOpusEncoder.html">DiscordOpusEncoder</a></span><span class="p">,</span> <span class="nv">bufferSize</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">15_000</span><span class="p">,</span> <span class="nv">drainThreshold</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">13_500</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -834,7 +837,7 @@ into the buffer.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">closeEncoder</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">closeEncoder</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -863,7 +866,7 @@ into the buffer.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">createDispatchIO</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">createDispatchIO</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -891,7 +894,7 @@ a <code>DiscordVoiceEngineDataSourceStatus.done</code> error should be thrown.</
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">engineNeedsData</span><span class="p">(</span><span class="n">_</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">]</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">engineNeedsData</span><span class="p">(</span><span class="n">_</span> <span class="nv">engine</span><span class="p">:</span> <span class="kt"><a href="../Classes/DiscordVoiceEngine.html">DiscordVoiceEngine</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -942,7 +945,7 @@ This should cause ffmpeg to get an EOF on input, which will cause it to close on
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">finishUpAndClose</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">finishUpAndClose</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -969,7 +972,7 @@ This should cause ffmpeg to get an EOF on input, which will cause it to close on
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">startReading</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">startReading</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -984,8 +987,8 @@ This should cause ffmpeg to get an EOF on input, which will cause it to close on
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-09-25)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-01-14)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

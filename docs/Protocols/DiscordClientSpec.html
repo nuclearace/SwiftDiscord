@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-           Docs
+          SwiftDiscord Docs
         </a>
          (100% documented)
       </p>
@@ -36,7 +36,7 @@
     </header>
 
     <p class="breadcrumbs">
-      <a class="breadcrumb" href="../index.html"> Reference</a>
+      <a class="breadcrumb" href="../index.html">SwiftDiscord Reference</a>
       <img class="carat" src="../img/carat.png" />
       DiscordClientSpec Protocol Reference
     </p>
@@ -109,7 +109,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Enums.html">Enums</a>
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/DiscordAuditLogActionType.html">DiscordAuditLogActionType</a>
@@ -216,6 +216,9 @@
                 <a class="nav-group-task-link" href="../Protocols/DiscordOpusCodeable.html">DiscordOpusCodeable</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/DiscordRateLimiterSpec.html">DiscordRateLimiterSpec</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/DiscordShard.html">DiscordShard</a>
               </li>
               <li class="nav-group-task">
@@ -251,7 +254,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Structs.html">Structs</a>
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DiscordAttachment.html">DiscordAttachment</a>
@@ -400,7 +403,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Typealiases.html">Typealiases</a>
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord12AttachmentIDa">AttachmentID</a>
@@ -443,7 +446,7 @@
             <h1>DiscordClientSpec</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordClientSpec</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceManagerDelegate.html">DiscordVoiceManagerDelegate</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/DiscordUserActor.html">DiscordUserActor</a></span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DiscordClientSpec</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceManagerDelegate.html">DiscordVoiceManagerDelegate</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/DiscordShardManagerDelegate.html">DiscordShardManagerDelegate</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/DiscordUserActor.html">DiscordUserActor</a></span></code></pre>
 
                 </div>
               </div>
@@ -483,7 +486,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">connected</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">connected</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -510,7 +513,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordClientDelegate.html">DiscordClientDelegate</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordClientDelegate.html">DiscordClientDelegate</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -538,7 +541,7 @@ made on this queue, as this is the queue where modifications on them are made.</
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">handleQueue</span><span class="p">:</span> <span class="kt">DispatchQueue</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">handleQueue</span><span class="p">:</span> <span class="kt">DispatchQueue</span></code></pre>
 
                         </div>
                       </div>
@@ -575,7 +578,7 @@ made on this queue, as this is the queue where modifications on them are made.</
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="nf">init</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordClientDelegate.html">DiscordClientDelegate</a></span><span class="p">,</span> <span class="nv">configuration</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/DiscordClientOption.html">DiscordClientOption</a></span><span class="p">])</span></code></pre>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="p">(</span><span class="nv">token</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordToken.html">DiscordToken</a></span><span class="p">,</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordClientDelegate.html">DiscordClientDelegate</a></span><span class="p">,</span> <span class="nv">configuration</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Enums/DiscordClientOption.html">DiscordClientOption</a></span><span class="p">])</span></code></pre>
 
                         </div>
                       </div>
@@ -657,7 +660,7 @@ with the client.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">connect</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">connect</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -684,7 +687,7 @@ with the client.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">disconnect</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">disconnect</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -711,7 +714,7 @@ with the client.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">joinVoiceChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelIDa">ChannelID</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">joinVoiceChannel</span><span class="p">(</span><span class="n">_</span> <span class="nv">channelId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord9ChannelIDa">ChannelID</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -757,7 +760,7 @@ with the client.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">leaveVoiceChannel</span><span class="p">(</span><span class="n">onGuild</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildIDa">GuildID</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">leaveVoiceChannel</span><span class="p">(</span><span class="n">onGuild</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildIDa">GuildID</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -804,7 +807,7 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">requestAllUsers</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildIDa">GuildID</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">requestAllUsers</span><span class="p">(</span><span class="n">on</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildIDa">GuildID</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -850,7 +853,7 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">setPresence</span><span class="p">(</span><span class="n">_</span> <span class="nv">presence</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordPresenceUpdate.html">DiscordPresenceUpdate</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">setPresence</span><span class="p">(</span><span class="n">_</span> <span class="nv">presence</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordPresenceUpdate.html">DiscordPresenceUpdate</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -884,8 +887,8 @@ guild. Multiple <code>guildMembersChunk</code> will be fired.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-09-25)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-01-14)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

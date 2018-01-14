@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-           Docs
+          SwiftDiscord Docs
         </a>
          (100% documented)
       </p>
@@ -36,7 +36,7 @@
     </header>
 
     <p class="breadcrumbs">
-      <a class="breadcrumb" href="../index.html"> Reference</a>
+      <a class="breadcrumb" href="../index.html">SwiftDiscord Reference</a>
       <img class="carat" src="../img/carat.png" />
       DiscordVoiceEngine Class Reference
     </p>
@@ -109,7 +109,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Enums.html">Enums</a>
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/DiscordAuditLogActionType.html">DiscordAuditLogActionType</a>
@@ -216,6 +216,9 @@
                 <a class="nav-group-task-link" href="../Protocols/DiscordOpusCodeable.html">DiscordOpusCodeable</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/DiscordRateLimiterSpec.html">DiscordRateLimiterSpec</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/DiscordShard.html">DiscordShard</a>
               </li>
               <li class="nav-group-task">
@@ -251,7 +254,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Structs.html">Structs</a>
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DiscordAttachment.html">DiscordAttachment</a>
@@ -400,7 +403,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="../Typealiases.html">Typealiases</a>
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:12SwiftDiscord12AttachmentIDa">AttachmentID</a>
@@ -443,7 +446,7 @@
             <h1>DiscordVoiceEngine</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">DiscordVoiceEngine</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceEngineSpec.html">DiscordVoiceEngineSpec</a></span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">DiscordVoiceEngine</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceEngineSpec.html">DiscordVoiceEngineSpec</a></span></code></pre>
 
                 </div>
               </div>
@@ -486,7 +489,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">config</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceEngineConfiguration.html">DiscordVoiceEngineConfiguration</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">config</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceEngineConfiguration.html">DiscordVoiceEngineConfiguration</a></span></code></pre>
 
                         </div>
                       </div>
@@ -513,7 +516,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">heartbeatQueue</span> <span class="o">=</span> <span class="kt">DispatchQueue</span><span class="p">(</span><span class="nv">label</span><span class="p">:</span> <span class="s">"discordVoiceEngine.heartbeatQueue"</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">heartbeatQueue</span> <span class="o">=</span> <span class="nf">DispatchQueue</span><span class="p">(</span><span class="nv">label</span><span class="p">:</span> <span class="s">"discordVoiceEngine.heartbeatQueue"</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -540,7 +543,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">parseQueue</span> <span class="o">=</span> <span class="kt">DispatchQueue</span><span class="p">(</span><span class="nv">label</span><span class="p">:</span> <span class="s">"discordVoiceEngine.parseQueue"</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">parseQueue</span> <span class="o">=</span> <span class="nf">DispatchQueue</span><span class="p">(</span><span class="nv">label</span><span class="p">:</span> <span class="s">"discordVoiceEngine.parseQueue"</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -567,7 +570,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">connectURL</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">connectURL</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -594,7 +597,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">connectUUID</span> <span class="o">=</span> <span class="kt">UUID</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">connectUUID</span> <span class="o">=</span> <span class="nf">UUID</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -621,7 +624,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -648,7 +651,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildIDa">GuildID</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">guildId</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:12SwiftDiscord7GuildIDa">GuildID</a></span></code></pre>
 
                         </div>
                       </div>
@@ -675,7 +678,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">handshakeObject</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">handshakeObject</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -702,7 +705,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">resumeObject</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">resumeObject</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -729,7 +732,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">websocket</span><span class="p">:</span> <span class="kt">WebSocket</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">websocket</span><span class="p">:</span> <span class="kt">WebSocket</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -756,7 +759,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">voiceDelegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">voiceDelegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -783,7 +786,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">heartbeatInterval</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">heartbeatInterval</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span></code></pre>
 
                         </div>
                       </div>
@@ -810,7 +813,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">source</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceDataSource.html">DiscordVoiceDataSource</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">source</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceDataSource.html">DiscordVoiceDataSource</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -837,7 +840,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">modes</span> <span class="o">=</span> <span class="p">[</span><span class="kt">String</span><span class="p">]()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">modes</span> <span class="o">=</span> <span class="p">[</span><span class="kt">String</span><span class="p">]()</span></code></pre>
 
                         </div>
                       </div>
@@ -864,7 +867,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">secret</span><span class="p">:</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">]</span><span class="o">!</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">secret</span><span class="p">:</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">]</span><span class="o">!</span></code></pre>
 
                         </div>
                       </div>
@@ -891,7 +894,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">ssrc</span><span class="p">:</span> <span class="kt">UInt32</span> <span class="o">=</span> <span class="mi">0</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">ssrc</span><span class="p">:</span> <span class="kt">UInt32</span> <span class="o">=</span> <span class="mi">0</span></code></pre>
 
                         </div>
                       </div>
@@ -918,7 +921,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">udpSocket</span><span class="p">:</span> <span class="kt">UDPInternetSocket</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">udpSocket</span><span class="p">:</span> <span class="kt">UDPInternetSocket</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -945,7 +948,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">udpPort</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">udpPort</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span></code></pre>
 
                         </div>
                       </div>
@@ -972,7 +975,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">voiceServerInformation</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a></span><span class="o">!</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">voiceServerInformation</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a></span><span class="o">!</span></code></pre>
 
                         </div>
                       </div>
@@ -999,7 +1002,7 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">voiceState</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a></span><span class="o">!</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">voiceState</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a></span><span class="o">!</span></code></pre>
 
                         </div>
                       </div>
@@ -1037,12 +1040,12 @@ packets that are sent and received.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a></span><span class="p">,</span>
-                <span class="nv">config</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceEngineConfiguration.html">DiscordVoiceEngineConfiguration</a></span><span class="p">,</span>
-                <span class="nv">voiceServerInformation</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a></span><span class="p">,</span>
-                <span class="nv">voiceState</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a></span><span class="p">,</span>
-                <span class="nv">source</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceDataSource.html">DiscordVoiceDataSource</a></span><span class="p">?,</span>
-                <span class="nv">secret</span><span class="p">:</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">]?)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceEngineDelegate.html">DiscordVoiceEngineDelegate</a></span><span class="p">,</span>
+            <span class="nv">config</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceEngineConfiguration.html">DiscordVoiceEngineConfiguration</a></span><span class="p">,</span>
+            <span class="nv">voiceServerInformation</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceServerInformation.html">DiscordVoiceServerInformation</a></span><span class="p">,</span>
+            <span class="nv">voiceState</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordVoiceState.html">DiscordVoiceState</a></span><span class="p">,</span>
+            <span class="nv">source</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DiscordVoiceDataSource.html">DiscordVoiceDataSource</a></span><span class="p">?,</span>
+            <span class="nv">secret</span><span class="p">:</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">]?)</span></code></pre>
 
                         </div>
                       </div>
@@ -1136,7 +1139,7 @@ moved channels</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">disconnect</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">disconnect</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1146,9 +1149,9 @@ moved channels</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B11VoiceEngineC11handleCloseySo7NSErrorCSg6reason_tF"></a>
+                    <a name="/s:12SwiftDiscord0B11VoiceEngineC11handleCloseys5Error_pSg6reason_tF"></a>
                     <a name="//apple_ref/swift/Method/handleClose(reason:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B11VoiceEngineC11handleCloseySo7NSErrorCSg6reason_tF">handleClose(reason:)</a>
+                    <a class="token" href="#/s:12SwiftDiscord0B11VoiceEngineC11handleCloseys5Error_pSg6reason_tF">handleClose(reason:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1163,7 +1166,7 @@ moved channels</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleClose</span><span class="p">(</span><span class="nv">reason</span><span class="p">:</span> <span class="kt">NSError</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleClose</span><span class="p">(</span><span class="nv">reason</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1209,7 +1212,7 @@ moved channels</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleDispatch</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleDispatch</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1236,7 +1239,7 @@ moved channels</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleHello</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleHello</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1284,7 +1287,7 @@ moved channels</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleGatewayPayload</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleGatewayPayload</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1330,7 +1333,7 @@ moved channels</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleResumed</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">handleResumed</span><span class="p">(</span><span class="n">_</span> <span class="nv">payload</span><span class="p">:</span> <span class="kt"><a href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1377,7 +1380,7 @@ You shouldn&rsquo;t call this directly.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">parseGatewayMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">string</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">parseGatewayMessage</span><span class="p">(</span><span class="n">_</span> <span class="nv">string</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1387,9 +1390,9 @@ You shouldn&rsquo;t call this directly.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B11VoiceEngineC20requestNewDataSourceyyKF"></a>
+                    <a name="/s:12SwiftDiscord0B11VoiceEngineC20requestNewDataSourceyyF"></a>
                     <a name="//apple_ref/swift/Method/requestNewDataSource()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B11VoiceEngineC20requestNewDataSourceyyKF">requestNewDataSource()</a>
+                    <a class="token" href="#/s:12SwiftDiscord0B11VoiceEngineC20requestNewDataSourceyyF">requestNewDataSource()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1405,7 +1408,7 @@ the new encoder is ready.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestNewDataSource</span><span class="p">()</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestNewDataSource</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1432,7 +1435,7 @@ the new encoder is ready.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">sendHeartbeat</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">sendHeartbeat</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1456,7 +1459,7 @@ the new encoder is ready.</p>
 into raw PCM.</p>
 
 <p>Example setting up youtube-dl to play music.</p>
-<pre class="highlight swift"><code><span class="n">youtube</span> <span class="o">=</span> <span class="kt">EncoderProcess</span><span class="p">()</span>
+<pre class="highlight swift"><code><span class="n">youtube</span> <span class="o">=</span> <span class="nf">EncoderProcess</span><span class="p">()</span>
 <span class="n">youtube</span><span class="o">.</span><span class="n">launchPath</span> <span class="o">=</span> <span class="s">"usrlocalbinyoutube-dl"</span>
 <span class="n">youtube</span><span class="o">.</span><span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="s">"-f"</span><span class="p">,</span> <span class="s">"bestaudio"</span><span class="p">,</span> <span class="s">"-q"</span><span class="p">,</span> <span class="s">"-o"</span><span class="p">,</span> <span class="s">"-"</span><span class="p">,</span> <span class="n">link</span><span class="p">]</span>
 
@@ -1472,7 +1475,7 @@ into raw PCM.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">setupMiddleware</span><span class="p">(</span><span class="n">_</span> <span class="nv">middleware</span><span class="p">:</span> <span class="kt">Process</span><span class="p">,</span> <span class="nv">terminationHandler</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">setupMiddleware</span><span class="p">(</span><span class="n">_</span> <span class="nv">middleware</span><span class="p">:</span> <span class="kt">Process</span><span class="p">,</span> <span class="nv">terminationHandler</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="p">())?)</span></code></pre>
 
                         </div>
                       </div>
@@ -1530,7 +1533,7 @@ into raw PCM.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">startHandshake</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">startHandshake</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1557,7 +1560,7 @@ into raw PCM.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">startHeartbeat</span><span class="p">(</span><span class="nv">milliseconds</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">startHeartbeat</span><span class="p">(</span><span class="nv">milliseconds</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1591,8 +1594,8 @@ into raw PCM.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-09-25)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-01-14)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>
