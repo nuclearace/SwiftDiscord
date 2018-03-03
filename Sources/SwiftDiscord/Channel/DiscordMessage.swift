@@ -274,6 +274,7 @@ public extension DiscordMessage {
         public let partyId: String?
     }
 
+    /// Represents an application in a `DiscordMessage` object.
     public struct MessageApplication {
         /// The id of this application.
         public let id: Snowflake
