@@ -179,7 +179,7 @@ public struct DiscordActivity : Encodable {
         guard let name = game["name"] as? String else { return nil }
 
         self.applicationId = game.get("application_id", as: String.self)
-            self.assets = DiscordActivityAssets(assetsObj: game.get("assets", as: [String: Any].self))
+        self.assets = DiscordActivityAssets(assetsObj: game.get("assets", as: [String: Any].self))
         self.details = game.get("details", as: String.self)
         self.name = name
         self.party = DiscordParty(partyObj: game.get("party", as: [String: Any].self))
