@@ -86,6 +86,8 @@ public struct DiscordPresence {
 
 /// Represents a presence status.
 public enum DiscordPresenceStatus : String {
+    // MARK: Cases
+
     /// User is idle.
     case idle = "idle"
 
@@ -101,6 +103,8 @@ public enum DiscordPresenceStatus : String {
 
 /// Represents an activity type.
 public enum DiscordActivityType : Int, Encodable {
+    // MARK: Cases
+
     /// A regular game.
     case game
 
@@ -224,6 +228,8 @@ public struct DiscordActivityTimestamps {
 
 /// Represents the party status.
 public struct DiscordParty {
+    // MARK: Properties
+
     /// The id of the party.
     public let id: String
 
@@ -240,6 +246,8 @@ public struct DiscordParty {
 
 /// Represents presence assets.
 public struct DiscordActivityAssets {
+    // MARK: Properties
+
     /// The id of the large image.
     public let largeImage: String?
 
