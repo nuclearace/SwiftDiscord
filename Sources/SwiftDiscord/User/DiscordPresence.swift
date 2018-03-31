@@ -326,4 +326,12 @@ public struct DiscordPresenceUpdate : Encodable {
         case status
         case afk
     }
+
+    func toJSON() -> [String: Any] {
+        // FIXME this is lolwut tier
+
+        let raw = try! JSONEncoder().encode(self)
+
+        return try! JSONSerialization.jsonObject(with: raw) as! [String: Any]
+    }
 }

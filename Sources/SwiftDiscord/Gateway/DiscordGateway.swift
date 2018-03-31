@@ -108,7 +108,7 @@ public extension DiscordGatewayable where Self: DiscordWebSocketable {
 }
 
 /// Holds a gateway payload, based on its type.
-public enum DiscordGatewayPayloadData : Encodable {
+public enum DiscordGatewayPayloadData {
     /// Outgoing payloads only, payload is a custom encodable type
     case customEncodable(Encodable)
 
@@ -136,29 +136,6 @@ public enum DiscordGatewayPayloadData : Encodable {
             return bool
         case .null:
             return NSNull()
-        }
-    }
-
-    /// Encodable implementation.
-    public func encode(to encoder: Encoder) throws {
-        switch self {
-        case let .customEncodable(encodable):
-            try encodable.encode(to: encoder)
-        case let .object(contents):
-            guard let encodableContents = contents as? [String: Encodable] else {
-                let context = EncodingError.Context(codingPath: encoder.codingPath, debugDescription: "Failed to convert dictionary to [String: Encodable]")
-                throw EncodingError.invalidValue(contents, context)
-            }
-            try GenericEncodableDictionary(encodableContents).encode(to: encoder)
-        case let .integer(integer):
-            var container = encoder.singleValueContainer()
-            try container.encode(integer)
-        case let .bool(bool):
-            var container = encoder.singleValueContainer()
-            try container.encode(bool)
-        case .null:
-            var container = encoder.singleValueContainer()
-            try container.encodeNil()
         }
     }
 }
@@ -195,7 +172,7 @@ extension DiscordGatewayPayloadData {
 }
 
 /// Represents a gateway payload. This is lowest level of the Discord API.
-public struct DiscordGatewayPayload : Encodable {
+public struct DiscordGatewayPayload {
     /// The payload code.
     public let code: DiscordGatewayCode
 
@@ -231,17 +208,20 @@ public struct DiscordGatewayPayload : Encodable {
         case name = "t"
     }
 
-    /// Encodable implementation.
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: PayloadKeys.self)
-        try container.encode(code.rawCode, forKey: .code)
-        try container.encodeIfPresent(sequenceNumber, forKey: .sequence)
-        try container.encodeIfPresent(name, forKey: .name)
-        try payload.encode(to: container.superEncoder(forKey: .payload))
-    }
-
     func createPayloadString() -> String? {
-        return JSON.encodeJSON(self)
+        let createJSON: [String: Any] = [
+            "op": code.rawCode,
+            "s": sequenceNumber as Any,
+            "t": name as Any,
+            "d": payload.value
+        ]
+
+        guard let data = try? JSONSerialization.data(withJSONObject: createJSON),
+              let strData = String(data: data, encoding: .utf8) else {
+            return nil
+        }
+
+        return strData
     }
 }
 
