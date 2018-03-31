@@ -21,18 +21,12 @@ enum JSON {
     case array([Any])
     case object([String: Any])
 
+    // FIXME redo all this
     static func encodeJSONData<T: Encodable>(_ object: T) -> Data? {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .formatted(DiscordDateFormatter.rfc3339DateFormatter)
-        if let dictionary = object as? [String: Any] {
-            guard let encodableDic = dictionary as? [String: Encodable] else { return nil }
-            return try? encoder.encode(GenericEncodableDictionary(encodableDic))
-        } else if let array = object as? [Any] {
-            guard let encodableArray = array as? [Encodable] else { return nil }
-            return try? encoder.encode(GenericEncodableArray(encodableArray))
-        } else {
-            return try? encoder.encode(object)
-        }
+
+        return try? encoder.encode(object)
     }
 
     static func encodeJSON<T: Encodable>(_ object: T) -> String? {

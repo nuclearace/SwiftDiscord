@@ -123,7 +123,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         embeds = DiscordEmbed.embedsFromArray(messageObject.get("embeds", or: JSONArray()))
         id = messageObject.getSnowflake()
         mentionEveryone = messageObject.get("mention_everyone", or: false)
-        mentionRoles = messageObject.get("mention_roles", or: [String]()).flatMap(Snowflake.init)
+        mentionRoles = messageObject.get("mention_roles", or: [String]()).compactMap(Snowflake.init)
         mentions = DiscordUser.usersFromArray(messageObject.get("mentions", or: JSONArray()))
         nonce = messageObject.getSnowflake(key: "nonce")
         pinned = messageObject.get("pinned", or: false)

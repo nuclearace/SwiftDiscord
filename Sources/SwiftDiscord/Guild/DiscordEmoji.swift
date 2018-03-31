@@ -39,7 +39,7 @@ public struct DiscordEmoji {
         managed = emojiObject.get("managed", or: false)
         name = emojiObject.get("name", or: "")
         requireColons = emojiObject.get("require_colons", or: false)
-        roles = (emojiObject["roles"] as? [String])?.flatMap(Snowflake.init) ?? []
+        roles = (emojiObject["roles"] as? [String])?.compactMap(Snowflake.init) ?? []
     }
 
     static func emojisFromArray(_ emojiArray: [[String: Any]]) -> [EmojiID: DiscordEmoji] {
