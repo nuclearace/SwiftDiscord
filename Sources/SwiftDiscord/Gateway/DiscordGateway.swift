@@ -145,11 +145,7 @@ public enum DiscordGatewayPayloadData : Encodable {
         case let .customEncodable(encodable):
             try encodable.encode(to: encoder)
         case let .object(contents):
-            guard let encodableContents = contents as? [String: Encodable] else {
-                let context = EncodingError.Context(codingPath: encoder.codingPath, debugDescription: "Failed to convert dictionary to [String: Encodable]")
-                throw EncodingError.invalidValue(contents, context)
-            }
-            try GenericEncodableDictionary(encodableContents).encode(to: encoder)
+            try GenericEncodableDictionary(contents).encode(to: encoder)
         case let .integer(integer):
             var container = encoder.singleValueContainer()
             try container.encode(integer)

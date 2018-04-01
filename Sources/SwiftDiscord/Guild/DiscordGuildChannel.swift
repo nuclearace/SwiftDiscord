@@ -164,9 +164,9 @@ func guildChannels(fromArray guildChannelArray: [[String: Any]],
                    client: DiscordClient? = nil) -> [ChannelID: DiscordGuildChannel] {
     var guildChannels = [ChannelID: DiscordGuildChannel]()
 
-    for guildChannel in guildChannelArray.flatMap({ return guildChannel(fromObject: $0,
-                                                                        guildID: guildID,
-                                                                        client: client) }) {
+    for guildChannel in guildChannelArray.compactMap({ return guildChannel(fromObject: $0,
+                                                                           guildID: guildID,
+                                                                           client: client) }) {
         guildChannels[guildChannel.id] = guildChannel
     }
 

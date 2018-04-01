@@ -24,14 +24,14 @@ enum JSON {
     static func encodeJSONData<T: Encodable>(_ object: T) -> Data? {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .formatted(DiscordDateFormatter.rfc3339DateFormatter)
-        if let dictionary = object as? [String: Any] {
-            guard let encodableDic = dictionary as? [String: Encodable] else { return nil }
-            return try? encoder.encode(GenericEncodableDictionary(encodableDic))
-        } else if let array = object as? [Any] {
-            guard let encodableArray = array as? [Encodable] else { return nil }
-            return try? encoder.encode(GenericEncodableArray(encodableArray))
-        } else {
-            return try? encoder.encode(object)
+        do {
+            return try encoder.encode(object)
+        } catch let error as EncodingError {
+            DefaultDiscordLogger.Logger.error("Failed to encode json \(object): \(error.localizedDescription)", type: "JSON")
+            return nil
+        } catch {
+            DefaultDiscordLogger.Logger.error("Failed to encode json \(object): \(error)", type: "JSON")
+            return nil
         }
     }
 
