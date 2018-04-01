@@ -106,7 +106,7 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
 
     /// The value type.
     public typealias Value = V
-
+    
     /// The index type.
     public typealias Index = DiscordLazyDictionaryIndex<Key, Value>
 
@@ -136,7 +136,7 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
     }
 
     /// - returns: The first key/value pair stored in the dictionary.
-    public var first: (key: Key, value: Value)? {
+    public var first: Iterator.Element? {
         guard let firstValue = backingDictionary.first else { return nil }
 
         return (firstValue.key, firstValue.value.value)
@@ -190,7 +190,7 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
     ///
     /// - returns: An optional containing the keyvalue pair at `key`, or nil if that key is not in the dictionary
     ///
-    public subscript(position: Index) -> (key: Key, value: Value) {
+    public subscript(position: Index) -> Iterator.Element {
         let backingValues = backingDictionary[position.backingIndex]
 
         return (backingValues.key, backingValues.value.value)

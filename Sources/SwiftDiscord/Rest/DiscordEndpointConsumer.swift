@@ -378,11 +378,12 @@ public protocol DiscordEndpointConsumer {
     /// Modifies the position of a channel.
     ///
     /// - parameter on: The snowflake id of the guild
-    /// - parameter channelPositions: An array of channels that should be reordered.
+    /// - parameter channelPositions: An array of channels that should be reordered. Should contain a dictionary
+    /// in the form `["id": channelId, "position": position]`
     /// - parameter callback: An optional callback containing the modified channels, if successful.
     ///
     func modifyGuildChannelPositions(on guildId: GuildID,
-                                     channelPositions: [DiscordGuildChannelPosistion],
+                                     channelPositions: [[String: Any]],
                                      callback: (([DiscordGuildChannel], HTTPURLResponse?) -> ())?)
 
     ///

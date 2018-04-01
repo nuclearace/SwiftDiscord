@@ -21,12 +21,18 @@ enum JSON {
     case array([Any])
     case object([String: Any])
 
-    // FIXME redo all this
     static func encodeJSONData<T: Encodable>(_ object: T) -> Data? {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .formatted(DiscordDateFormatter.rfc3339DateFormatter)
-
-        return try? encoder.encode(object)
+        do {
+            return try encoder.encode(object)
+        } catch let error as EncodingError {
+            DefaultDiscordLogger.Logger.error("Failed to encode json \(object): \(error.localizedDescription)", type: "JSON")
+            return nil
+        } catch {
+            DefaultDiscordLogger.Logger.error("Failed to encode json \(object): \(error)", type: "JSON")
+            return nil
+        }
     }
 
     static func encodeJSON<T: Encodable>(_ object: T) -> String? {

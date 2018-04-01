@@ -265,7 +265,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                               options: [DiscordEndpoint.Options.ModifyChannel],
                               reason: String? = nil,
                               callback: ((DiscordGuildChannel?, HTTPURLResponse?) -> ())? = nil) {
-        var modifyJSON: [String: Encodable] = [:]
+        var modifyJSON: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {

@@ -33,6 +33,21 @@ extension Dictionary where Value == Any {
     }
 }
 
+// TODO: Remove when swift 4.1 is common
+#if swift(>=4.1)
+#else
+    extension Optional {
+        func compactMap<T>(_ transform: (Wrapped) throws -> T?) rethrows -> T? {
+            return try self.flatMap(transform)
+        }
+    }
+    extension Collection {
+        func compactMap<T>(_ transform: (Element) throws -> T?) rethrows -> [T] {
+            return try self.flatMap(transform)
+        }
+    }
+#endif
+
 extension Dictionary where Key == String, Value == Any {
     func getSnowflake(key: String = "id") -> Snowflake {
         return Snowflake(self[key] as? String) ?? 0
@@ -41,9 +56,9 @@ extension Dictionary where Key == String, Value == Any {
 
 /// Swift normally doesn't allow `[Encodable]` to be encoded
 struct GenericEncodableArray : Encodable {
-    let wrapped: [Encodable]
+    let wrapped: [Any]
 
-    init(_ wrapped: [Encodable]) {
+    init(_ wrapped: [Any]) {
         self.wrapped = wrapped
     }
 
@@ -52,12 +67,14 @@ struct GenericEncodableArray : Encodable {
         for item in wrapped {
             let superEncoder = container.superEncoder()
             switch item {
-            case let array as [Encodable]:
+            case let array as [Any]:
                 try GenericEncodableArray(array).encode(to: superEncoder)
-            case let dictionary as [String: Encodable]:
+            case let dictionary as [String: Any]:
                 try GenericEncodableDictionary(dictionary).encode(to: superEncoder)
-            default:
+            case let item as Encodable:
                 try item.encode(to: superEncoder)
+            default:
+                throw EncodingError.invalidValue(item, .init(codingPath: encoder.codingPath, debugDescription: "Attempted to encode a value that doesn't conform to encodable"))
             }
         }
     }
@@ -65,7 +82,7 @@ struct GenericEncodableArray : Encodable {
 
 /// Swift normally doesn't allow `[String: Encodable]` to be encoded
 struct GenericEncodableDictionary : Encodable {
-    let wrapped: [String: Encodable]
+    let wrapped: [String: Any]
 
     private struct GenericEncodingKey : CodingKey {
         var stringValue: String
@@ -80,7 +97,7 @@ struct GenericEncodableDictionary : Encodable {
         }
     }
 
-    init(_ wrapped: [String: Encodable]) {
+    init(_ wrapped: [String: Any]) {
         self.wrapped = wrapped
     }
 
@@ -89,12 +106,14 @@ struct GenericEncodableDictionary : Encodable {
         for (key, value) in wrapped {
             let superEncoder = container.superEncoder(forKey: GenericEncodingKey(stringValue: key))
             switch value {
-            case let array as [Encodable]:
+            case let array as [Any]:
                 try GenericEncodableArray(array).encode(to: superEncoder)
-            case let dictionary as [String: Encodable]:
+            case let dictionary as [String: Any]:
                 try GenericEncodableDictionary(dictionary).encode(to: superEncoder)
-            default:
+            case let value as Encodable:
                 try value.encode(to: superEncoder)
+            default:
+                throw EncodingError.invalidValue(value, .init(codingPath: encoder.codingPath, debugDescription: "Attempted to encode a value that doesn't conform to encodable"))
             }
         }
     }
