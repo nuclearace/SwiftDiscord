@@ -45,7 +45,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                              options: [DiscordEndpoint.Options.CreateInvite],
                              reason: String? = nil,
                              callback: @escaping (DiscordInvite?, HTTPURLResponse?) -> ()) {
-        var inviteJSON: [String: Encodable] = [:]
+        var inviteJSON: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
@@ -65,7 +65,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(inviteJSON)) else { return }
+        guard let contentData = JSON.encodeJSONData(inviteJSON) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(invite)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -265,7 +265,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                               options: [DiscordEndpoint.Options.ModifyChannel],
                               reason: String? = nil,
                               callback: ((DiscordGuildChannel?, HTTPURLResponse?) -> ())? = nil) {
-        var modifyJSON: [String: Encodable] = [:]
+        var modifyJSON: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
@@ -287,7 +287,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(modifyJSON)) else { return }
+        guard let contentData = JSON.encodeJSONData(modifyJSON) else { return }
 
         let requestCallback: DiscordRequestCallback = {data, response, error in
             guard case let .object(channel)? = JSON.jsonFromResponse(data: data, response: response) else {

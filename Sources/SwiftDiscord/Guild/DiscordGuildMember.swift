@@ -92,7 +92,7 @@ public struct DiscordGuildMember {
         _deaf = guildMemberObject.get("deaf", or: false)
         _mute = guildMemberObject.get("mute", or: false)
         _nick = guildMemberObject["nick"] as? String
-        roleIds = (guildMemberObject["roles"] as? [String])?.compactMap(Snowflake.init) ?? []
+        roleIds = (guildMemberObject["roles"] as? [String])?.flatMap(Snowflake.init) ?? []
         joinedAt = DiscordDateFormatter.format(guildMemberObject.get("joined_at", or: "")) ?? Date()
         self.guild = guild
     }
@@ -141,7 +141,7 @@ public struct DiscordGuildMember {
 
     mutating func updateMember(_ updateObject: [String: Any]) -> DiscordGuildMember {
         if let roles = updateObject["roles"] as? [String] {
-            self.roleIds = roles.compactMap(Snowflake.init)
+            self.roleIds = roles.flatMap(Snowflake.init)
         }
 
         _nick = updateObject["nick"] as? String

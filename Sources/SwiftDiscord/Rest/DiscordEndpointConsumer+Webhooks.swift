@@ -23,7 +23,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                               options: [DiscordEndpoint.Options.WebhookOption],
                               reason: String? = nil,
                               callback: @escaping (DiscordWebhook?, HTTPURLResponse?) -> () = {_, _ in }) {
-        var createJSON: [String: String] = [:]
+        var createJSON: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
@@ -139,7 +139,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                               options: [DiscordEndpoint.Options.WebhookOption],
                               reason: String? = nil,
                               callback: @escaping (DiscordWebhook?, HTTPURLResponse?) -> () = {_, _ in }) {
-        var createJSON: [String: Encodable] = [:]
+        var createJSON: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
@@ -155,7 +155,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(createJSON)) else { return }
+        guard let contentData = JSON.encodeJSONData(createJSON) else { return }
 
         DefaultDiscordLogger.Logger.debug("Modifying webhook: \(webhookId)", type: "DiscordEndpointChannels")
 

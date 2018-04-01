@@ -86,7 +86,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 withOptions options: [DiscordEndpoint.Options.CreateRole] = [],
                                 reason: String? = nil,
                                 callback: @escaping (DiscordRole?, HTTPURLResponse?) -> ()) {
-        var roleData: [String: Encodable] = [:]
+        var roleData: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
@@ -111,9 +111,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         DefaultDiscordLogger.Logger.log("Creating a new role on \(guildId)", type: "DiscordEndpointGuild")
         DefaultDiscordLogger.Logger.verbose("Role options \(roleData)", type: "DiscordEndpointGuild")
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(roleData)) else {
-            return callback(nil, nil)
-        }
+        guard let contentData = JSON.encodeJSONData(roleData) else { return callback(nil, nil) }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(role)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -326,7 +324,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                             options: [DiscordEndpoint.Options.ModifyGuild],
                             reason: String? = nil,
                             callback: ((DiscordGuild?, HTTPURLResponse?) -> ())? = nil) {
-        var modifyJSON: [String: Encodable] = [:]
+        var modifyJSON: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
@@ -356,7 +354,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(modifyJSON)) else { return }
+        guard let contentData = JSON.encodeJSONData(modifyJSON) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(guild)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -376,9 +374,9 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
     /// Default implementation
     public func modifyGuildChannelPositions(on guildId: GuildID,
-                                            channelPositions: [DiscordGuildChannelPosistion],
+                                            channelPositions: [[String: Any]],
                                             callback: (([DiscordGuildChannel], HTTPURLResponse?) -> ())? = nil) {
-        guard let contentData = JSON.encodeJSONData(GenericEncodableArray(channelPositions)) else { return }
+        guard let contentData = JSON.encodeJSONData(channelPositions) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(channels)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -401,7 +399,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                            options: [DiscordEndpoint.Options.ModifyMember],
                            reason: String? = nil,
                            callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
-        var patchParams: [String: Encodable] = [:]
+        var patchParams: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
@@ -418,7 +416,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(patchParams)) else { return }
+        guard let contentData = JSON.encodeJSONData(patchParams) else { return }
 
         DefaultDiscordLogger.Logger.debug("Modifying guild member \(id) with options: \(patchParams) on \(guildId)",
                                           type: "DiscordEndpointGuild")

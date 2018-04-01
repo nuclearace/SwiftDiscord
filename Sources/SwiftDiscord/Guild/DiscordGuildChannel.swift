@@ -163,11 +163,10 @@ func guildChannels(fromArray guildChannelArray: [[String: Any]],
                    guildID: GuildID?,
                    client: DiscordClient? = nil) -> [ChannelID: DiscordGuildChannel] {
     var guildChannels = [ChannelID: DiscordGuildChannel]()
-    let channels = guildChannelArray.compactMap({channelObj in
-        return guildChannel(fromObject: channelObj, guildID: guildID, client: client)
-    })
 
-    for guildChannel in channels {
+    for guildChannel in guildChannelArray.flatMap({ return guildChannel(fromObject: $0,
+                                                                        guildID: guildID,
+                                                                        client: client) }) {
         guildChannels[guildChannel.id] = guildChannel
     }
 
@@ -301,13 +300,4 @@ public struct DiscordGuildChannelCategory : DiscordGuildChannel {
         position = categoryObject.get("position", or: 0)
         self.client = client
     }
-}
-
-/// Represents the position of a channel in a
-public struct DiscordGuildChannelPosistion : Encodable {
-    /// The snowflake id of this channel.
-    public var id: ChannelID
-
-    /// The position of this channel.
-    public var position: Int
 }
