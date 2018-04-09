@@ -111,7 +111,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         DefaultDiscordLogger.Logger.log("Creating a new role on \(guildId)", type: "DiscordEndpointGuild")
         DefaultDiscordLogger.Logger.verbose("Role options \(roleData)", type: "DiscordEndpointGuild")
 
-        guard let contentData = JSON.encodeJSONData(roleData) else { return callback(nil, nil) }
+        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(roleData)) else { return callback(nil, nil) }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(role)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -354,7 +354,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        guard let contentData = JSON.encodeJSONData(modifyJSON) else { return }
+        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(modifyJSON)) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(guild)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -376,7 +376,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     public func modifyGuildChannelPositions(on guildId: GuildID,
                                             channelPositions: [[String: Any]],
                                             callback: (([DiscordGuildChannel], HTTPURLResponse?) -> ())? = nil) {
-        guard let contentData = JSON.encodeJSONData(channelPositions) else { return }
+        guard let contentData = JSON.encodeJSONData(GenericEncodableArray(channelPositions)) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(channels)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -416,7 +416,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        guard let contentData = JSON.encodeJSONData(patchParams) else { return }
+        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(patchParams)) else { return }
 
         DefaultDiscordLogger.Logger.debug("Modifying guild member \(id) with options: \(patchParams) on \(guildId)",
                                           type: "DiscordEndpointGuild")

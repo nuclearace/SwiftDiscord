@@ -53,10 +53,10 @@ public class TestDiscordDataStructures : XCTestCase {
     }
 
     func testGameJSONification() {
-        let game1 = DiscordGame(name: "Game", type: .game)
-        let game2 = DiscordGame(gameObject: roundTripEncode(game1))!
-        let game3 = DiscordGame(name: "Another Game", type: .stream, url: "http://www.twitch.tv/person")
-        let game4 = DiscordGame(gameObject: roundTripEncode(game3))!
+        let game1 = DiscordActivity(name: "Game", type: .game)
+        let game2 = DiscordActivity(gameObject: roundTripEncode(game1))!
+        let game3 = DiscordActivity(name: "Another Game", type: .stream, url: "http://www.twitch.tv/person")
+        let game4 = DiscordActivity(gameObject: roundTripEncode(game3))!
         XCTAssertEqual(game1.name, game2.name, "Name should survive JSONification")
         XCTAssertEqual(game1.type, game2.type, "Type should survive JSONification")
         XCTAssertEqual(game1.url, game2.url, "Nil URL should survive JSONification")
@@ -151,11 +151,11 @@ public class TestDiscordDataStructures : XCTestCase {
         testRunner(data: .integer(8)) { item in
             XCTAssertEqual(item as? Int, 8)
         }
-        testRunner(data: .object(["hello": 4, "yay": DiscordGame(name: "A Game", type: .stream)])) { item in
+        testRunner(data: .object(["hello": 4, "yay": DiscordActivity(name: "A Game", type: .stream)])) { item in
             let item = item as! [String: Any]
             XCTAssertEqual(item["hello"] as? Int, 4)
             XCTAssertNotNil(item["yay"])
-            let game = DiscordGame(gameObject: item["yay"] as? [String: Any])
+            let game = DiscordActivity(gameObject: item["yay"] as? [String: Any])
             XCTAssertEqual(game?.name, "A Game")
             XCTAssertEqual(game?.type, .stream)
         }

@@ -39,6 +39,12 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
 
     // MARK: Properties
 
+    /// The activity for this message, if any.
+    public let activity: MessageActivity?
+
+    /// Sent with Rich-Presence messages.
+    public let application: MessageApplication?
+
     /// The attachments included in this message.
     public let attachments: [DiscordAttachment]
 
@@ -87,6 +93,9 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// Whether or not this message should be read by a screen reader.
     public let tts: Bool
 
+    /// The type of this message.
+    public let type: MessageType
+
     /// The channel that this message originated from. Can return nil if the channel couldn't be found.
     public var channel: DiscordTextChannel? {
         return client?.findChannel(fromId: channelId) as? DiscordTextChannel
@@ -105,6 +114,8 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     // MARK: Initializers
 
     init(messageObject: [String: Any], client: DiscordClient?) {
+        activity = MessageActivity(activityObject: messageObject.get("activity", as: [String: Any].self))
+        application = MessageApplication(applicationObject: messageObject.get("application", as: [String: Any].self))
         attachments = DiscordAttachment.attachmentsFromArray(messageObject.get("attachments", or: JSONArray()))
         author = DiscordUser(userObject: messageObject.get("author", or: [String: Any]()))
         channelId = Snowflake(messageObject["channel_id"] as? String) ?? 0
@@ -112,7 +123,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         embeds = DiscordEmbed.embedsFromArray(messageObject.get("embeds", or: JSONArray()))
         id = messageObject.getSnowflake()
         mentionEveryone = messageObject.get("mention_everyone", or: false)
-        mentionRoles = messageObject.get("mention_roles", or: [String]()).flatMap(Snowflake.init)
+        mentionRoles = messageObject.get("mention_roles", or: [String]()).compactMap(Snowflake.init)
         mentions = DiscordUser.usersFromArray(messageObject.get("mentions", or: JSONArray()))
         nonce = messageObject.getSnowflake(key: "nonce")
         pinned = messageObject.get("pinned", or: false)
@@ -121,6 +132,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         editedTimestamp = DiscordDateFormatter.format(messageObject.get("edited_timestamp", or: "")) ?? Date()
         timestamp = DiscordDateFormatter.format(messageObject.get("timestamp", or: "")) ?? Date()
         files = []
+        type = MessageType(rawValue: messageObject.get("type", or: 0)) ?? .default
         self.client = client
     }
 
@@ -139,6 +151,8 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         } else {
             self.embeds = []
         }
+        self.activity = nil
+        self.application = nil
         self.files = files
         self.tts = tts
         self.attachments = []
@@ -153,6 +167,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.reactions = []
         self.editedTimestamp = Date()
         self.timestamp = Date()
+        self.type = .default
     }
 
     ///
@@ -203,6 +218,99 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
 
     static func messagesFromArray(_ array: [[String: Any]]) -> [DiscordMessage] {
         return array.map({ DiscordMessage(messageObject: $0, client: nil) })
+    }
+}
+
+public extension DiscordMessage {
+    /// Type of message
+    public enum MessageType : Int {
+        /// Default.
+        case `default`
+
+        /// Recipient Add.
+        case recipientAdd
+
+        /// Recipient Remove.
+        case recipientRemove
+
+        /// Call.
+        case call
+
+        /// Channel name change.
+        case channelNameChange
+
+        /// Channel icon change.
+        case channelIconChange
+
+        /// Channel pinned message.
+        case channelPinnedMessage
+
+        /// Guild member join.
+        case guildMemberJoin
+    }
+
+    /// Represents an action that be taken on a message.
+    public struct MessageActivity {
+        /// Represents the type of activity.
+        public enum ActivityType : Int {
+            /// Join.
+            case join = 1
+
+            /// Spectate.
+            case spectate
+
+            /// Listen.
+            case listen
+
+            /// Join request.
+            case joinRequest
+        }
+
+        /// The type of action.
+        public let type: ActivityType
+
+        // FIXME Make Par†yId type?
+        /// The party ID for this activity
+        public let partyId: String?
+    }
+
+    /// Represents an application in a `DiscordMessage` object.
+    public struct MessageApplication {
+        /// The id of this application.
+        public let id: Snowflake
+
+        /// Id of the embed's image asset.
+        public let coverImage: String
+
+        /// The description of the application.
+        public let description: String
+
+        /// Id of the application's icon.
+        public let icon: String
+
+        /// The name of the application.
+        public let name: String
+    }
+}
+
+extension DiscordMessage.MessageActivity {
+    init?(activityObject: [String: Any]?) {
+        guard let activityObject = activityObject else { return nil }
+
+        type = ActivityType(rawValue: activityObject.get("type", or: 0)) ?? .join
+        partyId = activityObject.get("party_id", as: String.self)
+    }
+}
+
+extension DiscordMessage.MessageApplication {
+    init?(applicationObject: [String: Any]?) {
+        guard let applicationObject = applicationObject else { return nil }
+
+        id = applicationObject.getSnowflake(key: "id")
+        coverImage = applicationObject.get("cover_image", or: "")
+        description = applicationObject.get("description", or: "")
+        icon = applicationObject.get("icon", or: "")
+        name = applicationObject.get("name", or: "")
     }
 }
 

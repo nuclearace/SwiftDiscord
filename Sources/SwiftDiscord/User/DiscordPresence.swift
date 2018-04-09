@@ -17,76 +17,6 @@
 
 import Foundation
 
-/// Represents a game type.
-public enum DiscordGameType : Int, Encodable {
-    /// A regular game.
-    case game = 0
-
-    /// A stream.
-    case stream = 1
-}
-
-/// Represents a game
-public struct DiscordGame : Encodable {
-    // MARK: Properties
-
-    /// The name of the game.
-    public let name: String
-
-    /// The type of the game.
-    public let type: DiscordGameType
-
-    /// The url of the stream, if a stream.
-    public let url: String?
-
-    // MARK: Initializers
-
-    ///
-    /// Creates a new DiscordGame.
-    ///
-    /// - parameter name: The name of the game
-    /// - parameter type: The type of the game
-    /// - parameter url: The url of the stream, if a stream
-    ///
-    public init(name: String, type: DiscordGameType, url: String? = nil) {
-        self.name = name
-        self.type = type
-        self.url = url
-    }
-
-
-    ///
-    /// Creates a new DiscordGame from a json object.
-    ///
-    /// Can fail if no game object was given.
-    ///
-    /// - parameter gameObject: The json game
-    ///
-    public init?(gameObject: [String: Any]?) {
-        guard let game = gameObject else { return nil }
-        guard let name = game["name"] as? String else { return nil }
-
-        self.name = name
-        self.type = DiscordGameType(rawValue: game.get("type", or: 0)) ?? .game
-        self.url = game["url"] as? String
-    }
-}
-
-/// Represents a presence status.
-public enum DiscordPresenceStatus : String {
-    /// User is idle.
-    case idle = "idle"
-
-    /// User is offline or hidden.
-    case offline = "offline"
-
-    /// User is online.
-    case online = "online"
-
-    /// This user won't receive notifications.
-    case doNotDisturb = "dnd"
-}
-
 /// Represents a presence.
 public struct DiscordPresence {
     // MARK: Properties
@@ -98,7 +28,7 @@ public struct DiscordPresence {
     public let user: DiscordUser
 
     /// The game this user is playing, if they are playing a game.
-    public var game: DiscordGame?
+    public var game: DiscordActivity?
 
     /// This user's nick on this guild.
     public var nick: String?
@@ -112,7 +42,7 @@ public struct DiscordPresence {
     init(presenceObject: [String: Any], guildId: GuildID) {
         self.guildId = guildId
         user = DiscordUser(userObject: presenceObject.get("user", or: [String: Any]()))
-        game = DiscordGame(gameObject: presenceObject["game"] as? [String: Any])
+        game = DiscordActivity(gameObject: presenceObject["game"] as? [String: Any])
         nick = presenceObject["nick"] as? String
         status = DiscordPresenceStatus(rawValue: presenceObject.get("status", or: "")) ?? .offline
         roles = []
@@ -120,9 +50,9 @@ public struct DiscordPresence {
 
     mutating func updatePresence(presenceObject: [String: Any]) {
         if let game = presenceObject["game"] as? [String: Any] {
-            self.game = DiscordGame(gameObject: game)
+            self.game = DiscordActivity(gameObject: game)
         } else {
-            game = nil
+            self.game = nil
         }
 
         if let nick = presenceObject["nick"] as? String {
@@ -139,7 +69,7 @@ public struct DiscordPresence {
     }
 
     static func presencesFromArray(_ presencesArray: [[String: Any]], guildId: GuildID)
-            -> DiscordLazyDictionary<UserID, DiscordPresence> {
+                    -> DiscordLazyDictionary<UserID, DiscordPresence> {
         var presences = DiscordLazyDictionary<UserID, DiscordPresence>()
 
         for presence in presencesArray {
@@ -154,35 +84,206 @@ public struct DiscordPresence {
     }
 }
 
+/// Represents a presence status.
+public enum DiscordPresenceStatus : String {
+    // MARK: Cases
+
+    /// User is idle.
+    case idle = "idle"
+
+    /// User is offline or hidden.
+    case offline = "offline"
+
+    /// User is online.
+    case online = "online"
+
+    /// This user won't receive notifications.
+    case doNotDisturb = "dnd"
+}
+
+/// Represents an activity type.
+public enum DiscordActivityType : Int, Encodable {
+    // MARK: Cases
+
+    /// A regular game.
+    case game
+
+    /// A stream.
+    case stream
+
+    /// Listening to something.
+    case listening
+}
+
+/// Represents a game
+public struct DiscordActivity : Encodable {
+    // MARK: Properties
+
+    /// The application id.
+    public let applicationId: String?
+
+    /// The assets for this activity.
+    public let assets: DiscordActivityAssets?
+
+    /// What the player is currently doing.
+    public let details: String?
+
+    /// The name of the game.
+    public let name: String
+
+    /// The party status.
+    public let party: DiscordParty?
+
+    /// The user's current party status
+    public let state: String?
+
+    /// Unix timestamps for the start and end of a game.
+    public let timestamps: DiscordActivityTimestamps?
+
+    /// The type of the game.
+    public let type: DiscordActivityType
+
+    /// The url of the stream, if a stream.
+    public let url: String?
+
+    // MARK: Initializers
+
+    ///
+    /// Creates a new DiscordGame.
+    ///
+    /// - parameter name: The name of the game
+    /// - parameter type: The type of the game
+    /// - parameter url: The url of the stream, if a stream
+    ///
+    public init(name: String, type: DiscordActivityType, url: String? = nil) {
+        self.applicationId = nil
+        self.assets = nil
+        self.details = nil
+        self.name = name
+        self.party = nil
+        self.state = nil
+        self.timestamps = nil
+        self.type = type
+        self.url = url
+    }
+
+    ///
+    /// Creates a new DiscordGame from a json object.
+    ///
+    /// Can fail if no game object was given.
+    ///
+    /// - parameter gameObject: The json game
+    ///
+    public init?(gameObject: [String: Any]?) {
+        guard let game = gameObject else { return nil }
+        guard let name = game["name"] as? String else { return nil }
+
+        self.applicationId = game.get("application_id", as: String.self)
+        self.assets = DiscordActivityAssets(assetsObj: game.get("assets", as: [String: Any].self))
+        self.details = game.get("details", as: String.self)
+        self.name = name
+        self.party = DiscordParty(partyObj: game.get("party", as: [String: Any].self))
+        self.state = game.get("state", as: String.self)
+        self.timestamps = DiscordActivityTimestamps(timestampsObj: game.get("timestamps", as: [String: Int].self))
+        self.type = DiscordActivityType(rawValue: game.get("type", or: 0)) ?? .game
+        self.url = game["url"] as? String
+    }
+
+    /// Encodable requirement
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(name, forKey: .name)
+        try container.encode(type, forKey: .type)
+
+        if let url = self.url {
+            try container.encode(url, forKey: .url)
+        } else {
+            try container.encodeNil(forKey: .url)
+        }
+    }
+
+    private enum CodingKeys : CodingKey {
+        case name, type, url
+    }
+}
+
+/// Represents the start/end of a game.
+public struct DiscordActivityTimestamps {
+    // MARK: Properties
+
+    /// The start.
+    public let start: Int?
+
+    /// The end.
+    public let end: Int?
+
+    init?(timestampsObj: [String: Int]?) {
+        guard let timestampsObj = timestampsObj else { return nil }
+
+        self.start = timestampsObj["start"]
+        self.end = timestampsObj["end"]
+    }
+}
+
+/// Represents the party status.
+public struct DiscordParty {
+    // MARK: Properties
+
+    /// The id of the party.
+    public let id: String
+
+    /// The sizes of the party. Array of two elements, first is the current, second is the max size of the party.
+    public let sizes: [Int]?
+
+    init?(partyObj: [String: Any]?) {
+        guard let partyObj = partyObj else { return nil }
+
+        self.id = partyObj.get("id", or: "")
+        self.sizes = partyObj.get("sizes", as: [Int].self)
+    }
+}
+
+/// Represents presence assets.
+public struct DiscordActivityAssets {
+    // MARK: Properties
+
+    /// The id of the large image.
+    public let largeImage: String?
+
+    /// The hover text for the large image.
+    public let largeText: String?
+
+    /// The id of the small image.
+    public let smallImage: String?
+
+    /// The hover text for the small image.
+    public let smallText: String?
+
+    init?(assetsObj: [String: Any]?) {
+        guard let assetsObj = assetsObj else { return nil }
+
+        self.largeImage = assetsObj.get("large_image", as: String.self)
+        self.largeText = assetsObj.get("large_text", as: String.self)
+        self.smallImage = assetsObj.get("small_image", as: String.self)
+        self.smallText = assetsObj.get("small_text", as: String.self)
+    }
+}
 
 /// Used to send updates to Discord about our presence.
 public struct DiscordPresenceUpdate : Encodable {
     // MARK: Properties
 
-    /// Deprecated. Use afkSince instead.
-    @available(*, deprecated, message: "Use afkSince instead")
-    public var since: Int? {
-        return (afkSince?.timeIntervalSince1970).map({ Int($0 * 1000) })
-    }
-
     /// The time at which we went idle. Nil if not idle
     public var afkSince: Date?
 
     /// The game we are currently playing. Nil if not playing a game.
-    public var game: DiscordGame?
+    public var game: DiscordActivity?
 
     /// The status for this update.
     public var status: DiscordPresenceStatus
 
     // MARK: Initializers
-
-    /// Deprecated. Use init(game:afkSince:) instead.
-    @available(*, deprecated, message: "Use init(game:afkSince:) instead")
-    public init(since: Int?, game: DiscordGame?) {
-        self.afkSince = since.map({ Date(timeIntervalSince1970: Double($0) / 1000) })
-        self.game = game
-        self.status = .online
-    }
 
     ///
     /// Creates a new DiscordPresenceUpdate
@@ -191,7 +292,7 @@ public struct DiscordPresenceUpdate : Encodable {
     /// - parameter status: The current status
     /// - parameter afkSince: The time the user went afk. Nil if the user is not afk
     ///
-    public init(game: DiscordGame?, status: DiscordPresenceStatus = .online, afkSince: Date? = nil) {
+    public init(game: DiscordActivity?, status: DiscordPresenceStatus = .online, afkSince: Date? = nil) {
         self.afkSince = afkSince
         self.game = game
         self.status = status
