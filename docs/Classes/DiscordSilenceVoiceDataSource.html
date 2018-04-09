@@ -112,6 +112,9 @@
             <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/DiscordActivityType.html">DiscordActivityType</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/DiscordAuditLogActionType.html">DiscordAuditLogActionType</a>
               </li>
               <li class="nav-group-task">
@@ -131,9 +134,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/DiscordEndpoint/Options.html">– Options</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/DiscordGameType.html">DiscordGameType</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/DiscordGatewayCloseReason.html">DiscordGatewayCloseReason</a>
@@ -257,6 +257,15 @@
             <a class="nav-group-name-link" href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DiscordActivity.html">DiscordActivity</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DiscordActivityAssets.html">DiscordActivityAssets</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DiscordActivityTimestamps.html">DiscordActivityTimestamps</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DiscordAttachment.html">DiscordAttachment</a>
               </li>
               <li class="nav-group-task">
@@ -302,9 +311,6 @@
                 <a class="nav-group-task-link" href="../Structs/DiscordFileUpload.html">DiscordFileUpload</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/DiscordGame.html">DiscordGame</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a>
               </li>
               <li class="nav-group-task">
@@ -341,7 +347,19 @@
                 <a class="nav-group-task-link" href="../Structs/DiscordMessage.html">DiscordMessage</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DiscordMessage/MessageType.html">– MessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DiscordMessage/MessageActivity.html">– MessageActivity</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DiscordMessage/MessageApplication.html">– MessageApplication</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DiscordOpusVoiceData.html">DiscordOpusVoiceData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DiscordParty.html">DiscordParty</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DiscordPermission.html">DiscordPermission</a>
@@ -463,9 +481,9 @@ Only sends 5 packets of silence and is then spent.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B22SilenceVoiceDataSourceC9frameSizeSiv"></a>
+                    <a name="/s:12SwiftDiscord0B22SilenceVoiceDataSourceC9frameSizeSivp"></a>
                     <a name="//apple_ref/swift/Property/frameSize" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B22SilenceVoiceDataSourceC9frameSizeSiv">frameSize</a>
+                    <a class="token" href="#/s:12SwiftDiscord0B22SilenceVoiceDataSourceC9frameSizeSivp">frameSize</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -490,9 +508,9 @@ Only sends 5 packets of silence and is then spent.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B22SilenceVoiceDataSourceC08previousF0AA0bdeF0_pSgv"></a>
+                    <a name="/s:12SwiftDiscord0B22SilenceVoiceDataSourceC08previousF0AA0bdeF0_pSgvp"></a>
                     <a name="//apple_ref/swift/Property/previousSource" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B22SilenceVoiceDataSourceC08previousF0AA0bdeF0_pSgv">previousSource</a>
+                    <a class="token" href="#/s:12SwiftDiscord0B22SilenceVoiceDataSourceC08previousF0AA0bdeF0_pSgvp">previousSource</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -527,8 +545,8 @@ Only sends 5 packets of silence and is then spent.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Creates a new silence data source. If <code><a href="../Classes/DiscordSilenceVoiceDataSource.html#/s:12SwiftDiscord0B22SilenceVoiceDataSourceC08previousF0AA0bdeF0_pSgv">previousSource</a></code> is sent then when the silence data
-is used it the engine will attempt to use <code><a href="../Classes/DiscordSilenceVoiceDataSource.html#/s:12SwiftDiscord0B22SilenceVoiceDataSourceC08previousF0AA0bdeF0_pSgv">previousSource</a></code> rather than asking for a new source.</p>
+                        <p>Creates a new silence data source. If <code><a href="../Classes/DiscordSilenceVoiceDataSource.html#/s:12SwiftDiscord0B22SilenceVoiceDataSourceC08previousF0AA0bdeF0_pSgvp">previousSource</a></code> is sent then when the silence data
+is used it the engine will attempt to use <code><a href="../Classes/DiscordSilenceVoiceDataSource.html#/s:12SwiftDiscord0B22SilenceVoiceDataSourceC08previousF0AA0bdeF0_pSgvp">previousSource</a></code> rather than asking for a new source.</p>
 
                       </div>
                       <div class="declaration">
@@ -654,7 +672,7 @@ is used it the engine will attempt to use <code><a href="../Classes/DiscordSilen
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-01-14)</p>
+      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-04-09)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

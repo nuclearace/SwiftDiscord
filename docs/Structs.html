@@ -111,6 +111,9 @@
             <a class="nav-group-name-link" href="Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/DiscordActivityType.html">DiscordActivityType</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/DiscordAuditLogActionType.html">DiscordAuditLogActionType</a>
               </li>
               <li class="nav-group-task">
@@ -130,9 +133,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/DiscordEndpoint/Options.html">– Options</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Enums/DiscordGameType.html">DiscordGameType</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/DiscordGatewayCloseReason.html">DiscordGatewayCloseReason</a>
@@ -256,6 +256,15 @@
             <a class="nav-group-name-link" href="Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DiscordActivity.html">DiscordActivity</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DiscordActivityAssets.html">DiscordActivityAssets</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DiscordActivityTimestamps.html">DiscordActivityTimestamps</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/DiscordAttachment.html">DiscordAttachment</a>
               </li>
               <li class="nav-group-task">
@@ -301,9 +310,6 @@
                 <a class="nav-group-task-link" href="Structs/DiscordFileUpload.html">DiscordFileUpload</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Structs/DiscordGame.html">DiscordGame</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/DiscordGatewayPayload.html">DiscordGatewayPayload</a>
               </li>
               <li class="nav-group-task">
@@ -340,7 +346,19 @@
                 <a class="nav-group-task-link" href="Structs/DiscordMessage.html">DiscordMessage</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DiscordMessage/MessageType.html">– MessageType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DiscordMessage/MessageActivity.html">– MessageActivity</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DiscordMessage/MessageApplication.html">– MessageApplication</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/DiscordOpusVoiceData.html">DiscordOpusVoiceData</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DiscordParty.html">DiscordParty</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/DiscordPermission.html">DiscordPermission</a>
@@ -1291,34 +1309,6 @@ Are considered different endpoints</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:12SwiftDiscord0B4GameV"></a>
-                    <a name="//apple_ref/swift/Struct/DiscordGame" class="dashAnchor"></a>
-                    <a class="token" href="#/s:12SwiftDiscord0B4GameV">DiscordGame</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Represents a game</p>
-
-                        <a href="Structs/DiscordGame.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordGame</span> <span class="p">:</span> <span class="kt">Encodable</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:12SwiftDiscord0B8PresenceV"></a>
                     <a name="//apple_ref/swift/Struct/DiscordPresence" class="dashAnchor"></a>
                     <a class="token" href="#/s:12SwiftDiscord0B8PresenceV">DiscordPresence</a>
@@ -1338,6 +1328,118 @@ Are considered different endpoints</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordPresence</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SwiftDiscord0B8ActivityV"></a>
+                    <a name="//apple_ref/swift/Struct/DiscordActivity" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B8ActivityV">DiscordActivity</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a game</p>
+
+                        <a href="Structs/DiscordActivity.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordActivity</span> <span class="p">:</span> <span class="kt">Encodable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SwiftDiscord0B18ActivityTimestampsV"></a>
+                    <a name="//apple_ref/swift/Struct/DiscordActivityTimestamps" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B18ActivityTimestampsV">DiscordActivityTimestamps</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents the start/end of a game.</p>
+
+                        <a href="Structs/DiscordActivityTimestamps.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordActivityTimestamps</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SwiftDiscord0B5PartyV"></a>
+                    <a name="//apple_ref/swift/Struct/DiscordParty" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B5PartyV">DiscordParty</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents the party status.</p>
+
+                        <a href="Structs/DiscordParty.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordParty</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12SwiftDiscord0B14ActivityAssetsV"></a>
+                    <a name="//apple_ref/swift/Struct/DiscordActivityAssets" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12SwiftDiscord0B14ActivityAssetsV">DiscordActivityAssets</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents presence assets.</p>
+
+                        <a href="Structs/DiscordActivityAssets.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DiscordActivityAssets</span></code></pre>
 
                         </div>
                       </div>
@@ -1660,7 +1762,7 @@ Are considered different endpoints</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-01-14)</p>
+      <p>&copy; 2018 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2018-04-09)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
