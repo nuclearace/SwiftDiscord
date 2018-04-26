@@ -123,7 +123,7 @@ open class DiscordOpusEncoder : DiscordOpusCodeable {
         let output = UnsafeMutablePointer<UInt8>.allocate(capacity: maxPacketSize)
         let lenPacket = opus_encode(encoderState, audio, Int32(frameSize), output, opus_int32(maxPacketSize))
 
-        defer { free(output) }
+        defer { output.deallocate() }
 
         guard lenPacket > 0 else { throw DiscordVoiceError.encodeFail }
 
@@ -196,7 +196,7 @@ open class DiscordOpusDecoder : DiscordOpusCodeable {
         let decodedSize = Int(opus_decode(decoderState, audio, Int32(packetSize), output, Int32(frameSize), 0))
         let totalSize = decodedSize * channels
 
-        defer { free(output) }
+        defer { output.deallocate() }
 
         guard decodedSize > 0, totalSize <= maxSize else { throw DiscordVoiceError.decodeFail }
 

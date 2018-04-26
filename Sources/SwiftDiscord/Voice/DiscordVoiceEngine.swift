@@ -234,7 +234,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         var nonce = rtpHeader + DiscordVoiceEngine.padding
         var buf = data
 
-        defer { free(encrypted) }
+        defer { encrypted.deallocate() }
 
         let success = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &secret!)
 
@@ -254,7 +254,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         let unencrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
         var nonce = rtpHeader + DiscordVoiceEngine.padding
 
-        defer { free(unencrypted) }
+        defer { unencrypted.deallocate() }
 
         let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &secret!)
 
