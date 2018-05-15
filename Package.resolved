@@ -69,8 +69,8 @@
         "repositoryURL": "https://github.com/vapor/engine",
         "state": {
           "branch": null,
-          "revision": "c8072bcad951523adda26798e9b5c56a5c54d191",
-          "version": "2.2.3"
+          "revision": "0ecc50fa8c7bc03ec9af78ca37e3b57f192bd258",
+          "version": "2.2.4"
         }
       },
       {
@@ -87,8 +87,8 @@
         "repositoryURL": "https://github.com/vapor/sockets.git",
         "state": {
           "branch": null,
-          "revision": "a77816695630a44d5d1393fc71eac37ac3d082ca",
-          "version": "2.2.2"
+          "revision": "79fc180cdcb451dbbb01b1156be36720adde80e0",
+          "version": "2.2.3"
         }
       },
       {
@@ -105,8 +105,8 @@
         "repositoryURL": "https://github.com/daltoniam/Starscream",
         "state": {
           "branch": null,
-          "revision": "6e10c04c8387d00f41a17450fa45b51427971022",
-          "version": "3.0.4"
+          "revision": "114e5df9b6251970a069e8f1c0cbb5802759f0a9",
+          "version": "3.0.5"
         }
       },
       {
