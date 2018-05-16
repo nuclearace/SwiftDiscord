@@ -47,16 +47,8 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
     /// A DiscordRateLimiter for this client. All REST calls will be put through this limiter.
     case rateLimiter(DiscordRateLimiterSpec)
 
-    /// If this client is going to shard into multiple instances, this tells a client the shard information.
-    @available(*, deprecated, message: "Use .shardingInformation")
-    case singleShard(DiscordShardInformation)
-
     /// Tells the client the number of shards to create. If not provided, one shard will be created.
     case shardingInfo(DiscordShardInformation)
-
-    /// The number of shards this client should spawn. Defaults to 1.
-    @available(*, deprecated, message: "Use .shardingInformation")
-    case shards(Int)
 
     /// The settings for voice engines. See `DiscordVoiceEngineConfiguration` for defaults.
     case voiceConfiguration(DiscordVoiceEngineConfiguration)
@@ -74,8 +66,6 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
         case .logger:               return "logger"
         case .rateLimiter:          return "rateLimiter"
         case .shardingInfo:         return "shardingInfo"
-        case .shards:               return "shards"
-        case .singleShard:          return "singleShard"
         case .pruneUsers:           return "pruneUsers"
         case .voiceConfiguration:   return "voiceConfiguration"
         }

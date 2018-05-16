@@ -30,10 +30,6 @@ public struct DiscordShardInformation {
 
     // MARK: Properties
 
-    /// This client's shard number
-    @available(*, deprecated, message: "No longer meaningful, check the shardRange for a list of shards in this client")
-    public let shardNum = -1
-
     /// The range of shards in this client.
     public let shardRange: CountableRange<Int>
 
@@ -41,14 +37,6 @@ public struct DiscordShardInformation {
     public let totalShards: Int
 
     // MARK: Initializers
-
-    ///
-    /// Creates a new DiscordShardInformation
-    ///
-    @available(*, deprecated, message: "Use init(shardRange:totalShards:)")
-    public init(shardNum: Int, totalShards: Int) {
-        try! self.init(shardRange: shardNum..<shardNum+1, totalShards: totalShards)
-    }
 
     ///
     /// Creates a new DiscordShardInformation telling the client the range of shards that it should spawn.
@@ -326,25 +314,5 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
         guard get(closedShards == shards.count) else { return }
 
         delegate?.shardManager(self, didDisconnectWithReason: "Closed")
-    }
-
-    ///
-    /// Creates the shards for this manager.
-    ///
-    /// - parameter into: The number of shards to create.
-    ///
-    @available(*, deprecated, message: "Use manuallyShatter(withInfo:)")
-    open func shatter(into numberOfShards: Int) {
-        guard let delegate = self.delegate else { return }
-
-        DefaultDiscordLogger.Logger.verbose("Shattering into \(numberOfShards) shards", type: "DiscordShardManager")
-
-        cleanUp()
-
-        protected {
-            for i in 0..<numberOfShards {
-                shards.append(createShardWithDelegate(delegate, withShardNum: i, totalShards: numberOfShards))
-            }
-        }
     }
 }
