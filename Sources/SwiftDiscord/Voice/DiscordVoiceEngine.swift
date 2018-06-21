@@ -210,12 +210,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func createRTPHeader() -> [UInt8] {
-        // TODO: Remove when Swift 4.1 is common
-        #if swift(>=4.1)
-            let header = UnsafeMutableRawBufferPointer.allocate(byteCount: 12, alignment: MemoryLayout<Int>.alignment)
-        #else
-            let header = UnsafeMutableRawBufferPointer.allocate(count: 12)
-        #endif
+        let header = UnsafeMutableRawBufferPointer.allocate(byteCount: 12, alignment: MemoryLayout<Int>.alignment)
+
         defer { header.deallocate() }
 
         header.storeBytes(of: 0x80, as: UInt8.self)
@@ -234,7 +230,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         var nonce = rtpHeader + DiscordVoiceEngine.padding
         var buf = data
 
-        defer { free(encrypted) }
+        defer { encrypted.deallocate() }
 
         let success = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &secret!)
 
@@ -254,7 +250,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         let unencrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
         var nonce = rtpHeader + DiscordVoiceEngine.padding
 
-        defer { free(unencrypted) }
+        defer { unencrypted.deallocate() }
 
         let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &secret!)
 

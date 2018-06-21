@@ -71,12 +71,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// Whether the client should remove users from guilds when they go offline.
     public var pruneUsers = false
 
-    /// How many shards this client should spawn. Default is one.
-    @available(*, deprecated, message: "Check shardingInformation.totalShards")
-    public var shards: Int {
-        return shardingInfo.totalShards
-    }
-
     /// Whether or not this client is connected.
     public private(set) var connected = false
 
@@ -126,10 +120,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
                 self.rateLimiter = limiter
             case let .shardingInfo(shardingInfo):
                 self.shardingInfo = shardingInfo
-            case let .shards(shards) where shards > 0:
-                self.shardingInfo = try! DiscordShardInformation(shardRange: 0..<shards, totalShards: shards)
-            case let .singleShard(shardInfo):
-                self.shardingInfo = shardInfo
             case let .voiceConfiguration(config):
                 self.voiceManager.engineConfiguration = config
             case .discardPresences:
@@ -140,8 +130,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
                 fillUsers = true
             case .pruneUsers:
                 pruneUsers = true
-            default:
-                continue
             }
         }
 
@@ -384,7 +372,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
             guard let shardNum = self.guilds[engine.guildId]?.shardNumber(assuming: self.shardingInfo.totalShards) else { return }
 
             let payload = DiscordGatewayPayloadData.object(["guild_id": String(describing: engine.guildId),
-                                                            "channel_id": nil as Bool? as Any,
+                                                            "channel_id": EncodableNull(),
                                                             "self_mute": false,
                                                             "self_deaf": false])
 

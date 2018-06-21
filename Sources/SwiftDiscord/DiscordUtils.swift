@@ -33,24 +33,16 @@ extension Dictionary where Value == Any {
     }
 }
 
-// TODO: Remove when swift 4.1 is common
-#if swift(>=4.1)
-#else
-    extension Optional {
-        func compactMap<T>(_ transform: (Wrapped) throws -> T?) rethrows -> T? {
-            return try self.flatMap(transform)
-        }
-    }
-    extension Collection {
-        func compactMap<T>(_ transform: (Element) throws -> T?) rethrows -> [T] {
-            return try self.flatMap(transform)
-        }
-    }
-#endif
-
 extension Dictionary where Key == String, Value == Any {
     func getSnowflake(key: String = "id") -> Snowflake {
         return Snowflake(self[key] as? String) ?? 0
+    }
+}
+
+struct EncodableNull: Encodable {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encodeNil()
     }
 }
 

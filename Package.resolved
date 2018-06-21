@@ -11,21 +11,21 @@
         }
       },
       {
+        "package": "SSCommonCrypto",
+        "repositoryURL": "https://github.com/daltoniam/common-crypto-spm",
+        "state": {
+          "branch": null,
+          "revision": "2eb3aff0fb57f92f5722fac5d6d20bf64669ca66",
+          "version": "1.1.0"
+        }
+      },
+      {
         "package": "COPUS",
         "repositoryURL": "https://github.com/nuclearace/copus",
         "state": {
           "branch": null,
           "revision": "365743902efc1c93730757cea288bef4b90637a0",
           "version": "2.0.0"
-        }
-      },
-      {
-        "package": "CTLS",
-        "repositoryURL": "https://github.com/vapor/ctls.git",
-        "state": {
-          "branch": null,
-          "revision": "fba1297f4986a4dac8b02f7ac4e84a77fd492e4c",
-          "version": "1.1.3"
         }
       },
       {
@@ -47,6 +47,15 @@
         }
       },
       {
+        "package": "CTLS",
+        "repositoryURL": "https://github.com/vapor/ctls.git",
+        "state": {
+          "branch": null,
+          "revision": "fba1297f4986a4dac8b02f7ac4e84a77fd492e4c",
+          "version": "1.1.3"
+        }
+      },
+      {
         "package": "Debugging",
         "repositoryURL": "https://github.com/vapor/debugging.git",
         "state": {
@@ -60,8 +69,8 @@
         "repositoryURL": "https://github.com/vapor/engine",
         "state": {
           "branch": null,
-          "revision": "c8072bcad951523adda26798e9b5c56a5c54d191",
-          "version": "2.2.3"
+          "revision": "0ecc50fa8c7bc03ec9af78ca37e3b57f192bd258",
+          "version": "2.2.4"
         }
       },
       {
@@ -74,30 +83,12 @@
         }
       },
       {
-        "package": "SSCZLib",
-        "repositoryURL": "https://github.com/daltoniam/zlib-spm.git",
-        "state": {
-          "branch": null,
-          "revision": "83ac8d719a2f3aa775dbdf116a57f56fb2c49abb",
-          "version": "1.1.0"
-        }
-      },
-      {
-        "package": "SSCommonCrypto",
-        "repositoryURL": "https://github.com/daltoniam/common-crypto-spm",
-        "state": {
-          "branch": null,
-          "revision": "2eb3aff0fb57f92f5722fac5d6d20bf64669ca66",
-          "version": "1.1.0"
-        }
-      },
-      {
         "package": "Sockets",
         "repositoryURL": "https://github.com/vapor/sockets.git",
         "state": {
           "branch": null,
-          "revision": "a77816695630a44d5d1393fc71eac37ac3d082ca",
-          "version": "2.2.2"
+          "revision": "79fc180cdcb451dbbb01b1156be36720adde80e0",
+          "version": "2.2.3"
         }
       },
       {
@@ -114,8 +105,8 @@
         "repositoryURL": "https://github.com/daltoniam/Starscream",
         "state": {
           "branch": null,
-          "revision": "6e10c04c8387d00f41a17450fa45b51427971022",
-          "version": "3.0.4"
+          "revision": "114e5df9b6251970a069e8f1c0cbb5802759f0a9",
+          "version": "3.0.5"
         }
       },
       {
@@ -125,6 +116,15 @@
           "branch": null,
           "revision": "02a47309249e69358aa3c28b5853897585d7a750",
           "version": "2.1.2"
+        }
+      },
+      {
+        "package": "SSCZLib",
+        "repositoryURL": "https://github.com/daltoniam/zlib-spm.git",
+        "state": {
+          "branch": null,
+          "revision": "83ac8d719a2f3aa775dbdf116a57f56fb2c49abb",
+          "version": "1.1.0"
         }
       }
     ]
