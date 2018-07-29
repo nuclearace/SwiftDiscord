@@ -17,6 +17,7 @@
 
 import Foundation
 import Dispatch
+import NIO
 
 ///
 /// The base class for SwiftDiscord. Most interaction with Discord will be done through this class.
@@ -42,6 +43,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
     /// The rate limiter for this client.
     public var rateLimiter: DiscordRateLimiterSpec!
+
+    /// The run loops.
+    public let runloops = MultiThreadedEventLoopGroup(numberOfThreads: System.coreCount)
 
     /// The Discord JWT token.
     public let token: DiscordToken
@@ -134,6 +138,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         }
 
         rateLimiter = rateLimiter ?? DiscordRateLimiter(callbackQueue: handleQueue, failFast: false)
+    }
+
+    deinit {
+        try! runloops.syncShutdownGracefully()
     }
 
     // MARK: Methods

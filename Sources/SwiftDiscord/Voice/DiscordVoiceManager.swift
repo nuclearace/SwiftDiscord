@@ -19,7 +19,7 @@ import Dispatch
 import Foundation
 
 /// A delegate for a VoiceManager.
-public protocol DiscordVoiceManagerDelegate : class, DiscordTokenBearer {
+public protocol DiscordVoiceManagerDelegate : AnyObject, DiscordTokenBearer, DiscordEventLoopGroupManager {
     // MARK: Methods
 
     ///
@@ -154,6 +154,8 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     /// Tries to create a voice engine for a guild, and connect.
     /// **Not thread safe.**
     private func _startVoiceConnection(_ guildId: GuildID) {
+        guard let delegate = delegate else { return }
+
         // We need both to start the connection
         guard let voiceState = voiceStates[guildId], let serverInfo = voiceServerInformations[guildId] else {
             return
@@ -161,12 +163,15 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
 
         // Reuse a previous engine's encoder if possible
         let previousEngine = voiceEngines[guildId]
-        voiceEngines[guildId] = DiscordVoiceEngine(delegate: self,
-                                                   config: engineConfiguration,
-                                                   voiceServerInformation: serverInfo,
-                                                   voiceState: voiceState,
-                                                   source: previousEngine?.source,
-                                                   secret: previousEngine?.secret)
+        voiceEngines[guildId] = DiscordVoiceEngine(
+                delegate: self,
+                onLoop: delegate.runloops.next(),
+                config: engineConfiguration,
+                voiceServerInformation: serverInfo,
+                voiceState: voiceState,
+                source: previousEngine?.source,
+                secret: previousEngine?.secret
+        )
 
         DefaultDiscordLogger.Logger.log("Connecting voice engine", type: logType)
 

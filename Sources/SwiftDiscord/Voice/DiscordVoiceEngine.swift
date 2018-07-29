@@ -17,12 +17,12 @@
 
 import Foundation
 import Dispatch
-#if !os(Linux)
-import Starscream
-#else
-import WebSockets
-#endif
-import Sockets
+//#if !os(Linux)
+//import Starscream
+//#else
+import WebSocket
+//#endif
+//import Sockets
 import Sodium
 
 ///
@@ -51,6 +51,9 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
     /// The parse queue.
     public let parseQueue = DispatchQueue(label: "discordVoiceEngine.parseQueue")
+
+    /// The run loop for this shard.
+    public let runloop: EventLoop
 
     /// The voice url
     public var connectURL: String {
@@ -106,8 +109,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// Our SSRC
     public private(set) var ssrc: UInt32 = 0
 
-    /// The UDP socket that is used to send/receive voice data
-    public private(set) var udpSocket: UDPInternetSocket?
+//    /// The UDP socket that is used to send/receive voice data
+//    public private(set) var udpSocket: UDPInternetSocket?
 
     /// Our UDP port
     public private(set) var udpPort = -1
@@ -152,12 +155,14 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// - parameter secret: The secret from a previous engine.
     ///
     public init(delegate: DiscordVoiceEngineDelegate,
+                onLoop: EventLoop,
                 config: DiscordVoiceEngineConfiguration,
                 voiceServerInformation: DiscordVoiceServerInformation,
                 voiceState: DiscordVoiceState,
                 source: DiscordVoiceDataSource?,
                 secret: [UInt8]?) {
         self.voiceDelegate = delegate
+        self.runloop = onLoop
         self.config = config
 
         _ = sodium_init()
@@ -182,17 +187,17 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     // MARK: Methods
 
     private func closeOutEngine() {
-        guard !closed else { return }
-
-        do {
-            try udpSocket?.close()
-        } catch {
-            self.error(message: "Error trying to close voice engine udp socket")
-        }
-
-        closed = true
-        connected = false
-        sendTimer.cancel()
+//        guard !closed else { return }
+//
+//        do {
+//            try udpSocket?.close()
+//        } catch {
+//            self.error(message: "Error trying to close voice engine udp socket")
+//        }
+//
+//        closed = true
+//        connected = false
+//        sendTimer.cancel()
     }
 
     private func configureTimer() {
@@ -287,24 +292,24 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
     // https://discordapp.com/developers/docs/topics/voice-connections#ip-discovery
     private func findIP() {
-        udpQueueWrite.async {
-            guard let udpSocket = self.udpSocket else { return }
-
-            // print("Finding IP")
-            let discoveryData = [UInt8](repeating: 0x00, count: 70)
-
-            do {
-                try udpSocket.sendto(data: discoveryData)
-
-                let (data, _) = try udpSocket.recvfrom(maxBytes: 70)
-                let (ip, port) = try self.extractIPAndPort(from: data)
-
-                self.selectProtocol(with: ip, on: port)
-            } catch {
-                self.error(message: "Something went wrong extracting the ip and port \(error)")
-                self.disconnect()
-            }
-        }
+//        udpQueueWrite.async {
+//            guard let udpSocket = self.udpSocket else { return }
+//
+//            // print("Finding IP")
+//            let discoveryData = [UInt8](repeating: 0x00, count: 70)
+//
+//            do {
+//                try udpSocket.sendto(data: discoveryData)
+//
+//                let (data, _) = try udpSocket.recvfrom(maxBytes: 70)
+//                let (ip, port) = try self.extractIPAndPort(from: data)
+//
+//                self.selectProtocol(with: ip, on: port)
+//            } catch {
+//                self.error(message: "Something went wrong extracting the ip and port \(error)")
+//                self.disconnect()
+//            }
+//        }
     }
 
     private func getNewDataSource() {
@@ -485,39 +490,39 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
     private func readSocket() {
         // TODO refactor to be non-blocking
-        udpQueueRead.async {[weak self] in
-            guard let socket = self?.udpSocket, self?.connected ?? false else { return }
-
-            do {
-                let (data, _) = try socket.recvfrom(maxBytes: 4096)
-
-                DefaultDiscordLogger.Logger.debug("Received data \(data)", type: "DiscordVoiceEngine")
-
-                guard let this = self else { return }
-
-                let packet = DiscordOpusVoiceData(voicePacket: try this.decryptVoiceData(data))
-
-                if this.config.decodeVoice {
-                    this.voiceDelegate?.voiceEngine(this,
-                                                    didReceiveRawVoiceData: try this.decoderSession.decode(packet))
-                } else {
-                    this.voiceDelegate?.voiceEngine(this, didReceiveOpusVoiceData: packet)
-                }
-            } catch DiscordVoiceError.initialPacket {
-                DefaultDiscordLogger.Logger.debug("Got initial packet", type: DiscordVoiceEngine.logType)
-            } catch DiscordVoiceError.decodeFail {
-                DefaultDiscordLogger.Logger.debug("Failed to decode a packet", type: DiscordVoiceEngine.logType)
-            } catch EngineError.decryptionError {
-                self?.error(message: "Error decrypting voice packet")
-            } catch let err {
-                self?.error(message: "Error reading voice data from udp socket \(err)")
-                self?.disconnect()
-
-                return
-            }
-
-            self?.readSocket()
-        }
+//        udpQueueRead.async {[weak self] in
+//            guard let socket = self?.udpSocket, self?.connected ?? false else { return }
+//
+//            do {
+//                let (data, _) = try socket.recvfrom(maxBytes: 4096)
+//
+//                DefaultDiscordLogger.Logger.debug("Received data \(data)", type: "DiscordVoiceEngine")
+//
+//                guard let this = self else { return }
+//
+//                let packet = DiscordOpusVoiceData(voicePacket: try this.decryptVoiceData(data))
+//
+//                if this.config.decodeVoice {
+//                    this.voiceDelegate?.voiceEngine(this,
+//                                                    didReceiveRawVoiceData: try this.decoderSession.decode(packet))
+//                } else {
+//                    this.voiceDelegate?.voiceEngine(this, didReceiveOpusVoiceData: packet)
+//                }
+//            } catch DiscordVoiceError.initialPacket {
+//                DefaultDiscordLogger.Logger.debug("Got initial packet", type: DiscordVoiceEngine.logType)
+//            } catch DiscordVoiceError.decodeFail {
+//                DefaultDiscordLogger.Logger.debug("Failed to decode a packet", type: DiscordVoiceEngine.logType)
+//            } catch EngineError.decryptionError {
+//                self?.error(message: "Error decrypting voice packet")
+//            } catch let err {
+//                self?.error(message: "Error reading voice data from udp socket \(err)")
+//                self?.disconnect()
+//
+//                return
+//            }
+//
+//            self?.readSocket()
+//        }
     }
 
     ///
@@ -600,28 +605,28 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// - parameter data: An Opus encoded packet.
     ///
     private func sendVoiceData(_ data: [UInt8]) {
-        guard let udpSocket = self.udpSocket, let frameSize = source?.frameSize, secret != nil else { return }
-
-        if !speaking {
-            sendSpeaking(true)
-        }
-
-        DefaultDiscordLogger.Logger.debug("Should send voice data: \(data.count) bytes",
-                                          type: DiscordVoiceEngine.logType)
-
-        do {
-            try udpSocket.sendto(data: createVoicePacket(data))
-        } catch EngineError.encryptionError {
-            error(message: "Error encrypting packet")
-        } catch let err {
-            error(message: "Failed sending voice packet \(err)")
-            disconnect()
-
-            return
-        }
-
-        sequenceNum = sequenceNum &+ 1
-        timestamp = timestamp &+ UInt32(frameSize)
+//        guard let udpSocket = self.udpSocket, let frameSize = source?.frameSize, secret != nil else { return }
+//
+//        if !speaking {
+//            sendSpeaking(true)
+//        }
+//
+//        DefaultDiscordLogger.Logger.debug("Should send voice data: \(data.count) bytes",
+//                                          type: DiscordVoiceEngine.logType)
+//
+//        do {
+//            try udpSocket.sendto(data: createVoicePacket(data))
+//        } catch EngineError.encryptionError {
+//            error(message: "Error encrypting packet")
+//        } catch let err {
+//            error(message: "Failed sending voice packet \(err)")
+//            disconnect()
+//
+//            return
+//        }
+//
+//        sequenceNum = sequenceNum &+ 1
+//        timestamp = timestamp &+ UInt32(frameSize)
     }
 
     #if !os(iOS)
@@ -682,22 +687,22 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func startUDP() {
-        guard udpPort != -1 else { return }
-
-        let base = voiceServerInformation.endpoint.components(separatedBy: ":")[0]
-        let udpEndpoint = InternetAddress(hostname: base, port: UInt16(udpPort))
-
-        DefaultDiscordLogger.Logger.debug("Starting voice UDP connection", type: DiscordVoiceEngine.logType)
-
-        guard let client = try? UDPInternetSocket(address: udpEndpoint) else {
-            disconnect()
-
-            return
-        }
-
-        udpSocket = client
-
-        // Begin async UDP setup
-        findIP()
+//        guard udpPort != -1 else { return }
+//
+//        let base = voiceServerInformation.endpoint.components(separatedBy: ":")[0]
+//        let udpEndpoint = InternetAddress(hostname: base, port: UInt16(udpPort))
+//
+//        DefaultDiscordLogger.Logger.debug("Starting voice UDP connection", type: DiscordVoiceEngine.logType)
+//
+//        guard let client = try? UDPInternetSocket(address: udpEndpoint) else {
+//            disconnect()
+//
+//            return
+//        }
+//
+//        udpSocket = client
+//
+//        // Begin async UDP setup
+//        findIP()
     }
 }
