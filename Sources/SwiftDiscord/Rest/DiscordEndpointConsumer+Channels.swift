@@ -370,7 +370,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 callback?(sentMessages, response)
                 return
             }
-            if (callback != nil) { // Save a bit of memory in the case that we won't need `sentMessages`
+            if callback != nil { // Save a bit of memory in the case that we won't need `sentMessages`
                 sentMessages.append(sentMessage)
             }
             guard let nextMessage = messagesToSend.first else {
