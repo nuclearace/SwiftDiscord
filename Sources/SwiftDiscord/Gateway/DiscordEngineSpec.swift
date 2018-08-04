@@ -133,6 +133,12 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
 
             return doneFuture
         }
+
+        future.catch({[weak self] error in
+            guard let this = self else { return }
+
+            this.handleClose(reason: error)
+        })
     }
 
     internal func closeWebSockets(fast: Bool = false) {
