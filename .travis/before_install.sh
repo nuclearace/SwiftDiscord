@@ -12,9 +12,9 @@ else
     sudo apt-get install swift vapor libopus-dev
 
     # Sodium
-    wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz
-    tar -xzf libsodium-1.0.13.tar.gz
-    cd libsodium-1.0.13
+    wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.16.tar.gz
+    tar -xzf libsodium-1.0.16.tar.gz
+    cd libsodium-1.0.16
     ./configure --prefix=/usr/
     make
     sudo make install
