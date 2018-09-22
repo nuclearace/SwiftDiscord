@@ -16,7 +16,6 @@
 // DEALINGS IN THE SOFTWARE.
 
 import COPUS
-import DiscordOpus
 import Foundation
 
 /// Declares that a type has enough information to encode/decode Opus data.
