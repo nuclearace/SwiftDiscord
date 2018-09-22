@@ -25,9 +25,6 @@ struct DiscordEndpointGateway {
 
     static func getURL() -> String {
         // Linux's urlsession is busted
-        #if os(Linux)
-        return "wss://gateway.discord.gg"
-        #else
         var request = URLRequest(url: URL(string: "https://discordapp.com/api/gateway")!)
 
         request.httpMethod = "GET"
@@ -49,6 +46,5 @@ struct DiscordEndpointGateway {
         gatewaySemaphore.wait()
 
         return url
-        #endif
     }
 }

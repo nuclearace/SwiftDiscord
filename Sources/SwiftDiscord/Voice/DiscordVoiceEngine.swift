@@ -17,13 +17,8 @@
 
 import Foundation
 import Dispatch
-//#if !os(Linux)
-//import Starscream
-//#else
-import WebSocket
-//#endif
-//import Sockets
 import Sodium
+import Starscream
 
 ///
 /// A subclass of `DiscordEngine` that provides functionality for voice communication.
@@ -51,9 +46,6 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
     /// The parse queue.
     public let parseQueue = DispatchQueue(label: "discordVoiceEngine.parseQueue")
-
-    /// The run loop for this shard.
-    public let runloop: EventLoop
 
     /// The voice url
     public var connectURL: String {
@@ -155,14 +147,12 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// - parameter secret: The secret from a previous engine.
     ///
     public init(delegate: DiscordVoiceEngineDelegate,
-                onLoop: EventLoop,
                 config: DiscordVoiceEngineConfiguration,
                 voiceServerInformation: DiscordVoiceServerInformation,
                 voiceState: DiscordVoiceState,
                 source: DiscordVoiceDataSource?,
                 secret: [UInt8]?) {
         self.voiceDelegate = delegate
-        self.runloop = onLoop
         self.config = config
 
         _ = sodium_init()

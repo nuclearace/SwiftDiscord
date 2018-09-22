@@ -16,13 +16,8 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
-//#if !os(Linux)
-//import Starscream
-//#else
-import NIO
-import WebSocket
-//#endif
 import Dispatch
+import Starscream
 
 #if os(macOS)
 private let os = "macOS"
@@ -87,9 +82,6 @@ open class DiscordEngine : DiscordEngineSpec {
     /// The total number of shards.
     public let numShards: Int
 
-    /// The run loop for this shard.
-    public let runloop: EventLoop
-
     /// The shard number of this engine.
     public let shardNum: Int
 
@@ -139,11 +131,10 @@ open class DiscordEngine : DiscordEngineSpec {
     ///
     /// - parameter delegate: The DiscordClientSpec this engine should be associated with.
     ///
-    public required init(delegate: DiscordShardDelegate, shardNum: Int = 0, numShards: Int = 1, onLoop: EventLoop) {
+    public required init(delegate: DiscordShardDelegate, shardNum: Int = 0, numShards: Int = 1) {
         self.delegate = delegate
         self.shardNum = shardNum
         self.numShards = numShards
-        self.runloop = onLoop
     }
 
     // MARK: Methods

@@ -19,7 +19,7 @@ import Dispatch
 import Foundation
 
 /// A delegate for a VoiceManager.
-public protocol DiscordVoiceManagerDelegate : AnyObject, DiscordTokenBearer, DiscordEventLoopGroupManager {
+public protocol DiscordVoiceManagerDelegate : AnyObject, DiscordTokenBearer {
     // MARK: Methods
 
     ///
@@ -165,7 +165,6 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
         let previousEngine = voiceEngines[guildId]
         voiceEngines[guildId] = DiscordVoiceEngine(
                 delegate: self,
-                onLoop: delegate.runloops.next(),
                 config: engineConfiguration,
                 voiceServerInformation: serverInfo,
                 voiceState: voiceState,

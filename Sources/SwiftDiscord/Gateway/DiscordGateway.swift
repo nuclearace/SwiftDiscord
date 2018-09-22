@@ -88,7 +88,7 @@ public protocol DiscordGatewayable : DiscordEngineHeartbeatable {
     func startHandshake()
 }
 
-public extension DiscordGatewayable where Self: DiscordWebSocketable & DiscordRunLoopable {
+public extension DiscordGatewayable where Self: DiscordWebSocketable {
     /// Default Implementation.
     func sendPayload(_ payload: DiscordGatewayPayload) {
         guard let payloadString = payload.createPayloadString() else {
@@ -99,9 +99,7 @@ public extension DiscordGatewayable where Self: DiscordWebSocketable & DiscordRu
 
         DefaultDiscordLogger.Logger.debug("Sending ws: \(payloadString)", type: description)
 
-        runloop.execute {
-            self.websocket?.send(payloadString)
-        }
+        self.websocket?.write(string: payloadString)
     }
 }
 

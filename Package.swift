@@ -20,16 +20,10 @@
 import PackageDescription
 
 var deps: [Package.Dependency] = [
-    .package(url: "https://github.com/vapor/websocket", .upToNextMinor(from: "1.0.0")),
+    .package(url: "https://github.com/daltoniam/Starscream", .upToNextMinor(from: "3.0.0")),
 ]
 
-var targetDeps: [Target.Dependency] = ["WebSocket", "COPUS", "Sodium"]
-
-#if !os(Linux)
-deps += [.package(url: "https://github.com/daltoniam/Starscream", .upToNextMinor(from: "3.0.0")),]
-targetDeps += ["Starscream"]
-#endif
-
+var targetDeps: [Target.Dependency] = ["Starscream", "COPUS", "Sodium"]
 
 let package = Package(
     name: "SwiftDiscord",

@@ -17,7 +17,6 @@
 
 import Dispatch
 import Foundation
-import NIO
 
 /// Struct that represents shard information.
 /// Used when a client is doing manual sharding.
@@ -50,23 +49,9 @@ public struct DiscordShardInformation {
     }
 }
 
-/// Marks that a type will contain a runloop.
-public protocol DiscordRunLoopable {
-    /// The run loop for this entity.
-    var runloop: EventLoop { get }
-}
-
-/// Declares that a type will be manager of a run loop.
-public protocol DiscordEventLoopGroupManager {
-    // MARK: Properties
-
-    /// The run loops.
-    var runloops: MultiThreadedEventLoopGroup { get }
-}
-
 /// Protocol that represents a sharded gateway connection. This is the top-level protocol for `DiscordEngineSpec` and
 /// `DiscordEngine`
-public protocol DiscordShard : DiscordWebSocketable, DiscordGatewayable, DiscordRunLoopable {
+public protocol DiscordShard : DiscordWebSocketable, DiscordGatewayable {
     // MARK: Properties
 
     /// Whether this shard is connected to the gateway
@@ -88,7 +73,7 @@ public protocol DiscordShard : DiscordWebSocketable, DiscordGatewayable, Discord
     ///
     /// - parameter client: The client this engine should be associated with.
     ///
-    init(delegate: DiscordShardDelegate, shardNum: Int, numShards: Int, onLoop: EventLoop)
+    init(delegate: DiscordShardDelegate, shardNum: Int, numShards: Int)
 }
 
 /// Declares that a type will be a shard's delegate.
@@ -129,7 +114,7 @@ public protocol DiscordShardDelegate : AnyObject, DiscordTokenBearer {
 }
 
 /// The delegate for a `DiscordShardManager`.
-public protocol DiscordShardManagerDelegate : AnyObject, DiscordEventLoopGroupManager, DiscordTokenBearer {
+public protocol DiscordShardManagerDelegate : AnyObject, DiscordTokenBearer {
     // MARK: Methods
 
     ///
@@ -228,8 +213,8 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     /// - returns: A new `DiscordShard`
     ///
     open func createShardWithDelegate(_ delegate: DiscordShardManagerDelegate, withShardNum shardNum: Int,
-                                      totalShards: Int, onloop: EventLoop) -> DiscordShard {
-        return DiscordEngine(delegate: self, shardNum: shardNum, numShards: totalShards, onLoop: onloop)
+                                      totalShards: Int) -> DiscordShard {
+        return DiscordEngine(delegate: self, shardNum: shardNum, numShards: totalShards)
     }
 
     ///
@@ -264,10 +249,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
 
         protected {
             for shardNum in info.shardRange {
-                shards.append(createShardWithDelegate(delegate,
-                                                      withShardNum: shardNum,
-                                                      totalShards: info.totalShards,
-                                                      onloop: delegate.runloops.next()))
+                shards.append(createShardWithDelegate(delegate, withShardNum: shardNum, totalShards: info.totalShards))
             }
         }
     }
