@@ -16,12 +16,8 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
-//#if !os(Linux)
-//import Starscream
-//#else
 import NIO
 import WebSocket
-//#endif
 import Dispatch
 
 #if os(macOS)
@@ -40,7 +36,7 @@ open class DiscordEngine : DiscordEngineSpec {
 
     /// The url for the gateway.
     open var connectURL: String {
-        return DiscordEndpointGateway.gatewayURL + "/?v=6"
+        return DiscordEndpointGateway.gatewayURL + "/?v=6&encoding=json"
     }
 
     /// The type of DiscordEngineSpec. Used to correctly fire events.
@@ -401,6 +397,8 @@ open class DiscordEngine : DiscordEngineSpec {
     /// - parameter milliseconds: The heartbeat interval
     ///
     public func startHeartbeat(milliseconds: Int) {
+        DefaultDiscordLogger.Logger.debug("Starting heartbeat, shard: \(shardNum), \(milliseconds)ms", type: logType)
+
         heartbeatInterval = milliseconds
 
         sendHeartbeat()

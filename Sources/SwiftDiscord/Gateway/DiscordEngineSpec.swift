@@ -105,22 +105,24 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
     /// Starts the connection to the Discord gateway.
     ///
     public func connect() {
+        runloop.execute(self._connect)
+    }
+
+    private func _connect() {
         DefaultDiscordLogger.Logger.log("Connecting to \(connectURL), \(description)", type: "DiscordWebSocketable")
         DefaultDiscordLogger.Logger.log("Attaching WebSocket, shard: \(description)", type: "DiscordWebSocketable")
 
         let url = URL(string: connectURL)!
         let path = url.path.isEmpty ? "/" : url.path
-
+        let doneFuture = runloop.newSucceededFuture(result: ())
         let future = HTTPClient.webSocket(scheme: .wss,
-                                          hostname: url.host!,
-                                          port: url.port,
-                                          path: path,
-                                          on: runloop
+                hostname: url.host!,
+                port: url.port,
+                path: path,
+                on: runloop
         )
 
-        let doneFuture = runloop.newSucceededFuture(result: ())
-
-        _ = future.then {[weak self] ws -> EventLoopFuture<()> in
+        future.then {[weak self] ws -> EventLoopFuture<()> in
             guard let this = self else { return doneFuture }
 
             DefaultDiscordLogger.Logger.log("Websocket connected, shard: \(this.description)", type: "DiscordWebSocketable")
@@ -132,9 +134,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
             this.startHandshake()
 
             return doneFuture
-        }
-
-        future.catch({[weak self] error in
+        }.catch({[weak self] error in
             guard let this = self else { return }
 
             this.handleClose(reason: error)
