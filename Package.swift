@@ -21,9 +21,10 @@ import PackageDescription
 
 var deps: [Package.Dependency] = [
     .package(url: "https://github.com/vapor/websocket", .upToNextMinor(from: "1.0.0")),
+    .package(url: "https://github.com/IBM-Swift/BlueSocket", .upToNextMinor(from: "1.0.0"))
 ]
 
-var targetDeps: [Target.Dependency] = ["WebSocket", "COPUS", "Sodium"]
+var targetDeps: [Target.Dependency] = ["WebSocket", "COPUS", "Sodium", "Socket"]
 
 #if !os(Linux)
 deps += [.package(url: "https://github.com/daltoniam/Starscream", .upToNextMinor(from: "3.0.0")),]
