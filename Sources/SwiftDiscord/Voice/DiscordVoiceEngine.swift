@@ -232,7 +232,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         defer { encrypted.deallocate() }
 
-        let success = crypto_secretbox_easy(encrypted, &buf, UInt64(buf.count), &nonce, &secret!)
+        let success = crypto_secretbox_easy(encrypted, buf, UInt64(buf.count), nonce, secret)
 
         guard success != -1 else { throw EngineError.encryptionError }
 
@@ -252,7 +252,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
         defer { unencrypted.deallocate() }
 
-        let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), &nonce, &secret!)
+        let success = crypto_secretbox_open_easy(unencrypted, voiceData, UInt64(data.count - 12), nonce, secret)
 
         guard success != -1 else { throw EngineError.decryptionError }
 
