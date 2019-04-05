@@ -87,7 +87,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     public func createReaction(for messageId: MessageID,
                         on channelId: ChannelID,
                         emoji: String,
-                        callback: ((DiscordMessage?, HTTPURLResponse?) -> ())?) {
+                        callback: ((DiscordMessage?, HTTPURLResponse?) -> ())? = nil) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(message)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback?(nil, response)
