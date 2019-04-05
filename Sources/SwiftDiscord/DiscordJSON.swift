@@ -67,7 +67,7 @@ enum JSON {
         }
 
         guard response.statusCode != 204 else {
-            DefaultDiscordLogger.Logger.debug("Response code 204: No content")
+            DefaultDiscordLogger.Logger.debug("Response code 204: No content", type: "JSON")
             
             return nil
         }
