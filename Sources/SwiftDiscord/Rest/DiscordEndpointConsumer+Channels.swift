@@ -97,7 +97,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             callback?(DiscordMessage(messageObject: message, client: nil), response)
         }
         
-        rateLimiter.executeRequest(endpoint: .reactions(channel: channelId, message: messageId, emoji: emoji),
+        rateLimiter.executeRequest(endpoint: .reactions(channel: channelId, message: messageId, emoji: emoji.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)),
                                    token: token,
                                    requestInfo: .put(content: nil, extraHeaders: nil),
                                    callback: requestCallback)
