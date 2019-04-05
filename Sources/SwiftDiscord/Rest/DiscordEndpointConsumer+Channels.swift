@@ -84,6 +84,26 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
+    public func createReaction(for messageId: MessageID,
+                        on channelId: ChannelID,
+                        emoji: String,
+                        callback: ((DiscordMessage?, HTTPURLResponse?) -> ())?) {
+        let requestCallback: DiscordRequestCallback = { data, response, error in
+            guard case let .object(message)? = JSON.jsonFromResponse(data: data, response: response) else {
+                callback?(nil, response)
+                return
+            }
+
+            callback?(DiscordMessage(messageObject: message, client: nil), response)
+        }
+        
+        rateLimiter.executeRequest(endpoint: .reactions(channel: channelId, message: messageId, emoji: emoji),
+                                   token: token,
+                                   requestInfo: .put(content: nil, extraHeaders: nil),
+                                   callback: requestCallback)
+    }
+
+    /// Default implementation
     public func deleteChannel(_ channelId: ChannelID,
                               reason: String? = nil,
                               callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
