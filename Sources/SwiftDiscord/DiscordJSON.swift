@@ -66,7 +66,7 @@ enum JSON {
             return nil
         }
 
-        guard response.statusCode == 200 || response.statusCode == 201 else {
+        guard response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 204 else {
             DefaultDiscordLogger.Logger.error("Invalid response code \(response.statusCode)", type: "JSON")
             DefaultDiscordLogger.Logger.error("Response: \(stringData)", type: "JSON")
 
