@@ -51,6 +51,13 @@ public enum DiscordEndpoint : CustomStringConvertible {
     /// The channel typing endpoint.
     case typing(channel: ChannelID)
 
+    // Reactions
+    /// The endpoint for creating/deleting own reactions.
+    case reactions(channel: ChannelID, message: MessageID, emoji: String)
+    
+    /// The endpoint for another user's reactions
+    case userReactions(channel: ChannelID, message: MessageID, emoji: String, user: UserID)
+
     // Permissions
     /// The base channel permissions endpoint.
     case permissions(channel: ChannelID)
@@ -264,6 +271,11 @@ public extension DiscordEndpoint {
             return "/channels/\(channel)/messages/\(message)"
         case let .typing(channel):
             return "/channels/\(channel)/typing"
+        // Reactions
+        case let .reactions(channel, message, emoji):
+            return "/channels/\(channel)/messages/\(message)/reactions/\(emoji)/@me"
+        case let .userReactions(channel, message, emoji, user):
+            return "/channels/\(channel)/messages/\(message)/reactions/\(emoji)/\(user)"
         // Permissions
         case let .permissions(channel):
             return "/channels/\(channel)/permissions"
@@ -362,6 +374,11 @@ public extension DiscordEndpoint {
             return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .messagesDelete, .messageID])
         case let .typing(channel):
             return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .typing])
+        // Reactions
+        case let .reactions(channel, _, _):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .messages, .messageID, .reactions, .emoji, .me])
+        case let .userReactions(channel, _, _, _):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .messages, .messageID, .reactions, .emoji, .userID])
         // Permissions
         case let .permissions(channel):
             return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .permissions])
