@@ -20,7 +20,7 @@
 import PackageDescription
 
 var deps: [Package.Dependency] = [
-    .package(url: "https://github.com/vapor/websocket", .upToNextMinor(from: "1.0.0")),
+    .package(url: "https://github.com/vapor/websocket", .upToNextMinor(from: "1.1.2")),
     .package(url: "https://github.com/IBM-Swift/BlueSocket", .upToNextMinor(from: "1.0.0"))
 ]
 
