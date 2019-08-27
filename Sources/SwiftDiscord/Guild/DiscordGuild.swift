@@ -17,6 +17,9 @@
 
 import class Dispatch.DispatchSemaphore
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// Represents a Guild.
 public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {

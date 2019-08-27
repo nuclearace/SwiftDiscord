@@ -16,6 +16,9 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 ///
 /// Protocol that declares a type will be a consumer of the Discord REST API.
@@ -68,6 +71,19 @@ public protocol DiscordEndpointConsumer {
                       options: [DiscordEndpoint.Options.CreateInvite],
                       reason: String?,
                       callback: @escaping (DiscordInvite?, HTTPURLResponse?) -> ())
+
+    ///
+    /// Creates a reaction for the specified message.
+    ///
+    /// - parameter for: The message that is to be edited's snowflake id
+    /// - parameter on: The channel that we are editing on
+    /// - parameter emoji: The emoji name
+    /// - parameter callback: An optional callback containing the edited message, if successful.
+    ///
+    func createReaction(for messageId: MessageID,
+                        on channelId: ChannelID,
+                        emoji: String,
+                        callback: ((DiscordMessage?, HTTPURLResponse?) -> ())?)
 
     ///
     /// Deletes the specified channel.

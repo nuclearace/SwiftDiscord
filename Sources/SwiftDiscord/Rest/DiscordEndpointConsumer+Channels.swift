@@ -16,6 +16,9 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
@@ -80,6 +83,26 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         rateLimiter.executeRequest(endpoint: .channelInvites(channel: channelId),
                                    token: token,
                                    requestInfo: .post(content: .json(contentData), extraHeaders: extraHeaders),
+                                   callback: requestCallback)
+    }
+
+    /// Default implementation
+    public func createReaction(for messageId: MessageID,
+                        on channelId: ChannelID,
+                        emoji: String,
+                        callback: ((DiscordMessage?, HTTPURLResponse?) -> ())? = nil) {
+        let requestCallback: DiscordRequestCallback = { data, response, error in
+            guard case let .object(message)? = JSON.jsonFromResponse(data: data, response: response) else {
+                callback?(nil, response)
+                return
+            }
+
+            callback?(DiscordMessage(messageObject: message, client: nil), response)
+        }
+        
+        rateLimiter.executeRequest(endpoint: .reactions(channel: channelId, message: messageId, emoji: emoji.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? emoji),
+                                   token: token,
+                                   requestInfo: .put(content: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
 
