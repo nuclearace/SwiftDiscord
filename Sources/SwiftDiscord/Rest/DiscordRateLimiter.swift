@@ -16,6 +16,10 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 import Dispatch
 
 internal typealias DiscordRequestCallback = (Data?, HTTPURLResponse?, Error?) -> ()

@@ -16,6 +16,10 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 import class Dispatch.DispatchSemaphore
 
 /// Protocol that declares a type will be a Discord channel.
