@@ -20,17 +20,11 @@
 import PackageDescription
 
 var deps: [Package.Dependency] = [
-    .package(url: "https://github.com/vapor/websocket", .upToNextMinor(from: "1.1.2")),
+    .package(url: "https://github.com/vapor/nio-websocket-client", .revision("e24870ba2350b613e71322caf79d138e139819df")),
     .package(url: "https://github.com/IBM-Swift/BlueSocket", .upToNextMinor(from: "1.0.0"))
 ]
 
-var targetDeps: [Target.Dependency] = ["WebSocket", "COPUS", "Sodium", "Socket"]
-
-#if !os(Linux)
-deps += [.package(url: "https://github.com/daltoniam/Starscream", .upToNextMinor(from: "3.0.0")),]
-targetDeps += ["Starscream"]
-#endif
-
+var targetDeps: [Target.Dependency] = ["AsyncWebSocketClient", "COPUS", "Sodium", "Socket"]
 
 let package = Package(
     name: "SwiftDiscord",

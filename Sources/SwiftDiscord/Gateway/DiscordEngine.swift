@@ -17,7 +17,7 @@
 
 import Foundation
 import NIO
-import WebSocket
+import AsyncWebSocketClient
 import Dispatch
 
 #if os(macOS)
@@ -99,9 +99,7 @@ open class DiscordEngine : DiscordEngineSpec {
     public var sessionId: String?
 
     /// The underlying WebSocket.
-    ///
-    /// On Linux this is a WebSockets.WebSocket. While on macOS/iOS this is a Starscream.WebSocket
-    public var websocket: WebSocket?
+    public var websocket: WebSocketClient.Socket?
 
     /// Whether this engine is connected to the gateway.
     public internal(set) var connected = false
