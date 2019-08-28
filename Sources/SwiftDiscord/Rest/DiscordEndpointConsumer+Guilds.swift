@@ -22,7 +22,7 @@ import FoundationNetworking
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
-    public func addGuildMemberRole(_ roleId: RoleID,
+    func addGuildMemberRole(_ roleId: RoleID,
                                    to userId: UserID,
                                    on guildId: GuildID,
                                    reason: String? = nil,
@@ -40,7 +40,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func createGuildChannel(on guildId: GuildID,
+    func createGuildChannel(on guildId: GuildID,
                                    options: [DiscordEndpoint.Options.GuildCreateChannel],
                                    reason: String? = nil,
                                    callback: ((DiscordGuildChannel?, HTTPURLResponse?) -> ())? = nil) {
@@ -85,7 +85,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func createGuildRole(on guildId: GuildID,
+    func createGuildRole(on guildId: GuildID,
                                 withOptions options: [DiscordEndpoint.Options.CreateRole] = [],
                                 reason: String? = nil,
                                 callback: @escaping (DiscordRole?, HTTPURLResponse?) -> ()) {
@@ -133,7 +133,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func deleteGuild(_ guildId: GuildID,
+    func deleteGuild(_ guildId: GuildID,
                             callback: ((DiscordGuild?, HTTPURLResponse?) -> ())? = nil) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(guild)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -193,7 +193,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getGuildBans(for guildId: GuildID,
+    func getGuildBans(for guildId: GuildID,
                              callback: @escaping ([DiscordBan], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(bans)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -213,7 +213,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getGuildChannels(_ guildId: GuildID,
+    func getGuildChannels(_ guildId: GuildID,
                                  callback: @escaping ([DiscordGuildChannel], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(channels)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -232,7 +232,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getGuildMember(by id: UserID,
+    func getGuildMember(by id: UserID,
                                on guildId: GuildID,
                                callback: @escaping (DiscordGuildMember?, HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
@@ -252,7 +252,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getGuildMembers(on guildId: GuildID,
+    func getGuildMembers(on guildId: GuildID,
                                 options: [DiscordEndpoint.Options.GuildGetMembers],
                                 callback: @escaping ([DiscordGuildMember], HTTPURLResponse?) -> ()) {
         var getParams: [String: String] = [:]
@@ -285,7 +285,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getGuildRoles(for guildId: GuildID,
+    func getGuildRoles(for guildId: GuildID,
                               callback: @escaping ([DiscordRole], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(roles)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -304,7 +304,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func guildBan(userId: UserID,
+    func guildBan(userId: UserID,
                          on guildId: GuildID,
                          deleteMessageDays: Int = 7,
                          reason: String? = nil,
@@ -323,7 +323,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func modifyGuild(_ guildId: GuildID,
+    func modifyGuild(_ guildId: GuildID,
                             options: [DiscordEndpoint.Options.ModifyGuild],
                             reason: String? = nil,
                             callback: ((DiscordGuild?, HTTPURLResponse?) -> ())? = nil) {
@@ -376,7 +376,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func modifyGuildChannelPositions(on guildId: GuildID,
+    func modifyGuildChannelPositions(on guildId: GuildID,
                                             channelPositions: [[String: Any]],
                                             callback: (([DiscordGuildChannel], HTTPURLResponse?) -> ())? = nil) {
         guard let contentData = JSON.encodeJSONData(GenericEncodableArray(channelPositions)) else { return }
@@ -431,7 +431,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func modifyGuildRole(_ role: DiscordRole,
+    func modifyGuildRole(_ role: DiscordRole,
                                 on guildId: GuildID,
                                 reason: String? = nil,
                                 callback: ((DiscordRole?, HTTPURLResponse?) -> ())? = nil) {
@@ -459,7 +459,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func removeGuildBan(for userId: UserID,
+    func removeGuildBan(for userId: UserID,
                                on guildId: GuildID,
                                reason: String? = nil,
                                callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
@@ -478,7 +478,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation.
-    public func removeGuildMemberRole(_ roleId: RoleID,
+    func removeGuildMemberRole(_ roleId: RoleID,
                                       from userId: UserID,
                                       on guildId: GuildID,
                                       reason: String? = nil,
@@ -496,7 +496,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func removeGuildRole(_ roleId: RoleID,
+    func removeGuildRole(_ roleId: RoleID,
                                 on guildId: GuildID,
                                 reason: String? = nil,
                                 callback: ((DiscordRole?, HTTPURLResponse?) -> ())? = nil) {

@@ -224,8 +224,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         let packetSize = Int(crypto_secretbox_MACBYTES) + data.count
         let encrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: packetSize)
         let rtpHeader = createRTPHeader()
-        var nonce = rtpHeader + DiscordVoiceEngine.padding
-        var buf = data
+        let nonce = rtpHeader + DiscordVoiceEngine.padding
+        let buf = data
 
         defer { encrypted.deallocate() }
 
@@ -245,7 +245,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         guard audioSize > 0 else { throw EngineError.decryptionError }
 
         let unencrypted = UnsafeMutablePointer<UInt8>.allocate(capacity: audioSize)
-        var nonce = rtpHeader + DiscordVoiceEngine.padding
+        let nonce = rtpHeader + DiscordVoiceEngine.padding
 
         defer { unencrypted.deallocate() }
 
@@ -655,7 +655,11 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         source.middleware = DiscordEncoderMiddleware(source: source,
                                                      middleware: middleware,
                                                      terminationHandler: terminationHandler)
-        source.middleware?.start()
+        do {
+            try source.middleware?.start()
+        } catch {
+            DefaultDiscordLogger.Logger.error("Could not start middleware: \(error)", type: DiscordVoiceEngine.logType)
+        }
     }
     #endif
 

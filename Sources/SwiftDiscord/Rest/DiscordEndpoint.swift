@@ -160,7 +160,7 @@ public extension DiscordEndpoint {
     ///
     /// * An HTTP Request for an Endpoint.  This includes any associated data.
     ///
-    public enum EndpointRequest {
+    enum EndpointRequest {
         /// A GET request.
         case get(params: [String: String]?, extraHeaders: [DiscordHeader: String]?)
 
@@ -255,7 +255,7 @@ public extension DiscordEndpoint {
 
     // MARK: Endpoint string calculation
 
-    public var description: String {
+    var description: String {
         switch self {
         case .baseURL:
             return "https://discordapp.com/api/v6"
@@ -506,7 +506,7 @@ public enum DiscordHeader : String {
 
 public extension DiscordEndpoint {
     /// A namespace struct for endpoint options.
-    public struct Options {
+    struct Options {
         private init() {}
 
         /// Options when getting an audit log.

@@ -22,7 +22,7 @@ import FoundationNetworking
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
-    public func createWebhook(forChannel channelId: ChannelID,
+    func createWebhook(forChannel channelId: ChannelID,
                               options: [DiscordEndpoint.Options.WebhookOption],
                               reason: String? = nil,
                               callback: @escaping (DiscordWebhook?, HTTPURLResponse?) -> () = {_, _ in }) {
@@ -63,7 +63,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func deleteWebhook(_ webhookId: WebhookID,
+    func deleteWebhook(_ webhookId: WebhookID,
                               reason: String? = nil,
                               callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
         var extraHeaders = [DiscordHeader: String]()
@@ -79,7 +79,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getWebhook(_ webhookId: WebhookID,
+    func getWebhook(_ webhookId: WebhookID,
                            callback: @escaping (DiscordWebhook?, HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -98,7 +98,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getWebhooks(forChannel channelId: ChannelID,
+    func getWebhooks(forChannel channelId: ChannelID,
                             callback: @escaping ([DiscordWebhook], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(webhooks)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -117,7 +117,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getWebhooks(forGuild guildId: GuildID,
+    func getWebhooks(forGuild guildId: GuildID,
                             callback: @escaping ([DiscordWebhook], HTTPURLResponse?) -> ()) {
         DefaultDiscordLogger.Logger.debug("Getting webhooks for guild: \(guildId)", type: "DiscordEndpointWebhooks")
 
@@ -138,7 +138,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func modifyWebhook(_ webhookId: WebhookID,
+    func modifyWebhook(_ webhookId: WebhookID,
                               options: [DiscordEndpoint.Options.WebhookOption],
                               reason: String? = nil,
                               callback: @escaping (DiscordWebhook?, HTTPURLResponse?) -> () = {_, _ in }) {

@@ -609,7 +609,7 @@ public protocol DiscordEndpointConsumer {
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
-    public func getBotURL(with permissions: DiscordPermission) -> URL? {
+    func getBotURL(with permissions: DiscordPermission) -> URL? {
         guard let user = self.user else { return nil }
 
         return DiscordOAuthEndpoint.createBotAddURL(for: user, with: permissions)

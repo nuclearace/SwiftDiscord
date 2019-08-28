@@ -79,7 +79,7 @@ public protocol DiscordWebSocketable : AnyObject {
 
 public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRunLoopable {
     /// Default implementation.
-    public func attachWebSocketHandlers() {
+    func attachWebSocketHandlers() {
         websocket?.onText { [weak self] ws, text in
             guard let this = self else { return }
 
@@ -106,7 +106,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
     ///
     /// Starts the connection to the Discord gateway.
     ///
-    public func connect() {
+    func connect() {
         runloop.execute(self._connect)
     }
 
@@ -154,7 +154,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
             return
         }
 
-        websocket?.close()
+        let _ = websocket?.close()
     }
 
     ///
@@ -162,7 +162,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
     ///
     /// - parameter message: The error message
     ///
-    public func error(message: String) {
+    func error(message: String) {
         DefaultDiscordLogger.Logger.error(message, type: description)
     }
 }

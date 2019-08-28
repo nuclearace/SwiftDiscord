@@ -223,7 +223,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
 
 public extension DiscordMessage {
     /// Type of message
-    public enum MessageType : Int {
+    enum MessageType : Int {
         /// Default.
         case `default`
 
@@ -250,7 +250,7 @@ public extension DiscordMessage {
     }
 
     /// Represents an action that be taken on a message.
-    public struct MessageActivity {
+    struct MessageActivity {
         /// Represents the type of activity.
         public enum ActivityType : Int {
             /// Join.
@@ -275,7 +275,7 @@ public extension DiscordMessage {
     }
 
     /// Represents an application in a `DiscordMessage` object.
-    public struct MessageApplication {
+    struct MessageApplication {
         /// The id of this application.
         public let id: Snowflake
 

@@ -268,11 +268,6 @@ public struct DiscordRateLimitKey : Hashable {
     /// The list of parts that the URL contains
     public let urlParts: DiscordRateLimitURLParts
 
-    /// The hash of the key.
-    public var hashValue: Int {
-        return urlParts.rawValue &+ id.hashValue
-    }
-
     // MARK: Initializers
 
     /// Creates a new endpoint key.
@@ -284,6 +279,12 @@ public struct DiscordRateLimitKey : Hashable {
     /// Whether two keys are equal.
     public static func ==(lhs: DiscordRateLimitKey, rhs: DiscordRateLimitKey) -> Bool {
         return lhs.id == rhs.id && lhs.urlParts == rhs.urlParts
+    }
+
+    /// The hash of the key.
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(urlParts.rawValue)
+        hasher.combine(id)
     }
 }
 
