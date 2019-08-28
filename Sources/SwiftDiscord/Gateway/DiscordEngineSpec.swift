@@ -116,8 +116,11 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
 
         let url = URL(string: connectURL)!
         let path = url.path.isEmpty ? "/" : url.path
-        let wsClient = WebSocketClient(eventLoopGroupProvider: .shared(runloop))
-        wsClient.connect(
+        let wsClient = WebSocketClient(eventLoopGroupProvider: .shared(runloop), configuration: .init(
+            tlsConfiguration: .clientDefault,
+            maxFrameSize: 1 << 31
+        ))
+        let future = wsClient.connect(
                 host: url.host!,
                 port: url.port ?? 443,
                 uri: path
@@ -131,6 +134,14 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
 
             this.attachWebSocketHandlers()
             this.startHandshake()
+        }
+        
+        future.whenFailure { [weak self] err in
+            guard let this = self else { return }
+            
+            DefaultDiscordLogger.Logger.log("Websocket errored, closing: \(err), \(this.description)", type: "DiscordWebSocketable")
+            
+            this.handleClose(reason: err)
         }
     }
 
