@@ -20,7 +20,7 @@
 import PackageDescription
 
 var deps: [Package.Dependency] = [
-    .package(url: "https://github.com/vapor/nio-websocket-client", .revision("e24870ba2350b613e71322caf79d138e139819df")),
+    .package(url: "https://github.com/vapor/nio-websocket-client", .revision("f9a0955dff2b6a7a466cc26db2d061b682023197")),
     .package(url: "https://github.com/IBM-Swift/BlueSocket", .upToNextMinor(from: "1.0.0"))
 ]
 
