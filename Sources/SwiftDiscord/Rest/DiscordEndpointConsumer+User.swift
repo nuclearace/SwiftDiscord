@@ -16,10 +16,13 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
-    public func createDM(with: UserID,
+    func createDM(with: UserID,
                          callback: @escaping (DiscordDMChannel?, HTTPURLResponse?) -> ()) {
         guard let contentData = JSON.encodeJSONData(["recipient_id": with]) else { return }
 
@@ -40,7 +43,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getDMs(callback: @escaping ([ChannelID: DiscordDMChannel], HTTPURLResponse?) -> ()) {
+    func getDMs(callback: @escaping ([ChannelID: DiscordDMChannel], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(channels)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([:], response)
@@ -59,7 +62,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getGuilds(callback: @escaping ([GuildID: DiscordUserGuild], HTTPURLResponse?) -> ()) {
+    func getGuilds(callback: @escaping ([GuildID: DiscordUserGuild], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = {data, response, error in
             guard case let .array(guilds)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([:], response)

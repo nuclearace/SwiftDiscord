@@ -419,7 +419,7 @@ public class DiscordEncoderMiddleware {
 
         middleware.standardOutput = pipe
 
-        ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
+        ffmpeg.executableURL = URL(fileURLWithPath: "/usr/local/bin/ffmpeg")
         ffmpeg.standardInput = pipe
         ffmpeg.standardOutput = source.writeToHandler
         ffmpeg.arguments = ["-hide_banner", "-loglevel", "quiet", "-i", "pipe:0", "-f", "s16le", "-map", "0:a",
@@ -437,9 +437,9 @@ public class DiscordEncoderMiddleware {
     ///
     /// Starts the middleware.
     ///
-    public func start() {
-        ffmpeg.launch()
-        middleware.launch()
+    public func start() throws {
+        try ffmpeg.run()
+        try middleware.run()
     }
 }
 #endif

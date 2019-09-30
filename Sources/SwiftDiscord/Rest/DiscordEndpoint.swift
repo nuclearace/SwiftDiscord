@@ -16,6 +16,9 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 // TODO Group DM
 // TODO Add guild member
@@ -50,6 +53,13 @@ public enum DiscordEndpoint : CustomStringConvertible {
 
     /// The channel typing endpoint.
     case typing(channel: ChannelID)
+
+    // Reactions
+    /// The endpoint for creating/deleting own reactions.
+    case reactions(channel: ChannelID, message: MessageID, emoji: String)
+    
+    /// The endpoint for another user's reactions
+    case userReactions(channel: ChannelID, message: MessageID, emoji: String, user: UserID)
 
     // Permissions
     /// The base channel permissions endpoint.
@@ -150,7 +160,7 @@ public extension DiscordEndpoint {
     ///
     /// * An HTTP Request for an Endpoint.  This includes any associated data.
     ///
-    public enum EndpointRequest {
+    enum EndpointRequest {
         /// A GET request.
         case get(params: [String: String]?, extraHeaders: [DiscordHeader: String]?)
 
@@ -245,7 +255,7 @@ public extension DiscordEndpoint {
 
     // MARK: Endpoint string calculation
 
-    public var description: String {
+    var description: String {
         switch self {
         case .baseURL:
             return "https://discordapp.com/api/v6"
@@ -264,6 +274,11 @@ public extension DiscordEndpoint {
             return "/channels/\(channel)/messages/\(message)"
         case let .typing(channel):
             return "/channels/\(channel)/typing"
+        // Reactions
+        case let .reactions(channel, message, emoji):
+            return "/channels/\(channel)/messages/\(message)/reactions/\(emoji)/@me"
+        case let .userReactions(channel, message, emoji, user):
+            return "/channels/\(channel)/messages/\(message)/reactions/\(emoji)/\(user)"
         // Permissions
         case let .permissions(channel):
             return "/channels/\(channel)/permissions"
@@ -362,6 +377,11 @@ public extension DiscordEndpoint {
             return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .messagesDelete, .messageID])
         case let .typing(channel):
             return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .typing])
+        // Reactions
+        case let .reactions(channel, _, _):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .messages, .messageID, .reactions, .emoji, .me])
+        case let .userReactions(channel, _, _, _):
+            return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .messages, .messageID, .reactions, .emoji, .userID])
         // Permissions
         case let .permissions(channel):
             return DiscordRateLimitKey(id: channel, urlParts: [.channels, .channelID, .permissions])
@@ -486,7 +506,7 @@ public enum DiscordHeader : String {
 
 public extension DiscordEndpoint {
     /// A namespace struct for endpoint options.
-    public struct Options {
+    struct Options {
         private init() {}
 
         /// Options when getting an audit log.

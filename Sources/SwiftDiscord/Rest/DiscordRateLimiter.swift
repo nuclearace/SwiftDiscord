@@ -16,6 +16,10 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 import Dispatch
 
 internal typealias DiscordRequestCallback = (Data?, HTTPURLResponse?, Error?) -> ()
@@ -245,6 +249,9 @@ public struct DiscordRateLimitKey : Hashable {
         static let          slack = DiscordRateLimitURLParts(rawValue: 1 << 23)
         static let         github = DiscordRateLimitURLParts(rawValue: 1 << 24)
         static let       auditLog = DiscordRateLimitURLParts(rawValue: 1 << 25)
+        static let      reactions = DiscordRateLimitURLParts(rawValue: 1 << 26)
+        static let          emoji = DiscordRateLimitURLParts(rawValue: 1 << 27)
+        static let             me = DiscordRateLimitURLParts(rawValue: 1 << 28)
 
         public init(rawValue: Int) {
             self.rawValue = rawValue
@@ -261,11 +268,6 @@ public struct DiscordRateLimitKey : Hashable {
     /// The list of parts that the URL contains
     public let urlParts: DiscordRateLimitURLParts
 
-    /// The hash of the key.
-    public var hashValue: Int {
-        return urlParts.rawValue &+ id.hashValue
-    }
-
     // MARK: Initializers
 
     /// Creates a new endpoint key.
@@ -277,6 +279,12 @@ public struct DiscordRateLimitKey : Hashable {
     /// Whether two keys are equal.
     public static func ==(lhs: DiscordRateLimitKey, rhs: DiscordRateLimitKey) -> Bool {
         return lhs.id == rhs.id && lhs.urlParts == rhs.urlParts
+    }
+
+    /// The hash of the key.
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(urlParts.rawValue)
+        hasher.combine(id)
     }
 }
 

@@ -100,7 +100,7 @@ public extension DiscordGatewayable where Self: DiscordWebSocketable & DiscordRu
         DefaultDiscordLogger.Logger.debug("Sending ws: \(payloadString)", type: description)
 
         runloop.execute {
-            self.websocket?.send(payloadString)
+            self.websocket?.send(text: payloadString)
         }
     }
 }

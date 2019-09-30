@@ -18,8 +18,7 @@
 import Dispatch
 import Foundation
 import NIO
-import HTTP
-import WebSocket
+import AsyncWebSocketClient
 
 /// Declares that a type will be an Engine for the Discord Gateway.
 public protocol DiscordEngineSpec : DiscordShard {
@@ -48,9 +47,8 @@ public protocol DiscordWebSocketable : AnyObject {
     /// The queue WebSockets do their parsing on.
     var parseQueue: DispatchQueue { get }
 
-    /// A reference to the underlying WebSocket. This is a WebSockets.Websocket on Linux and Starscream.WebSocket on
-    /// macOS/iOS.
-    var websocket: WebSocket? { get set }
+    /// A reference to the underlying WebSocket.
+    var websocket: WebSocketClient.Socket? { get set }
 
     // MARK: Methods
 
@@ -58,8 +56,6 @@ public protocol DiscordWebSocketable : AnyObject {
     /// Attaches the WebSocket handlers that listen for text/connects/disconnects/etc
     ///
     /// Override if you need to provide custom handlers.
-    ///
-    /// Note: You should handle both WebSockets.WebSocket and Starscream.WebSocket handlers.
     ///
     func attachWebSocketHandlers()
 
@@ -83,8 +79,8 @@ public protocol DiscordWebSocketable : AnyObject {
 
 public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRunLoopable {
     /// Default implementation.
-    public func attachWebSocketHandlers() {
-        websocket?.onText {[weak self] ws, text in
+    func attachWebSocketHandlers() {
+        websocket?.onText { [weak self] ws, text in
             guard let this = self else { return }
 
             DefaultDiscordLogger.Logger.debug("\(this.description), Got text: \(text)", type: "DiscordWebSocketable")
@@ -92,19 +88,25 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
             this.parseGatewayMessage(text)
         }
 
-        websocket?.onClose.do {[weak self] _ in
+        websocket?.onCloseCode { [weak self] code in
             guard let this = self else { return }
 
-            DefaultDiscordLogger.Logger.log("WebSocket closed, \(this.description);",  type: "DiscordWebSocketable")
+            DefaultDiscordLogger.Logger.log("WebSocket closed, code: \(code), \(this.description);",  type: "DiscordWebSocketable")
 
             this.handleClose(reason: nil)
-        }.catch {_ in }
+        }
+        
+        websocket?.onError { [weak self] ws, err in
+            guard let this = self else { return }
+            
+            DefaultDiscordLogger.Logger.log("WebSocket errored, \(err), \(this.description)", type: "DiscordWebSocketable")
+        }
     }
 
     ///
     /// Starts the connection to the Discord gateway.
     ///
-    public func connect() {
+    func connect() {
         runloop.execute(self._connect)
     }
 
@@ -114,16 +116,16 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
 
         let url = URL(string: connectURL)!
         let path = url.path.isEmpty ? "/" : url.path
-        let doneFuture = runloop.newSucceededFuture(result: ())
-        let future = HTTPClient.webSocket(scheme: .wss,
-                hostname: url.host!,
-                port: url.port,
-                path: path,
-                on: runloop
-        )
-
-        future.then {[weak self] ws -> EventLoopFuture<()> in
-            guard let this = self else { return doneFuture }
+        let wsClient = WebSocketClient(eventLoopGroupProvider: .shared(runloop), configuration: .init(
+            tlsConfiguration: .clientDefault,
+            maxFrameSize: 1 << 31
+        ))
+        let future = wsClient.connect(
+                host: url.host!,
+                port: url.port ?? 443,
+                uri: path
+        ) { [weak self] ws in
+            guard let this = self else { return }
 
             DefaultDiscordLogger.Logger.log("Websocket connected, shard: \(this.description)", type: "DiscordWebSocketable")
 
@@ -132,13 +134,15 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
 
             this.attachWebSocketHandlers()
             this.startHandshake()
-
-            return doneFuture
-        }.catch({[weak self] error in
+        }
+        
+        future.whenFailure { [weak self] err in
             guard let this = self else { return }
-
-            this.handleClose(reason: error)
-        })
+            
+            DefaultDiscordLogger.Logger.log("Websocket errored, closing: \(err), \(this.description)", type: "DiscordWebSocketable")
+            
+            this.handleClose(reason: err)
+        }
     }
 
     internal func closeWebSockets(fast: Bool = false) {
@@ -150,7 +154,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
             return
         }
 
-        websocket?.close()
+        let _ = websocket?.close()
     }
 
     ///
@@ -158,7 +162,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
     ///
     /// - parameter message: The error message
     ///
-    public func error(message: String) {
+    func error(message: String) {
         DefaultDiscordLogger.Logger.error(message, type: description)
     }
 }

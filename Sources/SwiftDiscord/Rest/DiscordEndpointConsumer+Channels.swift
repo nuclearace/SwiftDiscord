@@ -16,10 +16,13 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
-    public func addPinnedMessage(_ messageId: MessageID,
+    func addPinnedMessage(_ messageId: MessageID,
                                  on channelId: ChannelID,
                                  callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
         rateLimiter.executeRequest(endpoint: .pinnedMessage(channel: channelId, message: messageId),
@@ -29,7 +32,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func bulkDeleteMessages(_ messages: [MessageID],
+    func bulkDeleteMessages(_ messages: [MessageID],
                                    on channelId: ChannelID,
                                    callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
         guard let contentData = JSON.encodeJSONData(["messages": messages.map({ $0.description })]) else { return }
@@ -41,7 +44,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func createInvite(for channelId: ChannelID,
+    func createInvite(for channelId: ChannelID,
                              options: [DiscordEndpoint.Options.CreateInvite],
                              reason: String? = nil,
                              callback: @escaping (DiscordInvite?, HTTPURLResponse?) -> ()) {
@@ -84,7 +87,27 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func deleteChannel(_ channelId: ChannelID,
+    func createReaction(for messageId: MessageID,
+                        on channelId: ChannelID,
+                        emoji: String,
+                        callback: ((DiscordMessage?, HTTPURLResponse?) -> ())? = nil) {
+        let requestCallback: DiscordRequestCallback = { data, response, error in
+            guard case let .object(message)? = JSON.jsonFromResponse(data: data, response: response) else {
+                callback?(nil, response)
+                return
+            }
+
+            callback?(DiscordMessage(messageObject: message, client: nil), response)
+        }
+        
+        rateLimiter.executeRequest(endpoint: .reactions(channel: channelId, message: messageId, emoji: emoji.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? emoji),
+                                   token: token,
+                                   requestInfo: .put(content: nil, extraHeaders: nil),
+                                   callback: requestCallback)
+    }
+
+    /// Default implementation
+    func deleteChannel(_ channelId: ChannelID,
                               reason: String? = nil,
                               callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
         var extraHeaders = [DiscordHeader: String]()
@@ -100,7 +123,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func deleteChannelPermission(_ overwriteId: OverwriteID,
+    func deleteChannelPermission(_ overwriteId: OverwriteID,
                                         on channelId: ChannelID,
                                         reason: String? = nil,
                                         callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
@@ -117,7 +140,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func deleteMessage(_ messageId: MessageID,
+    func deleteMessage(_ messageId: MessageID,
                               on channelId: ChannelID,
                               callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
         rateLimiter.executeRequest(endpoint: .channelMessageDelete(channel: channelId, message: messageId),
@@ -127,7 +150,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func deletePinnedMessage(_ messageId: MessageID,
+    func deletePinnedMessage(_ messageId: MessageID,
                                     on channelId: ChannelID,
                                     callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
         rateLimiter.executeRequest(endpoint: .pinnedMessage(channel: channelId, message: messageId),
@@ -137,7 +160,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite,
+    func editChannelPermission(_ permissionOverwrite: DiscordPermissionOverwrite,
                                       on channelId: ChannelID,
                                       reason: String? = nil,
                                       callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
@@ -156,7 +179,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getInvites(for channelId: ChannelID,
+    func getInvites(for channelId: ChannelID,
                            callback: @escaping ([DiscordInvite], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(invites)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -174,7 +197,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func editMessage(_ messageId: MessageID,
+    func editMessage(_ messageId: MessageID,
                             on channelId: ChannelID,
                             content: String,
                             callback: ((DiscordMessage?, HTTPURLResponse?) -> ())? = nil) {
@@ -196,7 +219,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getChannel(_ channelId: ChannelID,
+    func getChannel(_ channelId: ChannelID,
                            callback: @escaping (DiscordChannel?, HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = {data, response, error in
             guard case let .object(channel)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -214,7 +237,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getMessages(for channelId: ChannelID,
+    func getMessages(for channelId: ChannelID,
                             selection: DiscordEndpoint.Options.MessageSelection? = nil,
                             limit: Int? = nil,
                             callback: @escaping ([DiscordMessage], HTTPURLResponse?) -> ()) {
@@ -243,7 +266,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getPinnedMessages(for channelId: ChannelID,
+    func getPinnedMessages(for channelId: ChannelID,
                                   callback: @escaping ([DiscordMessage], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = {data, response, error in
             guard case let .array(messages)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -261,7 +284,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func modifyChannel(_ channelId: ChannelID,
+    func modifyChannel(_ channelId: ChannelID,
                               options: [DiscordEndpoint.Options.ModifyChannel],
                               reason: String? = nil,
                               callback: ((DiscordGuildChannel?, HTTPURLResponse?) -> ())? = nil) {
@@ -306,7 +329,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation.
-    public func sendMessage(_ message: DiscordMessage,
+    func sendMessage(_ message: DiscordMessage,
                             to channelId: ChannelID,
                             callback: ((DiscordMessage?, HTTPURLResponse?) -> ())? = nil) {
         let requestInfo: DiscordEndpoint.EndpointRequest
@@ -349,7 +372,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         If all messages were sent successfully, the length of the array will be the same as the length of the input.
         Otherwise, the callback's array will be shorter.
     */
-    public func sendMessages(_ messages: [DiscordMessage],
+    func sendMessages(_ messages: [DiscordMessage],
                              to channelID: ChannelID,
                              callback: (([DiscordMessage], HTTPURLResponse?) -> ())? = nil ) {
         guard let firstMessage = messages.first else {
@@ -384,8 +407,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func triggerTyping(on channelId: ChannelID,
-                              callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
+    func triggerTyping(on channelId: ChannelID, callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
         rateLimiter.executeRequest(endpoint: .typing(channel: channelId),
                                    token: token,
                                    requestInfo: .post(content: nil, extraHeaders: nil),

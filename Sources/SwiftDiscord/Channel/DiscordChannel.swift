@@ -16,6 +16,10 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 import class Dispatch.DispatchSemaphore
 
 /// Protocol that declares a type will be a Discord channel.
@@ -56,7 +60,7 @@ public extension DiscordChannel {
     // MARK: Properties
 
     /// - returns: The guild that this channel is associated with. Or nil if this channel has no guild.
-    public var guild: DiscordGuild? {
+    var guild: DiscordGuild? {
         return client?.guildForChannel(id)
     }
 
@@ -65,7 +69,7 @@ public extension DiscordChannel {
     ///
     /// Deletes this channel.
     ///
-    public func delete(reason: String? = nil) {
+    func delete(reason: String? = nil) {
         guard let client = self.client else { return }
 
         DefaultDiscordLogger.Logger.log("Deleting channel: \(id)", type: "DiscordChannel")
@@ -78,7 +82,7 @@ public extension DiscordChannel {
     ///
     /// - parameter options: An array of `DiscordEndpointOptions.ModifyChannel`
     ///
-    public func modifyChannel(options: [DiscordEndpoint.Options.ModifyChannel], reason: String? = nil) {
+    func modifyChannel(options: [DiscordEndpoint.Options.ModifyChannel], reason: String? = nil) {
         guard let client = self.client else { return }
 
         client.modifyChannel(id, options: options, reason: reason)
@@ -93,7 +97,7 @@ public extension DiscordTextChannel {
     ///
     /// - parameter message: The message to pin
     ///
-    public func pinMessage(_ message: DiscordMessage) {
+    func pinMessage(_ message: DiscordMessage) {
         guard let client = self.client else { return }
 
         client.addPinnedMessage(message.id, on: id)
@@ -104,7 +108,7 @@ public extension DiscordTextChannel {
     ///
     /// - parameter message: The message to delete
     ///
-    public func deleteMessage(_ message: DiscordMessage) {
+    func deleteMessage(_ message: DiscordMessage) {
         guard let client = self.client else { return }
 
         client.deleteMessage(message.id, on: id)
@@ -115,7 +119,7 @@ public extension DiscordTextChannel {
     ///
     /// - parameter callback: The callback.
     ///
-    public func getPinnedMessages(callback: @escaping ([DiscordMessage], HTTPURLResponse?) -> ()) {
+    func getPinnedMessages(callback: @escaping ([DiscordMessage], HTTPURLResponse?) -> ()) {
         guard let client = self.client else { return callback([], nil) }
 
         client.getPinnedMessages(for: id) {pins, response in
@@ -144,7 +148,7 @@ public extension DiscordTextChannel {
     ///
     /// - parameter message: The message to send.
     ///
-    public func send(_ message: DiscordMessage) {
+    func send(_ message: DiscordMessage) {
         guard let client = self.client else { return }
 
         client.sendMessage(message, to: id)
@@ -153,7 +157,7 @@ public extension DiscordTextChannel {
     ///
     /// Sends that this user is typing on this channel.
     ///
-    public func triggerTyping() {
+    func triggerTyping() {
         guard let client = self.client else { return }
 
         client.triggerTyping(on: id)
@@ -164,7 +168,7 @@ public extension DiscordTextChannel {
     ///
     /// - parameter message: The message to unpin.
     ///
-    public func unpinMessage(_ message: DiscordMessage) {
+    func unpinMessage(_ message: DiscordMessage) {
         guard let client = self.client else { return }
 
         client.deletePinnedMessage(message.id, on: id)

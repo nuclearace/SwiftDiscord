@@ -16,6 +16,9 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 enum JSON {
     case array([Any])
@@ -63,6 +66,12 @@ enum JSON {
         guard let data = data, let stringData = String(data: data, encoding: .utf8) else {
             DefaultDiscordLogger.Logger.error("Not string data? Response code: \(response.statusCode)", type: "JSON")
 
+            return nil
+        }
+
+        guard response.statusCode != 204 else {
+            DefaultDiscordLogger.Logger.debug("Response code 204: No content", type: "JSON")
+            
             return nil
         }
 
