@@ -83,6 +83,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// The relationships this user has. Only valid for non-bot users.
     public private(set) var relationships = [[String: Any]]()
 
+    /// The presences of various other users this user has access to.
+    /// This is filled during the first ```READY``` frame received and updated during any subsequent ```PRESENCE_UPDATE```s.
+    public private(set) var presences = [UserID: DiscordPresence]()
+    
     /// The DiscordUser this client is connected to.
     public private(set) var user: DiscordUser?
 
@@ -829,7 +833,26 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// - parameter with: The data from the event
     ///
     open func handlePresenceUpdate(with data: [String: Any]) {
-        guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
+        guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else {
+            guard let user = data["user"] as? [String: Any], let userId = Snowflake(user["id"] as? String) else { return }
+            
+            var presence = self.presences[userId]
+            
+            if presence != nil {
+                presence!.updatePresence(presenceObject: data)
+            } else {
+                presence = DiscordPresence(presenceObject: data, guildId: GuildID(0))
+            }
+            
+            if !discardPresences {
+                DefaultDiscordLogger.Logger.debug("Updated presence: \(presence!)", type: logType)
+                self.presences[userId] = presence
+            }
+            
+            delegate?.client(self, didReceivePresenceUpdate: presence!)
+            
+            return
+        }
         guard let user = data["user"] as? [String: Any], let userId = Snowflake(user["id"] as? String) else { return }
 
         var presence = guild.presences[userId]
@@ -881,6 +904,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
             for (id, channel) in privateChannelsFromArray(privateChannels, client: self) {
                 self.directChannels.updateValue(channel, forKey: id)
             }
+        }
+        
+        if let presences = data["presences"] as? [[String: Any]] {
+            self.presences = presencesFromArray(presences, client: self)
         }
 
         delegate?.client(self, didReceiveReady: data)

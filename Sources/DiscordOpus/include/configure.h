@@ -18,7 +18,11 @@
 #ifndef configure_h
 #define configure_h
 
+#ifdef __APPLE__
+#include "/usr/local/Cellar/opus/1.3.1/include/opus/opus.h"
+#else
 #include <opus/opus.h>
+#endif
 
 int configure_encoder(OpusEncoder *enc, int bitrate, int vbr);
 int configure_decoder(OpusDecoder *dec, int gain);

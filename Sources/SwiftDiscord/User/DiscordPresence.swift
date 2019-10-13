@@ -327,3 +327,14 @@ public struct DiscordPresenceUpdate : Encodable {
         case afk
     }
 }
+
+func presencesFromArray(_ presences: [[String: Any]], client: DiscordClient) -> [UserID: DiscordPresence] {
+    var presenceDict = [UserID: DiscordPresence]()
+    
+    for presence in presences {
+        let newPresence = DiscordPresence(presenceObject: presence, guildId: GuildID(0))
+        presenceDict[newPresence.user.id] = newPresence
+    }
+    
+    return presenceDict
+}
