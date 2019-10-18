@@ -17,7 +17,7 @@
 
 import Foundation
 import NIO
-import AsyncWebSocketClient
+import WebSocketKit
 import Dispatch
 
 #if os(macOS)
@@ -99,7 +99,7 @@ open class DiscordEngine : DiscordEngineSpec {
     public var sessionId: String?
 
     /// The underlying WebSocket.
-    public var websocket: WebSocketClient.Socket?
+    public var websocket: WebSocket?
 
     /// Whether this engine is connected to the gateway.
     public internal(set) var connected = false
