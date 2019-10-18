@@ -118,15 +118,17 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
 
         let url = URL(string: connectURL)!
         let path = url.path.isEmpty ? "/" : url.path
-        let wsClient = WebSocketClient(eventLoopGroupProvider: .shared(runloop), configuration: .init(
-            tlsConfiguration: .clientDefault,
-            maxFrameSize: 1 << 31
-        ))
-        let future = wsClient.connect(
-                scheme: url.scheme!,
-                host: url.host!,
-                port: url.port ?? 443,
-                path: path
+
+        let future = WebSocket.connect(
+            scheme: url.scheme ?? "wss",
+            host: url.host!,
+            port: url.port ?? 443,
+            path: path,
+            configuration: .init(
+                tlsConfiguration: .clientDefault,
+                maxFrameSize: 1 << 31
+            ),
+            on: runloop
         ) { [weak self] ws in
             guard let this = self else { return }
 
