@@ -418,8 +418,20 @@ public class DiscordEncoderMiddleware {
         pipe = Pipe()
 
         middleware.standardOutput = pipe
+        
+        let ffmpegPath = "/usr/local/bin/ffmpeg"
+        let ffmpegURL = URL(fileURLWithPath: ffmpegPath)
+        
+        pathSetter: do {
+            #if os(macOS)
+            guard #available(macOS 10.13, *) else {
+                ffmpeg.launchPath = ffmpegPath
+                break pathSetter
+            }
+            #endif
+            ffmpeg.executableURL = ffmpegURL
+        }
 
-        ffmpeg.executableURL = URL(fileURLWithPath: "/usr/local/bin/ffmpeg")
         ffmpeg.standardInput = pipe
         ffmpeg.standardOutput = source.writeToHandler
         ffmpeg.arguments = ["-hide_banner", "-loglevel", "quiet", "-i", "pipe:0", "-f", "s16le", "-map", "0:a",
@@ -433,11 +445,19 @@ public class DiscordEncoderMiddleware {
             source?.finishUpAndClose()
         }
     }
-
+    
     ///
     /// Starts the middleware.
     ///
     public func start() throws {
+        #if os(macOS)
+        guard #available(macOS 10.13, *) else {
+            ffmpeg.launch()
+            middleware.launch()
+            return
+        }
+        #endif
+
         try ffmpeg.run()
         try middleware.run()
     }
