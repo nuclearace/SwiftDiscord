@@ -92,6 +92,8 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
             guard let this = self else { return }
             
             DefaultDiscordLogger.Logger.log("Websocket closed, \(this.description)", type: "DiscordWebSocketable")
+            
+            this.handleClose(reason: nil)
         }
 
         websocket?.onClose.whenFailure { [weak self] err in
