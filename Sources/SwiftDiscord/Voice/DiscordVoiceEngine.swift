@@ -17,7 +17,7 @@
 
 import Foundation
 import Dispatch
-import AsyncWebSocketClient
+import WebSocketKit
 import Socket
 import Sodium
 
@@ -86,7 +86,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     /// The underlying websocket.
-    public var websocket: WebSocketClient.Socket?
+    public var websocket: WebSocket?
 
     /// The voice engine's delegate.
     public private(set) weak var voiceDelegate: DiscordVoiceEngineDelegate?

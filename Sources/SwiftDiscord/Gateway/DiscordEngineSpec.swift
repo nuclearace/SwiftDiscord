@@ -18,7 +18,7 @@
 import Dispatch
 import Foundation
 import NIO
-import AsyncWebSocketClient
+import WebSocketKit
 
 /// Declares that a type will be an Engine for the Discord Gateway.
 public protocol DiscordEngineSpec : DiscordShard {
@@ -48,7 +48,7 @@ public protocol DiscordWebSocketable : AnyObject {
     var parseQueue: DispatchQueue { get }
 
     /// A reference to the underlying WebSocket.
-    var websocket: WebSocketClient.Socket? { get set }
+    var websocket: WebSocket? { get set }
 
     // MARK: Methods
 
@@ -87,19 +87,21 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
 
             this.parseGatewayMessage(text)
         }
-
-        websocket?.onCloseCode { [weak self] code in
-            guard let this = self else { return }
-
-            DefaultDiscordLogger.Logger.log("WebSocket closed, code: \(code), \(this.description);",  type: "DiscordWebSocketable")
-
-            this.handleClose(reason: nil)
-        }
         
-        websocket?.onError { [weak self] ws, err in
+        websocket?.onClose.whenSuccess { [weak self] in
             guard let this = self else { return }
             
-            DefaultDiscordLogger.Logger.log("WebSocket errored, \(err), \(this.description)", type: "DiscordWebSocketable")
+            DefaultDiscordLogger.Logger.log("Websocket closed, \(this.description)", type: "DiscordWebSocketable")
+            
+            this.handleClose(reason: nil)
+        }
+
+        websocket?.onClose.whenFailure { [weak self] err in
+            guard let this = self else { return }
+
+            DefaultDiscordLogger.Logger.log("WebSocket errored: \(err), \(this.description);",  type: "DiscordWebSocketable")
+
+            this.handleClose(reason: nil)
         }
     }
 
@@ -116,14 +118,17 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
 
         let url = URL(string: connectURL)!
         let path = url.path.isEmpty ? "/" : url.path
-        let wsClient = WebSocketClient(eventLoopGroupProvider: .shared(runloop), configuration: .init(
-            tlsConfiguration: .clientDefault,
-            maxFrameSize: 1 << 31
-        ))
-        let future = wsClient.connect(
-                host: url.host!,
-                port: url.port ?? 443,
-                uri: path
+
+        let future = WebSocket.connect(
+            scheme: url.scheme ?? "wss",
+            host: url.host!,
+            port: url.port ?? 443,
+            path: path,
+            configuration: .init(
+                tlsConfiguration: .clientDefault,
+                maxFrameSize: 1 << 31
+            ),
+            on: runloop
         ) { [weak self] ws in
             guard let this = self else { return }
 
