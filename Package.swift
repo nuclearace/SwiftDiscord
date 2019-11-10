@@ -20,12 +20,12 @@
 import PackageDescription
 
 var deps: [Package.Dependency] = [
-    .package(url: "https://github.com/nuclearace/copus", .upToNextMinor(from: "2.0.0")),
+    .package(url: "https://github.com/nuclearace/copus", .upToNextMinor(from: "2.1.1")),
     .package(url: "https://github.com/nuclearace/Sodium", .upToNextMinor(from: "2.0.0")),
     .package(url: "https://github.com/vapor/engine", .upToNextMinor(from: "2.2.0")),
 ]
 
-var targetDeps: [Target.Dependency] = ["DiscordOpus", "WebSockets"]
+var targetDeps: [Target.Dependency] = ["WebSockets"]
 
 #if !os(Linux)
 deps += [.package(url: "https://github.com/daltoniam/Starscream", .upToNextMinor(from: "3.0.0")),]
@@ -41,7 +41,6 @@ let package = Package(
     dependencies: deps,
     targets: [
         .target(name: "SwiftDiscord", dependencies: targetDeps),
-        .target(name: "DiscordOpus"),
         .testTarget(name: "SwiftDiscordTests", dependencies: ["SwiftDiscord"]),
     ]
 )

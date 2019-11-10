@@ -16,7 +16,6 @@
 // DEALINGS IN THE SOFTWARE.
 
 import COPUS
-import DiscordOpus
 import Dispatch
 import Foundation
 
