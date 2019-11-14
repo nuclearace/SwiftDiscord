@@ -164,29 +164,16 @@ extension DiscordGatewayPayloadData {
         guard let data = data else { return .null }
 
         // TODO this is very ugly. See https://bugs.swift.org/browse/SR-5863
-        #if !os(Linux)
         switch data {
         case let object as [String: Any]:
             return .object(object)
-        case let number as NSNumber where number === kCFBooleanTrue || number === kCFBooleanFalse:
+        case let number as NSNumber where number === (true as NSNumber) || number === (false as NSNumber):
             return .bool(number.boolValue)
         case let integer as Int:
             return .integer(integer)
         default:
             return .null
         }
-        #else
-        switch data {
-        case let object as [String: Any]:
-            return .object(object)
-        case let bool as Bool:
-            return .bool(bool)
-        case let integer as Int:
-            return .integer(integer)
-        default:
-            return .null
-        }
-        #endif
     }
 }
 

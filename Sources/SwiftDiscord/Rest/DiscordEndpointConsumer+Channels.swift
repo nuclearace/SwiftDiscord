@@ -84,6 +84,26 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
+    public func createReaction(for messageId: MessageID,
+                        on channelId: ChannelID,
+                        emoji: String,
+                        callback: ((DiscordMessage?, HTTPURLResponse?) -> ())? = nil) {
+        let requestCallback: DiscordRequestCallback = { data, response, error in
+            guard case let .object(message)? = JSON.jsonFromResponse(data: data, response: response) else {
+                callback?(nil, response)
+                return
+            }
+
+            callback?(DiscordMessage(messageObject: message, client: nil), response)
+        }
+        
+        rateLimiter.executeRequest(endpoint: .reactions(channel: channelId, message: messageId, emoji: emoji.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? emoji),
+                                   token: token,
+                                   requestInfo: .put(content: nil, extraHeaders: nil),
+                                   callback: requestCallback)
+    }
+
+    /// Default implementation
     public func deleteChannel(_ channelId: ChannelID,
                               reason: String? = nil,
                               callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
@@ -336,6 +356,51 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                    token: token,
                                    requestInfo: requestInfo,
                                    callback: requestCallback)
+    }
+
+    /**
+     Sends multiple messages in a row
+
+     Guarantees that the messages will be sent (and received by Discord) in the specified order
+     - parameter messages: The list of messages to send
+     - parameter channelID: The ID of the channel to send the messages to
+     - parameter callback: The function that will be called after all messages are sent or one fails to send.
+        The HTTPURLResponse will be from the last attempt to send a message (first failure or final success).
+        If all messages were sent successfully, the length of the array will be the same as the length of the input.
+        Otherwise, the callback's array will be shorter.
+    */
+    public func sendMessages(_ messages: [DiscordMessage],
+                             to channelID: ChannelID,
+                             callback: (([DiscordMessage], HTTPURLResponse?) -> ())? = nil ) {
+        guard let firstMessage = messages.first else {
+            callback?([], nil)
+            return
+        }
+
+        var messagesToSend = messages.dropFirst()
+        var sentMessages: [DiscordMessage] = []
+
+        // This function strongly captures `self` (which, being a protocol that doesn't require
+        // its implementors to be classes, can't be made weak).  It shouldn't lead to any reference
+        // cycles due to the fact that `self` never holds onto a reference to the function.
+        // It does, however, keep `self` alive until all messages are sent.  If this is undesirable,
+        // maybe we should include an `: AnyClass` on `DiscordEndpointConsumer`
+        func handlerFunc(sentMessage: DiscordMessage?, response: HTTPURLResponse?) {
+            guard let sentMessage = sentMessage else {
+                callback?(sentMessages, response)
+                return
+            }
+            if callback != nil { // Save a bit of memory in the case that we won't need `sentMessages`
+                sentMessages.append(sentMessage)
+            }
+            guard let nextMessage = messagesToSend.first else {
+                callback?(sentMessages, response)
+                return
+            }
+            messagesToSend = messagesToSend.dropFirst()
+            sendMessage(nextMessage, to: channelID, callback: handlerFunc)
+        }
+        sendMessage(firstMessage, to: channelID, callback: handlerFunc)
     }
 
     /// Default implementation

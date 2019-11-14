@@ -16,7 +16,6 @@
 // DEALINGS IN THE SOFTWARE.
 
 import COPUS
-import DiscordOpus
 import Foundation
 
 /// Declares that a type has enough information to encode/decode Opus data.
@@ -93,9 +92,10 @@ open class DiscordOpusEncoder : DiscordOpusCodeable {
         var err = 0 as Int32
 
         encoderState = opus_encoder_create(Int32(sampleRate), Int32(channels), OPUS_APPLICATION_VOIP, &err)
-        err = configure_encoder(encoderState, Int32(bitrate), vbr ? 1 : 0)
+        let err2 = opus_encoder_set_bitrate(encoderState, Int32(bitrate))
+        let err3 = opus_encoder_set_vbr(encoderState, vbr ? 1 : 0)
 
-        guard err == 0 else {
+        guard err == 0, err2 == 0, err3 == 0 else {
             destroyState()
 
             throw DiscordVoiceError.creationFail
@@ -163,9 +163,9 @@ open class DiscordOpusDecoder : DiscordOpusCodeable {
         var err = 0 as Int32
 
         decoderState = opus_decoder_create(Int32(sampleRate), Int32(channels), &err)
-        err = configure_decoder(decoderState, Int32(gain))
+        let err2 = opus_decoder_set_gain(decoderState, Int32(gain))
 
-        guard err == 0 else {
+        guard err == 0, err2 == 0 else {
             destroyState()
 
             throw DiscordVoiceError.creationFail
