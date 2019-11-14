@@ -35,7 +35,7 @@ let package = Package(
     targets: [
         .target(name: "SwiftDiscord", dependencies: targetDeps),
         .systemLibrary(name: "COPUS", pkgConfig: "opus"),
-        .systemLibrary(name: "Sodium"),
+        .systemLibrary(name: "Sodium", pkgConfig: "libsodium"),
         .testTarget(name: "SwiftDiscordTests", dependencies: ["SwiftDiscord"]),
     ]
 )
