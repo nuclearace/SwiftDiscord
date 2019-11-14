@@ -16,7 +16,6 @@
 // DEALINGS IN THE SOFTWARE.
 
 import COPUS
-import DiscordOpus
 import Foundation
 
 /// Class that decodes Opus voice data into raw PCM data for a VoiceEngine. It can decode multiple streams. Decoding is
