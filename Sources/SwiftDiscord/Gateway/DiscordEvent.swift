@@ -39,13 +39,13 @@ public enum DiscordDispatchEvent : String {
     /// Message Delete Bulk (Not handled)
     case messageDeleteBulk = "MESSAGE_DELETE_BULK"
 
-    /// Message Reaction Add (Not handled)
+    /// Message Reaction Add (Handled)
     case messageReactionAdd = "MESSAGE_REACTION_ADD"
 
-    /// Message Reaction Remove All (Not handled)
+    /// Message Reaction Remove All (Handled)
     case messageReactionRemoveAll = "MESSAGE_REACTION_REMOVE_ALL"
 
-    /// Message Reaction Remove (Not handled)
+    /// Message Reaction Remove (Handled)
     case messageReactionRemove = "MESSAGE_REACTION_REMOVE"
 
     /// Message Update (Not handled)
