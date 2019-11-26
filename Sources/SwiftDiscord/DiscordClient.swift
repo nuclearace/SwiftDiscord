@@ -854,6 +854,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         guard let (userID, channel, messageID, emoji) = getReactionInfo(mode: "add", from: data) else { return }
 
+        if let guildID = GuildID(data["guild_id"] as? String),
+           let guild = guilds[guildID],
+           let member = (data["member"] as? [String: Any]).map({ DiscordGuildMember(guildMemberObject: $0, guildId: guildID) }) {
+            guild.members[member.user.id] = member
+        }
+
         delegate?.client(self, didAddReaction: emoji, toMessage: messageID, onChannel: channel, user: userID)
     }
 
