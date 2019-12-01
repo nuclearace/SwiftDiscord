@@ -712,7 +712,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             findIP()
         } catch let err {
             // TODO Handle voice error disconnect from voice
-            DefaultDiscordLogger.Logger.debug("Voice error \(err)", type: DiscordVoiceEngine.logType)
+            DefaultDiscordLogger.Logger.error("UDP setup error \(err)", type: DiscordVoiceEngine.logType)
         }
     }
 }
