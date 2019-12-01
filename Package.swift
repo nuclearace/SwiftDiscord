@@ -21,7 +21,9 @@ import PackageDescription
 
 var deps: [Package.Dependency] = [
     .package(url: "https://github.com/vapor/websocket-kit", .revision("d2fbfc28cb08e7a41644a92da16a383c8f9cc6f4")),
-    .package(url: "https://github.com/IBM-Swift/BlueSocket", .upToNextMinor(from: "1.0.0"))
+    .package(url: "https://github.com/IBM-Swift/BlueSocket", .upToNextMinor(from: "1.0.0")),
+    .package(url: "https://github.com/nuclearace/copus", .upToNextMinor(from: "2.1.1")),
+    .package(url: "https://github.com/nuclearace/Sodium", .upToNextMinor(from: "2.0.0")),
 ]
 
 var targetDeps: [Target.Dependency] = ["WebSocketKit", "COPUS", "Sodium", "Socket"]
@@ -34,8 +36,8 @@ let package = Package(
     dependencies: deps,
     targets: [
         .target(name: "SwiftDiscord", dependencies: targetDeps),
-        .systemLibrary(name: "COPUS", pkgConfig: "opus"),
-        .systemLibrary(name: "Sodium", pkgConfig: "libsodium"),
+//        .systemLibrary(name: "COPUS", pkgConfig: "opus"),
+//        .systemLibrary(name: "Sodium", pkgConfig: "libsodium"),
         .testTarget(name: "SwiftDiscordTests", dependencies: ["SwiftDiscord"]),
     ]
 )
