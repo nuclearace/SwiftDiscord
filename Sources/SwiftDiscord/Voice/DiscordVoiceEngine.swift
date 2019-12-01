@@ -292,7 +292,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
             do {
                 var data = Data()
-                try udpSocket.write(from: Data(bytes: discoveryData))
+                try udpSocket.write(from: Data(discoveryData))
 
                 _ = try udpSocket.readDatagram(into: &data)
                 let (ip, port) = try self.extractIPAndPort(from: data)
@@ -610,7 +610,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
                                           type: DiscordVoiceEngine.logType)
 
         do {
-            try udpSocket.write(from: Data(bytes: createVoicePacket(data)))
+            try udpSocket.write(from: Data(createVoicePacket(data)))
         } catch EngineError.encryptionError {
             error(message: "Error encrypting packet")
         } catch let err {
