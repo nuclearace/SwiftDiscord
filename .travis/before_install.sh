@@ -15,6 +15,8 @@ else
 
     echo 'eval "$(swiftenv init -)"' >> ~/.bash_profile
 
+    swiftenv install 5.1 && swiftenv global 5.1
+
     # Install  Vapor and Opus
     eval "$(curl -sL https://apt.vapor.sh)"
     sudo apt-get install vapor libopus-dev
