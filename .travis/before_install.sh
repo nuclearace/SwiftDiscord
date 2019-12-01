@@ -10,16 +10,16 @@ else
     git clone https://github.com/kylef/swiftenv.git ~/.swiftenv
     echo 'export SWIFTENV_ROOT="$HOME/.swiftenv"' >> ~/.bash_profile
     echo 'export PATH="$SWIFTENV_ROOT/bin:$PATH"' >> ~/.bash_profile
-    source ~/.bash_profile
     echo 'eval "$(swiftenv init -)"' >> ~/.bash_profile
+    source ~/.bash_profile
 
     # Install  Vapor and Opus
     eval "$(curl -sL https://apt.vapor.sh)"
     sudo apt-get install vapor libopus-dev
 
     # Swift
-    sudo apt-get remove swift
-    swiftenv install 5.1 && swiftenv global 5.1
+     ~/.swiftenv/bin/swiftenv install 5.1
+     ~/.swiftenv/bin/swiftenv global 5.1
 
     # Sodium
     wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.16.tar.gz
