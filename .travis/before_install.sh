@@ -18,6 +18,7 @@ else
     sudo apt-get install vapor libopus-dev
 
     # Swift
+    sudo apt-get remove swift
     swiftenv install 5.1 && swiftenv global 5.1
 
     # Sodium
