@@ -185,7 +185,7 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
         encoderQueue.sync {
             done = self.done
 
-            DefaultDiscordLogger.Logger.debug("Buffer state: count: \(self.readBuffer.count) drain: \(self.drain)",
+            DefaultDiscordLogger.Logger.trace("Buffer state: count: \(self.readBuffer.count) drain: \(self.drain)",
                                               type: DiscordBufferedVoiceDataSource.logType)
 
             if self.drain && self.readBuffer.count <= self.drainThreshold {

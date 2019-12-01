@@ -25,8 +25,10 @@ public enum DiscordLogLevel {
     case info
     /// Log content of events.
     case verbose
-    /// Log everything.
+    /// Log almost everything, minus the noisiest things.
     case debug
+    /// Log everything.
+    case trace
 }
 
 /// Declares that a type will act as a logger.
@@ -54,21 +56,21 @@ public protocol DiscordLogger {
 public extension DiscordLogger {
     /// Normal log messages.
     func log(_ message: @autoclosure () -> String, type: String) {
-        guard level == .info || level == .verbose || level == .debug else { return }
+        guard level == .info || level == .verbose || level == .debug || level == .trace else { return }
 
         abstractLog("LOG", message: message(), type: type)
     }
 
     /// More info on log messages.
     func verbose(_ message: @autoclosure () -> String, type: String) {
-        guard level == .verbose || level == .debug else { return }
+        guard level == .verbose || level == .debug || level == .trace else { return }
 
         abstractLog("VERBOSE", message: message(), type: type)
     }
 
     /// Debug messages.
     func debug(_ message: @autoclosure () -> String, type: String) {
-        guard level == .debug else { return }
+        guard level == .debug || level == .trace else { return }
 
         abstractLog("DEBUG", message: message(), type: type)
     }
@@ -76,6 +78,13 @@ public extension DiscordLogger {
     /// Error Messages.
     func error(_ message: @autoclosure () -> String, type: String) {
         abstractLog("ERROR", message: message(), type: type)
+    }
+
+    /// trace Messages.
+    func trace(_ message: @autoclosure () -> String, type: String) {
+        guard level == .trace else { return }
+
+        abstractLog("TRACE", message: message(), type: type)
     }
 
     private func abstractLog(_ logType: String, message: String, type: String) {
