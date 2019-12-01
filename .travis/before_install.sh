@@ -10,10 +10,10 @@ else
     git clone https://github.com/kylef/swiftenv.git ~/.swiftenv
     echo 'export SWIFTENV_ROOT="$HOME/.swiftenv"' >> ~/.bash_profile
     echo 'export PATH="$SWIFTENV_ROOT/bin:$PATH"' >> ~/.bash_profile
-    echo 'eval "$(swiftenv init -)"' >> ~/.bash_profile
 
-    reload
-    swiftenv install 5.1 && swiftenv global 5.1
+    source ~/.bash_profile
+
+    echo 'eval "$(swiftenv init -)"' >> ~/.bash_profile
 
     # Install  Vapor and Opus
     eval "$(curl -sL https://apt.vapor.sh)"
