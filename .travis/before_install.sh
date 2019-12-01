@@ -7,9 +7,17 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     brew install libsodium
     brew install opus
 else
-    # Install Swift, Vapor and Opus
+    git clone https://github.com/kylef/swiftenv.git ~/.swiftenv
+    echo 'export SWIFTENV_ROOT="$HOME/.swiftenv"' >> ~/.bash_profile
+    echo 'export PATH="$SWIFTENV_ROOT/bin:$PATH"' >> ~/.bash_profile
+    echo 'eval "$(swiftenv init -)"' >> ~/.bash_profile
+
+    reload
+    swiftenv install 5.1 && swiftenv global 5.1
+
+    # Install  Vapor and Opus
     eval "$(curl -sL https://apt.vapor.sh)"
-    sudo apt-get install swift vapor libopus-dev
+    sudo apt-get install vapor libopus-dev
 
     # Sodium
     wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.16.tar.gz
