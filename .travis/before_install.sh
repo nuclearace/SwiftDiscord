@@ -18,8 +18,8 @@ else
     sudo apt-get install vapor libopus-dev
 
     # Swift
-     ~/.swiftenv/bin/swiftenv install 5.1
-     ~/.swiftenv/bin/swiftenv global 5.1
+     swiftenv install 5.1 && swiftenv global 5.1
+     swift --version
 
     # Sodium
     wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.16.tar.gz
