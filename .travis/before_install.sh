@@ -13,13 +13,12 @@ else
     echo 'eval "$(swiftenv init -)"' >> ~/.bash_profile
     source ~/.bash_profile
 
-    # Install  Vapor and Opus
+    # Install Vapor and Opus
     eval "$(curl -sL https://apt.vapor.sh)"
     sudo apt-get install vapor libopus-dev
 
     # Swift
-     swiftenv install 5.1 && swiftenv global 5.1
-     swift --version
+     swiftenv install 5.1
 
     # Sodium
     wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.16.tar.gz
