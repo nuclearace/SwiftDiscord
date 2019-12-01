@@ -1,7 +1,7 @@
 matrix:
   include:
     - os: linux
-      dist: trusty
+      dist: bionic
       sudo: required
       language: generic
     - os: osx
