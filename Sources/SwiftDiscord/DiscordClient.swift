@@ -118,8 +118,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
                 handleQueue = queue
             case let .log(level):
                 DefaultDiscordLogger.logger.level = level
-            case let .logger(logger):
-                DefaultDiscordLogger.logger = logger
             case let .rateLimiter(limiter):
                 self.rateLimiter = limiter
             case let .shardingInfo(shardingInfo):

@@ -18,26 +18,12 @@
 import Foundation
 import Logging
 
-/// Represents the level of verbosity for the logger.
-public enum DiscordLogLevel {
-    /// Log nothing.
-    case none
-    /// Log connecting, disconnecting, events (but not content), etc.
-    case info
-    /// Log content of events.
-    case verbose
-    /// Log almost everything, minus the noisiest things.
-    case debug
-    /// Log everything.
-    case trace
-}
-
 /// Declares that a type will act as a logger.
 public protocol DiscordLogger {
     // MARK: Properties
 
     /// Whether to log or not.
-    var level: DiscordLogLevel { get set }
+    var level: Logger.Level { get set }
 
     // MARK: Methods
 
@@ -61,7 +47,10 @@ class DefaultDiscordLogger : DiscordLogger {
     static var logger: DiscordLogger = DefaultDiscordLogger()
     
     private var downstreamLogger = Logger(label: "SwiftDiscord")
-    var level = DiscordLogLevel.none
+    var level: Logger.Level {
+        get { return downstreamLogger.logLevel }
+        set { downstreamLogger.logLevel = newValue }
+    }
     
     /// Error Messages.
     func error(_ message: @autoclosure () -> String, type: String) {
