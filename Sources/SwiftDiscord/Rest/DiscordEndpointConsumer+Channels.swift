@@ -342,8 +342,8 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 extraHeaders: nil)
         }
 
-        DefaultDiscordLogger.Logger.log("Sending message to: \(channelId)", type: "DiscordEndpointChannels")
-        DefaultDiscordLogger.Logger.verbose("Message: \(message)", type: "DiscordEndpointChannels")
+        DefaultDiscordLogger.logger.log("Sending message to: \(channelId)", type: "DiscordEndpointChannels")
+        DefaultDiscordLogger.logger.verbose("Message: \(message)", type: "DiscordEndpointChannels")
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(message)? = JSON.jsonFromResponse(data: data, response: response) else {

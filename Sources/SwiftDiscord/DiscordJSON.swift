@@ -30,10 +30,10 @@ enum JSON {
         do {
             return try encoder.encode(object)
         } catch let error as EncodingError {
-            DefaultDiscordLogger.Logger.error("Failed to encode json \(object): \(error.localizedDescription)", type: "JSON")
+            DefaultDiscordLogger.logger.error("Failed to encode json \(object): \(error.localizedDescription)", type: "JSON")
             return nil
         } catch {
-            DefaultDiscordLogger.Logger.error("Failed to encode json \(object): \(error)", type: "JSON")
+            DefaultDiscordLogger.logger.error("Failed to encode json \(object): \(error)", type: "JSON")
             return nil
         }
     }
@@ -58,26 +58,26 @@ enum JSON {
 
     static func jsonFromResponse(data: Data?, response: HTTPURLResponse?) -> JSON? {
         guard let response = response else {
-            DefaultDiscordLogger.Logger.error("No response from jsonFromResponse", type: "JSON")
+            DefaultDiscordLogger.logger.error("No response from jsonFromResponse", type: "JSON")
 
             return nil
         }
 
         guard let data = data, let stringData = String(data: data, encoding: .utf8) else {
-            DefaultDiscordLogger.Logger.error("Not string data? Response code: \(response.statusCode)", type: "JSON")
+            DefaultDiscordLogger.logger.error("Not string data? Response code: \(response.statusCode)", type: "JSON")
 
             return nil
         }
 
         guard response.statusCode != 204 else {
-            DefaultDiscordLogger.Logger.debug("Response code 204: No content", type: "JSON")
+            DefaultDiscordLogger.logger.debug("Response code 204: No content", type: "JSON")
             
             return nil
         }
 
         guard response.statusCode == 200 || response.statusCode == 201 else {
-            DefaultDiscordLogger.Logger.error("Invalid response code \(response.statusCode)", type: "JSON")
-            DefaultDiscordLogger.Logger.error("Response: \(stringData)", type: "JSON")
+            DefaultDiscordLogger.logger.error("Invalid response code \(response.statusCode)", type: "JSON")
+            DefaultDiscordLogger.logger.error("Response: \(stringData)", type: "JSON")
 
             return nil
         }

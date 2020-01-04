@@ -116,7 +116,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     ///
     open func leaveVoiceChannel(onGuild guildId: GuildID) {
         guard let engine = get(voiceEngines[guildId]) else {
-            DefaultDiscordLogger.Logger.error("Could not find a voice engine for guild \(guildId)", type: logType)
+            DefaultDiscordLogger.logger.error("Could not find a voice engine for guild \(guildId)", type: logType)
 
             return
         }
@@ -126,13 +126,13 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
             voiceServerInformations[guildId] = nil
         }
 
-        DefaultDiscordLogger.Logger.verbose("Disconnecting voice engine for guild \(guildId)", type: logType)
+        DefaultDiscordLogger.logger.verbose("Disconnecting voice engine for guild \(guildId)", type: logType)
 
         engine.disconnect()
 
         // Make sure everything is cleaned out
 
-        DefaultDiscordLogger.Logger.verbose("Rejoining voice channels after leave", type: logType)
+        DefaultDiscordLogger.logger.verbose("Rejoining voice channels after leave", type: logType)
 
         for (guildId, _) in voiceEngines {
             startVoiceConnection(guildId)
@@ -173,7 +173,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
                 secret: previousEngine?.secret
         )
 
-        DefaultDiscordLogger.Logger.log("Connecting voice engine", type: logType)
+        DefaultDiscordLogger.logger.log("Connecting voice engine", type: logType)
 
         DispatchQueue.global().async {[weak engine = voiceEngines[guildId]!] in
             engine?.connect()

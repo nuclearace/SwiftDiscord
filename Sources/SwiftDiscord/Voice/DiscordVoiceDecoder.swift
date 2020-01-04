@@ -37,10 +37,10 @@ open class DiscordVoiceSessionDecoder {
         let decoder: DiscordOpusDecoder
 
         if let previous = decoders[packet.ssrc] {
-            DefaultDiscordLogger.Logger.debug("Reusing decoder for ssrc: \(packet.ssrc), seqNum: \(packet.seqNum), timestamp: \(packet.timestamp)", type: "DiscordVoiceSessionDecoder")
+            DefaultDiscordLogger.logger.debug("Reusing decoder for ssrc: \(packet.ssrc), seqNum: \(packet.seqNum), timestamp: \(packet.timestamp)", type: "DiscordVoiceSessionDecoder")
             decoder = previous
         } else {
-            DefaultDiscordLogger.Logger.debug("New decoder for ssrc: \(packet.ssrc), seqNum: \(packet.seqNum), timestamp: \(packet.timestamp)", type: "DiscordVoiceSessionDecoder")
+            DefaultDiscordLogger.logger.debug("New decoder for ssrc: \(packet.ssrc), seqNum: \(packet.seqNum), timestamp: \(packet.timestamp)", type: "DiscordVoiceSessionDecoder")
             decoder = try DiscordOpusDecoder(sampleRate: 48_000, channels: 2)
             decoders[packet.ssrc] = decoder
         }
@@ -61,8 +61,8 @@ open class DiscordVoiceSessionDecoder {
             sequences[packet.ssrc] = packet.seqNum
             timestamps[packet.ssrc] = packet.timestamp
 
-            DefaultDiscordLogger.Logger.debug("Out of order packet", type: "DiscordVoiceSessionDecoder")
-            DefaultDiscordLogger.Logger.debug("Looks to have a sequence difference of \(packet.seqNum - previousSeqNum)", type: "DiscordVoiceSessionDecoder")
+            DefaultDiscordLogger.logger.debug("Out of order packet", type: "DiscordVoiceSessionDecoder")
+            DefaultDiscordLogger.logger.debug("Looks to have a sequence difference of \(packet.seqNum - previousSeqNum)", type: "DiscordVoiceSessionDecoder")
 
             for _ in 0..<packet.seqNum-previousSeqNum {
                 // TODO Don't hardcode the frameSize

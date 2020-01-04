@@ -50,7 +50,7 @@ public struct DiscordEmoji {
             if let emojiID = emoji.id {
                 emojis[emojiID] = emoji
             } else {
-                DefaultDiscordLogger.Logger.debug("EmojisFromArray used on array with non-custom emoji", type: "DiscordEmoji")
+                DefaultDiscordLogger.logger.debug("EmojisFromArray used on array with non-custom emoji", type: "DiscordEmoji")
             }
         }
 

@@ -179,7 +179,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     deinit {
-        DefaultDiscordLogger.Logger.debug("deinit", type: DiscordVoiceEngine.logType)
+        DefaultDiscordLogger.logger.debug("deinit", type: DiscordVoiceEngine.logType)
 
         closeOutEngine()
     }
@@ -263,7 +263,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// Disconnects the voice engine.
     ///
     public func disconnect() {
-        DefaultDiscordLogger.Logger.log("Disconnecting VoiceEngine", type: DiscordVoiceEngine.logType)
+        DefaultDiscordLogger.logger.log("Disconnecting VoiceEngine", type: DiscordVoiceEngine.logType)
 
         closeWebSockets()
         closeOutEngine()
@@ -272,7 +272,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     }
 
     private func extractIPAndPort(from bytes: Data) throws -> (String, Int) {
-        DefaultDiscordLogger.Logger.debug("Extracting ip and port from \(bytes)", type: DiscordVoiceEngine.logType)
+        DefaultDiscordLogger.logger.debug("Extracting ip and port from \(bytes)", type: DiscordVoiceEngine.logType)
 
         let ipData = bytes.dropLast(2)
         let portBytes = Array(bytes.suffix(from: bytes.endIndex.advanced(by: -2)))
@@ -329,17 +329,17 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         do {
             sendVoiceData(try source.engineNeedsData(self))
         } catch DiscordVoiceDataSourceStatus.noData {
-            DefaultDiscordLogger.Logger.trace("No data", type: DiscordVoiceEngine.logType)
+            DefaultDiscordLogger.logger.trace("No data", type: DiscordVoiceEngine.logType)
 
             if speaking {
                 sendSpeaking(false)
             }
         } catch DiscordVoiceDataSourceStatus.done {
-            DefaultDiscordLogger.Logger.debug("Voice source done, sending silence", type: DiscordVoiceEngine.logType)
+            DefaultDiscordLogger.logger.debug("Voice source done, sending silence", type: DiscordVoiceEngine.logType)
 
             sendSilence(previousSource: nil)
         } catch let DiscordVoiceDataSourceStatus.silenceDone(source) {
-            DefaultDiscordLogger.Logger.debug("Voice silence done, requesting new source",
+            DefaultDiscordLogger.logger.debug("Voice silence done, requesting new source",
                                               type: DiscordVoiceEngine.logType)
 
             if speaking {
@@ -354,7 +354,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
                 self.source = source
             }
         } catch {
-            DefaultDiscordLogger.Logger.error("Error getting voice data: \(error)", type: DiscordVoiceEngine.logType)
+            DefaultDiscordLogger.logger.error("Error getting voice data: \(error)", type: DiscordVoiceEngine.logType)
         }
     }
 
@@ -364,7 +364,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// - parameter reason: The reason the socket closed.
     ///
     public func handleClose(reason: Error? = nil) {
-        DefaultDiscordLogger.Logger.log("Voice engine closed", type: DiscordVoiceEngine.logType)
+        DefaultDiscordLogger.logger.log("Voice engine closed", type: DiscordVoiceEngine.logType)
 
         closeOutEngine()
     }
@@ -378,11 +378,11 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// - parameter payload: The dispatch payload
     ///
     public func handleHello(_ payload: DiscordGatewayPayload) {
-        DefaultDiscordLogger.Logger.debug("Handling hello \(payload)", type: DiscordVoiceEngine.logType)
+        DefaultDiscordLogger.logger.debug("Handling hello \(payload)", type: DiscordVoiceEngine.logType)
 
         guard case let .object(helloPayload) = payload.payload,
               let heartbeat = helloPayload["heartbeat_interval"] as? Int else {
-            DefaultDiscordLogger.Logger.error("Error extracting heartbeat info \(payload)",
+            DefaultDiscordLogger.logger.error("Error extracting heartbeat info \(payload)",
                                               type: DiscordVoiceEngine.logType)
 
             return
@@ -412,18 +412,18 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
                 self.sendSilence(previousSource: self.source)
             }
         case .speaking:
-            DefaultDiscordLogger.Logger.debug("Got speaking \(payload)", type: DiscordVoiceEngine.logType)
+            DefaultDiscordLogger.logger.debug("Got speaking \(payload)", type: DiscordVoiceEngine.logType)
         case .hello:
             handleHello(payload)
         case .heartbeatAck:
-            DefaultDiscordLogger.Logger.debug("Got heartbeat ack", type: DiscordVoiceEngine.logType)
+            DefaultDiscordLogger.logger.debug("Got heartbeat ack", type: DiscordVoiceEngine.logType)
         case .resumed:
             handleResumed(payload)
         case .clientDisconnect:
             // Should we tell someone about this?
-            DefaultDiscordLogger.Logger.debug("Someone left voice channel \(payload)", type: DiscordVoiceEngine.logType)
+            DefaultDiscordLogger.logger.debug("Someone left voice channel \(payload)", type: DiscordVoiceEngine.logType)
         default:
-            DefaultDiscordLogger.Logger.debug("Unhandled voice payload \(payload)", type: DiscordVoiceEngine.logType)
+            DefaultDiscordLogger.logger.debug("Unhandled voice payload \(payload)", type: DiscordVoiceEngine.logType)
         }
     }
 
@@ -453,7 +453,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     ///
     public func handleResumed(_ payload: DiscordGatewayPayload) {
         // TODO implement voice resume
-        DefaultDiscordLogger.Logger.debug("Should handle resumed \(payload)", type: DiscordVoiceEngine.logType)
+        DefaultDiscordLogger.logger.debug("Should handle resumed \(payload)", type: DiscordVoiceEngine.logType)
     }
 
     private func handleVoiceSessionDescription(with payload: DiscordGatewayPayloadData) {
@@ -473,7 +473,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     ///
     public func parseGatewayMessage(_ string: String) {
         guard let decoded = DiscordGatewayPayload.payloadFromString(string, fromGateway: false) else {
-            DefaultDiscordLogger.Logger.log("Got unknown payload \(string)", type: DiscordVoiceEngine.logType)
+            DefaultDiscordLogger.logger.log("Got unknown payload \(string)", type: DiscordVoiceEngine.logType)
 
             return
         }
@@ -495,7 +495,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
 
                 _ = try socket.readDatagram(into: &data)
 
-                DefaultDiscordLogger.Logger.debug("Received data \(data)", type: "DiscordVoiceEngine")
+                DefaultDiscordLogger.logger.debug("Received data \(data)", type: "DiscordVoiceEngine")
 
                 guard let this = self else { return }
 
@@ -508,9 +508,9 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
                     this.voiceDelegate?.voiceEngine(this, didReceiveOpusVoiceData: packet)
                 }
             } catch DiscordVoiceError.initialPacket {
-                DefaultDiscordLogger.Logger.debug("Got initial packet", type: DiscordVoiceEngine.logType)
+                DefaultDiscordLogger.logger.debug("Got initial packet", type: DiscordVoiceEngine.logType)
             } catch DiscordVoiceError.decodeFail {
-                DefaultDiscordLogger.Logger.debug("Failed to decode a packet", type: DiscordVoiceEngine.logType)
+                DefaultDiscordLogger.logger.debug("Failed to decode a packet", type: DiscordVoiceEngine.logType)
             } catch EngineError.decryptionError {
                 self?.error(message: "Error decrypting voice packet")
             } catch let err {
@@ -536,7 +536,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     // currently only xsalsa20_poly1305 is supported
     // After this point we are good to go in sending encrypted voice packets
     private func selectProtocol(with ip: String, on port: Int) {
-        DefaultDiscordLogger.Logger.debug("Selecting UDP protocol with ip: \(ip) on port: \(port)",
+        DefaultDiscordLogger.logger.debug("Selecting UDP protocol with ip: \(ip) on port: \(port)",
                                           type: DiscordVoiceEngine.logType)
 
         let payloadData: [String: Any] = [
@@ -555,7 +555,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         // which will cause an ask for a new source
         readSource()
 
-        DefaultDiscordLogger.Logger.debug("VoiceEngine is ready!", type: DiscordVoiceEngine.logType)
+        DefaultDiscordLogger.logger.debug("VoiceEngine is ready!", type: DiscordVoiceEngine.logType)
 
         guard config.captureVoice else { return }
 
@@ -611,7 +611,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             sendSpeaking(true)
         }
 
-        DefaultDiscordLogger.Logger.trace("Should send voice data: \(data.count) bytes",
+        DefaultDiscordLogger.logger.trace("Should send voice data: \(data.count) bytes",
                                           type: DiscordVoiceEngine.logType)
 
         do {
@@ -652,7 +652,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     /// - parameter terminationHandler: Called when the middleware is done. Does not mean that all encoding is done.
     ///
     public func setupMiddleware(_ middleware: Process, terminationHandler: (() -> ())?) {
-        DefaultDiscordLogger.Logger.debug("Setting up middleware", type: DiscordVoiceEngine.logType)
+        DefaultDiscordLogger.logger.debug("Setting up middleware", type: DiscordVoiceEngine.logType)
 
         // TODO this is bad, fix the types here
         guard let source = self.source as? DiscordBufferedVoiceDataSource else { return }
@@ -663,7 +663,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         do {
             try source.middleware?.start()
         } catch {
-            DefaultDiscordLogger.Logger.error("Could not start middleware: \(error)", type: DiscordVoiceEngine.logType)
+            DefaultDiscordLogger.logger.error("Could not start middleware: \(error)", type: DiscordVoiceEngine.logType)
         }
     }
     #endif
@@ -674,7 +674,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     public func startHandshake() {
         guard voiceDelegate != nil else { return }
 
-        DefaultDiscordLogger.Logger.log("Starting voice handshake", type: DiscordVoiceEngine.logType)
+        DefaultDiscordLogger.logger.log("Starting voice handshake", type: DiscordVoiceEngine.logType)
 
         sendPayload(DiscordGatewayPayload(code: .voice(.identify), payload: .object(handshakeObject)))
     }
@@ -693,7 +693,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     private func startUDP() {
         guard udpPort != -1, !udpIp.isEmpty else { return }
 
-        DefaultDiscordLogger.Logger.debug("Starting voice UDP connection", type: DiscordVoiceEngine.logType)
+        DefaultDiscordLogger.logger.debug("Starting voice UDP connection", type: DiscordVoiceEngine.logType)
 
         do {
             guard let sig = try Socket.Signature(
@@ -712,7 +712,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
             findIP()
         } catch let err {
             // TODO Handle voice error disconnect from voice
-            DefaultDiscordLogger.Logger.error("UDP setup error \(err)", type: DiscordVoiceEngine.logType)
+            DefaultDiscordLogger.logger.error("UDP setup error \(err)", type: DiscordVoiceEngine.logType)
         }
     }
 }

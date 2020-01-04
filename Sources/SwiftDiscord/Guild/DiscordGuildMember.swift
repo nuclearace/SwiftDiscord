@@ -115,7 +115,7 @@ public struct DiscordGuildMember {
 
         for guildMember in guildMembersArray {
             guard let user = guildMember["user"] as? [String: Any], let id = Snowflake(user["id"] as? String) else {
-                DefaultDiscordLogger.Logger.error("Couldn't extract userId from user JSON", type: "GuildMembersFromArray")
+                DefaultDiscordLogger.logger.error("Couldn't extract userId from user JSON", type: "GuildMembersFromArray")
                 continue
             }
 

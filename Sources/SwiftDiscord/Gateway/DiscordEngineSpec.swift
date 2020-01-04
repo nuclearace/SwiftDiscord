@@ -83,7 +83,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
         websocket?.onText { [weak self] ws, text in
             guard let this = self else { return }
 
-            DefaultDiscordLogger.Logger.debug("\(this.description), Got text: \(text)", type: "DiscordWebSocketable")
+            DefaultDiscordLogger.logger.debug("\(this.description), Got text: \(text)", type: "DiscordWebSocketable")
 
             this.parseGatewayMessage(text)
         }
@@ -91,7 +91,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
         websocket?.onClose.whenSuccess { [weak self] in
             guard let this = self else { return }
             
-            DefaultDiscordLogger.Logger.log("Websocket closed, \(this.description)", type: "DiscordWebSocketable")
+            DefaultDiscordLogger.logger.log("Websocket closed, \(this.description)", type: "DiscordWebSocketable")
             
             this.handleClose(reason: nil)
         }
@@ -99,7 +99,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
         websocket?.onClose.whenFailure { [weak self] err in
             guard let this = self else { return }
 
-            DefaultDiscordLogger.Logger.log("WebSocket errored: \(err), \(this.description);",  type: "DiscordWebSocketable")
+            DefaultDiscordLogger.logger.log("WebSocket errored: \(err), \(this.description);",  type: "DiscordWebSocketable")
 
             this.handleClose(reason: nil)
         }
@@ -113,8 +113,8 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
     }
 
     private func _connect() {
-        DefaultDiscordLogger.Logger.log("Connecting to \(connectURL), \(description)", type: "DiscordWebSocketable")
-        DefaultDiscordLogger.Logger.log("Attaching WebSocket, shard: \(description)", type: "DiscordWebSocketable")
+        DefaultDiscordLogger.logger.log("Connecting to \(connectURL), \(description)", type: "DiscordWebSocketable")
+        DefaultDiscordLogger.logger.log("Attaching WebSocket, shard: \(description)", type: "DiscordWebSocketable")
 
         let url = URL(string: connectURL)!
         let path = url.path.isEmpty ? "/" : url.path
@@ -132,7 +132,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
         ) { [weak self] ws in
             guard let this = self else { return }
 
-            DefaultDiscordLogger.Logger.log("Websocket connected, shard: \(this.description)", type: "DiscordWebSocketable")
+            DefaultDiscordLogger.logger.log("Websocket connected, shard: \(this.description)", type: "DiscordWebSocketable")
 
             this.websocket = ws
             this.connectUUID = UUID()
@@ -144,14 +144,14 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
         future.whenFailure { [weak self] err in
             guard let this = self else { return }
             
-            DefaultDiscordLogger.Logger.log("Websocket errored, closing: \(err), \(this.description)", type: "DiscordWebSocketable")
+            DefaultDiscordLogger.logger.log("Websocket errored, closing: \(err), \(this.description)", type: "DiscordWebSocketable")
             
             this.handleClose(reason: err)
         }
     }
 
     internal func closeWebSockets(fast: Bool = false) {
-        DefaultDiscordLogger.Logger.log("Closing WebSocket, shard: \(description)", type: "DiscordWebSocketable")
+        DefaultDiscordLogger.logger.log("Closing WebSocket, shard: \(description)", type: "DiscordWebSocketable")
 
         guard !fast else {
             handleClose(reason: nil)
@@ -168,6 +168,6 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
     /// - parameter message: The error message
     ///
     func error(message: String) {
-        DefaultDiscordLogger.Logger.error(message, type: description)
+        DefaultDiscordLogger.logger.error(message, type: description)
     }
 }

@@ -73,7 +73,7 @@ public final class DiscordRateLimiter : DiscordRateLimiterSpec {
             let rateLimit = endpointLimits[endpointKey]!
 
             if rateLimit.atLimit {
-                DefaultDiscordLogger.Logger.debug("Hit rate limit: \(rateLimit)", type: "DiscordRateLimiter")
+                DefaultDiscordLogger.logger.debug("Hit rate limit: \(rateLimit)", type: "DiscordRateLimiter")
 
                 guard !failFast else {
                     callbackQueue.async { callback(nil, nil, nil) }
@@ -89,7 +89,7 @@ public final class DiscordRateLimiter : DiscordRateLimiterSpec {
 
             rateLimit.remaining -= 1
 
-            DefaultDiscordLogger.Logger.debug("Doing request: \(request), remaining: \(rateLimit.remaining)", type: "DiscordRateLimiter")
+            DefaultDiscordLogger.logger.debug("Doing request: \(request), remaining: \(rateLimit.remaining)", type: "DiscordRateLimiter")
 
             session.dataTask(with: request,
                              completionHandler: createResponseHandler(for: request, endpointKey: endpointKey,
@@ -157,9 +157,9 @@ public final class DiscordRateLimiter : DiscordRateLimiterSpec {
                                            reset: Int(reset as! String)!)
                 }
 
-                DefaultDiscordLogger.Logger.debug("New limit: \(rateLimit.limit)", type: "DiscordRateLimiter")
-                DefaultDiscordLogger.Logger.debug("New remaining: \(rateLimit.remaining)", type: "DiscordRateLimiter")
-                DefaultDiscordLogger.Logger.debug("New reset: \(rateLimit.reset)", type: "DiscordRateLimiter")
+                DefaultDiscordLogger.logger.debug("New limit: \(rateLimit.limit)", type: "DiscordRateLimiter")
+                DefaultDiscordLogger.logger.debug("New remaining: \(rateLimit.remaining)", type: "DiscordRateLimiter")
+                DefaultDiscordLogger.logger.debug("New reset: \(rateLimit.reset)", type: "DiscordRateLimiter")
 
                 callbackQueue.async { callback(data, response, error) }
             }
@@ -327,7 +327,7 @@ private final class DiscordRateLimit {
         scheduledReset = true
 
         queue.asyncAfter(deadline: deadlineForReset) {
-            DefaultDiscordLogger.Logger.debug("Reset triggered: \(self.endpointKey)", type: "RateLimit")
+            DefaultDiscordLogger.logger.debug("Reset triggered: \(self.endpointKey)", type: "RateLimit")
             self.remaining = self.limit
             self.scheduledReset = false
 
@@ -343,7 +343,7 @@ private final class DiscordRateLimit {
                 removed += 1
             } while removed < self.remaining && self.queue.count != 0
 
-            DefaultDiscordLogger.Logger.debug("Sent \(removed) requests for limit: \(self.endpointKey)", type: "RateLimit")
+            DefaultDiscordLogger.logger.debug("Sent \(removed) requests for limit: \(self.endpointKey)", type: "RateLimit")
         }
     }
 

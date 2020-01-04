@@ -42,7 +42,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        DefaultDiscordLogger.Logger.debug("Creating webhook on: \(channelId)", type: "DiscordEndpointChannels")
+        DefaultDiscordLogger.logger.debug("Creating webhook on: \(channelId)", type: "DiscordEndpointChannels")
 
         guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(createJSON)) else { return }
 
@@ -119,7 +119,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     func getWebhooks(forGuild guildId: GuildID,
                             callback: @escaping ([DiscordWebhook], HTTPURLResponse?) -> ()) {
-        DefaultDiscordLogger.Logger.debug("Getting webhooks for guild: \(guildId)", type: "DiscordEndpointWebhooks")
+        DefaultDiscordLogger.logger.debug("Getting webhooks for guild: \(guildId)", type: "DiscordEndpointWebhooks")
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(webhooks)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -160,7 +160,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(createJSON)) else { return }
 
-        DefaultDiscordLogger.Logger.debug("Modifying webhook: \(webhookId)", type: "DiscordEndpointChannels")
+        DefaultDiscordLogger.logger.debug("Modifying webhook: \(webhookId)", type: "DiscordEndpointChannels")
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {

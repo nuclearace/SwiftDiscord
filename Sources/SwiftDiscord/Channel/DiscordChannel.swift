@@ -72,7 +72,7 @@ public extension DiscordChannel {
     func delete(reason: String? = nil) {
         guard let client = self.client else { return }
 
-        DefaultDiscordLogger.Logger.log("Deleting channel: \(id)", type: "DiscordChannel")
+        DefaultDiscordLogger.logger.log("Deleting channel: \(id)", type: "DiscordChannel")
 
         client.deleteChannel(id, reason: reason)
     }

@@ -16,6 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+import Logging
 
 /// Represents the level of verbosity for the logger.
 public enum DiscordLogLevel {
@@ -40,6 +41,9 @@ public protocol DiscordLogger {
 
     // MARK: Methods
 
+    /// Error Messages.
+    func error(_ message: @autoclosure () -> String, type: String)
+
     /// Normal log messages.
     func log( _ message: @autoclosure () -> String, type: String)
 
@@ -49,51 +53,42 @@ public protocol DiscordLogger {
     /// Debug messages.
     func debug(_ message: @autoclosure () -> String, type: String)
 
-    /// Error Messages.
-    func error(_ message: @autoclosure () -> String, type: String)
+    /// Trace Messages.
+    func trace(_ message: @autoclosure () -> String, type: String)
 }
 
-public extension DiscordLogger {
+class DefaultDiscordLogger : DiscordLogger {
+    static var logger: DiscordLogger = DefaultDiscordLogger()
+    
+    private var downstreamLogger = Logger(label: "SwiftDiscord")
+    var level = DiscordLogLevel.none
+    
+    /// Error Messages.
+    func error(_ message: @autoclosure () -> String, type: String) {
+        abstractLog(.error, message: message(), type: type)
+    }
+
     /// Normal log messages.
     func log(_ message: @autoclosure () -> String, type: String) {
-        guard level == .info || level == .verbose || level == .debug || level == .trace else { return }
-
-        abstractLog("LOG", message: message(), type: type)
+        abstractLog(.info, message: message(), type: type)
     }
 
     /// More info on log messages.
     func verbose(_ message: @autoclosure () -> String, type: String) {
-        guard level == .verbose || level == .debug || level == .trace else { return }
-
-        abstractLog("VERBOSE", message: message(), type: type)
+        abstractLog(.debug, message: message(), type: type)
     }
 
     /// Debug messages.
     func debug(_ message: @autoclosure () -> String, type: String) {
-        guard level == .debug || level == .trace else { return }
-
-        abstractLog("DEBUG", message: message(), type: type)
+        abstractLog(.debug, message: message(), type: type)
     }
 
-    /// Error Messages.
-    func error(_ message: @autoclosure () -> String, type: String) {
-        abstractLog("ERROR", message: message(), type: type)
-    }
-
-    /// trace Messages.
+    /// Trace Messages.
     func trace(_ message: @autoclosure () -> String, type: String) {
-        guard level == .trace else { return }
-
-        abstractLog("TRACE", message: message(), type: type)
+        abstractLog(.trace, message: message(), type: type)
     }
 
-    private func abstractLog(_ logType: String, message: String, type: String) {
-        NSLog("\(logType): \(type): \(message)")
+    private func abstractLog(_ level: Logger.Level, message: String, type: String) {
+        downstreamLogger.log(level: level, "\(type): \(message)")
     }
-}
-
-class DefaultDiscordLogger : DiscordLogger {
-    static var Logger: DiscordLogger = DefaultDiscordLogger()
-
-    var level = DiscordLogLevel.none
 }

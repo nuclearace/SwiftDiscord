@@ -258,7 +258,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     open func manuallyShatter(withInfo info: DiscordShardInformation) {
         guard let delegate = self.delegate else { return }
 
-        DefaultDiscordLogger.Logger.verbose("Handling shard range \(info.shardRange)", type: "DiscordShardManager")
+        DefaultDiscordLogger.logger.verbose("Handling shard range \(info.shardRange)", type: "DiscordShardManager")
 
         cleanUp()
 
@@ -310,7 +310,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     /// - parameter shardNum: The number of the shard that disconnected.
     ///
     open func shardDidConnect(_ shard: DiscordShard) {
-        DefaultDiscordLogger.Logger.verbose("Shard #\(shard.shardNum), connected", type: "DiscordShardManager")
+        DefaultDiscordLogger.logger.verbose("Shard #\(shard.shardNum), connected", type: "DiscordShardManager")
 
         protected { connectedShards += 1 }
 
@@ -325,7 +325,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     /// - parameter shardNum: The number of the shard that disconnected.
     ///
     open func shardDidDisconnect(_ shard: DiscordShard) {
-        DefaultDiscordLogger.Logger.verbose("Shard #\(shard.shardNum), disconnected", type: "DiscordShardManager")
+        DefaultDiscordLogger.logger.verbose("Shard #\(shard.shardNum), disconnected", type: "DiscordShardManager")
 
         protected { closedShards += 1 }
 
