@@ -35,9 +35,6 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
     /// This is also the queue that properties should be read from.
     case handleQueue(DispatchQueue)
 
-    /// The log level for the logger.
-    case log(Logger.Level)
-
     /// If this option is given, the client will automatically unload users who go offline. This can save some memory.
     /// However this means that invsible users will also be pruned.
     case pruneUsers
@@ -60,7 +57,6 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
         case .fillLargeGuilds:      return "fillLargeGuilds"
         case .fillUsers:            return "fillUsers"
         case .handleQueue:          return "handleQueue"
-        case .log:                  return "log"
         case .rateLimiter:          return "rateLimiter"
         case .shardingInfo:         return "shardingInfo"
         case .pruneUsers:           return "pruneUsers"

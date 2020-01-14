@@ -19,6 +19,9 @@ import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordEndpointUser")
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
@@ -51,7 +54,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 return
             }
 
-            DefaultDiscordLogger.logger.debug("Got DMChannels: \(channels)", type: "DiscordEndpointUser")
+            logger.debug("Got DMChannels: \(channels)")
             callback(DiscordDMChannel.DMsfromArray(channels as! [[String: Any]]), response)
         }
 

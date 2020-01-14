@@ -16,6 +16,9 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordGateway")
 
 /// Declares that a type will communicate with a Discord gateway.
 public protocol DiscordGatewayable : DiscordEngineHeartbeatable {
@@ -97,7 +100,7 @@ public extension DiscordGatewayable where Self: DiscordWebSocketable & DiscordRu
             return
         }
 
-        DefaultDiscordLogger.logger.debug("Sending ws: \(payloadString)", type: description)
+        logger.debug("Sending ws: \(payloadString)")
 
         runloop.execute {
             self.websocket?.send(payloadString)

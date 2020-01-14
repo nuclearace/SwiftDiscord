@@ -17,7 +17,10 @@
 
 import Dispatch
 import Foundation
+import Logging
 import NIO
+
+fileprivate let logger = Logger(label: "DiscordSharding")
 
 /// Struct that represents shard information.
 /// Used when a client is doing manual sharding.
@@ -258,7 +261,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     open func manuallyShatter(withInfo info: DiscordShardInformation) {
         guard let delegate = self.delegate else { return }
 
-        DefaultDiscordLogger.logger.verbose("Handling shard range \(info.shardRange)", type: "DiscordShardManager")
+        logger.debug("(verbose) Handling shard range \(info.shardRange)")
 
         cleanUp()
 
@@ -310,7 +313,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     /// - parameter shardNum: The number of the shard that disconnected.
     ///
     open func shardDidConnect(_ shard: DiscordShard) {
-        DefaultDiscordLogger.logger.verbose("Shard #\(shard.shardNum), connected", type: "DiscordShardManager")
+        logger.debug("(verbose) Shard #\(shard.shardNum), connected")
 
         protected { connectedShards += 1 }
 
@@ -325,7 +328,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     /// - parameter shardNum: The number of the shard that disconnected.
     ///
     open func shardDidDisconnect(_ shard: DiscordShard) {
-        DefaultDiscordLogger.logger.verbose("Shard #\(shard.shardNum), disconnected", type: "DiscordShardManager")
+        logger.debug("(verbose) Shard #\(shard.shardNum), disconnected")
 
         protected { closedShards += 1 }
 
