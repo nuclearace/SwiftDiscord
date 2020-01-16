@@ -24,9 +24,10 @@ var deps: [Package.Dependency] = [
     .package(url: "https://github.com/IBM-Swift/BlueSocket", .upToNextMinor(from: "1.0.0")),
     .package(url: "https://github.com/nuclearace/copus", .upToNextMinor(from: "2.1.1")),
     .package(url: "https://github.com/nuclearace/Sodium", .upToNextMinor(from: "2.0.0")),
+    .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
 ]
 
-var targetDeps: [Target.Dependency] = ["WebSocketKit", "COPUS", "Sodium", "Socket"]
+var targetDeps: [Target.Dependency] = ["WebSocketKit", "COPUS", "Sodium", "Socket", "Logging"]
 
 let package = Package(
     name: "SwiftDiscord",

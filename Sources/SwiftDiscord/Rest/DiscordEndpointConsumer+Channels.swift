@@ -19,6 +19,9 @@ import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordEndpointChannels")
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
@@ -342,8 +345,8 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 extraHeaders: nil)
         }
 
-        DefaultDiscordLogger.Logger.log("Sending message to: \(channelId)", type: "DiscordEndpointChannels")
-        DefaultDiscordLogger.Logger.verbose("Message: \(message)", type: "DiscordEndpointChannels")
+        logger.info("Sending message to: \(channelId)")
+        logger.debug("(verbose) Message: \(message)")
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(message)? = JSON.jsonFromResponse(data: data, response: response) else {

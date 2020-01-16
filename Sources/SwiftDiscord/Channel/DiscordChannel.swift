@@ -19,8 +19,11 @@ import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
+import Logging
 
 import class Dispatch.DispatchSemaphore
+
+fileprivate let logger = Logger(label: "DiscordChannel")
 
 /// Protocol that declares a type will be a Discord channel.
 public protocol DiscordChannel : DiscordClientHolder {
@@ -72,7 +75,7 @@ public extension DiscordChannel {
     func delete(reason: String? = nil) {
         guard let client = self.client else { return }
 
-        DefaultDiscordLogger.Logger.log("Deleting channel: \(id)", type: "DiscordChannel")
+        logger.info("Deleting channel: \(id)")
 
         client.deleteChannel(id, reason: reason)
     }

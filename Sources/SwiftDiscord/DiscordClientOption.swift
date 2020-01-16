@@ -16,6 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Dispatch
+import Logging
 import Foundation
 
 /// A enum representing a configuration option.
@@ -33,12 +34,6 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
     /// The dispatch queue that events should be handled on.
     /// This is also the queue that properties should be read from.
     case handleQueue(DispatchQueue)
-
-    /// The log level for the logger.
-    case log(DiscordLogLevel)
-
-    /// Used to set a custom logger.
-    case logger(DiscordLogger)
 
     /// If this option is given, the client will automatically unload users who go offline. This can save some memory.
     /// However this means that invsible users will also be pruned.
@@ -62,8 +57,6 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
         case .fillLargeGuilds:      return "fillLargeGuilds"
         case .fillUsers:            return "fillUsers"
         case .handleQueue:          return "handleQueue"
-        case .log:                  return "log"
-        case .logger:               return "logger"
         case .rateLimiter:          return "rateLimiter"
         case .shardingInfo:         return "shardingInfo"
         case .pruneUsers:           return "pruneUsers"

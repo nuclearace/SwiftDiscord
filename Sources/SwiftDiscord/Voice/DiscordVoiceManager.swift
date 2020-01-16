@@ -17,6 +17,9 @@
 
 import Dispatch
 import Foundation
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordVoiceManager")
 
 /// A delegate for a VoiceManager.
 public protocol DiscordVoiceManagerDelegate : AnyObject, DiscordTokenBearer, DiscordEventLoopGroupManager {
@@ -116,7 +119,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     ///
     open func leaveVoiceChannel(onGuild guildId: GuildID) {
         guard let engine = get(voiceEngines[guildId]) else {
-            DefaultDiscordLogger.Logger.error("Could not find a voice engine for guild \(guildId)", type: logType)
+            logger.error("Could not find a voice engine for guild \(guildId)")
 
             return
         }
@@ -126,13 +129,13 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
             voiceServerInformations[guildId] = nil
         }
 
-        DefaultDiscordLogger.Logger.verbose("Disconnecting voice engine for guild \(guildId)", type: logType)
+        logger.debug("(verbose) Disconnecting voice engine for guild \(guildId)")
 
         engine.disconnect()
 
         // Make sure everything is cleaned out
 
-        DefaultDiscordLogger.Logger.verbose("Rejoining voice channels after leave", type: logType)
+        logger.debug("(verbose) Rejoining voice channels after leave")
 
         for (guildId, _) in voiceEngines {
             startVoiceConnection(guildId)
@@ -173,7 +176,7 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
                 secret: previousEngine?.secret
         )
 
-        DefaultDiscordLogger.Logger.log("Connecting voice engine", type: logType)
+        logger.info("Connecting voice engine")
 
         DispatchQueue.global().async {[weak engine = voiceEngines[guildId]!] in
             engine?.connect()

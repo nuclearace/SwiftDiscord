@@ -19,6 +19,9 @@ import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordEndpoint")
 
 // TODO Group DM
 // TODO Add guild member
@@ -457,15 +460,13 @@ public extension DiscordEndpoint {
     private func createURL(getParams: [String: String]?) -> URL? {
         // This can fail, specifically if you try to include a non-url-encoded emoji in it
         guard let url = URL(string: self.combined) else {
-            DefaultDiscordLogger.Logger.error("Couldn't convert \"\(self.combined)\" to a URL.  This shouldn't happen.",
-                                              type: "DiscordEndpoint")
+            logger.error("Couldn't convert \"\(self.combined)\" to a URL.  This shouldn't happen.")
             return nil
         }
 
         guard let getParams = getParams else { return url }
         guard var com = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            DefaultDiscordLogger.Logger.error("Couldn't convert \"\(url)\" to URLComponents. This shouldn't happen.",
-                                              type: "DiscordEndpoint")
+            logger.error("Couldn't convert \"\(url)\" to URLComponents. This shouldn't happen.")
             return nil
         }
 

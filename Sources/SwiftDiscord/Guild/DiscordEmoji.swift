@@ -15,6 +15,10 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordEmoji")
+
 /// Represents an Emoji.
 public struct DiscordEmoji {
     // MARK: Properties
@@ -50,7 +54,7 @@ public struct DiscordEmoji {
             if let emojiID = emoji.id {
                 emojis[emojiID] = emoji
             } else {
-                DefaultDiscordLogger.Logger.debug("EmojisFromArray used on array with non-custom emoji", type: "DiscordEmoji")
+                logger.debug("EmojisFromArray used on array with non-custom emoji")
             }
         }
 

@@ -15,6 +15,10 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordGuildChannel")
+
 /// Protocol that declares a type will be a Discord guild channel.
 public protocol DiscordGuildChannel : DiscordChannel {
     /// The snowflake id of the guild this channel is on.
@@ -153,8 +157,7 @@ func guildChannel(fromObject channelObject: [String: Any],
     case .category:
         return DiscordGuildChannelCategory(categoryObject: channelObject, guildID: guildID, client: client)
     default:
-        DefaultDiscordLogger.Logger.error("Unhandled guild channel in guildChannelFromObject",
-                                          type: "DiscordGuildChannel")
+        logger.error("Unhandled guild channel in guildChannelFromObject")
         return nil
     }
 }
