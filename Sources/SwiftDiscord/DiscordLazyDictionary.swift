@@ -146,6 +146,11 @@ public struct DiscordLazyDictionary<K: Hashable, V> : ExpressibleByDictionaryLit
     public var isEmpty: Bool {
         return backingDictionary.isEmpty
     }
+    
+    /// - returns: A collection of keys in the dictionary
+    public var keys: Dictionary<K, DiscordLazyValue<V>>.Keys {
+        return backingDictionary.keys
+    }
 
     ///
     /// Used to getset the value stored at `key`. This will force evaluation if the value hasn't been computed yet.
