@@ -28,6 +28,9 @@ public struct DiscordEmoji {
 
     /// Whether this is a managed emoji.
     public let managed: Bool
+    
+    /// Whether this is an animated emoji.
+    public let animated: Bool
 
     /// The name of the emoji or unicode representation if it's a unicode emoji.
     public let name: String
@@ -41,6 +44,7 @@ public struct DiscordEmoji {
     init(emojiObject: [String: Any]) {
         id = Snowflake(emojiObject["id"] as? String)
         managed = emojiObject.get("managed", or: false)
+        animated = emojiObject.get("animated", or: false)
         name = emojiObject.get("name", or: "")
         requireColons = emojiObject.get("require_colons", or: false)
         roles = (emojiObject["roles"] as? [String])?.compactMap(Snowflake.init) ?? []
