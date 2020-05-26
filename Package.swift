@@ -31,6 +31,7 @@ var targetDeps: [Target.Dependency] = ["WebSocketKit", "COPUS", "Sodium", "Socke
 
 let package = Package(
     name: "SwiftDiscord",
+    platforms: [.macOS(.v10_15)],
     products: [
         .library(name: "SwiftDiscord", targets: ["SwiftDiscord"])
     ],
