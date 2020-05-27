@@ -20,7 +20,7 @@
 import PackageDescription
 
 var deps: [Package.Dependency] = [
-    .package(url: "https://github.com/vapor/websocket-kit", .revision("66c0ea58398f055b5a0d92b0d5f4c32ef0c02eeb")),
+    .package(url: "https://github.com/vapor/websocket-kit", .upToNextMinor(from: "2.1.0")),
     .package(url: "https://github.com/IBM-Swift/BlueSocket", .upToNextMinor(from: "1.0.0")),
     .package(url: "https://github.com/nuclearace/copus", .upToNextMinor(from: "2.1.1")),
     .package(url: "https://github.com/nuclearace/Sodium", .upToNextMinor(from: "2.0.0")),
@@ -31,6 +31,7 @@ var targetDeps: [Target.Dependency] = ["WebSocketKit", "COPUS", "Sodium", "Socke
 
 let package = Package(
     name: "SwiftDiscord",
+    platforms: [.macOS(.v10_15)],
     products: [
         .library(name: "SwiftDiscord", targets: ["SwiftDiscord"])
     ],
