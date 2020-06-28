@@ -223,6 +223,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         case .presenceUpdate:        handlePresenceUpdate(with: eventData)
         case .messageCreate:         handleMessageCreate(with: eventData)
         case .messageUpdate:         handleMessageUpdate(with: eventData)
+        case .messageReactionAdd:    handleMessageReactionAdd(with: eventData)
+        case .messageReactionRemove: handleMessageReactionRemove(with: eventData)
+        case .messageReactionRemoveAll: handleMessageReactionRemoveAll(with: eventData)
         case .guildMemberAdd:        handleGuildMemberAdd(with: eventData)
         case .guildMembersChunk:     handleGuildMembersChunk(with: eventData)
         case .guildMemberUpdate:     handleGuildMemberUpdate(with: eventData)
@@ -822,6 +825,88 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         logger.debug("(verbose) Message: \(message)")
 
         delegate?.client(self, didCreateMessage: message)
+    }
+
+    /// Used to get fields for reaction notifications since add and remove are very similar
+    /// - parameter mode: A string to identify add/remove when logging errors
+    private func getReactionInfo(mode: String, from data: [String: Any]) -> (UserID, DiscordTextChannel, MessageID, DiscordEmoji)? {
+        guard let userID = UserID(data["user_id"] as? String),
+              let channelID = ChannelID(data["channel_id"] as? String),
+              let messageID = MessageID(data["message_id"] as? String),
+              let emoji = (data["emoji"] as? [String: Any]).map(DiscordEmoji.init(emojiObject:))
+        else {
+                DefaultDiscordLogger.Logger.log("Failed to get required fields from reaction \(mode)", type: logType)
+                return nil
+        }
+        guard let channel = findChannel(fromId: channelID) as? DiscordTextChannel else {
+            DefaultDiscordLogger.Logger.log("Failed to get channel from ID in reaction \(mode)", type: logType)
+            return nil
+        }
+        return (userID, channel, messageID, emoji)
+    }
+
+    ///
+    /// Handles reaction adds from Discord. You shouldn't need to call this method directly.
+    ///
+    /// Override to provide additional customization around this event.
+    ///
+    /// Calls the `didAddReaction` delegate method.
+    ///
+    /// - parameter with: The data from the event
+    ///
+    open func handleMessageReactionAdd(with data: [String: Any]) {
+        DefaultDiscordLogger.Logger.log("Handling message reaction add", type: logType)
+
+        guard let (userID, channel, messageID, emoji) = getReactionInfo(mode: "add", from: data) else { return }
+
+        if let guildID = GuildID(data["guild_id"] as? String),
+           let guild = guilds[guildID],
+           let member = (data["member"] as? [String: Any]).map({ DiscordGuildMember(guildMemberObject: $0, guildId: guildID) }) {
+            guild.members[member.user.id] = member
+        }
+
+        delegate?.client(self, didAddReaction: emoji, toMessage: messageID, onChannel: channel, user: userID)
+    }
+
+    ///
+    /// Handles reaction removals from Discord. You shouldn't need to call this method directly.
+    ///
+    /// Override to provide additional customization around this event.
+    ///
+    /// Calls the `didRemoveReaction` delegate method.
+    ///
+    /// - parameter with: The data from the event
+    ///
+    open func handleMessageReactionRemove(with data: [String: Any]) {
+        DefaultDiscordLogger.Logger.log("Handling message reaction remove", type: logType)
+
+        guard let (userID, channel, messageID, emoji) = getReactionInfo(mode: "remove", from: data) else { return }
+
+        delegate?.client(self, didRemoveReaction: emoji, fromMessage: messageID, onChannel: channel, user: userID)
+    }
+
+    ///
+    /// Handles reaction remove alls from Discord. You shouldn't need to call this method directly.
+    ///
+    /// Override to provide additional customization around this event.
+    ///
+    /// Calls the `didRemoveAllReactionsFrom` delegate method.
+    ///
+    /// - parameter with: The data from the event
+    ///
+    open func handleMessageReactionRemoveAll(with data: [String: Any]) {
+        guard let channelID = ChannelID(data["channel_id"] as? String),
+              let messageID = MessageID(data["message_id"] as? String)
+        else {
+                DefaultDiscordLogger.Logger.log("Failed to get required fields from reaction remove all", type: logType)
+                return
+        }
+        guard let channel = findChannel(fromId: channelID) as? DiscordTextChannel else {
+            DefaultDiscordLogger.Logger.log("Failed to get channel from ID in reaction remove all", type: logType)
+            return
+        }
+
+        delegate?.client(self, didRemoveAllReactionsFrom: messageID, onChannel: channel)
     }
 
     ///
