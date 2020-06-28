@@ -835,11 +835,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
               let messageID = MessageID(data["message_id"] as? String),
               let emoji = (data["emoji"] as? [String: Any]).map(DiscordEmoji.init(emojiObject:))
         else {
-                DefaultDiscordLogger.Logger.log("Failed to get required fields from reaction \(mode)", type: logType)
+                logger.error("Failed to get required fields from reaction \(mode)")
                 return nil
         }
         guard let channel = findChannel(fromId: channelID) as? DiscordTextChannel else {
-            DefaultDiscordLogger.Logger.log("Failed to get channel from ID in reaction \(mode)", type: logType)
+            logger.error("Failed to get channel from ID in reaction \(mode)")
             return nil
         }
         return (userID, channel, messageID, emoji)
@@ -855,7 +855,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// - parameter with: The data from the event
     ///
     open func handleMessageReactionAdd(with data: [String: Any]) {
-        DefaultDiscordLogger.Logger.log("Handling message reaction add", type: logType)
+        logger.info("Handling message reaction add")
 
         guard let (userID, channel, messageID, emoji) = getReactionInfo(mode: "add", from: data) else { return }
 
@@ -878,7 +878,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// - parameter with: The data from the event
     ///
     open func handleMessageReactionRemove(with data: [String: Any]) {
-        DefaultDiscordLogger.Logger.log("Handling message reaction remove", type: logType)
+        logger.info("Handling message reaction remove")
 
         guard let (userID, channel, messageID, emoji) = getReactionInfo(mode: "remove", from: data) else { return }
 
@@ -898,11 +898,11 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         guard let channelID = ChannelID(data["channel_id"] as? String),
               let messageID = MessageID(data["message_id"] as? String)
         else {
-                DefaultDiscordLogger.Logger.log("Failed to get required fields from reaction remove all", type: logType)
+                logger.error("Failed to get required fields from reaction remove all")
                 return
         }
         guard let channel = findChannel(fromId: channelID) as? DiscordTextChannel else {
-            DefaultDiscordLogger.Logger.log("Failed to get channel from ID in reaction remove all", type: logType)
+            logger.error("Failed to get channel from ID in reaction remove all")
             return
         }
 
