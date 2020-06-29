@@ -221,20 +221,21 @@ public extension DiscordEndpoint {
         private func addContent(to request: inout URLRequest) {
             let content: HTTPContent?
             let extraHeaders: [DiscordHeader: String]?
+            let requiresBody: Bool
 
             switch self {
             case let .get(_, headers?):
-                (content, extraHeaders) = (nil, headers)
+                (content, extraHeaders, requiresBody) = (nil, headers, false)
             case let .post(optionalContent, headers):
-                (content, extraHeaders) = (optionalContent, headers)
+                (content, extraHeaders, requiresBody) = (optionalContent, headers, true)
             case let .put(optionalContent, headers):
-                (content, extraHeaders) = (optionalContent, headers)
+                (content, extraHeaders, requiresBody) = (optionalContent, headers, true)
             case let .patch(optionalContent, headers):
-                (content, extraHeaders) = (optionalContent, headers)
+                (content, extraHeaders, requiresBody) = (optionalContent, headers, true)
             case let .delete(optionalContent, headers):
-                (content, extraHeaders) = (optionalContent, headers)
+                (content, extraHeaders, requiresBody) = (optionalContent, headers, false)
             default:
-                (content, extraHeaders) = (nil, nil)
+                (content, extraHeaders, requiresBody) = (nil, nil, false)
             }
 
             for (header, value) in extraHeaders ?? [:] {
@@ -243,7 +244,11 @@ public extension DiscordEndpoint {
             }
 
             switch content {
-            case nil:   break
+            case nil:
+                if requiresBody {
+                    request.httpBody = Data()
+                    request.setValue("0", forHTTPHeaderField: "Content-Length")
+                }
             case let .json(data)?:
                 request.httpBody = data
                 request.setValue(HTTPContent.jsonType, forHTTPHeaderField: "Content-Type")
