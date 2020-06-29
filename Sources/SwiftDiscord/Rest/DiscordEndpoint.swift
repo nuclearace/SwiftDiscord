@@ -170,7 +170,7 @@ public extension DiscordEndpoint {
         /// A POST request.
         case post(content: HTTPContent?, extraHeaders: [DiscordHeader: String]?)
 
-        /// A POST request.
+        /// A PUT request.
         case put(content: HTTPContent?, extraHeaders: [DiscordHeader: String]?)
 
         /// A PATCH request.
