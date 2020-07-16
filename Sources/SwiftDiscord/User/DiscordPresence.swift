@@ -30,6 +30,9 @@ public struct DiscordPresence {
     /// The game this user is playing, if they are playing a game.
     public var game: DiscordActivity?
 
+    /// All of the user's current activies.
+    public var activities: [DiscordActivity]
+
     /// This user's nick on this guild.
     public var nick: String?
 
@@ -43,6 +46,7 @@ public struct DiscordPresence {
         self.guildId = guildId
         user = DiscordUser(userObject: presenceObject.get("user", or: [String: Any]()))
         game = DiscordActivity(gameObject: presenceObject["game"] as? [String: Any])
+        activities = (presenceObject["activities"] as? [[String: Any]])?.map(DiscordActivity.init(gameObject:)).compactMap { $0 } ?? []
         nick = presenceObject["nick"] as? String
         status = DiscordPresenceStatus(rawValue: presenceObject.get("status", or: "")) ?? .offline
         roles = []
@@ -53,6 +57,10 @@ public struct DiscordPresence {
             self.game = DiscordActivity(gameObject: game)
         } else {
             self.game = nil
+        }
+
+        if let activities = presenceObject["activities"] as? [[String: Any]] {
+            self.activities = activities.map(DiscordActivity.init(gameObject:)).compactMap { $0 }
         }
 
         if let nick = presenceObject["nick"] as? String {
