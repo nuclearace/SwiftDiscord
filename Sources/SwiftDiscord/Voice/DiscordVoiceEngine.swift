@@ -287,7 +287,7 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
         return (ipString, port)
     }
 
-    // https://discordapp.com/developers/docs/topics/voice-connections#ip-discovery
+    // https://discord.com/developers/docs/topics/voice-connections#ip-discovery
     private func findIP() {
         udpQueueWrite.async {
             guard let udpSocket = self.udpSocket else { return }
