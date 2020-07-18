@@ -32,7 +32,7 @@ public struct DiscordAuditLogEntry {
 
     // TODO An actual struct for this?
     /// Optional audit entry information for certain action types.
-    /// [Structure](https://discordapp.com/developers/docs/resources/audit-log#audit-log-entry-object-optional-audit-entry-info)
+    /// [Structure](https://discord.com/developers/docs/resources/audit-log#audit-log-entry-object-optional-audit-entry-info)
     public let options: [String: Any]
 
     /// The reason for this entry.

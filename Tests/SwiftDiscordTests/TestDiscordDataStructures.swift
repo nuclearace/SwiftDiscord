@@ -68,7 +68,7 @@ public class TestDiscordDataStructures : XCTestCase {
     func testEmbedJSONification() {
         let dummyIconA = URL(string: "https://cdn.discordapp.com/embed/avatars/0.png")!
         let dummyIconB = URL(string: "https://cdn.discordapp.com/embed/avatars/1.png")!
-        let dummyURL = URL(string: "https://discordapp.com")!
+        let dummyURL = URL(string: "https://discord.com")!
 
         let embed1 = DiscordEmbed(
             title: "Title",

@@ -32,7 +32,7 @@ struct DiscordEndpointGateway {
         #if os(Linux)
         return "wss://gateway.discord.gg"
         #else
-        var request = URLRequest(url: URL(string: "https://discordapp.com/api/gateway")!)
+        var request = URLRequest(url: URL(string: "https://discord.com/api/gateway")!)
 
         request.httpMethod = "GET"
 

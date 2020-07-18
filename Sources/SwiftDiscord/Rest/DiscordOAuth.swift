@@ -20,7 +20,7 @@ import Foundation
 /// Represents the Discord OAuth endpoint and the different scopes Disocrd has.
 public enum DiscordOAuthEndpoint : String {
     /// The base OAuth endpoint.
-    case baseURL = "https://discordapp.com/api/oauth2/authorize"
+    case baseURL = "https://discord.com/api/oauth2/authorize"
 
     /// The bot scope.
     case bot
