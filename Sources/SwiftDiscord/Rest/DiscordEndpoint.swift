@@ -266,7 +266,7 @@ public extension DiscordEndpoint {
     var description: String {
         switch self {
         case .baseURL:
-            return "https://discordapp.com/api/v6"
+            return "https://discord.com/api/v6"
 
         /* Channels */
         case let .channel(id):
