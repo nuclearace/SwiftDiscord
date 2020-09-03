@@ -64,4 +64,14 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                    requestInfo: .get(params: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
+
+    // Default implementation
+    func deleteGuildEmoji(on guildId: GuildID,
+                                    for emojiId: EmojiID,
+                                    callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
+        rateLimiter.executeRequest(endpoint: .guildEmoji(guild: guildId, emoji: emojiId),
+                                   token: token,
+                                   requestInfo: .delete(content: nil, extraHeaders: nil),
+                                   callback: { _, response, _ in callback?(response?.statusCode == 204, response) })
+    }
 }
