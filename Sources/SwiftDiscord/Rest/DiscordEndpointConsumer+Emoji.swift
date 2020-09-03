@@ -12,7 +12,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 name: String,
                                 image: String,
                                 roles: [RoleID],
-                                callback: ((Bool, HTTPURLResponse?) -> ())?) {
+                                callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
         var createJSON = [String: Encodable]()
 
         createJSON["name"] = name
