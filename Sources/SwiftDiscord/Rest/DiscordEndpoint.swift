@@ -155,6 +155,9 @@ public enum DiscordEndpoint : CustomStringConvertible {
     /* Emoji */
     // The guild's emojis endpoint.
     case guildEmojis(guild: GuildID)
+
+    // The guild's emoji endpoint
+    case guildEmoji(guild: GuildID, emoji: EmojiID)
     /* End Emoji */
 
     var combined: String {
@@ -363,6 +366,8 @@ public extension DiscordEndpoint {
         /* Emoji */
         case let .guildEmojis(guild):
             return "/guilds/\(guild)/emojis"
+        case let .guildEmoji(guild, emoji):
+            return "/guilds/\(guild)/emojis/\(emoji)"
         /* End Emoji */
         }
     }
@@ -470,7 +475,9 @@ public extension DiscordEndpoint {
 
         /* Emoji */
         case let .guildEmojis(guild):
-            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .webhooks])
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .emojis])
+        case let .guildEmoji(guild, _):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .emojis, .emojiID])
         /* End Emoji */
         }
     }
