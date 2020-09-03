@@ -12,7 +12,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 name: String,
                                 image: String,
                                 roles: [RoleID],
-                                callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
+                                callback: ((DiscordEmoji?, HTTPURLResponse?) -> ())? = nil) {
         var createJSON = [String: Encodable]()
 
         createJSON["name"] = name
@@ -21,10 +21,19 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(createJSON)) else { return }
 
+        let requestCallback: DiscordRequestCallback = { data, response, error in
+            guard case let .object(emoji)? = JSON.jsonFromResponse(data: data, response: response) else {
+                callback?(nil, response)
+                return
+            }
+
+            callback?(DiscordEmoji(emojiObject: emoji), response)
+        }
+
         rateLimiter.executeRequest(endpoint: .guildEmojis(guild: guildId),
                                    token: token,
                                    requestInfo: .post(content: .json(contentData), extraHeaders: nil),
-                                   callback: { _, response, _ in callback?(response?.statusCode == 204, response) })
+                                   callback: requestCallback)
     }
 
     // Default implementation
