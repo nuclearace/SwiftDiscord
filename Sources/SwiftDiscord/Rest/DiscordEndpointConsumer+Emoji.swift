@@ -45,4 +45,23 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                    requestInfo: .get(params: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
+
+    // Default implementation
+    func getGuildEmoji(on guildId: GuildID,
+                                for emojiId: EmojiID,
+                                callback: @escaping (DiscordEmoji?, HTTPURLResponse?) -> ()) {
+        let requestCallback: DiscordRequestCallback = { data, response, error in
+            guard case let .object(emoji)? = JSON.jsonFromResponse(data: data, response: response) else {
+                callback(nil, response)
+                return
+            }
+
+            callback(DiscordEmoji(emojiObject: emoji), response)
+        }
+
+        rateLimiter.executeRequest(endpoint: .guildEmoji(guild: guildId, emoji: emojiId),
+                                   token: token,
+                                   requestInfo: .get(params: nil, extraHeaders: nil),
+                                   callback: requestCallback)
+    }
 }
