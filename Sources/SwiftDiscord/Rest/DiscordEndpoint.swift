@@ -152,6 +152,14 @@ public enum DiscordEndpoint : CustomStringConvertible {
     case webhookGithub(id: WebhookID, token: String)
     /* End Webhooks */
 
+    /* Emoji */
+    // The guild's emojis endpoint.
+    case guildEmojis(guild: GuildID)
+
+    // The guild's emoji endpoint
+    case guildEmoji(guild: GuildID, emoji: EmojiID)
+    /* End Emoji */
+
     var combined: String {
         return DiscordEndpoint.baseURL.description + description
     }
@@ -354,6 +362,13 @@ public extension DiscordEndpoint {
         case let .webhookGithub(id, token):
             return "/webhooks/\(id)/\(token)/github"
         /* End Webhooks */
+
+        /* Emoji */
+        case let .guildEmojis(guild):
+            return "/guilds/\(guild)/emojis"
+        case let .guildEmoji(guild, emoji):
+            return "/guilds/\(guild)/emojis/\(emoji)"
+        /* End Emoji */
         }
     }
 
@@ -457,6 +472,13 @@ public extension DiscordEndpoint {
         case .webhookGithub:
             return DiscordRateLimitKey(urlParts: [.webhooks, .webhookID, .webhookToken, .github])
         /* End Webhooks */
+
+        /* Emoji */
+        case let .guildEmojis(guild):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .emojis])
+        case let .guildEmoji(guild, _):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .emojis, .emojiID])
+        /* End Emoji */
         }
     }
 

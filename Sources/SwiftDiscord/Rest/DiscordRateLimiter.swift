@@ -254,7 +254,9 @@ public struct DiscordRateLimitKey : Hashable {
         static let       auditLog = DiscordRateLimitURLParts(rawValue: 1 << 25)
         static let      reactions = DiscordRateLimitURLParts(rawValue: 1 << 26)
         static let          emoji = DiscordRateLimitURLParts(rawValue: 1 << 27)
-        static let             me = DiscordRateLimitURLParts(rawValue: 1 << 28)
+        static let         emojis = DiscordRateLimitURLParts(rawValue: 1 << 28)
+        static let        emojiID = DiscordRateLimitURLParts(rawValue: 1 << 29)
+        static let             me = DiscordRateLimitURLParts(rawValue: 1 << 30)
 
         public init(rawValue: Int) {
             self.rawValue = rawValue
