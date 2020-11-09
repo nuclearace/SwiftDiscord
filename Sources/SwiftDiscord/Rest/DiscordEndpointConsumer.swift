@@ -86,6 +86,34 @@ public protocol DiscordEndpointConsumer {
                         callback: ((DiscordMessage?, HTTPURLResponse?) -> ())?)
 
     ///
+    /// Deletes a reaction the current user has made for the specified message.
+    ///
+    /// - parameter for: The message that is to be edited's snowflake id
+    /// - parameter on: The channel that we are editing on
+    /// - parameter emoji: The emoji name
+    /// - parameter callback: An optional callback containing the edited message, if successful.
+    ///
+    func deleteOwnReaction(for messageId: MessageID,
+                        on channelId: ChannelID,
+                        emoji: String,
+                        callback: ((Bool, HTTPURLResponse?) -> ())?)
+    
+    ///
+    /// Deletes a reaction another user has made for the specified message.
+    ///
+    /// - parameter for: The message that is to be edited's snowflake id
+    /// - parameter on: The channel that we are editing on
+    /// - parameter emoji: The emoji name
+    /// - parameter by: The snowflake id of the user
+    /// - parameter callback: An optional callback containing the edited message, if successful.
+    ///
+    func deleteUserReaction(for messageId: MessageID,
+                        on channelId: ChannelID,
+                        emoji: String,
+                        by userId: UserID,
+                        callback: ((Bool, HTTPURLResponse?) -> ())?)
+
+    ///
     /// Deletes the specified channel.
     ///
     /// - parameter channelId: The snowflake id of the channel.
