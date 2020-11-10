@@ -110,6 +110,37 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
+    func deleteOwnReaction(for messageId: MessageID,
+                        on channelId: ChannelID,
+                        emoji: String,
+                        callback: ((Bool, HTTPURLResponse?) -> ())?) {
+        let requestCallback: DiscordRequestCallback = { data, response, error in
+            callback?(response?.statusCode == 204, response)
+        }
+        
+        rateLimiter.executeRequest(endpoint: .reactions(channel: channelId, message: messageId, emoji: emoji.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? emoji),
+                                   token: token,
+                                   requestInfo: .delete(content: nil, extraHeaders: nil),
+                                   callback: requestCallback)
+    }
+
+    /// Default implementation
+    func deleteUserReaction(for messageId: MessageID,
+                        on channelId: ChannelID,
+                        emoji: String,
+                        by userId: UserID,
+                        callback: ((Bool, HTTPURLResponse?) -> ())?) {
+        let requestCallback: DiscordRequestCallback = { data, response, error in
+            callback?(response?.statusCode == 204, response)
+        }
+        
+        rateLimiter.executeRequest(endpoint: .userReactions(channel: channelId, message: messageId, emoji: emoji.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? emoji, user: userId),
+                                   token: token,
+                                   requestInfo: .delete(content: nil, extraHeaders: nil),
+                                   callback: requestCallback)
+    }
+
+    /// Default implementation
     func deleteChannel(_ channelId: ChannelID,
                               reason: String? = nil,
                               callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
