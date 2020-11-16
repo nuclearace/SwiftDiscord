@@ -91,6 +91,9 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     /// The base64 encoded icon image for this guild.
     public private(set) var icon: String
 
+    /// The base64 encoded banner image for this guild.
+    public private(set) var banner: String
+
     /// The multi-factor authentication level for this guild.
     public private(set) var mfaLevel: Int
 
@@ -115,6 +118,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: JSONArray()))
         features = guildObject.get("features", or: Array<Any>())
         icon = guildObject.get("icon", or: "")
+        banner = guildObject.get("banner", or: "")
         large = guildObject.get("large", or: false)
         memberCount = guildObject.get("member_count", or: 0)
         mfaLevel = guildObject.get("mfa_level", or: -1)
@@ -319,6 +323,10 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
 
         if let icon = newGuild["icon"] as? String {
             self.icon = icon
+        }
+
+        if let banner = newGuild["banner"] as? String {
+            self.banner = banner
         }
 
         if let memberCount = newGuild["member_count"] as? Int {
