@@ -24,6 +24,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         let content: String
         let tts: Bool
         let embed: DiscordEmbed?
+        let allowedMentions: DiscordAllowedMentions?
     }
 
     // MARK: Typealiases
@@ -93,6 +94,9 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// Whether or not this message should be read by a screen reader.
     public let tts: Bool
 
+    /// Finer-grained control over the allowed mentions in an outgoing message.
+    public let allowedMentions: DiscordAllowedMentions?
+
     /// The type of this message.
     public let type: MessageType
 
@@ -131,6 +135,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         tts = messageObject.get("tts", or: false)
         editedTimestamp = DiscordDateFormatter.format(messageObject.get("edited_timestamp", or: "")) ?? Date()
         timestamp = DiscordDateFormatter.format(messageObject.get("timestamp", or: "")) ?? Date()
+        allowedMentions = nil
         files = []
         type = MessageType(rawValue: messageObject.get("type", or: 0)) ?? .default
         self.client = client
@@ -144,7 +149,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// - parameter files: The files to send with this message.
     /// - parameter tts: Whether this message should be text-to-speach.
     ///
-    public init(content: String, embed: DiscordEmbed? = nil, files: [DiscordFileUpload] = [], tts: Bool = false) {
+    public init(content: String, embed: DiscordEmbed? = nil, files: [DiscordFileUpload] = [], tts: Bool = false, allowedMentions: DiscordAllowedMentions? = nil) {
         self.content = content
         if let embed = embed {
             self.embeds = [embed]
@@ -155,6 +160,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.application = nil
         self.files = files
         self.tts = tts
+        self.allowedMentions = allowedMentions
         self.attachments = []
         self.author = DiscordUser(userObject: [:])
         self.channelId = 0
@@ -200,7 +206,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     // MARK: Methods
 
     func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
-        let fields = FieldsList(content: content, tts: tts, embed: embeds.first)
+        let fields = FieldsList(content: content, tts: tts, embed: embeds.first, allowedMentions: allowedMentions)
         let fieldsData = JSON.encodeJSONData(fields) ?? Data()
         if files.count > 0 {
             return .right(createMultipartBody(encodedJSON: fieldsData, files: files))
@@ -798,4 +804,30 @@ public struct DiscordReaction {
     static func reactionsFromArray(_ reactionsArray: [[String: Any]]) -> [DiscordReaction] {
         return reactionsArray.map(DiscordReaction.init)
     }
+}
+
+public enum DiscordAllowedMentionType : String, Encodable {
+    case roles
+    case users
+    case everyone
+}
+
+/// Allows for more granular control over mentions
+/// without having to modify the message content.
+public struct DiscordAllowedMentions : Encodable {
+    public enum CodingKeys : String, CodingKey {
+        case parse
+        case roles
+        case users
+        case repliedUser = "replied_user"
+    }
+
+    /// An array of allowed mentions types to parse from the content.
+    public let parse: DiscordAllowedMentionType
+    /// Array of role ids to mention.
+    public let roles: [RoleID]
+    /// Array of user ids to mention.
+    public let users: [UserID]
+    /// For replies, whether to mention the author of the message being replied to (default: false)
+    public let repliedUser: Bool
 }
