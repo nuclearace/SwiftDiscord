@@ -36,6 +36,35 @@ public struct DiscordGatewayIntent : OptionSet {
     /// Direct message typing indicators.
     public static let directMessageTyping = DiscordGatewayIntent(rawValue: 1 << 14)
 
+    /// The privileged intents (which may require enabling in the Discord developer console).
+    public static let privilegedIntents: DiscordGatewayIntent = [
+        .guildMembers,
+        .guildPresences
+    ]
+
+    /// The unprivileged intents. Use these if you don't need the privileged intents.
+    public static let unprivilegedIntents: DiscordGatewayIntent = [
+        .guilds,
+        .guildBans,
+        .guildEmojis,
+        .guildIntegrations,
+        .guildWebhooks,
+        .guildInvites,
+        .guildVoiceStates,
+        .guildMessages,
+        .guildMessageReactions,
+        .guildMessageTyping,
+        .directMessages,
+        .directMessageReactions,
+        .directMessageTyping
+    ]
+
+    /// All intents.
+    public static let allIntents: DiscordGatewayIntent = [
+        .privilegedIntents,
+        .unprivilegedIntents
+    ]
+
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
