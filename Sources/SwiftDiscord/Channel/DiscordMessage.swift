@@ -231,28 +231,52 @@ public extension DiscordMessage {
     /// Type of message
     enum MessageType : Int {
         /// Default.
-        case `default`
+        case `default` = 0
 
         /// Recipient Add.
-        case recipientAdd
+        case recipientAdd = 1
 
         /// Recipient Remove.
-        case recipientRemove
+        case recipientRemove = 2
 
         /// Call.
-        case call
+        case call = 3
 
         /// Channel name change.
-        case channelNameChange
+        case channelNameChange = 4
 
         /// Channel icon change.
-        case channelIconChange
+        case channelIconChange = 5
 
         /// Channel pinned message.
-        case channelPinnedMessage
+        case channelPinnedMessage = 6
 
         /// Guild member join.
-        case guildMemberJoin
+        case guildMemberJoin = 7
+
+        /// User premium guild subscription.
+        case userPremiumGuildSubscription = 8
+
+        /// User premium guild subscription tier 1.
+        case userPremiumGuildSubscriptionTier1 = 9
+
+        /// User premium guild subscription tier 2.
+        case userPremiumGuildSubscriptionTier2 = 10
+
+        /// User premium guild subscription tier 3.
+        case userPremiumGuildSubscriptionTier3 = 11
+
+        /// Channel follow add.
+        case channelFollowAdd = 12
+
+        /// Guild discovery disqualified.
+        case guildDiscoveryDisqualified = 14
+
+        /// Guild discovery requalified.
+        case guildDiscoveryRequalified = 15
+
+        /// Message reply.
+        case reply = 19
     }
 
     /// Represents an action that be taken on a message.
