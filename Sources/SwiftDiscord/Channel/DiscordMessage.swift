@@ -877,6 +877,13 @@ public struct DiscordAllowedMentions : Encodable {
     public let users: [UserID]
     /// For replies, whether to mention the author of the message being replied to (default: false)
     public let repliedUser: Bool
+
+    public init(parse: DiscordAllowedMentionType = .everyone, roles: [RoleID] = [], users: [UserID] = [], repliedUser: Bool = false) {
+        self.parse = parse
+        self.roles = roles
+        self.users = users
+        self.repliedUser = repliedUser
+    }
 }
 
 /// A reference to a message, e.g. used in outgoing replies.
@@ -890,4 +897,10 @@ public struct DiscordMessageReference : Encodable {
     public let messageId: MessageID?
     public let channelId: ChannelID?
     public let guildId: GuildID?
+
+    public init(messageId: MessageID? = nil, channelId: ChannelID? = nil, guildId: GuildID? = nil) {
+        self.messageId = messageId
+        self.channelId = channelId
+        self.guildId = guildId
+    }
 }
