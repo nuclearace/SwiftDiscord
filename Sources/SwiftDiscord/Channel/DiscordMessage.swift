@@ -97,6 +97,9 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// The reactions a message has.
     public let reactions: [DiscordReaction]
 
+    /// The stickers a message has.
+    public let stickers: [DiscordMessageSticker]
+
     /// The timestamp of this message.
     public let timestamp: Date
 
@@ -151,6 +154,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         nonce = messageObject.getSnowflake(key: "nonce")
         pinned = messageObject.get("pinned", or: false)
         reactions = DiscordReaction.reactionsFromArray(messageObject.get("reactions", or: []))
+        stickers = DiscordMessageSticker.stickersFromArray(messageObject.get("sticker", or: []))
         tts = messageObject.get("tts", or: false)
         editedTimestamp = DiscordDateFormatter.format(messageObject.get("edited_timestamp", or: "")) ?? Date()
         timestamp = DiscordDateFormatter.format(messageObject.get("timestamp", or: "")) ?? Date()
@@ -194,6 +198,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.nonce = 0
         self.pinned = false
         self.reactions = []
+        self.stickers = []
         self.editedTimestamp = Date()
         self.timestamp = Date()
         self.type = .default
@@ -902,5 +907,45 @@ public struct DiscordMessageReference : Encodable {
         self.messageId = messageId
         self.channelId = channelId
         self.guildId = guildId
+    }
+}
+
+public enum DiscordMessageStickerFormatType: Int {
+    case png = 1
+    case apng = 2
+    case lottie = 3
+}
+
+public struct DiscordMessageSticker {
+    /// ID of the sticker
+    public let id: Snowflake
+    /// ID of the sticker pack
+    public let packId: Snowflake
+    /// Name of the sticker
+    public let name: String
+    /// Description of the sticker
+    public let description: String
+    /// List of tags for the sticker
+    public let tags: [String]
+    /// Sticker asset hash
+    public let asset: String?
+    /// Sticker preview asset hash
+    public let previewAsset: String?
+    /// Type of sticker format
+    public let formatType: DiscordMessageStickerFormatType?
+
+    init(stickerObject: [String: Any]) {
+        id = stickerObject.getSnowflake(key: "id")
+        packId = stickerObject.getSnowflake(key: "pack_id")
+        name = stickerObject.get("name", or: "")
+        description = stickerObject.get("description", or: "")
+        tags = stickerObject.get("tags", or: "").split(separator: ",").map(String.init)
+        asset = stickerObject.get("asset", as: String.self)
+        previewAsset = stickerObject.get("preview_asset", as: String.self)
+        formatType = stickerObject.get("format_type", as: Int.self).flatMap(DiscordMessageStickerFormatType.init(rawValue:))
+    }
+
+    static func stickersFromArray(_ stickerArray: [[String: Any]]) -> [DiscordMessageSticker] {
+        return stickerArray.map(DiscordMessageSticker.init)
     }
 }
