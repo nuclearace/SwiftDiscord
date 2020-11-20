@@ -110,7 +110,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             case let .name(name):
                 roleData["name"] = name
             case let .permissions(permissions):
-                roleData["permissions"] = permissions
+                roleData["permissions"] = permissions.rawValue.description
             }
         }
 

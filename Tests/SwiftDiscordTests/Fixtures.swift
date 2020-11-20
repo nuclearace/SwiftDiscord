@@ -16,7 +16,7 @@ let testRole: [String: Any] = [
     "managed": false,
     "mentionable": true,
     "name": "My Test Role",
-    "permissions": 0,
+    "permissions": "0",
     "position": 0
 ]
 
