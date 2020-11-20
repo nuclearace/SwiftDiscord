@@ -93,6 +93,11 @@ public struct DiscordPermission : OptionSet, Encodable {
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue.description)
+    }
 }
 
 /// Represents a permission overwrite type for a channel.
