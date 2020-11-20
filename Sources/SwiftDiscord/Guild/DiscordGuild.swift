@@ -83,7 +83,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public private(set) var defaultMessageNotifications: Int
 
     /// The snowflake id of the embed channel for this guild.
-    public private(set) var embedChannelId: ChannelID
+    public private(set) var widgetChannelId: ChannelID
 
     /// Whether this guild has embed enabled.
     public private(set) var widgetEnabled: Bool
@@ -114,7 +114,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         channels = guildChannels(fromArray: guildObject.get("channels", or: JSONArray()), guildID: id, client: client)
         defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
         widgetEnabled = guildObject.get("widget_enabled", or: false)
-        embedChannelId = guildObject.getSnowflake(key: "embed_channel_id")
+        widgetChannelId = guildObject.getSnowflake(key: "widget_channel_id")
         emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: JSONArray()))
         features = guildObject.get("features", or: Array<Any>())
         icon = guildObject.get("icon", or: "")
@@ -313,8 +313,8 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
             self.defaultMessageNotifications = defaultMessageNotifications
         }
 
-        if let embedChannelId = Snowflake(newGuild["embed_channel_id"] as? String) {
-            self.embedChannelId = embedChannelId
+        if let widgetChannelId = Snowflake(newGuild["widget_channel_id"] as? String) {
+            self.widgetChannelId = widgetChannelId
         }
 
         if let widgetEnabled = newGuild["widget_enabled"] as? Bool {
