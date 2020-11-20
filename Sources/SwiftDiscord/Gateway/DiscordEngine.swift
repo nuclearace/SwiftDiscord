@@ -140,7 +140,7 @@ open class DiscordEngine : DiscordEngineSpec {
     ///
     /// - parameter delegate: The DiscordClientSpec this engine should be associated with.
     ///
-    public required init(delegate: DiscordShardDelegate, shardNum: Int = 0, numShards: Int = 1, intents: DiscordGatewayIntent = .unprivilegedIntents, onLoop: EventLoop) {
+    public required init(delegate: DiscordShardDelegate, shardNum: Int = 0, numShards: Int = 1, intents: DiscordGatewayIntent, onLoop: EventLoop) {
         self.delegate = delegate
         self.shardNum = shardNum
         self.numShards = numShards
