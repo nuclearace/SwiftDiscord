@@ -39,7 +39,7 @@ open class DiscordEngine : DiscordEngineSpec {
 
     /// The url for the gateway.
     open var connectURL: String {
-        return DiscordEndpointGateway.gatewayURL + "/?v=6&encoding=json"
+        return DiscordEndpointGateway.gatewayURL + "/?v=8&encoding=json"
     }
 
     /// The type of DiscordEngineSpec. Used to correctly fire events.
