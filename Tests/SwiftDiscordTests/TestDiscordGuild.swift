@@ -26,7 +26,7 @@ public class TestDiscordGuild : XCTestCase {
     }
 
     func testCreatingGuildSetsEmbedEnabled() {
-        tGuild["embed_enabled"] = true
+        tGuild["widget_enabled"] = true
 
         let guild = DiscordGuild(guildObject: tGuild, client: nil)
 

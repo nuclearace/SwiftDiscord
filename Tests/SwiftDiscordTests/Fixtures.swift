@@ -95,7 +95,7 @@ let testGuildChannelCategory: [String: Any] = [
 let testGuild: [String: Any] = [
     "channels": [[String: Any]](),
     "default_message_notifications": 0,
-    "embed_enabled": false,
+    "widget_enabled": false,
     "embed_channel_id": "",
     "emojis": [[String: Any]](),
     "features": [Any](),
