@@ -52,6 +52,7 @@ open class DiscordEngine : DiscordEngineSpec {
     open var handshakeObject: [String: Any] {
         var identify: [String: Any] = [
             "token": delegate!.token.token,
+            "intents": intents.rawValue,
             "properties": [
                 "$os": os,
                 "$browser": "SwiftDiscord",
@@ -91,6 +92,9 @@ open class DiscordEngine : DiscordEngineSpec {
 
     /// The shard number of this engine.
     public let shardNum: Int
+
+    /// The intents used when connecting to the gateway.
+    public let intents: DiscordGatewayIntent
 
     /// The queue that WebSockets use to parse things.
     public let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
@@ -136,10 +140,11 @@ open class DiscordEngine : DiscordEngineSpec {
     ///
     /// - parameter delegate: The DiscordClientSpec this engine should be associated with.
     ///
-    public required init(delegate: DiscordShardDelegate, shardNum: Int = 0, numShards: Int = 1, onLoop: EventLoop) {
+    public required init(delegate: DiscordShardDelegate, shardNum: Int = 0, numShards: Int = 1, intents: DiscordGatewayIntent = .unprivilegedIntents, onLoop: EventLoop) {
         self.delegate = delegate
         self.shardNum = shardNum
         self.numShards = numShards
+        self.intents = intents
         self.runloop = onLoop
     }
 

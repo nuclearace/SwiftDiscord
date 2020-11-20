@@ -91,7 +91,7 @@ public protocol DiscordShard : DiscordWebSocketable, DiscordGatewayable, Discord
     ///
     /// - parameter client: The client this engine should be associated with.
     ///
-    init(delegate: DiscordShardDelegate, shardNum: Int, numShards: Int, onLoop: EventLoop)
+    init(delegate: DiscordShardDelegate, shardNum: Int, numShards: Int, intents: DiscordGatewayIntent, onLoop: EventLoop)
 }
 
 /// Declares that a type will be a shard's delegate.
