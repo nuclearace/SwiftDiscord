@@ -52,7 +52,7 @@ public class TestDiscordEngine : XCTestCase, DiscordShardDelegate {
 
     public override func setUp() {
         loop = MultiThreadedEventLoopGroup(numberOfThreads: 1)
-        engine = DiscordEngine(delegate: self, onLoop: loop.next())
+        engine = DiscordEngine(delegate: self, intents: .unprivilegedIntents, onLoop: loop.next())
     }
 }
 
