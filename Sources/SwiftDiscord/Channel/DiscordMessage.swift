@@ -21,10 +21,19 @@ import Foundation
 public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     // Used for `createDataForSending`
     private struct FieldsList : Encodable {
+        enum CodingKeys: String, CodingKey {
+            case content
+            case tts
+            case embed
+            case allowedMentions = "allowed_mentions"
+            case messageReference = "message_reference"
+        }
+
         let content: String
         let tts: Bool
         let embed: DiscordEmbed?
         let allowedMentions: DiscordAllowedMentions?
+        let messageReference: DiscordMessageReference?
     }
 
     // MARK: Typealiases
@@ -97,6 +106,16 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// Finer-grained control over the allowed mentions in an outgoing message.
     public let allowedMentions: DiscordAllowedMentions?
 
+    /// A referenced message in an incoming message. Only present if it's a reply.
+    ///
+    /// TODO: This is actually a DiscordMessage object too, but would cause the
+    ///       value type to become recursive, which is not allowed yet (since optionals
+    ///       are value types themselves that do not box the value).
+    public let referencedMessage: [String: Any]?
+
+    /// A referenced message in an outgoing message.
+    public let messageReference: DiscordMessageReference?
+
     /// The type of this message.
     public let type: MessageType
 
@@ -136,6 +155,8 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         editedTimestamp = DiscordDateFormatter.format(messageObject.get("edited_timestamp", or: "")) ?? Date()
         timestamp = DiscordDateFormatter.format(messageObject.get("timestamp", or: "")) ?? Date()
         allowedMentions = nil
+        referencedMessage = messageObject.get("referenced_message", as: [String: Any].self)
+        messageReference = nil
         files = []
         type = MessageType(rawValue: messageObject.get("type", or: 0)) ?? .default
         self.client = client
@@ -149,7 +170,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// - parameter files: The files to send with this message.
     /// - parameter tts: Whether this message should be text-to-speach.
     ///
-    public init(content: String, embed: DiscordEmbed? = nil, files: [DiscordFileUpload] = [], tts: Bool = false, allowedMentions: DiscordAllowedMentions? = nil) {
+    public init(content: String, embed: DiscordEmbed? = nil, files: [DiscordFileUpload] = [], tts: Bool = false, allowedMentions: DiscordAllowedMentions? = nil, messageReference: DiscordMessageReference? = nil) {
         self.content = content
         if let embed = embed {
             self.embeds = [embed]
@@ -161,6 +182,8 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.files = files
         self.tts = tts
         self.allowedMentions = allowedMentions
+        self.messageReference = messageReference
+        self.referencedMessage = nil
         self.attachments = []
         self.author = DiscordUser(userObject: [:])
         self.channelId = 0
@@ -206,7 +229,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     // MARK: Methods
 
     func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
-        let fields = FieldsList(content: content, tts: tts, embed: embeds.first, allowedMentions: allowedMentions)
+        let fields = FieldsList(content: content, tts: tts, embed: embeds.first, allowedMentions: allowedMentions, messageReference: messageReference)
         let fieldsData = JSON.encodeJSONData(fields) ?? Data()
         if files.count > 0 {
             return .right(createMultipartBody(encodedJSON: fieldsData, files: files))
@@ -854,4 +877,17 @@ public struct DiscordAllowedMentions : Encodable {
     public let users: [UserID]
     /// For replies, whether to mention the author of the message being replied to (default: false)
     public let repliedUser: Bool
+}
+
+/// A reference to a message, e.g. used in outgoing replies.
+public struct DiscordMessageReference : Encodable {
+    public enum CodingKeys : String, CodingKey {
+        case messageId = "message_id"
+        case channelId = "channel_id"
+        case guildId = "guild_id"
+    }
+
+    public let messageId: MessageID?
+    public let channelId: ChannelID?
+    public let guildId: GuildID?
 }
