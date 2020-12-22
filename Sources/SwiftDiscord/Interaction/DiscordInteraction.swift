@@ -11,9 +11,9 @@ public struct DiscordInteraction {
     public let type: DiscordInteractionType?
 
     /// Command data payload
-    /// Always specified for ApplicationCommand interaction
+    /// Always specified for DiscordApplicationCommand interaction
     /// types, but optional for future-proofing.
-    public let data: ApplicationCommandInteractionData?
+    public let data: DiscordApplicationCommandInteractionData?
 
     /// Guild it was sent from
     public let guildId: GuildID
@@ -33,7 +33,7 @@ public struct DiscordInteraction {
     init(interactionObject: [String: Any]) {
         id = Snowflake(interactionObject["id"] as? String) ?? 0
         type = (interactionObject["type"] as? Int).flatMap(DiscordInteractionType.init(rawValue:))
-        data = (interactionObject["data"] as? [String: Any]).map(ApplicationCommandInteractionData.init(dataObject:))
+        data = (interactionObject["data"] as? [String: Any]).map(DiscordApplicationCommandInteractionData.init(dataObject:))
         let guildId = Snowflake(interactionObject["guild_id"] as? String) ?? 0
         self.guildId = guildId
         channelId = Snowflake(interactionObject["channel_id"] as? String) ?? 0
@@ -45,39 +45,5 @@ public struct DiscordInteraction {
 
 public enum DiscordInteractionType: Int {
     case ping = 1
-    case applicationCommand = 2
-}
-
-public struct ApplicationCommandInteractionData {
-    /// The ID of the invoked command
-    public let id: Snowflake
-
-    /// The name of the invoked command
-    public let name: String
-
-    /// The params + values by the user
-    public let options: [ApplicationCommandInteractionDataOption]
-
-    init(dataObject: [String: Any]) {
-        id = Snowflake(dataObject["id"] as? String) ?? 0
-        name = dataObject.get("name", as: String.self) ?? ""
-        options = (dataObject["options"] as? [[String: Any]])?.map(ApplicationCommandInteractionDataOption.init(optionObject:)).compactMap { $0 } ?? []
-    }
-}
-
-public struct ApplicationCommandInteractionDataOption {
-    /// The name of the parameter.
-    public let name: String
-
-    /// The value of the pair. Type is the OptionType of the command.
-    public let value: Any?
-
-    /// Present if this option is a group or subcommand.
-    public let options: [ApplicationCommandInteractionDataOption]?
-
-    init(optionObject: [String: Any]) {
-        name = optionObject.get("name", as: String.self) ?? ""
-        value = optionObject["value"]
-        options = (optionObject["options"] as? [[String: Any]])?.map(ApplicationCommandInteractionDataOption.init(optionObject:)).compactMap { $0 } ?? []
-    }
+    case DiscordapplicationCommand = 2
 }
