@@ -175,6 +175,10 @@ public enum DiscordEndpoint : CustomStringConvertible {
     case guildApplicationCommand(applicationId: ApplicationID, guildId: GuildID, commandId: CommandID)
     /* End Application */
 
+    /* Interactions */
+    case interactionsCallback(interactionId: InteractionID, interactionToken: String)
+    /* End Interactions */
+
     var combined: String {
         return DiscordEndpoint.baseURL.description + description
     }
@@ -395,6 +399,11 @@ public extension DiscordEndpoint {
         case let .guildApplicationCommand(applicationId, guildId, commandId):
             return "/applications/\(applicationId)/guilds/\(guildId)/commands/\(commandId)"
         /* End Application */
+
+        /* Interactions */
+        case let .interactionsCallback(interactionId, interactionToken):
+            return "/interactions/\(interactionId)/\(interactionToken)/callback"
+        /* End Interactions */
         }
     }
 
@@ -515,6 +524,11 @@ public extension DiscordEndpoint {
         case let .guildApplicationCommand(applicationId, _, _):
             return DiscordRateLimitKey(id: applicationId, urlParts: [.applications, .applicationID, .guilds, .guildID, .commands, .commandID])
         /* End Applications */
+
+        /* Interactions */
+        case let .interactionsCallback(interactionId, _):
+            return DiscordRateLimitKey(id: interactionId, urlParts: [.interactions, .interactionID, .interactionToken, .callback])
+        /* End Interactions */
         }
     }
 
