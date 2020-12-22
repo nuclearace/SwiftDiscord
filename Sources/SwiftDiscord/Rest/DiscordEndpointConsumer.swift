@@ -703,6 +703,16 @@ public protocol DiscordEndpointConsumer {
                                   on guildId: GuildID,
                                   callback: @escaping (HTTPURLResponse?) -> ())
 
+    ///
+    /// Creates a response to an interaction from the gateway.
+    ///
+    /// - parameter response: The response
+    ///
+    func createInteractionResponse(for interactionId: InteractionID,
+                                   token: String,
+                                   response: DiscordMessage,
+                                   callback: @escaping (HTTPURLResponse?) -> ())
+
     // MARK: Misc
 
     ///
