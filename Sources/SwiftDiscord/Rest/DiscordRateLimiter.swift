@@ -224,7 +224,7 @@ public struct DiscordRateLimitKey : Hashable {
     /// stored separately if needed.  Technically, the .guildID and .channelID fields aren't needed since
     /// the full ID will also be stored, but they're included to make the system more straightforward.
     public struct DiscordRateLimitURLParts : OptionSet {
-        public let rawValue: Int
+        public let rawValue: Int64
 
         static let         guilds = DiscordRateLimitURLParts(rawValue: 1 << 0)
         static let        guildID = DiscordRateLimitURLParts(rawValue: 1 << 1)
@@ -257,8 +257,12 @@ public struct DiscordRateLimitKey : Hashable {
         static let         emojis = DiscordRateLimitURLParts(rawValue: 1 << 28)
         static let        emojiID = DiscordRateLimitURLParts(rawValue: 1 << 29)
         static let             me = DiscordRateLimitURLParts(rawValue: 1 << 30)
+        static let   applications = DiscordRateLimitURLParts(rawValue: 1 << 31)
+        static let  applicationID = DiscordRateLimitURLParts(rawValue: 1 << 32)
+        static let       commands = DiscordRateLimitURLParts(rawValue: 1 << 33)
+        static let      commandID = DiscordRateLimitURLParts(rawValue: 1 << 34)
 
-        public init(rawValue: Int) {
+        public init(rawValue: Int64) {
             self.rawValue = rawValue
         }
     }

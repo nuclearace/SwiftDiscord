@@ -160,6 +160,21 @@ public enum DiscordEndpoint : CustomStringConvertible {
     case guildEmoji(guild: GuildID, emoji: EmojiID)
     /* End Emoji */
 
+
+    /* Applications */
+    /// The global slash-commands endpoint.
+    case globalApplicationCommands(applicationId: ApplicationID)
+
+    /// The endpoint for a specific global slash-command.
+    case globalApplicationCommand(applicationId: ApplicationID, commandId: CommandID)
+
+    /// The guild-specific slash-commands endpoint.
+    case guildApplicationCommands(applicationId: ApplicationID, guildId: GuildID)
+
+    /// The endpoint for a specific guild-specific slash-command.
+    case guildApplicationCommand(applicationId: ApplicationID, guildId: GuildID, commandId: CommandID)
+    /* End Application */
+
     var combined: String {
         return DiscordEndpoint.baseURL.description + description
     }
@@ -369,6 +384,17 @@ public extension DiscordEndpoint {
         case let .guildEmoji(guild, emoji):
             return "/guilds/\(guild)/emojis/\(emoji)"
         /* End Emoji */
+
+        /* Application */
+        case let .globalApplicationCommands(applicationId):
+            return "/applications/\(applicationId)/commands"
+        case let .globalApplicationCommand(applicationId, commandId):
+            return "/applications/\(applicationId)/commands/\(commandId)"
+        case let .guildApplicationCommands(applicationId, guildId):
+            return "/applications/\(applicationId)/guilds/\(guildId)/commands"
+        case let .guildApplicationCommand(applicationId, guildId, commandId):
+            return "/applications/\(applicationId)/guilds/\(guildId)/commands/\(commandId)"
+        /* End Application */
         }
     }
 
@@ -478,7 +504,17 @@ public extension DiscordEndpoint {
             return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .emojis])
         case let .guildEmoji(guild, _):
             return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .emojis, .emojiID])
-        /* End Emoji */
+
+        /* Applications */
+        case let .globalApplicationCommands(applicationId):
+            return DiscordRateLimitKey(id: applicationId, urlParts: [.applications, .applicationID, .commands])
+        case let .globalApplicationCommand(applicationId, _):
+            return DiscordRateLimitKey(id: applicationId, urlParts: [.applications, .applicationID, .commands, .commandID])
+        case let .guildApplicationCommands(applicationId, _):
+            return DiscordRateLimitKey(id: applicationId, urlParts: [.applications, .applicationID, .guilds, .guildID, .commands])
+        case let .guildApplicationCommand(applicationId, _, _):
+            return DiscordRateLimitKey(id: applicationId, urlParts: [.applications, .applicationID, .guilds, .guildID, .commands, .commandID])
+        /* End Applications */
         }
     }
 
