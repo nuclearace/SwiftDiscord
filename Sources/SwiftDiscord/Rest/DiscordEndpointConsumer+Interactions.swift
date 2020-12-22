@@ -14,9 +14,9 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func createInteractionResponse(for interactionId: InteractionID,
                                    token interactionToken: String,
                                    response: DiscordMessage,
-                                   callback: @escaping (HTTPURLResponse?) -> ()) {
+                                   callback: ((HTTPURLResponse?) -> ())? = nil){
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            callback(response)
+            callback?(response)
         }
         let requestInfo: DiscordEndpoint.EndpointRequest
 

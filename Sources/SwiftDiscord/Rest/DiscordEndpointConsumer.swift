@@ -642,7 +642,7 @@ public protocol DiscordEndpointConsumer {
     func createApplicationCommand(name: String,
                                   description: String,
                                   options: [DiscordApplicationCommandOption]?,
-                                  callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ())
+                                  callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())?)
 
     ///
     /// Edits a global slash-command for a user.
@@ -653,7 +653,7 @@ public protocol DiscordEndpointConsumer {
                                 name: String,
                                 description: String,
                                 options: [DiscordApplicationCommandOption]?,
-                                callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ())
+                                callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())?)
 
     ///
     /// Deletes a global slash-command for a user.
@@ -661,7 +661,7 @@ public protocol DiscordEndpointConsumer {
     /// - parameter callback: The callback function, taking a command.
     ///
     func deleteApplicationCommand(_ commandId: CommandID,
-                                  callback: @escaping (HTTPURLResponse?) -> ())
+                                  callback: ((HTTPURLResponse?) -> ())?)
 
     ///
     /// Gets the guild-specific slash-commands of a user.
@@ -680,7 +680,7 @@ public protocol DiscordEndpointConsumer {
                                   name: String,
                                   description: String,
                                   options: [DiscordApplicationCommandOption]?,
-                                  callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ())
+                                  callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())?)
 
     ///
     /// Edits a guild-specific slash-command for a user.
@@ -692,7 +692,7 @@ public protocol DiscordEndpointConsumer {
                                 name: String,
                                 description: String,
                                 options: [DiscordApplicationCommandOption]?,
-                                callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ())
+                                callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())?)
 
     ///
     /// Deletes a guild-specific slash-command for a user.
@@ -701,7 +701,7 @@ public protocol DiscordEndpointConsumer {
     ///
     func deleteApplicationCommand(_ commandId: CommandID,
                                   on guildId: GuildID,
-                                  callback: @escaping (HTTPURLResponse?) -> ())
+                                  callback: ((HTTPURLResponse?) -> ())?)
 
     ///
     /// Creates a response to an interaction from the gateway.
@@ -711,7 +711,7 @@ public protocol DiscordEndpointConsumer {
     func createInteractionResponse(for interactionId: InteractionID,
                                    token: String,
                                    response: DiscordMessage,
-                                   callback: @escaping (HTTPURLResponse?) -> ())
+                                   callback: ((HTTPURLResponse?) -> ())?)
 
     // MARK: Misc
 
