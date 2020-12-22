@@ -63,7 +63,11 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
             callback(DiscordApplicationCommand(commandObject: command), response)
         }
-        // TODO
+        let params = CommandParams(name: name, description: description, options: options)
+        rateLimiter.executeRequest(endpoint: .globalApplicationCommand(applicationId: applicationId, commandId: commandId),
+                                   token: token,
+                                   requestInfo: .patch(content: .json(JSON.encodeJSONData(params) ?? Data()), extraHeaders: nil),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
