@@ -45,5 +45,5 @@ public struct DiscordInteraction {
 
 public enum DiscordInteractionType: Int {
     case ping = 1
-    case DiscordapplicationCommand = 2
+    case applicationCommand = 2
 }
