@@ -6,7 +6,7 @@ import FoundationNetworking
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     func getApplicationCommands(callback: @escaping ([DiscordApplicationCommand], HTTPURLResponse?) -> ()) {
-        guard let applicationId = user?.id else { callback(nil, nil); return }
+        guard let applicationId = user?.id else { callback([], nil); return }
         let requestCallback: DiscordRequestCallback = {data, response, error in
             guard case let .array(commands)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([], response)
@@ -15,9 +15,9 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
             callback(DiscordApplicationCommand.commandsFromArray(commands as! [[String: Any]]), response)
         }
-        rateLimiter.executeRequest(endpoint: .globalApplicationCommands(applicationId)
+        rateLimiter.executeRequest(endpoint: .globalApplicationCommands(applicationId: applicationId),
                                    token: token,
-                                   requestInfo: .get(params: getParams, extraHeaders: nil),
+                                   requestInfo: .get(params: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
 

@@ -29,8 +29,8 @@ public struct DiscordApplicationCommand: Encodable {
     public let parameters: [DiscordApplicationCommandOption]
 
     init(commandObject: [String: Any]) {
-        id = Snowflake((commandObject["id"] as? String) ?? "")
-        applicationId = Snowflake((commandObject["application_id"] as? String) ?? "")
+        id = Snowflake((commandObject["id"] as? String) ?? "") ?? 0
+        applicationId = Snowflake((commandObject["application_id"] as? String) ?? "") ?? 0
         name = (commandObject["name"] as? String) ?? ""
         description = (commandObject["description"] as? String) ?? ""
         parameters = ((commandObject["parameters"] as? [[String: Any]]) ?? []).map(DiscordApplicationCommandOption.init(optionObject:))
@@ -81,7 +81,7 @@ public struct DiscordApplicationCommandOption: Encodable {
         description = (optionObject["description"] as? String) ?? ""
         isDefault = (optionObject["default"] as? Bool) ?? false
         isRequired = (optionObject["required"] as? Bool) ?? false
-        choices = (optionObject["choices"] as? [[String: Any]]).map { $0.map(DiscordApplicationCommandOptionChoice.init(choiceObject:)) }
+        choices = (optionObject["choices"] as? [[String: Any]]).map { $0.compactMap(DiscordApplicationCommandOptionChoice.init(choiceObject:)) }
         options = (optionObject["options"] as? [[String: Any]]).map { $0.map(DiscordApplicationCommandOption.init(optionObject:)) }
     }
 }
@@ -93,13 +93,15 @@ public struct DiscordApplicationCommandOptionChoice: Encodable {
     /// Value of the choice
     public let value: DiscordApplicationCommandOptionChoiceValue?
 
-    init(choiceObject: [String: Any]) {
+    init?(choiceObject: [String: Any]) {
         name = (choiceObject["name"] as? String) ?? ""
         let rawValue = choiceObject["value"]
         if let value = rawValue as? String {
             self.value = .string(value)
         } else if let value = rawValue as? Int {
             self.value = .int(value)
+        } else {
+            return nil
         }
     }
 }
