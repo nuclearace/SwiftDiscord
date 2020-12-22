@@ -132,6 +132,8 @@ public enum DiscordDispatchEvent : String {
 
     case applicationCommandCreate = "APPLICATION_COMMAND_CREATE"
 
+    case applicationCommandUpdate = "APPLICATION_COMMAND_UPDATE"
+
     // Interactions
 
     /// Interaction Create (Handled)
