@@ -710,7 +710,7 @@ public protocol DiscordEndpointConsumer {
     ///
     func createInteractionResponse(for interactionId: InteractionID,
                                    token: String,
-                                   response: DiscordMessage,
+                                   response: DiscordInteractionResponse,
                                    callback: ((HTTPURLResponse?) -> ())?)
 
     // MARK: Misc
