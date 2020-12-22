@@ -13,7 +13,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     func getApplicationCommands(callback: @escaping ([DiscordApplicationCommand], HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback([], nil); return }
-        let requestCallback: DiscordRequestCallback = {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(commands)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([], response)
                 return
@@ -33,7 +33,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                   options: [DiscordApplicationCommandOption]? = nil,
                                   callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback(nil, nil); return }
-        let requestCallback: DiscordRequestCallback = {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(command)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil, response)
                 return
@@ -55,7 +55,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 options: [DiscordApplicationCommandOption]? = nil,
                                 callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback(nil, nil); return }
-        let requestCallback: DiscordRequestCallback = {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(command)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil, response)
                 return
@@ -74,14 +74,20 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func deleteApplicationCommand(_ commandId: CommandID,
                                   callback: @escaping (HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback(nil); return }
-        // TODO
+        let requestCallback: DiscordRequestCallback = { data, response, error in
+            callback(response)
+        }
+        rateLimiter.executeRequest(endpoint: .globalApplicationCommand(applicationId: applicationId, commandId: commandId),
+                                   token: token,
+                                   requestInfo: .patch(content: nil, extraHeaders: nil),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
     func getApplicationCommands(on guildId: GuildID,
                                 callback: @escaping ([DiscordApplicationCommand], HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback([], nil); return }
-        let requestCallback: DiscordRequestCallback = {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(commands)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([], response)
                 return
@@ -102,7 +108,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                   options: [DiscordApplicationCommandOption]? = nil,
                                   callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback(nil, nil); return }
-        let requestCallback: DiscordRequestCallback = {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(command)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil, response)
                 return
@@ -121,7 +127,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 options: [DiscordApplicationCommandOption]? = nil,
                                 callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback(nil, nil); return }
-        let requestCallback: DiscordRequestCallback = {data, response, error in
+        let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(command)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback(nil, response)
                 return
