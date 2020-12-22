@@ -8,6 +8,14 @@ public struct DiscordInteractionResponse: Encodable {
 
     /// An optional response message
     public let data: DiscordInteractionApplicationCommandCallbackData?
+
+    public init(
+        type: DiscordInteractionResponseType,
+        data: DiscordInteractionApplicationCommandCallbackData? = nil
+    ) {
+        self.type = type
+        self.data = data
+    }
 }
 
 public enum DiscordInteractionResponseType: Int, Encodable {
