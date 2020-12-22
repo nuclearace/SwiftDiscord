@@ -75,6 +75,24 @@ public struct DiscordApplicationCommandOption: Encodable {
     /// nested options will be the parameters
     public let options: [DiscordApplicationCommandOption]?
 
+    public init(
+        type: DiscordApplicationCommandOptionType,
+        name: String,
+        description: String,
+        isDefault: Bool? = nil,
+        isRequired: Bool? = nil,
+        choices: [DiscordApplicationCommandOptionChoice]? = nil,
+        options: [DiscordApplicationCommandOption]? = nil
+    ) {
+        self.type = type
+        self.name = name
+        self.description = description
+        self.isDefault = isDefault
+        self.isRequired = isRequired
+        self.choices = choices
+        self.options = options
+    }
+
     init(optionObject: [String: Any]) {
         type = (optionObject["type"] as? Int).flatMap(DiscordApplicationCommandOptionType.init(rawValue:))
         name = (optionObject["name"] as? String) ?? ""
@@ -92,6 +110,11 @@ public struct DiscordApplicationCommandOptionChoice: Encodable {
 
     /// Value of the choice
     public let value: DiscordApplicationCommandOptionChoiceValue?
+
+    public init(name: String, value: DiscordApplicationCommandOptionChoiceValue? = nil) {
+        self.name = name
+        self.value = value
+    }
 
     init?(choiceObject: [String: Any]) {
         name = (choiceObject["name"] as? String) ?? ""
