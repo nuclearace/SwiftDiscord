@@ -242,6 +242,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         case .channelUpdate:         handleChannelUpdate(with: eventData)
         case .channelCreate:         handleChannelCreate(with: eventData)
         case .channelDelete:         handleChannelDelete(with: eventData)
+        case .interactionCreate:     handleInteractionCreate(with: eventData)
         case .voiceServerUpdate:     handleVoiceServerUpdate(with: eventData)
         case .voiceStateUpdate:      handleVoiceStateUpdate(with: eventData)
         case .ready:                 handleReady(with: eventData)
@@ -859,6 +860,20 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         delegate?.client(self, didReceivePresenceUpdate: presence!)
 
         guild.updateGuild(fromPresence: presence!, fillingUsers: fillUsers, pruningUsers: pruneUsers)
+    }
+
+    ///
+    /// Handles interaction creations from Discord, i.e. slash command
+    /// invocations. You shouldn't need to call this method directly.
+    ///
+    /// Override to provide additional customization around this event.
+    ///
+    /// Calls the `didCreateInteraction` delegate method.
+    ///
+    /// - parameter with: The data from the event
+    ///
+    open func handleInteractionCreate(with data: [String: Any]) {
+        // TODO
     }
 
     ///

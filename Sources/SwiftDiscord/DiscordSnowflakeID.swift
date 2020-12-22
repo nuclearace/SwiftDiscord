@@ -72,6 +72,9 @@ public typealias IntegrationID = Snowflake
 /// A Snowflake ID representing an Attachment
 public typealias AttachmentID = Snowflake
 
+/// A Snowflake ID representing an Interaction
+public typealias InteractionID = Snowflake
+
 // MARK: Extra snowflake information
 
 extension Snowflake {
