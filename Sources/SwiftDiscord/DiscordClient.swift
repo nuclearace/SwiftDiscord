@@ -873,7 +873,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// - parameter with: The data from the event
     ///
     open func handleInteractionCreate(with data: [String: Any]) {
-        // TODO
+        logger.info("Handling interaction create")
+
+        delegate?.client(self, didCreateInteraction: DiscordInteraction(interactionObject: data))
     }
 
     ///

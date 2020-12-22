@@ -316,6 +316,9 @@ public extension DiscordClientDelegate {
     func client(_ client: DiscordClient, didReceivePresenceUpdate presence: DiscordPresence) { }
 
     /// Default.
+    func client(_ client: DiscordClient, didCreateInteraction interaction: DiscordInteraction) { }
+
+    /// Default.
     func client(_ client: DiscordClient, didReceiveReady readyData: [String: Any]) { }
 
     /// Default.
