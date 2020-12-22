@@ -3,6 +3,12 @@ import Foundation
 import FoundationNetworking
 #endif
 
+private struct CommandParams: Encodable {
+    let name: String
+    let description: String
+    let options: [DiscordApplicationCommandOption]?
+}
+
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     func getApplicationCommands(callback: @escaping ([DiscordApplicationCommand], HTTPURLResponse?) -> ()) {
@@ -27,7 +33,19 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                   options: [DiscordApplicationCommandOption]? = nil,
                                   callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback(nil, nil); return }
-        // TODO
+        let requestCallback: DiscordRequestCallback = {data, response, error in
+            guard case let .object(command)? = JSON.jsonFromResponse(data: data, response: response) else {
+                callback(nil, response)
+                return
+            }
+
+            callback(DiscordApplicationCommand(commandObject: command), response)
+        }
+        let params = CommandParams(name: name, description: description, options: options)
+        rateLimiter.executeRequest(endpoint: .globalApplicationCommands(applicationId: applicationId),
+                                   token: token,
+                                   requestInfo: .post(content: .json(JSON.encodeJSONData(params) ?? Data()), extraHeaders: nil),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
@@ -37,6 +55,14 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 options: [DiscordApplicationCommandOption]? = nil,
                                 callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback(nil, nil); return }
+        let requestCallback: DiscordRequestCallback = {data, response, error in
+            guard case let .object(command)? = JSON.jsonFromResponse(data: data, response: response) else {
+                callback(nil, response)
+                return
+            }
+
+            callback(DiscordApplicationCommand(commandObject: command), response)
+        }
         // TODO
     }
 
@@ -72,6 +98,14 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                   options: [DiscordApplicationCommandOption]? = nil,
                                   callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback(nil, nil); return }
+        let requestCallback: DiscordRequestCallback = {data, response, error in
+            guard case let .object(command)? = JSON.jsonFromResponse(data: data, response: response) else {
+                callback(nil, response)
+                return
+            }
+
+            callback(DiscordApplicationCommand(commandObject: command), response)
+        }
         // TODO
     }
 
@@ -83,6 +117,14 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 options: [DiscordApplicationCommandOption]? = nil,
                                 callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback(nil, nil); return }
+        let requestCallback: DiscordRequestCallback = {data, response, error in
+            guard case let .object(command)? = JSON.jsonFromResponse(data: data, response: response) else {
+                callback(nil, response)
+                return
+            }
+
+            callback(DiscordApplicationCommand(commandObject: command), response)
+        }
         // TODO
     }
 
