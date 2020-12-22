@@ -22,21 +22,29 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    func getApplicationCommand(_ commandId: CommandID,
-                               callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ()) {
+    func createApplicationCommand(name: String,
+                                  description: String,
+                                  options: [DiscordApplicationCommandOption]? = nil,
+                                  callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback(nil, nil); return }
-        let requestCallback: DiscordRequestCallback = {data, response, error in
-            guard case let .object(command) = JSON.jsonFromResponse(data: data, response: response) else {
-                callback(nil, response)
-                return
-            }
+        // TODO
+    }
 
-            callback(DiscordApplicationCommand(commandObject: command), response)
-        }
-        rateLimiter.executeRequest(endpoint: .globalApplicationCommand(applicationId: applicationId, commandId: commandId),
-                                   token: token,
-                                   requestInfo: .get(params: nil, extraHeaders: nil),
-                                   callback: requestCallback)
+    /// Default implementation
+    func editApplicationCommand(_ commandId: CommandID,
+                                name: String,
+                                description: String,
+                                options: [DiscordApplicationCommandOption]? = nil,
+                                callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ()) {
+        guard let applicationId = user?.id else { callback(nil, nil); return }
+        // TODO
+    }
+
+    /// Default implementation
+    func deleteApplicationCommand(_ commandId: CommandID,
+                                  callback: @escaping (HTTPURLResponse?) -> ()) {
+        guard let applicationId = user?.id else { callback(nil); return }
+        // TODO
     }
 
     /// Default implementation
@@ -58,21 +66,31 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    func getApplicationCommand(_ commandId: CommandID,
-                               on guildId: GuildID,
-                               callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ()) {
+    func createApplicationCommand(on guildId: GuildID,
+                                  name: String,
+                                  description: String,
+                                  options: [DiscordApplicationCommandOption]? = nil,
+                                  callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback(nil, nil); return }
-        let requestCallback: DiscordRequestCallback = {data, response, error in
-            guard case let .object(command) = JSON.jsonFromResponse(data: data, response: response) else {
-                callback(nil, response)
-                return
-            }
+        // TODO
+    }
 
-            callback(DiscordApplicationCommand(commandObject: command), response)
-        }
-        rateLimiter.executeRequest(endpoint: .guildApplicationCommand(applicationId: applicationId, guildId: guildId, commandId: commandId),
-                                   token: token,
-                                   requestInfo: .get(params: nil, extraHeaders: nil),
-                                   callback: requestCallback)
+    /// Default implementation
+    func editApplicationCommand(_ commandId: CommandID,
+                                on guildId: GuildID,
+                                name: String,
+                                description: String,
+                                options: [DiscordApplicationCommandOption]? = nil,
+                                callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ()) {
+        guard let applicationId = user?.id else { callback(nil, nil); return }
+        // TODO
+    }
+
+    /// Default implementation
+    func deleteApplicationCommand(_ commandId: CommandID,
+                                  on guildId: GuildID,
+                                  callback: @escaping (HTTPURLResponse?) -> ()) {
+        guard let applicationId = user?.id else { callback(nil); return }
+        // TODO
     }
 }
