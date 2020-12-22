@@ -3,6 +3,14 @@ import Foundation
 /// Represents a slash-command. The base command model of the
 /// application.
 public struct DiscordApplicationCommand: Encodable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case applicationId = "application_id"
+        case name
+        case description
+        case parameters
+    }
+
     // MARK: Properties
 
     /// The ID of the command.
@@ -22,6 +30,16 @@ public struct DiscordApplicationCommand: Encodable {
 }
 
 public struct DiscordApplicationCommandOption: Encodable {
+    public enum CodingKeys: String, CodingKey {
+        case type
+        case name
+        case description
+        case isDefault = "default"
+        case isRequired = "required"
+        case choices
+        case options
+    }
+
     /// The expected type
     public let type: DiscordApplicationCommandOptionType
 
