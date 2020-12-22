@@ -79,7 +79,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .globalApplicationCommand(applicationId: applicationId, commandId: commandId),
                                    token: token,
-                                   requestInfo: .patch(content: nil, extraHeaders: nil),
+                                   requestInfo: .delete(content: nil, extraHeaders: nil),
                                    callback: requestCallback)
     }
 
@@ -116,7 +116,11 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
             callback(DiscordApplicationCommand(commandObject: command), response)
         }
-        // TODO
+        let params = CommandParams(name: name, description: description, options: options)
+        rateLimiter.executeRequest(endpoint: .guildApplicationCommands(applicationId: applicationId, guildId: guildId),
+                                   token: token,
+                                   requestInfo: .post(content: .json(JSON.encodeJSONData(params) ?? Data()), extraHeaders: nil),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
@@ -135,7 +139,11 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
             callback(DiscordApplicationCommand(commandObject: command), response)
         }
-        // TODO
+        let params = CommandParams(name: name, description: description, options: options)
+        rateLimiter.executeRequest(endpoint: .guildApplicationCommand(applicationId: applicationId, guildId: guildId, commandId: commandId),
+                                   token: token,
+                                   requestInfo: .patch(content: .json(JSON.encodeJSONData(params) ?? Data()), extraHeaders: nil),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
@@ -143,6 +151,12 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                   on guildId: GuildID,
                                   callback: @escaping (HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback(nil); return }
-        // TODO
+        let requestCallback: DiscordRequestCallback = { data, response, error in
+            callback(response)
+        }
+        rateLimiter.executeRequest(endpoint: .guildApplicationCommand(applicationId: applicationId, guildId: guildId, commandId: commandId),
+                                   token: token,
+                                   requestInfo: .delete(content: nil, extraHeaders: nil),
+                                   callback: requestCallback)
     }
 }
