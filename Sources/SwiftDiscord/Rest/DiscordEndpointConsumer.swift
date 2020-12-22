@@ -625,6 +625,40 @@ public protocol DiscordEndpointConsumer {
     ///
     func getGuilds(callback: @escaping ([ChannelID: DiscordUserGuild], HTTPURLResponse?) -> ())
 
+    // MARK: Applications
+
+    ///
+    /// Gets the global slash-commands of a user.
+    ///
+    /// - parameter callback: The callback function, taking a dictionary of commands.
+    ///
+    func getApplicationCommands(callback: @escaping ([DiscordApplicationCommand], HTTPURLResponse?) -> ())
+
+    ///
+    /// Gets a global slash-command of a user.
+    ///
+    /// - parameter callback: The callback function, taking a command.
+    ///
+    func getApplicationCommand(_ commandId: CommandID,
+                               callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ())
+
+    ///
+    /// Gets the guild-specific slash-commands of a user.
+    ///
+    /// - parameter callback: The callback function, taking a dictionary of commands.
+    ///
+    func getApplicationCommands(on guildId: GuildID,
+                                callback: @escaping ([DiscordApplicationCommand], HTTPURLResponse?) -> ())
+
+    ///
+    /// Gets a guild-specific slash-command of a user.
+    ///
+    /// - parameter callback: The callback function, taking a command.
+    ///
+    func getApplicationCommand(_ commandId: CommandID,
+                               on guildId: GuildID,
+                               callback: @escaping (DiscordApplicationCommand?, HTTPURLResponse?) -> ())
+
     // MARK: Misc
 
     ///

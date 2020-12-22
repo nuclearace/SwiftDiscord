@@ -26,7 +26,19 @@ public struct DiscordApplicationCommand: Encodable {
     public let description: String
 
     /// The parameters for the command
-    public let parameters: DiscordApplicationCommandOption
+    public let parameters: [DiscordApplicationCommandOption]
+
+    init(commandObject: [String: Any]) {
+        id = Snowflake((commandObject["id"] as? String) ?? "")
+        applicationId = Snowflake((commandObject["application_id"] as? String) ?? "")
+        name = (commandObject["name"] as? String) ?? ""
+        description = (commandObject["description"] as? String) ?? ""
+        parameters = ((commandObject["parameters"] as? [[String: Any]]) ?? []).map(DiscordApplicationCommandOption.init(optionObject:))
+    }
+
+    static func commandsFromArray(_ array: [[String: Any]]) -> [DiscordApplicationCommand] {
+        return array.map({ DiscordApplicationCommand(commandObject: $0) })
+    }
 }
 
 public struct DiscordApplicationCommandOption: Encodable {
@@ -41,7 +53,7 @@ public struct DiscordApplicationCommandOption: Encodable {
     }
 
     /// The expected type
-    public let type: DiscordApplicationCommandOptionType
+    public let type: DiscordApplicationCommandOptionType?
 
     /// 1-32 character name
     public let name: String
@@ -61,7 +73,17 @@ public struct DiscordApplicationCommandOption: Encodable {
 
     /// If the option is a subcommand or subcommand group, these
     /// nested options will be the parameters
-    public let options: [DiscordApplicationCommandOption]
+    public let options: [DiscordApplicationCommandOption]?
+
+    init(optionObject: [String: Any]) {
+        type = (optionObject["type"] as? Int).flatMap(DiscordApplicationCommandOptionType.init(rawValue:))
+        name = (optionObject["name"] as? String) ?? ""
+        description = (optionObject["description"] as? String) ?? ""
+        isDefault = (optionObject["default"] as? Bool) ?? false
+        isRequired = (optionObject["required"] as? Bool) ?? false
+        choices = (optionObject["choices"] as? [[String: Any]]).map { $0.map(DiscordApplicationCommandOptionChoice.init(choiceObject:)) }
+        options = (optionObject["options"] as? [[String: Any]]).map { $0.map(DiscordApplicationCommandOption.init(optionObject:)) }
+    }
 }
 
 public struct DiscordApplicationCommandOptionChoice: Encodable {
@@ -69,7 +91,17 @@ public struct DiscordApplicationCommandOptionChoice: Encodable {
     public let name: String
 
     /// Value of the choice
-    public let value: DiscordApplicationCommandOptionChoiceValue
+    public let value: DiscordApplicationCommandOptionChoiceValue?
+
+    init(choiceObject: [String: Any]) {
+        name = (choiceObject["name"] as? String) ?? ""
+        let rawValue = choiceObject["value"]
+        if let value = rawValue as? String {
+            self.value = .string(value)
+        } else if let value = rawValue as? Int {
+            self.value = .int(value)
+        }
+    }
 }
 
 public enum DiscordApplicationCommandOptionChoiceValue: Encodable {
