@@ -70,7 +70,7 @@ public final class DiscordRateLimiter : DiscordRateLimiterSpec {
             if endpointLimits[endpointKey] == nil {
                 // First time handling this endpoint, err on the side caution and limit to one
                 endpointLimits[endpointKey] = DiscordRateLimit(endpointKey: endpointKey, limit: 1, remaining: 1,
-                                                               reset: Int(Date().timeIntervalSince1970) + 3)
+                                                               reset: Date().timeIntervalSince1970 + 3)
             }
 
             let rateLimit = endpointLimits[endpointKey]!
@@ -155,9 +155,9 @@ public final class DiscordRateLimiter : DiscordRateLimiterSpec {
                    let remaining = response.allHeaderFields["x-ratelimit-remaining"],
                    let reset = response.allHeaderFields["x-ratelimit-reset"] {
                     // Update the limit and attempt to schedule a limit reset
-                    rateLimit.updateLimits(limit: Int(limit as! String)!,
-                                           remaining: Int(remaining as! String)!,
-                                           reset: Int(reset as! String)!)
+                    rateLimit.updateLimits(limit: Double(limit as! String)!,
+                                           remaining: Double(remaining as! String)!,
+                                           reset: Double(reset as! String)!)
                 }
 
                 logger.debug("New limit: \(rateLimit.limit)")
@@ -224,41 +224,49 @@ public struct DiscordRateLimitKey : Hashable {
     /// stored separately if needed.  Technically, the .guildID and .channelID fields aren't needed since
     /// the full ID will also be stored, but they're included to make the system more straightforward.
     public struct DiscordRateLimitURLParts : OptionSet {
-        public let rawValue: Int
+        public let rawValue: Int64
 
-        static let         guilds = DiscordRateLimitURLParts(rawValue: 1 << 0)
-        static let        guildID = DiscordRateLimitURLParts(rawValue: 1 << 1)
-        static let       channels = DiscordRateLimitURLParts(rawValue: 1 << 2)
-        static let      channelID = DiscordRateLimitURLParts(rawValue: 1 << 3)
-        static let       messages = DiscordRateLimitURLParts(rawValue: 1 << 4)
-        static let messagesDelete = DiscordRateLimitURLParts(rawValue: 1 << 5)
-        static let      messageID = DiscordRateLimitURLParts(rawValue: 1 << 6)
-        static let     bulkDelete = DiscordRateLimitURLParts(rawValue: 1 << 7)
-        static let         typing = DiscordRateLimitURLParts(rawValue: 1 << 8)
-        static let    permissions = DiscordRateLimitURLParts(rawValue: 1 << 9)
-        static let    overwriteID = DiscordRateLimitURLParts(rawValue: 1 << 10)
-        static let        invites = DiscordRateLimitURLParts(rawValue: 1 << 11)
-        static let     inviteCode = DiscordRateLimitURLParts(rawValue: 1 << 12)
-        static let           pins = DiscordRateLimitURLParts(rawValue: 1 << 13)
-        static let       webhooks = DiscordRateLimitURLParts(rawValue: 1 << 14)
-        static let        members = DiscordRateLimitURLParts(rawValue: 1 << 15)
-        static let         userID = DiscordRateLimitURLParts(rawValue: 1 << 16)
-        static let          roles = DiscordRateLimitURLParts(rawValue: 1 << 17)
-        static let         roleID = DiscordRateLimitURLParts(rawValue: 1 << 18)
-        static let           bans = DiscordRateLimitURLParts(rawValue: 1 << 19)
-        static let          users = DiscordRateLimitURLParts(rawValue: 1 << 20)
-        static let      webhookID = DiscordRateLimitURLParts(rawValue: 1 << 21)
-        static let   webhookToken = DiscordRateLimitURLParts(rawValue: 1 << 22)
-        static let          slack = DiscordRateLimitURLParts(rawValue: 1 << 23)
-        static let         github = DiscordRateLimitURLParts(rawValue: 1 << 24)
-        static let       auditLog = DiscordRateLimitURLParts(rawValue: 1 << 25)
-        static let      reactions = DiscordRateLimitURLParts(rawValue: 1 << 26)
-        static let          emoji = DiscordRateLimitURLParts(rawValue: 1 << 27)
-        static let         emojis = DiscordRateLimitURLParts(rawValue: 1 << 28)
-        static let        emojiID = DiscordRateLimitURLParts(rawValue: 1 << 29)
-        static let             me = DiscordRateLimitURLParts(rawValue: 1 << 30)
+        static let           guilds = DiscordRateLimitURLParts(rawValue: 1 << 0)
+        static let          guildID = DiscordRateLimitURLParts(rawValue: 1 << 1)
+        static let         channels = DiscordRateLimitURLParts(rawValue: 1 << 2)
+        static let        channelID = DiscordRateLimitURLParts(rawValue: 1 << 3)
+        static let         messages = DiscordRateLimitURLParts(rawValue: 1 << 4)
+        static let   messagesDelete = DiscordRateLimitURLParts(rawValue: 1 << 5)
+        static let        messageID = DiscordRateLimitURLParts(rawValue: 1 << 6)
+        static let       bulkDelete = DiscordRateLimitURLParts(rawValue: 1 << 7)
+        static let           typing = DiscordRateLimitURLParts(rawValue: 1 << 8)
+        static let      permissions = DiscordRateLimitURLParts(rawValue: 1 << 9)
+        static let      overwriteID = DiscordRateLimitURLParts(rawValue: 1 << 10)
+        static let          invites = DiscordRateLimitURLParts(rawValue: 1 << 11)
+        static let       inviteCode = DiscordRateLimitURLParts(rawValue: 1 << 12)
+        static let             pins = DiscordRateLimitURLParts(rawValue: 1 << 13)
+        static let         webhooks = DiscordRateLimitURLParts(rawValue: 1 << 14)
+        static let          members = DiscordRateLimitURLParts(rawValue: 1 << 15)
+        static let           userID = DiscordRateLimitURLParts(rawValue: 1 << 16)
+        static let            roles = DiscordRateLimitURLParts(rawValue: 1 << 17)
+        static let           roleID = DiscordRateLimitURLParts(rawValue: 1 << 18)
+        static let             bans = DiscordRateLimitURLParts(rawValue: 1 << 19)
+        static let            users = DiscordRateLimitURLParts(rawValue: 1 << 20)
+        static let        webhookID = DiscordRateLimitURLParts(rawValue: 1 << 21)
+        static let     webhookToken = DiscordRateLimitURLParts(rawValue: 1 << 22)
+        static let            slack = DiscordRateLimitURLParts(rawValue: 1 << 23)
+        static let           github = DiscordRateLimitURLParts(rawValue: 1 << 24)
+        static let         auditLog = DiscordRateLimitURLParts(rawValue: 1 << 25)
+        static let        reactions = DiscordRateLimitURLParts(rawValue: 1 << 26)
+        static let            emoji = DiscordRateLimitURLParts(rawValue: 1 << 27)
+        static let           emojis = DiscordRateLimitURLParts(rawValue: 1 << 28)
+        static let          emojiID = DiscordRateLimitURLParts(rawValue: 1 << 29)
+        static let               me = DiscordRateLimitURLParts(rawValue: 1 << 30)
+        static let     applications = DiscordRateLimitURLParts(rawValue: 1 << 31)
+        static let    applicationID = DiscordRateLimitURLParts(rawValue: 1 << 32)
+        static let         commands = DiscordRateLimitURLParts(rawValue: 1 << 33)
+        static let        commandID = DiscordRateLimitURLParts(rawValue: 1 << 34)
+        static let     interactions = DiscordRateLimitURLParts(rawValue: 1 << 35)
+        static let    interactionID = DiscordRateLimitURLParts(rawValue: 1 << 36)
+        static let interactionToken = DiscordRateLimitURLParts(rawValue: 1 << 37)
+        static let         callback = DiscordRateLimitURLParts(rawValue: 1 << 38)
 
-        public init(rawValue: Int) {
+        public init(rawValue: Int64) {
             self.rawValue = rawValue
         }
     }
@@ -298,9 +306,9 @@ public struct DiscordRateLimitKey : Hashable {
 /// Enqueued requests are handled through limit resets. Which are told to us by Discord in the x-ratelimit-reset header.
 /// It's up to the DiscordRateLimiter to actually call the scheduleReset method.
 private final class DiscordRateLimit {
-    var limit: Int
-    var remaining: Int
-    var reset: Int
+    var limit: Double
+    var remaining: Double
+    var reset: Double
     var queue = [RateLimitedRequest]()
 
     private let endpointKey: DiscordRateLimitKey
@@ -312,14 +320,14 @@ private final class DiscordRateLimit {
     }
 
     private var deadlineForReset: DispatchTime {
-        let seconds = reset - Int(Date().timeIntervalSince1970)
+        let seconds = reset - Date().timeIntervalSince1970
 
         guard seconds > 0 else { return DispatchTime(uptimeNanoseconds: 0) }
 
         return DispatchTime.now() + Double(seconds)
     }
 
-    init(endpointKey: DiscordRateLimitKey, limit: Int, remaining: Int, reset: Int) {
+    init(endpointKey: DiscordRateLimitKey, limit: Double, remaining: Double, reset: Double) {
         self.endpointKey = endpointKey
         self.limit = limit
         self.remaining = remaining
@@ -346,13 +354,13 @@ private final class DiscordRateLimit {
                 limiter.executeRequest(limitedRequest.request, for: self.endpointKey, callback: limitedRequest.callback)
 
                 removed += 1
-            } while removed < self.remaining && self.queue.count != 0
+            } while removed < Int(self.remaining) && self.queue.count != 0
 
             logger.debug("Sent \(removed) requests for limit: \(self.endpointKey)")
         }
     }
 
-    func updateLimits(limit: Int, remaining: Int, reset: Int) {
+    func updateLimits(limit: Double, remaining: Double, reset: Double) {
         self.limit = limit
         self.remaining = remaining
         self.reset = reset

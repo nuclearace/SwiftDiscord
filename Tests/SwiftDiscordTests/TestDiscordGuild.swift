@@ -25,20 +25,20 @@ public class TestDiscordGuild : XCTestCase {
         XCTAssertEqual(guild.defaultMessageNotifications, 0, "init should set default message notifications")
     }
 
-    func testCreatingGuildSetsEmbedEnabled() {
-        tGuild["embed_enabled"] = true
+    func testCreatingGuildSetsWidgetEnabled() {
+        tGuild["widget_enabled"] = true
 
         let guild = DiscordGuild(guildObject: tGuild, client: nil)
 
-        XCTAssertTrue(guild.embedEnabled, "init should set embed enabled")
+        XCTAssertTrue(guild.widgetEnabled, "init should set widget enabled")
     }
 
-    func testCreatingGuildSetsEmbedChannel() {
-        tGuild["embed_channel_id"] = "200"
+    func testCreatingGuildSetsWidgetChannel() {
+        tGuild["widget_channel_id"] = "200"
 
         let guild = DiscordGuild(guildObject: tGuild, client: nil)
 
-        XCTAssertEqual(guild.embedChannelId, 200, "init should set the embed channel id")
+        XCTAssertEqual(guild.widgetChannelId, 200, "init should set the widget channel id")
     }
 
     func testCreatingGuildSetsIcon() {
@@ -229,8 +229,8 @@ public class TestDiscordGuild : XCTestCase {
             ("testCreatingGuildSetsId", testCreatingGuildSetsId),
             ("testCreatingGuildSetsName", testCreatingGuildSetsName),
             ("testCreatingGuildSetsDefaultMessageNotifications", testCreatingGuildSetsDefaultMessageNotifications),
-            ("testCreatingGuildSetsEmbedEnabled", testCreatingGuildSetsEmbedEnabled),
-            ("testCreatingGuildSetsEmbedChannel", testCreatingGuildSetsEmbedChannel),
+            ("testCreatingGuildSetsWidgetEnabled", testCreatingGuildSetsWidgetEnabled),
+            ("testCreatingGuildSetsWidgetChannel", testCreatingGuildSetsWidgetChannel),
             ("testCreatingGuildSetsIcon", testCreatingGuildSetsIcon),
             ("testCreatingGuildSetsLarge", testCreatingGuildSetsLarge),
             ("testCreatingGuildSetsMemberCount", testCreatingGuildSetsMemberCount),

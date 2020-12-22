@@ -21,9 +21,19 @@ import Foundation
 public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     // Used for `createDataForSending`
     private struct FieldsList : Encodable {
+        enum CodingKeys: String, CodingKey {
+            case content
+            case tts
+            case embed
+            case allowedMentions = "allowed_mentions"
+            case messageReference = "message_reference"
+        }
+
         let content: String
         let tts: Bool
         let embed: DiscordEmbed?
+        let allowedMentions: DiscordAllowedMentions?
+        let messageReference: DiscordMessageReference?
     }
 
     // MARK: Typealiases
@@ -87,11 +97,27 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// The reactions a message has.
     public let reactions: [DiscordReaction]
 
+    /// The stickers a message has.
+    public let stickers: [DiscordMessageSticker]
+
     /// The timestamp of this message.
     public let timestamp: Date
 
     /// Whether or not this message should be read by a screen reader.
     public let tts: Bool
+
+    /// Finer-grained control over the allowed mentions in an outgoing message.
+    public let allowedMentions: DiscordAllowedMentions?
+
+    /// A referenced message in an incoming message. Only present if it's a reply.
+    ///
+    /// TODO: This is actually a DiscordMessage object too, but would cause the
+    ///       value type to become recursive, which is not allowed yet (since optionals
+    ///       are value types themselves that do not box the value).
+    public let referencedMessage: [String: Any]?
+
+    /// A referenced message in an outgoing message.
+    public let messageReference: DiscordMessageReference?
 
     /// The type of this message.
     public let type: MessageType
@@ -128,9 +154,13 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         nonce = messageObject.getSnowflake(key: "nonce")
         pinned = messageObject.get("pinned", or: false)
         reactions = DiscordReaction.reactionsFromArray(messageObject.get("reactions", or: []))
+        stickers = DiscordMessageSticker.stickersFromArray(messageObject.get("sticker", or: []))
         tts = messageObject.get("tts", or: false)
         editedTimestamp = DiscordDateFormatter.format(messageObject.get("edited_timestamp", or: "")) ?? Date()
         timestamp = DiscordDateFormatter.format(messageObject.get("timestamp", or: "")) ?? Date()
+        allowedMentions = nil
+        referencedMessage = messageObject.get("referenced_message", as: [String: Any].self)
+        messageReference = nil
         files = []
         type = MessageType(rawValue: messageObject.get("type", or: 0)) ?? .default
         self.client = client
@@ -144,7 +174,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// - parameter files: The files to send with this message.
     /// - parameter tts: Whether this message should be text-to-speach.
     ///
-    public init(content: String, embed: DiscordEmbed? = nil, files: [DiscordFileUpload] = [], tts: Bool = false) {
+    public init(content: String, embed: DiscordEmbed? = nil, files: [DiscordFileUpload] = [], tts: Bool = false, allowedMentions: DiscordAllowedMentions? = nil, messageReference: DiscordMessageReference? = nil) {
         self.content = content
         if let embed = embed {
             self.embeds = [embed]
@@ -155,6 +185,9 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.application = nil
         self.files = files
         self.tts = tts
+        self.allowedMentions = allowedMentions
+        self.messageReference = messageReference
+        self.referencedMessage = nil
         self.attachments = []
         self.author = DiscordUser(userObject: [:])
         self.channelId = 0
@@ -165,6 +198,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.nonce = 0
         self.pinned = false
         self.reactions = []
+        self.stickers = []
         self.editedTimestamp = Date()
         self.timestamp = Date()
         self.type = .default
@@ -200,7 +234,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     // MARK: Methods
 
     func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
-        let fields = FieldsList(content: content, tts: tts, embed: embeds.first)
+        let fields = FieldsList(content: content, tts: tts, embed: embeds.first, allowedMentions: allowedMentions, messageReference: messageReference)
         let fieldsData = JSON.encodeJSONData(fields) ?? Data()
         if files.count > 0 {
             return .right(createMultipartBody(encodedJSON: fieldsData, files: files))
@@ -225,28 +259,52 @@ public extension DiscordMessage {
     /// Type of message
     enum MessageType : Int {
         /// Default.
-        case `default`
+        case `default` = 0
 
         /// Recipient Add.
-        case recipientAdd
+        case recipientAdd = 1
 
         /// Recipient Remove.
-        case recipientRemove
+        case recipientRemove = 2
 
         /// Call.
-        case call
+        case call = 3
 
         /// Channel name change.
-        case channelNameChange
+        case channelNameChange = 4
 
         /// Channel icon change.
-        case channelIconChange
+        case channelIconChange = 5
 
         /// Channel pinned message.
-        case channelPinnedMessage
+        case channelPinnedMessage = 6
 
         /// Guild member join.
-        case guildMemberJoin
+        case guildMemberJoin = 7
+
+        /// User premium guild subscription.
+        case userPremiumGuildSubscription = 8
+
+        /// User premium guild subscription tier 1.
+        case userPremiumGuildSubscriptionTier1 = 9
+
+        /// User premium guild subscription tier 2.
+        case userPremiumGuildSubscriptionTier2 = 10
+
+        /// User premium guild subscription tier 3.
+        case userPremiumGuildSubscriptionTier3 = 11
+
+        /// Channel follow add.
+        case channelFollowAdd = 12
+
+        /// Guild discovery disqualified.
+        case guildDiscoveryDisqualified = 14
+
+        /// Guild discovery requalified.
+        case guildDiscoveryRequalified = 15
+
+        /// Message reply.
+        case reply = 19
     }
 
     /// Represents an action that be taken on a message.
@@ -797,5 +855,97 @@ public struct DiscordReaction {
 
     static func reactionsFromArray(_ reactionsArray: [[String: Any]]) -> [DiscordReaction] {
         return reactionsArray.map(DiscordReaction.init)
+    }
+}
+
+public enum DiscordAllowedMentionType : String, Encodable {
+    case roles
+    case users
+    case everyone
+}
+
+/// Allows for more granular control over mentions
+/// without having to modify the message content.
+public struct DiscordAllowedMentions : Encodable {
+    public enum CodingKeys : String, CodingKey {
+        case parse
+        case roles
+        case users
+        case repliedUser = "replied_user"
+    }
+
+    /// An array of allowed mentions types to parse from the content.
+    public let parse: DiscordAllowedMentionType
+    /// Array of role ids to mention.
+    public let roles: [RoleID]
+    /// Array of user ids to mention.
+    public let users: [UserID]
+    /// For replies, whether to mention the author of the message being replied to (default: false)
+    public let repliedUser: Bool
+
+    public init(parse: DiscordAllowedMentionType = .everyone, roles: [RoleID] = [], users: [UserID] = [], repliedUser: Bool = false) {
+        self.parse = parse
+        self.roles = roles
+        self.users = users
+        self.repliedUser = repliedUser
+    }
+}
+
+/// A reference to a message, e.g. used in outgoing replies.
+public struct DiscordMessageReference : Encodable {
+    public enum CodingKeys : String, CodingKey {
+        case messageId = "message_id"
+        case channelId = "channel_id"
+        case guildId = "guild_id"
+    }
+
+    public let messageId: MessageID?
+    public let channelId: ChannelID?
+    public let guildId: GuildID?
+
+    public init(messageId: MessageID? = nil, channelId: ChannelID? = nil, guildId: GuildID? = nil) {
+        self.messageId = messageId
+        self.channelId = channelId
+        self.guildId = guildId
+    }
+}
+
+public enum DiscordMessageStickerFormatType: Int {
+    case png = 1
+    case apng = 2
+    case lottie = 3
+}
+
+public struct DiscordMessageSticker {
+    /// ID of the sticker
+    public let id: Snowflake
+    /// ID of the sticker pack
+    public let packId: Snowflake
+    /// Name of the sticker
+    public let name: String
+    /// Description of the sticker
+    public let description: String
+    /// List of tags for the sticker
+    public let tags: [String]
+    /// Sticker asset hash
+    public let asset: String?
+    /// Sticker preview asset hash
+    public let previewAsset: String?
+    /// Type of sticker format
+    public let formatType: DiscordMessageStickerFormatType?
+
+    init(stickerObject: [String: Any]) {
+        id = stickerObject.getSnowflake(key: "id")
+        packId = stickerObject.getSnowflake(key: "pack_id")
+        name = stickerObject.get("name", or: "")
+        description = stickerObject.get("description", or: "")
+        tags = stickerObject.get("tags", or: "").split(separator: ",").map(String.init)
+        asset = stickerObject.get("asset", as: String.self)
+        previewAsset = stickerObject.get("preview_asset", as: String.self)
+        formatType = stickerObject.get("format_type", as: Int.self).flatMap(DiscordMessageStickerFormatType.init(rawValue:))
+    }
+
+    static func stickersFromArray(_ stickerArray: [[String: Any]]) -> [DiscordMessageSticker] {
+        return stickerArray.map(DiscordMessageSticker.init)
     }
 }

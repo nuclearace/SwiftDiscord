@@ -16,7 +16,7 @@ let testRole: [String: Any] = [
     "managed": false,
     "mentionable": true,
     "name": "My Test Role",
-    "permissions": 0,
+    "permissions": "0",
     "position": 0
 ]
 
@@ -95,8 +95,8 @@ let testGuildChannelCategory: [String: Any] = [
 let testGuild: [String: Any] = [
     "channels": [[String: Any]](),
     "default_message_notifications": 0,
-    "embed_enabled": false,
-    "embed_channel_id": "",
+    "widget_enabled": false,
+    "widget_channel_id": "",
     "emojis": [[String: Any]](),
     "features": [Any](),
     "icon": "",

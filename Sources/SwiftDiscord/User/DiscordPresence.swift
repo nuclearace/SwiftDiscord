@@ -27,9 +27,6 @@ public struct DiscordPresence {
     /// The user associated with this presence.
     public let user: DiscordUser
 
-    /// The game this user is playing, if they are playing a game.
-    public var game: DiscordActivity?
-
     /// All of the user's current activies.
     public var activities: [DiscordActivity]
 
@@ -45,7 +42,6 @@ public struct DiscordPresence {
     init(presenceObject: [String: Any], guildId: GuildID) {
         self.guildId = guildId
         user = DiscordUser(userObject: presenceObject.get("user", or: [String: Any]()))
-        game = DiscordActivity(gameObject: presenceObject["game"] as? [String: Any])
         activities = (presenceObject["activities"] as? [[String: Any]])?.map(DiscordActivity.init(gameObject:)).compactMap { $0 } ?? []
         nick = presenceObject["nick"] as? String
         status = DiscordPresenceStatus(rawValue: presenceObject.get("status", or: "")) ?? .offline
@@ -53,12 +49,6 @@ public struct DiscordPresence {
     }
 
     mutating func updatePresence(presenceObject: [String: Any]) {
-        if let game = presenceObject["game"] as? [String: Any] {
-            self.game = DiscordActivity(gameObject: game)
-        } else {
-            self.game = nil
-        }
-
         if let activities = presenceObject["activities"] as? [[String: Any]] {
             self.activities = activities.map(DiscordActivity.init(gameObject:)).compactMap { $0 }
         }

@@ -625,6 +625,94 @@ public protocol DiscordEndpointConsumer {
     ///
     func getGuilds(callback: @escaping ([ChannelID: DiscordUserGuild], HTTPURLResponse?) -> ())
 
+    // MARK: Applications
+
+    ///
+    /// Gets the global slash-commands of a user.
+    ///
+    /// - parameter callback: The callback function, taking a dictionary of commands.
+    ///
+    func getApplicationCommands(callback: @escaping ([DiscordApplicationCommand], HTTPURLResponse?) -> ())
+
+    ///
+    /// Creates a global slash-command for a user.
+    ///
+    /// - parameter callback: The callback function, taking a command.
+    ///
+    func createApplicationCommand(name: String,
+                                  description: String,
+                                  options: [DiscordApplicationCommandOption]?,
+                                  callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Edits a global slash-command for a user.
+    ///
+    /// - parameter callback: The callback function, taking a command.
+    ///
+    func editApplicationCommand(_ commandId: CommandID,
+                                name: String,
+                                description: String,
+                                options: [DiscordApplicationCommandOption]?,
+                                callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Deletes a global slash-command for a user.
+    ///
+    /// - parameter callback: The callback function, taking a command.
+    ///
+    func deleteApplicationCommand(_ commandId: CommandID,
+                                  callback: ((HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Gets the guild-specific slash-commands of a user.
+    ///
+    /// - parameter callback: The callback function, taking a dictionary of commands.
+    ///
+    func getApplicationCommands(on guildId: GuildID,
+                                callback: @escaping ([DiscordApplicationCommand], HTTPURLResponse?) -> ())
+
+    ///
+    /// Creates a guild-specific slash-command for a user.
+    ///
+    /// - parameter callback: The callback function, taking a command.
+    ///
+    func createApplicationCommand(on guildId: GuildID,
+                                  name: String,
+                                  description: String,
+                                  options: [DiscordApplicationCommandOption]?,
+                                  callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Edits a guild-specific slash-command for a user.
+    ///
+    /// - parameter callback: The callback function, taking a command.
+    ///
+    func editApplicationCommand(_ commandId: CommandID,
+                                on guildId: GuildID,
+                                name: String,
+                                description: String,
+                                options: [DiscordApplicationCommandOption]?,
+                                callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Deletes a guild-specific slash-command for a user.
+    ///
+    /// - parameter callback: The callback function, taking a command.
+    ///
+    func deleteApplicationCommand(_ commandId: CommandID,
+                                  on guildId: GuildID,
+                                  callback: ((HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Creates a response to an interaction from the gateway.
+    ///
+    /// - parameter response: The response
+    ///
+    func createInteractionResponse(for interactionId: InteractionID,
+                                   token: String,
+                                   response: DiscordMessage,
+                                   callback: ((HTTPURLResponse?) -> ())?)
+
     // MARK: Misc
 
     ///

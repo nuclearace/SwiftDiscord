@@ -34,7 +34,7 @@ public class TestDiscordDataStructures : XCTestCase {
         XCTAssertEqual(role1.hoist, role2.hoist, "Hoist should survive JSONification")
         XCTAssertEqual(role1.managed, role2.managed, "Managed should survive JSONification")
         XCTAssertEqual(role1.mentionable, role2.mentionable, "Mentionable should survive JSONification")
-        XCTAssertEqual(role1.name, role2.name, "Name should survive JSONificaiton")
+        XCTAssertEqual(role1.name, role2.name, "Name should survive JSONification")
         XCTAssertEqual(role1.permissions, role2.permissions, "Permissions should survive JSONification")
         XCTAssertEqual(role1.position, role2.position, "Position should survive JSONification")
     }
