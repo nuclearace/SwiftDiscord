@@ -50,7 +50,7 @@ public struct DiscordRole : Encodable, Equatable {
         managed = roleObject.get("managed", or: false)
         mentionable = roleObject.get("mentionable", or: false)
         name = roleObject.get("name", or: "")
-        permissions = DiscordPermission(rawValue: roleObject.get("permissions", or: 0))
+        permissions = DiscordPermission(rawValue: Int(roleObject.get("permissions", or: "0")) ?? 0)
         position = roleObject.get("position", or: 0)
     }
 

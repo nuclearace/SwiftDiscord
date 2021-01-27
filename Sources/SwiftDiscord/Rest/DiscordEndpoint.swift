@@ -274,7 +274,7 @@ public extension DiscordEndpoint {
     var description: String {
         switch self {
         case .baseURL:
-            return "https://discord.com/api/v6"
+            return "https://discord.com/api/v8"
 
         /* Channels */
         case let .channel(id):
@@ -582,7 +582,7 @@ public extension DiscordEndpoint {
             case name(String)
 
             /// The permissions this role has.
-            case permissions(Int)
+            case permissions(DiscordPermission)
         }
 
         /// Options for getting messages

@@ -39,6 +39,10 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
     /// However this means that invsible users will also be pruned.
     case pruneUsers
 
+    /// The gateway intents. By default, only the unprivileged intents are used, i.e. you won't
+    /// get guild member and presence events, unless you specify these here (e.g. by using .allIntents).
+    case intents(DiscordGatewayIntent)
+
     /// A DiscordRateLimiter for this client. All REST calls will be put through this limiter.
     case rateLimiter(DiscordRateLimiterSpec)
 
@@ -60,6 +64,7 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
         case .rateLimiter:          return "rateLimiter"
         case .shardingInfo:         return "shardingInfo"
         case .pruneUsers:           return "pruneUsers"
+        case .intents:              return "intents"
         case .voiceConfiguration:   return "voiceConfiguration"
         }
     }

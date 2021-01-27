@@ -70,7 +70,7 @@ public final class DiscordRateLimiter : DiscordRateLimiterSpec {
             if endpointLimits[endpointKey] == nil {
                 // First time handling this endpoint, err on the side caution and limit to one
                 endpointLimits[endpointKey] = DiscordRateLimit(endpointKey: endpointKey, limit: 1, remaining: 1,
-                                                               reset: Int(Date().timeIntervalSince1970) + 3)
+                                                               reset: Date().timeIntervalSince1970 + 3)
             }
 
             let rateLimit = endpointLimits[endpointKey]!
@@ -155,9 +155,9 @@ public final class DiscordRateLimiter : DiscordRateLimiterSpec {
                    let remaining = response.allHeaderFields["x-ratelimit-remaining"],
                    let reset = response.allHeaderFields["x-ratelimit-reset"] {
                     // Update the limit and attempt to schedule a limit reset
-                    rateLimit.updateLimits(limit: Int(limit as! String)!,
-                                           remaining: Int(remaining as! String)!,
-                                           reset: Int(reset as! String)!)
+                    rateLimit.updateLimits(limit: Double(limit as! String)!,
+                                           remaining: Double(remaining as! String)!,
+                                           reset: Double(reset as! String)!)
                 }
 
                 logger.debug("New limit: \(rateLimit.limit)")
@@ -298,9 +298,9 @@ public struct DiscordRateLimitKey : Hashable {
 /// Enqueued requests are handled through limit resets. Which are told to us by Discord in the x-ratelimit-reset header.
 /// It's up to the DiscordRateLimiter to actually call the scheduleReset method.
 private final class DiscordRateLimit {
-    var limit: Int
-    var remaining: Int
-    var reset: Int
+    var limit: Double
+    var remaining: Double
+    var reset: Double
     var queue = [RateLimitedRequest]()
 
     private let endpointKey: DiscordRateLimitKey
@@ -312,14 +312,14 @@ private final class DiscordRateLimit {
     }
 
     private var deadlineForReset: DispatchTime {
-        let seconds = reset - Int(Date().timeIntervalSince1970)
+        let seconds = reset - Date().timeIntervalSince1970
 
         guard seconds > 0 else { return DispatchTime(uptimeNanoseconds: 0) }
 
         return DispatchTime.now() + Double(seconds)
     }
 
-    init(endpointKey: DiscordRateLimitKey, limit: Int, remaining: Int, reset: Int) {
+    init(endpointKey: DiscordRateLimitKey, limit: Double, remaining: Double, reset: Double) {
         self.endpointKey = endpointKey
         self.limit = limit
         self.remaining = remaining
@@ -346,13 +346,13 @@ private final class DiscordRateLimit {
                 limiter.executeRequest(limitedRequest.request, for: self.endpointKey, callback: limitedRequest.callback)
 
                 removed += 1
-            } while removed < self.remaining && self.queue.count != 0
+            } while removed < Int(self.remaining) && self.queue.count != 0
 
             logger.debug("Sent \(removed) requests for limit: \(self.endpointKey)")
         }
     }
 
-    func updateLimits(limit: Int, remaining: Int, reset: Int) {
+    func updateLimits(limit: Double, remaining: Double, reset: Double) {
         self.limit = limit
         self.remaining = remaining
         self.reset = reset

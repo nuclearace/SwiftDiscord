@@ -83,10 +83,10 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public private(set) var defaultMessageNotifications: Int
 
     /// The snowflake id of the embed channel for this guild.
-    public private(set) var embedChannelId: ChannelID
+    public private(set) var widgetChannelId: ChannelID
 
     /// Whether this guild has embed enabled.
-    public private(set) var embedEnabled: Bool
+    public private(set) var widgetEnabled: Bool
 
     /// The base64 encoded icon image for this guild.
     public private(set) var icon: String
@@ -113,8 +113,8 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         id = guildObject.getSnowflake()
         channels = guildChannels(fromArray: guildObject.get("channels", or: JSONArray()), guildID: id, client: client)
         defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
-        embedEnabled = guildObject.get("embed_enabled", or: false)
-        embedChannelId = guildObject.getSnowflake(key: "embed_channel_id")
+        widgetEnabled = guildObject.get("widget_enabled", or: false)
+        widgetChannelId = guildObject.getSnowflake(key: "widget_channel_id")
         emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: JSONArray()))
         features = guildObject.get("features", or: Array<Any>())
         icon = guildObject.get("icon", or: "")
@@ -313,12 +313,12 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
             self.defaultMessageNotifications = defaultMessageNotifications
         }
 
-        if let embedChannelId = Snowflake(newGuild["embed_channel_id"] as? String) {
-            self.embedChannelId = embedChannelId
+        if let widgetChannelId = Snowflake(newGuild["widget_channel_id"] as? String) {
+            self.widgetChannelId = widgetChannelId
         }
 
-        if let embedEnabled = newGuild["embed_enabled"] as? Bool {
-            self.embedEnabled = embedEnabled
+        if let widgetEnabled = newGuild["widget_enabled"] as? Bool {
+            self.widgetEnabled = widgetEnabled
         }
 
         if let icon = newGuild["icon"] as? String {

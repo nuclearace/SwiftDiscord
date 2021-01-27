@@ -91,7 +91,7 @@ public protocol DiscordShard : DiscordWebSocketable, DiscordGatewayable, Discord
     ///
     /// - parameter client: The client this engine should be associated with.
     ///
-    init(delegate: DiscordShardDelegate, shardNum: Int, numShards: Int, onLoop: EventLoop)
+    init(delegate: DiscordShardDelegate, shardNum: Int, numShards: Int, intents: DiscordGatewayIntent, onLoop: EventLoop)
 }
 
 /// Declares that a type will be a shard's delegate.
@@ -231,8 +231,8 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     /// - returns: A new `DiscordShard`
     ///
     open func createShardWithDelegate(_ delegate: DiscordShardManagerDelegate, withShardNum shardNum: Int,
-                                      totalShards: Int, onloop: EventLoop) -> DiscordShard {
-        return DiscordEngine(delegate: self, shardNum: shardNum, numShards: totalShards, onLoop: onloop)
+                                      totalShards: Int, intents: DiscordGatewayIntent, onloop: EventLoop) -> DiscordShard {
+        return DiscordEngine(delegate: self, shardNum: shardNum, numShards: totalShards, intents: intents, onLoop: onloop)
     }
 
     ///
@@ -258,7 +258,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     ///
     /// - parameter withInfo: The information about this single shard.
     ///
-    open func manuallyShatter(withInfo info: DiscordShardInformation) {
+    open func manuallyShatter(withInfo info: DiscordShardInformation, intents: DiscordGatewayIntent) {
         guard let delegate = self.delegate else { return }
 
         logger.debug("(verbose) Handling shard range \(info.shardRange)")
@@ -270,6 +270,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
                 shards.append(createShardWithDelegate(delegate,
                                                       withShardNum: shardNum,
                                                       totalShards: info.totalShards,
+                                                      intents: intents,
                                                       onloop: delegate.runloops.next()))
             }
         }

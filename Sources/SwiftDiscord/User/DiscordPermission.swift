@@ -17,6 +17,9 @@
 
 /// Represents a Discord Permission. Calculating Permissions involves bitwise operations.
 public struct DiscordPermission : OptionSet, Encodable {
+    // TODO: Migrate to BigInt or similar since permission are string-serialized
+    //       and may have arbitrary size as of v8
+
     public let rawValue: Int
 
     /// This user can create invites.
@@ -90,6 +93,11 @@ public struct DiscordPermission : OptionSet, Encodable {
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue.description)
+    }
 }
 
 /// Represents a permission overwrite type for a channel.
@@ -138,8 +146,8 @@ public struct DiscordPermissionOverwrite : Encodable {
     init(permissionOverwriteObject: [String: Any]) {
         id = permissionOverwriteObject.getSnowflake()
         type = DiscordPermissionOverwriteType(rawValue: permissionOverwriteObject.get("type", or: "")) ?? .role
-        allow = DiscordPermission(rawValue: permissionOverwriteObject.get("allow", or: 0))
-        deny = DiscordPermission(rawValue: permissionOverwriteObject.get("deny", or: 0))
+        allow = DiscordPermission(rawValue: Int(permissionOverwriteObject.get("allow", or: "0")) ?? 0)
+        deny = DiscordPermission(rawValue: Int(permissionOverwriteObject.get("deny", or: "0")) ?? 0)
     }
 
     static func overwritesFromArray(_ permissionOverwritesArray: [[String: Any]]) -> [OverwriteID: DiscordPermissionOverwrite] {

@@ -39,7 +39,7 @@ public struct DiscordUserGuild {
         name = userGuildObject.get("name", or: "")
         icon = userGuildObject.get("icon", or: "")
         owner = userGuildObject.get("owner", or: false)
-        permissions = DiscordPermission(rawValue: userGuildObject.get("permissions", or: 0))
+        permissions = DiscordPermission(rawValue: Int(userGuildObject.get("permissions", or: "0")) ?? 0)
     }
 
     static func userGuildsFromArray(_ guilds: [[String: Any]]) -> [GuildID: DiscordUserGuild] {

@@ -69,6 +69,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// If we should only represent a single shard, this is the shard information.
     public var shardingInfo = try! DiscordShardInformation(shardRange: 0..<1, totalShards: 1)
 
+    /// The gateway intents.
+    public var intents = DiscordGatewayIntent.unprivilegedIntents
+
     /// Whether large guilds should have their users fetched as soon as they are created.
     public var fillLargeGuilds = false
 
@@ -124,6 +127,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
                 self.shardingInfo = shardingInfo
             case let .voiceConfiguration(config):
                 self.voiceManager.engineConfiguration = config
+            case let .intents(intents):
+                self.intents = intents
             case .discardPresences:
                 discardPresences = true
             case .fillLargeGuilds:
@@ -151,7 +156,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     open func connect() {
         logger.info("Connecting")
 
-        shardManager.manuallyShatter(withInfo: shardingInfo)
+        shardManager.manuallyShatter(withInfo: shardingInfo, intents: intents)
 
         shardManager.connect()
     }
