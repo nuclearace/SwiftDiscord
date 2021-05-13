@@ -19,7 +19,7 @@
 /// Declares that a type will be a delegate for a `DiscordClient`. After the client handles any events,
 /// the corresponding delegate method will be called.
 ///
-public protocol DiscordClientDelegate : class {
+public protocol DiscordClientDelegate : AnyObject {
     // MARK: Methods
 
     ///
