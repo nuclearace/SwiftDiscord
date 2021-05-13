@@ -23,7 +23,7 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordVoiceDataSource")
 
 /// Specifies that a type will be a data source for a VoiceEngine.
-public protocol DiscordVoiceDataSource : class {
+public protocol DiscordVoiceDataSource : AnyObject {
     // MARK: Properties
 
     /// The size of a frame in samples per channel. Needed to calculate the maximum size of a frame.
