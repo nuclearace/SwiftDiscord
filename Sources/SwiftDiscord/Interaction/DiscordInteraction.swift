@@ -43,7 +43,14 @@ public struct DiscordInteraction {
     }
 }
 
-public enum DiscordInteractionType: Int {
-    case ping = 1
-    case applicationCommand = 2
+public struct DiscordInteractionType: RawRepresentable {
+    public var rawValue: Int
+
+    public static let ping = DiscordInteractionType(rawValue: 1)
+    public static let applicationCommand = DiscordInteractionType(rawValue: 2)
+    public static let messageComponent = DiscordInteractionType(rawValue: 3)
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
 }
