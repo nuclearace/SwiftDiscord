@@ -119,7 +119,8 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// A referenced message in an outgoing message.
     public let messageReference: DiscordMessageReference?
 
-    /// Interactive components (e.g. buttons) in the message
+    /// Interactive components in the message. This top-level array should only
+    /// contain action rows (which can then e.g. contain buttons).
     public let components: [DiscordMessageComponent]?
 
     /// The type of this message.
