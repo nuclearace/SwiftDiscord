@@ -937,6 +937,8 @@ public struct DiscordMessageComponent : Encodable {
 
     /// The type of the component.
     public let type: DiscordMessageComponentType
+    /// Sub-components. Only valid for action rows.
+    public let components: [DiscordMessageComponent]?
     /// One of a few button styles. Only valid for buttons.
     public let style: DiscordMessageComponentButtonStyle?
     /// Label that appears on a button. Only valid for buttons.
@@ -952,6 +954,7 @@ public struct DiscordMessageComponent : Encodable {
 
     public init(
         type: DiscordMessageComponentType,
+        components: [DiscordMessageComponent]? = nil,
         style: DiscordMessageComponentButtonStyle? = nil,
         label: String? = nil,
         emoji: DiscordMessageComponentEmoji? = nil,
@@ -960,12 +963,41 @@ public struct DiscordMessageComponent : Encodable {
         disabled: Bool? = nil
     ) {
         self.type = type
+        self.components = components
         self.style = style
         self.label = label
         self.emoji = emoji
         self.customId = customId
         self.url = url
         self.disabled = disabled
+    }
+
+    /// Creates a new button component.
+    public static func button(
+        style: DiscordMessageComponentButtonStyle? = nil,
+        label: String? = nil,
+        emoji: DiscordMessageComponentEmoji? = nil,
+        customId: String? = nil,
+        url: URL? = nil,
+        disabled: Bool? = nil
+    ) -> DiscordMessageComponent {
+        DiscordMessageComponent(
+            type: .button,
+            style: style,
+            label: label,
+            emoji: emoji,
+            customId: customId,
+            url: url,
+            disabled: disabled
+        )
+    }
+
+    /// Creates a new action row component. Cannot contain other action rows.
+    public static func actionRow(components: [DiscordMessageComponent]) -> DiscordMessageComponent {
+        DiscordMessageComponent(
+            type: .actionRow,
+            components: components
+        )
     }
 }
 
