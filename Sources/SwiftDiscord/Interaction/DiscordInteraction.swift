@@ -15,6 +15,9 @@ public struct DiscordInteraction {
     /// types, but optional for future-proofing.
     public let data: DiscordApplicationCommandInteractionData?
 
+    /// The message a user interacted with, e.g. when pressing a button.
+    public let message: DiscordMessage?
+
     /// Guild it was sent from
     public let guildId: GuildID
 
@@ -34,6 +37,7 @@ public struct DiscordInteraction {
         id = Snowflake(interactionObject["id"] as? String) ?? 0
         type = (interactionObject["type"] as? Int).flatMap(DiscordInteractionType.init(rawValue:))
         data = (interactionObject["data"] as? [String: Any]).map(DiscordApplicationCommandInteractionData.init(dataObject:))
+        message = (interactionObject["message"] as? [String: Any]).map { DiscordMessage(messageObject: $0, client: nil) }
         let guildId = Snowflake(interactionObject["guild_id"] as? String) ?? 0
         self.guildId = guildId
         channelId = Snowflake(interactionObject["channel_id"] as? String) ?? 0
