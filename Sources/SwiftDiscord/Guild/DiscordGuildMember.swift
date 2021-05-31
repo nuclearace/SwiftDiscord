@@ -16,6 +16,9 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordGuildMember")
 
 /// Represents a guild member.
 public struct DiscordGuildMember {
@@ -115,7 +118,7 @@ public struct DiscordGuildMember {
 
         for guildMember in guildMembersArray {
             guard let user = guildMember["user"] as? [String: Any], let id = Snowflake(user["id"] as? String) else {
-                DefaultDiscordLogger.Logger.error("Couldn't extract userId from user JSON", type: "GuildMembersFromArray")
+                logger.error("Couldn't extract userId from user JSON")
                 continue
             }
 

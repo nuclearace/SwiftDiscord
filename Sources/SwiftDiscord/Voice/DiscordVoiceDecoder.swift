@@ -17,6 +17,9 @@
 
 import COPUS
 import Foundation
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordVoiceDecoder")
 
 /// Class that decodes Opus voice data into raw PCM data for a VoiceEngine. It can decode multiple streams. Decoding is
 /// not thread safe, and it is up to the caller to decode safely.
@@ -37,10 +40,10 @@ open class DiscordVoiceSessionDecoder {
         let decoder: DiscordOpusDecoder
 
         if let previous = decoders[packet.ssrc] {
-            DefaultDiscordLogger.Logger.debug("Reusing decoder for ssrc: \(packet.ssrc), seqNum: \(packet.seqNum), timestamp: \(packet.timestamp)", type: "DiscordVoiceSessionDecoder")
+            logger.debug("Reusing decoder for ssrc: \(packet.ssrc), seqNum: \(packet.seqNum), timestamp: \(packet.timestamp)")
             decoder = previous
         } else {
-            DefaultDiscordLogger.Logger.debug("New decoder for ssrc: \(packet.ssrc), seqNum: \(packet.seqNum), timestamp: \(packet.timestamp)", type: "DiscordVoiceSessionDecoder")
+            logger.debug("New decoder for ssrc: \(packet.ssrc), seqNum: \(packet.seqNum), timestamp: \(packet.timestamp)")
             decoder = try DiscordOpusDecoder(sampleRate: 48_000, channels: 2)
             decoders[packet.ssrc] = decoder
         }
@@ -61,8 +64,8 @@ open class DiscordVoiceSessionDecoder {
             sequences[packet.ssrc] = packet.seqNum
             timestamps[packet.ssrc] = packet.timestamp
 
-            DefaultDiscordLogger.Logger.debug("Out of order packet", type: "DiscordVoiceSessionDecoder")
-            DefaultDiscordLogger.Logger.debug("Looks to have a sequence difference of \(packet.seqNum - previousSeqNum)", type: "DiscordVoiceSessionDecoder")
+            logger.debug("Out of order packet")
+            logger.debug("Looks to have a sequence difference of \(packet.seqNum - previousSeqNum)")
 
             for _ in 0..<packet.seqNum-previousSeqNum {
                 // TODO Don't hardcode the frameSize

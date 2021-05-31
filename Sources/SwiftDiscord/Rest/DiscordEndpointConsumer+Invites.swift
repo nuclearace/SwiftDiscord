@@ -16,10 +16,13 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
-    public func acceptInvite(_ invite: String,
+    func acceptInvite(_ invite: String,
                              callback: ((DiscordInvite?, HTTPURLResponse?) -> ())? = nil) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(invite)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -38,7 +41,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func deleteInvite(_ invite: String,
+    func deleteInvite(_ invite: String,
                              reason: String? = nil,
                              callback: ((DiscordInvite?, HTTPURLResponse?) -> ())? = nil) {
         var extraHeaders = [DiscordHeader: String]()
@@ -64,7 +67,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    public func getInvite(_ invite: String,
+    func getInvite(_ invite: String,
                           callback: @escaping (DiscordInvite?, HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(invite)? = JSON.jsonFromResponse(data: data, response: response) else {

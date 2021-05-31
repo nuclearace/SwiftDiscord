@@ -16,6 +16,9 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 ///
 /// Protocol that declares a type will be a consumer of the Discord REST API.
@@ -81,6 +84,34 @@ public protocol DiscordEndpointConsumer {
                         on channelId: ChannelID,
                         emoji: String,
                         callback: ((DiscordMessage?, HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Deletes a reaction the current user has made for the specified message.
+    ///
+    /// - parameter for: The message that is to be edited's snowflake id
+    /// - parameter on: The channel that we are editing on
+    /// - parameter emoji: The emoji name
+    /// - parameter callback: An optional callback containing the edited message, if successful.
+    ///
+    func deleteOwnReaction(for messageId: MessageID,
+                        on channelId: ChannelID,
+                        emoji: String,
+                        callback: ((Bool, HTTPURLResponse?) -> ())?)
+    
+    ///
+    /// Deletes a reaction another user has made for the specified message.
+    ///
+    /// - parameter for: The message that is to be edited's snowflake id
+    /// - parameter on: The channel that we are editing on
+    /// - parameter emoji: The emoji name
+    /// - parameter by: The snowflake id of the user
+    /// - parameter callback: An optional callback containing the edited message, if successful.
+    ///
+    func deleteUserReaction(for messageId: MessageID,
+                        on channelId: ChannelID,
+                        emoji: String,
+                        by userId: UserID,
+                        callback: ((Bool, HTTPURLResponse?) -> ())?)
 
     ///
     /// Deletes the specified channel.
@@ -594,6 +625,94 @@ public protocol DiscordEndpointConsumer {
     ///
     func getGuilds(callback: @escaping ([ChannelID: DiscordUserGuild], HTTPURLResponse?) -> ())
 
+    // MARK: Applications
+
+    ///
+    /// Gets the global slash-commands of a user.
+    ///
+    /// - parameter callback: The callback function, taking a dictionary of commands.
+    ///
+    func getApplicationCommands(callback: @escaping ([DiscordApplicationCommand], HTTPURLResponse?) -> ())
+
+    ///
+    /// Creates a global slash-command for a user.
+    ///
+    /// - parameter callback: The callback function, taking a command.
+    ///
+    func createApplicationCommand(name: String,
+                                  description: String,
+                                  options: [DiscordApplicationCommandOption]?,
+                                  callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Edits a global slash-command for a user.
+    ///
+    /// - parameter callback: The callback function, taking a command.
+    ///
+    func editApplicationCommand(_ commandId: CommandID,
+                                name: String,
+                                description: String,
+                                options: [DiscordApplicationCommandOption]?,
+                                callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Deletes a global slash-command for a user.
+    ///
+    /// - parameter callback: The callback function, taking a command.
+    ///
+    func deleteApplicationCommand(_ commandId: CommandID,
+                                  callback: ((HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Gets the guild-specific slash-commands of a user.
+    ///
+    /// - parameter callback: The callback function, taking a dictionary of commands.
+    ///
+    func getApplicationCommands(on guildId: GuildID,
+                                callback: @escaping ([DiscordApplicationCommand], HTTPURLResponse?) -> ())
+
+    ///
+    /// Creates a guild-specific slash-command for a user.
+    ///
+    /// - parameter callback: The callback function, taking a command.
+    ///
+    func createApplicationCommand(on guildId: GuildID,
+                                  name: String,
+                                  description: String,
+                                  options: [DiscordApplicationCommandOption]?,
+                                  callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Edits a guild-specific slash-command for a user.
+    ///
+    /// - parameter callback: The callback function, taking a command.
+    ///
+    func editApplicationCommand(_ commandId: CommandID,
+                                on guildId: GuildID,
+                                name: String,
+                                description: String,
+                                options: [DiscordApplicationCommandOption]?,
+                                callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Deletes a guild-specific slash-command for a user.
+    ///
+    /// - parameter callback: The callback function, taking a command.
+    ///
+    func deleteApplicationCommand(_ commandId: CommandID,
+                                  on guildId: GuildID,
+                                  callback: ((HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Creates a response to an interaction from the gateway.
+    ///
+    /// - parameter response: The response
+    ///
+    func createInteractionResponse(for interactionId: InteractionID,
+                                   token: String,
+                                   response: DiscordInteractionResponse,
+                                   callback: ((HTTPURLResponse?) -> ())?)
+
     // MARK: Misc
 
     ///
@@ -606,7 +725,7 @@ public protocol DiscordEndpointConsumer {
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
-    public func getBotURL(with permissions: DiscordPermission) -> URL? {
+    func getBotURL(with permissions: DiscordPermission) -> URL? {
         guard let user = self.user else { return nil }
 
         return DiscordOAuthEndpoint.createBotAddURL(for: user, with: permissions)

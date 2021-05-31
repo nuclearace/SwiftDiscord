@@ -16,6 +16,12 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordEndpoint")
 
 // TODO Group DM
 // TODO Add guild member
@@ -146,6 +152,33 @@ public enum DiscordEndpoint : CustomStringConvertible {
     case webhookGithub(id: WebhookID, token: String)
     /* End Webhooks */
 
+    /* Emoji */
+    // The guild's emojis endpoint.
+    case guildEmojis(guild: GuildID)
+
+    // The guild's emoji endpoint
+    case guildEmoji(guild: GuildID, emoji: EmojiID)
+    /* End Emoji */
+
+
+    /* Applications */
+    /// The global slash-commands endpoint.
+    case globalApplicationCommands(applicationId: ApplicationID)
+
+    /// The endpoint for a specific global slash-command.
+    case globalApplicationCommand(applicationId: ApplicationID, commandId: CommandID)
+
+    /// The guild-specific slash-commands endpoint.
+    case guildApplicationCommands(applicationId: ApplicationID, guildId: GuildID)
+
+    /// The endpoint for a specific guild-specific slash-command.
+    case guildApplicationCommand(applicationId: ApplicationID, guildId: GuildID, commandId: CommandID)
+    /* End Application */
+
+    /* Interactions */
+    case interactionsCallback(interactionId: InteractionID, interactionToken: String)
+    /* End Interactions */
+
     var combined: String {
         return DiscordEndpoint.baseURL.description + description
     }
@@ -157,14 +190,14 @@ public extension DiscordEndpoint {
     ///
     /// * An HTTP Request for an Endpoint.  This includes any associated data.
     ///
-    public enum EndpointRequest {
+    enum EndpointRequest {
         /// A GET request.
         case get(params: [String: String]?, extraHeaders: [DiscordHeader: String]?)
 
         /// A POST request.
         case post(content: HTTPContent?, extraHeaders: [DiscordHeader: String]?)
 
-        /// A POST request.
+        /// A PUT request.
         case put(content: HTTPContent?, extraHeaders: [DiscordHeader: String]?)
 
         /// A PATCH request.
@@ -215,20 +248,21 @@ public extension DiscordEndpoint {
         private func addContent(to request: inout URLRequest) {
             let content: HTTPContent?
             let extraHeaders: [DiscordHeader: String]?
+            let requiresBody: Bool
 
             switch self {
             case let .get(_, headers?):
-                (content, extraHeaders) = (nil, headers)
+                (content, extraHeaders, requiresBody) = (nil, headers, false)
             case let .post(optionalContent, headers):
-                (content, extraHeaders) = (optionalContent, headers)
+                (content, extraHeaders, requiresBody) = (optionalContent, headers, true)
             case let .put(optionalContent, headers):
-                (content, extraHeaders) = (optionalContent, headers)
+                (content, extraHeaders, requiresBody) = (optionalContent, headers, true)
             case let .patch(optionalContent, headers):
-                (content, extraHeaders) = (optionalContent, headers)
+                (content, extraHeaders, requiresBody) = (optionalContent, headers, true)
             case let .delete(optionalContent, headers):
-                (content, extraHeaders) = (optionalContent, headers)
+                (content, extraHeaders, requiresBody) = (optionalContent, headers, false)
             default:
-                (content, extraHeaders) = (nil, nil)
+                (content, extraHeaders, requiresBody) = (nil, nil, false)
             }
 
             for (header, value) in extraHeaders ?? [:] {
@@ -237,7 +271,11 @@ public extension DiscordEndpoint {
             }
 
             switch content {
-            case nil:   break
+            case nil:
+                if requiresBody {
+                    request.httpBody = Data()
+                    request.setValue("0", forHTTPHeaderField: "Content-Length")
+                }
             case let .json(data)?:
                 request.httpBody = data
                 request.setValue(HTTPContent.jsonType, forHTTPHeaderField: "Content-Type")
@@ -252,10 +290,10 @@ public extension DiscordEndpoint {
 
     // MARK: Endpoint string calculation
 
-    public var description: String {
+    var description: String {
         switch self {
         case .baseURL:
-            return "https://discordapp.com/api/v6"
+            return "https://discord.com/api/v8"
 
         /* Channels */
         case let .channel(id):
@@ -343,6 +381,29 @@ public extension DiscordEndpoint {
         case let .webhookGithub(id, token):
             return "/webhooks/\(id)/\(token)/github"
         /* End Webhooks */
+
+        /* Emoji */
+        case let .guildEmojis(guild):
+            return "/guilds/\(guild)/emojis"
+        case let .guildEmoji(guild, emoji):
+            return "/guilds/\(guild)/emojis/\(emoji)"
+        /* End Emoji */
+
+        /* Application */
+        case let .globalApplicationCommands(applicationId):
+            return "/applications/\(applicationId)/commands"
+        case let .globalApplicationCommand(applicationId, commandId):
+            return "/applications/\(applicationId)/commands/\(commandId)"
+        case let .guildApplicationCommands(applicationId, guildId):
+            return "/applications/\(applicationId)/guilds/\(guildId)/commands"
+        case let .guildApplicationCommand(applicationId, guildId, commandId):
+            return "/applications/\(applicationId)/guilds/\(guildId)/commands/\(commandId)"
+        /* End Application */
+
+        /* Interactions */
+        case let .interactionsCallback(interactionId, interactionToken):
+            return "/interactions/\(interactionId)/\(interactionToken)/callback"
+        /* End Interactions */
         }
     }
 
@@ -446,6 +507,28 @@ public extension DiscordEndpoint {
         case .webhookGithub:
             return DiscordRateLimitKey(urlParts: [.webhooks, .webhookID, .webhookToken, .github])
         /* End Webhooks */
+
+        /* Emoji */
+        case let .guildEmojis(guild):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .emojis])
+        case let .guildEmoji(guild, _):
+            return DiscordRateLimitKey(id: guild, urlParts: [.guilds, .guildID, .emojis, .emojiID])
+
+        /* Applications */
+        case let .globalApplicationCommands(applicationId):
+            return DiscordRateLimitKey(id: applicationId, urlParts: [.applications, .applicationID, .commands])
+        case let .globalApplicationCommand(applicationId, _):
+            return DiscordRateLimitKey(id: applicationId, urlParts: [.applications, .applicationID, .commands, .commandID])
+        case let .guildApplicationCommands(applicationId, _):
+            return DiscordRateLimitKey(id: applicationId, urlParts: [.applications, .applicationID, .guilds, .guildID, .commands])
+        case let .guildApplicationCommand(applicationId, _, _):
+            return DiscordRateLimitKey(id: applicationId, urlParts: [.applications, .applicationID, .guilds, .guildID, .commands, .commandID])
+        /* End Applications */
+
+        /* Interactions */
+        case let .interactionsCallback(interactionId, _):
+            return DiscordRateLimitKey(id: interactionId, urlParts: [.interactions, .interactionID, .interactionToken, .callback])
+        /* End Interactions */
         }
     }
 
@@ -454,15 +537,13 @@ public extension DiscordEndpoint {
     private func createURL(getParams: [String: String]?) -> URL? {
         // This can fail, specifically if you try to include a non-url-encoded emoji in it
         guard let url = URL(string: self.combined) else {
-            DefaultDiscordLogger.Logger.error("Couldn't convert \"\(self.combined)\" to a URL.  This shouldn't happen.",
-                                              type: "DiscordEndpoint")
+            logger.error("Couldn't convert \"\(self.combined)\" to a URL.  This shouldn't happen.")
             return nil
         }
 
         guard let getParams = getParams else { return url }
         guard var com = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            DefaultDiscordLogger.Logger.error("Couldn't convert \"\(url)\" to URLComponents. This shouldn't happen.",
-                                              type: "DiscordEndpoint")
+            logger.error("Couldn't convert \"\(url)\" to URLComponents. This shouldn't happen.")
             return nil
         }
 
@@ -503,7 +584,7 @@ public enum DiscordHeader : String {
 
 public extension DiscordEndpoint {
     /// A namespace struct for endpoint options.
-    public struct Options {
+    struct Options {
         private init() {}
 
         /// Options when getting an audit log.
@@ -551,7 +632,7 @@ public extension DiscordEndpoint {
             case name(String)
 
             /// The permissions this role has.
-            case permissions(Int)
+            case permissions(DiscordPermission)
         }
 
         /// Options for getting messages

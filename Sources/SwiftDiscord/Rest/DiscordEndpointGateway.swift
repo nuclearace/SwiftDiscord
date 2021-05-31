@@ -16,6 +16,10 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 import Dispatch
 
 struct DiscordEndpointGateway {
@@ -28,7 +32,7 @@ struct DiscordEndpointGateway {
         #if os(Linux)
         return "wss://gateway.discord.gg"
         #else
-        var request = URLRequest(url: URL(string: "https://discordapp.com/api/gateway")!)
+        var request = URLRequest(url: URL(string: "https://discord.com/api/gateway")!)
 
         request.httpMethod = "GET"
 

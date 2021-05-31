@@ -48,7 +48,7 @@ public extension DiscordOpusCodeable {
     /// - parameter assumingSize: The size of the frame, in number of samples per channel.
     /// - returns: The number of bytes in this frame.
     ///
-    public func maxFrameSize(assumingSize size: Int) -> Int {
+    func maxFrameSize(assumingSize size: Int) -> Int {
         return size * channels * MemoryLayout<opus_int16>.size
     }
 }

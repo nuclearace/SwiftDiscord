@@ -4,6 +4,7 @@
 
 import Foundation
 import XCTest
+import NIO
 @testable import SwiftDiscord
 
 public class TestDiscordEngine : XCTestCase, DiscordShardDelegate {
@@ -39,6 +40,7 @@ public class TestDiscordEngine : XCTestCase, DiscordShardDelegate {
 
     var engine: DiscordEngine!
     var expectation: XCTestExpectation!
+    var loop: MultiThreadedEventLoopGroup!
 
     public static var allTests: [(String, (TestDiscordEngine) -> () -> ())] {
         return [
@@ -49,7 +51,8 @@ public class TestDiscordEngine : XCTestCase, DiscordShardDelegate {
     }
 
     public override func setUp() {
-        engine = DiscordEngine(delegate: self)
+        loop = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+        engine = DiscordEngine(delegate: self, intents: .unprivilegedIntents, onLoop: loop.next())
     }
 }
 

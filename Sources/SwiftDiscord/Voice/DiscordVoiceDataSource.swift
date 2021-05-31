@@ -18,9 +18,12 @@
 import COPUS
 import Dispatch
 import Foundation
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordVoiceDataSource")
 
 /// Specifies that a type will be a data source for a VoiceEngine.
-public protocol DiscordVoiceDataSource : class {
+public protocol DiscordVoiceDataSource : AnyObject {
     // MARK: Properties
 
     /// The size of a frame in samples per channel. Needed to calculate the maximum size of a frame.
@@ -78,8 +81,6 @@ public enum DiscordVoiceDataSourceStatus : Error {
 ///
 open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
     // MARK: Properties
-
-    private static let logType =  "DiscordBufferedVoiceDataSource"
 
     /// The max number of voice packets to buffer.
     /// Roughly equal to `(nPackets * 20ms) / 1000 = seconds to buffer`.
@@ -139,7 +140,7 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
     }
 
     deinit {
-        DefaultDiscordLogger.Logger.debug("deinit", type: DiscordBufferedVoiceDataSource.logType)
+        logger.debug("deinit")
 
         guard !closed else { return }
 
@@ -167,7 +168,7 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
     open func createDispatchIO() {
         self.source = DispatchIO(type: .stream, fileDescriptor: pipe.fileHandleForReading.fileDescriptor,
                                  queue: encoderQueue, cleanupHandler: {code in
-            DefaultDiscordLogger.Logger.debug("Source spent: \(code)", type: DiscordBufferedVoiceDataSource.logType)
+            logger.debug("Source spent: \(code)")
         })
     }
 
@@ -185,12 +186,11 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
         encoderQueue.sync {
             done = self.done
 
-            DefaultDiscordLogger.Logger.debug("Buffer state: count: \(self.readBuffer.count) drain: \(self.drain)",
-                                              type: DiscordBufferedVoiceDataSource.logType)
+            logger.trace("Buffer state: count: \(self.readBuffer.count) drain: \(self.drain)")
 
             if self.drain && self.readBuffer.count <= self.drainThreshold {
                 // The swamp has been drained, start reading again
-                DefaultDiscordLogger.Logger.debug("Buffer drained, scheduling read", type: DiscordBufferedVoiceDataSource.logType)
+                logger.debug("Buffer drained, scheduling read")
 
                 self.drain = false
                 self.startReading()
@@ -217,7 +217,7 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
     open func finishUpAndClose() {
         guard !closed else { return }
 
-        DefaultDiscordLogger.Logger.debug("Closing pipe for writing", type: DiscordBufferedVoiceDataSource.logType)
+        logger.debug("Closing pipe for writing")
 
         writeToHandler.closeFile()
 
@@ -243,23 +243,21 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
             guard let this = self else { return }
 
             guard let data = data, data.count > 0 else {
-                DefaultDiscordLogger.Logger.debug("No data, reader probably closed",
-                                                  type: DiscordBufferedVoiceDataSource.logType)
+                logger.debug("No data, reader probably closed")
 
                 this.done = true
 
                 if done && code == 0 {
                     // EOF reached
-                    DefaultDiscordLogger.Logger.debug("Reader done", type: DiscordBufferedVoiceDataSource.logType)
+                    logger.debug("Reader done")
                 } else {
-                    DefaultDiscordLogger.Logger.debug("Something is weird \(done) \(code)",
-                                                      type: DiscordBufferedVoiceDataSource.logType)
+                    logger.debug("Something is weird \(done) \(code)")
                 }
 
                 return
             }
 
-            DefaultDiscordLogger.Logger.debug("Read \(data.count) bytes", type: DiscordBufferedVoiceDataSource.logType)
+            logger.debug("Read \(data.count) bytes")
 
             do {
                 try data.withUnsafeBytes {(bytes: UnsafePointer<opus_int16>) in
@@ -269,8 +267,7 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
                 guard this.readBuffer.count < this.bufferSize else {
                     // Buffer is full; wait till it's drained
                     // Whatever is in charge of taking from the buffer should queue up more reading
-                    DefaultDiscordLogger.Logger.debug("Buffer full, not reading again",
-                                                      type: DiscordBufferedVoiceDataSource.logType)
+                    logger.debug("Buffer full, not reading again")
                     this.drain = true
 
                     return
@@ -278,7 +275,7 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
 
                 this._read()
             } catch {
-                DefaultDiscordLogger.Logger.error("Error encoding bytes", type: DiscordBufferedVoiceDataSource.logType)
+                logger.error("Error encoding bytes")
             }
         }
     }
@@ -298,8 +295,6 @@ open class DiscordBufferedVoiceDataSource : DiscordVoiceDataSource {
 ///
 open class DiscordVoiceFileDataSource : DiscordBufferedVoiceDataSource {
     // MARK: Properties
-
-    private static let logType = "DiscordVoiceFileDataSource"
 
     /// A FileHandle for reading the wrapped file.
     public let wrappedFile: FileHandle
@@ -325,7 +320,7 @@ open class DiscordVoiceFileDataSource : DiscordBufferedVoiceDataSource {
     }
 
     deinit {
-        DefaultDiscordLogger.Logger.debug("deinit", type: DiscordVoiceFileDataSource.logType)
+        logger.debug("deinit")
     }
 
     // MARK: Methods
@@ -338,7 +333,7 @@ open class DiscordVoiceFileDataSource : DiscordBufferedVoiceDataSource {
     open override func createDispatchIO() {
         self.source = DispatchIO(type: .stream, fileDescriptor: wrappedFile.fileDescriptor,
                                  queue: encoderQueue, cleanupHandler: {code in
-            DefaultDiscordLogger.Logger.debug("Source spent: \(code)", type: DiscordVoiceFileDataSource.logType)
+            logger.debug("Source spent: \(code)")
         })
     }
 }
@@ -418,8 +413,20 @@ public class DiscordEncoderMiddleware {
         pipe = Pipe()
 
         middleware.standardOutput = pipe
+        
+        let ffmpegPath = "/usr/local/bin/ffmpeg"
+        let ffmpegURL = URL(fileURLWithPath: ffmpegPath)
+        
+        pathSetter: do {
+            #if os(macOS)
+            guard #available(macOS 10.13, *) else {
+                ffmpeg.launchPath = ffmpegPath
+                break pathSetter
+            }
+            #endif
+            ffmpeg.executableURL = ffmpegURL
+        }
 
-        ffmpeg.launchPath = "/usr/local/bin/ffmpeg"
         ffmpeg.standardInput = pipe
         ffmpeg.standardOutput = source.writeToHandler
         ffmpeg.arguments = ["-hide_banner", "-loglevel", "quiet", "-i", "pipe:0", "-f", "s16le", "-map", "0:a",
@@ -433,13 +440,21 @@ public class DiscordEncoderMiddleware {
             source?.finishUpAndClose()
         }
     }
-
+    
     ///
     /// Starts the middleware.
     ///
-    public func start() {
-        ffmpeg.launch()
-        middleware.launch()
+    public func start() throws {
+        #if os(macOS)
+        guard #available(macOS 10.13, *) else {
+            ffmpeg.launch()
+            middleware.launch()
+            return
+        }
+        #endif
+
+        try ffmpeg.run()
+        try middleware.run()
     }
 }
 #endif

@@ -15,6 +15,10 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordEmoji")
+
 /// Represents an Emoji.
 public struct DiscordEmoji {
     // MARK: Properties
@@ -24,6 +28,9 @@ public struct DiscordEmoji {
 
     /// Whether this is a managed emoji.
     public let managed: Bool
+    
+    /// Whether this is an animated emoji.
+    public let animated: Bool
 
     /// The name of the emoji or unicode representation if it's a unicode emoji.
     public let name: String
@@ -37,6 +44,7 @@ public struct DiscordEmoji {
     init(emojiObject: [String: Any]) {
         id = Snowflake(emojiObject["id"] as? String)
         managed = emojiObject.get("managed", or: false)
+        animated = emojiObject.get("animated", or: false)
         name = emojiObject.get("name", or: "")
         requireColons = emojiObject.get("require_colons", or: false)
         roles = (emojiObject["roles"] as? [String])?.compactMap(Snowflake.init) ?? []
@@ -50,7 +58,7 @@ public struct DiscordEmoji {
             if let emojiID = emoji.id {
                 emojis[emojiID] = emoji
             } else {
-                DefaultDiscordLogger.Logger.debug("EmojisFromArray used on array with non-custom emoji", type: "DiscordEmoji")
+                logger.debug("EmojisFromArray used on array with non-custom emoji")
             }
         }
 

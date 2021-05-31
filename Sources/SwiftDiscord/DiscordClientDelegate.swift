@@ -19,7 +19,7 @@
 /// Declares that a type will be a delegate for a `DiscordClient`. After the client handles any events,
 /// the corresponding delegate method will be called.
 ///
-public protocol DiscordClientDelegate : class {
+public protocol DiscordClientDelegate : AnyObject {
     // MARK: Methods
 
     ///
@@ -160,6 +160,14 @@ public protocol DiscordClientDelegate : class {
     /// - parameter didReceivePresenceUpdate: The presence that was received.
     ///
     func client(_ client: DiscordClient, didReceivePresenceUpdate presence: DiscordPresence)
+
+    ///
+    /// Called when the client receives a new interaction, i.e.
+    /// a slash command invocation.
+    ///
+    /// - parameter interaction: The invocation data
+    ///
+    func client(_ client: DiscordClient, didCreateInteraction interaction: DiscordInteraction)
 
     ///
     /// Called when the client receives a ready event.
@@ -306,6 +314,9 @@ public extension DiscordClientDelegate {
 
     /// Default.
     func client(_ client: DiscordClient, didReceivePresenceUpdate presence: DiscordPresence) { }
+
+    /// Default.
+    func client(_ client: DiscordClient, didCreateInteraction interaction: DiscordInteraction) { }
 
     /// Default.
     func client(_ client: DiscordClient, didReceiveReady readyData: [String: Any]) { }

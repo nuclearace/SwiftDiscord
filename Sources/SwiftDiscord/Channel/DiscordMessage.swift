@@ -21,9 +21,21 @@ import Foundation
 public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     // Used for `createDataForSending`
     private struct FieldsList : Encodable {
+        enum CodingKeys: String, CodingKey {
+            case content
+            case tts
+            case embed
+            case allowedMentions = "allowed_mentions"
+            case messageReference = "message_reference"
+            case components
+        }
+
         let content: String
         let tts: Bool
         let embed: DiscordEmbed?
+        let allowedMentions: DiscordAllowedMentions?
+        let messageReference: DiscordMessageReference?
+        let components: [DiscordMessageComponent]?
     }
 
     // MARK: Typealiases
@@ -87,11 +99,31 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// The reactions a message has.
     public let reactions: [DiscordReaction]
 
+    /// The stickers a message has.
+    public let stickers: [DiscordMessageSticker]
+
     /// The timestamp of this message.
     public let timestamp: Date
 
     /// Whether or not this message should be read by a screen reader.
     public let tts: Bool
+
+    /// Finer-grained control over the allowed mentions in an outgoing message.
+    public let allowedMentions: DiscordAllowedMentions?
+
+    /// A referenced message in an incoming message. Only present if it's a reply.
+    ///
+    /// TODO: This is actually a DiscordMessage object too, but would cause the
+    ///       value type to become recursive, which is not allowed yet (since optionals
+    ///       are value types themselves that do not box the value).
+    public let referencedMessage: [String: Any]?
+
+    /// A referenced message in an outgoing message.
+    public let messageReference: DiscordMessageReference?
+
+    /// Interactive components in the message. This top-level array should only
+    /// contain action rows (which can then e.g. contain buttons).
+    public let components: [DiscordMessageComponent]?
 
     /// The type of this message.
     public let type: MessageType
@@ -128,9 +160,14 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         nonce = messageObject.getSnowflake(key: "nonce")
         pinned = messageObject.get("pinned", or: false)
         reactions = DiscordReaction.reactionsFromArray(messageObject.get("reactions", or: []))
+        stickers = DiscordMessageSticker.stickersFromArray(messageObject.get("sticker", or: []))
         tts = messageObject.get("tts", or: false)
         editedTimestamp = DiscordDateFormatter.format(messageObject.get("edited_timestamp", or: "")) ?? Date()
         timestamp = DiscordDateFormatter.format(messageObject.get("timestamp", or: "")) ?? Date()
+        allowedMentions = nil
+        referencedMessage = messageObject.get("referenced_message", as: [String: Any].self)
+        messageReference = nil
+        components = nil
         files = []
         type = MessageType(rawValue: messageObject.get("type", or: 0)) ?? .default
         self.client = client
@@ -144,7 +181,15 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// - parameter files: The files to send with this message.
     /// - parameter tts: Whether this message should be text-to-speach.
     ///
-    public init(content: String, embed: DiscordEmbed? = nil, files: [DiscordFileUpload] = [], tts: Bool = false) {
+    public init(
+        content: String,
+        embed: DiscordEmbed? = nil,
+        files: [DiscordFileUpload] = [],
+        tts: Bool = false,
+        allowedMentions: DiscordAllowedMentions? = nil,
+        messageReference: DiscordMessageReference? = nil,
+        components: [DiscordMessageComponent] = []
+    ) {
         self.content = content
         if let embed = embed {
             self.embeds = [embed]
@@ -155,6 +200,10 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.application = nil
         self.files = files
         self.tts = tts
+        self.allowedMentions = allowedMentions
+        self.messageReference = messageReference
+        self.components = components
+        self.referencedMessage = nil
         self.attachments = []
         self.author = DiscordUser(userObject: [:])
         self.channelId = 0
@@ -165,6 +214,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.nonce = 0
         self.pinned = false
         self.reactions = []
+        self.stickers = []
         self.editedTimestamp = Date()
         self.timestamp = Date()
         self.type = .default
@@ -200,7 +250,14 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     // MARK: Methods
 
     func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
-        let fields = FieldsList(content: content, tts: tts, embed: embeds.first)
+        let fields = FieldsList(
+            content: content,
+            tts: tts,
+            embed: embeds.first,
+            allowedMentions: allowedMentions,
+            messageReference: messageReference,
+            components: components
+        )
         let fieldsData = JSON.encodeJSONData(fields) ?? Data()
         if files.count > 0 {
             return .right(createMultipartBody(encodedJSON: fieldsData, files: files))
@@ -223,34 +280,58 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
 
 public extension DiscordMessage {
     /// Type of message
-    public enum MessageType : Int {
+    enum MessageType : Int {
         /// Default.
-        case `default`
+        case `default` = 0
 
         /// Recipient Add.
-        case recipientAdd
+        case recipientAdd = 1
 
         /// Recipient Remove.
-        case recipientRemove
+        case recipientRemove = 2
 
         /// Call.
-        case call
+        case call = 3
 
         /// Channel name change.
-        case channelNameChange
+        case channelNameChange = 4
 
         /// Channel icon change.
-        case channelIconChange
+        case channelIconChange = 5
 
         /// Channel pinned message.
-        case channelPinnedMessage
+        case channelPinnedMessage = 6
 
         /// Guild member join.
-        case guildMemberJoin
+        case guildMemberJoin = 7
+
+        /// User premium guild subscription.
+        case userPremiumGuildSubscription = 8
+
+        /// User premium guild subscription tier 1.
+        case userPremiumGuildSubscriptionTier1 = 9
+
+        /// User premium guild subscription tier 2.
+        case userPremiumGuildSubscriptionTier2 = 10
+
+        /// User premium guild subscription tier 3.
+        case userPremiumGuildSubscriptionTier3 = 11
+
+        /// Channel follow add.
+        case channelFollowAdd = 12
+
+        /// Guild discovery disqualified.
+        case guildDiscoveryDisqualified = 14
+
+        /// Guild discovery requalified.
+        case guildDiscoveryRequalified = 15
+
+        /// Message reply.
+        case reply = 19
     }
 
     /// Represents an action that be taken on a message.
-    public struct MessageActivity {
+    struct MessageActivity {
         /// Represents the type of activity.
         public enum ActivityType : Int {
             /// Join.
@@ -275,7 +356,7 @@ public extension DiscordMessage {
     }
 
     /// Represents an application in a `DiscordMessage` object.
-    public struct MessageApplication {
+    struct MessageApplication {
         /// The id of this application.
         public let id: Snowflake
 
@@ -797,5 +878,214 @@ public struct DiscordReaction {
 
     static func reactionsFromArray(_ reactionsArray: [[String: Any]]) -> [DiscordReaction] {
         return reactionsArray.map(DiscordReaction.init)
+    }
+}
+
+public enum DiscordAllowedMentionType : String, Encodable {
+    case roles
+    case users
+    case everyone
+}
+
+/// Allows for more granular control over mentions
+/// without having to modify the message content.
+public struct DiscordAllowedMentions : Encodable {
+    public enum CodingKeys : String, CodingKey {
+        case parse
+        case roles
+        case users
+        case repliedUser = "replied_user"
+    }
+
+    /// An array of allowed mentions types to parse from the content.
+    public let parse: DiscordAllowedMentionType
+    /// Array of role ids to mention.
+    public let roles: [RoleID]
+    /// Array of user ids to mention.
+    public let users: [UserID]
+    /// For replies, whether to mention the author of the message being replied to (default: false)
+    public let repliedUser: Bool
+
+    public init(parse: DiscordAllowedMentionType = .everyone, roles: [RoleID] = [], users: [UserID] = [], repliedUser: Bool = false) {
+        self.parse = parse
+        self.roles = roles
+        self.users = users
+        self.repliedUser = repliedUser
+    }
+}
+
+/// A reference to a message, e.g. used in outgoing replies.
+public struct DiscordMessageReference : Encodable {
+    public enum CodingKeys : String, CodingKey {
+        case messageId = "message_id"
+        case channelId = "channel_id"
+        case guildId = "guild_id"
+    }
+
+    public let messageId: MessageID?
+    public let channelId: ChannelID?
+    public let guildId: GuildID?
+
+    public init(messageId: MessageID? = nil, channelId: ChannelID? = nil, guildId: GuildID? = nil) {
+        self.messageId = messageId
+        self.channelId = channelId
+        self.guildId = guildId
+    }
+}
+
+/// An interactive part of a message.
+public struct DiscordMessageComponent : Encodable {
+    public enum CodingKeys : String, CodingKey {
+        case type
+        case components
+        case style
+        case label
+        case emoji
+        case customId = "custom_id"
+        case url
+        case disabled
+    }
+
+    /// The type of the component.
+    public let type: DiscordMessageComponentType
+    /// Sub-components. Only valid for action rows.
+    public let components: [DiscordMessageComponent]?
+    /// One of a few button styles. Only valid for buttons.
+    public let style: DiscordMessageComponentButtonStyle?
+    /// Label that appears on a button. Only valid for buttons.
+    public let label: String?
+    /// Emoji that appears on the button. Only valid for buttons.
+    public let emoji: DiscordMessageComponentEmoji?
+    /// A developer-defined id for the button, max 100 chars. Only valid for buttons.
+    public let customId: String?
+    /// A URL for link-style buttons. Only valid for buttons.
+    public let url: URL?
+    /// Whether the button is disabled. False by default. Only valid for buttons.
+    public let disabled: Bool?
+
+    public init(
+        type: DiscordMessageComponentType,
+        components: [DiscordMessageComponent]? = nil,
+        style: DiscordMessageComponentButtonStyle? = nil,
+        label: String? = nil,
+        emoji: DiscordMessageComponentEmoji? = nil,
+        customId: String? = nil,
+        url: URL? = nil,
+        disabled: Bool? = nil
+    ) {
+        self.type = type
+        self.components = components
+        self.style = style
+        self.label = label
+        self.emoji = emoji
+        self.customId = customId
+        self.url = url
+        self.disabled = disabled
+    }
+
+    /// Creates a new button component.
+    public static func button(
+        style: DiscordMessageComponentButtonStyle? = nil,
+        label: String? = nil,
+        emoji: DiscordMessageComponentEmoji? = nil,
+        customId: String? = nil,
+        url: URL? = nil,
+        disabled: Bool? = nil
+    ) -> DiscordMessageComponent {
+        DiscordMessageComponent(
+            type: .button,
+            style: style,
+            label: label,
+            emoji: emoji,
+            customId: customId,
+            url: url,
+            disabled: disabled
+        )
+    }
+
+    /// Creates a new action row component. Cannot contain other action rows.
+    public static func actionRow(components: [DiscordMessageComponent]) -> DiscordMessageComponent {
+        DiscordMessageComponent(
+            type: .actionRow,
+            components: components
+        )
+    }
+}
+
+public struct DiscordMessageComponentType : RawRepresentable, Hashable, Encodable {
+    public let rawValue: Int
+
+    public static let actionRow = DiscordMessageComponentType(rawValue: 1)
+    public static let button = DiscordMessageComponentType(rawValue: 2)
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+}
+
+/// A partial emoji for use in message components.
+public struct DiscordMessageComponentEmoji : Encodable {
+    public let id: EmojiID?
+    public let name: String?
+    public let animated: Bool
+
+    public init(id: EmojiID? = nil, name: String? = nil, animated: Bool = false) {
+        self.id = id
+        self.name = name
+        self.animated = animated
+    }
+}
+
+public struct DiscordMessageComponentButtonStyle : RawRepresentable, Hashable, Encodable {
+    public let rawValue: Int
+
+    public static let primary = DiscordMessageComponentButtonStyle(rawValue: 1)
+    public static let secondary = DiscordMessageComponentButtonStyle(rawValue: 2)
+    public static let success = DiscordMessageComponentButtonStyle(rawValue: 3)
+    public static let danger = DiscordMessageComponentButtonStyle(rawValue: 4)
+    public static let link = DiscordMessageComponentButtonStyle(rawValue: 5)
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+}
+
+public enum DiscordMessageStickerFormatType: Int {
+    case png = 1
+    case apng = 2
+    case lottie = 3
+}
+
+public struct DiscordMessageSticker {
+    /// ID of the sticker
+    public let id: Snowflake
+    /// ID of the sticker pack
+    public let packId: Snowflake
+    /// Name of the sticker
+    public let name: String
+    /// Description of the sticker
+    public let description: String
+    /// List of tags for the sticker
+    public let tags: [String]
+    /// Sticker asset hash
+    public let asset: String?
+    /// Sticker preview asset hash
+    public let previewAsset: String?
+    /// Type of sticker format
+    public let formatType: DiscordMessageStickerFormatType?
+
+    init(stickerObject: [String: Any]) {
+        id = stickerObject.getSnowflake(key: "id")
+        packId = stickerObject.getSnowflake(key: "pack_id")
+        name = stickerObject.get("name", or: "")
+        description = stickerObject.get("description", or: "")
+        tags = stickerObject.get("tags", or: "").split(separator: ",").map(String.init)
+        asset = stickerObject.get("asset", as: String.self)
+        previewAsset = stickerObject.get("preview_asset", as: String.self)
+        formatType = stickerObject.get("format_type", as: Int.self).flatMap(DiscordMessageStickerFormatType.init(rawValue:))
+    }
+
+    static func stickersFromArray(_ stickerArray: [[String: Any]]) -> [DiscordMessageSticker] {
+        return stickerArray.map(DiscordMessageSticker.init)
     }
 }

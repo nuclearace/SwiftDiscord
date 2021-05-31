@@ -2,12 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "Bits",
-        "repositoryURL": "https://github.com/vapor/bits.git",
+        "package": "Socket",
+        "repositoryURL": "https://github.com/IBM-Swift/BlueSocket",
         "state": {
           "branch": null,
-          "revision": "c32f5e6ae2007dccd21a92b7e33eba842dd80d2f",
-          "version": "1.1.0"
+          "revision": "c46a3d41f5b2401d18bcb46d0101cdc5cd13e307",
+          "version": "1.0.52"
         }
       },
       {
@@ -20,69 +20,6 @@
         }
       },
       {
-        "package": "Core",
-        "repositoryURL": "https://github.com/vapor/core.git",
-        "state": {
-          "branch": null,
-          "revision": "f9f3a585ab0ea5764b46d7a36d9c0d9d508b9c63",
-          "version": "2.2.0"
-        }
-      },
-      {
-        "package": "Crypto",
-        "repositoryURL": "https://github.com/vapor/crypto.git",
-        "state": {
-          "branch": null,
-          "revision": "946edc6642d6825982a2f52a268a8ba9bd520a3d",
-          "version": "2.1.2"
-        }
-      },
-      {
-        "package": "CTLS",
-        "repositoryURL": "https://github.com/vapor/ctls.git",
-        "state": {
-          "branch": null,
-          "revision": "fba1297f4986a4dac8b02f7ac4e84a77fd492e4c",
-          "version": "1.1.3"
-        }
-      },
-      {
-        "package": "Debugging",
-        "repositoryURL": "https://github.com/vapor/debugging.git",
-        "state": {
-          "branch": null,
-          "revision": "fc5a27d6eb236141dc24e5f14eedaa2e035ae7b3",
-          "version": "1.1.1"
-        }
-      },
-      {
-        "package": "Engine",
-        "repositoryURL": "https://github.com/vapor/engine",
-        "state": {
-          "branch": null,
-          "revision": "0ecc50fa8c7bc03ec9af78ca37e3b57f192bd258",
-          "version": "2.2.4"
-        }
-      },
-      {
-        "package": "Random",
-        "repositoryURL": "https://github.com/vapor/random.git",
-        "state": {
-          "branch": null,
-          "revision": "d7c4397d125caba795d14d956efacfe2a27a63d0",
-          "version": "1.2.0"
-        }
-      },
-      {
-        "package": "Sockets",
-        "repositoryURL": "https://github.com/vapor/sockets.git",
-        "state": {
-          "branch": null,
-          "revision": "79fc180cdcb451dbbb01b1156be36720adde80e0",
-          "version": "2.2.3"
-        }
-      },
-      {
         "package": "Sodium",
         "repositoryURL": "https://github.com/nuclearace/Sodium",
         "state": {
@@ -92,12 +29,39 @@
         }
       },
       {
-        "package": "TLS",
-        "repositoryURL": "https://github.com/vapor/tls.git",
+        "package": "swift-log",
+        "repositoryURL": "https://github.com/apple/swift-log.git",
         "state": {
           "branch": null,
-          "revision": "02a47309249e69358aa3c28b5853897585d7a750",
-          "version": "2.1.2"
+          "revision": "74d7b91ceebc85daf387ebb206003f78813f71aa",
+          "version": "1.2.0"
+        }
+      },
+      {
+        "package": "swift-nio",
+        "repositoryURL": "https://github.com/apple/swift-nio.git",
+        "state": {
+          "branch": null,
+          "revision": "c5fa0b456524cd73dc3ddbb263d4f46c20b86ca3",
+          "version": "2.17.0"
+        }
+      },
+      {
+        "package": "swift-nio-ssl",
+        "repositoryURL": "https://github.com/apple/swift-nio-ssl.git",
+        "state": {
+          "branch": null,
+          "revision": "ccf96bbe65ecc7c1558ab0dba7ffabdea5c1d31f",
+          "version": "2.4.4"
+        }
+      },
+      {
+        "package": "websocket-kit",
+        "repositoryURL": "https://github.com/vapor/websocket-kit",
+        "state": {
+          "branch": null,
+          "revision": "021edd1ca55451ad15b3e84da6b4064e4b877b34",
+          "version": "2.1.0"
         }
       }
     ]

@@ -17,11 +17,15 @@
 
 import class Dispatch.DispatchSemaphore
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordGuild")
 
 /// Represents a Guild.
 public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
-    private static let logType = "DiscordGuild"
-
     // MARK: Properties
 
     // TODO figure out what features are
@@ -79,13 +83,16 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public private(set) var defaultMessageNotifications: Int
 
     /// The snowflake id of the embed channel for this guild.
-    public private(set) var embedChannelId: ChannelID
+    public private(set) var widgetChannelId: ChannelID
 
     /// Whether this guild has embed enabled.
-    public private(set) var embedEnabled: Bool
+    public private(set) var widgetEnabled: Bool
 
     /// The base64 encoded icon image for this guild.
     public private(set) var icon: String
+
+    /// The base64 encoded banner image for this guild.
+    public private(set) var banner: String
 
     /// The multi-factor authentication level for this guild.
     public private(set) var mfaLevel: Int
@@ -106,11 +113,12 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         id = guildObject.getSnowflake()
         channels = guildChannels(fromArray: guildObject.get("channels", or: JSONArray()), guildID: id, client: client)
         defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
-        embedEnabled = guildObject.get("embed_enabled", or: false)
-        embedChannelId = guildObject.getSnowflake(key: "embed_channel_id")
+        widgetEnabled = guildObject.get("widget_enabled", or: false)
+        widgetChannelId = guildObject.getSnowflake(key: "widget_channel_id")
         emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: JSONArray()))
         features = guildObject.get("features", or: Array<Any>())
         icon = guildObject.get("icon", or: "")
+        banner = guildObject.get("banner", or: "")
         large = guildObject.get("large", or: false)
         memberCount = guildObject.get("member_count", or: 0)
         mfaLevel = guildObject.get("mfa_level", or: -1)
@@ -159,7 +167,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public func createChannel(with options: [DiscordEndpoint.Options.GuildCreateChannel], reason: String? = nil) {
         guard let client = self.client else { return }
 
-        DefaultDiscordLogger.Logger.log("Creating guild channel on \(id)", type: "DiscordGuild")
+        logger.info("Creating guild channel on \(id)")
 
         client.createGuildChannel(on: id, options: options, reason: reason)
     }
@@ -201,7 +209,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         guard let client = self.client else { return callback(nil, nil) }
 
         client.getGuildMember(by: userId, on: id) {member, response in
-            DefaultDiscordLogger.Logger.debug("Got member: \(userId)", type: "DiscordGuild")
+            logger.debug("Got member: \(userId)")
 
             var member = member
             member?.guild = self
@@ -273,12 +281,12 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
         let userId = presence.user.id
 
         if pruneUsers && presence.status == .offline {
-            DefaultDiscordLogger.Logger.debug("Pruning guild member \(userId) on \(id)", type: DiscordGuild.logType)
+            logger.debug("Pruning guild member \(userId) on \(id)")
 
             members[userId] = nil
             presences[userId] = nil
         } else if fillUsers && !members.contains(userId) {
-            DefaultDiscordLogger.Logger.debug("Should get member \(userId); pull from the API", type: DiscordGuild.logType)
+            logger.debug("Should get member \(userId); pull from the API")
 
             members[lazy: userId] = .lazy({[weak self] in
                 guard let this = self else {
@@ -305,16 +313,20 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
             self.defaultMessageNotifications = defaultMessageNotifications
         }
 
-        if let embedChannelId = Snowflake(newGuild["embed_channel_id"] as? String) {
-            self.embedChannelId = embedChannelId
+        if let widgetChannelId = Snowflake(newGuild["widget_channel_id"] as? String) {
+            self.widgetChannelId = widgetChannelId
         }
 
-        if let embedEnabled = newGuild["embed_enabled"] as? Bool {
-            self.embedEnabled = embedEnabled
+        if let widgetEnabled = newGuild["widget_enabled"] as? Bool {
+            self.widgetEnabled = widgetEnabled
         }
 
         if let icon = newGuild["icon"] as? String {
             self.icon = icon
+        }
+
+        if let banner = newGuild["banner"] as? String {
+            self.banner = banner
         }
 
         if let memberCount = newGuild["member_count"] as? Int {
@@ -352,7 +364,7 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public func unban(_ user: DiscordUser) {
         guard let client = self.client else { return }
 
-        DefaultDiscordLogger.Logger.log("Unbanning user \(user) on \(id)", type: "DiscordGuild")
+        logger.info("Unbanning user \(user) on \(id)")
 
         client.removeGuildBan(for: user.id, on: id)
     }

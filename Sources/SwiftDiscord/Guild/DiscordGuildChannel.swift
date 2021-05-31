@@ -15,6 +15,10 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordGuildChannel")
+
 /// Protocol that declares a type will be a Discord guild channel.
 public protocol DiscordGuildChannel : DiscordChannel {
     /// The snowflake id of the guild this channel is on.
@@ -153,8 +157,7 @@ func guildChannel(fromObject channelObject: [String: Any],
     case .category:
         return DiscordGuildChannelCategory(categoryObject: channelObject, guildID: guildID, client: client)
     default:
-        DefaultDiscordLogger.Logger.error("Unhandled guild channel in guildChannelFromObject",
-                                          type: "DiscordGuildChannel")
+        logger.error("Unhandled guild channel in guildChannelFromObject")
         return nil
     }
 }
@@ -206,6 +209,9 @@ public struct DiscordGuildTextChannel : DiscordTextChannel, DiscordGuildChannel 
     /// The topic of this channel, if this is a text channel.
     public var topic: String
 
+    /// If this channel is NSFW
+    public var nsfw: Bool
+    
     init(guildChannelObject: [String: Any], guildID: GuildID?, client: DiscordClient? = nil) {
         id = Snowflake(guildChannelObject["id"] as? String) ?? 0
         guildId = guildID ?? Snowflake(guildChannelObject["guild_id"] as? String) ?? 0
@@ -216,6 +222,7 @@ public struct DiscordGuildTextChannel : DiscordTextChannel, DiscordGuildChannel 
         position = guildChannelObject.get("position", or: 0)
         topic = guildChannelObject.get("topic", or: "")
         parentId = Snowflake(guildChannelObject.get("parent_id", or: ""))
+        nsfw = guildChannelObject.get("nsfw", or: false)
         self.client = client
     }
 }

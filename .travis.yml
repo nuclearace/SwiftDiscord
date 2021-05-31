@@ -1,11 +1,11 @@
 matrix:
   include:
     - os: linux
-      dist: trusty
+      dist: bionic
       sudo: required
       language: generic
     - os: osx
-      osx_image: xcode9.3
+      osx_image: xcode11
       language: objective-c
 branches:
   only:

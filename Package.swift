@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:5.1
 
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
@@ -20,27 +20,26 @@
 import PackageDescription
 
 var deps: [Package.Dependency] = [
+    .package(url: "https://github.com/vapor/websocket-kit", .upToNextMinor(from: "2.1.0")),
+    .package(url: "https://github.com/IBM-Swift/BlueSocket", .upToNextMinor(from: "1.0.0")),
     .package(url: "https://github.com/nuclearace/copus", .upToNextMinor(from: "2.1.1")),
     .package(url: "https://github.com/nuclearace/Sodium", .upToNextMinor(from: "2.0.0")),
-    .package(url: "https://github.com/vapor/engine", .upToNextMinor(from: "2.2.0")),
+    .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
 ]
 
-var targetDeps: [Target.Dependency] = ["WebSockets"]
-
-#if !os(Linux)
-deps += [.package(url: "https://github.com/daltoniam/Starscream", .upToNextMinor(from: "3.0.0")),]
-targetDeps += ["Starscream"]
-#endif
-
+var targetDeps: [Target.Dependency] = ["WebSocketKit", "COPUS", "Sodium", "Socket", "Logging"]
 
 let package = Package(
     name: "SwiftDiscord",
+    platforms: [.macOS(.v10_15)],
     products: [
         .library(name: "SwiftDiscord", targets: ["SwiftDiscord"])
     ],
     dependencies: deps,
     targets: [
         .target(name: "SwiftDiscord", dependencies: targetDeps),
+//        .systemLibrary(name: "COPUS", pkgConfig: "opus"),
+//        .systemLibrary(name: "Sodium", pkgConfig: "libsodium"),
         .testTarget(name: "SwiftDiscordTests", dependencies: ["SwiftDiscord"]),
     ]
 )

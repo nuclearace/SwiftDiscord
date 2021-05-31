@@ -34,7 +34,7 @@ public class TestDiscordDataStructures : XCTestCase {
         XCTAssertEqual(role1.hoist, role2.hoist, "Hoist should survive JSONification")
         XCTAssertEqual(role1.managed, role2.managed, "Managed should survive JSONification")
         XCTAssertEqual(role1.mentionable, role2.mentionable, "Mentionable should survive JSONification")
-        XCTAssertEqual(role1.name, role2.name, "Name should survive JSONificaiton")
+        XCTAssertEqual(role1.name, role2.name, "Name should survive JSONification")
         XCTAssertEqual(role1.permissions, role2.permissions, "Permissions should survive JSONification")
         XCTAssertEqual(role1.position, role2.position, "Position should survive JSONification")
     }
@@ -68,7 +68,7 @@ public class TestDiscordDataStructures : XCTestCase {
     func testEmbedJSONification() {
         let dummyIconA = URL(string: "https://cdn.discordapp.com/embed/avatars/0.png")!
         let dummyIconB = URL(string: "https://cdn.discordapp.com/embed/avatars/1.png")!
-        let dummyURL = URL(string: "https://discordapp.com")!
+        let dummyURL = URL(string: "https://discord.com")!
 
         let embed1 = DiscordEmbed(
             title: "Title",

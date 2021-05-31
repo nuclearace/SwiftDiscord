@@ -16,6 +16,9 @@
 // DEALINGS IN THE SOFTWARE.
 
 import Foundation
+import Logging
+
+fileprivate let logger = Logger(label: "DiscordGateway")
 
 /// Declares that a type will communicate with a Discord gateway.
 public protocol DiscordGatewayable : DiscordEngineHeartbeatable {
@@ -88,7 +91,7 @@ public protocol DiscordGatewayable : DiscordEngineHeartbeatable {
     func startHandshake()
 }
 
-public extension DiscordGatewayable where Self: DiscordWebSocketable {
+public extension DiscordGatewayable where Self: DiscordWebSocketable & DiscordRunLoopable {
     /// Default Implementation.
     func sendPayload(_ payload: DiscordGatewayPayload) {
         guard let payloadString = payload.createPayloadString() else {
@@ -97,13 +100,11 @@ public extension DiscordGatewayable where Self: DiscordWebSocketable {
             return
         }
 
-        DefaultDiscordLogger.Logger.debug("Sending ws: \(payloadString)", type: description)
+        logger.debug("Sending ws: \(payloadString)")
 
-#if !os(Linux)
-        websocket?.write(string: payloadString)
-#else
-        try? websocket?.send(payloadString)
-#endif
+        runloop.execute {
+            self.websocket?.send(payloadString)
+        }
     }
 }
 

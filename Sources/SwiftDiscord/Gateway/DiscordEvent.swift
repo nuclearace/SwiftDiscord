@@ -127,4 +127,13 @@ public enum DiscordDispatchEvent : String {
 
     /// Webhooks Update (Not handled)
     case webhooksUpdate = "WEBHOOKS_UPDATE"
+
+    // Applications
+
+    case applicationCommandCreate = "APPLICATION_COMMAND_CREATE"
+
+    // Interactions
+
+    /// Interaction Create (Handled)
+    case interactionCreate = "INTERACTION_CREATE"
 }

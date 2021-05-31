@@ -19,7 +19,7 @@ import COPUS
 import Foundation
 
 /// Declares that a type will be a voice engine.
-public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayable {
+public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayable, DiscordRunLoopable {
     // MARK: Properties
 
     /// The encoder for this engine. The encoder is responsible for turning raw audio data into OPUS encoded data.
@@ -60,7 +60,7 @@ public protocol DiscordVoiceEngineSpec : DiscordWebSocketable, DiscordGatewayabl
 }
 
 /// Declares that a type will be a client for a voice engine.
-public protocol DiscordVoiceEngineDelegate : class {
+public protocol DiscordVoiceEngineDelegate : AnyObject {
     // MARK: Methods
 
     ///

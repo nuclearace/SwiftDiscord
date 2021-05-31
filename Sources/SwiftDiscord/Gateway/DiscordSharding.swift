@@ -17,6 +17,10 @@
 
 import Dispatch
 import Foundation
+import Logging
+import NIO
+
+fileprivate let logger = Logger(label: "DiscordSharding")
 
 /// Struct that represents shard information.
 /// Used when a client is doing manual sharding.
@@ -49,9 +53,23 @@ public struct DiscordShardInformation {
     }
 }
 
+/// Marks that a type will contain a runloop.
+public protocol DiscordRunLoopable {
+    /// The run loop for this entity.
+    var runloop: EventLoop { get }
+}
+
+/// Declares that a type will be manager of a run loop.
+public protocol DiscordEventLoopGroupManager {
+    // MARK: Properties
+
+    /// The run loops.
+    var runloops: MultiThreadedEventLoopGroup { get }
+}
+
 /// Protocol that represents a sharded gateway connection. This is the top-level protocol for `DiscordEngineSpec` and
 /// `DiscordEngine`
-public protocol DiscordShard : DiscordWebSocketable, DiscordGatewayable {
+public protocol DiscordShard : DiscordWebSocketable, DiscordGatewayable, DiscordRunLoopable {
     // MARK: Properties
 
     /// Whether this shard is connected to the gateway
@@ -73,11 +91,11 @@ public protocol DiscordShard : DiscordWebSocketable, DiscordGatewayable {
     ///
     /// - parameter client: The client this engine should be associated with.
     ///
-    init(delegate: DiscordShardDelegate, shardNum: Int, numShards: Int)
+    init(delegate: DiscordShardDelegate, shardNum: Int, numShards: Int, intents: DiscordGatewayIntent, onLoop: EventLoop)
 }
 
 /// Declares that a type will be a shard's delegate.
-public protocol DiscordShardDelegate : class, DiscordTokenBearer {
+public protocol DiscordShardDelegate : AnyObject, DiscordTokenBearer {
     ///
     /// Used by shards to signal that they have connected.
     ///
@@ -114,7 +132,7 @@ public protocol DiscordShardDelegate : class, DiscordTokenBearer {
 }
 
 /// The delegate for a `DiscordShardManager`.
-public protocol DiscordShardManagerDelegate : class, DiscordTokenBearer {
+public protocol DiscordShardManagerDelegate : AnyObject, DiscordEventLoopGroupManager, DiscordTokenBearer {
     // MARK: Methods
 
     ///
@@ -196,7 +214,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
         let shards = get(self.shards)
 
         for (i, shard) in shards.enumerated() {
-            let deadline = DispatchTime(secondsFromNow: Double(5 * i))
+            let deadline = DispatchTime.now() +  Double(5 * i)
             DispatchQueue.global().asyncAfter(deadline: deadline) { [weak self, weak shard] in
                 guard let this = self, this.get(!this.closed) else { return }
                 shard?.connect()
@@ -213,8 +231,8 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     /// - returns: A new `DiscordShard`
     ///
     open func createShardWithDelegate(_ delegate: DiscordShardManagerDelegate, withShardNum shardNum: Int,
-                                      totalShards: Int) -> DiscordShard {
-        return DiscordEngine(delegate: self, shardNum: shardNum, numShards: totalShards)
+                                      totalShards: Int, intents: DiscordGatewayIntent, onloop: EventLoop) -> DiscordShard {
+        return DiscordEngine(delegate: self, shardNum: shardNum, numShards: totalShards, intents: intents, onLoop: onloop)
     }
 
     ///
@@ -240,16 +258,20 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     ///
     /// - parameter withInfo: The information about this single shard.
     ///
-    open func manuallyShatter(withInfo info: DiscordShardInformation) {
+    open func manuallyShatter(withInfo info: DiscordShardInformation, intents: DiscordGatewayIntent) {
         guard let delegate = self.delegate else { return }
 
-        DefaultDiscordLogger.Logger.verbose("Handling shard range \(info.shardRange)", type: "DiscordShardManager")
+        logger.debug("(verbose) Handling shard range \(info.shardRange)")
 
         cleanUp()
 
         protected {
             for shardNum in info.shardRange {
-                shards.append(createShardWithDelegate(delegate, withShardNum: shardNum, totalShards: info.totalShards))
+                shards.append(createShardWithDelegate(delegate,
+                                                      withShardNum: shardNum,
+                                                      totalShards: info.totalShards,
+                                                      intents: intents,
+                                                      onloop: delegate.runloops.next()))
             }
         }
     }
@@ -292,7 +314,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     /// - parameter shardNum: The number of the shard that disconnected.
     ///
     open func shardDidConnect(_ shard: DiscordShard) {
-        DefaultDiscordLogger.Logger.verbose("Shard #\(shard.shardNum), connected", type: "DiscordShardManager")
+        logger.debug("(verbose) Shard #\(shard.shardNum), connected")
 
         protected { connectedShards += 1 }
 
@@ -307,7 +329,7 @@ open class DiscordShardManager : DiscordShardDelegate, Lockable {
     /// - parameter shardNum: The number of the shard that disconnected.
     ///
     open func shardDidDisconnect(_ shard: DiscordShard) {
-        DefaultDiscordLogger.Logger.verbose("Shard #\(shard.shardNum), disconnected", type: "DiscordShardManager")
+        logger.debug("(verbose) Shard #\(shard.shardNum), disconnected")
 
         protected { closedShards += 1 }
 
