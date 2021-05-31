@@ -1,6 +1,6 @@
 # SwiftDiscord
 
-[![Build Status](https://travis-ci.org/nuclearace/SwiftDiscord.svg?branch=master)](https://travis-ci.org/nuclearace/SwiftDiscord)
+[![Linux](https://github.com/fwcd/swift-discord/actions/workflows/linux.yml/badge.svg)](https://github.com/fwcd/swift-discord/actions/workflows/linux.yml)
 
 A Discord API client for Swift.
 
