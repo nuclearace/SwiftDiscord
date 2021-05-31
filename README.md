@@ -1,8 +1,9 @@
 # SwiftDiscord
 
 [![Linux](https://github.com/fwcd/swift-discord/actions/workflows/linux.yml/badge.svg)](https://github.com/fwcd/swift-discord/actions/workflows/linux.yml)
+[![Docs](https://github.com/fwcd/swift-discord/actions/workflows/docs.yml/badge.svg)](https://fwcd.github.io/swift-discord)
 
-A Discord API client for Swift.
+A Discord API client library for Swift.
 
 - Features:
   - Sending and receiving voice.
@@ -36,19 +37,6 @@ If you wish to use Xcode with your Swift Package Manager project, you can do `sw
 
 ![](https://i.imgur.com/JR97eTO.png)
 
-Usage
-=====
+## Usage
 
 Checkout the [getting started](https://nuclearace.github.io/SwiftDiscord/getting-started.html) page for a quickstart guide.
-
-[Docs](https://nuclearace.github.io/SwiftDiscord/index.html)
-============================================================
-Docs are generated with [jazzy](https://github.com/realm/jazzy) using the magical command:
-
-`jazzy --xcodebuild-arguments -project,SwiftDiscord.xcodeproj/,-scheme,SwiftDiscord-Package --documentation=UsageDocs/*.md --theme fullwidth --module SwiftDiscord`
-
-*Must have setup an Xcode project*
-
-Why no CocoaPods?
-=================
-I hate CocoaPods and the Swift Package Manager makes it easy to do system modules.
