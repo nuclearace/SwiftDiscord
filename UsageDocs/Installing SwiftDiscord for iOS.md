@@ -83,7 +83,7 @@ You may be tempted to skip some steps or to not follow them in order. If you'd l
 
 	```swift
 	import UIKit
-	import SwiftDiscord
+	import Discord
 
 	class ViewController: UIViewController, DiscordClientDelegate {
 	    

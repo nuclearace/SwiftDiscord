@@ -5,7 +5,7 @@
 import Foundation
 import XCTest
 import NIO
-@testable import SwiftDiscord
+@testable import Discord
 
 public class TestDiscordEngine : XCTestCase, DiscordShardDelegate {
     func testEngineCorrectlyHandlesHelloPacket() {

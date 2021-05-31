@@ -4,7 +4,7 @@
 
 import Foundation
 import XCTest
-@testable import SwiftDiscord
+@testable import Discord
 
 public class TestDiscordGuildMember : XCTestCase {
     func testCreatingGuildMember() {

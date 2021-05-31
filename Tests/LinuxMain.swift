@@ -1,5 +1,5 @@
 import XCTest
-import SwiftDiscordTests
+import DiscordTests
 
 XCTMain([testCase(TestDiscordClient.allTests),
          testCase(TestDiscordDataStructures.allTests),

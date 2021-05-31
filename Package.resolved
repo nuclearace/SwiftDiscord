@@ -3,29 +3,11 @@
     "pins": [
       {
         "package": "Socket",
-        "repositoryURL": "https://github.com/IBM-Swift/BlueSocket",
+        "repositoryURL": "https://github.com/Kitura/BlueSocket.git",
         "state": {
           "branch": null,
-          "revision": "c46a3d41f5b2401d18bcb46d0101cdc5cd13e307",
-          "version": "1.0.52"
-        }
-      },
-      {
-        "package": "COPUS",
-        "repositoryURL": "https://github.com/nuclearace/copus",
-        "state": {
-          "branch": null,
-          "revision": "a2af57fa582c0191789f446cc430615ee7e41d4f",
-          "version": "2.1.1"
-        }
-      },
-      {
-        "package": "Sodium",
-        "repositoryURL": "https://github.com/nuclearace/Sodium",
-        "state": {
-          "branch": null,
-          "revision": "5812a3d879b77aae0fdfbd62d0e8354e914d15ae",
-          "version": "2.0.0"
+          "revision": "c9894fd117457f1d006575fbfb2fdfd6f79eac03",
+          "version": "1.0.200"
         }
       },
       {
@@ -42,8 +24,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio.git",
         "state": {
           "branch": null,
-          "revision": "c5fa0b456524cd73dc3ddbb263d4f46c20b86ca3",
-          "version": "2.17.0"
+          "revision": "d161bf658780b209c185994528e7e24376cf7283",
+          "version": "2.29.0"
         }
       },
       {
@@ -51,17 +33,17 @@
         "repositoryURL": "https://github.com/apple/swift-nio-ssl.git",
         "state": {
           "branch": null,
-          "revision": "ccf96bbe65ecc7c1558ab0dba7ffabdea5c1d31f",
-          "version": "2.4.4"
+          "revision": "6363cdf6d2fb863e82434f3c4618f4e896e37569",
+          "version": "2.13.1"
         }
       },
       {
         "package": "websocket-kit",
-        "repositoryURL": "https://github.com/vapor/websocket-kit",
+        "repositoryURL": "https://github.com/vapor/websocket-kit.git",
         "state": {
           "branch": null,
-          "revision": "021edd1ca55451ad15b3e84da6b4064e4b877b34",
-          "version": "2.1.0"
+          "revision": "a2d26b3de8b3be292f3208d1c74024f76ac503da",
+          "version": "2.1.3"
         }
       }
     ]

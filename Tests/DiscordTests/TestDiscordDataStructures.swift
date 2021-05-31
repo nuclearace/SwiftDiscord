@@ -3,7 +3,7 @@
 //
 
 import XCTest
-@testable import SwiftDiscord
+@testable import Discord
 
 extension DiscordGatewayPayloadData: Equatable {
     public static func ==(lhs: DiscordGatewayPayloadData, rhs: DiscordGatewayPayloadData) -> Bool {
