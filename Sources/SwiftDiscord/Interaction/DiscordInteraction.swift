@@ -47,7 +47,7 @@ public struct DiscordInteraction {
     }
 }
 
-public struct DiscordInteractionType: RawRepresentable {
+public struct DiscordInteractionType: RawRepresentable, Hashable {
     public var rawValue: Int
 
     public static let ping = DiscordInteractionType(rawValue: 1)
