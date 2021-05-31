@@ -1012,7 +1012,7 @@ public struct DiscordMessageComponent : Encodable {
     }
 }
 
-public struct DiscordMessageComponentType : RawRepresentable, Encodable {
+public struct DiscordMessageComponentType : RawRepresentable, Hashable, Encodable {
     public let rawValue: Int
 
     public static let actionRow = DiscordMessageComponentType(rawValue: 1)
@@ -1036,7 +1036,7 @@ public struct DiscordMessageComponentEmoji : Encodable {
     }
 }
 
-public struct DiscordMessageComponentButtonStyle : RawRepresentable, Encodable {
+public struct DiscordMessageComponentButtonStyle : RawRepresentable, Hashable, Encodable {
     public let rawValue: Int
 
     public static let primary = DiscordMessageComponentButtonStyle(rawValue: 1)
