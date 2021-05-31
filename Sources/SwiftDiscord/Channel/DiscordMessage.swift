@@ -27,6 +27,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
             case embed
             case allowedMentions = "allowed_mentions"
             case messageReference = "message_reference"
+            case components
         }
 
         let content: String
@@ -34,6 +35,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         let embed: DiscordEmbed?
         let allowedMentions: DiscordAllowedMentions?
         let messageReference: DiscordMessageReference?
+        let components: [DiscordMessageComponent]?
     }
 
     // MARK: Typealiases
@@ -248,7 +250,14 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     // MARK: Methods
 
     func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
-        let fields = FieldsList(content: content, tts: tts, embed: embeds.first, allowedMentions: allowedMentions, messageReference: messageReference)
+        let fields = FieldsList(
+            content: content,
+            tts: tts,
+            embed: embeds.first,
+            allowedMentions: allowedMentions,
+            messageReference: messageReference,
+            components: components
+        )
         let fieldsData = JSON.encodeJSONData(fields) ?? Data()
         if files.count > 0 {
             return .right(createMultipartBody(encodedJSON: fieldsData, files: files))
@@ -928,6 +937,7 @@ public struct DiscordMessageReference : Encodable {
 public struct DiscordMessageComponent : Encodable {
     public enum CodingKeys : String, CodingKey {
         case type
+        case components
         case style
         case label
         case emoji
