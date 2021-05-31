@@ -167,12 +167,16 @@ public struct DiscordApplicationCommandInteractionData {
     /// The name of the invoked command
     public let name: String
 
+    /// A custom (developer-defined) id attached to e.g. a button interaction.
+    public let customId: String?
+
     /// The params + values by the user
     public let options: [DiscordApplicationCommandInteractionDataOption]
 
     init(dataObject: [String: Any]) {
         id = Snowflake(dataObject["id"] as? String) ?? 0
         name = dataObject.get("name", as: String.self) ?? ""
+        customId = dataObject["custom_id"] as? String
         options = (dataObject["options"] as? [[String: Any]])?.map(DiscordApplicationCommandInteractionDataOption.init(optionObject:)).compactMap { $0 } ?? []
     }
 }
