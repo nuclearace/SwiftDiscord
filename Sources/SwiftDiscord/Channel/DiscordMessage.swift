@@ -27,6 +27,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
             case embed
             case allowedMentions = "allowed_mentions"
             case messageReference = "message_reference"
+            case components
         }
 
         let content: String
@@ -34,6 +35,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         let embed: DiscordEmbed?
         let allowedMentions: DiscordAllowedMentions?
         let messageReference: DiscordMessageReference?
+        let components: [DiscordMessageComponent]?
     }
 
     // MARK: Typealiases
@@ -119,6 +121,10 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// A referenced message in an outgoing message.
     public let messageReference: DiscordMessageReference?
 
+    /// Interactive components in the message. This top-level array should only
+    /// contain action rows (which can then e.g. contain buttons).
+    public let components: [DiscordMessageComponent]?
+
     /// The type of this message.
     public let type: MessageType
 
@@ -161,6 +167,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         allowedMentions = nil
         referencedMessage = messageObject.get("referenced_message", as: [String: Any].self)
         messageReference = nil
+        components = nil
         files = []
         type = MessageType(rawValue: messageObject.get("type", or: 0)) ?? .default
         self.client = client
@@ -174,7 +181,15 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     /// - parameter files: The files to send with this message.
     /// - parameter tts: Whether this message should be text-to-speach.
     ///
-    public init(content: String, embed: DiscordEmbed? = nil, files: [DiscordFileUpload] = [], tts: Bool = false, allowedMentions: DiscordAllowedMentions? = nil, messageReference: DiscordMessageReference? = nil) {
+    public init(
+        content: String,
+        embed: DiscordEmbed? = nil,
+        files: [DiscordFileUpload] = [],
+        tts: Bool = false,
+        allowedMentions: DiscordAllowedMentions? = nil,
+        messageReference: DiscordMessageReference? = nil,
+        components: [DiscordMessageComponent] = []
+    ) {
         self.content = content
         if let embed = embed {
             self.embeds = [embed]
@@ -187,6 +202,7 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
         self.tts = tts
         self.allowedMentions = allowedMentions
         self.messageReference = messageReference
+        self.components = components
         self.referencedMessage = nil
         self.attachments = []
         self.author = DiscordUser(userObject: [:])
@@ -234,7 +250,14 @@ public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
     // MARK: Methods
 
     func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
-        let fields = FieldsList(content: content, tts: tts, embed: embeds.first, allowedMentions: allowedMentions, messageReference: messageReference)
+        let fields = FieldsList(
+            content: content,
+            tts: tts,
+            embed: embeds.first,
+            allowedMentions: allowedMentions,
+            messageReference: messageReference,
+            components: components
+        )
         let fieldsData = JSON.encodeJSONData(fields) ?? Data()
         if files.count > 0 {
             return .right(createMultipartBody(encodedJSON: fieldsData, files: files))
@@ -907,6 +930,123 @@ public struct DiscordMessageReference : Encodable {
         self.messageId = messageId
         self.channelId = channelId
         self.guildId = guildId
+    }
+}
+
+/// An interactive part of a message.
+public struct DiscordMessageComponent : Encodable {
+    public enum CodingKeys : String, CodingKey {
+        case type
+        case components
+        case style
+        case label
+        case emoji
+        case customId = "custom_id"
+        case url
+        case disabled
+    }
+
+    /// The type of the component.
+    public let type: DiscordMessageComponentType
+    /// Sub-components. Only valid for action rows.
+    public let components: [DiscordMessageComponent]?
+    /// One of a few button styles. Only valid for buttons.
+    public let style: DiscordMessageComponentButtonStyle?
+    /// Label that appears on a button. Only valid for buttons.
+    public let label: String?
+    /// Emoji that appears on the button. Only valid for buttons.
+    public let emoji: DiscordMessageComponentEmoji?
+    /// A developer-defined id for the button, max 100 chars. Only valid for buttons.
+    public let customId: String?
+    /// A URL for link-style buttons. Only valid for buttons.
+    public let url: URL?
+    /// Whether the button is disabled. False by default. Only valid for buttons.
+    public let disabled: Bool?
+
+    public init(
+        type: DiscordMessageComponentType,
+        components: [DiscordMessageComponent]? = nil,
+        style: DiscordMessageComponentButtonStyle? = nil,
+        label: String? = nil,
+        emoji: DiscordMessageComponentEmoji? = nil,
+        customId: String? = nil,
+        url: URL? = nil,
+        disabled: Bool? = nil
+    ) {
+        self.type = type
+        self.components = components
+        self.style = style
+        self.label = label
+        self.emoji = emoji
+        self.customId = customId
+        self.url = url
+        self.disabled = disabled
+    }
+
+    /// Creates a new button component.
+    public static func button(
+        style: DiscordMessageComponentButtonStyle? = nil,
+        label: String? = nil,
+        emoji: DiscordMessageComponentEmoji? = nil,
+        customId: String? = nil,
+        url: URL? = nil,
+        disabled: Bool? = nil
+    ) -> DiscordMessageComponent {
+        DiscordMessageComponent(
+            type: .button,
+            style: style,
+            label: label,
+            emoji: emoji,
+            customId: customId,
+            url: url,
+            disabled: disabled
+        )
+    }
+
+    /// Creates a new action row component. Cannot contain other action rows.
+    public static func actionRow(components: [DiscordMessageComponent]) -> DiscordMessageComponent {
+        DiscordMessageComponent(
+            type: .actionRow,
+            components: components
+        )
+    }
+}
+
+public struct DiscordMessageComponentType : RawRepresentable, Encodable {
+    public let rawValue: Int
+
+    public static let actionRow = DiscordMessageComponentType(rawValue: 1)
+    public static let button = DiscordMessageComponentType(rawValue: 2)
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+}
+
+/// A partial emoji for use in message components.
+public struct DiscordMessageComponentEmoji : Encodable {
+    public let id: EmojiID?
+    public let name: String?
+    public let animated: Bool
+
+    public init(id: EmojiID? = nil, name: String? = nil, animated: Bool = false) {
+        self.id = id
+        self.name = name
+        self.animated = animated
+    }
+}
+
+public struct DiscordMessageComponentButtonStyle : RawRepresentable, Encodable {
+    public let rawValue: Int
+
+    public static let primary = DiscordMessageComponentButtonStyle(rawValue: 1)
+    public static let secondary = DiscordMessageComponentButtonStyle(rawValue: 2)
+    public static let success = DiscordMessageComponentButtonStyle(rawValue: 3)
+    public static let danger = DiscordMessageComponentButtonStyle(rawValue: 4)
+    public static let link = DiscordMessageComponentButtonStyle(rawValue: 5)
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
     }
 }
 
