@@ -89,5 +89,5 @@ public protocol DiscordClientHolder {
 	// MARK: Properties
 
 	/// A reference to the client.
-	var client: DiscordClient? { get set }
+	var client: DiscordClient? { get }
 }

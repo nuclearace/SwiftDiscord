@@ -16,7 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a user guild.
-public struct DiscordUserGuild {
+public struct DiscordUserGuild: Codable, Identifiable {
     // MARK: Properties
 
     /// The snowflake id of the guild.
@@ -33,24 +33,4 @@ public struct DiscordUserGuild {
 
     /// Bitwise of the user's enabled/disabled permissions.
     public let permissions: DiscordPermission
-
-    init(userGuildObject: [String: Any]) {
-        id = userGuildObject.getSnowflake()
-        name = userGuildObject.get("name", or: "")
-        icon = userGuildObject.get("icon", or: "")
-        owner = userGuildObject.get("owner", or: false)
-        permissions = DiscordPermission(rawValue: Int(userGuildObject.get("permissions", or: "0")) ?? 0)
-    }
-
-    static func userGuildsFromArray(_ guilds: [[String: Any]]) -> DiscordIDDictionary<DiscordUserGuild> {
-        var userGuildDictionary = DiscordIDDictionary<DiscordUserGuild>()
-
-        for guildObject in guilds {
-            let guild = DiscordUserGuild(userGuildObject: guildObject)
-
-            userGuildDictionary[guild.id] = guild
-        }
-
-        return userGuildDictionary
-    }
 }

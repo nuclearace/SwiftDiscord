@@ -17,7 +17,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a Discord role.
-public struct DiscordRole: Codable, Equatable {
+public struct DiscordRole: Codable, Identifiable, Equatable {
     // MARK: Properties
 
     /// The snowflake id of the role.

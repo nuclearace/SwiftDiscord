@@ -18,7 +18,7 @@
 import Foundation
 
 /// Represents an audit entry.
-public struct DiscordAuditLogEntry {
+public struct DiscordAuditLogEntry: Identifiable {
     // MARK: Properties
 
     /// The type of this entry.

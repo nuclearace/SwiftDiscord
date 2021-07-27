@@ -25,7 +25,7 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordGuild")
 
 /// Represents a Guild.
-public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
+public final class DiscordGuild: DiscordClientHolder, CustomStringConvertible, Identifiable {
     // MARK: Properties
 
     // TODO figure out what features are

@@ -101,7 +101,7 @@ public struct DiscordPermission: OptionSet, Codable {
 }
 
 /// Represents a permission overwrite type for a channel.
-public enum DiscordPermissionOverwriteType : String, Encodable {
+public enum DiscordPermissionOverwriteType: String, Codable {
     /// A role overwrite.
     case role = "role"
     /// A member overwrite.
@@ -111,7 +111,7 @@ public enum DiscordPermissionOverwriteType : String, Encodable {
 /// Represents a permission overwrite for a channel.
 ///
 /// The `allow` and `deny` properties are bit fields.
-public struct DiscordPermissionOverwrite: Codable {
+public struct DiscordPermissionOverwrite: Codable, Identifiable {
     // MARK: Properties
 
     /// The snowflake id of this permission overwrite.

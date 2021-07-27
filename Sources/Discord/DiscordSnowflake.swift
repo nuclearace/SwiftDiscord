@@ -41,7 +41,7 @@ public struct Snowflake: Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
-        let container = try encoder.singleValueContainer()
+        var container = encoder.singleValueContainer()
         encoder.encode(String(rawValue))
     }
 }

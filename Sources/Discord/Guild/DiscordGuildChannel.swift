@@ -20,7 +20,7 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordGuildChannel")
 
 /// Protocol that declares a type will be a Discord guild channel.
-public protocol DiscordGuildChannel: DiscordChannel {
+public protocol DiscordGuildChannel: Identifiable {
     /// The snowflake id of the guild this channel is on.
     var guildId: GuildID { get }
 
@@ -177,7 +177,7 @@ func guildChannels(fromArray guildChannelArray: [[String: Any]],
 }
 
 /// Represents a guild channel.
-public struct DiscordGuildTextChannel: DiscordTextChannel, DiscordGuildChannel, Codable {
+public struct DiscordGuildTextChannel: DiscordTextChannel, DiscordGuildChannel, Codable, Identifiable {
     public enum CodingKeys: String, CodingKey {
         case id
         case guildId = "guild_id"
@@ -226,7 +226,7 @@ public struct DiscordGuildTextChannel: DiscordTextChannel, DiscordGuildChannel, 
 }
 
 /// Represents a voice channel.
-public struct DiscordGuildVoiceChannel: DiscordGuildChannel, Decodable {
+public struct DiscordGuildVoiceChannel: DiscordGuildChannel, Decodable, Identifiable {
     public enum CodingKeys: String, CodingKey {
         case id
         case guildId = "guild_id"
@@ -270,7 +270,7 @@ public struct DiscordGuildVoiceChannel: DiscordGuildChannel, Decodable {
 
 // TODO make sure this is correct when category types are documented.
 /// A Category channel.
-public struct DiscordGuildChannelCategory: DiscordGuildChannel, Codable {
+public struct DiscordGuildChannelCategory: DiscordGuildChannel, Codable, Identifiable {
     public enum CodingKeys: String, CodingKey {
         case id
         case guildId = "guild_id"

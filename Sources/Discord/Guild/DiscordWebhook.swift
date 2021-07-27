@@ -18,7 +18,7 @@
 import Foundation
 
 /// Represents a webhook.
-public struct DiscordWebhook {
+public struct DiscordWebhook: Identifiable {
     // MARK: Properties
 
     /// The avatar of this webhook.

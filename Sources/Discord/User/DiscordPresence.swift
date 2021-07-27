@@ -225,7 +225,7 @@ public struct DiscordActivityTimestamps {
 }
 
 /// Represents the party status.
-public struct DiscordParty {
+public struct DiscordParty: Codable, Identifiable {
     // MARK: Properties
 
     /// The id of the party.
@@ -233,17 +233,16 @@ public struct DiscordParty {
 
     /// The sizes of the party. Array of two elements, first is the current, second is the max size of the party.
     public let sizes: [Int]?
-
-    init?(partyObj: [String: Any]?) {
-        guard let partyObj = partyObj else { return nil }
-
-        self.id = partyObj.get("id", or: "")
-        self.sizes = partyObj.get("sizes", as: [Int].self)
-    }
 }
 
 /// Represents presence assets.
-public struct DiscordActivityAssets {
+public struct DiscordActivityAssets: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case largeImage = "large_image"
+        case smallImage = "small_image"
+        case smallText = "small_text"
+    }
+
     // MARK: Properties
 
     /// The id of the large image.
@@ -257,19 +256,10 @@ public struct DiscordActivityAssets {
 
     /// The hover text for the small image.
     public let smallText: String?
-
-    init?(assetsObj: [String: Any]?) {
-        guard let assetsObj = assetsObj else { return nil }
-
-        self.largeImage = assetsObj.get("large_image", as: String.self)
-        self.largeText = assetsObj.get("large_text", as: String.self)
-        self.smallImage = assetsObj.get("small_image", as: String.self)
-        self.smallText = assetsObj.get("small_text", as: String.self)
-    }
 }
 
 /// Used to send updates to Discord about our presence.
-public struct DiscordPresenceUpdate : Encodable {
+public struct DiscordPresenceUpdate: Encodable {
     // MARK: Properties
 
     /// The time at which we went idle. Nil if not idle
@@ -317,8 +307,7 @@ public struct DiscordPresenceUpdate : Encodable {
         try container.encode(status.rawValue, forKey: .status)
     }
 
-    // For encoding
-    enum CodingKeys : CodingKey {
+    public enum CodingKeys: CodingKey {
         case since
         case game
         case status

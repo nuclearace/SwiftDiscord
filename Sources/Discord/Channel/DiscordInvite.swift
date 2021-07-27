@@ -43,7 +43,7 @@ public struct DiscordInvite {
 }
 
 /// Represents an invite to a guild.
-public struct DiscordInviteGuild {
+public struct DiscordInviteGuild: Identifiable {
     // MARK: Properties
 
     /// The snowflake id of the guild this invite is for.
@@ -63,7 +63,7 @@ public struct DiscordInviteGuild {
 }
 
 /// Represents an invite to a channel.
-public struct DiscordInviteChannel {
+public struct DiscordInviteChannel: Identifiable {
     // MARK: Properties
 
     /// The snowflake id of the channel this invite is for.

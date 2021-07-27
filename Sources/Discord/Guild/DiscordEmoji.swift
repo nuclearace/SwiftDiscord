@@ -20,7 +20,7 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordEmoji")
 
 /// Represents an Emoji.
-public struct DiscordEmoji {
+public struct DiscordEmoji: Identifiable {
     // MARK: Properties
 
     /// The snowflake id of the emoji.  Nil if the emoji is a unicode emoji

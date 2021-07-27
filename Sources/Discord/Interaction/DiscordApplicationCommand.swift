@@ -2,7 +2,7 @@ import Foundation
 
 /// Represents a slash-command. The base command model of the
 /// application.
-public struct DiscordApplicationCommand: Encodable {
+public struct DiscordApplicationCommand: Codable, Identifiable {
     public enum CodingKeys: String, CodingKey {
         case id
         case applicationId = "application_id"
@@ -27,21 +27,9 @@ public struct DiscordApplicationCommand: Encodable {
 
     /// The parameters for the command
     public let parameters: [DiscordApplicationCommandOption]
-
-    init(commandObject: [String: Any]) {
-        id = Snowflake((commandObject["id"] as? String) ?? "") ?? 0
-        applicationId = Snowflake((commandObject["application_id"] as? String) ?? "") ?? 0
-        name = (commandObject["name"] as? String) ?? ""
-        description = (commandObject["description"] as? String) ?? ""
-        parameters = ((commandObject["parameters"] as? [[String: Any]]) ?? []).map(DiscordApplicationCommandOption.init(optionObject:))
-    }
-
-    static func commandsFromArray(_ array: [[String: Any]]) -> [DiscordApplicationCommand] {
-        return array.map({ DiscordApplicationCommand(commandObject: $0) })
-    }
 }
 
-public struct DiscordApplicationCommandOption: Encodable {
+public struct DiscordApplicationCommandOption: Codable {
     public enum CodingKeys: String, CodingKey {
         case type
         case name
@@ -92,19 +80,9 @@ public struct DiscordApplicationCommandOption: Encodable {
         self.choices = choices
         self.options = options
     }
-
-    init(optionObject: [String: Any]) {
-        type = (optionObject["type"] as? Int).flatMap(DiscordApplicationCommandOptionType.init(rawValue:))
-        name = (optionObject["name"] as? String) ?? ""
-        description = (optionObject["description"] as? String) ?? ""
-        isDefault = (optionObject["default"] as? Bool) ?? false
-        isRequired = (optionObject["required"] as? Bool) ?? false
-        choices = (optionObject["choices"] as? [[String: Any]]).map { $0.compactMap(DiscordApplicationCommandOptionChoice.init(choiceObject:)) }
-        options = (optionObject["options"] as? [[String: Any]]).map { $0.map(DiscordApplicationCommandOption.init(optionObject:)) }
-    }
 }
 
-public struct DiscordApplicationCommandOptionChoice: Encodable {
+public struct DiscordApplicationCommandOptionChoice: Codable {
     /// 1-100 character choice name
     public let name: String
 
@@ -115,23 +93,21 @@ public struct DiscordApplicationCommandOptionChoice: Encodable {
         self.name = name
         self.value = value
     }
-
-    init?(choiceObject: [String: Any]) {
-        name = (choiceObject["name"] as? String) ?? ""
-        let rawValue = choiceObject["value"]
-        if let value = rawValue as? String {
-            self.value = .string(value)
-        } else if let value = rawValue as? Int {
-            self.value = .int(value)
-        } else {
-            return nil
-        }
-    }
 }
 
-public enum DiscordApplicationCommandOptionChoiceValue: Encodable {
+public enum DiscordApplicationCommandOptionChoiceValue: Codable {
     case string(String)
     case int(Int)
+
+    public init(from decoder: Decoder) throws {
+        let container = try container.singleValueContainer()
+        if let s = try? container.decode(String.self) {
+            self = .string(s)
+        } else {
+            let i = try container.decode(Int.self)
+            self = .int(i)
+        }
+    }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
@@ -144,7 +120,7 @@ public enum DiscordApplicationCommandOptionChoiceValue: Encodable {
     }
 }
 
-public enum DiscordApplicationCommandOptionType: Int, Encodable {
+public enum DiscordApplicationCommandOptionType: Int, Codable {
     case subCommand = 1
     case subCommandGroup = 2
     case string = 3
@@ -153,14 +129,16 @@ public enum DiscordApplicationCommandOptionType: Int, Encodable {
     case user = 6
     case channel = 7
     case role = 8
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
-    }
 }
 
-public struct DiscordApplicationCommandInteractionData {
+public struct DiscordApplicationCommandInteractionData: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case customId = "custom_id"
+        case options
+    }
+
     /// The ID of the invoked command
     public let id: CommandID
 
@@ -172,16 +150,9 @@ public struct DiscordApplicationCommandInteractionData {
 
     /// The params + values by the user
     public let options: [DiscordApplicationCommandInteractionDataOption]
-
-    init(dataObject: [String: Any]) {
-        id = Snowflake(dataObject["id"] as? String) ?? 0
-        name = dataObject.get("name", as: String.self) ?? ""
-        customId = dataObject["custom_id"] as? String
-        options = (dataObject["options"] as? [[String: Any]])?.map(DiscordApplicationCommandInteractionDataOption.init(optionObject:)).compactMap { $0 } ?? []
-    }
 }
 
-public struct DiscordApplicationCommandInteractionDataOption {
+public struct DiscordApplicationCommandInteractionDataOption: Codable {
     /// The name of the parameter.
     public let name: String
 
@@ -190,10 +161,4 @@ public struct DiscordApplicationCommandInteractionDataOption {
 
     /// Present if this option is a group or subcommand.
     public let options: [DiscordApplicationCommandInteractionDataOption]?
-
-    init(optionObject: [String: Any]) {
-        name = optionObject.get("name", as: String.self) ?? ""
-        value = optionObject["value"]
-        options = (optionObject["options"] as? [[String: Any]])?.map(DiscordApplicationCommandInteractionDataOption.init(optionObject:)).compactMap { $0 } ?? []
-    }
 }

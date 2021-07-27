@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -25,8 +26,8 @@ import class Dispatch.DispatchSemaphore
 
 fileprivate let logger = Logger(label: "DiscordChannel")
 
-/// Protocol that declares a type will be a Discord channel.
-public enum DiscordChannel: DiscordClientHolder, Codable {
+/// A Discord channel of unspecified type.
+public enum DiscordChannel: DiscordClientHolder, Codable, Identifiable {
     case text(DiscordGuildTextChannel)
     case direct(DiscordDMChannel)
     case voice(DiscordGuildVoiceChannel)
@@ -47,6 +48,16 @@ public enum DiscordChannel: DiscordClientHolder, Codable {
         case .voice(let channel): return channel.id
         case .groupDM(let channel): return channel.id
         case .category(let channel): return channel.id
+        }
+    }
+
+    public var client: DiscordClient? {
+        switch self {
+        case .text(let channel): return channel.client
+        case .direct(let channel): return channel.client
+        case .voice(let channel): return channel.client
+        case .groupDM(let channel): return channel.client
+        case .category(let channel): return channel.client
         }
     }
 

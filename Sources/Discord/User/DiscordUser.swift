@@ -16,7 +16,18 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a Discord user.
-public struct DiscordUser {
+public struct DiscordUser: Codable, Identifiable {
+    public enum CodingKeys: String, CodingKey {
+        case avatar
+        case bot
+        case discriminator
+        case email
+        case id
+        case mfaEnabled = "mfa_enabled"
+        case username
+        case verified
+    }
+
     // MARK: Properties
 
     /// The base64 encoded avatar of this user.
@@ -42,21 +53,6 @@ public struct DiscordUser {
 
     /// Whether this user is verified.
     public let verified: Bool
-
-    init(userObject: [String: Any]) {
-        avatar = userObject.get("avatar", or: "")
-        bot = userObject.get("bot", or: false)
-        discriminator = userObject.get("discriminator", or: "")
-        email = userObject.get("email", or: "")
-        id = Snowflake(userObject["id"] as? String) ?? 0
-        mfaEnabled = userObject.get("mfa_enabled", or: false)
-        username = userObject.get("username", or: "")
-        verified = userObject.get("verified", or: false)
-    }
-
-    static func usersFromArray(_ userArray: [[String: Any]]) -> [DiscordUser] {
-        return userArray.map(DiscordUser.init)
-    }
 }
 
 /// Declares that a type will act as a Discord user.
@@ -80,7 +76,7 @@ public protocol DiscordUserActor {
 }
 
 /// Represents a ban.
-public struct DiscordBan {
+public struct DiscordBan: Codable {
     // MARK: Properties
 
     /// The reason this person was banned.
@@ -88,13 +84,4 @@ public struct DiscordBan {
 
     /// The user who is banned.
     public let user: DiscordUser
-
-    init(banObject: [String: Any]) {
-        reason = banObject["reason"] as? String
-        user = DiscordUser(userObject: banObject.get("user", or: [String: Any]()))
-    }
-
-    static func bansFromArray(_ banArray: [[String: Any]]) -> [DiscordBan] {
-        return banArray.map(DiscordBan.init)
-    }
 }

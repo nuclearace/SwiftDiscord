@@ -16,7 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a direct message channel with another user.
-public struct DiscordDMChannel : DiscordTextChannel {
+public struct DiscordDMChannel: DiscordTextChannel, Identifiable {
     // MARK: Properties
 
     /// The snowflake id of the channel.
@@ -58,7 +58,7 @@ public struct DiscordDMChannel : DiscordTextChannel {
 }
 
 /// Represents a direct message channel with a group of users.
-public struct DiscordGroupDMChannel : DiscordTextChannel {
+public struct DiscordGroupDMChannel: DiscordTextChannel, Identifiable {
     // MARK: Properties
 
     /// The snowflake id of the channel.

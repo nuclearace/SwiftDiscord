@@ -18,7 +18,7 @@
 import Foundation
 
 /// Represents a Discord chat message.
-public struct DiscordMessage : DiscordClientHolder, ExpressibleByStringLiteral {
+public struct DiscordMessage: DiscordClientHolder, ExpressibleByStringLiteral, Identifiable {
     // Used for `createDataForSending`
     private struct FieldsList : Encodable {
         enum CodingKeys: String, CodingKey {
@@ -356,7 +356,7 @@ public extension DiscordMessage {
     }
 
     /// Represents an application in a `DiscordMessage` object.
-    struct MessageApplication {
+    struct MessageApplication: Identifiable {
         /// The id of this application.
         public let id: Snowflake
 
@@ -396,7 +396,7 @@ extension DiscordMessage.MessageApplication {
 }
 
 /// Represents an attachment.
-public struct DiscordAttachment {
+public struct DiscordAttachment: Identifiable {
     // MARK: Properties
 
     /// The snowflake id of this attachment.
@@ -1024,7 +1024,7 @@ public struct DiscordMessageComponentType : RawRepresentable, Hashable, Encodabl
 }
 
 /// A partial emoji for use in message components.
-public struct DiscordMessageComponentEmoji : Encodable {
+public struct DiscordMessageComponentEmoji: Codable, Identifiable {
     public let id: EmojiID?
     public let name: String?
     public let animated: Bool
@@ -1056,7 +1056,7 @@ public enum DiscordMessageStickerFormatType: Int {
     case lottie = 3
 }
 
-public struct DiscordMessageSticker {
+public struct DiscordMessageSticker: Identifiable {
     /// ID of the sticker
     public let id: Snowflake
     /// ID of the sticker pack
