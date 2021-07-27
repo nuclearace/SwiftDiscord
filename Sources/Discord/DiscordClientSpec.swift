@@ -20,7 +20,7 @@ import Foundation
 import Dispatch
 
 /// Protocol that abstracts a DiscordClient
-public protocol DiscordClientSpec : DiscordVoiceManagerDelegate, DiscordShardManagerDelegate, DiscordUserActor {
+public protocol DiscordClientSpec: DiscordVoiceManagerDelegate, DiscordShardManagerDelegate, DiscordUserActor {
 	// MARK: Properties
 
 	/// Whether or not this client is connected.
@@ -83,12 +83,4 @@ public protocol DiscordClientSpec : DiscordVoiceManagerDelegate, DiscordShardMan
 	/// - parameter presence: The new presence object
 	///
 	func setPresence(_ presence: DiscordPresenceUpdate)
-}
-
-/// Declares that a type will be able to reference a DiscordClient from within itself.
-public protocol DiscordClientHolder {
-	// MARK: Properties
-
-	/// A reference to the client.
-	var client: DiscordClient? { get }
 }

@@ -27,7 +27,7 @@ import class Dispatch.DispatchSemaphore
 fileprivate let logger = Logger(label: "DiscordChannel")
 
 /// A Discord channel of unspecified type.
-public enum DiscordChannel: DiscordClientHolder, Codable, Identifiable {
+public enum DiscordChannel: Codable, Identifiable {
     case text(DiscordGuildTextChannel)
     case direct(DiscordDMChannel)
     case voice(DiscordGuildVoiceChannel)
@@ -48,16 +48,6 @@ public enum DiscordChannel: DiscordClientHolder, Codable, Identifiable {
         case .voice(let channel): return channel.id
         case .groupDM(let channel): return channel.id
         case .category(let channel): return channel.id
-        }
-    }
-
-    public var client: DiscordClient? {
-        switch self {
-        case .text(let channel): return channel.client
-        case .direct(let channel): return channel.client
-        case .voice(let channel): return channel.client
-        case .groupDM(let channel): return channel.client
-        case .category(let channel): return channel.client
         }
     }
 

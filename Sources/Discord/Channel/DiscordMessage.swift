@@ -19,7 +19,7 @@
 import Foundation
 
 /// Represents a Discord chat message.
-public struct DiscordMessage: DiscordClientHolder, ExpressibleByStringLiteral, Identifiable, Codable {
+public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable {
     // Used for `createDataForSending`
     private struct FieldsList: Codable {
         enum CodingKeys: String, CodingKey {
@@ -92,9 +92,6 @@ public struct DiscordMessage: DiscordClientHolder, ExpressibleByStringLiteral, I
 
     /// The snowflake id of the channel this message is on.
     public let channelId: ChannelID
-
-    /// A reference to the client.
-    public weak var client: DiscordClient?
 
     /// The content of this message.
     public let content: String

@@ -199,9 +199,6 @@ public struct DiscordGuildTextChannel: DiscordTextChannel, DiscordGuildChannel, 
     /// The snowflake id of the guild this channel is on.
     public let guildId: GuildID
 
-    /// Reference to the client.
-    public weak var client: DiscordClient?
-
     /// The last message received on this channel.
     ///
     /// **NOTE** Currently is not being updated.
@@ -250,9 +247,6 @@ public struct DiscordGuildVoiceChannel: DiscordGuildChannel, Decodable, Identifi
     /// The bitrate of this channel, if this is a voice channel.
     public var bitrate: Int
 
-    /// Reference to the client.
-    public weak var client: DiscordClient?
-
     /// The name of this channel.
     public var name: String
 
@@ -299,7 +293,4 @@ public struct DiscordGuildChannelCategory: DiscordGuildChannel, Codable, Identif
     // Discord syncs permissions with child channels and child permissions are what matters.
     /// The permission overwrites for this channel.
     public let permissionOverwrites: DiscordIDDictionary<DiscordPermissionOverwrite>
-
-    /// Reference to the client.
-    public weak var client: DiscordClient?
 }

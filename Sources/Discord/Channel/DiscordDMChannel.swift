@@ -17,7 +17,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a direct message channel with another user.
-public struct DiscordDMChannel: DiscordTextChannel, DiscordClientHolder, Identifiable, Codable {
+public struct DiscordDMChannel: DiscordTextChannel, Identifiable, Codable {
     public enum CodingKeys: String, CodingKey {
         case recipient
         case id
@@ -32,15 +32,12 @@ public struct DiscordDMChannel: DiscordTextChannel, DiscordClientHolder, Identif
     /// The users this channel is with.
     public let recipients: [DiscordUser]
 
-    /// Reference to the client.
-    public weak var client: DiscordClient?
-
     /// The snowflake id of the last received message on this channel.
     public var lastMessageId: MessageID
 }
 
 /// Represents a direct message channel with a group of users.
-public struct DiscordGroupDMChannel: DiscordTextChannel, DiscordClientHolder, Identifiable {
+public struct DiscordGroupDMChannel: DiscordTextChannel, Identifiable {
     public enum CodingKeys: String, CodingKey {
         case id
         case recipients
@@ -55,9 +52,6 @@ public struct DiscordGroupDMChannel: DiscordTextChannel, DiscordClientHolder, Id
 
     /// The users in this channel.
     public let recipients: [DiscordUser]
-
-    /// Reference to the client.
-    public weak var client: DiscordClient?
 
     /// The snowflake id of the last received message on this channel.
     public var lastMessageId: MessageID

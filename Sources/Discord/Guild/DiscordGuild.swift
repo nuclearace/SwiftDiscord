@@ -26,7 +26,7 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordGuild")
 
 /// Represents a Guild.
-public final class DiscordGuild: DiscordClientHolder, CustomStringConvertible, Identifiable, Codable {
+public final class DiscordGuild: CustomStringConvertible, Identifiable, Codable {
     public enum CodingKeys: String, CodingKey {
         case id
         case channels
@@ -82,9 +82,6 @@ public final class DiscordGuild: DiscordClientHolder, CustomStringConvertible, I
     /// A `DiscordLazyDictionary` of guild members. The key is the snowflake id of the user.
     public var members = DiscordLazyDictionary<UserID, DiscordGuildMember>()
 
-    /// Reference to the client.
-    public weak var client: DiscordClient?
-
     /// A dictionary of this guild's channels. The key is the snowflake id of the channel.
     public internal(set) var channels: DiscordIDDictionary<DiscordGuildChannel>
 
@@ -137,117 +134,6 @@ public final class DiscordGuild: DiscordClientHolder, CustomStringConvertible, I
     public private(set) var verificationLevel: Int
 
     // MARK: Methods
-
-    ///
-    /// Bans this user from the guild.
-    ///
-    /// - parameter member: The member to ban.
-    /// - parameter deleteMessageDays: The number of days going back to delete messages. Defaults to 7.
-    /// - parameter reason: The reason for this ban.
-    ///
-    public func ban(_ member: DiscordGuildMember, deleteMessageDays: Int = 7, reason: String? = nil) {
-        guard let client = self.client else { return }
-
-        client.guildBan(userId: member.user.id, on: id, deleteMessageDays: deleteMessageDays, reason: reason)
-    }
-
-    ///
-    /// Creates a channel on this guild with `options`. The channel will not be immediately available; wait for a
-    /// channel create event.
-    ///
-    /// - parameter with: The options for this new channel
-    /// - parameter reason: The reason this channel is being created.
-    ///
-    public func createChannel(with options: [DiscordEndpoint.Options.GuildCreateChannel], reason: String? = nil) {
-        guard let client = self.client else { return }
-
-        logger.info("Creating guild channel on \(id)")
-
-        client.createGuildChannel(on: id, options: options, reason: reason)
-    }
-
-    ///
-    /// Gets the audit log for this guild.
-    ///
-    /// - parameter withOptions: The options to use when getting the logs.
-    /// - parameter callback: The callback.
-    ///
-    public func getAuditLog(withOptions options: [DiscordEndpoint.Options.AuditLog] = [],
-                            callback: @escaping (DiscordAuditLog?, HTTPURLResponse?) -> ()) {
-        guard let client = self.client else { return callback(nil, nil) }
-
-        client.getGuildAuditLog(for: id, withOptions: options, callback: {log, response in
-            callback(log, response)
-        })
-    }
-
-    ///
-    /// Gets the bans for this guild.
-    ///
-    /// - parameter callback: The callback.
-    ///
-    public func getBans(callback: @escaping ([DiscordBan], HTTPURLResponse?) -> ()) {
-        guard let client = self.client else { return callback([], nil) }
-
-        client.getGuildBans(for: id) {bans, response in
-            callback(bans, response)
-        }
-    }
-
-    ///
-    /// Gets a guild member by their user id.
-    ///
-    /// - parameter userId: The user id of the member to get
-    ///
-    public func getGuildMember(_ userId: UserID, callback: @escaping (DiscordGuildMember?, HTTPURLResponse?) -> ()) {
-        guard let client = self.client else { return callback(nil, nil) }
-
-        client.getGuildMember(by: userId, on: id) {member, response in
-            logger.debug("Got member: \(userId)")
-
-            var member = member
-            member?.guild = self
-
-            callback(member, response)
-        }
-    }
-
-    // Used to setup initial guilds
-    static func guildsFromArray(_ guilds: [[String: Any]], client: DiscordClient? = nil) -> DiscordIDDictionary<DiscordGuild> {
-        var guildDictionary = DiscordIDDictionary<DiscordGuild>()
-
-        for guildObject in guilds {
-            let guild = DiscordGuild(guildObject: guildObject, client: client)
-
-            guildDictionary[guild.id] = guild
-        }
-
-        return guildDictionary
-    }
-
-    ///
-    /// Modifies this guild with `options`.
-    ///
-    /// - parameter options: An array of options to change.
-    /// - parameter reason: The reason for this change.
-    ///
-    public func modifyGuild(options: [DiscordEndpoint.Options.ModifyGuild], reason: String? = nil) {
-        guard let client = self.client else { return }
-
-        client.modifyGuild(id, options: options, reason: reason)
-    }
-
-    ///
-    /// Modifies a guild member.
-    ///
-    /// - parameter member: The member to modify.
-    /// - parameter options: The options to set.
-    ///
-    public func modifyMember(_ member: DiscordGuildMember, options: [DiscordEndpoint.Options.ModifyMember]) {
-        guard let client = self.client else { return }
-
-        client.modifyGuildMember(member.user.id, on: id, options: options)
-    }
 
     ///
     /// Gets the roles that this member has on this guild.

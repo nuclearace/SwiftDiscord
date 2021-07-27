@@ -29,7 +29,7 @@ public struct DiscordGuildMember: Codable {
         case user
         case deaf
         case mute
-        case roleIds = "role_ids"
+        case roleIds = "roles"
     }
 
     // MARK: Properties
@@ -58,31 +58,13 @@ public struct DiscordGuildMember: Codable {
     init(guildId: GuildID, user: DiscordUser, deaf: Bool, mute: Bool, nick: String?, roleIds: [RoleID], joinedAt: Date,
          guild: DiscordGuild? = nil) {
         self.user = user
-        self._deaf = deaf
-        self._mute = mute
-        self._nick = nick
+        self.deaf = deaf
+        self.mute = mute
+        self.nick = nick
         self.roleIds = roleIds
         self.joinedAt = joinedAt
         self.guild = guild
         self.guildId = guildId
-    }
-
-    static func guildMembersFromArray(_ guildMembersArray: [[String: Any]], withGuildId guildId: GuildID,
-                                      guild: DiscordGuild?) -> DiscordLazyDictionary<UserID, DiscordGuildMember> {
-        var guildMembers = DiscordLazyDictionary<UserID, DiscordGuildMember>()
-
-        for guildMember in guildMembersArray {
-            guard let user = guildMember["user"] as? [String: Any], let id = Snowflake(user["id"] as? String) else {
-                logger.error("Couldn't extract userId from user JSON")
-                continue
-            }
-
-            guildMembers[lazy: id] = .lazy({[weak guild] in
-                DiscordGuildMember(guildMemberObject: guildMember, guildId: guildId, guild: guild)
-            })
-        }
-
-        return guildMembers
     }
 
     ///
@@ -97,13 +79,22 @@ public struct DiscordGuildMember: Codable {
         return roles.contains(where: { $0.name == role })
     }
 
-    mutating func updateMember(_ updateObject: [String: Any]) -> DiscordGuildMember {
-        if let roles = updateObject["roles"] as? [String] {
-            self.roleIds = roles.compactMap(Snowflake.init)
-        }
-
-        _nick = updateObject["nick"] as? String
-
-        return self
+    mutating func updateMember(_ update: DiscordGuildMemberUpdate) {
+        self.roleIds = update.roleIds
+        self.nick = update.nick
     }
+}
+
+/// A guild member update event
+public struct DiscordGuildMemberUpdate: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case roleIds = "roles"
+        case nick
+    }
+
+    /// The user role IDs
+    public let roleIds: [RoleID]
+
+    /// Nickname of the user in the guild
+    public let nick: String?
 }
