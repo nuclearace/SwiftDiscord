@@ -50,8 +50,8 @@ public struct DiscordEmoji {
         roles = (emojiObject["roles"] as? [String])?.compactMap(Snowflake.init) ?? []
     }
 
-    static func emojisFromArray(_ emojiArray: [[String: Any]]) -> [EmojiID: DiscordEmoji] {
-        var emojis = [EmojiID: DiscordEmoji]()
+    static func emojisFromArray(_ emojiArray: [[String: Any]]) -> DiscordIDDictionary<DiscordEmoji> {
+        var emojis = DiscordIDDictionary<DiscordEmoji>()
 
         for emoji in emojiArray {
             let emoji = DiscordEmoji(emojiObject: emoji)

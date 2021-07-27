@@ -59,10 +59,10 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public weak var client: DiscordClient?
 
     /// A dictionary of this guild's channels. The key is the snowflake id of the channel.
-    public internal(set) var channels: [ChannelID: DiscordGuildChannel]
+    public internal(set) var channels: DiscordIDDictionary<DiscordGuildChannel>
 
     /// A dictionary of this guild's emojis. The key is the snowflake id of the emoji.
-    public internal(set) var emojis: [EmojiID: DiscordEmoji]
+    public internal(set) var emojis: DiscordIDDictionary<DiscordEmoji>
 
     /// The number of members in this guild.
     ///
@@ -73,11 +73,11 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     public internal(set) var presences = DiscordLazyDictionary<UserID, DiscordPresence>()
 
     /// A dictionary of this guild's roles. The key is the snowflake id of the role.
-    public internal(set) var roles: [RoleID: DiscordRole]
+    public internal(set) var roles: DiscordIDDictionary<DiscordRole>
 
     /// A dictionary of this guild's current voice states. The key is the snowflake id of the user for this voice
     /// state.
-    public internal(set) var voiceStates: [UserID: DiscordVoiceState]
+    public internal(set) var voiceStates: DiscordIDDictionary<DiscordVoiceState>
 
     /// The default message notification setting.
     public private(set) var defaultMessageNotifications: Int
@@ -219,8 +219,8 @@ public final class DiscordGuild : DiscordClientHolder, CustomStringConvertible {
     }
 
     // Used to setup initial guilds
-    static func guildsFromArray(_ guilds: [[String: Any]], client: DiscordClient? = nil) -> [GuildID: DiscordGuild] {
-        var guildDictionary = [GuildID: DiscordGuild]()
+    static func guildsFromArray(_ guilds: [[String: Any]], client: DiscordClient? = nil) -> DiscordIDDictionary<DiscordGuild> {
+        var guildDictionary = DiscordIDDictionary<DiscordGuild>()
 
         for guildObject in guilds {
             let guild = DiscordGuild(guildObject: guildObject, client: client)

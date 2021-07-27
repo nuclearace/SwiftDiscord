@@ -20,7 +20,7 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordGuildChannel")
 
 /// Protocol that declares a type will be a Discord guild channel.
-public protocol DiscordGuildChannel : DiscordChannel {
+public protocol DiscordGuildChannel: DiscordChannel {
     /// The snowflake id of the guild this channel is on.
     var guildId: GuildID { get }
 
@@ -34,7 +34,7 @@ public protocol DiscordGuildChannel : DiscordChannel {
     var position: Int { get }
 
     /// The permissions specific to this channel.
-    var permissionOverwrites: [OverwriteID: DiscordPermissionOverwrite] { get }
+    var permissionOverwrites: DiscordIDDictionary<DiscordPermissionOverwrite> { get }
 }
 
 extension DiscordGuildChannel {
@@ -164,8 +164,8 @@ func guildChannel(fromObject channelObject: [String: Any],
 
 func guildChannels(fromArray guildChannelArray: [[String: Any]],
                    guildID: GuildID?,
-                   client: DiscordClient? = nil) -> [ChannelID: DiscordGuildChannel] {
-    var guildChannels = [ChannelID: DiscordGuildChannel]()
+                   client: DiscordClient? = nil) -> DiscordIDDictionary<DiscordGuildChannel> {
+    var guildChannels = DiscordIDDictionary<DiscordGuildChannel>()
 
     for guildChannel in guildChannelArray.compactMap({ return guildChannel(fromObject: $0,
                                                                            guildID: guildID,
@@ -213,7 +213,7 @@ public struct DiscordGuildTextChannel: DiscordTextChannel, DiscordGuildChannel, 
     public var parentId: ChannelID?
 
     /// The permissions specifics to this channel.
-    public var permissionOverwrites: [OverwriteID: DiscordPermissionOverwrite]
+    public var permissionOverwrites: DiscordIDDictionary<DiscordPermissionOverwrite>
 
     /// The position of this channel. Mostly for UI purpose.
     public var position: Int
@@ -259,7 +259,7 @@ public struct DiscordGuildVoiceChannel: DiscordGuildChannel, Decodable {
     public var parentId: ChannelID?
 
     /// The permissions specifics to this channel.
-    public var permissionOverwrites: [OverwriteID: DiscordPermissionOverwrite]
+    public var permissionOverwrites: DiscordIDDictionary<DiscordPermissionOverwrite>
 
     /// The position of this channel. Mostly for UI purpose.
     public var position: Int
@@ -297,7 +297,7 @@ public struct DiscordGuildChannelCategory: DiscordGuildChannel, Codable {
     // TODO if permissions here start affecting child channels, fix permissions. Currently it looks like
     // Discord syncs permissions with child channels and child permissions are what matters.
     /// The permission overwrites for this channel.
-    public let permissionOverwrites: [OverwriteID: DiscordPermissionOverwrite]
+    public let permissionOverwrites: DiscordIDDictionary<DiscordPermissionOverwrite>
 
     /// Reference to the client.
     public weak var client: DiscordClient?

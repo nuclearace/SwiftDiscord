@@ -150,8 +150,8 @@ public struct DiscordPermissionOverwrite : Encodable {
         deny = DiscordPermission(rawValue: Int(permissionOverwriteObject.get("deny", or: "0")) ?? 0)
     }
 
-    static func overwritesFromArray(_ permissionOverwritesArray: [[String: Any]]) -> [OverwriteID: DiscordPermissionOverwrite] {
-        var overwrites = [OverwriteID: DiscordPermissionOverwrite]()
+    static func overwritesFromArray(_ permissionOverwritesArray: [[String: Any]]) -> DiscordIDDictionary<DiscordPermissionOverwrite> {
+        var overwrites = DiscordIDDictionary<DiscordPermissionOverwrite>()
 
         for overwriteObject in permissionOverwritesArray {
             let overwrite = DiscordPermissionOverwrite(permissionOverwriteObject: overwriteObject)

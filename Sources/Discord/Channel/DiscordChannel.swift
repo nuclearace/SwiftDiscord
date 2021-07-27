@@ -241,8 +241,8 @@ func channelFromObject(_ object: [String: Any], withClient client: DiscordClient
     }
 }
 
-func privateChannelsFromArray(_ channels: [[String: Any]], client: DiscordClient) -> [ChannelID: DiscordTextChannel] {
-    var channelDict = [ChannelID: DiscordTextChannel]()
+func privateChannelsFromArray(_ channels: [[String: Any]], client: DiscordClient) -> DiscordIDDictionary<DiscordTextChannel> {
+    var channelDict = DiscordIDDictionary<DiscordTextChannel>()
 
     for channel in channels {
         guard let channel = channelFromObject(channel, withClient: client) as? DiscordTextChannel else { continue }

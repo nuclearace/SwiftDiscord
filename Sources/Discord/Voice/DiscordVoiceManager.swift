@@ -88,14 +88,14 @@ open class DiscordVoiceManager : DiscordVoiceEngineDelegate, Lockable {
     }
 
     /// The voice engines, indexed by guild id.
-    public private(set) var voiceEngines = [GuildID: DiscordVoiceEngine]()
+    public private(set) var voiceEngines = DiscordIDDictionary<DiscordVoiceEngine>()
 
     /// The voice states for this user, if they are in any voice channels.
-    public internal(set) var voiceStates = [GuildID: DiscordVoiceState]()
+    public internal(set) var voiceStates = DiscordIDDictionary<DiscordVoiceState>()
 
     let lock = DispatchSemaphore(value: 1)
 
-    var voiceServerInformations = [GuildID: DiscordVoiceServerInformation]()
+    var voiceServerInformations = DiscordIDDictionary<DiscordVoiceServerInformation>()
 
     private var logType: String { return "DiscordVoiceManager" }
 

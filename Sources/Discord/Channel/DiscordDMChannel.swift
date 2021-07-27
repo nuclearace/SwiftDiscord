@@ -44,8 +44,8 @@ public struct DiscordDMChannel : DiscordTextChannel {
         self.client = client
     }
 
-    static func DMsfromArray(_ dmArray: [[String: Any]]) -> [ChannelID: DiscordDMChannel] {
-        var dms = [ChannelID: DiscordDMChannel]()
+    static func DMsfromArray(_ dmArray: [[String: Any]]) -> DiscordIDDictionary<DiscordDMChannel> {
+        var dms = DiscordIDDictionary<DiscordDMChannel>()
 
         for dm in dmArray {
             let dmChannel = DiscordDMChannel(dmObject: dm)

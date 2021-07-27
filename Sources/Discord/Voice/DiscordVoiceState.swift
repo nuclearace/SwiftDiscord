@@ -58,8 +58,8 @@ public struct DiscordVoiceState {
         suppress = voiceStateObject.get("suppress", or: false)
     }
 
-    static func voiceStatesFromArray(_ voiceStateArray: [[String: Any]], guildId: GuildID) -> [UserID: DiscordVoiceState] {
-        var voiceStates = [UserID: DiscordVoiceState]()
+    static func voiceStatesFromArray(_ voiceStateArray: [[String: Any]], guildId: GuildID) -> DiscordIDDictionary<DiscordVoiceState> {
+        var voiceStates = DiscordIDDictionary<DiscordVoiceState>()
 
         for voiceState in voiceStateArray {
             let voiceState = DiscordVoiceState(voiceStateObject: voiceState, guildId: guildId)

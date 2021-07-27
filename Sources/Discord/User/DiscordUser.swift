@@ -64,10 +64,10 @@ public protocol DiscordUserActor {
     // MARK: Properties
 
     /// The direct message channels this user is in.
-    var directChannels: [UserID: DiscordTextChannel] { get }
+    var directChannels: DiscordIDDictionary<DiscordTextChannel> { get }
 
     /// The guilds that this user is in.
-    var guilds: [GuildID: DiscordGuild] { get }
+    var guilds: DiscordIDDictionary<DiscordGuild> { get }
 
     /// The relationships this user has. Only valid for non-bot users.
     var relationships: [[String: Any]] { get }

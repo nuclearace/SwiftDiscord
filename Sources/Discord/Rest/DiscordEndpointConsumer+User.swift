@@ -46,7 +46,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    func getDMs(callback: @escaping ([ChannelID: DiscordDMChannel], HTTPURLResponse?) -> ()) {
+    func getDMs(callback: @escaping (DiscordIDDictionary<DiscordDMChannel>, HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(channels)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([:], response)
@@ -65,7 +65,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    func getGuilds(callback: @escaping ([GuildID: DiscordUserGuild], HTTPURLResponse?) -> ()) {
+    func getGuilds(callback: @escaping (DiscordIDDictionary<DiscordUserGuild>, HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = {data, response, error in
             guard case let .array(guilds)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([:], response)

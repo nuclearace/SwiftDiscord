@@ -85,10 +85,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     public private(set) var connected = false
 
     /// The direct message channels this user is in.
-    public private(set) var directChannels = [ChannelID: DiscordTextChannel]()
+    public private(set) var directChannels = DiscordIDDictionary<DiscordTextChannel>()
 
     /// The guilds that this user is in.
-    public private(set) var guilds = [GuildID: DiscordGuild]()
+    public private(set) var guilds = DiscordIDDictionary<DiscordGuild>()
 
     /// The relationships this user has. Only valid for non-bot users.
     public private(set) var relationships = [[String: Any]]()
@@ -99,7 +99,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// A manager for the voice engines.
     public private(set) var voiceManager: DiscordVoiceManager!
 
-    var channelCache = [ChannelID: DiscordChannel]()
+    var channelCache = DiscordIDDictionary<DiscordChannel>()
 
     private let voiceQueue = DispatchQueue(label: "voiceQueue")
 

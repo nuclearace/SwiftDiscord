@@ -615,7 +615,7 @@ public protocol DiscordEndpointConsumer {
     /// - parameter callback: The callback function, taking a dictionary of `DiscordDMChannel` associated by
     ///                       the recipient's id
     ///
-    func getDMs(callback: @escaping ([ChannelID: DiscordDMChannel], HTTPURLResponse?) -> ())
+    func getDMs(callback: @escaping (DiscordIDDictionary<DiscordDMChannel>, HTTPURLResponse?) -> ())
 
     ///
     /// Gets guilds the user is in.
@@ -623,7 +623,7 @@ public protocol DiscordEndpointConsumer {
     /// - parameter user: Our snowflake id
     /// - parameter callback: The callback function, taking a dictionary of `DiscordUserGuild` associated by guild id
     ///
-    func getGuilds(callback: @escaping ([ChannelID: DiscordUserGuild], HTTPURLResponse?) -> ())
+    func getGuilds(callback: @escaping (DiscordIDDictionary<DiscordUserGuild>, HTTPURLResponse?) -> ())
 
     // MARK: Applications
 

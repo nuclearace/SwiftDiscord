@@ -42,8 +42,8 @@ public struct DiscordUserGuild {
         permissions = DiscordPermission(rawValue: Int(userGuildObject.get("permissions", or: "0")) ?? 0)
     }
 
-    static func userGuildsFromArray(_ guilds: [[String: Any]]) -> [GuildID: DiscordUserGuild] {
-        var userGuildDictionary = [GuildID: DiscordUserGuild]()
+    static func userGuildsFromArray(_ guilds: [[String: Any]]) -> DiscordIDDictionary<DiscordUserGuild> {
+        var userGuildDictionary = DiscordIDDictionary<DiscordUserGuild>()
 
         for guildObject in guilds {
             let guild = DiscordUserGuild(userGuildObject: guildObject)

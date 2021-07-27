@@ -66,8 +66,8 @@ public struct DiscordRole : Encodable, Equatable {
         self.position = position
     }
 
-    static func rolesFromArray(_ rolesArray: [[String: Any]]) -> [RoleID: DiscordRole] {
-        var roles = [RoleID: DiscordRole]()
+    static func rolesFromArray(_ rolesArray: [[String: Any]]) -> DiscordIDDictionary<DiscordRole> {
+        var roles = DiscordIDDictionary<DiscordRole>()
 
         for role in rolesArray {
             let role = DiscordRole(roleObject: role)

@@ -275,7 +275,7 @@ public protocol DiscordClientDelegate : AnyObject {
     /// - parameter didUpdateEmojis: The chunk of guild members that was handled.
     /// - parameter onGuild: The guild the emojis were updated on.
     ///
-    func client(_ client: DiscordClient, didUpdateEmojis emojis: [EmojiID: DiscordEmoji],
+    func client(_ client: DiscordClient, didUpdateEmojis emojis: DiscordIDDictionary<DiscordEmoji>,
                 onGuild guild: DiscordGuild)
 
     ///
@@ -376,7 +376,7 @@ public extension DiscordClientDelegate {
                 withData data: [String: Any]) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didUpdateEmojis emojis: [EmojiID: DiscordEmoji],
+    func client(_ client: DiscordClient, didUpdateEmojis emojis: DiscordIDDictionary<DiscordEmoji>,
                 onGuild guild: DiscordGuild) { }
 
     /// Default.
