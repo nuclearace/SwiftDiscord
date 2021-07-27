@@ -238,28 +238,3 @@ public extension DiscordTextChannel {
         client.deletePinnedMessage(message.id, on: id)
     }
 }
-
-func channelFromObject(_ object: [String: Any], withClient client: DiscordClient?) -> DiscordChannel? {
-    guard let type = DiscordChannelType(rawValue: object.get("type", or: -1)) else { return nil }
-
-    switch type {
-    case .text:     return DiscordGuildTextChannel(guildChannelObject: object, guildID: nil, client: client)
-    case .voice:    return DiscordGuildVoiceChannel(guildChannelObject: object, guildID: nil, client: client)
-    case .direct:   return DiscordDMChannel(dmReadyObject: object, client: client)
-    case .groupDM:  return DiscordGroupDMChannel(dmReadyObject: object, client: client)
-    case .category: return DiscordGuildChannelCategory(categoryObject: object, guildID: nil, client: client)
-    default:        return nil // TODO
-    }
-}
-
-func privateChannelsFromArray(_ channels: [[String: Any]], client: DiscordClient) -> DiscordIDDictionary<DiscordTextChannel> {
-    var channelDict = DiscordIDDictionary<DiscordTextChannel>()
-
-    for channel in channels {
-        guard let channel = channelFromObject(channel, withClient: client) as? DiscordTextChannel else { continue }
-
-        channelDict[channel.id] = channel
-    }
-
-    return channelDict
-}

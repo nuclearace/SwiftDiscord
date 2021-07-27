@@ -19,9 +19,9 @@
 import Foundation
 
 /// Represents a Discord chat message.
-public struct DiscordMessage: DiscordClientHolder, ExpressibleByStringLiteral, Identifiable {
+public struct DiscordMessage: DiscordClientHolder, ExpressibleByStringLiteral, Identifiable, Codable {
     // Used for `createDataForSending`
-    private struct FieldsList : Encodable {
+    private struct FieldsList: Codable {
         enum CodingKeys: String, CodingKey {
             case content
             case tts
@@ -37,6 +37,32 @@ public struct DiscordMessage: DiscordClientHolder, ExpressibleByStringLiteral, I
         let allowedMentions: DiscordAllowedMentions?
         let messageReference: DiscordMessageReference?
         let components: [DiscordMessageComponent]?
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case activity
+        case application
+        case attachments
+        case author
+        case channelId = "channel_id"
+        case content
+        case embeds
+        case id
+        case mentionEveryone = "mention_everyone"
+        case mentionRoles = "mention_roles"
+        case mentions
+        case nonce
+        case pinned
+        case reactions
+        case stickers
+        case tts
+        case editedTimestamp = "edited_timestamp"
+        case timestamp
+        case allowedMentions = "allowed_mentions"
+        case referencedMessage = "referenced_message"
+        case components
+        case files
+        case type
     }
 
     // MARK: Typealiases
@@ -146,34 +172,6 @@ public struct DiscordMessage: DiscordClientHolder, ExpressibleByStringLiteral, I
 
     // MARK: Initializers
 
-    init(messageObject: [String: Any], client: DiscordClient?) {
-        activity = MessageActivity(activityObject: messageObject.get("activity", as: [String: Any].self))
-        application = MessageApplication(applicationObject: messageObject.get("application", as: [String: Any].self))
-        attachments = DiscordAttachment.attachmentsFromArray(messageObject.get("attachments", or: JSONArray()))
-        author = DiscordUser(userObject: messageObject.get("author", or: [String: Any]()))
-        channelId = Snowflake(messageObject["channel_id"] as? String) ?? 0
-        content = messageObject.get("content", or: "")
-        embeds = DiscordEmbed.embedsFromArray(messageObject.get("embeds", or: JSONArray()))
-        id = messageObject.getSnowflake()
-        mentionEveryone = messageObject.get("mention_everyone", or: false)
-        mentionRoles = messageObject.get("mention_roles", or: [String]()).compactMap(Snowflake.init)
-        mentions = DiscordUser.usersFromArray(messageObject.get("mentions", or: JSONArray()))
-        nonce = messageObject.getSnowflake(key: "nonce")
-        pinned = messageObject.get("pinned", or: false)
-        reactions = DiscordReaction.reactionsFromArray(messageObject.get("reactions", or: []))
-        stickers = DiscordMessageSticker.stickersFromArray(messageObject.get("sticker", or: []))
-        tts = messageObject.get("tts", or: false)
-        editedTimestamp = DiscordDateFormatter.format(messageObject.get("edited_timestamp", or: "")) ?? Date()
-        timestamp = DiscordDateFormatter.format(messageObject.get("timestamp", or: "")) ?? Date()
-        allowedMentions = nil
-        referencedMessage = messageObject.get("referenced_message", as: [String: Any].self)
-        messageReference = nil
-        components = nil
-        files = []
-        type = MessageType(rawValue: messageObject.get("type", or: 0)) ?? .default
-        self.client = client
-    }
-
     ///
     /// Creates a message that can be used to send.
     ///
@@ -273,15 +271,11 @@ public struct DiscordMessage: DiscordClientHolder, ExpressibleByStringLiteral, I
     public func delete() {
         channel?.deleteMessage(self)
     }
-
-    static func messagesFromArray(_ array: [[String: Any]]) -> [DiscordMessage] {
-        return array.map({ DiscordMessage(messageObject: $0, client: nil) })
-    }
 }
 
 public extension DiscordMessage {
     /// Type of message
-    enum MessageType : Int {
+    enum MessageType: Int, Codable {
         /// Default.
         case `default` = 0
 
@@ -332,9 +326,9 @@ public extension DiscordMessage {
     }
 
     /// Represents an action that be taken on a message.
-    struct MessageActivity {
+    struct MessageActivity: Codable {
         /// Represents the type of activity.
-        public enum ActivityType : Int {
+        public enum ActivityType: Int, Codable {
             /// Join.
             case join = 1
 
@@ -348,6 +342,11 @@ public extension DiscordMessage {
             case joinRequest
         }
 
+        public enum CodingKeys: String, CodingKey {
+            case type
+            case partyId = "party_id"
+        }
+
         /// The type of action.
         public let type: ActivityType
 
@@ -357,7 +356,15 @@ public extension DiscordMessage {
     }
 
     /// Represents an application in a `DiscordMessage` object.
-    struct MessageApplication: Identifiable {
+    struct MessageApplication: Identifiable, Codable {
+        public enum CodingKeys: String, CodingKey {
+            case id
+            case coverImage = "cover_image"
+            case description
+            case icon
+            case name
+        }
+
         /// The id of this application.
         public let id: Snowflake
 
@@ -375,29 +382,18 @@ public extension DiscordMessage {
     }
 }
 
-extension DiscordMessage.MessageActivity {
-    init?(activityObject: [String: Any]?) {
-        guard let activityObject = activityObject else { return nil }
-
-        type = ActivityType(rawValue: activityObject.get("type", or: 0)) ?? .join
-        partyId = activityObject.get("party_id", as: String.self)
-    }
-}
-
-extension DiscordMessage.MessageApplication {
-    init?(applicationObject: [String: Any]?) {
-        guard let applicationObject = applicationObject else { return nil }
-
-        id = applicationObject.getSnowflake(key: "id")
-        coverImage = applicationObject.get("cover_image", or: "")
-        description = applicationObject.get("description", or: "")
-        icon = applicationObject.get("icon", or: "")
-        name = applicationObject.get("name", or: "")
-    }
-}
-
 /// Represents an attachment.
-public struct DiscordAttachment: Identifiable {
+public struct DiscordAttachment: Identifiable, Codable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case filename
+        case height
+        case proxyUrl = "proxy_url"
+        case size
+        case url
+        case width
+    }
+
     // MARK: Properties
 
     /// The snowflake id of this attachment.
@@ -420,20 +416,6 @@ public struct DiscordAttachment: Identifiable {
 
     /// The width, if this is an image.
     public let width: Int?
-
-    init(attachmentObject: [String: Any]) {
-        id = attachmentObject.getSnowflake()
-        filename = attachmentObject.get("filename", or: "")
-        height = attachmentObject["height"] as? Int
-        proxyUrl = URL(string: attachmentObject.get("proxy_url", or: "")) ?? URL.localhost
-        size = attachmentObject.get("size", or: 0)
-        url = URL(string: attachmentObject.get("url", or: "")) ?? URL.localhost
-        width = attachmentObject["width"] as? Int
-    }
-
-    static func attachmentsFromArray(_ attachmentArray: [[String: Any]]) -> [DiscordAttachment] {
-        return attachmentArray.map(DiscordAttachment.init)
-    }
 }
 
 /// Represents an embeded entity.
@@ -442,8 +424,8 @@ public struct DiscordEmbed : Encodable {
     // MARK: Nested Types
 
     /// Represents an Embed's author.
-    public struct Author : Encodable {
-        private enum CodingKeys : String, CodingKey {
+    public struct Author: Codable {
+        private enum CodingKeys: String, CodingKey {
             case name
             case iconUrl = "icon_url"
             case proxyIconUrl = "proxy_icon_url"
@@ -487,7 +469,7 @@ public struct DiscordEmbed : Encodable {
     }
 
     /// Represents an Embed's fields.
-    public struct Field : Encodable {
+    public struct Field: Codable {
         // MARK: Properties
 
         /// The name of the field.
@@ -516,7 +498,7 @@ public struct DiscordEmbed : Encodable {
     }
 
     /// Represents an Embed's footer.
-    public struct Footer : Encodable {
+    public struct Footer: Codable {
         private enum CodingKeys : String, CodingKey {
             case text
             case iconUrl = "icon_url"
@@ -554,7 +536,7 @@ public struct DiscordEmbed : Encodable {
     }
 
     /// Represents an Embed's image.
-    public struct Image : Encodable {
+    public struct Image: Codable {
         // MARK: Properties
 
         /// The height of this image.
@@ -597,8 +579,8 @@ public struct DiscordEmbed : Encodable {
     }
 
     /// Represents the thumbnail of an embed.
-    public struct Thumbnail : Encodable {
-        private enum CodingKeys : String, CodingKey {
+    public struct Thumbnail: Codable {
+        private enum CodingKeys: String, CodingKey {
             case height
             case proxyUrl = "proxy_url"
             case url
@@ -641,8 +623,7 @@ public struct DiscordEmbed : Encodable {
 
     /// Represents the video of an embed.
     /// Note: Discord does not accept these, so they are read-only
-    public struct Video : Encodable {
-
+    public struct Video: Codable {
         /// The height of this video
         public let height: Int
 
@@ -756,79 +737,6 @@ public struct DiscordEmbed : Encodable {
     }
 }
 
-extension DiscordEmbed.Field {
-    init(fieldObject: [String: Any]) {
-        name = fieldObject.get("name", or: "")
-        value = fieldObject.get("value", or: "")
-        inline = fieldObject.get("inline", or: false)
-    }
-
-    static func fieldsFromArray(_ fieldArray: [[String: Any]]) -> [DiscordEmbed.Field] {
-        return fieldArray.map(DiscordEmbed.Field.init(fieldObject:))
-    }
-}
-
-extension DiscordEmbed.Author {
-    init?(authorObject: [String: Any]?) {
-        guard let authorObject = authorObject else { return nil }
-
-        name = authorObject.get("name", or: "")
-        iconUrl = URL(string: authorObject.get("icon_url", or: ""))
-        proxyIconUrl = URL(string: authorObject.get("proxy_icon_url", or: ""))
-        url = URL(string: authorObject.get("url", or: ""))
-    }
-}
-
-extension DiscordEmbed.Footer {
-    init?(footerObject: [String: Any]?) {
-        guard let footerObject = footerObject else { return nil }
-
-        text = footerObject.get("text", or: "")
-        iconUrl = URL(string: footerObject.get("icon_url", or: ""))
-        proxyIconUrl = URL(string: footerObject.get("proxy_icon_url", or: ""))
-    }
-}
-
-extension DiscordEmbed.Image {
-    init?(imageObject: [String: Any]?) {
-        guard let imageObject = imageObject else { return nil }
-
-        height = imageObject.get("height", or: -1)
-        url = URL(string: imageObject.get("url", or: "")) ?? URL.localhost
-        width = imageObject.get("width", or: -1)
-    }
-}
-
-extension DiscordEmbed.Provider {
-    init?(providerObject: [String: Any]?) {
-        guard let providerObject = providerObject else { return nil }
-
-        name = providerObject.get("name", or: "")
-        url = URL(string: providerObject.get("url", or: ""))
-    }
-}
-
-extension DiscordEmbed.Thumbnail {
-    init?(thumbnailObject: [String: Any]?) {
-        guard let thumbnailObject = thumbnailObject else { return nil }
-
-        height = thumbnailObject.get("height", or: 0)
-        proxyUrl = URL(string: thumbnailObject.get("proxy_url", or: ""))
-        url = URL(string: thumbnailObject.get("url", or: "")) ?? URL.localhost
-        width = thumbnailObject.get("width", or: 0)
-    }
-}
-
-extension DiscordEmbed.Video {
-    init?(videoObject: [String: Any]?) {
-        guard let videoObject = videoObject else { return nil }
-
-        height = videoObject.get("height", or: 0)
-        url = videoObject.get("url", as: String.self).flatMap(URL.init) ?? URL.localhost
-        width = videoObject.get("width", or: 0)
-    }
-}
-
 /// Represents a file to be uploaded to Discord.
 public struct DiscordFileUpload {
     // MARK: Properties
@@ -859,7 +767,7 @@ public struct DiscordFileUpload {
 }
 
 /// Represents a message reaction.
-public struct DiscordReaction {
+public struct DiscordReaction: Codable {
     // MARK: Properties
 
     /// The number of times this emoji has been used to react.
@@ -870,19 +778,9 @@ public struct DiscordReaction {
 
     /// The emoji used to react.
     public let emoji: DiscordEmoji
-
-    init(reactionObject: [String: Any]) {
-        count = reactionObject.get("count", or: -1)
-        me = reactionObject.get("me", or: false)
-        emoji = DiscordEmoji(emojiObject: reactionObject.get("emoji", or: [:]))
-    }
-
-    static func reactionsFromArray(_ reactionsArray: [[String: Any]]) -> [DiscordReaction] {
-        return reactionsArray.map(DiscordReaction.init)
-    }
 }
 
-public enum DiscordAllowedMentionType : String, Encodable {
+public enum DiscordAllowedMentionType: String, Codable {
     case roles
     case users
     case everyone
@@ -890,7 +788,7 @@ public enum DiscordAllowedMentionType : String, Encodable {
 
 /// Allows for more granular control over mentions
 /// without having to modify the message content.
-public struct DiscordAllowedMentions : Encodable {
+public struct DiscordAllowedMentions: Codable {
     public enum CodingKeys : String, CodingKey {
         case parse
         case roles
@@ -916,7 +814,7 @@ public struct DiscordAllowedMentions : Encodable {
 }
 
 /// A reference to a message, e.g. used in outgoing replies.
-public struct DiscordMessageReference : Encodable {
+public struct DiscordMessageReference: Codable {
     public enum CodingKeys : String, CodingKey {
         case messageId = "message_id"
         case channelId = "channel_id"
@@ -935,7 +833,7 @@ public struct DiscordMessageReference : Encodable {
 }
 
 /// An interactive part of a message.
-public struct DiscordMessageComponent : Encodable {
+public struct DiscordMessageComponent: Codable {
     public enum CodingKeys : String, CodingKey {
         case type
         case components
@@ -1013,7 +911,7 @@ public struct DiscordMessageComponent : Encodable {
     }
 }
 
-public struct DiscordMessageComponentType : RawRepresentable, Hashable, Encodable {
+public struct DiscordMessageComponentType : RawRepresentable, Hashable, Codable {
     public let rawValue: Int
 
     public static let actionRow = DiscordMessageComponentType(rawValue: 1)
@@ -1037,7 +935,7 @@ public struct DiscordMessageComponentEmoji: Codable, Identifiable {
     }
 }
 
-public struct DiscordMessageComponentButtonStyle : RawRepresentable, Hashable, Encodable {
+public struct DiscordMessageComponentButtonStyle : RawRepresentable, Hashable, Codable {
     public let rawValue: Int
 
     public static let primary = DiscordMessageComponentButtonStyle(rawValue: 1)
@@ -1051,13 +949,24 @@ public struct DiscordMessageComponentButtonStyle : RawRepresentable, Hashable, E
     }
 }
 
-public enum DiscordMessageStickerFormatType: Int {
+public enum DiscordMessageStickerFormatType: Int, Codable {
     case png = 1
     case apng = 2
     case lottie = 3
 }
 
-public struct DiscordMessageSticker: Identifiable {
+public struct DiscordMessageSticker: Identifiable, Codable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case packId = "pack_id"
+        case name
+        case description
+        case tags
+        case asset
+        case previewAsset = "preview_asset"
+        case formatType = "format_type"
+    }
+
     /// ID of the sticker
     public let id: Snowflake
     /// ID of the sticker pack
@@ -1074,19 +983,4 @@ public struct DiscordMessageSticker: Identifiable {
     public let previewAsset: String?
     /// Type of sticker format
     public let formatType: DiscordMessageStickerFormatType?
-
-    init(stickerObject: [String: Any]) {
-        id = stickerObject.getSnowflake(key: "id")
-        packId = stickerObject.getSnowflake(key: "pack_id")
-        name = stickerObject.get("name", or: "")
-        description = stickerObject.get("description", or: "")
-        tags = stickerObject.get("tags", or: "").split(separator: ",").map(String.init)
-        asset = stickerObject.get("asset", as: String.self)
-        previewAsset = stickerObject.get("preview_asset", as: String.self)
-        formatType = stickerObject.get("format_type", as: Int.self).flatMap(DiscordMessageStickerFormatType.init(rawValue:))
-    }
-
-    static func stickersFromArray(_ stickerArray: [[String: Any]]) -> [DiscordMessageSticker] {
-        return stickerArray.map(DiscordMessageSticker.init)
-    }
 }

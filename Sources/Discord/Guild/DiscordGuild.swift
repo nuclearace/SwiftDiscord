@@ -26,7 +26,33 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordGuild")
 
 /// Represents a Guild.
-public final class DiscordGuild: DiscordClientHolder, CustomStringConvertible, Identifiable {
+public final class DiscordGuild: DiscordClientHolder, CustomStringConvertible, Identifiable, Codable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case channels
+        case defaultMessageNotifications = "default_message_notifications"
+        case widgetEnabled = "widget_enabled"
+        case widgetChannelId = "widget_channel_id"
+        case emojis
+        case features
+        case icon
+        case banner
+        case large
+        case memberCount = "member_count"
+        case mfaLevel = "mfa_level"
+        case name
+        case ownerId = "owner_id"
+        case presences
+        case region
+        case roles
+        case splash
+        case verificationLevel = "verification_level"
+        case voiceStates = "voice_states"
+        case unavailable
+        case joinedAt = "joined_at"
+        case members
+    }
+
     // MARK: Properties
 
     // TODO figure out what features are
@@ -109,39 +135,6 @@ public final class DiscordGuild: DiscordClientHolder, CustomStringConvertible, I
 
     /// The verification level a member of this guild must have to join.
     public private(set) var verificationLevel: Int
-
-    init(guildObject: [String: Any], client: DiscordClient?) {
-        id = guildObject.getSnowflake()
-        channels = guildChannels(fromArray: guildObject.get("channels", or: JSONArray()), guildID: id, client: client)
-        defaultMessageNotifications = guildObject.get("default_message_notifications", or: -1)
-        widgetEnabled = guildObject.get("widget_enabled", or: false)
-        widgetChannelId = guildObject.getSnowflake(key: "widget_channel_id")
-        emojis = DiscordEmoji.emojisFromArray(guildObject.get("emojis", or: JSONArray()))
-        features = guildObject.get("features", or: Array<Any>())
-        icon = guildObject.get("icon", or: "")
-        banner = guildObject.get("banner", or: "")
-        large = guildObject.get("large", or: false)
-        memberCount = guildObject.get("member_count", or: 0)
-        mfaLevel = guildObject.get("mfa_level", or: -1)
-        name = guildObject.get("name", or: "")
-        ownerId = guildObject.getSnowflake(key: "owner_id")
-
-        if !(client?.discardPresences ?? false) {
-            presences = DiscordPresence.presencesFromArray(guildObject.get("presences", or: JSONArray()), guildId: id)
-        }
-
-        region = guildObject.get("region", or: "")
-        roles = DiscordRole.rolesFromArray(guildObject.get("roles", or: JSONArray()))
-        splash = guildObject.get("splash", or: "")
-        verificationLevel = guildObject.get("verification_level", or: -1)
-        voiceStates = DiscordVoiceState.voiceStatesFromArray(guildObject.get("voice_states", or: JSONArray()),
-                                                             guildId: id)
-        unavailable = guildObject.get("unavailable", or: false)
-        joinedAt = DiscordDateFormatter.format(guildObject.get("joined_at", or: "")) ?? Date()
-        self.client = client
-        members = DiscordGuildMember.guildMembersFromArray(guildObject.get("members", or: JSONArray()),
-                                                           withGuildId: id, guild: self)
-    }
 
     // MARK: Methods
 

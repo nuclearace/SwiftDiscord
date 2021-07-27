@@ -34,7 +34,7 @@ fileprivate let logger = Logger(label: "DiscordEndpoint")
 ///
 /// This enum defines the endpoints used to interact with the Discord API.
 ///
-public enum DiscordEndpoint : CustomStringConvertible {
+public enum DiscordEndpoint: CustomStringConvertible {
     /// The base url for the Discord REST API.
     case baseURL
 

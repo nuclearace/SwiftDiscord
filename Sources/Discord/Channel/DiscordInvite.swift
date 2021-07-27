@@ -20,7 +20,7 @@
 
 
 /// Represents a generic invite object.
-public struct DiscordInvite {
+public struct DiscordInvite: Codable {
     // MARK: Properties
 
     /// The invite code.
@@ -31,20 +31,16 @@ public struct DiscordInvite {
 
     /// The channel this invite is for.
     public let channel: DiscordInviteChannel
-
-    init(inviteObject: [String: Any]) {
-        code = inviteObject.get("code", or: "")
-        guild = DiscordInviteGuild(inviteGuildObject: inviteObject.get("guild", or: [String: Any]()))
-        channel = DiscordInviteChannel(inviteChannelObject: inviteObject.get("channel", or: [String: Any]()))
-    }
-
-    static func invitesFromArray(inviteArray: [[String: Any]]) -> [DiscordInvite] {
-        return inviteArray.map(DiscordInvite.init)
-    }
 }
 
 /// Represents an invite to a guild.
-public struct DiscordInviteGuild: Identifiable {
+public struct DiscordInviteGuild: Identifiable, Codable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case splashHash = "splash_hash"
+    }
+
     // MARK: Properties
 
     /// The snowflake id of the guild this invite is for.
@@ -55,16 +51,10 @@ public struct DiscordInviteGuild: Identifiable {
 
     /// The splash of this guild.
     public let splashHash: String
-
-    init(inviteGuildObject: [String: Any]) {
-        id = inviteGuildObject.getSnowflake()
-        name = inviteGuildObject.get("name", or: "")
-        splashHash = inviteGuildObject.get("splash_hash", or: "")
-    }
 }
 
 /// Represents an invite to a channel.
-public struct DiscordInviteChannel: Identifiable {
+public struct DiscordInviteChannel: Identifiable, Codable {
     // MARK: Properties
 
     /// The snowflake id of the channel this invite is for.
@@ -75,10 +65,4 @@ public struct DiscordInviteChannel: Identifiable {
 
     /// The type of channel this invite is for.
     public let type: DiscordChannelType
-
-    init(inviteChannelObject: [String: Any]) {
-        id = inviteChannelObject.getSnowflake()
-        name = inviteChannelObject.get("name", or: "")
-        type = DiscordChannelType(rawValue: inviteChannelObject.get("type", or: 0)) ?? .text
-    }
 }

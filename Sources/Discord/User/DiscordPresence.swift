@@ -19,11 +19,15 @@
 import Foundation
 
 /// Represents a presence.
-public struct DiscordPresence {
-    // MARK: Properties
+public struct DiscordPresence: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case user
+        case activities
+        case nick
+        case status
+    }
 
-    /// The snowflake of the guild this presence belongs on.
-    public let guildId: GuildID
+    // MARK: Properties
 
     /// The user associated with this presence.
     public let user: DiscordUser
@@ -39,52 +43,10 @@ public struct DiscordPresence {
 
     /// The status of this user.
     public var status: DiscordPresenceStatus
-
-    init(presenceObject: [String: Any], guildId: GuildID) {
-        self.guildId = guildId
-        user = DiscordUser(userObject: presenceObject.get("user", or: [String: Any]()))
-        activities = (presenceObject["activities"] as? [[String: Any]])?.map(DiscordActivity.init(gameObject:)).compactMap { $0 } ?? []
-        nick = presenceObject["nick"] as? String
-        status = DiscordPresenceStatus(rawValue: presenceObject.get("status", or: "")) ?? .offline
-        roles = []
-    }
-
-    mutating func updatePresence(presenceObject: [String: Any]) {
-        if let activities = presenceObject["activities"] as? [[String: Any]] {
-            self.activities = activities.map(DiscordActivity.init(gameObject:)).compactMap { $0 }
-        }
-
-        if let nick = presenceObject["nick"] as? String {
-            self.nick = nick
-        }
-
-        if let roles = presenceObject["roles"] as? [String] {
-            self.roles = roles
-        }
-
-        if let status = presenceObject["status"] as? String {
-            self.status = DiscordPresenceStatus(rawValue: status) ?? .offline
-        }
-    }
-
-    static func presencesFromArray(_ presencesArray: [[String: Any]], guildId: GuildID)
-                    -> DiscordLazyDictionary<UserID, DiscordPresence> {
-        var presences = DiscordLazyDictionary<UserID, DiscordPresence>()
-
-        for presence in presencesArray {
-            guard let user = presence["user"] as? [String: Any], let id = Snowflake(user["id"] as? String) else {
-                fatalError("Couldn't extract userId")
-            }
-
-            presences[lazy: id] = .lazy({ DiscordPresence(presenceObject: presence, guildId: guildId) })
-        }
-
-        return presences
-    }
 }
 
 /// Represents a presence status.
-public enum DiscordPresenceStatus : String {
+public enum DiscordPresenceStatus: String, Codable {
     // MARK: Cases
 
     /// User is idle.
@@ -101,21 +63,25 @@ public enum DiscordPresenceStatus : String {
 }
 
 /// Represents an activity type.
-public enum DiscordActivityType : Int, Encodable {
+public enum DiscordActivityType: Int, Codable {
     // MARK: Cases
 
     /// A regular game.
-    case game
+    /// TODO: Rename to `playing`
+    case game = 0
 
     /// A stream.
-    case stream
+    case stream = 1
 
     /// Listening to something.
-    case listening
+    case listening = 2
+
+    /// Watching something
+    case watching = 3
 }
 
 /// Represents a game
-public struct DiscordActivity : Encodable {
+public struct DiscordActivity: Codable {
     // MARK: Properties
 
     /// The application id.
@@ -166,28 +132,6 @@ public struct DiscordActivity : Encodable {
         self.url = url
     }
 
-    ///
-    /// Creates a new DiscordGame from a json object.
-    ///
-    /// Can fail if no game object was given.
-    ///
-    /// - parameter gameObject: The json game
-    ///
-    public init?(gameObject: [String: Any]?) {
-        guard let game = gameObject else { return nil }
-        guard let name = game["name"] as? String else { return nil }
-
-        self.applicationId = game.get("application_id", as: String.self)
-        self.assets = DiscordActivityAssets(assetsObj: game.get("assets", as: [String: Any].self))
-        self.details = game.get("details", as: String.self)
-        self.name = name
-        self.party = DiscordParty(partyObj: game.get("party", as: [String: Any].self))
-        self.state = game.get("state", as: String.self)
-        self.timestamps = DiscordActivityTimestamps(timestampsObj: game.get("timestamps", as: [String: Int].self))
-        self.type = DiscordActivityType(rawValue: game.get("type", or: 0)) ?? .game
-        self.url = game["url"] as? String
-    }
-
     /// Encodable requirement
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -202,13 +146,21 @@ public struct DiscordActivity : Encodable {
         }
     }
 
-    private enum CodingKeys : CodingKey {
-        case name, type, url
+    private enum CodingKeys: CodingKey {
+        case applicationId = "application_id"
+        case assets
+        case details
+        case name
+        case party
+        case state
+        case timestamps
+        case type
+        case url
     }
 }
 
 /// Represents the start/end of a game.
-public struct DiscordActivityTimestamps {
+public struct DiscordActivityTimestamps: Codable {
     // MARK: Properties
 
     /// The start.
@@ -216,13 +168,6 @@ public struct DiscordActivityTimestamps {
 
     /// The end.
     public let end: Int?
-
-    init?(timestampsObj: [String: Int]?) {
-        guard let timestampsObj = timestampsObj else { return nil }
-
-        self.start = timestampsObj["start"]
-        self.end = timestampsObj["end"]
-    }
 }
 
 /// Represents the party status.

@@ -290,7 +290,7 @@ public struct DiscordGuildChannelCategory: DiscordGuildChannel, Codable, Identif
     public let name: String
 
     /// The parent category of this channel.
-    public let parentId = nil as ChannelID?
+    public let parentId: ChannelID? = nil
 
     /// The position of this channel.
     public let position: Int

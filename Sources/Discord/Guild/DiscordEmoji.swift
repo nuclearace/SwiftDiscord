@@ -21,7 +21,16 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordEmoji")
 
 /// Represents an Emoji.
-public struct DiscordEmoji: Identifiable {
+public struct DiscordEmoji: Identifiable, Codable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case managed
+        case animated
+        case name
+        case requireColons = "require_colons"
+        case roles
+    }
+
     // MARK: Properties
 
     /// The snowflake id of the emoji.  Nil if the emoji is a unicode emoji
@@ -41,28 +50,4 @@ public struct DiscordEmoji: Identifiable {
 
     /// An array of role snowflake ids this emoji is active for.
     public let roles: [RoleID]
-
-    init(emojiObject: [String: Any]) {
-        id = Snowflake(emojiObject["id"] as? String)
-        managed = emojiObject.get("managed", or: false)
-        animated = emojiObject.get("animated", or: false)
-        name = emojiObject.get("name", or: "")
-        requireColons = emojiObject.get("require_colons", or: false)
-        roles = (emojiObject["roles"] as? [String])?.compactMap(Snowflake.init) ?? []
-    }
-
-    static func emojisFromArray(_ emojiArray: [[String: Any]]) -> DiscordIDDictionary<DiscordEmoji> {
-        var emojis = DiscordIDDictionary<DiscordEmoji>()
-
-        for emoji in emojiArray {
-            let emoji = DiscordEmoji(emojiObject: emoji)
-            if let emojiID = emoji.id {
-                emojis[emojiID] = emoji
-            } else {
-                logger.debug("EmojisFromArray used on array with non-custom emoji")
-            }
-        }
-
-        return emojis
-    }
 }

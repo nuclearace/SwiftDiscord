@@ -22,7 +22,16 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordGuildMember")
 
 /// Represents a guild member.
-public struct DiscordGuildMember {
+public struct DiscordGuildMember: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case guildId = "guild_id"
+        case joinedAt = "joined_at"
+        case user
+        case deaf
+        case mute
+        case roleIds = "role_ids"
+    }
+
     // MARK: Properties
 
     /// The id of the guild of this member.
@@ -35,79 +44,24 @@ public struct DiscordGuildMember {
     public let user: DiscordUser
 
     /// Whether this member has been deafened.
-    /// Changing this will cause the client to attempt to change the deafen status on Discord.
-    public var deaf: Bool {
-        get {
-            return _deaf
-        }
-
-        set {
-            guild?.modifyMember(self, options: [.deaf(newValue)])
-        }
-    }
-
-    /// If this member has a guild object attached, this returns the `DiscordRoles` for the member.
-    /// If a guild is unavailable, you can call `roles(for:)` on this member's guild directly.
-    /// - returns: An Array of `DiscordRole` or nil if there is no guild attached to this member.
-    public var roles: [DiscordRole]? {
-        // TODO cache this
-        guard let guild = self.guild else { return nil }
-
-        return guild.roles(for: self)
-    }
+    public let deaf: Bool
 
     /// Whether this member is muted.
-    /// Changing this will cause the client to attempt to change the deafen status on Discord.
-    public var mute: Bool {
-        get {
-            return _mute
-        }
-
-        set {
-            guild?.modifyMember(self, options: [.mute(newValue)])
-        }
-    }
+    public var mute: Bool
 
     /// This member's nickname, if they have one.
-    /// Changing this value will cause the client to attempt to change the nick on Discord.
-    public var nick: String? {
-        get {
-            return _nick
-        }
-
-        set {
-            guild?.modifyMember(self, options: [.nick(newValue)])
-        }
-    }
+    public var nick: String?
 
     /// An array of role snowflake ids that this user has.
     public var roleIds: [RoleID]
 
-    /// The guild this member is on
-    public internal(set) weak var guild: DiscordGuild?
-
-    private var _deaf: Bool
-    private var _mute: Bool
-    private var _nick: String?
-
-    init(guildMemberObject: [String: Any], guildId: GuildID, guild: DiscordGuild? = nil) {
-        self.guildId = guildId
-        user = DiscordUser(userObject: guildMemberObject.get("user", or: [String: Any]()))
-        _deaf = guildMemberObject.get("deaf", or: false)
-        _mute = guildMemberObject.get("mute", or: false)
-        _nick = guildMemberObject["nick"] as? String
-        roleIds = (guildMemberObject["roles"] as? [String])?.compactMap(Snowflake.init) ?? []
-        joinedAt = DiscordDateFormatter.format(guildMemberObject.get("joined_at", or: "")) ?? Date()
-        self.guild = guild
-    }
-
-    init(guildId: GuildID, user: DiscordUser, deaf: Bool, mute: Bool, nick: String?, roles: [RoleID], joinedAt: Date,
+    init(guildId: GuildID, user: DiscordUser, deaf: Bool, mute: Bool, nick: String?, roleIds: [RoleID], joinedAt: Date,
          guild: DiscordGuild? = nil) {
         self.user = user
         self._deaf = deaf
         self._mute = mute
         self._nick = nick
-        self.roleIds = roles
+        self.roleIds = roleIds
         self.joinedAt = joinedAt
         self.guild = guild
         self.guildId = guildId

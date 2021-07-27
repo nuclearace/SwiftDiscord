@@ -17,7 +17,18 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a voice state.
-public struct DiscordVoiceState {
+public struct DiscordVoiceState: Codable, Identifiable {
+    public enum CodingKeys: String, CodingKey {
+        case channelId = "channel_id"
+        case sessionId = "session_id"
+        case userId = "user_id"
+        case deaf
+        case mute
+        case selfDeaf = "self_deaf"
+        case selfMute = "self_mute"
+        case suppress
+    }
+
     // MARK: Properties
 
     /// The snowflake id of the voice channel this state belongs to.
@@ -25,9 +36,6 @@ public struct DiscordVoiceState {
 
     /// Whether this user is deafened.
     public let deaf: Bool
-
-    /// The snowflake id of the guild this state belongs to.
-    public let guildId: GuildID
 
     /// Whether this user is muted.
     public let mute: Bool
@@ -47,27 +55,6 @@ public struct DiscordVoiceState {
     /// The snowflake id of the user this state is for.
     public let userId: UserID
 
-    init(voiceStateObject: [String: Any], guildId: GuildID) {
-        self.guildId = guildId
-        channelId = Snowflake(voiceStateObject["channel_id"] as? String) ?? 0
-        sessionId = voiceStateObject.get("session_id", or: "")
-        userId = Snowflake(voiceStateObject["user_id"] as? String) ?? 0
-        deaf = voiceStateObject.get("deaf", or: false)
-        mute = voiceStateObject.get("mute", or: false)
-        selfDeaf = voiceStateObject.get("self_deaf", or: false)
-        selfMute = voiceStateObject.get("self_mute", or: false)
-        suppress = voiceStateObject.get("suppress", or: false)
-    }
-
-    static func voiceStatesFromArray(_ voiceStateArray: [[String: Any]], guildId: GuildID) -> DiscordIDDictionary<DiscordVoiceState> {
-        var voiceStates = DiscordIDDictionary<DiscordVoiceState>()
-
-        for voiceState in voiceStateArray {
-            let voiceState = DiscordVoiceState(voiceStateObject: voiceState, guildId: guildId)
-
-            voiceStates[voiceState.userId] = voiceState
-        }
-
-        return voiceStates
-    }
+    /// Alias for `userId` to permit usage in `DiscordIDDictionary`s.
+    public var id: UserID { userId }
 }

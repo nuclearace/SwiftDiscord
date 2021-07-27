@@ -22,7 +22,7 @@
 /// If one of these events is handled specifically by the client then it will be turned into an event with the form
 /// `myEventName`. If it is not handled, then the associated enum string will be the event name.
 ///
-public enum DiscordDispatchEvent : String {
+public enum DiscordDispatchEvent: String, Codable {
     /// Ready (Handled)
     case ready = "READY"
 
