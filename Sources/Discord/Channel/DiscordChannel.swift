@@ -26,15 +26,46 @@ import class Dispatch.DispatchSemaphore
 fileprivate let logger = Logger(label: "DiscordChannel")
 
 /// Protocol that declares a type will be a Discord channel.
-public protocol DiscordChannel : DiscordClientHolder {
-    // MARK: Properties
+public enum DiscordChannel: DiscordClientHolder, Codable {
+    case text(DiscordGuildTextChannel)
+    case direct(DiscordDMChannel)
+    case voice(DiscordGuildVoiceChannel)
+    case groupDM(DiscordGroupDMChannel)
+    case category(DiscordGuildChannelCategory)
 
-    /// The id of the channel.
-    var id: ChannelID { get }
+    public enum CodingKeys: String, CodingKey {
+        case type
+    }
+
+    // TODO: Others
+
+    /// The snowflake id of the channel.
+    public var id: ChannelID {
+        switch self {
+        case .text(let channel): return channel.id
+        case .direct(let channel): return channel.id
+        case .voice(let channel): return channel.id
+        case .groupDM(let channel): return channel.id
+        case .category(let channel): return channel.id
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decode(DiscordChannelType.self, forKey: .type)
+
+        switch type {
+        case .text: self = .text(try DiscordGuildTextChannel(from: decoder))
+        case .direct: self = .direct(try DiscordDMChannel(from: decoder))
+        case .voice: self = .voice(try DiscordGuildVoiceChannel(from: decoder))
+        case .groupDM: self = .groupDM(try DiscordGroupDMChannel(from: decoder))
+        case .category: self = .category(try DiscordGuildChannelCategory(from: decoder))
+        }
+    }
 }
 
 /// Protocol that declares a type will be a Discord text-based channel.
-public protocol DiscordTextChannel : DiscordChannel {
+public protocol DiscordTextChannel {
     // MARK: Properties
 
     /// The snowflake id of the last received message on this channel.
@@ -42,7 +73,7 @@ public protocol DiscordTextChannel : DiscordChannel {
 }
 
 /// Represents the type of a channel.
-public enum DiscordChannelType : Int {
+public enum DiscordChannelType: Int, Codable {
     /// A guild text channel.
     case text = 0
 

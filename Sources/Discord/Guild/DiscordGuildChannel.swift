@@ -151,9 +151,9 @@ func guildChannel(fromObject channelObject: [String: Any],
 
     switch type {
     case .text:
-        return DiscordGuildTextChannel(guildChannelObject: channelObject, guildID: guildID, client: client)
+        return try? DiscordGuildTextChannel(guildChannelObject: channelObject, guildID: guildID, client: client)
     case .voice:
-        return DiscordGuildVoiceChannel(guildChannelObject: channelObject, guildID: guildID, client: client)
+        return try? DiscordGuildVoiceChannel(guildChannelObject: channelObject, guildID: guildID, client: client)
     case .category:
         return DiscordGuildChannelCategory(categoryObject: channelObject, guildID: guildID, client: client)
     default:
@@ -177,7 +177,19 @@ func guildChannels(fromArray guildChannelArray: [[String: Any]],
 }
 
 /// Represents a guild channel.
-public struct DiscordGuildTextChannel : DiscordTextChannel, DiscordGuildChannel {
+public struct DiscordGuildTextChannel: DiscordTextChannel, DiscordGuildChannel, Codable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case guildId = "guild_id"
+        case lastMessageId = "last_message_id"
+        case name
+        case permissionOverwrites = "permission_overwrites"
+        case position
+        case topic
+        case parentId = "parent_id"
+        case nsfw
+    }
+
     // MARK: Guild Text Channel Properties
 
     /// The snowflake id of the channel.
@@ -211,24 +223,21 @@ public struct DiscordGuildTextChannel : DiscordTextChannel, DiscordGuildChannel 
 
     /// If this channel is NSFW
     public var nsfw: Bool
-    
-    init(guildChannelObject: [String: Any], guildID: GuildID?, client: DiscordClient? = nil) {
-        id = Snowflake(guildChannelObject["id"] as? String) ?? 0
-        guildId = guildID ?? Snowflake(guildChannelObject["guild_id"] as? String) ?? 0
-        lastMessageId = Snowflake(guildChannelObject["last_message_id"] as? String) ?? 0
-        name = guildChannelObject.get("name", or: "")
-        permissionOverwrites = DiscordPermissionOverwrite.overwritesFromArray(
-            guildChannelObject.get("permission_overwrites", or: JSONArray()))
-        position = guildChannelObject.get("position", or: 0)
-        topic = guildChannelObject.get("topic", or: "")
-        parentId = Snowflake(guildChannelObject.get("parent_id", or: ""))
-        nsfw = guildChannelObject.get("nsfw", or: false)
-        self.client = client
-    }
 }
 
 /// Represents a voice channel.
-public struct DiscordGuildVoiceChannel : DiscordGuildChannel {
+public struct DiscordGuildVoiceChannel: DiscordGuildChannel, Decodable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case guildId = "guild_id"
+        case bitrate
+        case name
+        case permissionOverwrites = "permission_overwrites"
+        case position
+        case userLimit = "user_limit"
+        case parentId = "parent_id"
+    }
+
     // MARK: Guild Voice Channel Properties
 
     /// The snowflake id of the channel.
@@ -257,24 +266,19 @@ public struct DiscordGuildVoiceChannel : DiscordGuildChannel {
 
     /// The user limit of this channel, if this is a voice channel.
     public var userLimit: Int
-
-    init(guildChannelObject: [String: Any], guildID: GuildID?, client: DiscordClient? = nil) {
-        id = Snowflake(guildChannelObject["id"] as? String) ?? 0
-        guildId = guildID ?? Snowflake(guildChannelObject["guild_id"] as? String) ?? 0
-        bitrate = guildChannelObject.get("bitrate", or: 0) as Int
-        name = guildChannelObject.get("name", or: "")
-        permissionOverwrites = DiscordPermissionOverwrite.overwritesFromArray(
-            guildChannelObject.get("permission_overwrites", or: JSONArray()))
-        position = guildChannelObject.get("position", or: 0)
-        userLimit = guildChannelObject.get("user_limit", or: 0) as Int
-        parentId = Snowflake(guildChannelObject.get("parent_id", or: ""))
-        self.client = client
-    }
 }
 
 // TODO make sure this is correct when category types are documented.
 /// A Category channel.
-public struct DiscordGuildChannelCategory : DiscordGuildChannel {
+public struct DiscordGuildChannelCategory: DiscordGuildChannel, Codable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case guildId = "guild_id"
+        case name
+        case permissionOverwrites = "permission_overwrites"
+        case position
+    }
+
     /// The id for this category.
     public let id: ChannelID
 
@@ -297,14 +301,4 @@ public struct DiscordGuildChannelCategory : DiscordGuildChannel {
 
     /// Reference to the client.
     public weak var client: DiscordClient?
-
-    init(categoryObject: [String: Any], guildID: GuildID?, client: DiscordClient?) {
-        id = categoryObject.getSnowflake()
-        guildId = guildID ?? categoryObject.getSnowflake(key: "guild_id")
-        name = categoryObject.get("name", or: "")
-        permissionOverwrites = DiscordPermissionOverwrite.overwritesFromArray(
-            categoryObject.get("permission_overwrites", or: JSONArray()))
-        position = categoryObject.get("position", or: 0)
-        self.client = client
-    }
 }
