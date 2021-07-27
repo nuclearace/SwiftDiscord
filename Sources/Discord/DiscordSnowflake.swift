@@ -18,7 +18,7 @@
 import Foundation
 
 /// The stored type of a Discord Snowflake ID
-public struct Snowflake {
+public struct Snowflake: Codable {
     /// The internal ID storage for a snowflake
     public let rawValue: UInt64
 
@@ -28,17 +28,28 @@ public struct Snowflake {
     }
 
     /// Initialize from a string
-    public init?(_ string: String) {
-        guard let snowflake = UInt64(string) else { return nil }
+    public init(_ string: String) throws {
+        guard let snowflake = UInt64(string) else {
+            throw SnowflakeError.couldNotDecode(string)
+        }
         rawValue = snowflake
     }
 
-    /// Initialize from an optional string (returns nil if the input was nil or if it failed to initialize)
-    public init?(_ optionalString: String?) {
-        guard let string = optionalString else { return nil }
-        guard let snowflake = Snowflake(string) else { return nil }
-        self = snowflake
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(try container.decode(String.self))
     }
+
+    public func encode(to encoder: Encoder) throws {
+        let container = try encoder.singleValueContainer()
+        encoder.encode(String(rawValue))
+    }
+}
+
+/// An error related to snowflakes.
+public enum SnowflakeError: Error {
+    /// Indicates the a snowflake could not be decoded.
+    case couldNotDecode(String)
 }
 
 // MARK: Snowflake Typealiases

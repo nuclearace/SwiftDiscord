@@ -16,7 +16,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a Discord Permission. Calculating Permissions involves bitwise operations.
-public struct DiscordPermission : OptionSet, Encodable {
+public struct DiscordPermission: OptionSet, Codable {
     // TODO: Migrate to BigInt or similar since permission are string-serialized
     //       and may have arbitrary size as of v8
 
@@ -111,7 +111,7 @@ public enum DiscordPermissionOverwriteType : String, Encodable {
 /// Represents a permission overwrite for a channel.
 ///
 /// The `allow` and `deny` properties are bit fields.
-public struct DiscordPermissionOverwrite : Encodable {
+public struct DiscordPermissionOverwrite: Codable {
     // MARK: Properties
 
     /// The snowflake id of this permission overwrite.
@@ -141,24 +141,5 @@ public struct DiscordPermissionOverwrite : Encodable {
         self.type = type
         self.allow = allow
         self.deny = deny
-    }
-
-    init(permissionOverwriteObject: [String: Any]) {
-        id = permissionOverwriteObject.getSnowflake()
-        type = DiscordPermissionOverwriteType(rawValue: permissionOverwriteObject.get("type", or: "")) ?? .role
-        allow = DiscordPermission(rawValue: Int(permissionOverwriteObject.get("allow", or: "0")) ?? 0)
-        deny = DiscordPermission(rawValue: Int(permissionOverwriteObject.get("deny", or: "0")) ?? 0)
-    }
-
-    static func overwritesFromArray(_ permissionOverwritesArray: [[String: Any]]) -> DiscordIDDictionary<DiscordPermissionOverwrite> {
-        var overwrites = DiscordIDDictionary<DiscordPermissionOverwrite>()
-
-        for overwriteObject in permissionOverwritesArray {
-            let overwrite = DiscordPermissionOverwrite(permissionOverwriteObject: overwriteObject)
-
-            overwrites[overwrite.id] = overwrite
-        }
-
-        return overwrites
     }
 }
