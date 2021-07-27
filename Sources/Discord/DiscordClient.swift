@@ -499,7 +499,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
         let removedChannel: DiscordChannel
 
         switch type {
-        case .text, .voice, .category:
+        case .text, .voice, .category, .news, .store,
+             .newsThread, .publicThread, .privateThread,
+             .stageVoice:
             guard let guildId = Snowflake(data["guild_id"] as? String),
                   let guildChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) else { return }
             removedChannel = guildChannel

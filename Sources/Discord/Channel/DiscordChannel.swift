@@ -43,20 +43,39 @@ public protocol DiscordTextChannel : DiscordChannel {
 
 /// Represents the type of a channel.
 public enum DiscordChannelType : Int {
-    /// A text channel.
-    case text
+    /// A guild text channel.
+    case text = 0
 
     /// A direct message channel.
-    case direct
+    case direct = 1
 
-    /// A voice channel.
-    case voice
+    /// A voice channel within a guild.
+    case voice = 2
 
-    /// A GroupDM.
-    case groupDM
+    /// A group direct message.
+    case groupDM = 3
 
-    /// A Category.
-    case category
+    /// An organizational category in a guild that contains up to 50 channels.
+    case category = 4
+
+    /// A channel that users can follow in their own guild.
+    case news = 5
+
+    /// A channel in which game devs can sell their games on Discord.
+    case store = 6
+
+    /// A temporary sub-channel in a guild news channel.
+    case newsThread = 10
+
+    /// A temporary sub-channel within a guild text channel.
+    case publicThread = 11
+
+    /// A temporary sub-channel in a guild text channel that is only viewable
+    /// by those invited and those with the 'manage threads' permission.
+    case privateThread = 12
+
+    /// A guild voice channel for hosting events with an audience.
+    case stageVoice = 13
 }
 
 public extension DiscordChannel {
@@ -187,6 +206,7 @@ func channelFromObject(_ object: [String: Any], withClient client: DiscordClient
     case .direct:   return DiscordDMChannel(dmReadyObject: object, client: client)
     case .groupDM:  return DiscordGroupDMChannel(dmReadyObject: object, client: client)
     case .category: return DiscordGuildChannelCategory(categoryObject: object, guildID: nil, client: client)
+    default:        return nil // TODO
     }
 }
 
