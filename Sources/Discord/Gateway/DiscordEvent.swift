@@ -109,6 +109,18 @@ public enum DiscordDispatchEvent : String {
     /// Channel Update (Handled)
     case channelUpdate = "CHANNEL_UPDATE"
 
+    // Threads
+
+    case threadCreate = "THREAD_CREATE"
+
+    case threadUpdate = "THREAD_UPDATE"
+
+    case threadDelete = "THREAD_DELETE"
+
+    case threadMemberUpdate = "THREAD_MEMBER_UPDATE"
+
+    case threadMembersUpdate = "THREAD_MEMBERS_UPDATE"
+
     // Voice
 
     /// Voice Server Update (Handled but no event emitted)
