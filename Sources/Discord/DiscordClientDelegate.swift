@@ -264,10 +264,8 @@ public protocol DiscordClientDelegate : AnyObject {
     ///
     /// - parameter client: The client that is calling.
     /// - parameter didNotHandleDispatchEvent: The event that wasn't handled.
-    /// - parameter withData: The data for the event.
     ///
-    func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent,
-                withData data: [String: Any])
+    func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent)
 
     ///
     /// Called when the client updates a guild's emojis.
@@ -373,8 +371,7 @@ public extension DiscordClientDelegate {
                 forGuild guild: DiscordGuild) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent,
-                withData data: [String: Any]) { }
+    func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent) { }
 
     /// Default.
     func client(_ client: DiscordClient, didUpdateEmojis emojis: DiscordIDDictionary<DiscordEmoji>,

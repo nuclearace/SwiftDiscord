@@ -42,7 +42,7 @@ fileprivate let logger = Logger(label: "DiscordClient")
 ///
 /// See `DiscordClientDelegate` for a list of delegate methods that can be implemented.
 ///
-open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, DiscordEndpointConsumer {
+open class DiscordClient: DiscordClientSpec, DiscordDispatchEventHandler, DiscordEndpointConsumer {
     // MARK: Properties
 
     /// The rate limiter for this client.
@@ -217,40 +217,39 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// Handles a dispatch event. This will call one of the other handle methods or the standard event handler.
     ///
     /// - parameter event: The dispatch event
-    /// - parameter data: The dispatch event's data
     ///
-    open func handleDispatch(event: DiscordDispatchEvent, data: DiscordGatewayPayloadData) {
+    open func handleDispatch(event: DiscordDispatchEvent) {
         guard case let .object(eventData) = data else {
             logger.error("Got dispatch event without an object: \(event), \(data)")
             return
         }
 
-        switch event {
-        case .presenceUpdate:        handlePresenceUpdate(with: eventData)
-        case .messageCreate:         handleMessageCreate(with: eventData)
-        case .messageUpdate:         handleMessageUpdate(with: eventData)
-        case .messageReactionAdd:    handleMessageReactionAdd(with: eventData)
-        case .messageReactionRemove: handleMessageReactionRemove(with: eventData)
-        case .messageReactionRemoveAll: handleMessageReactionRemoveAll(with: eventData)
-        case .guildMemberAdd:        handleGuildMemberAdd(with: eventData)
-        case .guildMembersChunk:     handleGuildMembersChunk(with: eventData)
-        case .guildMemberUpdate:     handleGuildMemberUpdate(with: eventData)
-        case .guildMemberRemove:     handleGuildMemberRemove(with: eventData)
-        case .guildRoleCreate:       handleGuildRoleCreate(with: eventData)
-        case .guildRoleDelete:       handleGuildRoleRemove(with: eventData)
-        case .guildRoleUpdate:       handleGuildRoleUpdate(with: eventData)
-        case .guildCreate:           handleGuildCreate(with: eventData)
-        case .guildDelete:           handleGuildDelete(with: eventData)
-        case .guildUpdate:           handleGuildUpdate(with: eventData)
-        case .guildEmojisUpdate:     handleGuildEmojiUpdate(with: eventData)
-        case .channelUpdate:         handleChannelUpdate(with: eventData)
-        case .channelCreate:         handleChannelCreate(with: eventData)
-        case .channelDelete:         handleChannelDelete(with: eventData)
-        case .interactionCreate:     handleInteractionCreate(with: eventData)
-        case .voiceServerUpdate:     handleVoiceServerUpdate(with: eventData)
-        case .voiceStateUpdate:      handleVoiceStateUpdate(with: eventData)
-        case .ready:                 handleReady(with: eventData)
-        default:                     delegate?.client(self, didNotHandleDispatchEvent: event, withData: eventData)
+        switch event.type {
+        case .presenceUpdate(let e): handlePresenceUpdate(with: e)
+        case .messageCreate(let e): handleMessageCreate(with: e)
+        case .messageUpdate(let e): handleMessageUpdate(with: e)
+        case .messageReactionAdd(let e): handleMessageReactionAdd(with: e)
+        case .messageReactionRemove(let e handleMessageReactionRemove(with: e)
+        case .messageReactionRemoveAll(let e): handleMessageReactionRemoveAll(with: e)
+        case .guildMemberAdd(let e): handleGuildMemberAdd(with: e)
+        case .guildMembersChunk(let e): handleGuildMembersChunk(with: e)
+        case .guildMemberUpdate(let e): handleGuildMemberUpdate(with: e)
+        case .guildMemberRemove(let e): handleGuildMemberRemove(with: e)
+        case .guildRoleCreate(let e): handleGuildRoleCreate(with: e)
+        case .guildRoleDelete(let e): handleGuildRoleRemove(with: e)
+        case .guildRoleUpdate(let e): handleGuildRoleUpdate(with: e)
+        case .guildCreate(let e): handleGuildCreate(with: e)
+        case .guildDelete(let e): handleGuildDelete(with: e)
+        case .guildUpdate(let e): handleGuildUpdate(with: e)
+        case .guildEmojisUpdate(let e): handleGuildEmojiUpdate(with: e)
+        case .channelUpdate(let e): handleChannelUpdate(with: e)
+        case .channelCreate(let e): handleChannelCreate(with: e)
+        case .channelDelete(let e): handleChannelDelete(with: e)
+        case .interactionCreate(let e): handleInteractionCreate(with: e)
+        case .voiceServerUpdate(let e): handleVoiceServerUpdate(with: e)
+        case .voiceStateUpdate(let e): handleVoiceStateUpdate(with: e)
+        case .ready(let e): handleReady(with: e)
+        default: delegate?.client(self, didNotHandleDispatchEvent: event)
         }
     }
 
@@ -461,7 +460,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleChannelCreate(with data: [String: Any]) {
+    open func handleChannelCreate(with event: DiscordChannelCreateEvent) {
         logger.info("Handling channel create")
 
         guard let channel = channelFromObject(data, withClient: self) else { return }

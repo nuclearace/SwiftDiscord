@@ -180,7 +180,7 @@ extension DiscordGatewayPayloadData {
 }
 
 /// Represents a gateway payload. This is lowest level of the Discord API.
-public struct DiscordGatewayPayload : Encodable {
+public struct DiscordGatewayPayload: Codable {
     /// The payload code.
     public let code: DiscordGatewayCode
 
@@ -190,8 +190,8 @@ public struct DiscordGatewayPayload : Encodable {
     /// The sequence number of this dispatch.
     public let sequenceNumber: Int?
 
-    /// The name of this dispatch.
-    public let name: String?
+    /// The event type of this dispatch.
+    public let type: DiscordDispatchEventType?
 
     ///
     /// Creates a new DiscordGatewayPayload.
@@ -199,29 +199,29 @@ public struct DiscordGatewayPayload : Encodable {
     /// - parameter code: The code of this payload
     /// - parameter payload: The data of this payload
     /// - parameter sequenceNumber: An optional sequence number for this dispatch
-    /// - parameter name: The name of this dispatch
+    /// - parameter type: The event type of this dispatch
     ///
     public init(code: DiscordGatewayCode, payload: DiscordGatewayPayloadData, sequenceNumber: Int? = nil,
-                name: String? = nil) {
+                name: DiscordDispatchEventType? = nil) {
         self.code = code
         self.payload = payload
         self.sequenceNumber = sequenceNumber
-        self.name = name
+        self.type = type
     }
 
-    private enum PayloadKeys : String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case code = "op"
         case payload = "d"
         case sequence = "s"
-        case name = "t"
+        case type = "t"
     }
 
     /// Encodable implementation.
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: PayloadKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(code.rawCode, forKey: .code)
         try container.encodeIfPresent(sequenceNumber, forKey: .sequence)
-        try container.encodeIfPresent(name, forKey: .name)
+        try container.encodeIfPresent(type, forKey: .type)
         try payload.encode(to: container.superEncoder(forKey: .payload))
     }
 

@@ -25,7 +25,7 @@ public protocol DiscordDispatchEventHandler {
 	///
 	/// - parameter with: The data from the event
 	///
-	func handleChannelCreate(with data: [String: Any])
+	func handleChannelCreate(with event: DiscordChannelCreateEvent)
 
 	///
 	/// Handles channel deletes from Discord.

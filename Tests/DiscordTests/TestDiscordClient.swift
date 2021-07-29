@@ -652,8 +652,7 @@ public extension TestDiscordClient {
         expectations[.guildRoleUpdate]?.fulfill()
     }
 
-    func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent,
-                withData data: [String: Any]) {
+    func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent) {
         expectations[.typingStart]?.fulfill()
     }
 
