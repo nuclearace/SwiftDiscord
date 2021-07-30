@@ -18,6 +18,26 @@
 
 /// An application using the Discord API.
 public struct DiscordApplication: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case icon
+        case description
+        case rpcOrigins = "rpc_origins"
+        case botPublic = "bot_public"
+        case botRequireCodeGrant = "bot_require_code_grant"
+        case termsOfServiceUrl = "terms_of_service_url"
+        case privacyPolicyUrl = "privacy_policy_url"
+        case owner
+        case summary
+        case verifyKey = "verify_key"
+        case guildId = "guild_id"
+        case primarySkuId = "primary_sku_id"
+        case slug
+        case coverImage = "cover_image"
+        case flags
+    }
+
     /// The id of the app.
     public var id: Snowflake
 
