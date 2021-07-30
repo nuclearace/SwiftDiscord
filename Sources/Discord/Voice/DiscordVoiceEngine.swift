@@ -31,7 +31,7 @@ fileprivate let logger = Logger(label: "DiscordVoiceEngine")
 /// Discord uses encrypted OPUS encoded voice packets. The engine is responsible for encyrptingdecrypting voice
 /// packets that are sent and received.
 ///
-public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
+public final class DiscordVoiceEngine: DiscordVoiceEngineSpec {
     enum EngineError : Error {
         case decryptionError
         case encryptionError
@@ -399,12 +399,8 @@ public final class DiscordVoiceEngine : DiscordVoiceEngineSpec {
     ///
     /// - parameter payload: The payload object
     ///
-    public func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
-        guard case let .voice(voiceCode) = payload.code else {
-            fatalError("Got gateway payload in non gateway engine")
-        }
-
-        switch voiceCode {
+    public func handleGatewayPayload(_ payload: DiscordVoiceGatewayPayload) {
+        switch payload.code {
         case .ready:
             handleReady(with: payload.payload)
         case .sessionDescription:

@@ -168,7 +168,7 @@ public protocol DiscordShardManagerDelegate : AnyObject, DiscordEventLoopGroupMa
 /// Connected being when all shards have recieved a ready event and are receiving events from the gateway. It also
 /// decides when a client has fully disconnected. Disconnected being when all shards have closed.
 ///
-open class DiscordShardManager : DiscordShardDelegate, Lockable {
+open class DiscordShardManager: DiscordShardDelegate, Lockable {
     // MARK: Properties
 
     /// - returns: The shard with num `n`

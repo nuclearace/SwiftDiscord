@@ -253,7 +253,7 @@ open class DiscordEngine : DiscordEngineSpec {
         case .invalidSession:
             handleInvalidSession()
         case .heartbeat:
-            sendPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
+            sendPayload(DiscordNormalGatewayPayload(code: .heartbeat, payload: .integer(lastSequenceNumber)))
         case .heartbeatAck:
             heartbeatQueue.sync { self.pongsMissed = 0 }
             logger.debug("Got heartbeat ack")
@@ -362,7 +362,7 @@ open class DiscordEngine : DiscordEngineSpec {
         logger.debug("Sending heartbeat, shard: \(shardNum)")
 
         pongsMissed += 1
-        sendPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
+        sendPayload(DiscordNormalGatewayPayload(code: .heartbeat, payload: .integer(lastSequenceNumber)))
 
         let time = DispatchTime.now() + .milliseconds(heartbeatInterval)
 
@@ -388,11 +388,11 @@ open class DiscordEngine : DiscordEngineSpec {
         if sessionId != nil {
             logger.info("Sending resume, shard: \(shardNum)")
 
-            sendPayload(DiscordGatewayPayload(code: .gateway(.resume), payload: .object(resumeObject)))
+            sendPayload(DiscordNormalGatewayPayload(code: .resume, payload: .object(resumeObject)))
         } else {
             logger.info("Sending handshake, shard: \(shardNum)")
 
-            sendPayload(DiscordGatewayPayload(code: .gateway(.identify), payload: .object(handshakeObject)))
+            sendPayload(DiscordNormalGatewayPayload(code: .identify, payload: .object(handshakeObject)))
         }
     }
 

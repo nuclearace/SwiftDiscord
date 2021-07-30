@@ -36,13 +36,13 @@ public protocol DiscordGatewayable : DiscordEngineHeartbeatable {
     // MARK: Methods
 
     ///
-    /// Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
+    /// Handles a DiscordNormalGatewayPayload. You shouldn't need to call this directly.
     ///
     /// Override this method if you need to customize payload handling.
     ///
     /// - parameter payload: The payload object
     ///
-    func handleGatewayPayload(_ payload: DiscordGatewayPayload)
+    func handleGatewayPayload(_ payload: DiscordNormalGatewayPayload)
 
     // MARK: Methods
 
@@ -51,21 +51,21 @@ public protocol DiscordGatewayable : DiscordEngineHeartbeatable {
     ///
     /// - parameter payload: The dispatch payload
     ///
-    func handleDispatch(_ payload: DiscordGatewayPayload)
+    func handleDispatch(_ payload: DiscordNormalGatewayPayload)
 
     ///
     /// Handles the hello event.
     ///
     /// - parameter payload: The dispatch payload
     ///
-    func handleHello(_ payload: DiscordGatewayPayload)
+    func handleHello(_ payload: DiscordNormalGatewayPayload)
 
     ///
     /// Handles the resumed event.
     ///
     /// - parameter payload: The payload for the event.
     ///
-    func handleResumed(_ payload: DiscordGatewayPayload)
+    func handleResumed(_ payload: DiscordNormalGatewayPayload)
 
     ///
     /// Parses a raw message from the WebSocket. This is the entry point for all Discord events.
@@ -82,7 +82,7 @@ public protocol DiscordGatewayable : DiscordEngineHeartbeatable {
     ///
     /// - parameter payload: The payload to send.
     ///
-    func sendPayload(_ payload: DiscordGatewayPayload)
+    func sendPayload(_ payload: DiscordNormalGatewayPayload)
 
     ///
     /// Starts the handshake with the Discord server. You shouldn't need to call this directly.
@@ -94,7 +94,7 @@ public protocol DiscordGatewayable : DiscordEngineHeartbeatable {
 
 public extension DiscordGatewayable where Self: DiscordWebSocketable & DiscordRunLoopable {
     /// Default Implementation.
-    func sendPayload(_ payload: DiscordGatewayPayload) {
+    func sendPayload(_ payload: DiscordNormalGatewayPayload) {
         guard let payloadString = payload.createPayloadString() else {
             error(message: "Could not create payload string for payload: \(payload)")
 
@@ -180,209 +180,144 @@ extension DiscordGatewayPayloadData {
 }
 
 /// Represents a gateway payload. This is lowest level of the Discord API.
-public struct DiscordGatewayPayload: Codable {
-    /// The payload code.
-    public let code: DiscordGatewayCode
-
-    /// The payload data.
-    public let payload: DiscordGatewayPayloadData
+public struct DiscordNormalGatewayPayload<Opcode>: Codable where Opcode: Codable {
+    /// The opcode.
+    public let opcode: Opcode
 
     /// The sequence number of this dispatch.
     public let sequenceNumber: Int?
 
-    /// The event type of this dispatch.
-    public let type: DiscordDispatchEventType?
+    /// The event and payload data of this dispatch.
+    public let event: DiscordDispatchEvent
 
     ///
-    /// Creates a new DiscordGatewayPayload.
+    /// Creates a new DiscordNormalGatewayPayload.
     ///
-    /// - parameter code: The code of this payload
+    /// - parameter opcode: The opcode of this payload
     /// - parameter payload: The data of this payload
     /// - parameter sequenceNumber: An optional sequence number for this dispatch
     /// - parameter type: The event type of this dispatch
     ///
-    public init(code: DiscordGatewayCode, payload: DiscordGatewayPayloadData, sequenceNumber: Int? = nil,
-                name: DiscordDispatchEventType? = nil) {
-        self.code = code
-        self.payload = payload
+    public init(opcode: Opcode, sequenceNumber: Int? = nil, event: DiscordDispatchEvent) {
+        self.opcode = opcode
         self.sequenceNumber = sequenceNumber
-        self.type = type
+        self.event = event
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        opcode = try container.decode(Opcode.self, forKey: .opcode)
+        sequenceNumber = try container.decode(Int?.self, forKey: .sequenceNumber)
+        event = try DiscordDispatchEvent(from: container.superDecoder())
     }
 
     private enum CodingKeys: String, CodingKey {
-        case code = "op"
+        case opcode = "op"
         case payload = "d"
-        case sequence = "s"
+        case sequenceNumber = "s"
         case type = "t"
     }
 
     /// Encodable implementation.
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(code.rawCode, forKey: .code)
-        try container.encodeIfPresent(sequenceNumber, forKey: .sequence)
-        try container.encodeIfPresent(type, forKey: .type)
-        try payload.encode(to: container.superEncoder(forKey: .payload))
-    }
-
-    func createPayloadString() -> String? {
-        return JSON.encodeJSON(self)
+        try container.encode(opcode, forKey: .opcode)
+        try container.encodeIfPresent(sequenceNumber, forKey: .sequenceNumber)
+        try event.encode(to: container.superEncoder())
     }
 }
 
-extension DiscordGatewayPayload {
-    static func payloadFromString(_ string: String, fromGateway: Bool = true) -> DiscordGatewayPayload? {
-        guard case let .object(dictionary)? = JSON.decodeJSON(string),
-              let op = dictionary["op"] as? Int else { return nil }
+public typealias DiscordNormalGatewayPayload = DiscordNormalGatewayPayload<DiscordNormalGatewayOpcode>
+public typealias DiscordVoiceGatewayPayload = DiscordNormalGatewayPayload<DiscordVoiceGatewayOpcode>
 
-        let code: DiscordGatewayCode
-        let payload = DiscordGatewayPayloadData.dataFromDictionary(dictionary["d"])
-
-        if fromGateway, let gatewayCode = DiscordNormalGatewayCode(rawValue: op) {
-            code = .gateway(gatewayCode)
-        } else if let voiceCode = DiscordVoiceGatewayCode(rawValue: op) {
-            code = .voice(voiceCode)
-        } else {
-            return nil
-        }
-
-        return DiscordGatewayPayload(code: code, payload: payload, sequenceNumber: dictionary["s"] as? Int,
-                                     name: dictionary["t"] as? String)
-    }
-}
-
-/// Top-level enum for gateway codes.
-public enum DiscordGatewayCode {
-    /// Gateway code is a DiscordNormalGatewayCode.
-    case gateway(DiscordNormalGatewayCode)
-
-    /// Gateway code is a DiscordVoiceGatewayCode.
-    case voice(DiscordVoiceGatewayCode)
-
-    var rawCode: Int {
-        switch self {
-        case let .gateway(gatewayCode):
-            return gatewayCode.rawValue
-        case let .voice(voiceCode):
-            return voiceCode.rawValue
-        }
-    }
-}
-
-/// Represents a regular gateway code
-public enum DiscordNormalGatewayCode : Int {
+/// Represents a regular gateway opcode
+public enum DiscordNormalGatewayOpcode: Int, Codable {
     /// Dispatch.
-    case dispatch
+    case dispatch = 0
     /// Heartbeat.
-    case heartbeat
+    case heartbeat = 1
     /// Identify.
-    case identify
+    case identify = 2
     /// Status Update.
-    case statusUpdate
+    case statusUpdate = 3
     /// Voice Status Update.
-    case voiceStatusUpdate
+    case voiceStatusUpdate = 4
     /// Voice Server Ping.
-    case voiceServerPing
+    case voiceServerPing = 5
     /// Resume.
-    case resume
+    case resume = 6
     /// Reconnect.
-    case reconnect
+    case reconnect = 7
     /// Request Guild Members.
-    case requestGuildMembers
+    case requestGuildMembers = 8
     /// Invalid Session.
-    case invalidSession
+    case invalidSession = 9
     /// Hello.
-    case hello
+    case hello = 10
     /// HeartbeatAck
-    case heartbeatAck
+    case heartbeatAck = 11
 }
 
-/// Represents a voice gateway code
-public enum DiscordVoiceGatewayCode : Int {
+/// Represents a voice gateway opcode
+public enum DiscordVoiceGatewayOpcode: Int, Codable {
     /// Identify. Sent by the client.
     case identify = 0
-
     /// Select Protocol. Sent by the client.
     case selectProtocol = 1
-
     /// Ready. Sent by the server.
     case ready = 2
-
     /// Heartbeat. Sent by the client.
     case heartbeat = 3
-
     /// Session Description. Sent by the server.
     case sessionDescription = 4
-
     /// Speaking. Sent by both client and server.
     case speaking = 5
-
     /// Heartbeat ACK. Sent by the server.
     case heartbeatAck = 6
-
     /// Resume. Sent by the client.
     case resume = 7
-
     /// Hello. Sent by the server.
     case hello = 8
-
     /// Resumed. Sent by the server.
     case resumed = 9
-
     /// Client disconnect. Sent by the server.
     case clientDisconnect = 13
 }
 
 /// Represents the reason a gateway was closed.
-public enum DiscordGatewayCloseReason : Int {
+public enum DiscordGatewayCloseReason: Int, Codable {
     /// We don't quite know why the gateway closed.
     case unknown = 0
-
     /// The gateway closed because the network dropped.
     case noNetwork = 50
-
     /// The gateway closed from a normal WebSocket close event.
     case normal = 1000
-
     /// Something went wrong, but we aren't quite sure either.
     case unknownError = 4000
-
     /// Discord got an opcode is doesn't recognize.
     case unknownOpcode = 4001
-
     /// We sent a payload Discord doesn't know what to do with.
     case decodeError = 4002
-
     /// We tried to send stuff before we were authenticated.
     case notAuthenticated = 4003
-
     /// We failed to authenticate with Discord.
     case authenticationFailed = 4004
-
     /// We tried to authenticate twice.
     case alreadyAuthenticated = 4005
-
     /// We sent a bad sequence number when trying to resume.
     case invalidSequence = 4007
-
     /// We sent messages too fast.
     case rateLimited = 4008
-
     /// Our session timed out.
     case sessionTimeout = 4009
-
     /// We sent an invalid shard when identifing.
     case invalidShard = 4010
-
     /// We sent a protocol Discord doesn't recognize.
     case unknownProtocol = 4012
-
     /// We got disconnected.
     case disconnected = 4014
-
     /// The voice server crashed.
     case voiceServerCrash = 4015
-
     /// We sent an encryption mode Discord doesn't know.
     case unknownEncryptionMode = 4016
 
@@ -392,7 +327,7 @@ public enum DiscordGatewayCloseReason : Int {
         #if !os(Linux)
         guard let error = error else { return nil }
 
-        self.init(rawValue: (error as NSError).code)
+        self.init(rawValue: (error as NSError).opcode)
         #else
         self = .unknown
         #endif
