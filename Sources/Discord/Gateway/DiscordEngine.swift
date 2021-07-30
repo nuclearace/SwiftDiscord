@@ -48,7 +48,7 @@ public class DiscordEngine: DiscordEngineSpec {
     /// Override if you need to customize the handshake object.
     public var handshakeObject: [String: Any] {
         var identify: [String: Any] = [
-            "token": delegate!.token.token,
+            "token": delegate!.token.rawValue,
             "intents": intents.rawValue,
             "properties": [
                 "$os": os,
@@ -72,7 +72,7 @@ public class DiscordEngine: DiscordEngineSpec {
     /// Override if you need to customize the resume object.
     public var resumeObject: [String: Any] {
         [
-            "token": delegate!.token.token,
+            "token": delegate!.token.rawValue,
             "session_id": sessionId!,
             "seq": lastSequenceNumber
         ]

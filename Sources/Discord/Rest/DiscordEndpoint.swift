@@ -238,7 +238,7 @@ public extension DiscordEndpoint {
             guard let url = endpoint.createURL(getParams: getParams) else { return nil }
             var request = URLRequest(url: url)
 
-            request.setValue(token.token, forHTTPHeaderField: "Authorization")
+            request.setValue(token.rawValue, forHTTPHeaderField: "Authorization")
             request.httpMethod = methodString
 
             addContent(to: &request)

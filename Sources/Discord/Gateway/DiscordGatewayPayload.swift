@@ -16,10 +16,8 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/// The most basic form of event sent and received via Discord's gateway.
-public enum DiscordGatewayPayload: Codable {
-    // MARK: Commands (Send)
-
+/// A gateway payload to be sent.
+public enum DiscordGatewayCommand: Encodable {
     /// Starts a new session during the initial handshake.
     case identify(DiscordGatewayIdentify)
     /// Fired periodically by the client to keep the connection alive.
@@ -31,32 +29,81 @@ public enum DiscordGatewayPayload: Codable {
     /// Request information about offline guild members in a large guild.
     case requestGuildMembers(DiscordGatewayRequestGuildMembers)
 
-    // MARK: Events (Receive)
+    public enum CodingKeys: String, CodingKey {
+        case opcode = "op"
+        case data = "d"
+    }
 
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .identify(let identify): 
+            try container.encode(DiscordGatewayOpcode.identify, forKey: .opcode)
+            try container.encode(identify, forKey: .data)
+        case .heartbeat(let heartbeat):
+            try container.encode(DiscordGatewayOpcode.heartbeat, forKey: .opcode)
+            try container.encode(heartbeat, forKey: .data)
+        case .resume(let resume):
+            try container.encode(DiscordGatewayOpcode.resume, forKey: .opcode)
+            try container.encode(resume, forKey: .data)
+        case .presenceUpdate(let update):
+            try container.encode(DiscordGatewayOpcode.presenceUpdate, forKey: .opcode)
+            try container.encode(update, forKey: .data)
+        case .requestGuildMembers(let request):
+            try container.encode(DiscordGatewayOpcode.requestGuildMembers, forKey: .opcode)
+            try container.encode(request, forKey: .data)
+        }
+    }
+}
+
+/// A gateway payload to be received.
+public enum DiscordGatewayEvent: Decodable {
     /// An event was dispatched (receive).
-    case dispatch(DiscordDispatchEvent)
+    case dispatch(DiscordGatewayDispatch)
     /// We should attempt to reconnect and resume immediately.
     case reconnect
     /// The session has been invalidated. We should reconnect and identify/
     /// resume accordinly.
-    case invalidSession
+    case invalidSession(DiscordGatewayInvalidSession)
     /// Sent immediately after connecting, contains the `heartbeat_interval`.
-    case hello
+    case hello(DiscordGatewayHello)
     /// Sent in response to receiving a heartbeat to acknowledge that it has
     /// been received.
     case heartbeatAck
+
+    public enum CodingKeys: String, CodingKey {
+        case opcode = "op"
+        case data = "d"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let opcode = try container.decode(DiscordGatewayOpcode.self, forKey: .opcode)
+        switch opcode {
+        case .dispatch: self = .dispatch(try DiscordGatewayDispatch(from: decoder))
+        case .reconnect: self = .reconnect
+        case .invalidSession: self = .invalidSession(try container.decode(DiscordGatewayInvalidSession.self, forKey: .data))
+        case .hello: self = .hello(try container.decode(DiscordGatewayHello.self, forKey: .data))
+        case .heartbeatAck: self = .heartbeatAck
+        default: throw DiscordGatewayEventError.unrecognizedOpcode(opcode)
+        }
+    }
+}
+
+public enum DiscordGatewayEventError: Error {
+    case unrecognizedOpcode(DiscordGatewayOpcode)
 }
 
 /// Represents a regular gateway opcode
-public enum DiscordGatewayPayloadOpcode: Int, Codable {
+public enum DiscordGatewayOpcode: Int, Codable {
     /// Dispatch.
     case dispatch = 0
     /// Heartbeat.
     case heartbeat = 1
     /// Identify.
     case identify = 2
-    /// Status Update.
-    case statusUpdate = 3
+    /// Presence Update.
+    case presenceUpdate = 3
     /// Voice Status Update.
     case voiceStatusUpdate = 4
     /// Voice Server Ping.
@@ -79,10 +126,19 @@ public enum DiscordGatewayPayloadOpcode: Int, Codable {
 /// every `heartbeat_interval` ms after the hello.
 public struct DiscordGatewayHeartbeat: RawRepresentable, Codable {
     /// The last sequence number received by the client.
-    public var rawValue: Int
+    public var lastSequenceNumber: Int
+
+    public var rawValue: Int {
+        get { lastSequenceNumber }
+        set { lastSequenceNumber = newValue }
+    }
+
+    public init(lastSequenceNumber: Int) {
+        self.lastSequenceNumber = lastSequenceNumber
+    }
 
     public init(rawValue: Int) {
-        self.rawValue = rawValue
+        self.init(lastSequenceNumber: rawValue)
     }
 }
 
@@ -111,7 +167,7 @@ public struct DiscordGatewayIdentify: Codable {
     /// The token to use.
     public var token: DiscordToken
     /// The gateway intents we wish to receive.
-    public var intents: DiscordIntent
+    public var intents: DiscordGatewayIntents
     /// Connection properties.
     public var properties: Properties
     /// Whether this connection supports compression of packets.
@@ -122,6 +178,8 @@ public struct DiscordGatewayIdentify: Codable {
     public var largeThreshold: Int? = 50
     /// Array of two integers (shard_id, num_shards)
     public var shard: [Int]? = nil
+    /// A presence update.
+    public var presence: DiscordGatewayPresenceUpdate? = nil
 
     /// Connection properties.
     public struct Properties: Codable {
@@ -180,4 +238,55 @@ public struct DiscordGatewayPresenceUpdate: Codable {
     public var status: DiscordPresenceStatus
     /// Whether or not the client is afk.
     public var afk: Bool
+}
+
+/// A dispatch event.
+public struct DiscordGatewayDispatch: Decodable {
+    public enum CodingKeys: String, CodingKey {
+        case sequenceNumber = "seq"
+    }
+
+    /// The sequence number.
+    public var sequenceNumber: Int
+    /// The event type and data.
+    public var event: DiscordDispatchEvent
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        sequenceNumber = try container.decode(Int.self, forKey: .sequenceNumber)
+        event = try DiscordDispatchEvent(from: decoder)
+    }
+}
+
+/// Indicates one of three situations:
+///   - The gateway could not initialize a session after opcode 2 identify
+///   - The gateway could not resume a previous session after opcode 6 resume
+///   - The gateway has invalidated an active session and is requesting client action
+public struct DiscordGatewayInvalidSession: RawRepresentable, Codable {
+    /// Whether the session is resumsable.
+    public var isResumable: Bool
+
+    public var rawValue: Bool {
+        get { isResumable }
+        set { isResumable = newValue }
+    }
+
+    public init(isResumable: Bool) {
+        self.isResumable = isResumable
+    }
+
+    public init(rawValue: Bool) {
+        self.init(isResumable: rawValue)
+    }
+}
+
+/// Defines the heartbeat interval for the client.
+public struct DiscordGatewayHello: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case heartbeatInterval = "heartbeat_interval"
+    }
+
+    /// The heartbeat interval in milliseconds that
+    /// we (the client) should heartbeat to.
+    public var heartbeatInterval: Int
 }

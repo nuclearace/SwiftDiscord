@@ -177,9 +177,7 @@ open class DiscordShardManager: DiscordShardDelegate, Lockable {
     }
 
     /// The token for the user.
-    public var token: DiscordToken {
-        return delegate!.token
-    }
+    public var token: DiscordToken { delegate!.token }
 
     /// The individual shards.
     public var shards = [DiscordShard]()

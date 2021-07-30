@@ -71,10 +71,60 @@ public enum DiscordDispatchEvent: Decodable {
 
     // Interactions
     case interactionCreate(DiscordInteractionCreateEvent)
+
+    public enum CodingKeys: String, CodingKey {
+        case type = "t"
+        case data = "d"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decode(DiscordDispatchEventType.self, forKey: .type)
+
+        switch type {
+        case .ready: self = .ready(try container.decode(DiscordReadyEvent.self, forKey: .data))
+        case .resumed: self = .resumed(try container.decode(DiscordResumedEvent.self, forKey: .data))
+        case .messageCreate: self = .messageCreate(try container.decode(DiscordMessageCreateEvent.self, forKey: .data))
+        case .messageDelete: self = .messageDelete(try container.decode(DiscordMessageDeleteEvent.self, forKey: .data))
+        case .messageDeleteBulk: self = .messageDeleteBulk(try container.decode(DiscordMessageDeleteBulkEvent.self, forKey: .data))
+        case .messageReactionAdd: self = .messageReactionAdd(try container.decode(DiscordMessageReactionAddEvent.self, forKey: .data))
+        case .messageReactionRemove: self = .messageReactionRemove(try container.decode(DiscordMessageReactionRemoveEvent.self, forKey: .data))
+        case .messageReactionRemoveAll: self = .messageReactionRemoveAll(try container.decode(DiscordMessageReactionRemoveAllEvent.self, forKey: .data))
+        case .messageUpdate: self = .messageUpdate(try container.decode(DiscordMessageUpdate.self, forKey: .data))
+        case .guildBanAdd: self = .guildBanAdd(try container.decode(DiscordGuildBanAddEvent.self, forKey: .data))
+        case .guildBanRemove: self = .guildBanRemove(try container.decode(DiscordGuildBanRemoveEvent.self, forKey: .data))
+        case .guildCreate: self = .guildCreate(try container.decode(DiscordGuildCreateEvent.self, forKey: .data))
+        case .guildEmojisUpdate: self = .guildEmojisUpdate(try container.decode(DiscordGuildEmojisUpdateEvent.self, forKey: .data))
+        case .guildIntegrationsUpdate: self = .guildIntegrationsUpdate(try container.decode(DiscordGuildIntegrationsUpdateEvent.self, forKey: .data))
+        case .guildMemberAdd: self = .guildMemberAdd(try container.decode(DiscordGuildMemberAddEvent.self, forKey: .data))
+        case .guildMemberRemove: self = .guildMemberRemove(try container.decode(DiscordGuildMemberRemoveEvent.self, forKey: .data))
+        case .guildMembersChunk: self = .guildMembersChunk(try container.decode(DiscordGuildMembersChunkEvent.self, forKey: .data))
+        case .guildRoleCreate: self = .guildRoleCreate(try container.decode(DiscordGuildRoleCreateEvent.self, forKey: .data))
+        case .guildRoleDelete: self = .guildRoleDelete(try container.decode(DiscordGuildRoleDeleteEvent.self, forKey: .data))
+        case .guildUpdate: self = .guildUpdate(try container.decode(DiscordGuildUpdateEvent.self, forKey: .data))
+        case .channelCreate: self = .channelCreate(try container.decode(DiscordChannelCreateEvent.self, forKey: .data))
+        case .channelDelete: self = .channelDelete(try container.decode(DiscordChannelDeleteEvent.self, forKey: .data))
+        case .channelPinsUpdate: self = .channelPinsUpdate(try container.decode(DiscordChannelPinsUpdateEvent.self, forKey: .data))
+        case .channelUpdate: self = .channelUpdate(try container.decode(DiscordChannelUpdateEvent.self, forKey: .data))
+        case .threadCreate: self = .threadCreate(try container.decode(DiscordThreadCreateEvent.self, forKey: .data))
+        case .threadUpdate: self = .threadUpdate(try container.decode(DiscordThreadUpdateEvent.self, forKey: .data))
+        case .threadDelete: self = .threadDelete(try container.decode(DiscordThreadDeleteEvent.self, forKey: .data))
+        case .threadMemberUpdate: self = .threadMemberUpdate(try container.decode(DiscordThreadMemberUpdateEvent.self, forKey: .data))
+        case .threadMembersUpdate: self = .threadMembersUpdate(try container.decode(DiscordThreadMembersUpdateEvent.self, forKey: .data))
+        case .voiceServerUpdate: self = .voiceServerUpdate(try container.decode(DiscordVoiceServerUpdateEvent.self, forKey: .data))
+        case .voiceStateUpdate: self = .voiceStateUpdate(try container.decode(DiscordVoiceStateUpdateEvent.self, forKey: .data))
+        case .presenceUpdate: self = .presenceUpdate(try container.decode(DiscordPresenceUpdateEvent.self, forKey: .data))
+        case .typingStart: self = .typingStart(try container.decode(DiscordTypingStartEvent.self, forKey: .data))
+        case .webhooksUpdate: self = .webhooksUpdate(try container.decode(DiscordWebhooksUpdateEvent.self, forKey: .data))
+        case .applicationCommandCreate: self = .applicationCommandCreate(try container.decode(DiscordApplicationCommandCreateEvent.self, forKey: .data))
+        case .applicationCommandUpdate: self = .applicationCommandUpdate(try container.decode(DiscordApplicationCommandUpdateEvent.self, forKey: .data))
+        case .interactionCreate: self = .interactionCreate(try container.decode(DiscordInteractionCreateEvent.self, forKey: .data))
+        }
+    }
 }
 
 /// An enum that represents the dispatch events Discord sends.
-public struct DiscordDispatchEventType: RawRepresentable, Codable {
+public struct DiscordDispatchEventType: RawRepresentable, Codable, Hashable {
     public let rawValue: String
 
     public static let ready = DiscordDispatchEventType(rawValue: "READY")

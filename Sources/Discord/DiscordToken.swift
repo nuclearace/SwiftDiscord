@@ -32,13 +32,13 @@ public protocol DiscordTokenBearer {
 /// For example:
 ///
 /// ```swift
-/// let token = "Bot adfadf.adfdafdafdfa.afdaf" as DiscordToken
+/// let rawValue = "Bot adfadf.adfdafdafdfa.afdaf" as DiscordToken
 /// ```
 ///
 /// The "Bot" prefix indicates that this token is a bot. This must included if the token is for a bot.
 /// Likewise, if the token is an OAuth token, it must be preceded by "Bearer". User tokens can omit a prefix.
 ///
-public struct DiscordToken : ExpressibleByStringLiteral, CustomStringConvertible {
+public struct DiscordToken: RawRepresentable, Codable, ExpressibleByStringLiteral, CustomStringConvertible {
     // MARK: Typealiases
 
     /// ExpressibleByStringLiteral conformance
@@ -52,28 +52,20 @@ public struct DiscordToken : ExpressibleByStringLiteral, CustomStringConvertible
 
     // MARK: Properties
 
-    /// The token string.
-    public let token: String
+    /// The token.
+    public let rawValue: String
 
     /// CustomStringConvertible conformance. Same as `token`.
-    public var description: String {
-        return token
-    }
+    public var description: String { token }
 
     /// Whether this token is a bot token.
-    public var isBot: Bool {
-        return token.hasPrefix("Bot")
-    }
+    public var isBot: Bool { token.hasPrefix("Bot") }
 
     /// Whether this token is an OAuth token.
-    public var isBearer: Bool {
-        return token.hasPrefix("Bearer")
-    }
+    public var isBearer: Bool { token.hasPrefix("Bearer") }
 
     /// Whether this token is a user token.
-    public var isUser: Bool {
-        return !(isBot || isBearer)
-    }
+    public var isUser: Bool { !(isBot || isBearer) }
 
     // MARK: Initializers
 
@@ -83,7 +75,7 @@ public struct DiscordToken : ExpressibleByStringLiteral, CustomStringConvertible
     /// - parameter unicodeScalarLiteral: The unicode scalar literal
     ///
     public init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
-        token = String(unicodeScalarLiteral: value)
+        rawValue = String(unicodeScalarLiteral: value)
     }
 
     ///
@@ -92,7 +84,7 @@ public struct DiscordToken : ExpressibleByStringLiteral, CustomStringConvertible
     /// - parameter extendedGraphemeClusterLiteral: The grapheme scalar literal
     ///
     public init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
-        token = String(extendedGraphemeClusterLiteral: value)
+        rawValue = String(extendedGraphemeClusterLiteral: value)
     }
 
     ///
@@ -101,6 +93,11 @@ public struct DiscordToken : ExpressibleByStringLiteral, CustomStringConvertible
     /// - parameter stringLiteral: The string literal
     ///
     public init(stringLiteral value: StringLiteralType) {
-        token = value
+        rawValue = value
+    }
+
+    /// Creates a new token from a string.
+    public init(rawValue: String) {
+        self.rawValue = rawValue
     }
 }
