@@ -11,7 +11,7 @@ public class TestDiscordEngine : XCTestCase, DiscordShardDelegate {
     func testEngineCorrectlyHandlesHelloPacket() {
         expectation = expectation(description: "Engine should be connected after receiving hello packet")
 
-        engine.parseGatewayMessage(helloPacket)
+        engine.parseAndHandleGatewayMessage(helloPacket)
 
         waitForExpectations(timeout: 0.2)
     }
@@ -19,7 +19,7 @@ public class TestDiscordEngine : XCTestCase, DiscordShardDelegate {
     func testEngineSetsSessionIdFromReadyPacket() {
         expectation = expectation(description: "Engine should set the session id from a ready packet")
 
-        engine.parseGatewayMessage(readyPacket)
+        engine.parseAndHandleGatewayMessage(readyPacket)
 
         waitForExpectations(timeout: 0.2)
     }

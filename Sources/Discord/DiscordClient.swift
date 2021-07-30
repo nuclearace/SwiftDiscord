@@ -42,7 +42,7 @@ fileprivate let logger = Logger(label: "DiscordClient")
 ///
 /// See `DiscordClientDelegate` for a list of delegate methods that can be implemented.
 ///
-open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
+public class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     // MARK: Properties
 
     /// The rate limiter for this client.
@@ -146,11 +146,10 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     /// Begins the connection to Discord. Once this is called, wait for a `connect` event before trying to interact
     /// with the client.
     ///
-    open func connect() {
+    public func connect() {
         logger.info("Connecting")
 
         shardManager.manuallyShatter(withInfo: shardingInfo, intents: intents)
-
         shardManager.connect()
     }
 
@@ -159,7 +158,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// Calling this method turns off automatic resuming, set `resume` to `true` before calling `connect()` again.
     ///
-    open func disconnect() {
+    public func disconnect() {
         logger.info("Disconnecting")
 
         connected = false
@@ -206,7 +205,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter event: The dispatch event
     ///
-    open func handleDispatch(event: DiscordDispatchEvent) {
+    private func handleDispatch(event: DiscordDispatchEvent) {
         guard case let .object(eventData) = data else {
             logger.error("Got dispatch event without an object: \(event), \(data)")
             return
@@ -255,7 +254,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter on: The snowflake of the guild you wish to request all users.
     ///
-    open func requestAllUsers(on guildId: GuildID) {
+    public func requestAllUsers(on guildId: GuildID) {
         let requestObject: [String: Any] = [
             "guild_id": guildId,
             "query": "",
@@ -274,7 +273,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter presence: The new presence object
     ///
-    open func setPresence(_ presence: DiscordPresenceUpdate) {
+    public func setPresence(_ presence: DiscordPresenceUpdate) {
         shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.statusUpdate),
                                                        payload: .customEncodable(presence)),
                                  onShard: 0)
@@ -288,7 +287,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     /// - parameter manager: The manager.
     /// - parameter didConnect: Should always be true.
     ///
-    open func shardManager(_ manager: DiscordShardManager, didConnect connected: Bool) {
+    public func shardManager(_ manager: DiscordShardManager, didConnect connected: Bool) {
         handleQueue.async {
             self.connected = true
 
@@ -302,7 +301,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     /// - parameter manager: The manager.
     /// - parameter didDisconnectWithReason: The reason the manager disconnected.
     ///
-    open func shardManager(_ manager: DiscordShardManager, didDisconnectWithReason reason: String) {
+    public func shardManager(_ manager: DiscordShardManager, didDisconnectWithReason reason: String) {
         handleQueue.async {
             self.connected = false
 
@@ -317,8 +316,8 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     /// - parameter shouldHandleEvent: The event to be handled.
     /// - parameter withPayload: The payload that came with the event.
     ///
-    open func shardManager(_ manager: DiscordShardManager, shouldHandleEvent event: DiscordDispatchEvent,
-                           withPayload payload: DiscordGatewayPayload) {
+    public func shardManager(_ manager: DiscordShardManager, shouldHandleEvent event: DiscordDispatchEvent,
+                             withPayload payload: DiscordGatewayPayload) {
         handleQueue.async {
             self.handleDispatch(event: event, data: payload.payload)
         }
@@ -333,7 +332,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleChannelCreate(with event: DiscordChannelCreateEvent) {
+    func handleChannelCreate(with event: DiscordChannelCreateEvent) {
         logger.info("Handling channel create")
 
         guard let channel = channelFromObject(data, withClient: self) else { return }
@@ -363,7 +362,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleChannelDelete(with data: [String: Any]) {
+    func handleChannelDelete(with data: [String: Any]) {
         logger.info("Handling channel delete")
 
         guard let type = DiscordChannelType(rawValue: data["type"] as? Int ?? -1) else { return }
@@ -399,7 +398,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleChannelUpdate(with data: [String: Any]) {
+    func handleChannelUpdate(with data: [String: Any]) {
         logger.info("Handling channel update")
 
         guard let channel = guildChannel(fromObject: data, guildID: nil, client: self) else {
@@ -424,7 +423,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildCreate(with data: [String: Any]) {
+    func handleGuildCreate(with data: [String: Any]) {
         logger.info("Handling guild create")
 
         let guild = DiscordGuild(guildObject: data, client: self)
@@ -452,7 +451,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildDelete(with data: [String: Any]) {
+    func handleGuildDelete(with data: [String: Any]) {
         logger.info("Handling guild delete")
 
         guard let guildId = Snowflake(data["id"] as? String) else { return }
@@ -476,7 +475,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildEmojiUpdate(with data: [String: Any]) {
+    func handleGuildEmojiUpdate(with data: [String: Any]) {
         logger.info("Handling guild emoji update")
 
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
@@ -500,7 +499,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildMemberAdd(with data: [String: Any]) {
+    func handleGuildMemberAdd(with data: [String: Any]) {
         logger.info("Handling guild member add")
 
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
@@ -524,7 +523,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildMemberRemove(with data: [String: Any]) {
+    func handleGuildMemberRemove(with data: [String: Any]) {
         logger.info("Handling guild member remove")
 
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
@@ -548,7 +547,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildMemberUpdate(with data: [String: Any]) {
+    func handleGuildMemberUpdate(with data: [String: Any]) {
         logger.info("Handling guild member update")
 
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
@@ -569,7 +568,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildMembersChunk(with data: [String: Any]) {
+    func handleGuildMembersChunk(with data: [String: Any]) {
         logger.info("Handling guild members chunk")
 
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
@@ -591,7 +590,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildRoleCreate(with data: [String: Any]) {
+    func handleGuildRoleCreate(with data: [String: Any]) {
         logger.info("Handling guild role create")
 
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
@@ -614,7 +613,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildRoleRemove(with data: [String: Any]) {
+    func handleGuildRoleRemove(with data: [String: Any]) {
         logger.info("Handling guild role remove")
 
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
@@ -635,7 +634,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildRoleUpdate(with data: [String: Any]) {
+    func handleGuildRoleUpdate(with data: [String: Any]) {
         logger.info("Handling guild role update")
 
         // Functionally the same as adding
@@ -659,7 +658,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildUpdate(with data: [String: Any]) {
+    func handleGuildUpdate(with data: [String: Any]) {
         logger.info("Handling guild update")
 
         guard let guildId = Snowflake(data["id"] as? String) else { return }
@@ -679,7 +678,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleMessageUpdate(with data: [String: Any]) {
+    func handleMessageUpdate(with data: [String: Any]) {
         logger.info("Handling message update")
 
         let message = DiscordMessage(messageObject: data, client: self)
@@ -698,7 +697,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleMessageCreate(with data: [String: Any]) {
+    func handleMessageCreate(with data: [String: Any]) {
         logger.info("Handling message create")
 
         let message = DiscordMessage(messageObject: data, client: self)
@@ -735,7 +734,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleMessageReactionAdd(with data: [String: Any]) {
+    func handleMessageReactionAdd(with data: [String: Any]) {
         logger.info("Handling message reaction add")
 
         guard let (userID, channel, messageID, emoji) = getReactionInfo(mode: "add", from: data) else { return }
@@ -758,7 +757,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleMessageReactionRemove(with data: [String: Any]) {
+    func handleMessageReactionRemove(with data: [String: Any]) {
         logger.info("Handling message reaction remove")
 
         guard let (userID, channel, messageID, emoji) = getReactionInfo(mode: "remove", from: data) else { return }
@@ -775,7 +774,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleMessageReactionRemoveAll(with data: [String: Any]) {
+    func handleMessageReactionRemoveAll(with data: [String: Any]) {
         guard let channelID = ChannelID(data["channel_id"] as? String),
               let messageID = MessageID(data["message_id"] as? String)
         else {
@@ -799,7 +798,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handlePresenceUpdate(with data: [String: Any]) {
+    func handlePresenceUpdate(with data: [String: Any]) {
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
         guard let user = data["user"] as? [String: Any], let userId = Snowflake(user["id"] as? String) else { return }
 
@@ -832,7 +831,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleInteractionCreate(with data: [String: Any]) {
+    func handleInteractionCreate(with data: [String: Any]) {
         logger.info("Handling interaction create")
 
         delegate?.client(self, didCreateInteraction: DiscordInteraction(interactionObject: data))
@@ -847,7 +846,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleReady(with data: [String: Any]) {
+    func handleReady(with data: [String: Any]) {
         logger.info("Handling ready")
 
         if let user = data["user"] as? [String: Any] {

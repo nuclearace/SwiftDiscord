@@ -89,7 +89,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
 
             logger.debug("\(this.description), Got text: \(text)")
 
-            this.parseGatewayMessage(text)
+            this.parseAndHandleGatewayMessage(text)
         }
         
         websocket?.onClose.whenSuccess { [weak self] in
