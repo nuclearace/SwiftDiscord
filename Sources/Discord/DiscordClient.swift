@@ -42,7 +42,7 @@ fileprivate let logger = Logger(label: "DiscordClient")
 ///
 /// See `DiscordClientDelegate` for a list of delegate methods that can be implemented.
 ///
-open class DiscordClient: DiscordClientSpec, DiscordDispatchEventHandler, DiscordEndpointConsumer {
+open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     // MARK: Properties
 
     /// The rate limiter for this client.
@@ -448,8 +448,6 @@ open class DiscordClient: DiscordClientSpec, DiscordDispatchEventHandler, Discor
             self.delegate?.client(self, isReadyToSendVoiceWithEngine: engine)
         }
     }
-
-    // MARK: DiscordDispatchEventHandler Conformance
 
     ///
     /// Handles channel creates from Discord. You shouldn't need to call this method directly.
