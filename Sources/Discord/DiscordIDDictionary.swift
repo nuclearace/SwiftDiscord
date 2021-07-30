@@ -20,18 +20,18 @@
 public struct DiscordIDDictionary<Value: Identifiable>: ExpressibleByDictionaryLiteral {
     private var backingDictionary: [Value.ID: Value]
 
-    public var keys: Dictionary<Snowflake, Value>.Keys { backingDictionary.keys }
-    public var values: Dictionary<Snowflake, Value>.Values { backingDictionary.values }
+    public var keys: Dictionary<Value.ID, Value>.Keys { backingDictionary.keys }
+    public var values: Dictionary<Value.ID, Value>.Values { backingDictionary.values }
 
     public init(_ backingDictionary: [Value.ID: Value]) {
         self.backingDictionary = backingDictionary
     }
 
-    public init(dictionaryLiteral elements: (Snowflake, Value)...) {
+    public init(dictionaryLiteral elements: (Value.ID, Value)...) {
         backingDictionary = Dictionary(uniqueKeysWithValues: elements)
     }
 
-    public subscript(key: Snowflake) -> Value? {
+    public subscript(key: Value.ID) -> Value? {
         get { backingDictionary[key] }
         set { backingDictionary[key] = newValue }
     }
@@ -45,6 +45,6 @@ extension DiscordIDDictionary: Codable where Value: Codable, Value.ID: Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
-        try values.encode(to: encoder)
+        try Array(values).encode(to: encoder)
     }
 }
