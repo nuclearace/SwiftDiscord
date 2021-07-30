@@ -174,6 +174,6 @@ public struct DiscordChannelType: RawRepresentable, Codable, Hashable {
     public static let stageVoice = DiscordChannelType(rawValue: 13)
 
     public init(rawValue: Int) {
-        self.rawValue =rawValue
+        self.rawValue = rawValue
     }
 }
