@@ -141,4 +141,47 @@ public struct DiscordDispatchEventType: RawRepresentable, Codable {
     // Interactions
 
     public static let interactionCreate = DiscordDispatchEventType(rawValue: "INTERACTION_CREATE")
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+}
+
+public typealias DiscordChannelCreateEvent = DiscordChannel
+public typealias DiscordChannelUpdateEvent = DiscordChannel
+public typealias DiscordChannelDeleteEvent = DiscordChannel
+public typealias DiscordThreadCreateEvent = DiscordChannel
+public typealias DiscordThreadUpdateEvent = DiscordChannel
+public typealias DiscordThreadDeleteEvent = DiscordChannel
+
+public struct DiscordReadyEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case gatewayVersion = "v"
+        case user
+        case guilds
+        case sessionId = "session_id"
+        case shard
+        case application
+    }
+
+    /// The gateway version.
+    public var gatewayVersion: Int
+
+    /// Information about the user including email.
+    public var user: DiscordUser
+
+    /// The guilds the user is in
+    public var guilds: [DiscordUnavailableGuild]
+
+    /// Used for resuming connections.
+    public var sessionId: String
+
+    /// The shard information associated with this session, if sent
+    /// when identifying. An array of two integers:
+    /// - shard_id
+    /// - num_shards
+    public var shard: [Int]
+
+    /// The partial application object (contains `id` and `flags`).
+    public var application: DiscordApplication
 }

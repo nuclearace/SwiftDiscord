@@ -249,3 +249,12 @@ public final class DiscordGuild: CustomStringConvertible, Identifiable, Codable 
         client.removeGuildBan(for: user.id, on: id)
     }
 }
+
+/// A guild for which no information aside from the id is available yet.
+public struct DiscordUnavailableGuild: Codable, Identifiable {
+    /// The guild's id.
+    public let id: GuildID
+
+    /// Whether the guild is unavailable (always true).
+    public let unavailable: Bool
+}
