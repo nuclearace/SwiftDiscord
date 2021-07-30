@@ -32,14 +32,10 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
     ],
     targets: [
-        .systemLibrary(name: "COPUS", pkgConfig: "opus"),
-        .systemLibrary(name: "Sodium", pkgConfig: "libsodium"),
         .target(name: "Discord", dependencies: [
             .product(name: "WebSocketKit", package: "websocket-kit"),
             .product(name: "Socket", package: "Socket"),
             .product(name: "Logging", package: "swift-log"),
-            .target(name: "COPUS"),
-            .target(name: "Sodium"),
         ]),
         .testTarget(name: "DiscordTests", dependencies: [
             .target(name: "Discord"),

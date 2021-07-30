@@ -20,7 +20,7 @@ import Foundation
 import Dispatch
 
 /// Protocol that abstracts a DiscordClient
-public protocol DiscordClientSpec: DiscordVoiceManagerDelegate, DiscordShardManagerDelegate, DiscordUserActor {
+public protocol DiscordClientSpec: DiscordShardManagerDelegate, DiscordUserActor {
 	// MARK: Properties
 
 	/// Whether or not this client is connected.
@@ -54,20 +54,6 @@ public protocol DiscordClientSpec: DiscordVoiceManagerDelegate, DiscordShardMana
 	/// Disconnects from Discord. A `disconnect` event is fired when the client has successfully disconnected.
 	///
 	func disconnect()
-
-	///
-	/// Joins a voice channel. A `voiceEngine.ready` event will be fired when the client has joined the channel.
-	///
-	/// - parameter channelId: The snowflake of the voice channel you would like to join
-	///
-	func joinVoiceChannel(_ channelId: ChannelID)
-
-	///
-	/// Leaves the currently connected voice channel.
-	///
-	/// - parameter onGuild: The snowflake of the guild whose voice channel you would like to leave.
-	///
-	func leaveVoiceChannel(onGuild guildId: GuildID)
 
 	///
 	/// Requests all users from Discord for the guild specified. Use this when you need to get all users on a large

@@ -35,7 +35,6 @@ dispatchMain()
 - macOS and Linux support
 - v8 API (including interactions, slash commands and message components)
 - Configurable sharding
-- Voice support
 
 ## Requirements
 

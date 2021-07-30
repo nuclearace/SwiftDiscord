@@ -237,15 +237,11 @@ open class DiscordEngine : DiscordEngineSpec {
             startHandshake()
         }
 
-        guard case let .gateway(gatewayCode) = payload.code else {
-            fatalError("Got voice payload in non voice engine")
-        }
-
         if let seq = payload.sequenceNumber {
             lastSequenceNumber = seq
         }
 
-        switch gatewayCode {
+        switch payload.opcode {
         case .dispatch:
             handleDispatch(payload)
         case .hello:
