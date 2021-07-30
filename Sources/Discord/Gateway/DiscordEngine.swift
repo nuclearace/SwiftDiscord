@@ -91,7 +91,7 @@ public class DiscordEngine: DiscordEngineSpec {
     public let shardNum: Int
 
     /// The intents used when connecting to the gateway.
-    public let intents: DiscordGatewayIntent
+    public let intents: DiscordGatewayIntents
 
     /// The queue that WebSockets use to parse things.
     public let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
@@ -137,7 +137,7 @@ public class DiscordEngine: DiscordEngineSpec {
     ///
     /// - parameter delegate: The DiscordClientSpec this engine should be associated with.
     ///
-    public required init(delegate: DiscordShardDelegate, shardNum: Int = 0, numShards: Int = 1, intents: DiscordGatewayIntent, onLoop: EventLoop) {
+    public required init(delegate: DiscordShardDelegate, shardNum: Int = 0, numShards: Int = 1, intents: DiscordGatewayIntents, onLoop: EventLoop) {
         self.delegate = delegate
         self.shardNum = shardNum
         self.numShards = numShards

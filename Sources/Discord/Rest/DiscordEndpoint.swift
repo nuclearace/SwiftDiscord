@@ -633,7 +633,7 @@ public extension DiscordEndpoint {
             case name(String)
 
             /// The permissions this role has.
-            case permissions(DiscordPermission)
+            case permissions(DiscordPermissions)
         }
 
         /// Options for getting messages

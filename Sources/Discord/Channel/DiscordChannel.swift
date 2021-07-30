@@ -142,7 +142,7 @@ public struct DiscordChannel: Codable, Identifiable {
     /// Computed permissions for the invoking user in the channel.
     /// Only included when part of the resolved data received on
     /// a slash command interaction.
-    public var permissions: DiscordPermission?
+    public var permissions: DiscordPermissions?
 }
 
 /// Represents the type of a channel.

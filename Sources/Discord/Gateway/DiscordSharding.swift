@@ -92,7 +92,7 @@ public protocol DiscordShard : DiscordWebSocketable, DiscordGatewayable, Discord
     ///
     /// - parameter client: The client this engine should be associated with.
     ///
-    init(delegate: DiscordShardDelegate, shardNum: Int, numShards: Int, intents: DiscordGatewayIntent, onLoop: EventLoop)
+    init(delegate: DiscordShardDelegate, shardNum: Int, numShards: Int, intents: DiscordGatewayIntents, onLoop: EventLoop)
 }
 
 /// Declares that a type will be a shard's delegate.
@@ -232,7 +232,7 @@ open class DiscordShardManager: DiscordShardDelegate, Lockable {
     /// - returns: A new `DiscordShard`
     ///
     open func createShardWithDelegate(_ delegate: DiscordShardManagerDelegate, withShardNum shardNum: Int,
-                                      totalShards: Int, intents: DiscordGatewayIntent, onloop: EventLoop) -> DiscordShard {
+                                      totalShards: Int, intents: DiscordGatewayIntents, onloop: EventLoop) -> DiscordShard {
         return DiscordEngine(delegate: self, shardNum: shardNum, numShards: totalShards, intents: intents, onLoop: onloop)
     }
 
@@ -259,7 +259,7 @@ open class DiscordShardManager: DiscordShardDelegate, Lockable {
     ///
     /// - parameter withInfo: The information about this single shard.
     ///
-    open func manuallyShatter(withInfo info: DiscordShardInformation, intents: DiscordGatewayIntent) {
+    open func manuallyShatter(withInfo info: DiscordShardInformation, intents: DiscordGatewayIntents) {
         guard let delegate = self.delegate else { return }
 
         logger.debug("(verbose) Handling shard range \(info.shardRange)")

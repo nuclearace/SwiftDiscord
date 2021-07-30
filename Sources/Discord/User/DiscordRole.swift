@@ -39,7 +39,7 @@ public struct DiscordRole: Codable, Identifiable, Equatable {
     public var name: String
 
     /// The permissions this role has.
-    public var permissions: DiscordPermission
+    public var permissions: DiscordPermissions
 
     /// The position of this role.
     public var position: Int

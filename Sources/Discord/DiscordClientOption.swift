@@ -42,7 +42,7 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
 
     /// The gateway intents. By default, only the unprivileged intents are used, i.e. you won't
     /// get guild member and presence events, unless you specify these here (e.g. by using .allIntents).
-    case intents(DiscordGatewayIntent)
+    case intents(DiscordGatewayIntents)
 
     /// A DiscordRateLimiter for this client. All REST calls will be put through this limiter.
     case rateLimiter(DiscordRateLimiterSpec)

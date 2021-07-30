@@ -71,7 +71,7 @@ public class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     public var shardingInfo = try! DiscordShardInformation(shardRange: 0..<1, totalShards: 1)
 
     /// The gateway intents.
-    public var intents = DiscordGatewayIntent.unprivilegedIntents
+    public var intents = DiscordGatewayIntents.unprivilegedIntents
 
     /// Whether large guilds should have their users fetched as soon as they are created.
     public var fillLargeGuilds = false

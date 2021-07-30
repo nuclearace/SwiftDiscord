@@ -2,48 +2,48 @@
 /// subscribe to.
 ///
 /// See https://discord.com/developers/docs/topics/gateway#gateway-intents
-public struct DiscordGatewayIntent : OptionSet {
+public struct DiscordGatewayIntents: OptionSet {
     public let rawValue: Int
 
     /// Creation, updates and deletions of guilds, roles and channels.
-    public static let guilds = DiscordGatewayIntent(rawValue: 1 << 0)
+    public static let guilds = DiscordGatewayIntents(rawValue: 1 << 0)
     /// Guild member update events. This is a privileged intent.
-    public static let guildMembers = DiscordGatewayIntent(rawValue: 1 << 1)
+    public static let guildMembers = DiscordGatewayIntents(rawValue: 1 << 1)
     /// Guild ban and unban events.
-    public static let guildBans = DiscordGatewayIntent(rawValue: 1 << 2)
+    public static let guildBans = DiscordGatewayIntents(rawValue: 1 << 2)
     /// Guild emoji update events.
-    public static let guildEmojis = DiscordGatewayIntent(rawValue: 1 << 3)
+    public static let guildEmojis = DiscordGatewayIntents(rawValue: 1 << 3)
     /// Guild integration update events.
-    public static let guildIntegrations = DiscordGatewayIntent(rawValue: 1 << 4)
+    public static let guildIntegrations = DiscordGatewayIntents(rawValue: 1 << 4)
     /// Guild webhook update events.
-    public static let guildWebhooks = DiscordGatewayIntent(rawValue: 1 << 5)
+    public static let guildWebhooks = DiscordGatewayIntents(rawValue: 1 << 5)
     /// Guild invite events.
-    public static let guildInvites = DiscordGatewayIntent(rawValue: 1 << 6)
+    public static let guildInvites = DiscordGatewayIntents(rawValue: 1 << 6)
     /// Guild voice state update events.
-    public static let guildVoiceStates = DiscordGatewayIntent(rawValue: 1 << 7)
+    public static let guildVoiceStates = DiscordGatewayIntents(rawValue: 1 << 7)
     /// Guild presence update events. This is a privileged intent.
-    public static let guildPresences = DiscordGatewayIntent(rawValue: 1 << 8)
+    public static let guildPresences = DiscordGatewayIntents(rawValue: 1 << 8)
     /// Guild message creations, updates and deletions.
-    public static let guildMessages = DiscordGatewayIntent(rawValue: 1 << 9)
+    public static let guildMessages = DiscordGatewayIntents(rawValue: 1 << 9)
     /// Guild message reaction creations, updates and deletions.
-    public static let guildMessageReactions = DiscordGatewayIntent(rawValue: 1 << 10)
+    public static let guildMessageReactions = DiscordGatewayIntents(rawValue: 1 << 10)
     /// Guild typing indicators.
-    public static let guildMessageTyping = DiscordGatewayIntent(rawValue: 1 << 11)
+    public static let guildMessageTyping = DiscordGatewayIntents(rawValue: 1 << 11)
     /// Direct message creations, updates and deletions.
-    public static let directMessages = DiscordGatewayIntent(rawValue: 1 << 12)
+    public static let directMessages = DiscordGatewayIntents(rawValue: 1 << 12)
     /// Direct message reaction creations, updates and deletions.
-    public static let directMessageReactions = DiscordGatewayIntent(rawValue: 1 << 13)
+    public static let directMessageReactions = DiscordGatewayIntents(rawValue: 1 << 13)
     /// Direct message typing indicators.
-    public static let directMessageTyping = DiscordGatewayIntent(rawValue: 1 << 14)
+    public static let directMessageTyping = DiscordGatewayIntents(rawValue: 1 << 14)
 
     /// The privileged intents (which may require enabling in the Discord developer console).
-    public static let privilegedIntents: DiscordGatewayIntent = [
+    public static let privilegedIntents: DiscordGatewayIntents = [
         .guildMembers,
         .guildPresences
     ]
 
     /// The unprivileged intents. Use these if you don't need the privileged intents.
-    public static let unprivilegedIntents: DiscordGatewayIntent = [
+    public static let unprivilegedIntents: DiscordGatewayIntents = [
         .guilds,
         .guildBans,
         .guildEmojis,
@@ -60,7 +60,7 @@ public struct DiscordGatewayIntent : OptionSet {
     ]
 
     /// All intents.
-    public static let allIntents: DiscordGatewayIntent = [
+    public static let allIntents: DiscordGatewayIntents = [
         .privilegedIntents,
         .unprivilegedIntents
     ]

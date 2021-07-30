@@ -108,7 +108,7 @@ let permissionsTestUsers = ["23416345", "32564235", "4359835345", "32499342123",
     return DiscordUser(userObject: tmp)
 })
 
-let permissionsTestUserPermissions: DiscordPermission = [.createInstantInvite, .addReactions, .viewChannel, .sendMessages, .readMessageHistory, .useExternalEmojis, .connect, .speak, .useVAD, .changeNickname]
+let permissionsTestUserPermissions: DiscordPermissions = [.createInstantInvite, .addReactions, .viewChannel, .sendMessages, .readMessageHistory, .useExternalEmojis, .connect, .speak, .useVAD, .changeNickname]
 let permissionsTestRoles: [DiscordRole] = [
     DiscordRole(id: 2349683489545, color: 10181046, hoist: true, managed: false, mentionable: true, name: "Admin", permissions: .administrator, position: 3),
     DiscordRole(id: 32423425264343, color: 10718666, hoist: true, managed: false, mentionable: true, name: "Mod", permissions: permissionsTestUserPermissions.union([.kickMembers, .manageChannels, .viewAuditLog, .sendTTSMessages, .embedLinks, .attachFiles, .mentionEveryone, .muteMembers, .deafenMembers, .moveMembers, .manageNicknames, .manageRoles]), position: 2),

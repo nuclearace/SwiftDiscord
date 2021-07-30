@@ -719,14 +719,14 @@ public protocol DiscordEndpointConsumer {
     ///
     /// Creates a url that can be used to authorize a bot.
     ///
-    /// - parameter with: An array of `DiscordPermission` that this bot should have
+    /// - parameter with: An array of `DiscordPermissions` that this bot should have
     ///
-    func getBotURL(with permissions: DiscordPermission) -> URL?
+    func getBotURL(with permissions: DiscordPermissions) -> URL?
 }
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
-    func getBotURL(with permissions: DiscordPermission) -> URL? {
+    func getBotURL(with permissions: DiscordPermissions) -> URL? {
         guard let user = self.user else { return nil }
 
         return DiscordOAuthEndpoint.createBotAddURL(for: user, with: permissions)

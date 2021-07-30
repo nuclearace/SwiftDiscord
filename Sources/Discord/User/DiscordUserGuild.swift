@@ -33,5 +33,5 @@ public struct DiscordUserGuild: Codable, Identifiable {
     public let owner: Bool
 
     /// Bitwise of the user's enabled/disabled permissions.
-    public let permissions: DiscordPermission
+    public let permissions: DiscordPermissions
 }
