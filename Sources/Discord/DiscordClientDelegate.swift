@@ -136,7 +136,7 @@ public protocol DiscordClientDelegate : AnyObject {
     /// - parameter channel: The channel the message was on.
     /// - parameter userID: The ID of the user who added the reaction.
     ///
-    func client(_ client: DiscordClient, didAddReaction reaction: DiscordEmoji, toMessage messageID: MessageID, onChannel channel: DiscordTextChannel, user userID: UserID)
+    func client(_ client: DiscordClient, didAddReaction reaction: DiscordEmoji, toMessage messageID: MessageID, onChannel channel: DiscordChannel, user userID: UserID)
 
     ///
     /// Called when a user removes a reaction to a message.
@@ -147,7 +147,7 @@ public protocol DiscordClientDelegate : AnyObject {
     /// - parameter channel: The channel the message was on.
     /// - parameter userID: The ID of the user who added the reaction.
     ///
-    func client(_ client: DiscordClient, didRemoveReaction reaction: DiscordEmoji, fromMessage messageID: MessageID, onChannel channel: DiscordTextChannel, user userID: UserID)
+    func client(_ client: DiscordClient, didRemoveReaction reaction: DiscordEmoji, fromMessage messageID: MessageID, onChannel channel: DiscordChannel, user userID: UserID)
 
     ///
     /// Called when all reactions are removed from a message.
@@ -156,7 +156,7 @@ public protocol DiscordClientDelegate : AnyObject {
     /// - parameter messageID: The ID of the message all
     /// - parameter channel: The channel the message was on
     ///
-    func client(_ client: DiscordClient, didRemoveAllReactionsFrom messageID: MessageID, onChannel channel: DiscordTextChannel)
+    func client(_ client: DiscordClient, didRemoveAllReactionsFrom messageID: MessageID, onChannel channel: DiscordChannel)
 
     ///
     /// Called when the client adds a new role.
@@ -303,13 +303,13 @@ public extension DiscordClientDelegate {
     func client(_ client: DiscordClient, didCreateMessage message: DiscordMessage) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didAddReaction reaction: DiscordEmoji, toMessage messageID: MessageID, onChannel channel: DiscordTextChannel, user userID: UserID) { }
+    func client(_ client: DiscordClient, didAddReaction reaction: DiscordEmoji, toMessage messageID: MessageID, onChannel channel: DiscordChannel, user userID: UserID) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didRemoveReaction reaction: DiscordEmoji, fromMessage messageID: MessageID, onChannel channel: DiscordTextChannel, user userID: UserID) { }
+    func client(_ client: DiscordClient, didRemoveReaction reaction: DiscordEmoji, fromMessage messageID: MessageID, onChannel channel: DiscordChannel, user userID: UserID) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didRemoveAllReactionsFrom messageID: MessageID, onChannel channel: DiscordTextChannel) { }
+    func client(_ client: DiscordClient, didRemoveAllReactionsFrom messageID: MessageID, onChannel channel: DiscordChannel) { }
 
     /// Default.
     func client(_ client: DiscordClient, didReceivePresenceUpdate presence: DiscordPresence) { }

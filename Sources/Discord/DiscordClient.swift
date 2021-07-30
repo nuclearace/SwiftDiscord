@@ -86,7 +86,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
     public private(set) var connected = false
 
     /// The direct message channels this user is in.
-    public private(set) var directChannels = DiscordIDDictionary<DiscordTextChannel>()
+    public private(set) var directChannels = DiscordIDDictionary<DiscordChannel>()
 
     /// The guilds that this user is in.
     public private(set) var guilds = DiscordIDDictionary<DiscordGuild>()
@@ -710,7 +710,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
 
     /// Used to get fields for reaction notifications since add and remove are very similar
     /// - parameter mode: A string to identify add/remove when logging errors
-    private func getReactionInfo(mode: String, from data: [String: Any]) -> (UserID, DiscordTextChannel, MessageID, DiscordEmoji)? {
+    private func getReactionInfo(mode: String, from data: [String: Any]) -> (UserID, DiscordChannel, MessageID, DiscordEmoji)? {
         guard let userID = UserID(data["user_id"] as? String),
               let channelID = ChannelID(data["channel_id"] as? String),
               let messageID = MessageID(data["message_id"] as? String),
@@ -719,7 +719,7 @@ open class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
                 logger.error("Failed to get required fields from reaction \(mode)")
                 return nil
         }
-        guard let channel = findChannel(fromId: channelID) as? DiscordTextChannel else {
+        guard let channel = findChannel(fromId: channelID) else {
             logger.error("Failed to get channel from ID in reaction \(mode)")
             return nil
         }
