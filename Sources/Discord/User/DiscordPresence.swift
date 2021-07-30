@@ -39,7 +39,7 @@ public struct DiscordPresence: Codable {
     public var nick: String?
 
     /// The roles?
-    public var roles: [String]
+    public var roles: [String]?
 
     /// The status of this user.
     public var status: DiscordPresenceStatus

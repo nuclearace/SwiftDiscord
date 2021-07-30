@@ -16,10 +16,12 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Foundation
+
 // A gateway event from Discord.
 public enum DiscordDispatchEvent: Decodable {
     case ready(DiscordReadyEvent)
-    case resumed(DiscordResumedEvent)
+    case resumed
 
     // Messaging
     case messageCreate(DiscordMessageCreateEvent)
@@ -28,7 +30,7 @@ public enum DiscordDispatchEvent: Decodable {
     case messageReactionAdd(DiscordMessageReactionAddEvent)
     case messageReactionRemove(DiscordMessageReactionRemoveEvent)
     case messageReactionRemoveAll(DiscordMessageReactionRemoveAllEvent)
-    case messageUpdate(DiscordMessageUpdate)
+    case messageUpdate(DiscordMessageUpdateEvent)
 
     // Guilds
     case guildBanAdd(DiscordGuildBanAddEvent)
@@ -43,6 +45,7 @@ public enum DiscordDispatchEvent: Decodable {
     case guildRoleCreate(DiscordGuildRoleCreateEvent)
     case guildRoleDelete(DiscordGuildRoleDeleteEvent)
     case guildUpdate(DiscordGuildUpdateEvent)
+    case presenceUpdate(DiscordPresenceUpdateEvent)
 
     // Channels
     case channelCreate(DiscordChannelCreateEvent)
@@ -60,8 +63,10 @@ public enum DiscordDispatchEvent: Decodable {
     // Voice
     case voiceServerUpdate(DiscordVoiceServerUpdateEvent)
     case voiceStateUpdate(DiscordVoiceStateUpdateEvent)
-    case presenceUpdate(DiscordPresenceUpdateEvent)
     case typingStart(DiscordTypingStartEvent)
+
+    // Users
+    case userUpdate(DiscordUserUpdateEvent)
 
     // Webhooks
     case webhooksUpdate(DiscordWebhooksUpdateEvent)
@@ -84,14 +89,14 @@ public enum DiscordDispatchEvent: Decodable {
 
         switch type {
         case .ready: self = .ready(try container.decode(DiscordReadyEvent.self, forKey: .data))
-        case .resumed: self = .resumed(try container.decode(DiscordResumedEvent.self, forKey: .data))
+        case .resumed: self = .resumed
         case .messageCreate: self = .messageCreate(try container.decode(DiscordMessageCreateEvent.self, forKey: .data))
         case .messageDelete: self = .messageDelete(try container.decode(DiscordMessageDeleteEvent.self, forKey: .data))
         case .messageDeleteBulk: self = .messageDeleteBulk(try container.decode(DiscordMessageDeleteBulkEvent.self, forKey: .data))
         case .messageReactionAdd: self = .messageReactionAdd(try container.decode(DiscordMessageReactionAddEvent.self, forKey: .data))
         case .messageReactionRemove: self = .messageReactionRemove(try container.decode(DiscordMessageReactionRemoveEvent.self, forKey: .data))
         case .messageReactionRemoveAll: self = .messageReactionRemoveAll(try container.decode(DiscordMessageReactionRemoveAllEvent.self, forKey: .data))
-        case .messageUpdate: self = .messageUpdate(try container.decode(DiscordMessageUpdate.self, forKey: .data))
+        case .messageUpdate: self = .messageUpdate(try container.decode(DiscordMessageUpdateEvent.self, forKey: .data))
         case .guildBanAdd: self = .guildBanAdd(try container.decode(DiscordGuildBanAddEvent.self, forKey: .data))
         case .guildBanRemove: self = .guildBanRemove(try container.decode(DiscordGuildBanRemoveEvent.self, forKey: .data))
         case .guildCreate: self = .guildCreate(try container.decode(DiscordGuildCreateEvent.self, forKey: .data))
@@ -104,6 +109,7 @@ public enum DiscordDispatchEvent: Decodable {
         case .guildRoleCreate: self = .guildRoleCreate(try container.decode(DiscordGuildRoleCreateEvent.self, forKey: .data))
         case .guildRoleDelete: self = .guildRoleDelete(try container.decode(DiscordGuildRoleDeleteEvent.self, forKey: .data))
         case .guildUpdate: self = .guildUpdate(try container.decode(DiscordGuildUpdateEvent.self, forKey: .data))
+        case .presenceUpdate: self = .presenceUpdate(try container.decode(DiscordPresenceUpdateEvent.self, forKey: .data))
         case .channelCreate: self = .channelCreate(try container.decode(DiscordChannelCreateEvent.self, forKey: .data))
         case .channelDelete: self = .channelDelete(try container.decode(DiscordChannelDeleteEvent.self, forKey: .data))
         case .channelPinsUpdate: self = .channelPinsUpdate(try container.decode(DiscordChannelPinsUpdateEvent.self, forKey: .data))
@@ -115,14 +121,19 @@ public enum DiscordDispatchEvent: Decodable {
         case .threadMembersUpdate: self = .threadMembersUpdate(try container.decode(DiscordThreadMembersUpdateEvent.self, forKey: .data))
         case .voiceServerUpdate: self = .voiceServerUpdate(try container.decode(DiscordVoiceServerUpdateEvent.self, forKey: .data))
         case .voiceStateUpdate: self = .voiceStateUpdate(try container.decode(DiscordVoiceStateUpdateEvent.self, forKey: .data))
-        case .presenceUpdate: self = .presenceUpdate(try container.decode(DiscordPresenceUpdateEvent.self, forKey: .data))
         case .typingStart: self = .typingStart(try container.decode(DiscordTypingStartEvent.self, forKey: .data))
+        case .userUpdate: self = .userUpdate(try container.decode(DiscordUserUpdateEvent.self, forKey: .data))
         case .webhooksUpdate: self = .webhooksUpdate(try container.decode(DiscordWebhooksUpdateEvent.self, forKey: .data))
         case .applicationCommandCreate: self = .applicationCommandCreate(try container.decode(DiscordApplicationCommandCreateEvent.self, forKey: .data))
         case .applicationCommandUpdate: self = .applicationCommandUpdate(try container.decode(DiscordApplicationCommandUpdateEvent.self, forKey: .data))
         case .interactionCreate: self = .interactionCreate(try container.decode(DiscordInteractionCreateEvent.self, forKey: .data))
+        default: throw DiscordDispatchEventError.unknownEventType(type)
         }
     }
+}
+
+public enum DiscordDispatchEventError: Error {
+    case unknownEventType(DiscordDispatchEventType)
 }
 
 /// An enum that represents the dispatch events Discord sends.
@@ -190,6 +201,10 @@ public struct DiscordDispatchEventType: RawRepresentable, Codable, Hashable {
     public static let applicationCommandCreate = DiscordDispatchEventType(rawValue: "APPLICATION_COMMAND_CREATE")
     public static let applicationCommandUpdate = DiscordDispatchEventType(rawValue: "APPLICATION_COMMAND_UPDATE")
 
+    // Users
+    
+    public static let userUpdate = DiscordDispatchEventType(rawValue: "USER_UPDATE")
+
     // Interactions
 
     public static let interactionCreate = DiscordDispatchEventType(rawValue: "INTERACTION_CREATE")
@@ -199,6 +214,10 @@ public struct DiscordDispatchEventType: RawRepresentable, Codable, Hashable {
     }
 }
 
+public typealias DiscordMessageCreateEvent = DiscordMessage
+public typealias DiscordMessageUpdateEvent = DiscordMessage
+public typealias DiscordMessageReactionAddEvent = DiscordMessageReactionUpdateEvent
+public typealias DiscordMessageReactionRemoveEvent = DiscordMessageReactionUpdateEvent
 public typealias DiscordGuildCreateEvent = DiscordGuild
 public typealias DiscordGuildUpdateEvent = DiscordGuild
 public typealias DiscordGuildDeleteEvent = DiscordUnavailableGuild
@@ -206,6 +225,7 @@ public typealias DiscordGuildMemberAddEvent = DiscordGuildMember
 public typealias DiscordGuildMemberUpdateEvent = DiscordGuildMember
 public typealias DiscordGuildRoleCreateEvent = DiscordGuildRoleUpdateEvent
 public typealias DiscordGuildRoleDeleteEvent = DiscordGuildRoleUpdateEvent
+public typealias DiscordPresenceUpdateEvent = DiscordPresence
 public typealias DiscordChannelCreateEvent = DiscordChannel
 public typealias DiscordChannelUpdateEvent = DiscordChannel
 public typealias DiscordChannelDeleteEvent = DiscordChannel
@@ -218,6 +238,7 @@ public typealias DiscordApplicationCommandCreateEvent = DiscordApplicationComman
 public typealias DiscordApplicationCommandUpdateEvent = DiscordApplicationCommand
 public typealias DiscordApplicationCommandDeleteEvent = DiscordApplicationCommand
 public typealias DiscordInteractionCreateEvent = DiscordInteraction
+public typealias DiscordUserUpdateEvent = DiscordUser
 
 public struct DiscordReadyEvent: Codable {
     public enum CodingKeys: String, CodingKey {
@@ -344,7 +365,7 @@ public struct DiscordGuildSticksUpdateEvent: Codable {
 }
 
 /// Sent when a guild's integration is updated.
-public struct DiscordGuildIntegrationUpdateEvent: Codable {
+public struct DiscordGuildIntegrationsUpdateEvent: Codable {
     public enum CodingKeys: String, CodingKey {
         case guildId = "guild_id"
     }
@@ -409,4 +430,168 @@ public struct DiscordGuildMembersChunkEvent: Codable {
     public var presences: [DiscordPresence]?
     /// The nonce used in the Guild Members Request.
     public var nonce: String?
+}
+
+/// Sent when a message is pinned/unpinned in a text channel. Not sent if the
+/// pinned message is deleted.
+public struct DiscordChannelPinsUpdateEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case guildId = "guild_id"
+        case channelId = "channel_id"
+        case lastPinTimestamp = "last_pin_timestamp"
+    }
+
+    public var guildId: GuildID?
+    public var channelId: ChannelID
+    public var lastPinTimestamp: Date?
+}
+
+/// Sent when a message is deleted.
+public struct DiscordMessageDeleteEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case channelId = "channel_id"
+        case guildId = "guild_id"
+    }
+
+    /// The id of the message.
+    public var id: MessageID
+    /// The id of the channel.
+    public var channelId: ChannelID
+    /// The id of the guild.
+    public var guildId: GuildID?
+}
+
+/// Sent when multiple messages are deleted at once.
+public struct DiscordMessageDeleteBulkEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case ids
+        case channelId = "channel_id"
+        case guildId = "guild_id"
+    }
+
+    /// The ids of the messages.
+    public var ids: [MessageID]
+    /// The id of the channel.
+    public var channelId: ChannelID
+    /// The id of the guild.
+    public var guildId: GuildID?
+}
+
+/// Sent when a single reaction is added/removed.
+public struct DiscordMessageReactionUpdateEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case userId = "user_id"
+        case channelId = "channel_id"
+        case messageId = "message_id"
+        case guildId = "guild_id"
+        case emoji
+        case member
+    }
+
+    /// The id of the user.
+    public var userId: UserID
+    /// The id of the channel.
+    public var channelId: ChannelID
+    /// The id of the message.
+    public var messageId: MessageID
+    /// The id of the guild.
+    public var guildId: GuildID?
+    /// The member who reacted if in a guild.
+    /// Only specified on reaction additions.
+    public var member: DiscordGuildMember?
+    /// The emoji used to react.
+    public var emoji: DiscordEmoji
+}
+
+/// Sent when a user explicitly removes all reactions from a message.
+public struct DiscordMessageReactionRemoveAllEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case channelId = "channel_id"
+        case messageId = "message_id"
+        case guildId = "guild_id"
+    }
+
+    /// The id of the channel.
+    public var channelId: ChannelID
+    /// The id of the message.
+    public var messageId: MessageID
+    /// The id of the guild.
+    public var guildId: GuildID?
+}
+
+/// Sent when a user explicitly removes all reactions of a given emoji from a message.
+public struct DiscordMessageReactionRemoveEmojiEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case channelId = "channel_id"
+        case messageId = "message_id"
+        case guildId = "guild_id"
+        case emoji
+    }
+
+    /// The id of the channel.
+    public var channelId: ChannelID
+    /// The id of the message.
+    public var messageId: MessageID
+    /// The id of the guild.
+    public var guildId: GuildID?
+    /// The removed emoji.
+    public var emoji: DiscordEmoji
+}
+
+/// Sent when anyone is added/removed from a thread.
+public struct DiscordThreadMembersUpdateEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case guildId = "guild_id"
+        case memberCount = "member_count"
+        case addedMembers = "added_members"
+        case removedMemberIds = "removed_member_ids"
+    }
+
+    /// The id of the thread.
+    public var id: ChannelID
+    /// The id of the guild.
+    public var guildId: GuildID
+    /// The approximate number of members in the thread, capped at 50.
+    public var memberCount: Int
+    /// The users added to the thread.
+    public var addedMembers: [DiscordThreadMember]?
+    /// The ids of the users removed from the thread.
+    public var removedMemberIds: [UserID]?
+}
+
+/// Sent when a user starts typing in a channel.
+public struct DiscordTypingStartEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case channelId = "channel_id"
+        case guildId = "guild_id"
+        case userId = "user_id"
+        case timestamp
+        case member
+    }
+
+    /// The id of the channel.
+    public var channelId: ChannelID
+    /// The id of the guild.
+    public var guildId: GuildID?
+    /// The id of the user.
+    public var userId: UserID
+    /// The unix time in seconds of when the user started typing.
+    public var timestamp: Int
+    /// The member who started typing if this happened in a guild.
+    public var member: DiscordGuildMember?
+}
+
+/// Sent when a guild channel's webhook is created, updated or deleted.
+public struct DiscordWebhooksUpdateEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case guildId = "guild_id"
+        case channelId = "channel_id"
+    }
+
+    /// The id of the guild.
+    public var guildId: GuildID?
+    /// The id of the channel.
+    public var channelId: ChannelID
 }
