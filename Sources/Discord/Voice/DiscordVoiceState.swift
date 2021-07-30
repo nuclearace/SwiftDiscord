@@ -16,6 +16,8 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Foundation
+
 /// Used to represent a user's voice connection status.
 public struct DiscordVoiceState: Codable {
     public enum CodingKeys: String, CodingKey {
