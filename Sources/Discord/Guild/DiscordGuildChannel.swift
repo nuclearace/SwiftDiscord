@@ -128,7 +128,7 @@ extension DiscordGuildChannel {
             workingPermissions.subtract([.sendTTSMessages, .mentionEveryone, .attachFiles, .embedLinks])
         }
 
-        if !workingPermissions.contains(.readMessages) {
+        if !workingPermissions.contains(.viewChannel) {
             // If they can't read, they lose all channel based permissions
             workingPermissions.subtract(.allChannel)
         }

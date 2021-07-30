@@ -27,7 +27,7 @@ public class TestDiscordPermissions : XCTestCase {
         XCTAssertTrue(channel.canMember(permissionsTestMembers[2], .viewAuditLog), "@everyone role should be applied to all members")
         XCTAssertFalse(channel.canMember(permissionsTestMembers[4], .viewAuditLog), "@everyone permission should be overridden by permissions for a specific role")
         XCTAssertTrue(channel.canMember(permissionsTestMembers[0], .sendMessages), "Owner should override all permissions")
-        XCTAssertTrue(channel.canMember(permissionsTestMembers[1], .readMessages), "Admin role should override all permissions")
+        XCTAssertTrue(channel.canMember(permissionsTestMembers[1], .viewChannel), "Admin role should override all permissions")
         XCTAssertTrue(channel.canMember(permissionsTestMembers[4], .addReactions), "An allow override should go over a deny of the same type")
         XCTAssertTrue(channel.canMember(permissionsTestMembers[3], .addReactions), "An allow override should go over a deny of the same type even if the deny is higher on the list")
         XCTAssertFalse(channel.canMember(permissionsTestMembers[4], .sendMessages), "A role permission deny should be properly applied to a normal user")
@@ -64,7 +64,7 @@ public class TestDiscordPermissions : XCTestCase {
         DiscordPermissionOverwrite(id: GuildID(testGuild.get("id", as: String.self))!, type: .role, allow: .viewAuditLog, deny: .readMessageHistory),
         DiscordPermissionOverwrite(id: permissionsTestRoles[3].id, type: .role, allow: [], deny: [.sendMessages, .addReactions, .viewAuditLog]),
         DiscordPermissionOverwrite(id: permissionsTestRoles[2].id, type: .role, allow: .addReactions, deny: []),
-        DiscordPermissionOverwrite(id: permissionsTestRoles[0].id, type: .role, allow: [], deny: .readMessages),
+        DiscordPermissionOverwrite(id: permissionsTestRoles[0].id, type: .role, allow: [], deny: .viewChannel),
         DiscordPermissionOverwrite(id: permissionsTestRoles[1].id, type: .role, allow: [], deny: .addReactions)
     ]
 
@@ -77,9 +77,9 @@ public class TestDiscordPermissions : XCTestCase {
     ]
 
     let depencencyOverwrites = [
-        DiscordPermissionOverwrite(id: permissionsTestRoles[2].id, type: .role, allow: [], deny: .readMessages),
+        DiscordPermissionOverwrite(id: permissionsTestRoles[2].id, type: .role, allow: [], deny: .viewChannel),
         DiscordPermissionOverwrite(id: permissionsTestUsers[4].id, type: .member, allow: [.createInstantInvite, .manageChannels, .addReactions, .sendMessages, .sendTTSMessages, .manageMessages, .embedLinks, .attachFiles, .readMessageHistory, .mentionEveryone, .useExternalEmojis], deny: []),
-        DiscordPermissionOverwrite(id: permissionsTestUsers[3].id, type: .member, allow: .readMessages, deny: []),
+        DiscordPermissionOverwrite(id: permissionsTestUsers[3].id, type: .member, allow: .viewChannel, deny: []),
         DiscordPermissionOverwrite(id: permissionsTestUsers[2].id, type: .member, allow: [.sendTTSMessages, .embedLinks, .attachFiles, .mentionEveryone], deny: .sendMessages)
     ]
 
@@ -108,7 +108,7 @@ let permissionsTestUsers = ["23416345", "32564235", "4359835345", "32499342123",
     return DiscordUser(userObject: tmp)
 })
 
-let permissionsTestUserPermissions: DiscordPermission = [.createInstantInvite, .addReactions, .readMessages, .sendMessages, .readMessageHistory, .useExternalEmojis, .connect, .speak, .useVAD, .changeNickname]
+let permissionsTestUserPermissions: DiscordPermission = [.createInstantInvite, .addReactions, .viewChannel, .sendMessages, .readMessageHistory, .useExternalEmojis, .connect, .speak, .useVAD, .changeNickname]
 let permissionsTestRoles: [DiscordRole] = [
     DiscordRole(id: 2349683489545, color: 10181046, hoist: true, managed: false, mentionable: true, name: "Admin", permissions: .administrator, position: 3),
     DiscordRole(id: 32423425264343, color: 10718666, hoist: true, managed: false, mentionable: true, name: "Mod", permissions: permissionsTestUserPermissions.union([.kickMembers, .manageChannels, .viewAuditLog, .sendTTSMessages, .embedLinks, .attachFiles, .mentionEveryone, .muteMembers, .deafenMembers, .moveMembers, .manageNicknames, .manageRoles]), position: 2),
