@@ -182,3 +182,23 @@ extension Lockable {
         return getter()
     }
 }
+
+/// An immutable container storing a wrapped value on
+/// the heap. This is useful when a codable value type
+/// recursively may contain itself.
+@propertyWrapper
+public class CodableBox<Value>: Codable where Value: Codable {
+    public let wrappedValue: Value
+
+    public required init(from decoder: Decoder) throws {
+        wrappedValue = try Value.init(from: decoder)
+    }
+
+    public init(wrappedValue: Value) {
+        self.wrappedValue = wrappedValue
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        try wrappedValue.encode(to: encoder)
+    }
+}

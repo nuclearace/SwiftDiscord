@@ -21,7 +21,7 @@ import Foundation
 /// Represents a Discord chat message.
 public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable {
     // Used for `createDataForSending`
-    private struct FieldsList: Codable {
+    private struct Draft: Codable {
         enum CodingKeys: String, CodingKey {
             case content
             case tts
@@ -61,7 +61,6 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable 
         case allowedMentions = "allowed_mentions"
         case referencedMessage = "referenced_message"
         case components
-        case files
         case type
     }
 
@@ -79,16 +78,16 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable 
     // MARK: Properties
 
     /// The activity for this message, if any.
-    public let activity: MessageActivity?
+    public let activity: Activity?
 
     /// Sent with Rich-Presence messages.
-    public let application: MessageApplication?
+    public let application: DiscordApplication?
 
     /// The attachments included in this message.
     public let attachments: [DiscordAttachment]
 
     /// Who sent this message.
-    public let author: DiscordUser
+    public let author: DiscordUser?
 
     /// The snowflake id of the channel this message is on.
     public let channelId: ChannelID
@@ -124,7 +123,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable 
     public let reactions: [DiscordReaction]
 
     /// The stickers a message has.
-    public let stickers: [DiscordMessageSticker]
+    public let stickers: [DiscordSticker]
 
     /// The timestamp of this message.
     public let timestamp: Date
@@ -136,11 +135,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable 
     public let allowedMentions: DiscordAllowedMentions?
 
     /// A referenced message in an incoming message. Only present if it's a reply.
-    ///
-    /// TODO: This is actually a DiscordMessage object too, but would cause the
-    ///       value type to become recursive, which is not allowed yet (since optionals
-    ///       are value types themselves that do not box the value).
-    public let referencedMessage: [String: Any]?
+    @CodableBox public var referencedMessage: DiscordMessage?
 
     /// A referenced message in an outgoing message.
     public let messageReference: DiscordMessageReference?
@@ -150,20 +145,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable 
     public let components: [DiscordMessageComponent]?
 
     /// The type of this message.
-    public let type: MessageType
-
-    /// The channel that this message originated from. Can return nil if the channel couldn't be found.
-    public var channel: DiscordTextChannel? {
-        return client?.findChannel(fromId: channelId) as? DiscordTextChannel
-    }
-
-    /// Returns a `DiscordGuildMember` for this author, or nil if this message is not from a guild.
-    public var guildMember: DiscordGuildMember? {
-        // TODO cache this
-        guard let guild = channel?.guild else { return nil }
-
-        return guild.members[author.id]
-    }
+    public let type: DiscordMessageType
 
     let files: [DiscordFileUpload]
 
@@ -199,9 +181,9 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable 
         self.allowedMentions = allowedMentions
         self.messageReference = messageReference
         self.components = components
-        self.referencedMessage = nil
+        self._referencedMessage = .init(wrappedValue: nil)
         self.attachments = []
-        self.author = DiscordUser(userObject: [:])
+        self.author = nil
         self.channelId = 0
         self.id = 0
         self.mentionEveryone = false
@@ -246,7 +228,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable 
     // MARK: Methods
 
     func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
-        let fields = FieldsList(
+        let fields = Draft(
             content: content,
             tts: tts,
             embed: embeds.first,
@@ -254,7 +236,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable 
             messageReference: messageReference,
             components: components
         )
-        let fieldsData = JSON.encodeJSONData(fields) ?? Data()
+        let fieldsData = (try? DiscordJSON.makeEncoder().encode(fields)) ?? Data()
         if files.count > 0 {
             return .right(createMultipartBody(encodedJSON: fieldsData, files: files))
         } else {
@@ -262,68 +244,10 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable 
         }
     }
 
-    ///
-    /// Deletes this message from Discord.
-    ///
-    public func delete() {
-        channel?.deleteMessage(self)
-    }
-}
-
-public extension DiscordMessage {
-    /// Type of message
-    enum MessageType: Int, Codable {
-        /// Default.
-        case `default` = 0
-
-        /// Recipient Add.
-        case recipientAdd = 1
-
-        /// Recipient Remove.
-        case recipientRemove = 2
-
-        /// Call.
-        case call = 3
-
-        /// Channel name change.
-        case channelNameChange = 4
-
-        /// Channel icon change.
-        case channelIconChange = 5
-
-        /// Channel pinned message.
-        case channelPinnedMessage = 6
-
-        /// Guild member join.
-        case guildMemberJoin = 7
-
-        /// User premium guild subscription.
-        case userPremiumGuildSubscription = 8
-
-        /// User premium guild subscription tier 1.
-        case userPremiumGuildSubscriptionTier1 = 9
-
-        /// User premium guild subscription tier 2.
-        case userPremiumGuildSubscriptionTier2 = 10
-
-        /// User premium guild subscription tier 3.
-        case userPremiumGuildSubscriptionTier3 = 11
-
-        /// Channel follow add.
-        case channelFollowAdd = 12
-
-        /// Guild discovery disqualified.
-        case guildDiscoveryDisqualified = 14
-
-        /// Guild discovery requalified.
-        case guildDiscoveryRequalified = 15
-
-        /// Message reply.
-        case reply = 19
-    }
+    
 
     /// Represents an action that be taken on a message.
-    struct MessageActivity: Codable {
+    public struct Activity: Codable {
         /// Represents the type of activity.
         public enum ActivityType: Int, Codable {
             /// Join.
@@ -351,416 +275,57 @@ public extension DiscordMessage {
         /// The party ID for this activity
         public let partyId: String?
     }
-
-    /// Represents an application in a `DiscordMessage` object.
-    struct MessageApplication: Identifiable, Codable {
-        public enum CodingKeys: String, CodingKey {
-            case id
-            case coverImage = "cover_image"
-            case description
-            case icon
-            case name
-        }
-
-        /// The id of this application.
-        public let id: Snowflake
-
-        /// Id of the embed's image asset.
-        public let coverImage: String
-
-        /// The description of the application.
-        public let description: String
-
-        /// Id of the application's icon.
-        public let icon: String
-
-        /// The name of the application.
-        public let name: String
-    }
 }
 
-/// Represents an attachment.
-public struct DiscordAttachment: Identifiable, Codable {
-    public enum CodingKeys: String, CodingKey {
-        case id
-        case filename
-        case height
-        case proxyUrl = "proxy_url"
-        case size
-        case url
-        case width
-    }
+/// Type of message
+public enum DiscordMessageType: Int, Codable {
+    /// Default.
+    case `default` = 0
 
-    // MARK: Properties
+    /// Recipient Add.
+    case recipientAdd = 1
 
-    /// The snowflake id of this attachment.
-    public let id: AttachmentID
+    /// Recipient Remove.
+    case recipientRemove = 2
 
-    /// The name of the file.
-    public let filename: String
+    /// Call.
+    case call = 3
 
-    /// The height, if this is an image.
-    public let height: Int?
+    /// Channel name change.
+    case channelNameChange = 4
 
-    /// The proxy url for this attachment.
-    public let proxyUrl: URL
+    /// Channel icon change.
+    case channelIconChange = 5
 
-    /// The size of this attachment.
-    public let size: Int
+    /// Channel pinned message.
+    case channelPinnedMessage = 6
 
-    /// The url of this attachment.
-    public let url: URL
+    /// Guild member join.
+    case guildMemberJoin = 7
 
-    /// The width, if this is an image.
-    public let width: Int?
-}
+    /// User premium guild subscription.
+    case userPremiumGuildSubscription = 8
 
-/// Represents an embeded entity.
-public struct DiscordEmbed : Encodable {
-    var shouldIncludeNilsInJSON: Bool { return false }
-    // MARK: Nested Types
+    /// User premium guild subscription tier 1.
+    case userPremiumGuildSubscriptionTier1 = 9
 
-    /// Represents an Embed's author.
-    public struct Author: Codable {
-        private enum CodingKeys: String, CodingKey {
-            case name
-            case iconUrl = "icon_url"
-            case proxyIconUrl = "proxy_icon_url"
-            case url
-        }
-        // MARK: Properties
+    /// User premium guild subscription tier 2.
+    case userPremiumGuildSubscriptionTier2 = 10
 
-        /// The name for this author.
-        public var name: String
+    /// User premium guild subscription tier 3.
+    case userPremiumGuildSubscriptionTier3 = 11
 
-        /// The icon for this url.
-        public var iconUrl: URL?
+    /// Channel follow add.
+    case channelFollowAdd = 12
 
-        /// The proxy url for the icon.
-        public let proxyIconUrl: URL?
+    /// Guild discovery disqualified.
+    case guildDiscoveryDisqualified = 14
 
-        /// The url of this author.
-        public var url: URL?
+    /// Guild discovery requalified.
+    case guildDiscoveryRequalified = 15
 
-        ///
-        /// Creates an Author object.
-        ///
-        /// - parameter name: The name of this author.
-        /// - parameter iconUrl: The iconUrl for this author's icon.
-        /// - parameter url: The url for this author.
-        ///
-        public init(name: String, iconUrl: URL? = nil, url: URL? = nil) {
-            self.name = name
-            self.iconUrl = iconUrl
-            self.url = url
-            self.proxyIconUrl = nil
-        }
-
-        /// For testing
-        init(name: String, iconURL: URL?, url: URL?, proxyIconURL: URL?) {
-            self.name = name
-            self.iconUrl = iconURL
-            self.url = url
-            self.proxyIconUrl = proxyIconURL
-        }
-    }
-
-    /// Represents an Embed's fields.
-    public struct Field: Codable {
-        // MARK: Properties
-
-        /// The name of the field.
-        public var name: String
-
-        /// The value of the field.
-        public var value: String
-
-        /// Whether this field should be inlined
-        public var inline: Bool
-
-        // MARK: Initializers
-
-        ///
-        /// Creates a Field object.
-        ///
-        /// - parameter name: The name of this field.
-        /// - parameter value: The value of this field.
-        /// - parameter inline: Whether this field can be inlined.
-        ///
-        public init(name: String, value: String, inline: Bool = false) {
-            self.name = name
-            self.value = value
-            self.inline = inline
-        }
-    }
-
-    /// Represents an Embed's footer.
-    public struct Footer: Codable {
-        private enum CodingKeys : String, CodingKey {
-            case text
-            case iconUrl = "icon_url"
-            case proxyIconUrl = "proxy_icon_url"
-        }
-        // MARK: Properties
-
-        /// The text for this footer.
-        public var text: String?
-
-        /// The icon for this url.
-        public var iconUrl: URL?
-
-        /// The proxy url for the icon.
-        public let proxyIconUrl: URL?
-
-        ///
-        /// Creates a Footer object.
-        ///
-        /// - parameter text: The text of this field.
-        /// - parameter iconUrl: The iconUrl of this field.
-        ///
-        public init(text: String?, iconUrl: URL? = nil) {
-            self.text = text
-            self.iconUrl = iconUrl
-            self.proxyIconUrl = nil
-        }
-
-        /// For testing
-        init(text: String?, iconURL: URL?, proxyIconURL: URL?) {
-            self.text = text
-            self.iconUrl = iconURL
-            self.proxyIconUrl = proxyIconURL
-        }
-    }
-
-    /// Represents an Embed's image.
-    public struct Image: Codable {
-        // MARK: Properties
-
-        /// The height of this image.
-        public let height: Int
-
-        /// The url of this image.
-        public var url: URL
-
-        /// The width of this image.
-        public let width: Int
-
-        ///
-        /// Creates an Image object.
-        ///
-        /// - parameter url: The url for this field.
-        ///
-        public init(url: URL) {
-            self.height = -1
-            self.url = url
-            self.width = -1
-        }
-
-        /// For Testing
-        init(url: URL, width: Int, height: Int) {
-            self.url = url
-            self.width = width
-            self.height = height
-        }
-    }
-
-    /// Represents what is providing the content of an embed.
-    public struct Provider : Encodable {
-        // MARK: Properties
-
-        /// The name of this provider.
-        public let name: String
-
-        /// The url of this provider.
-        public let url: URL?
-    }
-
-    /// Represents the thumbnail of an embed.
-    public struct Thumbnail: Codable {
-        private enum CodingKeys: String, CodingKey {
-            case height
-            case proxyUrl = "proxy_url"
-            case url
-            case width
-        }
-        // MARK: Properties
-
-        /// The height of this image.
-        public let height: Int
-
-        /// The proxy url for this image.
-        public let proxyUrl: URL?
-
-        /// The url for this image.
-        public var url: URL
-
-        /// The width of this image.
-        public let width: Int
-
-        ///
-        /// Creates a Thumbnail object.
-        ///
-        /// - parameter url: The url for this field
-        ///
-        public init(url: URL) {
-            self.url = url
-            self.height = -1
-            self.width = -1
-            self.proxyUrl = nil
-        }
-
-        /// For testing
-        init(url: URL, width: Int, height: Int, proxyURL: URL?) {
-            self.url = url
-            self.width = width
-            self.height = height
-            self.proxyUrl = proxyURL
-        }
-    }
-
-    /// Represents the video of an embed.
-    /// Note: Discord does not accept these, so they are read-only
-    public struct Video: Codable {
-        /// The height of this video
-        public let height: Int
-
-        /// The url for this video
-        public let url: URL
-
-        /// The width of this video
-        public let width: Int
-    }
-
-    // MARK: Properties
-
-    /// The author of this embed.
-    public var author: Author?
-
-    /// The color of this embed.
-    public var color: Int?
-
-    /// The description of this embed.
-    public var description: String?
-
-    /// The footer for this embed.
-    public var footer: Footer?
-
-    /// The image for this embed.
-    public var image: Image?
-
-    /// The provider of this embed.
-    public let provider: Provider?
-
-    /// The thumbnail of this embed.
-    public var thumbnail: Thumbnail?
-
-    /// The timestamp of this embed.
-    public var timestamp: Date?
-
-    /// The title of this embed.
-    public var title: String?
-
-    /// The type of this embed.
-    public let type: String
-
-    /// The url of this embed.
-    public var url: URL?
-
-    /// The video of this embed.
-    /// This is read-only, as bots cannot embed videos
-    public var video: Video?
-
-    /// The embed's fields
-    public var fields: [Field]
-
-    // MARK: Initializers
-
-    ///
-    /// Creates an Embed object.
-    ///
-    /// - parameter title: The title of this embed.
-    /// - parameter description: The description of this embed.
-    /// - parameter author: The author of this embed.
-    /// - parameter url: The url for this embed, if there is one.
-    /// - parameter image: The image for the embed, if there is one.
-    /// - parameter timestamp: The timestamp of this embed, if there is one.
-    /// - parameter thumbnail: The thumbnail of this embed, if there is one.
-    /// - parameter color: The color of this embed.
-    /// - parameter footer: The footer for this embed, if there is one.
-    /// - parameter fields: The list of fields for this embed, if there are any.
-    ///
-    public init(title: String? = nil,
-                description: String? = nil,
-                author: Author? = nil,
-                url: URL? = nil,
-                image: Image? = nil,
-                timestamp: Date? = nil,
-                thumbnail: Thumbnail? = nil,
-                color: Int? = nil,
-                footer: Footer? = nil,
-                fields: [Field] = []) {
-        self.title = title
-        self.author = author
-        self.description = description
-        self.provider = nil
-        self.thumbnail = thumbnail
-        self.timestamp = timestamp
-        self.type = "rich"
-        self.url = url
-        self.image = image
-        self.color = color
-        self.footer = footer
-        self.fields = fields
-    }
-
-    init(embedObject: [String: Any]) {
-        author = Author(authorObject: embedObject.get("author", or: nil))
-        description = embedObject.get("description", or: nil)
-        provider = Provider(providerObject: embedObject.get("provider", or: nil))
-        timestamp = embedObject.get("timestamp", as: String.self).flatMap(DiscordDateFormatter.format)
-        thumbnail = Thumbnail(thumbnailObject: embedObject.get("thumbnail", or: nil))
-        title = embedObject.get("title", or: nil)
-        type = embedObject.get("type", or: "")
-        url = URL(string: embedObject.get("url", or: ""))
-        image = Image(imageObject: embedObject.get("image", or: nil))
-        fields = Field.fieldsFromArray(embedObject.get("fields", or: []))
-        color = embedObject.get("color", or: nil)
-        footer = Footer(footerObject: embedObject.get("footer", or: nil))
-        video = Video(videoObject: embedObject.get("video", or: nil))
-    }
-
-    static func embedsFromArray(_ embedsArray: [[String: Any]]) -> [DiscordEmbed] {
-        return embedsArray.map(DiscordEmbed.init)
-    }
-}
-
-/// Represents a file to be uploaded to Discord.
-public struct DiscordFileUpload {
-    // MARK: Properties
-
-    /// The file data.
-    public let data: Data
-
-    /// The filename.
-    public let filename: String
-
-    /// The mime type.
-    public let mimeType: String
-
-    // MARK: Initializers
-
-    ///
-    /// Constructs a new DiscordFileUpload.
-    ///
-    /// - parameter data: The file data
-    /// - parameter filename: The filename
-    /// - parameter mimeType: The mime type
-    ///
-    public init(data: Data, filename: String, mimeType: String) {
-        self.data = data
-        self.filename = filename
-        self.mimeType = mimeType
-    }
+    /// Message reply.
+    case reply = 19
 }
 
 /// Represents a message reaction.
@@ -932,7 +497,7 @@ public struct DiscordMessageComponentEmoji: Codable, Identifiable {
     }
 }
 
-public struct DiscordMessageComponentButtonStyle : RawRepresentable, Hashable, Codable {
+public struct DiscordMessageComponentButtonStyle: RawRepresentable, Hashable, Codable {
     public let rawValue: Int
 
     public static let primary = DiscordMessageComponentButtonStyle(rawValue: 1)
@@ -944,40 +509,4 @@ public struct DiscordMessageComponentButtonStyle : RawRepresentable, Hashable, C
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
-}
-
-public enum DiscordMessageStickerFormatType: Int, Codable {
-    case png = 1
-    case apng = 2
-    case lottie = 3
-}
-
-public struct DiscordMessageSticker: Identifiable, Codable {
-    public enum CodingKeys: String, CodingKey {
-        case id
-        case packId = "pack_id"
-        case name
-        case description
-        case tags
-        case asset
-        case previewAsset = "preview_asset"
-        case formatType = "format_type"
-    }
-
-    /// ID of the sticker
-    public let id: Snowflake
-    /// ID of the sticker pack
-    public let packId: Snowflake
-    /// Name of the sticker
-    public let name: String
-    /// Description of the sticker
-    public let description: String
-    /// List of tags for the sticker
-    public let tags: [String]
-    /// Sticker asset hash
-    public let asset: String?
-    /// Sticker preview asset hash
-    public let previewAsset: String?
-    /// Type of sticker format
-    public let formatType: DiscordMessageStickerFormatType?
 }
