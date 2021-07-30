@@ -232,6 +232,7 @@ public class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
         case .channelUpdate(let e): handleChannelUpdate(with: e)
         case .channelCreate(let e): handleChannelCreate(with: e)
         case .channelDelete(let e): handleChannelDelete(with: e)
+        case .voiceStateUpdate(let e): handleVoiceStateUpdate(with: e)
         case .interactionCreate(let e): handleInteractionCreate(with: e)
         case .ready(let e): handleReady(with: e)
         default: delegate?.client(self, didNotHandleDispatchEvent: event)
@@ -387,6 +388,43 @@ public class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
         logger.debug("(verbose) Removed channel: \(removedChannel)")
 
         delegate?.client(self, didDeleteChannel: removedChannel)
+    }
+
+    ///
+    /// Handles voice state updates from Discord. You shouldn't need to call this method directly.
+    ///
+    /// Override to provide additional customization around this event.
+    ///
+    /// Calls the `didReceiveVoiceStateUpdate` delegate method.
+    ///
+    /// - parameter with: The data from the event
+    ///
+    func handleVoiceStateUpdate(with data: [String: Any]) {
+        logger.info("Handling voice state update")
+
+        guard let guildId = Snowflake(data["guild_id"] as? String) else { return }
+
+        let state = DiscordVoiceState(voiceStateObject: data, guildId: guildId)
+
+        logger.debug("Voice state: \(state)")
+
+        if state.channelId == 0 {
+            guilds[guildId]?.voiceStates[state.userId] = nil
+        } else {
+            guilds[guildId]?.voiceStates[state.userId] = state
+        }
+
+        if state.userId == user?.id {
+            if state.channelId == 0 {
+                voiceManager.protected { self.voiceManager.voiceStates[state.guildId] = nil }
+            } else {
+                voiceManager.protected { self.voiceManager.voiceStates[state.guildId] = state }
+
+                startVoiceConnection(state.guildId)
+            }
+        }
+
+        delegate?.client(self, didReceiveVoiceStateUpdate: state)
     }
 
     ///

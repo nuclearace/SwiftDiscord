@@ -210,6 +210,14 @@ public protocol DiscordClientDelegate : AnyObject {
     func client(_ client: DiscordClient, didReceiveReady readyData: [String: Any])
 
     ///
+    /// Called when the client receives a voice state update.
+    ///
+    /// - parameter client: The client that is calling.
+    /// - parameter didReceiveVoiceStateUpdate: The voice state that was received.
+    ///
+    func client(_ client: DiscordClient, didReceiveVoiceStateUpdate voiceState: DiscordVoiceState)
+
+    ///
     /// Called when the client handles a guild member chunk.
     ///
     /// - parameter client: The client that is calling.
@@ -304,6 +312,9 @@ public extension DiscordClientDelegate {
 
     /// Default.
     func client(_ client: DiscordClient, didReceiveReady readyData: [String: Any]) { }
+
+    /// Default.
+    func client(_ client: DiscordClient, didReceiveVoiceStateUpdate voiceState: DiscordVoiceState) { }
 
     /// Default.
     func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: DiscordLazyDictionary<UserID, DiscordGuildMember>,
