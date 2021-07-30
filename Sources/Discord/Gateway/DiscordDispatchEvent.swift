@@ -34,6 +34,7 @@ public enum DiscordDispatchEvent: Decodable {
     case guildBanAdd(DiscordGuildBanAddEvent)
     case guildBanRemove(DiscordGuildBanRemoveEvent)
     case guildCreate(DiscordGuildCreateEvent)
+    case guildDelete(DiscordGuildDeleteEvent)
     case guildEmojisUpdate(DiscordGuildEmojisUpdateEvent)
     case guildIntegrationsUpdate(DiscordGuildIntegrationsUpdateEvent)
     case guildMemberAdd(DiscordGuildMemberAddEvent)
@@ -94,6 +95,7 @@ public enum DiscordDispatchEvent: Decodable {
         case .guildBanAdd: self = .guildBanAdd(try container.decode(DiscordGuildBanAddEvent.self, forKey: .data))
         case .guildBanRemove: self = .guildBanRemove(try container.decode(DiscordGuildBanRemoveEvent.self, forKey: .data))
         case .guildCreate: self = .guildCreate(try container.decode(DiscordGuildCreateEvent.self, forKey: .data))
+        case .guildDelete: self = .guildDelete(try container.decode(DiscordGuildDeleteEvent.self, forKey: .data))
         case .guildEmojisUpdate: self = .guildEmojisUpdate(try container.decode(DiscordGuildEmojisUpdateEvent.self, forKey: .data))
         case .guildIntegrationsUpdate: self = .guildIntegrationsUpdate(try container.decode(DiscordGuildIntegrationsUpdateEvent.self, forKey: .data))
         case .guildMemberAdd: self = .guildMemberAdd(try container.decode(DiscordGuildMemberAddEvent.self, forKey: .data))
@@ -197,12 +199,25 @@ public struct DiscordDispatchEventType: RawRepresentable, Codable, Hashable {
     }
 }
 
+public typealias DiscordGuildCreateEvent = DiscordGuild
+public typealias DiscordGuildUpdateEvent = DiscordGuild
+public typealias DiscordGuildDeleteEvent = DiscordUnavailableGuild
+public typealias DiscordGuildMemberAddEvent = DiscordGuildMember
+public typealias DiscordGuildMemberUpdateEvent = DiscordGuildMember
+public typealias DiscordGuildRoleCreateEvent = DiscordGuildRoleUpdateEvent
+public typealias DiscordGuildRoleDeleteEvent = DiscordGuildRoleUpdateEvent
 public typealias DiscordChannelCreateEvent = DiscordChannel
 public typealias DiscordChannelUpdateEvent = DiscordChannel
 public typealias DiscordChannelDeleteEvent = DiscordChannel
 public typealias DiscordThreadCreateEvent = DiscordChannel
 public typealias DiscordThreadUpdateEvent = DiscordChannel
 public typealias DiscordThreadDeleteEvent = DiscordChannel
+public typealias DiscordThreadMemberUpdateEvent = DiscordThreadMember
+public typealias DiscordVoiceStateUpdateEvent = DiscordVoiceState
+public typealias DiscordApplicationCommandCreateEvent = DiscordApplicationCommand
+public typealias DiscordApplicationCommandUpdateEvent = DiscordApplicationCommand
+public typealias DiscordApplicationCommandDeleteEvent = DiscordApplicationCommand
+public typealias DiscordInteractionCreateEvent = DiscordInteraction
 
 public struct DiscordReadyEvent: Codable {
     public enum CodingKeys: String, CodingKey {
@@ -234,4 +249,164 @@ public struct DiscordReadyEvent: Codable {
 
     /// The partial application object (contains `id` and `flags`).
     public var application: DiscordApplication
+}
+
+/// Sent when a guild's voixce server is updated.
+public struct DiscordVoiceServerUpdateEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case token
+        case guildId = "guild_id"
+        case endpoint
+    }
+
+    /// The voice connection token.
+    public var token: String
+
+    /// The guild this voice server update is for.
+    public var guildId: GuildID?
+
+    /// The voice server host.
+    public var endpoint: String?
+}
+
+/// Sent when the current user *gains* access to a channel
+public struct DiscordThreadListSyncEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case guildId = "guild_id"
+        case channelIds = "channel_ids"
+        case threads
+        case members
+    }
+
+    /// The id of the guild.
+    public var guildId: GuildID?
+    /// The parent channel ids whose threads are being synced. If omitted, then
+    /// threads were synced for the entire guild. This array may contain channel_ids
+    /// that have no active threads as well, so you know to clear that data.
+    public var channelIds: [ChannelID]?
+    /// All active threads in the given channels that the current user can access.
+    public var threads: [DiscordChannel]
+    /// All thread member objects from the synced threads for the current user,
+    /// indicating which threads the current user has been added to.
+    public var members: [DiscordThreadMember]
+}
+
+/// Sent when a user is banned from a guild.
+public struct DiscordGuildBanAddEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case guildId = "guild_id"
+        case user
+    }
+
+    /// The id of the guild.
+    public var guildId: GuildID
+    /// The banned user.
+    public var user: DiscordUser
+}
+
+/// Sent when a user is unbanned from a guild.
+public struct DiscordGuildBanRemoveEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case guildId = "guild_id"
+        case user
+    }
+
+    /// The id of the guild.
+    public var guildId: GuildID
+    /// The banned user.
+    public var user: DiscordUser
+}
+
+/// Sent when a guild's emojis have been updated.
+public struct DiscordGuildEmojisUpdateEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case guildId = "guild_id"
+        case emojis
+    }
+
+    /// The id of the guild.
+    public var guildId: GuildID
+    /// The emojis updated.
+    public var emojis: [DiscordEmoji]
+}
+
+/// Sent when a guild's stickers have been updated.
+public struct DiscordGuildSticksUpdateEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case guildId = "guild_id"
+        case stickers
+    }
+
+    /// The id of the guild.
+    public var guildId: GuildID
+    /// The stickers updated.
+    public var stickers: [DiscordSticker]
+}
+
+/// Sent when a guild's integration is updated.
+public struct DiscordGuildIntegrationUpdateEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case guildId = "guild_id"
+    }
+
+    /// The id of the guild.
+    public var guildId: GuildID
+}
+
+/// Sent when a user is removed from a guild (leave/kick/ban):
+public struct DiscordGuildMemberRemoveEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case guildId = "guild_id"
+        case user
+    }
+
+    /// The id of the guild.
+    public var guildId: GuildID
+    /// The user who was removed.
+    public var user: DiscordUser
+}
+
+/// Sent when a role is created/updated/removed on a guild.
+public struct DiscordGuildRoleUpdateEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case guildId = "guild_id"
+        case role
+    }
+
+    /// The id of the guild.
+    public var guildId: GuildID
+    /// The role.
+    public var role: DiscordRole
+}
+
+/// Sent in response to Guild Request Members. You can use `chunk_index` and `chunk_count`
+/// to calculate how many chunks are left for your request.
+public struct DiscordGuildMembersChunkEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case guildId = "guild_id"
+        case members
+        case chunkIndex = "chunk_index"
+        case chunkCount = "chunk_count"
+        case notFound = "not_found"
+        case presences
+        case nonce
+    }
+
+    /// The id of the guild.
+    public var guildId: GuildID?
+    /// Set of guild members.
+    public var members: [DiscordGuildMember]
+    /// The chunk index in the expected chunks for this response
+    /// (0 <= chunkIndex < chunkCount).
+    public var chunkIndex: Int
+    /// The total number of expected chunks for this response.
+    public var chunkCount: Int
+    /// When passing an invalid id to the Guild Members Request, it will
+    /// be returned here.
+    public var notFound: [Snowflake]?
+    /// When passing true to the Guild Members Request, presences of the
+    /// returned members.
+    public var presences: [DiscordPresence]?
+    /// The nonce used in the Guild Members Request.
+    public var nonce: String?
 }
