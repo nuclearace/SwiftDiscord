@@ -56,13 +56,13 @@ public struct DiscordToken: RawRepresentable, Codable, ExpressibleByStringLitera
     public let rawValue: String
 
     /// CustomStringConvertible conformance. Same as `token`.
-    public var description: String { token }
+    public var description: String { rawValue }
 
     /// Whether this token is a bot token.
-    public var isBot: Bool { token.hasPrefix("Bot") }
+    public var isBot: Bool { rawValue.hasPrefix("Bot") }
 
     /// Whether this token is an OAuth token.
-    public var isBearer: Bool { token.hasPrefix("Bearer") }
+    public var isBearer: Bool { rawValue.hasPrefix("Bearer") }
 
     /// Whether this token is a user token.
     public var isUser: Bool { !(isBot || isBearer) }
