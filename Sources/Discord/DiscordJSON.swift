@@ -24,43 +24,20 @@ import Logging
 
 fileprivate let logger = Logger(label: "DiscordJSON")
 
-enum JSON {
-    case array([Any])
-    case object([String: Any])
-
-    static func encodeJSONData<T: Encodable>(_ object: T) -> Data? {
+enum DiscordJSON {
+    static func makeEncoder() -> JSONEncoder {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .formatted(DiscordDateFormatter.rfc3339DateFormatter)
-        do {
-            return try encoder.encode(object)
-        } catch let error as EncodingError {
-            logger.error("Failed to encode json \(object): \(error.localizedDescription)")
-            return nil
-        } catch {
-            logger.error("Failed to encode json \(object): \(error)")
-            return nil
-        }
+        return encoder
     }
 
-    static func encodeJSON<T: Encodable>(_ object: T) -> String? {
-        return encodeJSONData(object).flatMap({ String(data: $0, encoding: .utf8) })
+    static func makeDecoder() -> JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(DiscordDateFormatter.rfc3339DateFormatter)
+        return decoder
     }
 
-    static func decodeJSON(_ string: String) -> JSON? {
-        guard let data = string.data(using: .utf8, allowLossyConversion: false) else { return nil }
-        guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) else { return nil }
-
-        switch json {
-        case let dictionary as [String: Any]:
-            return .object(dictionary)
-        case let array as [Any]:
-            return .array(array)
-        default:
-            return nil
-        }
-    }
-
-    static func jsonFromResponse(data: Data?, response: HTTPURLResponse?) -> JSON? {
+    static func decodeResponse<T>(data: Data?, response: HTTPURLResponse?) -> T? where T: Decodable {
         guard let response = response else {
             logger.error("No response from jsonFromResponse")
 
@@ -86,13 +63,11 @@ enum JSON {
             return nil
         }
 
-        return JSON.decodeJSON(stringData)
+        do {
+            return try makeDecoder().decode(T.self, from: data)
+        } catch {
+            logger.error("Could not decode JSON: \(error)")
+            return nil
+        }
     }
 }
-
-typealias JSONArray = [[String: Any]]
-
-enum JSONError : Error {
-    case collectionError // Thrown when elements in the collection are not representable by json
-}
-
