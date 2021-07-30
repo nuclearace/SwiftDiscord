@@ -94,32 +94,26 @@ public enum DiscordGatewayEventError: Error {
     case unrecognizedOpcode(DiscordGatewayOpcode)
 }
 
-/// Represents a regular gateway opcode
-public enum DiscordGatewayOpcode: Int, Codable {
-    /// Dispatch.
-    case dispatch = 0
-    /// Heartbeat.
-    case heartbeat = 1
-    /// Identify.
-    case identify = 2
-    /// Presence Update.
-    case presenceUpdate = 3
-    /// Voice Status Update.
-    case voiceStatusUpdate = 4
-    /// Voice Server Ping.
-    case voiceServerPing = 5
-    /// Resume.
-    case resume = 6
-    /// Reconnect.
-    case reconnect = 7
-    /// Request Guild Members.
-    case requestGuildMembers = 8
-    /// Invalid Session.
-    case invalidSession = 9
-    /// Hello.
-    case hello = 10
-    /// HeartbeatAck
-    case heartbeatAck = 11
+/// Represents a regular gateway opcode.
+public struct DiscordGatewayOpcode: RawRepresentable, Codable, Hashable {
+    public var rawValue: Int
+
+    public static let dispatch = DiscordGatewayOpcode(rawValue: 0)
+    public static let heartbeat = DiscordGatewayOpcode(rawValue: 1)
+    public static let identify = DiscordGatewayOpcode(rawValue: 2)
+    public static let presenceUpdate = DiscordGatewayOpcode(rawValue: 3)
+    public static let voiceStatusUpdate = DiscordGatewayOpcode(rawValue: 4)
+    public static let voiceServerPing = DiscordGatewayOpcode(rawValue: 5)
+    public static let resume = DiscordGatewayOpcode(rawValue: 6)
+    public static let reconnect = DiscordGatewayOpcode(rawValue: 7)
+    public static let requestGuildMembers = DiscordGatewayOpcode(rawValue: 8)
+    public static let invalidSession = DiscordGatewayOpcode(rawValue: 9)
+    public static let hello = DiscordGatewayOpcode(rawValue: 10)
+    public static let heartbeatAck = DiscordGatewayOpcode(rawValue: 11)
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
 }
 
 /// Used to maintain an active gateway connection. Must be sent

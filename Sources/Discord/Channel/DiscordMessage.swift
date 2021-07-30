@@ -277,55 +277,46 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable 
     }
 }
 
-/// Type of message
-public enum DiscordMessageType: Int, Codable {
+/// The type of a message.
+public struct DiscordMessageType: RawRepresentable, Codable, Hashable {
+    public var rawValue: Int
+
     /// Default.
-    case `default` = 0
-
+    public static let `default` = DiscordMessageType(rawValue: 0)
     /// Recipient Add.
-    case recipientAdd = 1
-
+    public static let recipientAdd = DiscordMessageType(rawValue: 1)
     /// Recipient Remove.
-    case recipientRemove = 2
-
+    public static let recipientRemove = DiscordMessageType(rawValue: 2)
     /// Call.
-    case call = 3
-
+    public static let call = DiscordMessageType(rawValue: 3)
     /// Channel name change.
-    case channelNameChange = 4
-
+    public static let channelNameChange = DiscordMessageType(rawValue: 4)
     /// Channel icon change.
-    case channelIconChange = 5
-
+    public static let channelIconChange = DiscordMessageType(rawValue: 5)
     /// Channel pinned message.
-    case channelPinnedMessage = 6
-
+    public static let channelPinnedMessage = DiscordMessageType(rawValue: 6)
     /// Guild member join.
-    case guildMemberJoin = 7
-
+    public static let guildMemberJoin = DiscordMessageType(rawValue: 7)
     /// User premium guild subscription.
-    case userPremiumGuildSubscription = 8
-
+    public static let userPremiumGuildSubscription = DiscordMessageType(rawValue: 8)
     /// User premium guild subscription tier 1.
-    case userPremiumGuildSubscriptionTier1 = 9
-
+    public static let userPremiumGuildSubscriptionTier1 = DiscordMessageType(rawValue: 9)
     /// User premium guild subscription tier 2.
-    case userPremiumGuildSubscriptionTier2 = 10
-
+    public static let userPremiumGuildSubscriptionTier2 = DiscordMessageType(rawValue: 10)
     /// User premium guild subscription tier 3.
-    case userPremiumGuildSubscriptionTier3 = 11
-
+    public static let userPremiumGuildSubscriptionTier3 = DiscordMessageType(rawValue: 11)
     /// Channel follow add.
-    case channelFollowAdd = 12
-
+    public static let channelFollowAdd = DiscordMessageType(rawValue: 12)
     /// Guild discovery disqualified.
-    case guildDiscoveryDisqualified = 14
-
+    public static let guildDiscoveryDisqualified = DiscordMessageType(rawValue: 14)
     /// Guild discovery requalified.
-    case guildDiscoveryRequalified = 15
-
+    public static let guildDiscoveryRequalified = DiscordMessageType(rawValue: 15)
     /// Message reply.
-    case reply = 19
+    public static let reply = DiscordMessageType(rawValue: 19)
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
 }
 
 /// Represents a message reaction.

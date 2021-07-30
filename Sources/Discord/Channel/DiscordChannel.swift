@@ -146,38 +146,34 @@ public struct DiscordChannel: Codable, Identifiable {
 }
 
 /// Represents the type of a channel.
-public enum DiscordChannelType: Int, Codable {
+public struct DiscordChannelType: RawRepresentable, Codable, Hashable {
+    public var rawValue: Int
+
     /// A guild text channel.
-    case text = 0
-
+    public static let text = DiscordChannelType(rawValue: 0)
     /// A direct message channel.
-    case direct = 1
-
+    public static let direct = DiscordChannelType(rawValue: 1)
     /// A voice channel within a guild.
-    case voice = 2
-
+    public static let voice = DiscordChannelType(rawValue: 2)
     /// A group direct message.
-    case groupDM = 3
-
+    public static let groupDM = DiscordChannelType(rawValue: 3)
     /// An organizational category in a guild that contains up to 50 channels.
-    case category = 4
-
+    public static let category = DiscordChannelType(rawValue: 4)
     /// A channel that users can follow in their own guild.
-    case news = 5
-
+    public static let news = DiscordChannelType(rawValue: 5)
     /// A channel in which game devs can sell their games on Discord.
-    case store = 6
-
+    public static let store = DiscordChannelType(rawValue: 6)
     /// A temporary sub-channel in a guild news channel.
-    case newsThread = 10
-
+    public static let newsThread = DiscordChannelType(rawValue: 10)
     /// A temporary sub-channel within a guild text channel.
-    case publicThread = 11
-
+    public static let publicThread = DiscordChannelType(rawValue: 11)
     /// A temporary sub-channel in a guild text channel that is only viewable
     /// by those invited and those with the 'manage threads' permission.
-    case privateThread = 12
-
+    public static let privateThread = DiscordChannelType(rawValue: 12)
     /// A guild voice channel for hosting events with an audience.
-    case stageVoice = 13
+    public static let stageVoice = DiscordChannelType(rawValue: 13)
+
+    public init(rawValue: Int) {
+        self.rawValue =rawValue
+    }
 }
