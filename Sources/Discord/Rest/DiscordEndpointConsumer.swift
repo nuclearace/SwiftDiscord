@@ -613,25 +613,24 @@ public protocol DiscordEndpointConsumer {
     /// Gets the direct message channels for a user.
     ///
     /// - parameter user: Our snowflake id
-    /// - parameter callback: The callback function, taking a dictionary of `DiscordChannel` associated by
-    ///                       the recipient's id
+    /// - parameter callback: The callback function, taking the channels
     ///
-    func getDMs(callback: @escaping (DiscordIDDictionary<DiscordChannel>, HTTPURLResponse?) -> ())
+    func getDMs(callback: @escaping ([DiscordChannel], HTTPURLResponse?) -> ())
 
     ///
     /// Gets guilds the user is in.
     ///
     /// - parameter user: Our snowflake id
-    /// - parameter callback: The callback function, taking a dictionary of `DiscordUserGuild` associated by guild id
+    /// - parameter callback: The callback function, taking the guilds
     ///
-    func getGuilds(callback: @escaping (DiscordIDDictionary<DiscordUserGuild>, HTTPURLResponse?) -> ())
+    func getGuilds(callback: @escaping ([DiscordUserGuild], HTTPURLResponse?) -> ())
 
     // MARK: Applications
 
     ///
     /// Gets the global slash-commands of a user.
     ///
-    /// - parameter callback: The callback function, taking a dictionary of commands.
+    /// - parameter callback: The callback function, taking the commands
     ///
     func getApplicationCommands(callback: @escaping ([DiscordApplicationCommand], HTTPURLResponse?) -> ())
 
