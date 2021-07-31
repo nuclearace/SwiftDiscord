@@ -25,13 +25,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func acceptInvite(_ invite: String,
                              callback: ((DiscordInvite?, HTTPURLResponse?) -> ())? = nil) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(invite)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let invite: DiscordInvite = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback?(nil, response)
 
                 return
             }
 
-            callback?(DiscordInvite(inviteObject: invite), response)
+            callback?(invite, response)
         }
 
         rateLimiter.executeRequest(endpoint: .invites(code: invite),
@@ -51,13 +51,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(invite)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let invite: DiscordInvite = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback?(nil, response)
 
                 return
             }
 
-            callback?(DiscordInvite(inviteObject: invite), response)
+            callback?(invite, response)
         }
 
         rateLimiter.executeRequest(endpoint: .invites(code: invite),
@@ -70,13 +70,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func getInvite(_ invite: String,
                           callback: @escaping (DiscordInvite?, HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(invite)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let invite: DiscordInvite = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback(nil, response)
 
                 return
             }
 
-            callback(DiscordInvite(inviteObject: invite), response)
+            callback(invite, response)
         }
 
         rateLimiter.executeRequest(endpoint: .invites(code: invite),
