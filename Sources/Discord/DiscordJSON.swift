@@ -37,6 +37,14 @@ enum DiscordJSON {
         return decoder
     }
 
+    static func encode<T>(_ value: T) throws -> Data where T: Encodable {
+        try makeEncoder().encode(value)
+    }
+
+    static func decode<T>(_ data: Data) throws -> T where T: Decodable {
+        try makeDecoder().decode(T.self, from: data)
+    }
+
     static func decodeResponse<T>(data: Data?, response: HTTPURLResponse?) -> T? where T: Decodable {
         guard let response = response else {
             logger.error("No response from jsonFromResponse")
