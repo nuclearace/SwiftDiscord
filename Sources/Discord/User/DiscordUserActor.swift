@@ -26,9 +26,6 @@ public protocol DiscordUserActor {
     /// The guilds that this user is in.
     var guilds: DiscordIDDictionary<DiscordGuild> { get }
 
-    /// The relationships this user has. Only valid for non-bot users.
-    var relationships: [[String: Any]] { get }
-
     /// The Discord JWT for the user.
     var token: DiscordToken { get }
 

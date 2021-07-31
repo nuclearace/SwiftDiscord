@@ -17,14 +17,21 @@
 
 /// An ID-indexed dictionary that serializes to an array
 /// while enabling efficiently indexed access to the elements.
-public struct DiscordIDDictionary<Value: Identifiable>: ExpressibleByDictionaryLiteral, Sequence {
+public struct DiscordIDDictionary<Value: Identifiable>: ExpressibleByDictionaryLiteral, CustomStringConvertible, Sequence {
     private var backingDictionary: [Value.ID: Value]
 
     public var keys: Dictionary<Value.ID, Value>.Keys { backingDictionary.keys }
     public var values: Dictionary<Value.ID, Value>.Values { backingDictionary.values }
+    public var count: Int { backingDictionary.count }
+    public var isEmpty: Bool { backingDictionary.isEmpty }
+    public var description: String { "\(backingDictionary)" }
 
     public init(_ backingDictionary: [Value.ID: Value]) {
         self.backingDictionary = backingDictionary
+    }
+
+    public init(_ values: [Value]) {
+        backingDictionary = Dictionary(uniqueKeysWithValues: values.map { ($0.id, $0) })
     }
 
     public init(dictionaryLiteral elements: (Value.ID, Value)...) {
@@ -36,8 +43,19 @@ public struct DiscordIDDictionary<Value: Identifiable>: ExpressibleByDictionaryL
         set { backingDictionary[key] = newValue }
     }
 
-    public mutating func removeValue(forKey key: Value.ID) {
+    @discardableResult
+    public mutating func removeValue(forKey key: Value.ID) -> Value? {
         backingDictionary.removeValue(forKey: key)
+    }
+
+    public mutating func merge(_ other: [Value.ID: Value]) {
+        backingDictionary.merge(other, uniquingKeysWith: { _, new in new })
+    }
+
+    public mutating func merge(_ other: [Value]) {
+        for value in values {
+            backingDictionary[value.id] = value
+        }
     }
 
     public func makeIterator() -> Dictionary<Value.ID, Value>.Iterator {
@@ -56,3 +74,7 @@ extension DiscordIDDictionary: Codable where Value: Codable, Value.ID: Codable {
         try Array(values).encode(to: encoder)
     }
 }
+
+extension DiscordIDDictionary: Equatable where Value: Equatable {}
+
+extension DiscordIDDictionary: Hashable where Value: Hashable {}

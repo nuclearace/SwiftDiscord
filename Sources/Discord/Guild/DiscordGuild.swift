@@ -26,7 +26,7 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordGuild")
 
 /// Represents a Guild.
-public final class DiscordGuild: CustomStringConvertible, Identifiable, Codable {
+public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable {
     public enum CodingKeys: String, CodingKey {
         case id
         case channels
@@ -55,77 +55,77 @@ public final class DiscordGuild: CustomStringConvertible, Identifiable, Codable 
     // MARK: Properties
 
     /// The snowflake id of the guild.
-    public let id: GuildID
+    public var id: GuildID
 
     /// Whether or not this a "large" guild.
-    public let large: Bool
+    public var large: Bool?
 
     /// The date the user joined the guild.
-    public let joinedAt: Date
+    public var joinedAt: Date?
 
     /// The base64 encoded splash image.
-    public let splash: String
+    public var splash: String?
 
     /// Whether this guild is unavailable.
-    public let unavailable: Bool
+    public var unavailable: Bool?
 
     /// - returns: A description of this guild
     public var description: String { "DiscordGuild(name: \(name.map { "\"\($0)\"" } ?? "nil"))" }
 
-    /// A `DiscordLazyDictionary` of guild members. The key is the snowflake id of the user.
+    /// A dictionary of this guild's members. The key is the snowflake id of the user.
     public var members: DiscordIDDictionary<DiscordGuildMember>
 
     /// A dictionary of this guild's channels. The key is the snowflake id of the channel.
-    public internal(set) var channels: DiscordIDDictionary<DiscordChannel>
+    public var channels: DiscordIDDictionary<DiscordChannel>
 
     /// A dictionary of this guild's emojis. The key is the snowflake id of the emoji.
-    public internal(set) var emojis: DiscordIDDictionary<DiscordEmoji>
+    public var emojis: DiscordIDDictionary<DiscordEmoji>
 
     /// The number of members in this guild.
     ///
     /// *This number might not be the actual number of users in the `members` field.*
-    public internal(set) var memberCount: Int
+    public var memberCount: Int?
 
     /// A `DiscordLazyDictionary` of presences. The key is the snowflake id of the user.
-    public internal(set) var presences: DiscordIDDictionary<DiscordPresence>
+    public var presences: DiscordIDDictionary<DiscordPresence>
 
     /// A dictionary of this guild's roles. The key is the snowflake id of the role.
-    public internal(set) var roles: DiscordIDDictionary<DiscordRole>
+    public var roles: DiscordIDDictionary<DiscordRole>
 
     /// A dictionary of this guild's current voice states.
     /// The key is the snowflake id of the user for this voice
     /// state.
-    public internal(set) var voiceStates: DiscordIDDictionary<DiscordVoiceState>
+    public var voiceStates: DiscordIDDictionary<DiscordVoiceState>
 
     /// The default message notification setting.
-    public private(set) var defaultMessageNotifications: Int?
+    public var defaultMessageNotifications: Int?
 
     /// The snowflake id of the embed channel for this guild.
-    public private(set) var widgetChannelId: ChannelID?
+    public var widgetChannelId: ChannelID?
 
     /// Whether this guild has embed enabled.
-    public private(set) var widgetEnabled: Bool?
+    public var widgetEnabled: Bool?
 
     /// The base64 encoded icon image for this guild.
-    public private(set) var icon: String?
+    public var icon: String?
 
     /// The base64 encoded banner image for this guild.
-    public private(set) var banner: String?
+    public var banner: String?
 
     /// The multi-factor authentication level for this guild.
-    public private(set) var mfaLevel: Int?
+    public var mfaLevel: Int?
 
     /// The name of this guild.
-    public private(set) var name: String?
+    public var name: String?
 
     /// The snowflake id of this guild's owner.
-    public private(set) var ownerId: UserID?
+    public var ownerId: UserID?
 
     /// The region this guild is in.
-    public private(set) var region: String?
+    public var region: String?
 
     /// The verification level a member of this guild must have to join.
-    public private(set) var verificationLevel: Int?
+    public var verificationLevel: Int?
 
     // MARK: Methods
 
@@ -184,73 +184,51 @@ public final class DiscordGuild: CustomStringConvertible, Identifiable, Codable 
     }
 
     // Used to update a guild from a guildUpdate event
-    func updateGuild(fromGuildUpdate newGuild: [String: Any]) -> DiscordGuild {
-        if let defaultMessageNotifications = newGuild["default_message_notifications"] as? Int {
+    mutating func merge(update: DiscordGuild) {
+        if let defaultMessageNotifications = update.defaultMessageNotifications {
             self.defaultMessageNotifications = defaultMessageNotifications
         }
 
-        if let widgetChannelId = Snowflake(newGuild["widget_channel_id"] as? String) {
+        if let widgetChannelId = update.widgetChannelId {
             self.widgetChannelId = widgetChannelId
         }
 
-        if let widgetEnabled = newGuild["widget_enabled"] as? Bool {
+        if let widgetEnabled = update.widgetEnabled {
             self.widgetEnabled = widgetEnabled
         }
 
-        if let icon = newGuild["icon"] as? String {
+        if let icon = update.icon {
             self.icon = icon
         }
 
-        if let banner = newGuild["banner"] as? String {
+        if let banner = update.banner {
             self.banner = banner
         }
 
-        if let memberCount = newGuild["member_count"] as? Int {
+        if let memberCount = update.memberCount {
             self.memberCount = memberCount
         }
 
-        if let mfaLevel = newGuild["mfa_level"] as? Int {
+        if let mfaLevel = update.mfaLevel {
             self.mfaLevel = mfaLevel
         }
 
-        if let name = newGuild["name"] as? String {
+        if let name = update.name {
             self.name = name
         }
 
-        if let ownerId = Snowflake(newGuild["owner_id"] as? String) {
+        if let ownerId = update.ownerId {
             self.ownerId = ownerId
         }
 
-        if let region = newGuild["region"] as? String {
+        if let region = update.region {
             self.region = region
         }
 
-        if let verificationLevel = newGuild["verification_level"] as? Int {
+        if let verificationLevel = update.verificationLevel {
             self.verificationLevel = verificationLevel
         }
 
         return self
     }
-
-    ///
-    /// Unbans the specified user from the guild.
-    ///
-    /// - parameter user: The user to unban
-    ///
-    public func unban(_ user: DiscordUser) {
-        guard let client = self.client else { return }
-
-        logger.info("Unbanning user \(user) on \(id)")
-
-        client.removeGuildBan(for: user.id, on: id)
-    }
-}
-
-/// A guild for which no information aside from the id is available yet.
-public struct DiscordUnavailableGuild: Codable, Identifiable {
-    /// The guild's id.
-    public let id: GuildID
-
-    /// Whether the guild is unavailable (always true).
-    public let unavailable: Bool
 }

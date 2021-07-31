@@ -25,6 +25,7 @@ public struct DiscordPresence: Codable, Identifiable {
         case activities
         case nick
         case status
+        case guildId
     }
 
     // MARK: Properties
@@ -44,10 +45,13 @@ public struct DiscordPresence: Codable, Identifiable {
     /// The status of this user.
     public var status: DiscordPresenceStatus?
 
+    /// The id of the guild.
+    public var guildId: GuildID?
+
     public var id: UserID { user.id }
 
     /// Merges another presence in.
-    public mutating func merge(update: DiscordPresenceUpdateEvent) {
+    mutating func merge(update: DiscordPresence) {
         if let activities = update.activities {
             self.activities = activities
         }
@@ -158,7 +162,7 @@ public struct DiscordActivity: Codable {
         }
     }
 
-    private enum CodingKeys: CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case applicationId = "application_id"
         case assets
         case details
@@ -197,6 +201,7 @@ public struct DiscordParty: Codable, Identifiable {
 public struct DiscordActivityAssets: Codable {
     public enum CodingKeys: String, CodingKey {
         case largeImage = "large_image"
+        case largeText = "large_text"
         case smallImage = "small_image"
         case smallText = "small_text"
     }
@@ -218,13 +223,20 @@ public struct DiscordActivityAssets: Codable {
 
 /// Used to send updates to Discord about our presence.
 public struct DiscordPresenceUpdate: Encodable {
+    public enum CodingKeys: String, CodingKey {
+        case since
+        case activities
+        case status
+        case afk
+    }
+
     // MARK: Properties
 
     /// The time at which we went idle. Nil if not idle
     public var afkSince: Date?
 
     /// The game we are currently playing. Nil if not playing a game.
-    public var game: DiscordActivity?
+    public var activities: [DiscordActivity]
 
     /// The status for this update.
     public var status: DiscordPresenceStatus
@@ -234,13 +246,17 @@ public struct DiscordPresenceUpdate: Encodable {
     ///
     /// Creates a new DiscordPresenceUpdate
     ///
-    /// - parameter game: The game we are currently playing. Nil if not playing a game
+    /// - parameter activities: The games we are currently playing. Nil if not playing a game
     /// - parameter status: The current status
     /// - parameter afkSince: The time the user went afk. Nil if the user is not afk
     ///
-    public init(game: DiscordActivity?, status: DiscordPresenceStatus = .online, afkSince: Date? = nil) {
+    public init(
+        activities: [DiscordActivity] = [],
+        status: DiscordPresenceStatus = .online,
+        afkSince: Date? = nil
+    ) {
         self.afkSince = afkSince
-        self.game = game
+        self.activities = activities
         self.status = status
     }
 
@@ -256,19 +272,7 @@ public struct DiscordPresenceUpdate: Encodable {
             try container.encodeNil(forKey: .since)
             try container.encode(false, forKey: .afk)
         }
-        if let game = game {
-            let gameEncoder = container.superEncoder(forKey: .game)
-            try game.encode(to: gameEncoder)
-        } else {
-            try container.encodeNil(forKey: .game)
-        }
-        try container.encode(status.rawValue, forKey: .status)
-    }
-
-    public enum CodingKeys: CodingKey {
-        case since
-        case game
-        case status
-        case afk
+        try container.encode(activities, forKey: .activities)
+        try container.encode(status, forKey: .status)
     }
 }

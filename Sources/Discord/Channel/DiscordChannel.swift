@@ -70,7 +70,7 @@ public struct DiscordChannel: Codable, Identifiable {
     public var position: Int?
 
     /// Explicit permission overwrites for members and roles.
-    public var permissionOverwrites: DiscordIDDictionary<DiscordPermissionOverwrite>
+    public var permissionOverwrites: DiscordIDDictionary<DiscordPermissionOverwrite>?
 
     /// The name of the channel.
     public var name: String?

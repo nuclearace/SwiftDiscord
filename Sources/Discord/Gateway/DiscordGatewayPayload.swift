@@ -25,7 +25,7 @@ public enum DiscordGatewayCommand: Encodable {
     /// Resumes a previous session that was disconnected.
     case resume(DiscordGatewayResume)
     /// Updates the clients presence.
-    case presenceUpdate(DiscordGatewayPresenceUpdate)
+    case presenceUpdate(DiscordPresenceUpdate)
     /// Request information about offline guild members in a large guild.
     case requestGuildMembers(DiscordGatewayRequestGuildMembers)
 
@@ -140,7 +140,7 @@ public struct DiscordGatewayHeartbeat: RawRepresentable, Codable {
 }
 
 /// An event for identifying itself to the gateway.
-public struct DiscordGatewayIdentify: Codable {
+public struct DiscordGatewayIdentify: Encodable {
     public enum CodingKeys: String, CodingKey {
         case token
         case intents
@@ -166,7 +166,7 @@ public struct DiscordGatewayIdentify: Codable {
     /// Array of two integers (shard_id, num_shards)
     public var shard: [Int]? = nil
     /// A presence update.
-    public var presence: DiscordGatewayPresenceUpdate? = nil
+    public var presence: DiscordPresenceUpdate? = nil
 
     /// Connection properties.
     public struct Properties: Codable {
@@ -212,19 +212,6 @@ public struct DiscordGatewayRequestGuildMembers: Codable {
     public var presences: Bool? = false
     /// Nonce to identify the guild members chunk response.
     public var nonce: String? = nil
-}
-
-/// Sent by the client to indicate a presence update.
-public struct DiscordGatewayPresenceUpdate: Codable {
-    /// Unix time in ms of when the client went idle, or
-    /// null if the client is not idle.
-    public var since: Int? = nil
-    /// The user's activities.
-    public var activities: [DiscordActivity]
-    /// The user's new status.
-    public var status: DiscordPresenceStatus
-    /// Whether or not the client is afk.
-    public var afk: Bool
 }
 
 /// A dispatch event.

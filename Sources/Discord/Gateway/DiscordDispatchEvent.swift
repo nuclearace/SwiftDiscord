@@ -40,9 +40,11 @@ public enum DiscordDispatchEvent: Decodable {
     case guildEmojisUpdate(DiscordGuildEmojisUpdateEvent)
     case guildIntegrationsUpdate(DiscordGuildIntegrationsUpdateEvent)
     case guildMemberAdd(DiscordGuildMemberAddEvent)
+    case guildMemberUpdate(DiscordGuildMemberUpdateEvent)
     case guildMemberRemove(DiscordGuildMemberRemoveEvent)
     case guildMembersChunk(DiscordGuildMembersChunkEvent)
     case guildRoleCreate(DiscordGuildRoleCreateEvent)
+    case guildRoleUpdate(DiscordGuildRoleUpdateEvent)
     case guildRoleDelete(DiscordGuildRoleDeleteEvent)
     case guildUpdate(DiscordGuildUpdateEvent)
     case presenceUpdate(DiscordPresenceUpdateEvent)
@@ -104,9 +106,11 @@ public enum DiscordDispatchEvent: Decodable {
         case .guildEmojisUpdate: self = .guildEmojisUpdate(try container.decode(DiscordGuildEmojisUpdateEvent.self, forKey: .data))
         case .guildIntegrationsUpdate: self = .guildIntegrationsUpdate(try container.decode(DiscordGuildIntegrationsUpdateEvent.self, forKey: .data))
         case .guildMemberAdd: self = .guildMemberAdd(try container.decode(DiscordGuildMemberAddEvent.self, forKey: .data))
+        case .guildMemberUpdate: self = .guildMemberUpdate(try container.decode(DiscordGuildMemberUpdateEvent.self, forKey: .data))
         case .guildMemberRemove: self = .guildMemberRemove(try container.decode(DiscordGuildMemberRemoveEvent.self, forKey: .data))
         case .guildMembersChunk: self = .guildMembersChunk(try container.decode(DiscordGuildMembersChunkEvent.self, forKey: .data))
         case .guildRoleCreate: self = .guildRoleCreate(try container.decode(DiscordGuildRoleCreateEvent.self, forKey: .data))
+        case .guildRoleUpdate: self = .guildRoleUpdate(try container.decode(DiscordGuildRoleUpdateEvent.self, forKey: .data))
         case .guildRoleDelete: self = .guildRoleDelete(try container.decode(DiscordGuildRoleDeleteEvent.self, forKey: .data))
         case .guildUpdate: self = .guildUpdate(try container.decode(DiscordGuildUpdateEvent.self, forKey: .data))
         case .presenceUpdate: self = .presenceUpdate(try container.decode(DiscordPresenceUpdateEvent.self, forKey: .data))
@@ -220,11 +224,12 @@ public typealias DiscordMessageReactionAddEvent = DiscordMessageReactionUpdateEv
 public typealias DiscordMessageReactionRemoveEvent = DiscordMessageReactionUpdateEvent
 public typealias DiscordGuildCreateEvent = DiscordGuild
 public typealias DiscordGuildUpdateEvent = DiscordGuild
-public typealias DiscordGuildDeleteEvent = DiscordUnavailableGuild
+public typealias DiscordGuildDeleteEvent = DiscordGuild
 public typealias DiscordGuildMemberAddEvent = DiscordGuildMember
 public typealias DiscordGuildMemberUpdateEvent = DiscordGuildMember
 public typealias DiscordGuildRoleCreateEvent = DiscordGuildRoleUpdateEvent
 public typealias DiscordGuildRoleDeleteEvent = DiscordGuildRoleUpdateEvent
+public typealias DiscordPresenceUpdateEvent = DiscordPresence
 public typealias DiscordChannelCreateEvent = DiscordChannel
 public typealias DiscordChannelUpdateEvent = DiscordChannel
 public typealias DiscordChannelDeleteEvent = DiscordChannel
@@ -255,8 +260,10 @@ public struct DiscordReadyEvent: Codable {
     /// Information about the user including email.
     public var user: DiscordUser
 
-    /// The guilds the user is in
-    public var guilds: [DiscordUnavailableGuild]
+    /// The guilds the user is in.
+    /// Note that the guilds are unavailable and thus only have their
+    /// `id` and `unavailable` fields specified.
+    public var guilds: [DiscordGuild]
 
     /// Used for resuming connections.
     public var sessionId: String
@@ -593,26 +600,4 @@ public struct DiscordWebhooksUpdateEvent: Codable {
     public var guildId: GuildID?
     /// The id of the channel.
     public var channelId: ChannelID
-}
-
-/// Sent when a presence is updated.
-public struct DiscordPresenceUpdateEvent: Codable {
-    public enum CodingKeys: String, CodingKey {
-        case user
-        case guildId = "guild_id"
-        case status
-        case activities
-    }
-
-    /// The user whose presence is being updated.
-    public var user: DiscordPartialUser
-
-    /// The id of the guild.
-    public var guildId: GuildID
-
-    /// The status of the user.
-    public var status: DiscordPresenceStatus?
-
-    /// The user's current activities
-    public var activities: [DiscordActivity]?
 }

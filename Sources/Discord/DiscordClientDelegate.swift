@@ -221,10 +221,10 @@ public protocol DiscordClientDelegate : AnyObject {
     /// Called when the client handles a guild member chunk.
     ///
     /// - parameter client: The client that is calling.
-    /// - parameter didHandleGuildMemberChunk: The chunk of guild members that was handled.
+    /// - parameter didHandleGuildMemberChunk: The new members
     /// - parameter forGuild: The guild the members were added to.
     ///
-    func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: DiscordLazyDictionary<UserID, DiscordGuildMember>,
+    func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: [DiscordGuildMember],
                 forGuild guild: DiscordGuild)
 
     ///
@@ -239,10 +239,10 @@ public protocol DiscordClientDelegate : AnyObject {
     /// Called when the client updates a guild's emojis.
     ///
     /// - parameter client: The client that is calling.
-    /// - parameter didUpdateEmojis: The chunk of guild members that was handled.
+    /// - parameter didUpdateEmojis: The chunk of guild emojis that was updated
     /// - parameter onGuild: The guild the emojis were updated on.
     ///
-    func client(_ client: DiscordClient, didUpdateEmojis emojis: DiscordIDDictionary<DiscordEmoji>,
+    func client(_ client: DiscordClient, didUpdateEmojis emojis: [DiscordEmoji],
                 onGuild guild: DiscordGuild)
 }
 
@@ -317,14 +317,14 @@ public extension DiscordClientDelegate {
     func client(_ client: DiscordClient, didReceiveVoiceStateUpdate voiceState: DiscordVoiceState) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: DiscordLazyDictionary<UserID, DiscordGuildMember>,
+    func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: [DiscordGuildMember],
                 forGuild guild: DiscordGuild) { }
 
     /// Default.
     func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didUpdateEmojis emojis: DiscordIDDictionary<DiscordEmoji>,
+    func client(_ client: DiscordClient, didUpdateEmojis emojis: [DiscordEmoji],
                 onGuild guild: DiscordGuild) { }
 
 }

@@ -32,26 +32,26 @@ public struct DiscordUser: Codable, Identifiable {
     // MARK: Properties
 
     /// The base64 encoded avatar of this user.
-    public let avatar: String
+    public let avatar: String?
 
     /// Whether this user is a bot.
-    public let bot: Bool
+    public let bot: Bool?
 
     /// This user's discriminator.
-    public let discriminator: String
+    public let discriminator: String?
 
     /// The user's email. Only availabe if we are the user.
-    public let email: String
+    public let email: String?
 
     /// The snowflake id of the user.
     public let id: UserID
 
     /// Whether this user has multi-factor authentication enabled.
-    public let mfaEnabled: Bool
+    public let mfaEnabled: Bool?
 
     /// This user's username.
-    public let username: String
+    public let username: String?
 
     /// Whether this user is verified.
-    public let verified: Bool
+    public let verified: Bool?
 }
