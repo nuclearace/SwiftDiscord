@@ -18,7 +18,13 @@
 import Foundation
 
 /// Represents an audit log.
-public class DiscordAuditLog {
+public class DiscordAuditLog: Decodable {
+    public enum CodingKeys: String, CodingKey {
+        case auditLogEntries = "audit_log_entries"
+        case users
+        case webhooks
+    }
+
     // MARK: Properties
 
     /// List of audit log entries.
@@ -29,10 +35,4 @@ public class DiscordAuditLog {
 
     /// List of webhooks found in the audit log
     public let webhooks: [DiscordWebhook]
-
-    init(auditLogObject: [String: Any]) {
-        auditLogEntries = DiscordAuditLogEntry.entries(fromArray: auditLogObject.get("audit_log_entries", or: []))
-        users = DiscordUser.usersFromArray(auditLogObject.get("users", or: []))
-        webhooks = DiscordWebhook.webhooksFromArray(auditLogObject.get("webhooks", or: []))
-    }
 }
