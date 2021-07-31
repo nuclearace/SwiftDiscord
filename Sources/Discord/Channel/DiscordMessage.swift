@@ -78,76 +78,77 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable 
     // MARK: Properties
 
     /// The activity for this message, if any.
-    public let activity: Activity?
+    public var activity: Activity?
 
     /// Sent with Rich-Presence messages.
-    public let application: DiscordApplication?
+    public var application: DiscordApplication?
 
     /// The attachments included in this message.
-    public let attachments: [DiscordAttachment]
+    public var attachments: [DiscordAttachment]
 
     /// Who sent this message.
-    public let author: DiscordUser?
+    public var author: DiscordUser?
 
     /// The snowflake id of the channel this message is on.
-    public let channelId: ChannelID
+    public var channelId: ChannelID
 
     /// The content of this message.
-    public let content: String
+    public var content: String
 
     /// When this message was last edited.
-    public let editedTimestamp: Date
+    public var editedTimestamp: Date
 
     /// The embeds that are in this message.
-    public let embeds: [DiscordEmbed]
+    public var embeds: [DiscordEmbed]
 
     /// The snowflake id of this message.
-    public let id: MessageID
+    public var id: MessageID
 
     /// Whether or not this message mentioned everyone.
-    public let mentionEveryone: Bool
+    public var mentionEveryone: Bool
 
     /// List of snowflake ids of roles that were mentioned in this message.
-    public let mentionRoles: [RoleID]
+    public var mentionRoles: [RoleID]
 
     /// List of users that were mentioned in this message.
-    public let mentions: [DiscordUser]
+    public var mentions: [DiscordUser]
 
     /// Used for validating a message was sent.
-    public let nonce: Snowflake
+    public var nonce: Snowflake
 
     /// Whether this message is pinned.
-    public let pinned: Bool
+    public var pinned: Bool
 
     /// The reactions a message has.
-    public let reactions: [DiscordReaction]
+    public var reactions: [DiscordReaction]
 
     /// The stickers a message has.
-    public let stickers: [DiscordSticker]
+    public var stickers: [DiscordSticker]
 
     /// The timestamp of this message.
-    public let timestamp: Date
+    public var timestamp: Date
 
     /// Whether or not this message should be read by a screen reader.
-    public let tts: Bool
+    public var tts: Bool
 
     /// Finer-grained control over the allowed mentions in an outgoing message.
-    public let allowedMentions: DiscordAllowedMentions?
+    public var allowedMentions: DiscordAllowedMentions?
 
     /// A referenced message in an incoming message. Only present if it's a reply.
     @CodableBox public var referencedMessage: DiscordMessage?
 
     /// A referenced message in an outgoing message.
-    public let messageReference: DiscordMessageReference?
+    public var messageReference: DiscordMessageReference? = nil
 
     /// Interactive components in the message. This top-level array should only
     /// contain action rows (which can then e.g. contain buttons).
-    public let components: [DiscordMessageComponent]?
+    public var components: [DiscordMessageComponent]?
 
     /// The type of this message.
-    public let type: DiscordMessageType
+    public var type: DiscordMessageType
 
-    let files: [DiscordFileUpload]
+    /// Files to be uploaded as part of an outgoing message.
+    public var files: [DiscordFileUpload] = []
 
     // MARK: Initializers
 
@@ -269,11 +270,11 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable 
         }
 
         /// The type of action.
-        public let type: ActivityType
+        public var type: ActivityType
 
         // FIXME Make Par†yId type?
         /// The party ID for this activity
-        public let partyId: String?
+        public var partyId: String?
     }
 }
 
@@ -324,13 +325,13 @@ public struct DiscordReaction: Codable {
     // MARK: Properties
 
     /// The number of times this emoji has been used to react.
-    public let count: Int
+    public var count: Int
 
     /// Whether the current user reacted with this emoji.
-    public let me: Bool
+    public var me: Bool
 
     /// The emoji used to react.
-    public let emoji: DiscordEmoji
+    public var emoji: DiscordEmoji
 }
 
 public enum DiscordAllowedMentionType: String, Codable {
@@ -350,13 +351,13 @@ public struct DiscordAllowedMentions: Codable {
     }
 
     /// An array of allowed mentions types to parse from the content.
-    public let parse: DiscordAllowedMentionType
+    public var parse: DiscordAllowedMentionType
     /// Array of role ids to mention.
-    public let roles: [RoleID]
+    public var roles: [RoleID]
     /// Array of user ids to mention.
-    public let users: [UserID]
+    public var users: [UserID]
     /// For replies, whether to mention the author of the message being replied to (default: false)
-    public let repliedUser: Bool
+    public var repliedUser: Bool
 
     public init(parse: DiscordAllowedMentionType = .everyone, roles: [RoleID] = [], users: [UserID] = [], repliedUser: Bool = false) {
         self.parse = parse
@@ -374,9 +375,9 @@ public struct DiscordMessageReference: Codable {
         case guildId = "guild_id"
     }
 
-    public let messageId: MessageID?
-    public let channelId: ChannelID?
-    public let guildId: GuildID?
+    public var messageId: MessageID?
+    public var channelId: ChannelID?
+    public var guildId: GuildID?
 
     public init(messageId: MessageID? = nil, channelId: ChannelID? = nil, guildId: GuildID? = nil) {
         self.messageId = messageId
@@ -399,21 +400,21 @@ public struct DiscordMessageComponent: Codable {
     }
 
     /// The type of the component.
-    public let type: DiscordMessageComponentType
+    public var type: DiscordMessageComponentType
     /// Sub-components. Only valid for action rows.
-    public let components: [DiscordMessageComponent]?
+    public var components: [DiscordMessageComponent]?
     /// One of a few button styles. Only valid for buttons.
-    public let style: DiscordMessageComponentButtonStyle?
+    public var style: DiscordMessageComponentButtonStyle?
     /// Label that appears on a button. Only valid for buttons.
-    public let label: String?
+    public var label: String?
     /// Emoji that appears on the button. Only valid for buttons.
-    public let emoji: DiscordMessageComponentEmoji?
+    public var emoji: DiscordMessageComponentEmoji?
     /// A developer-defined id for the button, max 100 chars. Only valid for buttons.
-    public let customId: String?
+    public var customId: String?
     /// A URL for link-style buttons. Only valid for buttons.
-    public let url: URL?
+    public var url: URL?
     /// Whether the button is disabled. False by default. Only valid for buttons.
-    public let disabled: Bool?
+    public var disabled: Bool?
 
     public init(
         type: DiscordMessageComponentType,
@@ -465,7 +466,7 @@ public struct DiscordMessageComponent: Codable {
 }
 
 public struct DiscordMessageComponentType : RawRepresentable, Hashable, Codable {
-    public let rawValue: Int
+    public var rawValue: Int
 
     public static let actionRow = DiscordMessageComponentType(rawValue: 1)
     public static let button = DiscordMessageComponentType(rawValue: 2)
@@ -477,9 +478,9 @@ public struct DiscordMessageComponentType : RawRepresentable, Hashable, Codable 
 
 /// A partial emoji for use in message components.
 public struct DiscordMessageComponentEmoji: Codable, Identifiable {
-    public let id: EmojiID?
-    public let name: String?
-    public let animated: Bool
+    public var id: EmojiID?
+    public var name: String?
+    public var animated: Bool
 
     public init(id: EmojiID? = nil, name: String? = nil, animated: Bool = false) {
         self.id = id
@@ -489,7 +490,7 @@ public struct DiscordMessageComponentEmoji: Codable, Identifiable {
 }
 
 public struct DiscordMessageComponentButtonStyle: RawRepresentable, Hashable, Codable {
-    public let rawValue: Int
+    public var rawValue: Int
 
     public static let primary = DiscordMessageComponentButtonStyle(rawValue: 1)
     public static let secondary = DiscordMessageComponentButtonStyle(rawValue: 2)

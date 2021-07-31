@@ -167,7 +167,7 @@ public struct DiscordEmbed: Codable {
     }
 
     /// Represents what is providing the content of an embed.
-    public struct Provider : Encodable {
+    public struct Provider: Codable {
         // MARK: Properties
 
         /// The name of this provider.
