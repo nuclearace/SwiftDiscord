@@ -27,7 +27,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     func createDM(with: UserID,
                          callback: @escaping (DiscordChannel?, HTTPURLResponse?) -> ()) {
-        guard let contentData = JSON.encodeJSONData(["recipient_id": with]) else { return }
+        guard let contentData = try? DiscordJSON.encode(["recipient_id": with]) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(channel)? = JSON.jsonFromResponse(data: data, response: response) else {

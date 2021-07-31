@@ -69,7 +69,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(createJSON)) else { return }
+        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(createJSON)) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(channel)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -117,16 +117,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         logger.info("Creating a new role on \(guildId)")
         logger.debug("(verbose) Role options \(roleData)")
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(roleData)) else { return callback(nil, nil) }
+        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(roleData)) else { return callback(nil, nil) }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(role)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let role: DiscordRole = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback(nil, response)
 
                 return
             }
 
-            callback(DiscordRole(roleObject: role), response)
+            callback(role, response)
         }
 
         rateLimiter.executeRequest(endpoint: .guildRoles(guild: guildId),
@@ -312,7 +312,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                          deleteMessageDays: Int = 7,
                          reason: String? = nil,
                          callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
-        guard let contentData = JSON.encodeJSONData(["delete-message-days": deleteMessageDays]) else { return }
+        guard let contentData = try? DiscordJSON.encode(["delete-message-days": deleteMessageDays]) else { return }
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
@@ -360,7 +360,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(modifyJSON)) else { return }
+        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(modifyJSON)) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(guild)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -382,7 +382,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func modifyGuildChannelPositions(on guildId: GuildID,
                                             channelPositions: [[String: Any]],
                                             callback: (([DiscordChannel], HTTPURLResponse?) -> ())? = nil) {
-        guard let contentData = JSON.encodeJSONData(GenericEncodableArray(channelPositions)) else { return }
+        guard let contentData = try? DiscordJSON.encode(GenericEncodableArray(channelPositions)) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(channels)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -422,7 +422,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(patchParams)) else { return }
+        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(patchParams)) else { return }
 
         logger.debug("Modifying guild member \(id) with options: \(patchParams) on \(guildId)")
 
@@ -437,7 +437,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 on guildId: GuildID,
                                 reason: String? = nil,
                                 callback: ((DiscordRole?, HTTPURLResponse?) -> ())? = nil) {
-        guard let contentData = JSON.encodeJSONData(role) else { return }
+        guard let contentData = try? DiscordJSON.encode(role) else { return }
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
@@ -445,7 +445,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(role)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let role: DiscordRole = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback?(nil, response)
 
                 return
@@ -509,7 +509,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(role)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let role: DiscordRole = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback?(nil, response)
 
                 return

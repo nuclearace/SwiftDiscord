@@ -14,7 +14,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
         rateLimiter.executeRequest(endpoint: .interactionsCallback(interactionId: interactionId, interactionToken: interactionToken),
                                    token: token,
-                                   requestInfo: .post(content: .json(JSON.encodeJSONData(response) ?? Data()), extraHeaders: nil),
+                                   requestInfo: .post(content: .json(try? DiscordJSON.encode(response) ?? Data()), extraHeaders: nil),
                                    callback: requestCallback)
     }
 }

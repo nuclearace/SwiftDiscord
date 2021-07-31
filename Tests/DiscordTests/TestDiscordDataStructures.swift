@@ -19,7 +19,7 @@ extension DiscordGatewayPayloadData: Equatable {
 }
 
 func roundTripEncode<T: Encodable>(_ item: T) -> [String: Any] {
-    let json = JSON.encodeJSONData(item)!
+    let json = try? DiscordJSON.encode(item)!
     return try! JSONSerialization.jsonObject(with: json, options: []) as! [String: Any]
 }
 

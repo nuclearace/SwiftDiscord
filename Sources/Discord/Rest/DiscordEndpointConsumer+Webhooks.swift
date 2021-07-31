@@ -47,7 +47,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
         logger.debug("Creating webhook on: \(channelId)")
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(createJSON)) else { return }
+        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(createJSON)) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
@@ -161,7 +161,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(createJSON)) else { return }
+        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(createJSON)) else { return }
 
         logger.debug("Modifying webhook: \(webhookId)")
 
