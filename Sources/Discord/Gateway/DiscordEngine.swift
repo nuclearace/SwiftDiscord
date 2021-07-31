@@ -35,7 +35,7 @@ fileprivate let logger = Logger(label: "DiscordEngine")
 ///
 /// The base class for Discord WebSocket communications.
 ///
-public class DiscordEngine: DiscordEngineSpec {
+public class DiscordEngine: DiscordShard {
     // MARK: Properties
 
     /// The url for the gateway.
@@ -250,7 +250,7 @@ public class DiscordEngine: DiscordEngineSpec {
             heartbeatQueue.sync { self.pongsMissed = 0 }
             logger.debug("Got heartbeat ack")
         default:
-            error(message: "Unhandled payload: \(payload.code)")
+            logger.error("Unhandled payload: \(payload.code)")
         }
     }
 
@@ -292,7 +292,7 @@ public class DiscordEngine: DiscordEngineSpec {
     ///
     public func parseAndHandleGatewayMessage(_ string: String) {
         guard let decoded = DiscordGatewayPayload.payloadFromString(string) else {
-            error(message: "Got unknown payload \(string)")
+            logger.error("Got unknown payload \(string)")
 
             return
         }
@@ -366,10 +366,9 @@ public class DiscordEngine: DiscordEngineSpec {
     ///
     /// Starts the handshake with the Discord server. You shouldn't need to call this directly.
     ///
-    private func startHandshake() {
+    public func startHandshake() {
         guard delegate != nil else {
-            error(message: "delegate nil before handshaked")
-
+            logger.error("delegate nil before handshaked")
             return
         }
 

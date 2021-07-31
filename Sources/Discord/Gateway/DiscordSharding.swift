@@ -68,9 +68,9 @@ public protocol DiscordEventLoopGroupManager {
     var runloops: MultiThreadedEventLoopGroup { get }
 }
 
-/// Protocol that represents a sharded gateway connection. This is the top-level protocol for `DiscordEngineSpec` and
+/// Protocol that represents a sharded gateway connection. This is the top-level protocol for
 /// `DiscordEngine`
-public protocol DiscordShard : DiscordWebSocketable, DiscordGatewayable, DiscordRunLoopable {
+public protocol DiscordShard: DiscordWebSocketable, DiscordGatewayable, DiscordRunLoopable {
     // MARK: Properties
 
     /// Whether this shard is connected to the gateway

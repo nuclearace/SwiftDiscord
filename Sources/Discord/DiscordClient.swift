@@ -42,7 +42,7 @@ fileprivate let logger = Logger(label: "DiscordClient")
 ///
 /// See `DiscordClientDelegate` for a list of delegate methods that can be implemented.
 ///
-public class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
+public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, DiscordEndpointConsumer {
     // MARK: Properties
 
     /// The rate limiter for this client.
@@ -412,16 +412,6 @@ public class DiscordClient: DiscordClientSpec, DiscordEndpointConsumer {
             guilds[guildId]?.voiceStates[state.userId] = nil
         } else {
             guilds[guildId]?.voiceStates[state.userId] = state
-        }
-
-        if state.userId == user?.id {
-            if state.channelId == 0 {
-                voiceManager.protected { self.voiceManager.voiceStates[state.guildId] = nil }
-            } else {
-                voiceManager.protected { self.voiceManager.voiceStates[state.guildId] = state }
-
-                startVoiceConnection(state.guildId)
-            }
         }
 
         delegate?.client(self, didReceiveVoiceStateUpdate: state)

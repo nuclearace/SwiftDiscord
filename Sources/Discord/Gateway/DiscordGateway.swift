@@ -96,7 +96,7 @@ public extension DiscordGatewayable where Self: DiscordWebSocketable & DiscordRu
     /// Default Implementation.
     func sendPayload(_ payload: DiscordGatewayPayload) {
         guard let payloadString = payload.createPayloadString() else {
-            error(message: "Could not create payload string for payload: \(payload)")
+            logger.error("Could not create payload string for payload: \(payload)")
 
             return
         }
