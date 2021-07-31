@@ -50,13 +50,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(createJSON)) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let webhook: DiscordWebhook = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback(nil, response)
 
                 return
             }
 
-            callback(DiscordWebhook(webhookObject: webhook), response)
+            callback(webhook, response)
         }
 
         rateLimiter.executeRequest(endpoint: .channelWebhooks(channel: channelId),
@@ -85,13 +85,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func getWebhook(_ webhookId: WebhookID,
                            callback: @escaping (DiscordWebhook?, HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let webhook: DiscordWebhook = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback(nil, response)
 
                 return
             }
 
-            callback(DiscordWebhook(webhookObject: webhook), response)
+            callback(webhook, response)
         }
 
         rateLimiter.executeRequest(endpoint: .webhook(id: webhookId),
@@ -104,13 +104,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func getWebhooks(forChannel channelId: ChannelID,
                             callback: @escaping ([DiscordWebhook], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .array(webhooks)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let webhooks: [DiscordWebhook] = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback([], response)
 
                 return
             }
 
-            callback(DiscordWebhook.webhooksFromArray(webhooks as! [[String: Any]]), response)
+            callback(webhooks, response)
         }
 
         rateLimiter.executeRequest(endpoint: .channelWebhooks(channel: channelId),
@@ -125,13 +125,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         logger.debug("Getting webhooks for guild: \(guildId)")
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .array(webhooks)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let webhooks: [DiscordWebhook] = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback([], response)
 
                 return
             }
 
-            callback(DiscordWebhook.webhooksFromArray(webhooks as! [[String: Any]]), response)
+            callback(webhooks, response)
         }
 
         rateLimiter.executeRequest(endpoint: .guildWebhooks(guild: guildId),
@@ -166,13 +166,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         logger.debug("Modifying webhook: \(webhookId)")
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(webhook)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let webhook: DiscordWebhook = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback(nil, response)
 
                 return
             }
 
-            callback(DiscordWebhook(webhookObject: webhook), response)
+            callback(webhook, response)
         }
 
         rateLimiter.executeRequest(endpoint: .webhook(id: webhookId),
