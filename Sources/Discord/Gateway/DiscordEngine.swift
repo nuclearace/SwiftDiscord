@@ -44,38 +44,29 @@ public class DiscordEngine: DiscordShard {
     /// The type of DiscordEngineSpec. Used to correctly fire events.
     public var description: String { "shard: \(shardNum)" }
 
-    /// Creates the handshake object that Discord expects.
-    /// Override if you need to customize the handshake object.
-    public var handshakeObject: [String: Any] {
-        var identify: [String: Any] = [
-            "token": delegate!.token.rawValue,
-            "intents": intents.rawValue,
-            "properties": [
-                "$os": os,
-                "$browser": "SwiftDiscord",
-                "$device": "SwiftDiscord",
-                "$referrer": "",
-                "$referring_domain": ""
-            ],
-            "compress": false,
-            "large_threshold": 250,
-        ]
-
-        if numShards > 1 {
-            identify["shard"] = [shardNum, numShards]
-        }
-
-        return identify
+    /// The handshake object that Discord expects.
+    public var identify: DiscordGatewayIdentify {
+        DiscordGatewayIdentify(
+            token: delegate!.token,
+            intents: intents,
+            properties: .init(
+                os: os,
+                browser: "swift-discord",
+                device: "swift-discord"
+            ),
+            compress: false,
+            largeThreshold: 250,
+            shard: numShards > 1 ? [shardNum, numShards] : nil
+        )
     }
 
-    /// Creates the resume object that Discord expects.
-    /// Override if you need to customize the resume object.
-    public var resumeObject: [String: Any] {
-        [
-            "token": delegate!.token.rawValue,
-            "session_id": sessionId!,
-            "seq": lastSequenceNumber
-        ]
+    /// The resume object that Discord expects.
+    public var resume: DiscordGatewayResume {
+        DiscordGatewayResume(
+            token: delegate!.token,
+            sessionId: sessionId!,
+            sequenceNumber: lastSequenceNumber
+        )
     }
 
     /// The dispatch queue that heartbeats are sent on.
@@ -186,96 +177,87 @@ public class DiscordEngine: DiscordShard {
     ///
     /// Handles a dispatch payload.
     ///
-    /// - parameter payload: The dispatch payload
+    /// - parameter event: The dispatch payload
     ///
-    public func handleDispatch(_ payload: DiscordGatewayPayload) {
-        guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
-            logger.error("Could not create dispatch event \(payload)")
-
-            return
-        }
-
-        if event == .ready, case let .object(payloadObject) = payload.payload,
-           let sessionId = payloadObject["session_id"] as? String {
+    private func handleDispatch(_ event: DiscordDispatchEvent) {
+        switch event {
+        case .ready(let ready):
             delegate?.shardDidConnect(self)
-            self.sessionId = sessionId
-        } else if event == .resumed {
-            handleResumed(payload)
+            sessionId = ready.sessionId
+        case .resumed:
+            handleResumed()
+        default:
+            break
         }
 
-        delegate?.shard(self, didReceiveEvent: event, with: payload)
+        delegate?.shard(self, didReceiveEvent: event)
     }
 
     ///
-    /// Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
+    /// Handles a DiscordGatewayEvent. You shouldn't need to call this directly.
     ///
-    /// Override this method if you need to customize payload handling.
+    /// - parameter event: The payload object
     ///
-    /// - parameter payload: The payload object
-    ///
-    public func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
+    public func handleGatewayPayload(_ event: DiscordGatewayEvent) {
         handleQueue.async {
-            self._handleGatewayPayload(payload)
+            self._handleGatewayPayload(event)
         }
     }
 
-    func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
-        func handleInvalidSession() {
-            if case let .bool(netsplit) = payload.payload, netsplit {
-                logger.info("Netsplit recieved, trying to resume")
-            } else {
-                logger.info("Invalid session received. Invalidating session")
-
-                sessionId = nil
-            }
-
-            resuming = false
-            startHandshake()
-        }
-
-        if let seq = payload.sequenceNumber {
-            lastSequenceNumber = seq
-        }
-
-        switch payload.opcode {
-        case .dispatch:
-            handleDispatch(payload)
-        case .hello:
-            handleHello(payload)
-        case .invalidSession:
-            handleInvalidSession()
+    func _handleGatewayPayload(_ event: DiscordGatewayEvent) {
+        switch event {
+        case .dispatch(let e):
+            lastSequenceNumber = e.sequenceNumber
+            handleDispatch(e.event)
+        case .hello(let e):
+            handleHello(e)
+        case .invalidSession(let e):
+            handleInvalidSession(e)
         case .heartbeat:
-            sendPayload(DiscordGatewayPayload(code: .heartbeat, payload: .integer(lastSequenceNumber)))
+            sendPayload(.heartbeat(DiscordGatewayHeartbeat(lastSequenceNumber: lastSequenceNumber)))
         case .heartbeatAck:
             heartbeatQueue.sync { self.pongsMissed = 0 }
             logger.debug("Got heartbeat ack")
         default:
-            logger.error("Unhandled payload: \(payload.code)")
+            logger.error("Unhandled payload: \(event)")
         }
+    }
+
+    ///
+    /// Handles an invalid session event.
+    ///
+    /// - parameter event: The handled event.
+    ///
+    private func handleInvalidSession(_ event: DiscordGatewayInvalidSession) {
+        if event.isResumable {
+            logger.info("Netsplit recieved, trying to resume")
+        } else {
+            logger.info("Invalid session received. Invalidating session")
+
+            sessionId = nil
+        }
+
+        resuming = false
+        startHandshake()
     }
 
     ///
     /// Handles the hello event.
     ///
-    /// - parameter payload: The dispatch payload
+    /// - parameter hello: The dispatch payload
     ///
-    public func handleHello(_ payload: DiscordGatewayPayload) {
-        guard case let .object(eventData) = payload.payload else { fatalError("Got bad hello payload") }
-        guard let milliseconds = eventData["heartbeat_interval"] as? Int else {
-            fatalError("Got bad heartbeat interval")
-        }
-
+    private func handleHello(_ hello: DiscordGatewayHello) {
         heartbeatQueue.sync { self.pongsMissed = 0 }
         connected = true
 
-        startHeartbeat(milliseconds: milliseconds)
-        delegate?.shard(self, gotHelloWithPayload: payload)
+        startHeartbeat(milliseconds: hello.heartbeatInterval)
+        delegate?.shard(self, gotHello: hello)
     }
 
     ///
     /// Handles the resumed event. You shouldn't call this directly.
     ///
-    public func handleResumed(_ payload: DiscordGatewayPayload) {
+    private func handleResumed() {
         logger.info("Resumed gateway session on shard: \(shardNum)")
 
         heartbeatQueue.sync { self.pongsMissed = 0 }
@@ -291,13 +273,17 @@ public class DiscordEngine: DiscordShard {
     /// - parameter string: The raw payload string
     ///
     public func parseAndHandleGatewayMessage(_ string: String) {
-        guard let decoded = DiscordGatewayPayload.payloadFromString(string) else {
-            logger.error("Got unknown payload \(string)")
-
+        guard let data = string.data(using: .utf8) else {
+            logger.error("Could not decode gateway event: \(string)")
             return
         }
 
-        handleGatewayPayload(decoded)
+        do {
+            let decoded = try DiscordJSON.makeDecoder().decode(DiscordGatewayEvent.self, from: data)
+            handleGatewayPayload(decoded)
+        } catch {
+            logger.error("Could not decode gateway event: \(error)")
+        }
     }
 
     ///
@@ -352,7 +338,7 @@ public class DiscordEngine: DiscordShard {
         logger.debug("Sending heartbeat, shard: \(shardNum)")
 
         pongsMissed += 1
-        sendPayload(DiscordGatewayPayload(code: .heartbeat, payload: .integer(lastSequenceNumber)))
+        sendPayload(.heartbeat(DiscordGatewayHeartbeat(lastSequenceNumber: lastSequenceNumber)))
 
         let time = DispatchTime.now() + .milliseconds(heartbeatInterval)
 
@@ -375,11 +361,11 @@ public class DiscordEngine: DiscordShard {
         if sessionId != nil {
             logger.info("Sending resume, shard: \(shardNum)")
 
-            sendPayload(DiscordGatewayPayload(code: .resume, payload: .object(resumeObject)))
+            sendPayload(.resume(resume))
         } else {
             logger.info("Sending handshake, shard: \(shardNum)")
 
-            sendPayload(DiscordGatewayPayload(code: .identify, payload: .object(handshakeObject)))
+            sendPayload(.identify(identify))
         }
     }
 

@@ -206,12 +206,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     /// - parameter event: The dispatch event
     ///
     private func handleDispatch(event: DiscordDispatchEvent) {
-        guard case let .object(eventData) = data else {
-            logger.error("Got dispatch event without an object: \(event), \(data)")
-            return
-        }
-
-        switch event.type {
+        switch event {
         case .presenceUpdate(let e): handlePresenceUpdate(with: e)
         case .messageCreate(let e): handleMessageCreate(with: e)
         case .messageUpdate(let e): handleMessageUpdate(with: e)
@@ -315,12 +310,10 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter manager: The manager.
     /// - parameter shouldHandleEvent: The event to be handled.
-    /// - parameter withPayload: The payload that came with the event.
     ///
-    public func shardManager(_ manager: DiscordShardManager, shouldHandleEvent event: DiscordDispatchEvent,
-                             withPayload payload: DiscordGatewayPayload) {
+    public func shardManager(_ manager: DiscordShardManager, shouldHandleEvent event: DiscordDispatchEvent) {
         handleQueue.async {
-            self.handleDispatch(event: event, data: payload.payload)
+            self.handleDispatch(event: event)
         }
     }
 
@@ -333,20 +326,13 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleChannelCreate(with event: DiscordChannelCreateEvent) {
+    private func handleChannelCreate(with channel: DiscordChannel) {
         logger.info("Handling channel create")
 
-        guard let channel = channelFromObject(data, withClient: self) else { return }
-
-        switch channel {
-        case let guildChannel as DiscordGuildChannel:
-            guilds[guildChannel.guildId]?.channels[guildChannel.id] = guildChannel
-        case let dmChannel as DiscordDMChannel:
-            directChannels[channel.id] = dmChannel
-        case let groupChannel as DiscordGroupDMChannel:
-            directChannels[channel.id] = groupChannel
-        default:
-            break
+        if channel.isDM {
+            directChannels[channel.id] = channel
+        } else if let guildId = channel.guildId {
+            guilds[guildId]?.channels[channel.id] = channel
         }
 
         logger.debug("(verbose) Created channel: \(channel)")
@@ -363,31 +349,14 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleChannelDelete(with data: [String: Any]) {
+    private func handleChannelDelete(with channel: DiscordChannel) {
         logger.info("Handling channel delete")
 
-        guard let type = DiscordChannelType(rawValue: data["type"] as? Int ?? -1) else { return }
-        guard let channelId = Snowflake(data["id"] as? String) else { return }
+        channelCache.removeValue(forKey: channel.id)
 
-        let removedChannel: DiscordChannel
+        logger.debug("(verbose) Removed channel: \(channel)")
 
-        switch type {
-        case .text, .voice, .category, .news, .store,
-             .newsThread, .publicThread, .privateThread,
-             .stageVoice:
-            guard let guildId = Snowflake(data["guild_id"] as? String),
-                  let guildChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) else { return }
-            removedChannel = guildChannel
-        case .direct, .groupDM:
-            guard let direct = directChannels.removeValue(forKey: channelId) else { return }
-            removedChannel = direct
-        }
-
-        channelCache.removeValue(forKey: channelId)
-
-        logger.debug("(verbose) Removed channel: \(removedChannel)")
-
-        delegate?.client(self, didDeleteChannel: removedChannel)
+        delegate?.client(self, didDeleteChannel: channel)
     }
 
     ///
@@ -399,7 +368,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleVoiceStateUpdate(with data: [String: Any]) {
+    private func handleVoiceStateUpdate(with event: DiscordVoiceStateUpdateEvent) {
         logger.info("Handling voice state update")
 
         guard let guildId = Snowflake(data["guild_id"] as? String) else { return }
@@ -426,7 +395,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleChannelUpdate(with data: [String: Any]) {
+    private func handleChannelUpdate(with event: DiscordChannelUpdateEvent) {
         logger.info("Handling channel update")
 
         guard let channel = guildChannel(fromObject: data, guildID: nil, client: self) else {
@@ -451,7 +420,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleGuildCreate(with data: [String: Any]) {
+    private func handleGuildCreate(with event: DiscordGuildCreateEvent) {
         logger.info("Handling guild create")
 
         let guild = DiscordGuild(guildObject: data, client: self)
@@ -479,7 +448,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleGuildDelete(with data: [String: Any]) {
+    private func handleGuildDelete(with event: DiscordGuildDeleteEvent) {
         logger.info("Handling guild delete")
 
         guard let guildId = Snowflake(data["id"] as? String) else { return }
@@ -503,7 +472,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleGuildEmojiUpdate(with data: [String: Any]) {
+    private func handleGuildEmojiUpdate(with event: DiscordGuildEmojiUpdateEvent) {
         logger.info("Handling guild emoji update")
 
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
@@ -527,7 +496,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleGuildMemberAdd(with data: [String: Any]) {
+    private func handleGuildMemberAdd(with event: DiscordGuildMemberAddEvent) {
         logger.info("Handling guild member add")
 
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
@@ -551,7 +520,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleGuildMemberRemove(with data: [String: Any]) {
+    private func handleGuildMemberRemove(with event: DiscordGuildMemberRemoveEvent) {
         logger.info("Handling guild member remove")
 
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
@@ -575,7 +544,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleGuildMemberUpdate(with data: [String: Any]) {
+    private func handleGuildMemberUpdate(with event: DiscordGuildMemberUpdateEvent) {
         logger.info("Handling guild member update")
 
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
@@ -596,7 +565,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleGuildMembersChunk(with data: [String: Any]) {
+    private func handleGuildMembersChunk(with event: DiscordGuildMembersChunkEvent) {
         logger.info("Handling guild members chunk")
 
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
@@ -618,7 +587,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleGuildRoleCreate(with data: [String: Any]) {
+    private func handleGuildRoleCreate(with event: DiscordGuildRoleCreateEvent) {
         logger.info("Handling guild role create")
 
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
@@ -641,7 +610,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleGuildRoleRemove(with data: [String: Any]) {
+    private func handleGuildRoleRemove(with event: DiscordGuildRoleRemoveEvent) {
         logger.info("Handling guild role remove")
 
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
@@ -662,7 +631,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleGuildRoleUpdate(with data: [String: Any]) {
+    private func handleGuildRoleUpdate(with event: DiscordGuildRoleUpdateEvent) {
         logger.info("Handling guild role update")
 
         // Functionally the same as adding
@@ -686,7 +655,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleGuildUpdate(with data: [String: Any]) {
+    private func handleGuildUpdate(with event: DiscordGuildUpdateEvent) {
         logger.info("Handling guild update")
 
         guard let guildId = Snowflake(data["id"] as? String) else { return }
@@ -706,7 +675,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleMessageUpdate(with data: [String: Any]) {
+    private func handleMessageUpdate(with event: DiscordMessageUpdateEvent) {
         logger.info("Handling message update")
 
         let message = DiscordMessage(messageObject: data, client: self)
@@ -725,7 +694,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleMessageCreate(with data: [String: Any]) {
+    private func handleMessageCreate(with event: DiscordMessageCreateEvent) {
         logger.info("Handling message create")
 
         let message = DiscordMessage(messageObject: data, client: self)
@@ -762,7 +731,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleMessageReactionAdd(with data: [String: Any]) {
+    private func handleMessageReactionAdd(with event: DiscordMessageReactionAddEvent) {
         logger.info("Handling message reaction add")
 
         guard let (userID, channel, messageID, emoji) = getReactionInfo(mode: "add", from: data) else { return }
@@ -785,7 +754,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleMessageReactionRemove(with data: [String: Any]) {
+    private func handleMessageReactionRemove(with event: DiscordMessageReactionRemoveEvent) {
         logger.info("Handling message reaction remove")
 
         guard let (userID, channel, messageID, emoji) = getReactionInfo(mode: "remove", from: data) else { return }
@@ -802,7 +771,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleMessageReactionRemoveAll(with data: [String: Any]) {
+    private func handleMessageReactionRemoveAll(with event: DiscordMessageReactionRemoveAllEvent) {
         guard let channelID = ChannelID(data["channel_id"] as? String),
               let messageID = MessageID(data["message_id"] as? String)
         else {
@@ -826,7 +795,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handlePresenceUpdate(with data: [String: Any]) {
+    private func handlePresenceUpdate(with event: DiscordPresenceUpdateEvent) {
         guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
         guard let user = data["user"] as? [String: Any], let userId = Snowflake(user["id"] as? String) else { return }
 
@@ -859,7 +828,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleInteractionCreate(with data: [String: Any]) {
+    private func handleInteractionCreate(with event: DiscordInteractionCreateEvent) {
         logger.info("Handling interaction create")
 
         delegate?.client(self, didCreateInteraction: DiscordInteraction(interactionObject: data))
@@ -874,7 +843,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    func handleReady(with data: [String: Any]) {
+    private func handleReady(with event: DiscordReadyEvent) {
         logger.info("Handling ready")
 
         if let user = data["user"] as? [String: Any] {

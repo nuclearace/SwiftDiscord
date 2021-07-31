@@ -143,6 +143,9 @@ public struct DiscordChannel: Codable, Identifiable {
     /// Only included when part of the resolved data received on
     /// a slash command interaction.
     public var permissions: DiscordPermissions?
+
+    /// Whether this is a direct message.
+    public var isDM: Bool { [.dm, .groupDM].contains(type) }
 }
 
 /// Represents the type of a channel.
@@ -152,7 +155,7 @@ public struct DiscordChannelType: RawRepresentable, Codable, Hashable {
     /// A guild text channel.
     public static let text = DiscordChannelType(rawValue: 0)
     /// A direct message channel.
-    public static let direct = DiscordChannelType(rawValue: 1)
+    public static let dm = DiscordChannelType(rawValue: 1)
     /// A voice channel within a guild.
     public static let voice = DiscordChannelType(rawValue: 2)
     /// A group direct message.

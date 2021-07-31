@@ -35,6 +35,10 @@ public struct DiscordIDDictionary<Value: Identifiable>: ExpressibleByDictionaryL
         get { backingDictionary[key] }
         set { backingDictionary[key] = newValue }
     }
+
+    public mutating func removeValue(forKey key: Value.ID) {
+        backingDictionary.removeValue(forKey: key)
+    }
 }
 
 extension DiscordIDDictionary: Codable where Value: Codable, Value.ID: Codable {

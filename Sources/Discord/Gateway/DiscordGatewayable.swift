@@ -19,53 +19,18 @@
 import Foundation
 import Logging
 
-fileprivate let logger = Logger(label: "DiscordGateway")
+fileprivate let logger = Logger(label: "DiscordGatewayable")
 
 /// Declares that a type will communicate with a Discord gateway.
-public protocol DiscordGatewayable : DiscordEngineHeartbeatable {
-    // MARK: Properties
-
-    /// Creates the handshake object that Discord expects.
-    /// Override if you need to customize the handshake object.
-    var handshakeObject: [String: Any] { get }
-
-    /// Creates the resume object that Discord expects.
-    /// Override if you need to customize the resume object.
-    var resumeObject: [String: Any] { get }
-
+public protocol DiscordGatewayable: DiscordEngineHeartbeatable {
     // MARK: Methods
 
     ///
-    /// Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
+    /// Handles a DiscordGatewayEvent. You shouldn't need to call this directly.
     ///
-    /// Override this method if you need to customize payload handling.
+    /// - parameter event: The payload object
     ///
-    /// - parameter payload: The payload object
-    ///
-    func handleGatewayPayload(_ payload: DiscordGatewayPayload)
-
-    // MARK: Methods
-
-    ///
-    /// Handles a dispatch payload.
-    ///
-    /// - parameter payload: The dispatch payload
-    ///
-    func handleDispatch(_ payload: DiscordGatewayPayload)
-
-    ///
-    /// Handles the hello event.
-    ///
-    /// - parameter payload: The dispatch payload
-    ///
-    func handleHello(_ payload: DiscordGatewayPayload)
-
-    ///
-    /// Handles the resumed event.
-    ///
-    /// - parameter payload: The payload for the event.
-    ///
-    func handleResumed(_ payload: DiscordGatewayPayload)
+    func handleGatewayPayload(_ event: DiscordGatewayEvent)
 
     ///
     /// Parses a raw message from the WebSocket. This is the entry point for all Discord events.
@@ -82,7 +47,7 @@ public protocol DiscordGatewayable : DiscordEngineHeartbeatable {
     ///
     /// - parameter payload: The payload to send.
     ///
-    func sendPayload(_ payload: DiscordGatewayPayload)
+    func sendPayload(_ payload: DiscordGatewayCommand)
 
     ///
     /// Starts the handshake with the Discord server. You shouldn't need to call this directly.
@@ -94,17 +59,18 @@ public protocol DiscordGatewayable : DiscordEngineHeartbeatable {
 
 public extension DiscordGatewayable where Self: DiscordWebSocketable & DiscordRunLoopable {
     /// Default Implementation.
-    func sendPayload(_ payload: DiscordGatewayPayload) {
-        guard let payloadString = payload.createPayloadString() else {
+    func sendPayload(_ payload: DiscordGatewayCommand) {
+        guard let data = try? DiscordJSON.makeEncoder().encode(payload),
+              let string = String(data: data, encoding: .utf8) else {
             logger.error("Could not create payload string for payload: \(payload)")
 
             return
         }
 
-        logger.debug("Sending ws: \(payloadString)")
+        logger.debug("Sending ws: \(string)")
 
         runloop.execute {
-            self.websocket?.send(payloadString)
+            self.websocket?.send(string)
         }
     }
 }

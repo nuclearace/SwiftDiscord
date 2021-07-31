@@ -62,6 +62,8 @@ public enum DiscordGatewayEvent: Decodable {
     case dispatch(DiscordGatewayDispatch)
     /// We should attempt to reconnect and resume immediately.
     case reconnect
+    /// A heartbeat.
+    case heartbeat
     /// The session has been invalidated. We should reconnect and identify/
     /// resume accordinly.
     case invalidSession(DiscordGatewayInvalidSession)
@@ -84,6 +86,7 @@ public enum DiscordGatewayEvent: Decodable {
         case .reconnect: self = .reconnect
         case .invalidSession: self = .invalidSession(try container.decode(DiscordGatewayInvalidSession.self, forKey: .data))
         case .hello: self = .hello(try container.decode(DiscordGatewayHello.self, forKey: .data))
+        case .heartbeat: self = .heartbeat
         case .heartbeatAck: self = .heartbeatAck
         default: throw DiscordGatewayEventError.unrecognizedOpcode(opcode)
         }
@@ -136,16 +139,6 @@ public struct DiscordGatewayHeartbeat: RawRepresentable, Codable {
     }
 }
 
-#if os(Linux)
-private let currentOS = "Linux"
-#elseif os(macOS)
-private let currentOS = "macOS"
-#elseif os(Windows)
-private let currentOS = "Windows"
-#else
-private let currentOS = "Other"
-#endif
-
 /// An event for identifying itself to the gateway.
 public struct DiscordGatewayIdentify: Codable {
     public enum CodingKeys: String, CodingKey {
@@ -178,11 +171,11 @@ public struct DiscordGatewayIdentify: Codable {
     /// Connection properties.
     public struct Properties: Codable {
         /// Our operating system.
-        public var os: String = currentOS
+        public var os: String
         /// Our library name.
-        public var browser: String = "swift-discord"
+        public var browser: String
         /// Our library name.
-        public var device: String = "swift-discord"
+        public var device: String
     }
 }
 
