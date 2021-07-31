@@ -81,7 +81,7 @@ public enum DiscordOAuthEndpoint : String {
     /// - parameter with: An array of `DiscordPermissions` that this bot should have
     ///
     public static func createBotAddURL(for user: DiscordUser, with permissions: DiscordPermissions) -> URL? {
-        guard user.bot else { return nil }
+        guard user.bot ?? true else { return nil }
 
         return DiscordOAuthEndpoint.bot.createURL(getParams: [
             "permissions": permissions.rawValue.description,

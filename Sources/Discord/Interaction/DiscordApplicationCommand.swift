@@ -100,7 +100,7 @@ public enum DiscordApplicationCommandOptionChoiceValue: Codable {
     case int(Int)
 
     public init(from decoder: Decoder) throws {
-        let container = try container.singleValueContainer()
+        let container = try decoder.singleValueContainer()
         if let s = try? container.decode(String.self) {
             self = .string(s)
         } else {
@@ -156,8 +156,11 @@ public struct DiscordApplicationCommandInteractionDataOption: Codable {
     /// The name of the parameter.
     public let name: String
 
-    /// The value of the pair. Type is the OptionType of the command.
-    public let value: Any?
+    // TODO: Add this and type it property, e.g. using an enum that
+    //       encodes itself using an internally tagged representation.
+    //       See https://discord.com/developers/docs/interactions/slash-commands#application-command-object-application-command-option-type
+    // /// The value of the pair. Type is the OptionType of the command.
+    // public let value: Any?
 
     /// Present if this option is a group or subcommand.
     public let options: [DiscordApplicationCommandInteractionDataOption]?

@@ -16,6 +16,8 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Foundation
+
 /// Represents an attachment.
 public struct DiscordAttachment: Identifiable, Codable {
     public enum CodingKeys: String, CodingKey {

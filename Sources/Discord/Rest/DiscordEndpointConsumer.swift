@@ -623,7 +623,7 @@ public protocol DiscordEndpointConsumer {
     /// - parameter user: Our snowflake id
     /// - parameter callback: The callback function, taking the guilds
     ///
-    func getGuilds(callback: @escaping ([DiscordUserGuild], HTTPURLResponse?) -> ())
+    func getGuilds(callback: @escaping ([DiscordGuild], HTTPURLResponse?) -> ())
 
     // MARK: Applications
 
