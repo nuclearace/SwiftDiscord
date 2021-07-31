@@ -18,16 +18,16 @@ extension DiscordGatewayPayloadData: Equatable {
     }
 }
 
-func roundTripEncode<T: Encodable>(_ item: T) -> [String: Any] {
-    let json = try? DiscordJSON.encode(item)!
-    return try! JSONSerialization.jsonObject(with: json, options: []) as! [String: Any]
+func roundTripEncode<T: Codable>(_ item: T) -> T {
+    let data = try! DiscordJSON.encode(item)
+    return try! DiscordJSON.decode(data)
 }
 
 public class TestDiscordDataStructures : XCTestCase {
 
     func testRoleJSONification() {
         let role1 = DiscordRole(id: 324, color: 43, hoist: false, managed: true, mentionable: false, name: "Test Role", permissions: [.addReactions], position: 4)
-        let role2 = DiscordRole(roleObject: roundTripEncode(role1))
+        let role2 = roundTripEncode(role1)
 
         XCTAssertEqual(role1.id, role2.id, "Role ID should survive JSONification")
         XCTAssertEqual(role1.color, role2.color, "Color should survive JSONification")
@@ -41,22 +41,22 @@ public class TestDiscordDataStructures : XCTestCase {
 
     func testPermissionOverwriteJSONification() {
         let overwrite1 = DiscordPermissionOverwrite(id: 5234, type: .member, allow: [.changeNickname, .voice], deny: [.manageChannels])
-        let overwrite2 = DiscordPermissionOverwrite(permissionOverwriteObject: roundTripEncode(overwrite1))
+        let overwrite2 = roundTripEncode(overwrite1)
 
         XCTAssertEqual(overwrite1.id, overwrite2.id, "Permission Overwrite ID should survive JSONification")
         XCTAssertEqual(overwrite1.type, overwrite2.type, "Type should survive JSONification")
         XCTAssertEqual(overwrite1.allow, overwrite2.allow, "Allow should survive JSONification")
         XCTAssertEqual(overwrite1.deny, overwrite2.deny, "Deny should survive JSONification")
         let overwrite3 = DiscordPermissionOverwrite(id: 934, type: .role, allow: [], deny: [])
-        let overwrite4 = DiscordPermissionOverwrite(permissionOverwriteObject: roundTripEncode(overwrite3))
+        let overwrite4 = roundTripEncode(overwrite3)
         XCTAssertEqual(overwrite3.type, overwrite4.type, "Type should survive JSONification")
     }
 
     func testGameJSONification() {
         let game1 = DiscordActivity(name: "Game", type: .game)
-        let game2 = DiscordActivity(gameObject: roundTripEncode(game1))!
+        let game2 = roundTripEncode(game1)
         let game3 = DiscordActivity(name: "Another Game", type: .stream, url: "http://www.twitch.tv/person")
-        let game4 = DiscordActivity(gameObject: roundTripEncode(game3))!
+        let game4 = roundTripEncode(game3)
         XCTAssertEqual(game1.name, game2.name, "Name should survive JSONification")
         XCTAssertEqual(game1.type, game2.type, "Type should survive JSONification")
         XCTAssertEqual(game1.url, game2.url, "Nil URL should survive JSONification")
@@ -82,7 +82,7 @@ public class TestDiscordDataStructures : XCTestCase {
             footer: DiscordEmbed.Footer(text: "Footer", iconUrl: dummyIconB),
             fields: [DiscordEmbed.Field(name: "Field Name", value: "Field Value", inline: true)]
         )
-        let embed2 = DiscordEmbed(embedObject: roundTripEncode(embed1))
+        let embed2 = roundTripEncode(embed1)
         var currentCompare = "embed1 and embed2"
         func check<T: Equatable>(_ lhs: T?, _ rhs: T?, _ name: String) {
             XCTAssertEqual(lhs, rhs, "\(name) should survive JSONification (comparing \(currentCompare))")
@@ -114,7 +114,7 @@ public class TestDiscordDataStructures : XCTestCase {
         }
         compare(embed1, embed2)
         let embed3 = DiscordEmbed(author: DiscordEmbed.Author(name: "Author"), image: DiscordEmbed.Image(url: dummyIconA), thumbnail: DiscordEmbed.Thumbnail(url: dummyIconA), footer: DiscordEmbed.Footer(text: "Footer", iconUrl: nil))
-        let embed4 = DiscordEmbed(embedObject: roundTripEncode(embed3))
+        let embed4 = roundTripEncode(embed3)
         currentCompare = "embed3 and embed4"
         compare(embed3, embed4)
         let nilJSONTest = JSON.encodeJSON(embed3)!
