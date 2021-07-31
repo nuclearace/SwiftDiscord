@@ -149,40 +149,6 @@ public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable {
         return Int(id.rawValue >> 22) % numOfShards
     }
 
-    mutating func updateGuild(
-        fromPresence presence: DiscordPresence,
-        fillingUsers fillUsers: Bool,
-        pruningUsers pruneUsers: Bool
-    ) {
-        let userId = presence.user.id
-
-        if pruneUsers && presence.status == .offline {
-            logger.debug("Pruning guild member \(userId) on \(id)")
-
-            members[userId] = nil
-            presences[userId] = nil
-        } else if fillUsers && !members.keys.contains(userId) {
-            logger.debug("Should get member \(userId); pull from the API")
-
-            members[lazy: userId] = .lazy({[weak self] in
-                guard let this = self else {
-                    return DiscordGuildMember(guildMemberObject: [:], guildId: 0)
-                }
-
-                // Call out for the member
-                this.getGuildMember(userId) {member, _ in
-                    guard let member = member else { return }
-
-                    self?.members[userId] = member
-                }
-
-                // Return a placeholder
-                return DiscordGuildMember(guildMemberObject: ["user": ["id": String(describing: userId)]],
-                                          guildId: this.id)
-            })
-        }
-    }
-
     // Used to update a guild from a guildUpdate event
     mutating func merge(update: DiscordGuild) {
         if let defaultMessageNotifications = update.defaultMessageNotifications {
@@ -228,7 +194,5 @@ public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable {
         if let verificationLevel = update.verificationLevel {
             self.verificationLevel = verificationLevel
         }
-
-        return self
     }
 }

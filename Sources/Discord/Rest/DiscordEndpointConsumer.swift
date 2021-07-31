@@ -228,7 +228,7 @@ public protocol DiscordEndpointConsumer {
     func modifyChannel(_ channelId: ChannelID,
                        options: [DiscordEndpoint.Options.ModifyChannel],
                        reason: String?,
-                       callback: ((DiscordGuildChannel?, HTTPURLResponse?) -> ())?)
+                       callback: ((DiscordChannel?, HTTPURLResponse?) -> ())?)
 
     ///
     /// Gets the pinned messages for a channel.
@@ -307,7 +307,7 @@ public protocol DiscordEndpointConsumer {
     func createGuildChannel(on guildId: GuildID,
                             options: [DiscordEndpoint.Options.GuildCreateChannel],
                             reason: String?,
-                            callback: ((DiscordGuildChannel?, HTTPURLResponse?) -> ())?)
+                            callback: ((DiscordChannel?, HTTPURLResponse?) -> ())?)
 
     ///
     /// Creates a role on a guild.
@@ -355,10 +355,10 @@ public protocol DiscordEndpointConsumer {
     /// Gets the channels on a guild.
     ///
     /// - parameter guildId: The snowflake id of the guild
-    /// - parameter callback: The callback function, taking an array of `DiscordGuildChannel`
+    /// - parameter callback: The callback function, taking an array of `DiscordChannel`
     ///
     func getGuildChannels(_ guildId: GuildID,
-                          callback: @escaping ([DiscordGuildChannel], HTTPURLResponse?) -> ())
+                          callback: @escaping ([DiscordChannel], HTTPURLResponse?) -> ())
 
     ///
     /// Gets the specified guild member.
@@ -429,7 +429,7 @@ public protocol DiscordEndpointConsumer {
     ///
     func modifyGuildChannelPositions(on guildId: GuildID,
                                      channelPositions: [[String: Any]],
-                                     callback: (([DiscordGuildChannel], HTTPURLResponse?) -> ())?)
+                                     callback: (([DiscordChannel], HTTPURLResponse?) -> ())?)
 
     ///
     /// Modifies a guild member.
@@ -604,19 +604,19 @@ public protocol DiscordEndpointConsumer {
     ///
     /// - parameter with: The user that the channel will be opened with's snowflake id
     /// - parameter user: Our snowflake id
-    /// - parameter callback: The callback function. Takes an optional `DiscordDMChannel`
+    /// - parameter callback: The callback function. Takes an optional `DiscordChannel`
     ///
     func createDM(with: UserID,
-                  callback: @escaping (DiscordDMChannel?, HTTPURLResponse?) -> ())
+                  callback: @escaping (DiscordChannel?, HTTPURLResponse?) -> ())
 
     ///
     /// Gets the direct message channels for a user.
     ///
     /// - parameter user: Our snowflake id
-    /// - parameter callback: The callback function, taking a dictionary of `DiscordDMChannel` associated by
+    /// - parameter callback: The callback function, taking a dictionary of `DiscordChannel` associated by
     ///                       the recipient's id
     ///
-    func getDMs(callback: @escaping (DiscordIDDictionary<DiscordDMChannel>, HTTPURLResponse?) -> ())
+    func getDMs(callback: @escaping (DiscordIDDictionary<DiscordChannel>, HTTPURLResponse?) -> ())
 
     ///
     /// Gets guilds the user is in.
