@@ -38,7 +38,7 @@ public class TestDiscordMessage : XCTestCase, DiscordClientDelegate {
         ]
     }
 
-    var channel: DiscordTextChannel!
+    var channel: DiscordChannel!
     var client: DiscordClient!
     var member: DiscordGuildMember!
 
@@ -63,6 +63,6 @@ public extension TestDiscordMessage {
     }
 
     func client(_ client: DiscordClient, didCreateChannel channel: DiscordChannel) {
-        self.channel = channel as! DiscordTextChannel
+        self.channel = channel as! DiscordChannel
     }
 }

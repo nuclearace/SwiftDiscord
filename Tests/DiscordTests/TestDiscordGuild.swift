@@ -137,7 +137,7 @@ public class TestDiscordGuild : XCTestCase {
 
     func testGuildFromObjectCorrectlyCreatesChannelCategory() {
         switch guildChannel(fromObject: testGuildChannelCategory, guildID: nil) {
-        case let channel as DiscordGuildChannelCategory:
+        case let channel as DiscordChannelCategory:
             XCTAssertEqual(Snowflake(testGuildChannelCategory["id"] as! String), channel.id,
                            "It should create a guild category id correctly")
         default:

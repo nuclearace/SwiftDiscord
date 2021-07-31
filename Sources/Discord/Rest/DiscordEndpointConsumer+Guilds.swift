@@ -46,7 +46,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func createGuildChannel(on guildId: GuildID,
                                    options: [DiscordEndpoint.Options.GuildCreateChannel],
                                    reason: String? = nil,
-                                   callback: ((DiscordGuildChannel?, HTTPURLResponse?) -> ())? = nil) {
+                                   callback: ((DiscordChannel?, HTTPURLResponse?) -> ())? = nil) {
         var createJSON: [String: Encodable] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
@@ -217,7 +217,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
     /// Default implementation
     func getGuildChannels(_ guildId: GuildID,
-                                 callback: @escaping ([DiscordGuildChannel], HTTPURLResponse?) -> ()) {
+                                 callback: @escaping ([DiscordChannel], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(channels)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([], response)
@@ -381,7 +381,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     func modifyGuildChannelPositions(on guildId: GuildID,
                                             channelPositions: [[String: Any]],
-                                            callback: (([DiscordGuildChannel], HTTPURLResponse?) -> ())? = nil) {
+                                            callback: (([DiscordChannel], HTTPURLResponse?) -> ())? = nil) {
         guard let contentData = JSON.encodeJSONData(GenericEncodableArray(channelPositions)) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in

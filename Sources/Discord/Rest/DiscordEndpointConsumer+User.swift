@@ -26,7 +26,7 @@ fileprivate let logger = Logger(label: "DiscordEndpointUser")
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     func createDM(with: UserID,
-                         callback: @escaping (DiscordDMChannel?, HTTPURLResponse?) -> ()) {
+                         callback: @escaping (DiscordChannel?, HTTPURLResponse?) -> ()) {
         guard let contentData = JSON.encodeJSONData(["recipient_id": with]) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
@@ -36,7 +36,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 return
             }
 
-            callback(DiscordDMChannel(dmObject: channel), response)
+            callback(DiscordChannel(dmObject: channel), response)
         }
 
         rateLimiter.executeRequest(endpoint: .userChannels,
@@ -46,7 +46,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     }
 
     /// Default implementation
-    func getDMs(callback: @escaping (DiscordIDDictionary<DiscordDMChannel>, HTTPURLResponse?) -> ()) {
+    func getDMs(callback: @escaping (DiscordIDDictionary<DiscordChannel>, HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard case let .array(channels)? = JSON.jsonFromResponse(data: data, response: response) else {
                 callback([:], response)
@@ -55,7 +55,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
 
             logger.debug("Got DMChannels: \(channels)")
-            callback(DiscordDMChannel.DMsfromArray(channels as! [[String: Any]]), response)
+            callback(DiscordChannel.DMsfromArray(channels as! [[String: Any]]), response)
         }
 
         rateLimiter.executeRequest(endpoint: .userChannels,

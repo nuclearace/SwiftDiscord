@@ -321,7 +321,7 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
 
         client.handleDispatch(event: .channelCreate, data: .object(testDMChannel))
 
-        assertFindChannel(channelFixture: testDMChannel, channelType: DiscordDMChannel.self)
+        assertFindChannel(channelFixture: testDMChannel, channelType: DiscordChannel.self)
 
         waitForExpectations(timeout: 0.2)
     }
@@ -402,7 +402,7 @@ extension TestDiscordClient {
         case delete
     }
 
-    func assertGuildChannel(_ channel: DiscordGuildChannel, expectedGuildChannels expected: Int,
+    func assertGuildChannel(_ channel: DiscordChannel, expectedGuildChannels expected: Int,
                             testType type: ChannelTestType) {
         guard let clientGuild = client.guilds[channel.guildId] else {
             XCTFail("Guild for channel should be in guilds")
@@ -420,7 +420,7 @@ extension TestDiscordClient {
         XCTAssertEqual(clientGuild.channels.count, expected, "Number of channels should be predictable")
     }
 
-    func assertDMChannel(_ channel: DiscordDMChannel, testType type: ChannelTestType) {
+    func assertDMChannel(_ channel: DiscordChannel, testType type: ChannelTestType) {
         switch type {
         case .create:
             XCTAssertNotNil(client.directChannels[channel.id], "Created DM Channel should be in direct channels")
@@ -460,9 +460,9 @@ public extension TestDiscordClient {
 
     func client(_ client: DiscordClient, didCreateChannel channel: DiscordChannel) {
         switch channel {
-        case let guildChannel as DiscordGuildChannel:
+        case let guildChannel as DiscordChannel:
             assertGuildChannel(guildChannel, expectedGuildChannels: 3, testType: .create)
-        case let dmChannel as DiscordDMChannel:
+        case let dmChannel as DiscordChannel:
             assertDMChannel(dmChannel, testType: .create)
         case let groupDmChannel as DiscordGroupDMChannel:
             assertGroupDMChannel(groupDmChannel, testType: .create)
@@ -475,9 +475,9 @@ public extension TestDiscordClient {
 
     func client(_ client: DiscordClient, didDeleteChannel channel: DiscordChannel) {
         switch channel {
-        case let guildChannel as DiscordGuildChannel:
+        case let guildChannel as DiscordChannel:
             assertGuildChannel(guildChannel, expectedGuildChannels: 2, testType: .delete)
-        case let dmChannel as DiscordDMChannel:
+        case let dmChannel as DiscordChannel:
             assertDMChannel(dmChannel, testType: .delete)
         case let groupDmChannel as DiscordGroupDMChannel:
             assertGroupDMChannel(groupDmChannel, testType: .delete)
@@ -489,7 +489,7 @@ public extension TestDiscordClient {
     }
 
     func client(_ client: DiscordClient, didUpdateChannel channel: DiscordChannel) {
-        guard let guildChannel = channel as? DiscordGuildChannel else {
+        guard let guildChannel = channel as? DiscordChannel else {
             XCTFail("Updated channel is not a guild channel")
 
             return
@@ -502,7 +502,7 @@ public extension TestDiscordClient {
         }
 
         switch guildChannel {
-        case is DiscordGuildChannelCategory:
+        case is DiscordChannelCategory:
             XCTAssertEqual(clientGuild.channels.count, 3, "Guild should have three channels")
             XCTAssertEqual(guildChannel.name, "A new channel", "A new channel should have been updated")
         default:

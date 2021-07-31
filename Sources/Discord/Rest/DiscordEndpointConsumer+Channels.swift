@@ -38,7 +38,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func bulkDeleteMessages(_ messages: [MessageID],
                                    on channelId: ChannelID,
                                    callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
-        guard let contentData = JSON.encodeJSONData(["messages": messages.map({ $0.description })]) else { return }
+        guard let contentData = try? DiscordJSON.encode(["messages": messages.map({ $0.description })]) else { return }
 
         rateLimiter.executeRequest(endpoint: .bulkMessageDelete(channel: channelId),
                                    token: token,
@@ -71,16 +71,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(inviteJSON)) else { return }
+        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(inviteJSON)) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(invite)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let invite: DiscordInvite = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback(nil, response)
 
                 return
             }
 
-            callback(DiscordInvite(inviteObject: invite), response)
+            callback(invite, response)
         }
 
         rateLimiter.executeRequest(endpoint: .channelInvites(channel: channelId),
@@ -95,12 +95,12 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                         emoji: String,
                         callback: ((DiscordMessage?, HTTPURLResponse?) -> ())? = nil) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(message)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let message: DiscordMessage = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback?(nil, response)
                 return
             }
 
-            callback?(DiscordMessage(messageObject: message, client: nil), response)
+            callback?(message, response)
         }
         
         rateLimiter.executeRequest(endpoint: .reactions(channel: channelId, message: messageId, emoji: emoji.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? emoji),
@@ -204,7 +204,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             extraHeaders[.auditReason] = modifyReason
         }
 
-        guard let contentData = JSON.encodeJSONData(permissionOverwrite) else { return }
+        guard let contentData = try? DiscordJSON.encode(permissionOverwrite) else { return }
 
         rateLimiter.executeRequest(endpoint: .channelPermission(channel: channelId, overwrite: permissionOverwrite.id),
                                    token: token,
@@ -216,12 +216,12 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func getInvites(for channelId: ChannelID,
                            callback: @escaping ([DiscordInvite], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .array(invites)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let invites: [DiscordInvite] = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback([], response)
                 return
             }
 
-            callback(DiscordInvite.invitesFromArray(inviteArray: invites as! [[String: Any]]), response)
+            callback(invites, response)
         }
 
         rateLimiter.executeRequest(endpoint: .channelInvites(channel: channelId),
@@ -235,15 +235,15 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                             on channelId: ChannelID,
                             content: String,
                             callback: ((DiscordMessage?, HTTPURLResponse?) -> ())? = nil) {
-        guard let contentData = JSON.encodeJSONData(["content": content]) else { return }
+        guard let contentData = try? DiscordJSON.encode(["content": content]) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(message)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let message: DiscordMessage = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback?(nil, response)
                 return
             }
 
-            callback?(DiscordMessage(messageObject: message, client: nil), response)
+            callback?(message, response)
         }
 
         rateLimiter.executeRequest(endpoint: .channelMessage(channel: channelId, message: messageId),
@@ -256,12 +256,12 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func getChannel(_ channelId: ChannelID,
                            callback: @escaping (DiscordChannel?, HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = {data, response, error in
-            guard case let .object(channel)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let channel: DiscordChannel = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback(nil, response)
                 return
             }
 
-            callback(channelFromObject(channel, withClient: nil), response)
+            callback(channel, response)
         }
 
         rateLimiter.executeRequest(endpoint: .channel(id: channelId),
@@ -285,12 +285,12 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         }
 
         let requestCallback: DiscordRequestCallback = {data, response, error in
-            guard case let .array(messages)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let messages: [DiscordMessage] = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback([], response)
                 return
             }
 
-            callback(DiscordMessage.messagesFromArray(messages as! [[String: Any]]), response)
+            callback(messages, response)
         }
 
         rateLimiter.executeRequest(endpoint: .messages(channel: channelId),
@@ -303,12 +303,12 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func getPinnedMessages(for channelId: ChannelID,
                                   callback: @escaping ([DiscordMessage], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = {data, response, error in
-            guard case let .array(messages)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let messages: [DiscordMessage] = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback([], response)
                 return
             }
 
-            callback(DiscordMessage.messagesFromArray(messages as! [[String: Any]]), response)
+            callback(messages, response)
         }
 
         rateLimiter.executeRequest(endpoint: .pins(channel: channelId),
@@ -321,7 +321,7 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func modifyChannel(_ channelId: ChannelID,
                               options: [DiscordEndpoint.Options.ModifyChannel],
                               reason: String? = nil,
-                              callback: ((DiscordGuildChannel?, HTTPURLResponse?) -> ())? = nil) {
+                              callback: ((DiscordChannel?, HTTPURLResponse?) -> ())? = nil) {
         var modifyJSON: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
@@ -344,16 +344,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
             }
         }
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(modifyJSON)) else { return }
+        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(modifyJSON)) else { return }
 
         let requestCallback: DiscordRequestCallback = {data, response, error in
-            guard case let .object(channel)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let channel: DiscordChannel = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback?(nil, response)
 
                 return
             }
 
-            callback?(guildChannel(fromObject: channel, guildID: nil), response)
+            callback?(channel, response)
         }
 
         rateLimiter.executeRequest(endpoint: .channel(id: channelId),
@@ -380,13 +380,13 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         logger.debug("(verbose) Message: \(message)")
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(message)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let message: DiscordMessage = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback?(nil, response)
 
                 return
             }
 
-            callback?(DiscordMessage(messageObject: message, client: nil), response)
+            callback?(message, response)
         }
 
         rateLimiter.executeRequest(endpoint: .messages(channel: channelId),
