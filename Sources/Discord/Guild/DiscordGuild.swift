@@ -26,7 +26,7 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordGuild")
 
 /// Represents a Guild.
-public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable {
+public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case id
         case channels

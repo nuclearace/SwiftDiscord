@@ -27,7 +27,7 @@ import class Dispatch.DispatchSemaphore
 fileprivate let logger = Logger(label: "DiscordChannel")
 
 /// A Discord channel of unspecified type.
-public struct DiscordChannel: Codable, Identifiable {
+public struct DiscordChannel: Codable, Identifiable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case id
         case type

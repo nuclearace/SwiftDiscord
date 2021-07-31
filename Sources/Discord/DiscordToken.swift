@@ -38,7 +38,7 @@ public protocol DiscordTokenBearer {
 /// The "Bot" prefix indicates that this token is a bot. This must included if the token is for a bot.
 /// Likewise, if the token is an OAuth token, it must be preceded by "Bearer". User tokens can omit a prefix.
 ///
-public struct DiscordToken: RawRepresentable, Codable, ExpressibleByStringLiteral, CustomStringConvertible {
+public struct DiscordToken: RawRepresentable, Codable, ExpressibleByStringLiteral, CustomStringConvertible, Hashable {
     // MARK: Typealiases
 
     /// ExpressibleByStringLiteral conformance

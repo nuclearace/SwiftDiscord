@@ -17,7 +17,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a Discord Permission. Calculating Permissions involves bitwise operations.
-public struct DiscordPermissions: OptionSet, Codable {
+public struct DiscordPermissions: OptionSet, Codable, Hashable {
     // TODO: Migrate to BigInt or similar since permission are string-serialized
     //       and may have arbitrary size as of v8
 
@@ -120,17 +120,23 @@ public struct DiscordPermissions: OptionSet, Codable {
 }
 
 /// Represents a permission overwrite type for a channel.
-public enum DiscordPermissionOverwriteType: String, Codable {
+public struct DiscordPermissionOverwriteType: RawRepresentable, Codable, Hashable {
+    public var rawValue: String
+
     /// A role overwrite.
-    case role = "role"
+    public static let role = DiscordPermissionOverwriteType(rawValue: "role")
     /// A member overwrite.
-    case member = "member"
+    public static let member = DiscordPermissionOverwriteType(rawValue: "member")
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
 }
 
 /// Represents a permission overwrite for a channel.
 ///
 /// The `allow` and `deny` properties are bit fields.
-public struct DiscordPermissionOverwrite: Codable, Identifiable {
+public struct DiscordPermissionOverwrite: Codable, Identifiable, Hashable {
     // MARK: Properties
 
     /// The snowflake id of this permission overwrite.

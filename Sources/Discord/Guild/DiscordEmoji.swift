@@ -21,7 +21,7 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordEmoji")
 
 /// Represents an Emoji.
-public struct DiscordEmoji: Identifiable, Codable {
+public struct DiscordEmoji: Identifiable, Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case id
         case managed

@@ -18,7 +18,7 @@
 import Foundation
 
 /// Used to indicate that a user has joined a thread.
-public struct DiscordThreadMember: Codable {
+public struct DiscordThreadMember: Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case id
         case userId = "user_id"

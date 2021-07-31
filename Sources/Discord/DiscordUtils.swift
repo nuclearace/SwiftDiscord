@@ -187,6 +187,18 @@ public class CodableBox<Value>: Codable where Value: Codable {
     }
 }
 
+extension CodableBox: Equatable where Value: Equatable {
+    public static func ==(lhs: CodableBox<Value>, rhs: CodableBox<Value>) -> Bool {
+        lhs.wrappedValue == rhs.wrappedValue
+    }
+}
+
+extension CodableBox: Hashable where Value: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        wrappedValue.hash(into: &hasher)
+    }
+}
+
 extension KeyedDecodingContainerProtocol {
     func decodePrimitiveAny(forKey key: Key) throws -> Any {
         if let b = try? decode(Bool.self, forKey: key) {

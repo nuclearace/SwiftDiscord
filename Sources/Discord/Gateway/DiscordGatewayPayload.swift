@@ -17,7 +17,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// A gateway payload to be sent.
-public enum DiscordGatewayCommand: Encodable {
+public enum DiscordGatewayCommand: Encodable, Equatable {
     /// Starts a new session during the initial handshake.
     case identify(DiscordGatewayIdentify)
     /// Fired periodically by the client to keep the connection alive.
@@ -121,7 +121,7 @@ public struct DiscordGatewayOpcode: RawRepresentable, Codable, Hashable {
 
 /// Used to maintain an active gateway connection. Must be sent
 /// every `heartbeat_interval` ms after the hello.
-public struct DiscordGatewayHeartbeat: RawRepresentable, Codable {
+public struct DiscordGatewayHeartbeat: RawRepresentable, Codable, Hashable {
     /// The last sequence number received by the client.
     public var lastSequenceNumber: Int
 
@@ -140,7 +140,7 @@ public struct DiscordGatewayHeartbeat: RawRepresentable, Codable {
 }
 
 /// An event for identifying itself to the gateway.
-public struct DiscordGatewayIdentify: Encodable {
+public struct DiscordGatewayIdentify: Encodable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case token
         case intents
@@ -169,7 +169,7 @@ public struct DiscordGatewayIdentify: Encodable {
     public var presence: DiscordPresenceUpdate? = nil
 
     /// Connection properties.
-    public struct Properties: Codable {
+    public struct Properties: Codable, Hashable {
         /// Our operating system.
         public var os: String
         /// Our library name.
@@ -180,7 +180,7 @@ public struct DiscordGatewayIdentify: Encodable {
 }
 
 /// An event for 'resuming' a connection, replaying lost events.
-public struct DiscordGatewayResume: Codable {
+public struct DiscordGatewayResume: Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case token
         case sessionId = "session_id"
@@ -196,7 +196,7 @@ public struct DiscordGatewayResume: Codable {
 }
 
 /// Used to request all members for a guild or a list of guilds.
-public struct DiscordGatewayRequestGuildMembers: Codable {
+public struct DiscordGatewayRequestGuildMembers: Codable, Hashable {
     /// The id of the guild to get members for.
     public var guildId: GuildID
     /// String that username starts with (allows empty string for all).
@@ -224,6 +224,11 @@ public struct DiscordGatewayDispatch: Decodable {
     public var sequenceNumber: Int
     /// The event type and data.
     public var event: DiscordDispatchEvent
+
+    init(sequenceNumber: Int, event: DiscordDispatchEvent) {
+        self.sequenceNumber = sequenceNumber
+        self.event = event
+    }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

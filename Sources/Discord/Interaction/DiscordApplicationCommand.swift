@@ -2,7 +2,7 @@ import Foundation
 
 /// Represents a slash-command. The base command model of the
 /// application.
-public struct DiscordApplicationCommand: Codable, Identifiable {
+public struct DiscordApplicationCommand: Codable, Identifiable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case id
         case applicationId = "application_id"
@@ -29,7 +29,7 @@ public struct DiscordApplicationCommand: Codable, Identifiable {
     public let parameters: [DiscordApplicationCommandOption]
 }
 
-public struct DiscordApplicationCommandOption: Codable {
+public struct DiscordApplicationCommandOption: Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case type
         case name
@@ -82,7 +82,7 @@ public struct DiscordApplicationCommandOption: Codable {
     }
 }
 
-public struct DiscordApplicationCommandOptionChoice: Codable {
+public struct DiscordApplicationCommandOptionChoice: Codable, Hashable {
     /// 1-100 character choice name
     public let name: String
 
@@ -95,7 +95,7 @@ public struct DiscordApplicationCommandOptionChoice: Codable {
     }
 }
 
-public enum DiscordApplicationCommandOptionChoiceValue: Codable {
+public enum DiscordApplicationCommandOptionChoiceValue: Codable, Hashable {
     case string(String)
     case int(Int)
 
@@ -120,18 +120,24 @@ public enum DiscordApplicationCommandOptionChoiceValue: Codable {
     }
 }
 
-public enum DiscordApplicationCommandOptionType: Int, Codable {
-    case subCommand = 1
-    case subCommandGroup = 2
-    case string = 3
-    case integer = 4
-    case boolean = 5
-    case user = 6
-    case channel = 7
-    case role = 8
+public struct DiscordApplicationCommandOptionType: RawRepresentable, Codable, Hashable {
+    public var rawValue: Int
+
+    public static let subCommand = DiscordApplicationCommandOptionType(rawValue: 1)
+    public static let subCommandGroup = DiscordApplicationCommandOptionType(rawValue: 2)
+    public static let string = DiscordApplicationCommandOptionType(rawValue: 3)
+    public static let integer = DiscordApplicationCommandOptionType(rawValue: 4)
+    public static let boolean = DiscordApplicationCommandOptionType(rawValue: 5)
+    public static let user = DiscordApplicationCommandOptionType(rawValue: 6)
+    public static let channel = DiscordApplicationCommandOptionType(rawValue: 7)
+    public static let role = DiscordApplicationCommandOptionType(rawValue: 8)
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
 }
 
-public struct DiscordApplicationCommandInteractionData: Codable {
+public struct DiscordApplicationCommandInteractionData: Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case id
         case name
@@ -152,7 +158,7 @@ public struct DiscordApplicationCommandInteractionData: Codable {
     public let options: [DiscordApplicationCommandInteractionDataOption]
 }
 
-public struct DiscordApplicationCommandInteractionDataOption: Codable {
+public struct DiscordApplicationCommandInteractionDataOption: Codable, Hashable {
     /// The name of the parameter.
     public let name: String
 

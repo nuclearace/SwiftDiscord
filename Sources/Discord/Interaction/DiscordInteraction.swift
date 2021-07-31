@@ -1,7 +1,7 @@
 import Foundation
 
 /// Represents a slash-command invocation by the user.
-public struct DiscordInteraction: Identifiable, Codable {
+public struct DiscordInteraction: Identifiable, Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case id
         case type

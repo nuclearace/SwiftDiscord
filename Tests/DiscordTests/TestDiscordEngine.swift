@@ -25,10 +25,8 @@ public class TestDiscordEngine : XCTestCase, DiscordShardDelegate {
     }
 
     func testEngineUpdatesSequenceNumber() {
-        let payload1 = DiscordGatewayPayload(code: .gateway(.dispatch), payload: .object([:]), sequenceNumber: 1,
-                                             name: DiscordDispatchEvent.messageCreate.rawValue)
-        let payload2 = DiscordGatewayPayload(code: .gateway(.dispatch), payload: .object([:]), sequenceNumber: 2,
-                                             name: DiscordDispatchEvent.messageUpdate.rawValue)
+        let payload1 = DiscordGatewayEvent.dispatch(.init(sequenceNumber: 1, event: .messageCreate(DiscordMessage())))
+        let payload1 = DiscordGatewayEvent.dispatch(.init(sequenceNumber: 2, event: .messageUpdate(DiscordMessage())))
 
         expectation = expectation(description: "Engine should update the sequence number")
 

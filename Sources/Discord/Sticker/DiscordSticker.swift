@@ -15,7 +15,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-public struct DiscordSticker: Identifiable, Codable {
+public struct DiscordSticker: Identifiable, Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case id
         case packId = "pack_id"
@@ -45,7 +45,7 @@ public struct DiscordSticker: Identifiable, Codable {
     public let formatType: DiscordStickerFormatType?
 }
 
-public struct DiscordStickerFormatType: RawRepresentable, Codable {
+public struct DiscordStickerFormatType: RawRepresentable, Codable, Hashable {
     public var rawValue: Int
 
     public static let png = DiscordStickerFormatType(rawValue: 1)

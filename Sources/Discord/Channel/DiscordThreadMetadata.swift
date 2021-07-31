@@ -18,7 +18,7 @@
 import Foundation
 
 /// Additional metadata about a thread.
-public struct DiscordThreadMetadata: Codable {
+public struct DiscordThreadMetadata: Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case archived
         case autoArchiveDuration = "auto_archive_duration"

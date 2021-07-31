@@ -19,7 +19,7 @@
 import Foundation
 
 /// Represents an attachment.
-public struct DiscordAttachment: Identifiable, Codable {
+public struct DiscordAttachment: Identifiable, Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case id
         case filename

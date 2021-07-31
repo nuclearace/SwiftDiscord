@@ -19,7 +19,7 @@
 import Foundation
 
 /// Represents a webhook.
-public struct DiscordWebhook: Identifiable, Codable {
+public struct DiscordWebhook: Identifiable, Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case avatar
         case channelId = "channel_id"

@@ -19,9 +19,9 @@
 import Foundation
 
 /// Represents a Discord chat message.
-public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable {
+public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable, Hashable {
     // Used for `createDataForSending`
-    private struct Draft: Codable {
+    private struct Draft: Codable, Hashable {
         enum CodingKeys: String, CodingKey {
             case content
             case tts
@@ -161,7 +161,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable 
     /// - parameter tts: Whether this message should be text-to-speach.
     ///
     public init(
-        content: String,
+        content: String = "",
         embed: DiscordEmbed? = nil,
         files: [DiscordFileUpload] = [],
         tts: Bool = false,
@@ -248,20 +248,19 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable 
     
 
     /// Represents an action that be taken on a message.
-    public struct Activity: Codable {
+    public struct Activity: Codable, Hashable {
         /// Represents the type of activity.
-        public enum ActivityType: Int, Codable {
-            /// Join.
-            case join = 1
+        public struct ActivityType: RawRepresentable, Codable, Hashable {
+            public var rawValue: Int
 
-            /// Spectate.
-            case spectate
+            public static let join = ActivityType(rawValue: 1)
+            public static let spectate = ActivityType(rawValue: 2)
+            public static let listen = ActivityType(rawValue: 3)
+            public static let joinRequest = ActivityType(rawValue: 4)
 
-            /// Listen.
-            case listen
-
-            /// Join request.
-            case joinRequest
+            public init(rawValue: Int) {
+                self.rawValue = rawValue
+            }
         }
 
         public enum CodingKeys: String, CodingKey {
@@ -321,7 +320,7 @@ public struct DiscordMessageType: RawRepresentable, Codable, Hashable {
 }
 
 /// Represents a message reaction.
-public struct DiscordReaction: Codable {
+public struct DiscordReaction: Codable, Hashable {
     // MARK: Properties
 
     /// The number of times this emoji has been used to react.
@@ -334,7 +333,7 @@ public struct DiscordReaction: Codable {
     public var emoji: DiscordEmoji
 }
 
-public enum DiscordAllowedMentionType: String, Codable {
+public enum DiscordAllowedMentionType: String, Codable, Hashable {
     case roles
     case users
     case everyone
@@ -342,7 +341,7 @@ public enum DiscordAllowedMentionType: String, Codable {
 
 /// Allows for more granular control over mentions
 /// without having to modify the message content.
-public struct DiscordAllowedMentions: Codable {
+public struct DiscordAllowedMentions: Codable, Hashable {
     public enum CodingKeys : String, CodingKey {
         case parse
         case roles
@@ -368,7 +367,7 @@ public struct DiscordAllowedMentions: Codable {
 }
 
 /// A reference to a message, e.g. used in outgoing replies.
-public struct DiscordMessageReference: Codable {
+public struct DiscordMessageReference: Codable, Hashable {
     public enum CodingKeys : String, CodingKey {
         case messageId = "message_id"
         case channelId = "channel_id"
@@ -387,7 +386,7 @@ public struct DiscordMessageReference: Codable {
 }
 
 /// An interactive part of a message.
-public struct DiscordMessageComponent: Codable {
+public struct DiscordMessageComponent: Codable, Hashable {
     public enum CodingKeys : String, CodingKey {
         case type
         case components
@@ -477,7 +476,7 @@ public struct DiscordMessageComponentType : RawRepresentable, Hashable, Codable 
 }
 
 /// A partial emoji for use in message components.
-public struct DiscordMessageComponentEmoji: Codable, Identifiable {
+public struct DiscordMessageComponentEmoji: Codable, Identifiable, Hashable {
     public var id: EmojiID?
     public var name: String?
     public var animated: Bool

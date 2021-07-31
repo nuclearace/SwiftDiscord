@@ -17,7 +17,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a ban.
-public struct DiscordBan: Codable {
+public struct DiscordBan: Codable, Hashable {
     // MARK: Properties
 
     /// The reason this person was banned.

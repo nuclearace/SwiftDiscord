@@ -17,7 +17,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a Discord user.
-public struct DiscordUser: Codable, Identifiable {
+public struct DiscordUser: Codable, Identifiable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case avatar
         case bot

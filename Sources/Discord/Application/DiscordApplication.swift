@@ -19,7 +19,7 @@
 import Foundation
 
 /// An application using the Discord API.
-public struct DiscordApplication: Codable {
+public struct DiscordApplication: Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case id
         case name
@@ -93,7 +93,7 @@ public struct DiscordApplication: Codable {
 }
 
 /// Public flags of an application.
-public struct DiscordApplicationFlags: RawRepresentable, Codable, OptionSet {
+public struct DiscordApplicationFlags: RawRepresentable, Codable, OptionSet, Hashable {
     public var rawValue: UInt32
 
     public static let gatewayPresence = DiscordApplicationFlags(rawValue: 1 << 12)

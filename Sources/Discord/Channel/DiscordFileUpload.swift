@@ -19,7 +19,7 @@
 import Foundation
 
 /// Represents a file to be uploaded to Discord.
-public struct DiscordFileUpload {
+public struct DiscordFileUpload: Hashable {
     // MARK: Properties
 
     /// The file data.

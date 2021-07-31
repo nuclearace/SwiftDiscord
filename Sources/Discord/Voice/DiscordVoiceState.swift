@@ -19,7 +19,7 @@
 import Foundation
 
 /// Used to represent a user's voice connection status.
-public struct DiscordVoiceState: Codable, Identifiable {
+public struct DiscordVoiceState: Codable, Identifiable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case guildId = "guild_id"
         case channelId = "channel_id"

@@ -22,7 +22,7 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordGuildMember")
 
 /// Represents a guild member.
-public struct DiscordGuildMember: Codable, Identifiable {
+public struct DiscordGuildMember: Codable, Identifiable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case guildId = "guild_id"
         case joinedAt = "joined_at"

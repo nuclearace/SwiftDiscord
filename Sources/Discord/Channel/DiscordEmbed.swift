@@ -19,11 +19,11 @@
 import Foundation
 
 /// Represents an embeded entity.
-public struct DiscordEmbed: Codable {
+public struct DiscordEmbed: Codable, Hashable {
     // MARK: Nested Types
 
     /// Represents an Embed's author.
-    public struct Author: Codable {
+    public struct Author: Codable, Hashable {
         private enum CodingKeys: String, CodingKey {
             case name
             case iconUrl = "icon_url"
@@ -68,7 +68,7 @@ public struct DiscordEmbed: Codable {
     }
 
     /// Represents an Embed's fields.
-    public struct Field: Codable {
+    public struct Field: Codable, Hashable {
         // MARK: Properties
 
         /// The name of the field.
@@ -97,7 +97,7 @@ public struct DiscordEmbed: Codable {
     }
 
     /// Represents an Embed's footer.
-    public struct Footer: Codable {
+    public struct Footer: Codable, Hashable {
         private enum CodingKeys : String, CodingKey {
             case text
             case iconUrl = "icon_url"
@@ -135,7 +135,7 @@ public struct DiscordEmbed: Codable {
     }
 
     /// Represents an Embed's image.
-    public struct Image: Codable {
+    public struct Image: Codable, Hashable {
         // MARK: Properties
 
         /// The height of this image.
@@ -167,7 +167,7 @@ public struct DiscordEmbed: Codable {
     }
 
     /// Represents what is providing the content of an embed.
-    public struct Provider: Codable {
+    public struct Provider: Codable, Hashable {
         // MARK: Properties
 
         /// The name of this provider.
@@ -178,7 +178,7 @@ public struct DiscordEmbed: Codable {
     }
 
     /// Represents the thumbnail of an embed.
-    public struct Thumbnail: Codable {
+    public struct Thumbnail: Codable, Hashable {
         private enum CodingKeys: String, CodingKey {
             case height
             case proxyUrl = "proxy_url"
@@ -222,7 +222,7 @@ public struct DiscordEmbed: Codable {
 
     /// Represents the video of an embed.
     /// Note: Discord does not accept these, so they are read-only
-    public struct Video: Codable {
+    public struct Video: Codable, Hashable {
         /// The height of this video
         public let height: Int
 

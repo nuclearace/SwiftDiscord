@@ -5,19 +5,6 @@
 import XCTest
 @testable import Discord
 
-extension DiscordGatewayPayloadData: Equatable {
-    public static func ==(lhs: DiscordGatewayPayloadData, rhs: DiscordGatewayPayloadData) -> Bool {
-        switch (lhs, rhs) {
-        case let (.bool(lhsbool), .bool(rhsbool)):
-            return lhsbool == rhsbool
-        case let (.integer(lhsint), .integer(rhsint)):
-            return lhsint == rhsint
-        default:
-            return false
-        }
-    }
-}
-
 func roundTripEncode<T: Codable>(_ item: T) -> T {
     let data = try! DiscordJSON.encode(item)
     return try! DiscordJSON.decode(data)

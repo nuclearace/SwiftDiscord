@@ -19,7 +19,7 @@
 import Foundation
 
 /// Represents a presence.
-public struct DiscordPresence: Codable, Identifiable {
+public struct DiscordPresence: Codable, Identifiable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case user
         case activities
@@ -62,42 +62,47 @@ public struct DiscordPresence: Codable, Identifiable {
 }
 
 /// Represents a presence status.
-public enum DiscordPresenceStatus: String, Codable {
-    // MARK: Cases
+public struct DiscordPresenceStatus: RawRepresentable, Codable, Hashable {
+    public var rawValue: String
 
     /// User is idle.
-    case idle = "idle"
-
+    public static let idle = DiscordPresenceStatus(rawValue: "idle")
     /// User is offline or hidden.
-    case offline = "offline"
-
+    public static let offline = DiscordPresenceStatus(rawValue: "offline")
     /// User is online.
-    case online = "online"
-
+    public static let online = DiscordPresenceStatus(rawValue: "online")
     /// This user won't receive notifications.
-    case doNotDisturb = "dnd"
+    public static let doNotDisturb = DiscordPresenceStatus(rawValue: "dnd")
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
 }
 
 /// Represents an activity type.
-public enum DiscordActivityType: Int, Codable {
-    // MARK: Cases
+public struct DiscordActivityType: RawRepresentable, Codable, Hashable {
+    public var rawValue: Int
 
     /// A regular game.
     /// TODO: Rename to `playing`
-    case game = 0
+    public static let game = DiscordActivityType(rawValue: 0)
 
     /// A stream.
-    case stream = 1
+    public static let stream = DiscordActivityType(rawValue: 1)
 
     /// Listening to something.
-    case listening = 2
+    public static let listening = DiscordActivityType(rawValue: 2)
 
     /// Watching something
-    case watching = 3
+    public static let watching = DiscordActivityType(rawValue: 3)
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
 }
 
 /// Represents a game
-public struct DiscordActivity: Codable {
+public struct DiscordActivity: Codable, Hashable {
     // MARK: Properties
 
     /// The application id.
@@ -176,7 +181,7 @@ public struct DiscordActivity: Codable {
 }
 
 /// Represents the start/end of a game.
-public struct DiscordActivityTimestamps: Codable {
+public struct DiscordActivityTimestamps: Codable, Hashable {
     // MARK: Properties
 
     /// The start.
@@ -187,7 +192,7 @@ public struct DiscordActivityTimestamps: Codable {
 }
 
 /// Represents the party status.
-public struct DiscordParty: Codable, Identifiable {
+public struct DiscordParty: Codable, Identifiable, Hashable {
     // MARK: Properties
 
     /// The id of the party.
@@ -198,7 +203,7 @@ public struct DiscordParty: Codable, Identifiable {
 }
 
 /// Represents presence assets.
-public struct DiscordActivityAssets: Codable {
+public struct DiscordActivityAssets: Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case largeImage = "large_image"
         case largeText = "large_text"
@@ -222,7 +227,7 @@ public struct DiscordActivityAssets: Codable {
 }
 
 /// Used to send updates to Discord about our presence.
-public struct DiscordPresenceUpdate: Encodable {
+public struct DiscordPresenceUpdate: Encodable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case since
         case activities

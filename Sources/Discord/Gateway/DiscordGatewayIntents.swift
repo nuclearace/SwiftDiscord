@@ -2,7 +2,7 @@
 /// subscribe to.
 ///
 /// See https://discord.com/developers/docs/topics/gateway#gateway-intents
-public struct DiscordGatewayIntents: OptionSet, RawRepresentable, Codable {
+public struct DiscordGatewayIntents: OptionSet, RawRepresentable, Codable, Hashable {
     public let rawValue: Int
 
     /// Creation, updates and deletions of guilds, roles and channels.
