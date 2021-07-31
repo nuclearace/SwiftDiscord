@@ -19,7 +19,7 @@
 import Foundation
 
 /// Used to represent a user's voice connection status.
-public struct DiscordVoiceState: Codable {
+public struct DiscordVoiceState: Codable, Identifiable {
     public enum CodingKeys: String, CodingKey {
         case guildId = "guild_id"
         case channelId = "channel_id"
@@ -74,4 +74,6 @@ public struct DiscordVoiceState: Codable {
 
     /// The time at which the user requested to speak.
     public var requestToSpeakTimestamp: Date?
+
+    public var id: UserID { userId }
 }

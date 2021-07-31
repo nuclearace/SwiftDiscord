@@ -91,9 +91,6 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     /// The guilds that this user is in.
     public private(set) var guilds = DiscordIDDictionary<DiscordGuild>()
 
-    /// The relationships this user has. Only valid for non-bot users.
-    public private(set) var relationships = [[String: Any]]()
-
     /// The DiscordUser this client is connected to.
     public private(set) var user: DiscordUser?
 
@@ -655,11 +652,11 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    private func handleGuildUpdate(with event: DiscordGuildUpdateEvent) {
+    private func handleGuildUpdate(with guild: DiscordGuild) {
         logger.info("Handling guild update")
 
         guard let guildId = Snowflake(data["id"] as? String) else { return }
-        guard let updatedGuild = guilds[guildId]?.updateGuild(fromGuildUpdate: data) else { return }
+        guard let updatedGuild = guilds[guildId]?.updateGuild(fromGuildUpdate: guild) else { return }
 
         logger.debug("(verbose) Updated guild: \(updatedGuild)")
 
@@ -675,10 +672,8 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    private func handleMessageUpdate(with event: DiscordMessageUpdateEvent) {
+    private func handleMessageUpdate(with message: DiscordMessage) {
         logger.info("Handling message update")
-
-        let message = DiscordMessage(messageObject: data, client: self)
 
         logger.debug("(verbose) Message: \(message)")
 
@@ -694,32 +689,12 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    private func handleMessageCreate(with event: DiscordMessageCreateEvent) {
+    private func handleMessageCreate(with message: DiscordMessage) {
         logger.info("Handling message create")
-
-        let message = DiscordMessage(messageObject: data, client: self)
 
         logger.debug("(verbose) Message: \(message)")
 
         delegate?.client(self, didCreateMessage: message)
-    }
-
-    /// Used to get fields for reaction notifications since add and remove are very similar
-    /// - parameter mode: A string to identify add/remove when logging errors
-    private func getReactionInfo(mode: String, from data: [String: Any]) -> (UserID, DiscordChannel, MessageID, DiscordEmoji)? {
-        guard let userID = UserID(data["user_id"] as? String),
-              let channelID = ChannelID(data["channel_id"] as? String),
-              let messageID = MessageID(data["message_id"] as? String),
-              let emoji = (data["emoji"] as? [String: Any]).map(DiscordEmoji.init(emojiObject:))
-        else {
-                logger.error("Failed to get required fields from reaction \(mode)")
-                return nil
-        }
-        guard let channel = findChannel(fromId: channelID) else {
-            logger.error("Failed to get channel from ID in reaction \(mode)")
-            return nil
-        }
-        return (userID, channel, messageID, emoji)
     }
 
     ///
@@ -734,15 +709,21 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     private func handleMessageReactionAdd(with event: DiscordMessageReactionAddEvent) {
         logger.info("Handling message reaction add")
 
-        guard let (userID, channel, messageID, emoji) = getReactionInfo(mode: "add", from: data) else { return }
+        guard let channel = findChannel(fromId: event.channelId) else { return }
 
-        if let guildID = GuildID(data["guild_id"] as? String),
-           let guild = guilds[guildID],
-           let member = (data["member"] as? [String: Any]).map({ DiscordGuildMember(guildMemberObject: $0, guildId: guildID) }) {
+        if let guildId = event.guildId,
+           let guild = guilds[guildId],
+           let member = event.member {
             guild.members[member.user.id] = member
         }
 
-        delegate?.client(self, didAddReaction: emoji, toMessage: messageID, onChannel: channel, user: userID)
+        delegate?.client(
+            self,
+            didAddReaction: event.emoji,
+            toMessage: event.messageId,
+            onChannel: channel,
+            user: event.userId
+        )
     }
 
     ///
@@ -757,9 +738,15 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     private func handleMessageReactionRemove(with event: DiscordMessageReactionRemoveEvent) {
         logger.info("Handling message reaction remove")
 
-        guard let (userID, channel, messageID, emoji) = getReactionInfo(mode: "remove", from: data) else { return }
+        guard let channel = findChannel(fromId: event.channelId) else { return }
 
-        delegate?.client(self, didRemoveReaction: emoji, fromMessage: messageID, onChannel: channel, user: userID)
+        delegate?.client(
+            self,
+            didRemoveReaction: event.emoji,
+            fromMessage: event.messageId,
+            onChannel: channel,
+            user: event.userId
+        )
     }
 
     ///
@@ -772,18 +759,12 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     /// - parameter with: The data from the event
     ///
     private func handleMessageReactionRemoveAll(with event: DiscordMessageReactionRemoveAllEvent) {
-        guard let channelID = ChannelID(data["channel_id"] as? String),
-              let messageID = MessageID(data["message_id"] as? String)
-        else {
-                logger.error("Failed to get required fields from reaction remove all")
-                return
-        }
-        guard let channel = findChannel(fromId: channelID) as? DiscordTextChannel else {
+        guard let channel = findChannel(fromId: event.channelId) else {
             logger.error("Failed to get channel from ID in reaction remove all")
             return
         }
 
-        delegate?.client(self, didRemoveAllReactionsFrom: messageID, onChannel: channel)
+        delegate?.client(self, didRemoveAllReactionsFrom: event.messageId, onChannel: channel)
     }
 
     ///
@@ -795,22 +776,21 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    private func handlePresenceUpdate(with event: DiscordPresenceUpdateEvent) {
-        guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
-        guard let user = data["user"] as? [String: Any], let userId = Snowflake(user["id"] as? String) else { return }
+    private func handlePresenceUpdate(with update: DiscordPresenceUpdateEvent) {
+        guard let guild = guilds[update.guildId] else { return }
 
-        var presence = guild.presences[userId]
+        var presence = guild.presences[update.user.id]
 
         if presence != nil {
-            presence!.updatePresence(presenceObject: data)
+            presence!.merge(update: update)
         } else {
-            presence = DiscordPresence(presenceObject: data, guildId: guildId)
+            presence = update
         }
 
         if !discardPresences {
             logger.debug("Updated presence: \(presence!)")
 
-            guild.presences[userId] = presence!
+            guild.presences[update.user.id] = presence!
         }
 
         delegate?.client(self, didReceivePresenceUpdate: presence!)
@@ -828,10 +808,10 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter with: The data from the event
     ///
-    private func handleInteractionCreate(with event: DiscordInteractionCreateEvent) {
+    private func handleInteractionCreate(with interaction: DiscordInteraction) {
         logger.info("Handling interaction create")
 
-        delegate?.client(self, didCreateInteraction: DiscordInteraction(interactionObject: data))
+        delegate?.client(self, didCreateInteraction: interaction)
     }
 
     ///
@@ -846,26 +826,11 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     private func handleReady(with event: DiscordReadyEvent) {
         logger.info("Handling ready")
 
-        if let user = data["user"] as? [String: Any] {
-            self.user = DiscordUser(userObject: user)
-        }
+        user = event.user
 
-        if let guilds = data["guilds"] as? [[String: Any]] {
-            for (id, guild) in DiscordGuild.guildsFromArray(guilds, client: self) {
-                self.guilds.updateValue(guild, forKey: id)
-            }
-        }
+        // TODO: Handle uninitialized guilds?
+        // TODO: Use private_channels?
 
-        if let relationships = data["relationships"] as? [[String: Any]] {
-            self.relationships += relationships
-        }
-
-        if let privateChannels = data["private_channels"] as? [[String: Any]] {
-            for (id, channel) in privateChannelsFromArray(privateChannels, client: self) {
-                self.directChannels.updateValue(channel, forKey: id)
-            }
-        }
-
-        delegate?.client(self, didReceiveReady: data)
+        delegate?.client(self, didReceiveReady: event)
     }
 }

@@ -225,7 +225,6 @@ public typealias DiscordGuildMemberAddEvent = DiscordGuildMember
 public typealias DiscordGuildMemberUpdateEvent = DiscordGuildMember
 public typealias DiscordGuildRoleCreateEvent = DiscordGuildRoleUpdateEvent
 public typealias DiscordGuildRoleDeleteEvent = DiscordGuildRoleUpdateEvent
-public typealias DiscordPresenceUpdateEvent = DiscordPresence
 public typealias DiscordChannelCreateEvent = DiscordChannel
 public typealias DiscordChannelUpdateEvent = DiscordChannel
 public typealias DiscordChannelDeleteEvent = DiscordChannel
@@ -594,4 +593,26 @@ public struct DiscordWebhooksUpdateEvent: Codable {
     public var guildId: GuildID?
     /// The id of the channel.
     public var channelId: ChannelID
+}
+
+/// Sent when a presence is updated.
+public struct DiscordPresenceUpdateEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case user
+        case guildId = "guild_id"
+        case status
+        case activities
+    }
+
+    /// The user whose presence is being updated.
+    public var user: DiscordPartialUser
+
+    /// The id of the guild.
+    public var guildId: GuildID
+
+    /// The status of the user.
+    public var status: DiscordPresenceStatus?
+
+    /// The user's current activities
+    public var activities: [DiscordActivity]?
 }

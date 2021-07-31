@@ -207,7 +207,7 @@ public protocol DiscordClientDelegate : AnyObject {
     /// - parameter client: The client that is calling.
     /// - parameter didReceiveReady: The presence that was received.
     ///
-    func client(_ client: DiscordClient, didReceiveReady readyData: [String: Any])
+    func client(_ client: DiscordClient, didReceiveReady ready: DiscordReadyEvent)
 
     ///
     /// Called when the client receives a voice state update.

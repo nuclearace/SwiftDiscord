@@ -17,7 +17,7 @@
 
 /// An ID-indexed dictionary that serializes to an array
 /// while enabling efficiently indexed access to the elements.
-public struct DiscordIDDictionary<Value: Identifiable>: ExpressibleByDictionaryLiteral {
+public struct DiscordIDDictionary<Value: Identifiable>: ExpressibleByDictionaryLiteral, Sequence {
     private var backingDictionary: [Value.ID: Value]
 
     public var keys: Dictionary<Value.ID, Value>.Keys { backingDictionary.keys }
@@ -38,6 +38,10 @@ public struct DiscordIDDictionary<Value: Identifiable>: ExpressibleByDictionaryL
 
     public mutating func removeValue(forKey key: Value.ID) {
         backingDictionary.removeValue(forKey: key)
+    }
+
+    public func makeIterator() -> Dictionary<Value.ID, Value>.Iterator {
+        backingDictionary.makeIterator()
     }
 }
 

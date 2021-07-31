@@ -34,7 +34,6 @@ public final class DiscordGuild: CustomStringConvertible, Identifiable, Codable 
         case widgetEnabled = "widget_enabled"
         case widgetChannelId = "widget_channel_id"
         case emojis
-        case features
         case icon
         case banner
         case large
@@ -55,10 +54,6 @@ public final class DiscordGuild: CustomStringConvertible, Identifiable, Codable 
 
     // MARK: Properties
 
-    // TODO figure out what features are
-    /// The guild's features.
-    public let features: [Any]
-
     /// The snowflake id of the guild.
     public let id: GuildID
 
@@ -75,15 +70,13 @@ public final class DiscordGuild: CustomStringConvertible, Identifiable, Codable 
     public let unavailable: Bool
 
     /// - returns: A description of this guild
-    public var description: String {
-        return "DiscordGuild(name: \(name))"
-    }
+    public var description: String { "DiscordGuild(name: \(name.map { "\"\($0)\"" } ?? "nil"))" }
 
     /// A `DiscordLazyDictionary` of guild members. The key is the snowflake id of the user.
-    public var members = DiscordLazyDictionary<UserID, DiscordGuildMember>()
+    public var members: DiscordIDDictionary<DiscordGuildMember>
 
     /// A dictionary of this guild's channels. The key is the snowflake id of the channel.
-    public internal(set) var channels: DiscordIDDictionary<DiscordGuildChannel>
+    public internal(set) var channels: DiscordIDDictionary<DiscordChannel>
 
     /// A dictionary of this guild's emojis. The key is the snowflake id of the emoji.
     public internal(set) var emojis: DiscordIDDictionary<DiscordEmoji>
@@ -94,44 +87,45 @@ public final class DiscordGuild: CustomStringConvertible, Identifiable, Codable 
     public internal(set) var memberCount: Int
 
     /// A `DiscordLazyDictionary` of presences. The key is the snowflake id of the user.
-    public internal(set) var presences = DiscordLazyDictionary<UserID, DiscordPresence>()
+    public internal(set) var presences: DiscordIDDictionary<DiscordPresence>
 
     /// A dictionary of this guild's roles. The key is the snowflake id of the role.
     public internal(set) var roles: DiscordIDDictionary<DiscordRole>
 
-    /// A dictionary of this guild's current voice states. The key is the snowflake id of the user for this voice
+    /// A dictionary of this guild's current voice states.
+    /// The key is the snowflake id of the user for this voice
     /// state.
     public internal(set) var voiceStates: DiscordIDDictionary<DiscordVoiceState>
 
     /// The default message notification setting.
-    public private(set) var defaultMessageNotifications: Int
+    public private(set) var defaultMessageNotifications: Int?
 
     /// The snowflake id of the embed channel for this guild.
-    public private(set) var widgetChannelId: ChannelID
+    public private(set) var widgetChannelId: ChannelID?
 
     /// Whether this guild has embed enabled.
-    public private(set) var widgetEnabled: Bool
+    public private(set) var widgetEnabled: Bool?
 
     /// The base64 encoded icon image for this guild.
-    public private(set) var icon: String
+    public private(set) var icon: String?
 
     /// The base64 encoded banner image for this guild.
-    public private(set) var banner: String
+    public private(set) var banner: String?
 
     /// The multi-factor authentication level for this guild.
-    public private(set) var mfaLevel: Int
+    public private(set) var mfaLevel: Int?
 
     /// The name of this guild.
-    public private(set) var name: String
+    public private(set) var name: String?
 
     /// The snowflake id of this guild's owner.
-    public private(set) var ownerId: UserID
+    public private(set) var ownerId: UserID?
 
     /// The region this guild is in.
-    public private(set) var region: String
+    public private(set) var region: String?
 
     /// The verification level a member of this guild must have to join.
-    public private(set) var verificationLevel: Int
+    public private(set) var verificationLevel: Int?
 
     // MARK: Methods
 
@@ -148,16 +142,18 @@ public final class DiscordGuild: CustomStringConvertible, Identifiable, Codable 
             roles.append(everyone)
         }
 
-        return roles + self.roles.filter({ member.roleIds.contains($0.key) }).map({ $0.1 })
+        return roles + self.roles.filter { member.roleIds.contains($0.key) }.map(\.value)
     }
 
     func shardNumber(assuming numOfShards: Int) -> Int {
         return Int(id.rawValue >> 22) % numOfShards
     }
 
-    func updateGuild(fromPresence presence: DiscordPresence,
-                     fillingUsers fillUsers: Bool,
-                     pruningUsers pruneUsers: Bool) {
+    mutating func updateGuild(
+        fromPresence presence: DiscordPresence,
+        fillingUsers fillUsers: Bool,
+        pruningUsers pruneUsers: Bool
+    ) {
         let userId = presence.user.id
 
         if pruneUsers && presence.status == .offline {
@@ -165,7 +161,7 @@ public final class DiscordGuild: CustomStringConvertible, Identifiable, Codable 
 
             members[userId] = nil
             presences[userId] = nil
-        } else if fillUsers && !members.contains(userId) {
+        } else if fillUsers && !members.keys.contains(userId) {
             logger.debug("Should get member \(userId); pull from the API")
 
             members[lazy: userId] = .lazy({[weak self] in

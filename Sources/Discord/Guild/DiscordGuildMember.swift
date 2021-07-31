@@ -22,7 +22,7 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordGuildMember")
 
 /// Represents a guild member.
-public struct DiscordGuildMember: Codable {
+public struct DiscordGuildMember: Codable, Identifiable {
     public enum CodingKeys: String, CodingKey {
         case guildId = "guild_id"
         case joinedAt = "joined_at"
@@ -55,28 +55,16 @@ public struct DiscordGuildMember: Codable {
     /// An array of role snowflake ids that this user has.
     public var roleIds: [RoleID]
 
-    init(guildId: GuildID, user: DiscordUser, deaf: Bool, mute: Bool, nick: String?, roleIds: [RoleID], joinedAt: Date,
-         guild: DiscordGuild? = nil) {
+    public var id: UserID { user.id }
+
+    init(guildId: GuildID, user: DiscordUser, deaf: Bool, mute: Bool, nick: String?, roleIds: [RoleID], joinedAt: Date) {
         self.user = user
         self.deaf = deaf
         self.mute = mute
         self.nick = nick
         self.roleIds = roleIds
         self.joinedAt = joinedAt
-        self.guild = guild
         self.guildId = guildId
-    }
-
-    ///
-    /// Searches this member for a role with a name that matches.
-    ///
-    /// - parameter role: The role's name to look for.
-    /// - return: Whether or not they have this role.
-    ///
-    public func hasRole(_ role: String) -> Bool {
-        guard let roles = self.roles else { return false }
-
-        return roles.contains(where: { $0.name == role })
     }
 
     mutating func updateMember(_ update: DiscordGuildMemberUpdate) {

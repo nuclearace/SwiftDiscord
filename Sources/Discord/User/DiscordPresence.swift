@@ -19,7 +19,7 @@
 import Foundation
 
 /// Represents a presence.
-public struct DiscordPresence: Codable {
+public struct DiscordPresence: Codable, Identifiable {
     public enum CodingKeys: String, CodingKey {
         case user
         case activities
@@ -33,7 +33,7 @@ public struct DiscordPresence: Codable {
     public let user: DiscordUser
 
     /// All of the user's current activies.
-    public var activities: [DiscordActivity]
+    public var activities: [DiscordActivity]?
 
     /// This user's nick on this guild.
     public var nick: String?
@@ -42,7 +42,19 @@ public struct DiscordPresence: Codable {
     public var roles: [String]?
 
     /// The status of this user.
-    public var status: DiscordPresenceStatus
+    public var status: DiscordPresenceStatus?
+
+    public var id: UserID { user.id }
+
+    /// Merges another presence in.
+    public mutating func merge(update: DiscordPresenceUpdateEvent) {
+        if let activities = update.activities {
+            self.activities = activities
+        }
+        if let status = update.status {
+            self.status = status
+        }
+    }
 }
 
 /// Represents a presence status.
