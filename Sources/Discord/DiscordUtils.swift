@@ -24,22 +24,6 @@ enum Either<L, R> {
     case right(R)
 }
 
-extension Dictionary where Value == Any {
-    func get<T>(_ value: Key, or default: T) -> T {
-        return self[value] as? T ?? `default`
-    }
-
-    func get<T>(_ value: Key, as type: T.Type) -> T? {
-        return self[value] as? T
-    }
-}
-
-extension Dictionary where Key == String, Value == Any {
-    func getSnowflake(key: String = "id") -> Snowflake {
-        return Snowflake(self[key] as? String) ?? 0
-    }
-}
-
 struct EncodableNull: Encodable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
