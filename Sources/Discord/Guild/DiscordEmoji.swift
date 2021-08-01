@@ -50,4 +50,20 @@ public struct DiscordEmoji: Identifiable, Codable, Hashable {
 
     /// An array of role snowflake ids this emoji is active for.
     public var roles: [RoleID]? = nil
+
+    public init(
+        id: EmojiID? = nil,
+        managed: Bool? = nil,
+        animated: Bool? = nil,
+        name: String,
+        requireColons: Bool? = nil,
+        roles: [RoleID]? = nil
+    ) {
+        self.id = id
+        self.managed = managed
+        self.animated = animated
+        self.name = name
+        self.requireColons = requireColons
+        self.roles = roles
+    }
 }

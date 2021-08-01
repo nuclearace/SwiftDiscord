@@ -72,7 +72,7 @@ public struct DiscordMessageComponent: Codable, Hashable {
         label: String? = nil,
         emoji: DiscordMessageComponentEmoji? = nil,
         url: URL? = nil,
-        customId: String? = nil,
+        customId: String,
         disabled: Bool? = nil
     ) -> DiscordMessageComponent {
         DiscordMessageComponent(
@@ -94,7 +94,7 @@ public struct DiscordMessageComponent: Codable, Hashable {
         placeholder: String? = nil,
         minValues: Int? = nil,
         maxValues: Int? = nil,
-        customId: String? = nil,
+        customId: String,
         disabled: Bool? = nil
     ) -> DiscordMessageComponent {
         DiscordMessageComponent(
@@ -180,6 +180,7 @@ public struct DiscordMessageComponentSelectOption: Codable, Hashable {
         self.label = label
         self.value = value
         self.description = description
+        self.emoji = emoji
         self.default = `default`
     }
 }
