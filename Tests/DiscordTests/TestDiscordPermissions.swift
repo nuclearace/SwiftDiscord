@@ -7,15 +7,19 @@ import XCTest
 @testable import Discord
 
 public class TestDiscordPermissions: XCTestCase {
+    private var guild: DiscordGuild {
+        permissionsTestClient.guilds[testGuild.id]!
+    }
+
     func testBasicPermissions() {
         let channel = createPermissionTestChannel(overwrites: [])
 
         XCTAssertEqual(channel.permissionOverwrites?.count, 0, "There should be no permission overwrites for this test!")
 
-        XCTAssertTrue(permissionsTestGuild.canMember(permissionsTestMembers[0], .banMembers, in: channel.id), "Owners should be able to do anything")
-        XCTAssertTrue(permissionsTestGuild.canMember(permissionsTestMembers[1], .manageWebhooks, in: channel.id), "Admins should be able to do anything")
-        XCTAssertTrue(permissionsTestGuild.canMember(permissionsTestMembers[2], .manageRoles, in: channel.id), "Users should be able to do things allowed by their roles")
-        XCTAssertFalse(permissionsTestGuild.canMember(permissionsTestMembers[4], .manageRoles, in: channel.id), "Users should not be able to do things not allowed by their roles")
+        XCTAssertTrue(guild.canMember(permissionsTestMembers[0], .banMembers, in: channel.id), "Owners should be able to do anything")
+        XCTAssertTrue(guild.canMember(permissionsTestMembers[1], .manageWebhooks, in: channel.id), "Admins should be able to do anything")
+        XCTAssertTrue(guild.canMember(permissionsTestMembers[2], .manageRoles, in: channel.id), "Users should be able to do things allowed by their roles")
+        XCTAssertFalse(guild.canMember(permissionsTestMembers[4], .manageRoles, in: channel.id), "Users should not be able to do things not allowed by their roles")
     }
 
     func testRoleOverrides() {
@@ -23,15 +27,15 @@ public class TestDiscordPermissions: XCTestCase {
 
         XCTAssertEqual(channel.permissionOverwrites?.count, roleOverwrites.count, "There should be the same number of permission overwrites in this channel as we put in")
 
-        XCTAssertFalse(permissionsTestGuild.canMember(permissionsTestMembers[2], .readMessageHistory, in: channel.id), "@everyone role should be applied to all members")
-        XCTAssertTrue(permissionsTestGuild.canMember(permissionsTestMembers[2], .viewAuditLog, in: channel.id), "@everyone role should be applied to all members")
-        XCTAssertFalse(permissionsTestGuild.canMember(permissionsTestMembers[4], .viewAuditLog, in: channel.id), "@everyone permission should be overridden by permissions for a specific role")
-        XCTAssertTrue(permissionsTestGuild.canMember(permissionsTestMembers[0], .sendMessages, in: channel.id), "Owner should override all permissions")
-        XCTAssertTrue(permissionsTestGuild.canMember(permissionsTestMembers[1], .viewChannel, in: channel.id), "Admin role should override all permissions")
-        XCTAssertTrue(permissionsTestGuild.canMember(permissionsTestMembers[4], .addReactions, in: channel.id), "An allow override should go over a deny of the same type")
-        XCTAssertTrue(permissionsTestGuild.canMember(permissionsTestMembers[3], .addReactions, in: channel.id), "An allow override should go over a deny of the same type even if the deny is higher on the list")
-        XCTAssertFalse(permissionsTestGuild.canMember(permissionsTestMembers[4], .sendMessages, in: channel.id), "A role permission deny should be properly applied to a normal user")
-        XCTAssertFalse(permissionsTestGuild.canMember(permissionsTestMembers[2], .addReactions, in: channel.id), "A role permission deny should be properly applied to a normal user")
+        XCTAssertFalse(guild.canMember(permissionsTestMembers[2], .readMessageHistory, in: channel.id), "@everyone role should be applied to all members")
+        XCTAssertTrue(guild.canMember(permissionsTestMembers[2], .viewAuditLog, in: channel.id), "@everyone role should be applied to all members")
+        XCTAssertFalse(guild.canMember(permissionsTestMembers[4], .viewAuditLog, in: channel.id), "@everyone permission should be overridden by permissions for a specific role")
+        XCTAssertTrue(guild.canMember(permissionsTestMembers[0], .sendMessages, in: channel.id), "Owner should override all permissions")
+        XCTAssertTrue(guild.canMember(permissionsTestMembers[1], .viewChannel, in: channel.id), "Admin role should override all permissions")
+        XCTAssertTrue(guild.canMember(permissionsTestMembers[4], .addReactions, in: channel.id), "An allow override should go over a deny of the same type")
+        XCTAssertTrue(guild.canMember(permissionsTestMembers[3], .addReactions, in: channel.id), "An allow override should go over a deny of the same type even if the deny is higher on the list")
+        XCTAssertFalse(guild.canMember(permissionsTestMembers[4], .sendMessages, in: channel.id), "A role permission deny should be properly applied to a normal user")
+        XCTAssertFalse(guild.canMember(permissionsTestMembers[2], .addReactions, in: channel.id), "A role permission deny should be properly applied to a normal user")
     }
 
     func testUserOverrides() {
@@ -39,25 +43,25 @@ public class TestDiscordPermissions: XCTestCase {
 
         XCTAssertEqual(channel.permissionOverwrites?.count, roleOverwrites.count + userOverwrites.count, "There should be the same number of permission overwrites in this channel as we put in")
 
-        XCTAssertTrue(permissionsTestGuild.canMember(permissionsTestMembers[0], .manageMessages, in: channel.id), "Owner should override all permissions")
-        XCTAssertTrue(permissionsTestGuild.canMember(permissionsTestMembers[1], .manageWebhooks, in: channel.id), "Admin role should override all permissions")
-        XCTAssertTrue(permissionsTestGuild.canMember(permissionsTestMembers[2], .addReactions, in: channel.id), "User permissions should override role permissions")
-        XCTAssertFalse(permissionsTestGuild.canMember(permissionsTestMembers[2], .manageMessages, in: channel.id), "A user permission deny should be properly applied to a normal user")
-        XCTAssertFalse(permissionsTestGuild.canMember(permissionsTestMembers[3], .addReactions, in: channel.id), "User permissions should override role permissions that overrode other role permissions")
-        XCTAssertTrue(permissionsTestGuild.canMember(permissionsTestMembers[4], .embedLinks, in: channel.id), "User permissions should be properly applied to a normal user")
-        XCTAssertTrue(permissionsTestGuild.canMember(permissionsTestMembers[4], .sendMessages, in: channel.id), "A user allow should override a role deny")
+        XCTAssertTrue(guild.canMember(permissionsTestMembers[0], .manageMessages, in: channel.id), "Owner should override all permissions")
+        XCTAssertTrue(guild.canMember(permissionsTestMembers[1], .manageWebhooks, in: channel.id), "Admin role should override all permissions")
+        XCTAssertTrue(guild.canMember(permissionsTestMembers[2], .addReactions, in: channel.id), "User permissions should override role permissions")
+        XCTAssertFalse(guild.canMember(permissionsTestMembers[2], .manageMessages, in: channel.id), "A user permission deny should be properly applied to a normal user")
+        XCTAssertFalse(guild.canMember(permissionsTestMembers[3], .addReactions, in: channel.id), "User permissions should override role permissions that overrode other role permissions")
+        XCTAssertTrue(guild.canMember(permissionsTestMembers[4], .embedLinks, in: channel.id), "User permissions should be properly applied to a normal user")
+        XCTAssertTrue(guild.canMember(permissionsTestMembers[4], .sendMessages, in: channel.id), "A user allow should override a role deny")
     }
 
     func testOverwritesWithDependencies() {
-        let channel = createPermissionTestChannel(overwrites: depencencyOverwrites)
+        let channel = createPermissionTestChannel(overwrites: dependencyOverwrites)
 
-        XCTAssertEqual(channel.permissionOverwrites?.count, depencencyOverwrites.count, "There should be the same number of permission overwrites in this channel as we put in")
+        XCTAssertEqual(channel.permissionOverwrites?.count, dependencyOverwrites.count, "There should be the same number of permission overwrites in this channel as we put in")
 
-        XCTAssertFalse(permissionsTestGuild.canMember(permissionsTestMembers[4], .sendMessages, in: channel.id), "A user who can't read messages shouldn't be able to send them")
-        XCTAssertEqual(permissionsTestGuild.permissions(for: permissionsTestMembers[4], in: channel.id)!.intersection([.createInstantInvite, .manageChannels, .addReactions, .sendMessages, .sendTTSMessages, .manageMessages, .embedLinks, .attachFiles, .readMessageHistory, .mentionEveryone, .useExternalEmojis]), [], "A user who can't read messages shouldn't be able to do any channel-related things")
-        XCTAssertFalse(permissionsTestGuild.canMember(permissionsTestMembers[4], .sendTTSMessages, in: channel.id), "A user who can't send messages shouldn't be able to send TTS messages")
-        XCTAssertTrue(permissionsTestGuild.canMember(permissionsTestMembers[3], .sendMessages, in: channel.id), "A user who has conflicting read messages permissions where the allow is used shouldn't have dependencies blocked")
-        XCTAssertEqual(permissionsTestGuild.permissions(for: permissionsTestMembers[2], in: channel.id)!.intersection([.sendTTSMessages, .embedLinks, .attachFiles, .mentionEveryone]), [], "A user who can't send messages shouldn't be able to send TTS messages, embed links, attach files, or mention everyone")
+        XCTAssertFalse(guild.canMember(permissionsTestMembers[4], .sendMessages, in: channel.id), "A user who can't read messages shouldn't be able to send them")
+        XCTAssertEqual(guild.permissions(for: permissionsTestMembers[4], in: channel.id)!.intersection([.createInstantInvite, .manageChannels, .addReactions, .sendMessages, .sendTTSMessages, .manageMessages, .embedLinks, .attachFiles, .readMessageHistory, .mentionEveryone, .useExternalEmojis]), [], "A user who can't read messages shouldn't be able to do any channel-related things")
+        XCTAssertFalse(guild.canMember(permissionsTestMembers[4], .sendTTSMessages, in: channel.id), "A user who can't send messages shouldn't be able to send TTS messages")
+        XCTAssertTrue(guild.canMember(permissionsTestMembers[3], .sendMessages, in: channel.id), "A user who has conflicting read messages permissions where the allow is used shouldn't have dependencies blocked")
+        XCTAssertEqual(guild.permissions(for: permissionsTestMembers[2], in: channel.id)!.intersection([.sendTTSMessages, .embedLinks, .attachFiles, .mentionEveryone]), [], "A user who can't send messages shouldn't be able to send TTS messages, embed links, attach files, or mention everyone")
     }
 
     let roleOverwrites = [
@@ -76,7 +80,7 @@ public class TestDiscordPermissions: XCTestCase {
         DiscordPermissionOverwrite(id: permissionsTestUsers[4].id, type: .member, allow: [.embedLinks, .sendMessages], deny: [])
     ]
 
-    let depencencyOverwrites = [
+    let dependencyOverwrites = [
         DiscordPermissionOverwrite(id: permissionsTestRoles[2].id, type: .role, allow: [], deny: .viewChannel),
         DiscordPermissionOverwrite(id: permissionsTestUsers[4].id, type: .member, allow: [.createInstantInvite, .manageChannels, .addReactions, .sendMessages, .sendTTSMessages, .manageMessages, .embedLinks, .attachFiles, .readMessageHistory, .mentionEveryone, .useExternalEmojis], deny: []),
         DiscordPermissionOverwrite(id: permissionsTestUsers[3].id, type: .member, allow: .viewChannel, deny: []),
