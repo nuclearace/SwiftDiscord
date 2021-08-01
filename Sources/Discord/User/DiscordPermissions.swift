@@ -162,14 +162,14 @@ public enum DiscordPermissionsError: Error {
 
 /// Represents a permission overwrite type for a channel.
 public struct DiscordPermissionOverwriteType: RawRepresentable, Codable, Hashable {
-    public var rawValue: String
+    public var rawValue: Int
 
     /// A role overwrite.
-    public static let role = DiscordPermissionOverwriteType(rawValue: "role")
+    public static let role = DiscordPermissionOverwriteType(rawValue: 0)
     /// A member overwrite.
-    public static let member = DiscordPermissionOverwriteType(rawValue: "member")
+    public static let member = DiscordPermissionOverwriteType(rawValue: 1)
 
-    public init(rawValue: String) {
+    public init(rawValue: Int) {
         self.rawValue = rawValue
     }
 }
