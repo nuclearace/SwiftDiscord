@@ -19,21 +19,67 @@
 import Foundation
 
 /// The stored type of a Discord Snowflake ID
-public struct Snowflake {
+public struct Snowflake: RawRepresentable, Codable, Hashable, CustomStringConvertible, ExpressibleByIntegerLiteral, Comparable {
+    /// Set this key to true on an encoder to encode Snowflakes as UInt64s instead of Strings.
+    /// This will save space in binary encoders like binary plists, but will cause encoded JSON to be
+    /// incompatible with Discord. Since JSON isn't a binary encoding, it won't save much space there anyways.
+    public static let encodeAsUInt64 = CodingUserInfoKey(rawValue: "snowflakeAsUInt64")!
+
     /// The internal ID storage for a snowflake
     public let rawValue: UInt64
 
+    /// CustomStrngConvertible conformance.
+    public var description: String { String(rawValue) }
+
     /// Initialize from a UInt64
-    public init(_ snowflake: UInt64) {
-        rawValue = snowflake
+    public init(_ rawValue: UInt64) {
+        self.rawValue = rawValue
+    }
+
+    /// RawRepresentable conformance.
+    public init(rawValue: UInt64) {
+        self.init(rawValue)
+    }
+
+    /// Initialize from an integer literal.
+    public init(integerLiteral rawValue: UInt64) {
+        self.init(rawValue)
     }
 
     /// Initialize from a string
     public init?(_ string: String) {
-        guard let snowflake = UInt64(string) else {
-            return nil
+        guard let rawValue = UInt64(string) else { return nil }
+        self.init(rawValue)
+    }
+
+    /// Decodable implementation.
+    public init(from decoder: Decoder) throws {
+        do {
+            let intForm = try UInt64(from: decoder)
+            self.init(intForm)
+        } catch {
+            guard let snowflake = Snowflake(try String(from: decoder)) else {
+                let context = DecodingError.Context(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "Failed to convert decoded string into a snowflake"
+                )
+                throw DecodingError.typeMismatch(Snowflake.self, context)
+            }
+            self = snowflake
         }
-        rawValue = snowflake
+    }
+
+    /// Encodable implementation.
+    public func encode(to encoder: Encoder) throws {
+        if encoder.userInfo[Snowflake.encodeAsUInt64] as? Bool ?? false {
+            try self.rawValue.encode(to: encoder)
+        } else {
+            try self.description.encode(to: encoder)
+        }
+    }
+
+    public static func <(lhs: Snowflake, rhs: Snowflake) -> Bool {
+        return lhs.rawValue < rhs.rawValue
     }
 }
 
@@ -109,85 +155,4 @@ extension Snowflake {
         guard intervalSinceDiscordEpoch < (1 << 41) else { return nil }
         return Snowflake(UInt64(intervalSinceDiscordEpoch) << 22)
     }
-
-}
-
-// MARK: Snowflake Conformances
-
-extension Snowflake: Codable {
-    /// Set this key to true on an encoder to encode Snowflakes as UInt64s instead of Strings.
-    /// This will save space in binary encoders like binary plists, but will cause encoded JSON to be
-    /// incompatible with Discord. Since JSON isn't a binary encoding, it won't save much space there anyways.
-    public static let encodeAsUInt64 = CodingUserInfoKey(rawValue: "snowflakeAsUInt64")!
-
-    /// Decodable implementation.
-    public init(from decoder: Decoder) throws {
-        do {
-            let intForm = try UInt64(from: decoder)
-            self = Snowflake(intForm)
-        } catch {
-            guard let snowflake = Snowflake(try String(from: decoder)) else {
-                let context = DecodingError.Context(
-                    codingPath: decoder.codingPath,
-                    debugDescription: "Failed to convert decoded string into a snowflake"
-                )
-                throw DecodingError.typeMismatch(Snowflake.self, context)
-            }
-            self = snowflake
-        }
-    }
-
-    /// Encodable implementation.
-    public func encode(to encoder: Encoder) throws {
-        if encoder.userInfo[Snowflake.encodeAsUInt64] as? Bool ?? false {
-            try self.rawValue.encode(to: encoder)
-        } else {
-            try self.description.encode(to: encoder)
-        }
-    }
-
-}
-
-/// Snowflake conformance to ExpressibleByIntegerLiteral
-extension Snowflake : ExpressibleByIntegerLiteral {
-    public typealias IntegerLiteralType = UInt64
-
-    /// Initialize from an integer literal
-    public init(integerLiteral value: UInt64) {
-        self.rawValue = value
-    }
-}
-
-/// Snowflake conformance to CustomStringConvertible
-extension Snowflake : CustomStringConvertible {
-    /// Description for string Conversion
-    public var description: String {
-        return self.rawValue.description
-    }
-
-}
-
-/// Snowflake conformance to RawRepresentable and Comparable
-extension Snowflake : RawRepresentable, Comparable {
-    public typealias RawValue = UInt64
-
-    /// Init for rawValue conformance
-    public init(rawValue: UInt64) {
-        self.init(rawValue)
-    }
-
-    /// Used to compare Snowflakes (which is useful because a greater Snowflake was made later)
-    public static func <(lhs: Snowflake, rhs: Snowflake) -> Bool {
-        return lhs.rawValue < rhs.rawValue
-    }
-
-}
-
-/// Snowflake conformance to Hashable
-extension Snowflake : Hashable {
-    /// The hash value of the Snowflake
-    public var hashValue: Int {
-        return self.rawValue.hashValue
-    }
-
 }

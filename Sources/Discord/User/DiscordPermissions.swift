@@ -113,10 +113,25 @@ public struct DiscordPermissions: OptionSet, Codable, Hashable {
         self.rawValue = rawValue
     }
 
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawString = try container.decode(String.self)
+        guard let rawValue = UInt64(rawString) else {
+            throw DiscordPermissionsError.couldNotDecode("Could not decode permissions '\(rawString)' into 64-bit integer")
+        }
+        self.rawValue = rawValue
+    }
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(rawValue.description)
     }
+}
+
+/// An error related to permissions.
+public enum DiscordPermissionsError: Error {
+    /// Indicates that a permission set could not be decoded.
+    case couldNotDecode(String)
 }
 
 /// Represents a permission overwrite type for a channel.
