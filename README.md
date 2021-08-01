@@ -33,7 +33,7 @@ dispatchMain()
 ## Features
 
 - macOS and Linux support
-- v8 API (including interactions, slash commands and message components)
+- v9 API (including threads, interactions, slash commands and message components)
 - Configurable sharding
 
 ## Requirements
