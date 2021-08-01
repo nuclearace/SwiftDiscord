@@ -130,7 +130,7 @@ func createMultipartBody(encodedJSON: Data, files: [DiscordFileUpload]) -> (boun
 enum DiscordDateFormatter {
     static let rfc3339DateFormatter: DateFormatter = { () -> DateFormatter in
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
         formatter.locale = Locale(identifier: "en_US")
         return formatter
     }()

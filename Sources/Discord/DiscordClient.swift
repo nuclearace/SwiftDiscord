@@ -473,10 +473,11 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     private func handleGuildMemberAdd(with member: DiscordGuildMember) {
         logger.info("Handling guild member add")
 
-        guard var guild = guilds[member.guildId] else { return }
+        guard let guildId = member.guildId,
+              var guild = guilds[guildId] else { return }
         guild.members?[member.id] = member
         guild.memberCount = guild.memberCount.map { $0 + 1 }
-        guilds[member.guildId] = guild
+        guilds[guildId] = guild
 
         logger.debug("(verbose) Created guild member: \(member)")
 
@@ -515,9 +516,10 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     private func handleGuildMemberUpdate(with member: DiscordGuildMember) {
         logger.info("Handling guild member update")
 
-        guard var guild = guilds[member.guildId] else { return }
+        guard let guildId = member.guildId,
+              var guild = guilds[guildId] else { return }
         guild.members?[member.id] = member
-        guilds[member.guildId] = guild
+        guilds[guildId] = guild
 
         logger.debug("(verbose) Updated guild member: \(member)")
 

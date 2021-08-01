@@ -113,7 +113,8 @@ public struct DiscordChannel: Codable, Identifiable, Hashable {
     public var parentId: ChannelID?
 
     /// When the last pinned message was pinned.
-    public var lastPinTimestamp: Date?
+    /// TODO: For some reason this does not match our date format
+    public var lastPinTimestamp: String?
 
     /// Voice region id for voice channels, automatic when set to null.
     public var rtcRegion: String?

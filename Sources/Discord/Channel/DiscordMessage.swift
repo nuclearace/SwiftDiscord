@@ -59,7 +59,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
         case editedTimestamp = "edited_timestamp"
         case timestamp
         case allowedMentions = "allowed_mentions"
-        case referencedMessage = "referenced_message"
+        case _referencedMessage = "referenced_message"
         case components
         case type
     }
@@ -90,7 +90,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
     public var application: DiscordApplication? = nil
 
     /// The attachments included in this message.
-    public var attachments: [DiscordAttachment] = []
+    public var attachments: [DiscordAttachment]? = nil
 
     /// Who sent this message.
     public var author: DiscordUser? = nil
@@ -105,16 +105,16 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
     public var editedTimestamp: Date? = nil
 
     /// The embeds that are in this message.
-    public var embeds: [DiscordEmbed] = []
+    public var embeds: [DiscordEmbed]? = nil
 
     /// Whether or not this message mentioned everyone.
     public var mentionEveryone: Bool = false
 
     /// List of snowflake ids of roles that were mentioned in this message.
-    public var mentionRoles: [RoleID] = []
+    public var mentionRoles: [RoleID]? = nil
 
     /// List of users that were mentioned in this message.
-    public var mentions: [DiscordUser] = []
+    public var mentions: [DiscordUser]? = nil
 
     /// Used for validating a message was sent.
     public var nonce: Snowflake? = nil
@@ -123,10 +123,10 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
     public var pinned: Bool = false
 
     /// The reactions a message has.
-    public var reactions: [DiscordReaction] = []
+    public var reactions: [DiscordReaction]? = nil
 
     /// The stickers a message has.
-    public var stickers: [DiscordSticker] = []
+    public var stickers: [DiscordSticker]? = nil
 
     /// The timestamp of this message.
     public var timestamp: Date
@@ -138,7 +138,13 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
     public var allowedMentions: DiscordAllowedMentions? = nil
 
     /// A referenced message in an incoming message. Only present if it's a reply.
-    @CodableBox public var referencedMessage: DiscordMessage? = nil
+    public var _referencedMessage: CodableBox<DiscordMessage>? = nil
+
+    /// A referenced message in an incoming message. Only present if it's a reply.
+    public var referencedMessage: DiscordMessage? {
+        get { _referencedMessage?.wrappedValue }
+        set { _referencedMessage = newValue.map { .init(wrappedValue: $0) } }
+    }
 
     /// A referenced message in an outgoing message.
     public var messageReference: DiscordMessageReference? = nil
@@ -202,7 +208,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
         self.timestamp = timestamp
         self.tts = tts
         self.allowedMentions = allowedMentions
-        self._referencedMessage = .init(wrappedValue: referencedMessage)
+        self._referencedMessage = referencedMessage.map { .init(wrappedValue: $0) }
         self.components = components
     }
 
@@ -233,7 +239,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
         self.allowedMentions = allowedMentions
         self.messageReference = messageReference
         self.components = components
-        self._referencedMessage = .init(wrappedValue: nil)
+        self._referencedMessage = nil
         self.attachments = []
         self.author = nil
         self.channelId = 0
@@ -283,7 +289,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
         let fields = Draft(
             content: content,
             tts: tts,
-            embed: embeds.first,
+            embed: embeds?.first,
             allowedMentions: allowedMentions,
             messageReference: messageReference,
             components: components
@@ -530,9 +536,9 @@ public struct DiscordMessageComponentType : RawRepresentable, Hashable, Codable 
 public struct DiscordMessageComponentEmoji: Codable, Identifiable, Hashable {
     public var id: EmojiID?
     public var name: String?
-    public var animated: Bool
+    public var animated: Bool?
 
-    public init(id: EmojiID? = nil, name: String? = nil, animated: Bool = false) {
+    public init(id: EmojiID? = nil, name: String? = nil, animated: Bool? = nil) {
         self.id = id
         self.name = name
         self.animated = animated

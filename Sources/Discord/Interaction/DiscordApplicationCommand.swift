@@ -146,16 +146,16 @@ public struct DiscordApplicationCommandInteractionData: Codable, Hashable {
     }
 
     /// The ID of the invoked command
-    public let id: CommandID
+    public let id: CommandID?
 
     /// The name of the invoked command
-    public let name: String
+    public let name: String?
 
     /// A custom (developer-defined) id attached to e.g. a button interaction.
     public let customId: String?
 
     /// The params + values by the user
-    public let options: [DiscordApplicationCommandInteractionDataOption]
+    public let options: [DiscordApplicationCommandInteractionDataOption]?
 }
 
 public struct DiscordApplicationCommandInteractionDataOption: Codable, Hashable {

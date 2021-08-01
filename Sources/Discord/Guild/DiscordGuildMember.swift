@@ -35,7 +35,7 @@ public struct DiscordGuildMember: Codable, Identifiable, Hashable {
     // MARK: Properties
 
     /// The id of the guild of this member.
-    public var guildId: GuildID
+    public var guildId: GuildID?
 
     /// The date this member joined the guild.
     public var joinedAt: Date
@@ -57,7 +57,7 @@ public struct DiscordGuildMember: Codable, Identifiable, Hashable {
 
     public var id: UserID { user.id }
 
-    init(guildId: GuildID, user: DiscordUser, deaf: Bool, mute: Bool, nick: String?, roleIds: [RoleID], joinedAt: Date) {
+    init(guildId: GuildID? = nil, user: DiscordUser, deaf: Bool, mute: Bool, nick: String?, roleIds: [RoleID], joinedAt: Date) {
         self.user = user
         self.deaf = deaf
         self.mute = mute

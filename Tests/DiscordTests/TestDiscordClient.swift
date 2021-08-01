@@ -92,7 +92,7 @@ public class TestDiscordClient: XCTestCase, DiscordClientDelegate {
         tMember.user = tUser
 
         client.handleDispatch(event: .guildCreate(testGuild))
-        client.handleDispatch(event: .guildMemberRemove(.init(guildId: tMember.guildId, user: tMember.user)))
+        client.handleDispatch(event: .guildMemberRemove(.init(guildId: tMember.guildId!, user: tMember.user)))
 
         waitForExpectations(timeout: 0.2)
     }
@@ -457,7 +457,8 @@ public extension TestDiscordClient {
     }
 
     func client(_ client: DiscordClient, didAddGuildMember member: DiscordGuildMember) {
-        guard let clientGuild = client.guilds[member.guildId] else {
+        guard let guildId = member.guildId,
+              let clientGuild = client.guilds[guildId] else {
             XCTFail("Guild for member should be in guilds")
             return
         }
@@ -471,7 +472,8 @@ public extension TestDiscordClient {
     }
 
     func client(_ client: DiscordClient, didRemoveGuildMember member: DiscordGuildMember) {
-        guard let clientGuild = client.guilds[member.guildId] else {
+        guard let guildId = member.guildId,
+              let clientGuild = client.guilds[guildId] else {
             XCTFail("Guild for member should be in guilds")
             return
         }
@@ -484,7 +486,8 @@ public extension TestDiscordClient {
     }
 
     func client(_ client: DiscordClient, didUpdateGuildMember member: DiscordGuildMember) {
-        guard let guildMember = client.guilds[member.guildId]?.members?[member.user.id] else {
+        guard let guildId = member.guildId,
+              let guildMember = client.guilds[guildId]?.members?[member.user.id] else {
             XCTFail("Guild member should be in guild")
             return
         }
