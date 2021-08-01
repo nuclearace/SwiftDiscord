@@ -166,5 +166,6 @@ let testGuild = DiscordGuild(
     channels: .init([testGuildTextChannel, testGuildVoiceChannel]),
     memberCount: 20,
     presences: .init(createPresenceObjects(n: 20)),
+    roles: [:],
     name: "TestGuild"
 )

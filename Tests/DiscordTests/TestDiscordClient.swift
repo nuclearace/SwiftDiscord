@@ -35,7 +35,7 @@ public class TestDiscordClient: XCTestCase, DiscordClientDelegate {
         client.handleDispatch(event: .guildCreate(testGuild))
 
         // Force guild's channels into the channel cache
-        for channelId in testGuild.channels.keys {
+        for channelId in (testGuild.channels ?? [:]).keys {
             _ = client.findChannel(fromId: channelId)
         }
 
@@ -362,12 +362,12 @@ extension TestDiscordClient {
 
         switch type {
         case .create:
-            XCTAssertEqual(clientGuild.channels[channel.id]?.id, channel.id, "Channels should be the same")
+            XCTAssertEqual(clientGuild.channels?[channel.id]?.id, channel.id, "Channels should be the same")
         case .delete:
-            XCTAssertNil(clientGuild.channels[channel.id], "Channel should be removed from guild")
+            XCTAssertNil(clientGuild.channels?[channel.id], "Channel should be removed from guild")
         }
 
-        XCTAssertEqual(clientGuild.channels.count, expected, "Number of channels should be predictable")
+        XCTAssertEqual(clientGuild.channels?.count, expected, "Number of channels should be predictable")
     }
 
     func assertDMChannel(_ channel: DiscordChannel, testType type: ChannelTestType) {
@@ -446,10 +446,10 @@ public extension TestDiscordClient {
 
         switch channel.type {
         case .category:
-            XCTAssertEqual(clientGuild.channels.count, 3, "Guild should have three channels")
+            XCTAssertEqual(clientGuild.channels?.count, 3, "Guild should have three channels")
             XCTAssertEqual(channel.name, "A new channel", "A new channel should have been updated")
         default:
-            XCTAssertEqual(clientGuild.channels.count, 2, "Guild should have two channels")
+            XCTAssertEqual(clientGuild.channels?.count, 2, "Guild should have two channels")
             XCTAssertEqual(channel.name, "A new channel", "A new channel should have been updated")
         }
 
@@ -463,8 +463,8 @@ public extension TestDiscordClient {
         }
 
         XCTAssertEqual(member.nick, "test nick", "Guild member add should correctly create a member")
-        XCTAssertNotNil(clientGuild.members[member.user.id], "Member should be in guild after being added")
-        XCTAssertEqual(clientGuild.members.count, 21, "Guild member add should correctly add a new member to members")
+        XCTAssertNotNil(clientGuild.members?[member.user.id], "Member should be in guild after being added")
+        XCTAssertEqual(clientGuild.members?.count, 21, "Guild member add should correctly add a new member to members")
         XCTAssertEqual(clientGuild.memberCount, 21, "Guild member add should correctly increment the number of members")
 
         expectations[.guildMemberAdd]?.fulfill()
@@ -476,15 +476,15 @@ public extension TestDiscordClient {
             return
         }
 
-        XCTAssertNil(clientGuild.members[member.user.id], "Guild member remove should remove member")
-        XCTAssertEqual(clientGuild.members.count, 19, "Guild member remove should correctly remove a member")
+        XCTAssertNil(clientGuild.members?[member.user.id], "Guild member remove should remove member")
+        XCTAssertEqual(clientGuild.members?.count, 19, "Guild member remove should correctly remove a member")
         XCTAssertEqual(clientGuild.memberCount, 19, "Guild member remove should correctly decrement the number of members")
 
         expectations[.guildMemberRemove]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didUpdateGuildMember member: DiscordGuildMember) {
-        guard let guildMember = client.guilds[member.guildId]?.members[member.user.id] else {
+        guard let guildMember = client.guilds[member.guildId]?.members?[member.user.id] else {
             XCTFail("Guild member should be in guild")
             return
         }
@@ -500,9 +500,9 @@ public extension TestDiscordClient {
             return
         }
 
-        XCTAssertEqual(clientGuild.channels.count, 2, "Created guild should have two channels")
-        XCTAssertEqual(clientGuild.members.count, 20, "Created guild should have 20 members")
-        XCTAssertEqual(clientGuild.presences.count, 20, "Created guild should have 20 presences")
+        XCTAssertEqual(clientGuild.channels?.count, 2, "Created guild should have two channels")
+        XCTAssertEqual(clientGuild.members?.count, 20, "Created guild should have 20 members")
+        XCTAssertEqual(clientGuild.presences?.count, 20, "Created guild should have 20 presences")
         XCTAssert(guild.id == clientGuild.id, "Guild on the client should be the same as one passed to handler")
 
         expectations[.guildCreate]?.fulfill()
@@ -510,7 +510,7 @@ public extension TestDiscordClient {
 
     func client(_ client: DiscordClient, didDeleteGuild guild: DiscordGuild) {
         XCTAssertEqual(client.guilds.count, 0, "Client should have no guilds")
-        for channel in guild.channels.keys {
+        for channel in (guild.channels ?? [:]).keys {
             XCTAssertNil(client.channelCache[channel], "Removing a guild should remove its channels from the channel cache")
         }
         XCTAssertEqual(guild.id, 100, "Test guild should be removed")
@@ -532,7 +532,7 @@ public extension TestDiscordClient {
 
     func client(_ client: DiscordClient, didUpdateEmojis emojis: [DiscordEmoji],
                 onGuild guild: DiscordGuild) {
-        XCTAssertEqual(guild.emojis.count, 20, "Update should have 20 emoji")
+        XCTAssertEqual(guild.emojis?.count, 20, "Update should have 20 emoji")
 
         expectations[.guildEmojisUpdate]?.fulfill()
     }
@@ -546,7 +546,7 @@ public extension TestDiscordClient {
 
     func client(_ client: DiscordClient, didReceivePresenceUpdate presence: DiscordPresence) {
         XCTAssertEqual(presence.user.id, testUser.id, "Presence should be for the test user")
-        XCTAssertNotNil(client.guilds[presence.guildId!]?.presences[presence.user.id])
+        XCTAssertNotNil(client.guilds[presence.guildId!]?.presences?[presence.user.id])
 
         expectations[.presenceUpdate]?.fulfill()
     }
@@ -557,7 +557,7 @@ public extension TestDiscordClient {
             return
         }
 
-        XCTAssertNotNil(clientGuild.roles[role.id], "Role should be in guild")
+        XCTAssertNotNil(clientGuild.roles?[role.id], "Role should be in guild")
         XCTAssertEqual(role.name, "My Test Role", "Role create should correctly make role")
 
         expectations[.guildRoleCreate]?.fulfill()
@@ -569,7 +569,7 @@ public extension TestDiscordClient {
             return
         }
 
-        XCTAssertNil(clientGuild.roles[role.id], "Role should not be in guild")
+        XCTAssertNil(clientGuild.roles?[role.id], "Role should not be in guild")
         XCTAssertEqual(role.name, "My Test Role", "Role create should correctly make role")
 
         expectations[.guildRoleDelete]?.fulfill()
@@ -581,7 +581,7 @@ public extension TestDiscordClient {
             return
         }
 
-        XCTAssertNotNil(clientGuild.roles[role.id], "Role should be in guild")
+        XCTAssertNotNil(clientGuild.roles?[role.id], "Role should be in guild")
         XCTAssertEqual(role.name, "A dank role", "Role create should correctly update role")
 
         expectations[.guildRoleUpdate]?.fulfill()

@@ -73,13 +73,13 @@ public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable, Hash
     public var description: String { "DiscordGuild(name: \(name.map { "\"\($0)\"" } ?? "nil"))" }
 
     /// A dictionary of this guild's members. The key is the snowflake id of the user.
-    public var members: DiscordIDDictionary<DiscordGuildMember> = [:]
+    public var members: DiscordIDDictionary<DiscordGuildMember>? = nil
 
     /// A dictionary of this guild's channels. The key is the snowflake id of the channel.
-    public var channels: DiscordIDDictionary<DiscordChannel> = [:]
+    public var channels: DiscordIDDictionary<DiscordChannel>? = nil
 
     /// A dictionary of this guild's emojis. The key is the snowflake id of the emoji.
-    public var emojis: DiscordIDDictionary<DiscordEmoji> = [:]
+    public var emojis: DiscordIDDictionary<DiscordEmoji>? = nil
 
     /// The number of members in this guild.
     ///
@@ -87,15 +87,15 @@ public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable, Hash
     public var memberCount: Int? = nil
 
     /// A `DiscordLazyDictionary` of presences. The key is the snowflake id of the user.
-    public var presences: DiscordIDDictionary<DiscordPresence> = [:]
+    public var presences: DiscordIDDictionary<DiscordPresence>? = nil
 
     /// A dictionary of this guild's roles. The key is the snowflake id of the role.
-    public var roles: DiscordIDDictionary<DiscordRole> = [:]
+    public var roles: DiscordIDDictionary<DiscordRole>? = nil
 
     /// A dictionary of this guild's current voice states.
     /// The key is the snowflake id of the user for this voice
     /// state.
-    public var voiceStates: DiscordIDDictionary<DiscordVoiceState> = [:]
+    public var voiceStates: DiscordIDDictionary<DiscordVoiceState>? = nil
 
     /// The default message notification setting.
     public var defaultMessageNotifications: Int? = nil
@@ -138,11 +138,11 @@ public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable, Hash
     public func roles(for member: DiscordGuildMember) -> [DiscordRole] {
         var roles = [DiscordRole]()
 
-        if let everyone = self.roles[id] {
+        if let everyone = self.roles?[id] {
             roles.append(everyone)
         }
 
-        return roles + self.roles.filter { member.roleIds.contains($0.key) }.map(\.value)
+        return roles + (self.roles?.filter { member.roleIds.contains($0.key) }.map(\.value) ?? [])
     }
 
     func shardNumber(assuming numOfShards: Int) -> Int {
@@ -203,7 +203,7 @@ public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable, Hash
         guard ownerId != member.user.id else { return .all }
 
         var workingPermissions: DiscordPermissions = roles(for: member).reduce([], { $0.union($1.permissions) })
-        if let everybodyRole = roles[id] {
+        if let everybodyRole = roles?[id] {
             workingPermissions.formUnion(everybodyRole.permissions)
         }
 
@@ -212,7 +212,7 @@ public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable, Hash
             return .all
         }
 
-        guard let channel = channels[channelId],
+        guard let channel = channels?[channelId],
               let permissionOverwrites = channel.permissionOverwrites else {
             return nil
         }
@@ -254,7 +254,7 @@ public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable, Hash
 
     /// Fetches the permission overwrites for a member in the given channel.
     public func overwrites(for member: DiscordGuildMember, in channelId: ChannelID) -> [DiscordPermissionOverwrite] {
-        guard let permissionOverwrites = channels[channelId]?.permissionOverwrites else { return [] }
+        guard let permissionOverwrites = channels?[channelId]?.permissionOverwrites else { return [] }
         return permissionOverwrites
             .filter { member.roleIds.contains($0.key) || member.user.id == $0.key }
             .map({ $0.1 })

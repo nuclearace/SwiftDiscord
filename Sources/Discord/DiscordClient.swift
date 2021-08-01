@@ -178,7 +178,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
 
         let channel: DiscordChannel
 
-        if let guild = guildForChannel(channelId), let guildChannel = guild.channels[channelId] {
+        if let guild = guildForChannel(channelId), let guildChannel = guild.channels?[channelId] {
             channel = guildChannel
         } else if let dmChannel = directChannels[channelId] {
             channel = dmChannel
@@ -238,7 +238,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     /// - returns: An optional containing a `DiscordGuild` if one was found.
     ///
     public func guildForChannel(_ channelId: ChannelID) -> DiscordGuild? {
-        return guilds.filter({ $0.1.channels[channelId] != nil }).map({ $0.1 }).first
+        return guilds.filter({ $0.1.channels?[channelId] != nil }).map({ $0.1 }).first
     }
 
     ///
@@ -323,7 +323,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
         if channel.isDM {
             directChannels[channel.id] = channel
         } else if let guildId = channel.guildId {
-            guilds[guildId]?.channels[channel.id] = channel
+            guilds[guildId]?.channels?[channel.id] = channel
         }
 
         logger.debug("(verbose) Created channel: \(channel)")
@@ -342,7 +342,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
         logger.info("Handling channel delete")
 
         if let guildId = channel.guildId {
-            guilds[guildId]?.channels.removeValue(forKey: channel.id)
+            guilds[guildId]?.channels?.removeValue(forKey: channel.id)
         }
 
         directChannels.removeValue(forKey: channel.id)
@@ -369,9 +369,9 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
         logger.debug("Voice state: \(state)")
 
         if state.channelId == 0 {
-            guild.voiceStates[state.userId] = nil
+            guild.voiceStates?[state.userId] = nil
         } else {
-            guild.voiceStates[state.userId] = state
+            guild.voiceStates?[state.userId] = state
         }
 
         guilds[guildId] = guild
@@ -390,7 +390,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
         logger.info("Handling channel update")
 
         guard let guildId = channel.guildId else { return }
-        guilds[guildId]?.channels[channel.id] = channel
+        guilds[guildId]?.channels?[channel.id] = channel
 
         channelCache.removeValue(forKey: channel.id)
 
@@ -435,7 +435,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
 
         let removedGuild = guilds.removeValue(forKey: guild.id) ?? guild
 
-        for channel in removedGuild.channels.keys {
+        for channel in (removedGuild.channels ?? [:]).keys {
             channelCache[channel] = nil
         }
 
@@ -474,7 +474,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
         logger.info("Handling guild member add")
 
         guard var guild = guilds[member.guildId] else { return }
-        guild.members[member.id] = member
+        guild.members?[member.id] = member
         guild.memberCount = guild.memberCount.map { $0 + 1 }
         guilds[member.guildId] = guild
 
@@ -494,7 +494,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
         logger.info("Handling guild member remove")
 
         guard var guild = guilds[event.guildId] else { return }
-        let removedMember = guild.members.removeValue(forKey: event.user.id)
+        let removedMember = guild.members?.removeValue(forKey: event.user.id)
         guild.memberCount = guild.memberCount.map { $0 - 1 }
         guilds[event.guildId] = guild
 
@@ -516,7 +516,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
         logger.info("Handling guild member update")
 
         guard var guild = guilds[member.guildId] else { return }
-        guild.members[member.id] = member
+        guild.members?[member.id] = member
         guilds[member.guildId] = guild
 
         logger.debug("(verbose) Updated guild member: \(member)")
@@ -536,7 +536,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
 
         guard let guildId = event.guildId,
               var guild = guilds[guildId] else { return }
-        guild.members.merge(event.members)
+        guild.members?.merge(event.members)
         guilds[guildId] = guild
 
         delegate?.client(self, didHandleGuildMemberChunk: event.members, forGuild: guild)
@@ -553,7 +553,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
         logger.info("Handling guild role create")
 
         guard var guild = guilds[event.guildId] else { return }
-        guild.roles[event.role.id] = event.role
+        guild.roles?[event.role.id] = event.role
         guilds[event.guildId] = guild
 
         logger.debug("(verbose) Created role: \(event.role)")
@@ -572,7 +572,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
         logger.info("Handling guild role remove")
 
         guard var guild = guilds[event.guildId],
-              let removedRole = guild.roles.removeValue(forKey: event.roleId) else { return }
+              let removedRole = guild.roles?.removeValue(forKey: event.roleId) else { return }
         guilds[event.guildId] = guild
 
         logger.debug("(verbose) Removed role: \(removedRole)")
@@ -594,7 +594,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
         logger.debug("(verbose) Updated role: \(event.role)")
 
         guard var guild = guilds[event.guildId] else { return }
-        guild.roles[event.role.id] = event.role
+        guild.roles?[event.role.id] = event.role
         guilds[event.guildId] = guild
 
         delegate?.client(self, didUpdateRole: event.role, onGuild: guild)
@@ -663,7 +663,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
 
         if let guildId = event.guildId,
            let member = event.member {
-            guilds[guildId]?.members[member.user.id] = member
+            guilds[guildId]?.members?[member.user.id] = member
         }
 
         delegate?.client(
@@ -723,13 +723,13 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
         guard let guildId = update.guildId,
               var guild = guilds[guildId] else { return }
 
-        var presence = guild.presences[update.user.id] ?? update
+        var presence = guild.presences?[update.user.id] ?? update
         presence.merge(update: update)
 
         if !discardPresences {
             logger.debug("Updated presence: \(presence)")
 
-            guild.presences[update.user.id] = presence
+            guild.presences?[update.user.id] = presence
         }
 
         // TODO: Do we need to update the guild from the presences too?
