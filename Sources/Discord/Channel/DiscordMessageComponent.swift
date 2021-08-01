@@ -15,9 +15,11 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+import Foundation
+
 /// An interactive part of a message.
 public struct DiscordMessageComponent: Codable, Hashable {
-    public enum CodingKeys : String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case type
         case components
         case style
@@ -26,52 +28,51 @@ public struct DiscordMessageComponent: Codable, Hashable {
         case customId = "custom_id"
         case url
         case disabled
+        case options
+        case placeholder
+        case minValues = "min_values"
+        case maxValues = "max_values"
     }
 
     /// The type of the component.
     public var type: DiscordMessageComponentType
     /// Sub-components. Only valid for action rows.
-    public var components: [DiscordMessageComponent]?
+    public var components: [DiscordMessageComponent]? = nil
     /// One of a few button styles. Only valid for buttons.
-    public var style: DiscordMessageComponentButtonStyle?
+    public var style: DiscordMessageComponentButtonStyle? = nil
     /// Label that appears on a button. Only valid for buttons.
-    public var label: String?
+    public var label: String? = nil
     /// Emoji that appears on the button. Only valid for buttons.
-    public var emoji: DiscordMessageComponentEmoji?
-    /// A developer-defined id for the button, max 100 chars. Only valid for buttons.
-    public var customId: String?
+    public var emoji: DiscordMessageComponentEmoji? = nil
+    /// A developer-defined id for the button, max 100 chars.
+    /// Only valid for buttons and select menus.
+    public var customId: String? = nil
     /// A URL for link-style buttons. Only valid for buttons.
-    public var url: URL?
-    /// Whether the button is disabled. False by default. Only valid for buttons.
-    public var disabled: Bool?
-
-    public init(
-        type: DiscordMessageComponentType,
-        components: [DiscordMessageComponent]? = nil,
-        style: DiscordMessageComponentButtonStyle? = nil,
-        label: String? = nil,
-        emoji: DiscordMessageComponentEmoji? = nil,
-        customId: String? = nil,
-        url: URL? = nil,
-        disabled: Bool? = nil
-    ) {
-        self.type = type
-        self.components = components
-        self.style = style
-        self.label = label
-        self.emoji = emoji
-        self.customId = customId
-        self.url = url
-        self.disabled = disabled
-    }
+    public var url: URL? = nil
+    /// Whether the button is disabled. False by default.
+    /// Only valid for buttons and select menus.
+    public var disabled: Bool? = nil
+    /// The choices in the select, max 25.
+    /// Only valid for select menus.
+    public var options: [DiscordMessageComponentSelectOption]? = nil
+    /// Custom placeholder text if nothing is selected,
+    /// max 100 characters.
+    public var placeholder: String? = nil
+    /// The minimum number of items that must be chosen, default 1,
+    /// min 0, max 25
+    public var minValues: Int? = nil
+    /// The maximum number of items that can be chosen, default 1,
+    /// min 0, max 25
+    public var maxValues: Int? = nil
 
     /// Creates a new button component.
+    /// Must be inside an action row.
     public static func button(
         style: DiscordMessageComponentButtonStyle? = nil,
         label: String? = nil,
         emoji: DiscordMessageComponentEmoji? = nil,
-        customId: String? = nil,
         url: URL? = nil,
+        customId: String? = nil,
         disabled: Bool? = nil
     ) -> DiscordMessageComponent {
         DiscordMessageComponent(
@@ -82,6 +83,28 @@ public struct DiscordMessageComponent: Codable, Hashable {
             customId: customId,
             url: url,
             disabled: disabled
+        )
+    }
+
+    /// Creates a new select menu component.
+    /// Must be inside an action row, also an action menu can only
+    /// contain one select menu.
+    public static func selectMenu(
+        options: [DiscordMessageComponentSelectOption] = [],
+        placeholder: String? = nil,
+        minValues: Int? = nil,
+        maxValues: Int? = nil,
+        customId: String? = nil,
+        disabled: Bool? = nil
+    ) -> DiscordMessageComponent {
+        DiscordMessageComponent(
+            type: .selectMenu,
+            customId: customId,
+            disabled: disabled,
+            options: options,
+            placeholder: placeholder,
+            minValues: minValues,
+            maxValues: maxValues
         )
     }
 
@@ -99,6 +122,7 @@ public struct DiscordMessageComponentType: RawRepresentable, Hashable, Codable {
 
     public static let actionRow = DiscordMessageComponentType(rawValue: 1)
     public static let button = DiscordMessageComponentType(rawValue: 2)
+    public static let selectMenu = DiscordMessageComponentType(rawValue: 3)
 
     public init(rawValue: Int) {
         self.rawValue = rawValue
@@ -118,6 +142,7 @@ public struct DiscordMessageComponentEmoji: Codable, Identifiable, Hashable {
     }
 }
 
+/// A visual button component style.
 public struct DiscordMessageComponentButtonStyle: RawRepresentable, Hashable, Codable {
     public var rawValue: Int
 
@@ -129,5 +154,32 @@ public struct DiscordMessageComponentButtonStyle: RawRepresentable, Hashable, Co
 
     public init(rawValue: Int) {
         self.rawValue = rawValue
+    }
+}
+
+/// A choice in a select menu.
+public struct DiscordMessageComponentSelectOption: Codable, Hashable {
+    /// The user-facing label of the option, max 25 chars
+    public var label: String
+    /// The dev-defined value of the option, max 100 chars
+    public var value: String
+    /// An additional description of the option, max 50 chars
+    public var description: String?
+    /// `id`, `name` and `animated`
+    public var emoji: DiscordEmoji?
+    /// Whether this option should be selected by default
+    public var `default`: Bool?
+
+    public init(
+        label: String,
+        value: String,
+        description: String? = nil,
+        emoji: DiscordEmoji? = nil,
+        default: Bool? = nil
+    ) {
+        self.label = label
+        self.value = value
+        self.description = description
+        self.default = `default`
     }
 }
