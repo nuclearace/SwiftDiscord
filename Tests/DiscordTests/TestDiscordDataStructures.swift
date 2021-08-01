@@ -7,7 +7,6 @@ import XCTest
 
 func roundTripEncode<T: Codable>(_ item: T) -> T {
     let data = try! DiscordJSON.encode(item)
-    print(String(data: data, encoding: .utf8)!)
     return try! DiscordJSON.decode(data)
 }
 

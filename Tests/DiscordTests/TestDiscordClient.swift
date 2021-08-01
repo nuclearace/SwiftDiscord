@@ -530,7 +530,7 @@ public extension TestDiscordClient {
         expectations[.guildUpdate]?.fulfill()
     }
 
-    func client(_ client: DiscordClient, didUpdateEmojis emojis: DiscordIDDictionary<DiscordEmoji>,
+    func client(_ client: DiscordClient, didUpdateEmojis emojis: [DiscordEmoji],
                 onGuild guild: DiscordGuild) {
         XCTAssertEqual(guild.emojis.count, 20, "Update should have 20 emoji")
 

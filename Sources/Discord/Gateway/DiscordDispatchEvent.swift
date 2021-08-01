@@ -254,18 +254,18 @@ public struct DiscordReadyEvent: Codable {
     }
 
     /// The gateway version.
-    public var gatewayVersion: Int
+    public var gatewayVersion: Int?
 
     /// Information about the user including email.
-    public var user: DiscordUser
+    public var user: DiscordUser?
 
     /// The guilds the user is in.
     /// Note that the guilds are unavailable and thus only have their
     /// `id` and `unavailable` fields specified.
-    public var guilds: [DiscordGuild]
+    public var guilds: [DiscordGuild]? = nil
 
     /// Used for resuming connections.
-    public var sessionId: String
+    public var sessionId: String? = nil
 
     /// The shard information associated with this session, if sent
     /// when identifying. An array of two integers:

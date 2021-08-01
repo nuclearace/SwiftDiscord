@@ -192,7 +192,7 @@ public struct DiscordGatewayResume: Codable, Hashable {
     /// The session id stored from ready.
     public var sessionId: String
     /// The sequence number of the last event received.
-    public var sequenceNumber: Int
+    public var sequenceNumber: Int? = nil
 }
 
 /// Used to request all members for a guild or a list of guilds.
@@ -221,18 +221,18 @@ public struct DiscordGatewayDispatch: Decodable {
     }
 
     /// The sequence number.
-    public var sequenceNumber: Int
+    public var sequenceNumber: Int? = nil
     /// The event type and data.
     public var event: DiscordDispatchEvent
 
-    init(sequenceNumber: Int, event: DiscordDispatchEvent) {
+    init(sequenceNumber: Int? = nil, event: DiscordDispatchEvent) {
         self.sequenceNumber = sequenceNumber
         self.event = event
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        sequenceNumber = try container.decode(Int.self, forKey: .sequenceNumber)
+        sequenceNumber = try container.decodeIfPresent(Int.self, forKey: .sequenceNumber)
         event = try DiscordDispatchEvent(from: decoder)
     }
 }

@@ -93,7 +93,7 @@ let testDMChannel = DiscordChannel(
 let testGroupDMChannel = DiscordChannel(
     id: testUser.id,
     type: .groupDM,
-    name: "A group DM"
+    name: "A Group DM"
 )
 
 let testAttachment = DiscordAttachment(id: 0, filename: "test-attachment.txt")

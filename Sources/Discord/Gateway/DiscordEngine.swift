@@ -207,7 +207,9 @@ public class DiscordEngine: DiscordShard {
     func _handleGatewayPayload(_ event: DiscordGatewayEvent) {
         switch event {
         case .dispatch(let e):
-            lastSequenceNumber = e.sequenceNumber
+            if let sequenceNumber = e.sequenceNumber {
+                lastSequenceNumber = sequenceNumber
+            }
             handleDispatch(e.event)
         case .hello(let e):
             handleHello(e)

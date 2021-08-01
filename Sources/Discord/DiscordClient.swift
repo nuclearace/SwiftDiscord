@@ -341,6 +341,11 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     private func handleChannelDelete(with channel: DiscordChannel) {
         logger.info("Handling channel delete")
 
+        if let guildId = channel.guildId {
+            guilds[guildId]?.channels.removeValue(forKey: channel.id)
+        }
+
+        directChannels.removeValue(forKey: channel.id)
         channelCache.removeValue(forKey: channel.id)
 
         logger.debug("(verbose) Removed channel: \(channel)")
@@ -759,8 +764,8 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
         logger.info("Handling ready")
 
         user = event.user
+        guilds = .init(event.guilds ?? [])
 
-        // TODO: Handle uninitialized guilds?
         // TODO: Use private_channels?
 
         delegate?.client(self, didReceiveReady: event)
