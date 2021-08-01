@@ -78,6 +78,9 @@ public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable, Hash
     /// A dictionary of this guild's channels. The key is the snowflake id of the channel.
     public var channels: DiscordIDDictionary<DiscordChannel>? = nil
 
+    /// A dictionary of this guild's active threads. The key is the snowflake id of the thread.
+    public var threads: DiscordIDDictionary<DiscordChannel>? = nil
+
     /// A dictionary of this guild's emojis. The key is the snowflake id of the emoji.
     public var emojis: DiscordIDDictionary<DiscordEmoji>? = nil
 
@@ -212,7 +215,7 @@ public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable, Hash
             return .all
         }
 
-        guard let channel = channels?[channelId],
+        guard let channel = channels?[channelId] ?? threads?[channelId],
               let permissionOverwrites = channel.permissionOverwrites else {
             return nil
         }

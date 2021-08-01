@@ -178,7 +178,8 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
 
         let channel: DiscordChannel
 
-        if let guild = guildForChannel(channelId), let guildChannel = guild.channels?[channelId] {
+        if let guild = guildForChannel(channelId),
+           let guildChannel = guild.channels?[channelId] ?? guild.threads?[channelId] {
             channel = guildChannel
         } else if let dmChannel = directChannels[channelId] {
             channel = dmChannel
@@ -221,9 +222,12 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
         case .guildDelete(let e): handleGuildDelete(with: e)
         case .guildUpdate(let e): handleGuildUpdate(with: e)
         case .guildEmojisUpdate(let e): handleGuildEmojiUpdate(with: e)
-        case .channelUpdate(let e): handleChannelUpdate(with: e)
         case .channelCreate(let e): handleChannelCreate(with: e)
+        case .channelUpdate(let e): handleChannelUpdate(with: e)
         case .channelDelete(let e): handleChannelDelete(with: e)
+        case .threadCreate(let e): handleThreadCreate(with: e)
+        case .threadUpdate(let e): handleThreadUpdate(with: e)
+        case .threadDelete(let e): handleThreadDelete(with: e)
         case .voiceStateUpdate(let e): handleVoiceStateUpdate(with: e)
         case .interactionCreate(let e): handleInteractionCreate(with: e)
         case .ready(let e): handleReady(with: e)
@@ -351,6 +355,63 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
         logger.debug("(verbose) Removed channel: \(channel)")
 
         delegate?.client(self, didDeleteChannel: channel)
+    }
+
+    ///
+    /// Handles thread creates from Discord. You shouldn't need to call this method directly.
+    ///
+    /// Calls the `didCreateThread` delegate method.
+    ///
+    /// - parameter with: The data from the event
+    ///
+    private func handleThreadCreate(with thread: DiscordChannel) {
+        logger.info("Handling thread create")
+
+        guard let guildId = thread.guildId else { return }
+        guilds[guildId]?.threads?[thread.id] = thread
+
+        logger.debug("(verbose) Created thread: \(thread)")
+
+        delegate?.client(self, didCreateThread: thread)
+    }
+
+    ///
+    /// Handles thread updates from Discord. You shouldn't need to call this method directly.
+    ///
+    /// Calls the `didUpdateThread` delegate method.
+    ///
+    /// - parameter with: The data from the event
+    ///
+    private func handleThreadUpdate(with thread: DiscordChannel) {
+        logger.info("Handling thread update")
+
+        guard let guildId = thread.guildId else { return }
+        guilds[guildId]?.threads?[thread.id] = (thread.threadMetadata?.archived ?? false) ? nil : thread
+
+        logger.debug("(verbose) Updated thread: \(thread)")
+
+        delegate?.client(self, didUpdateThread: thread)
+    }
+
+    ///
+    /// Handles thread deletes from Discord. You shouldn't need to call this method directly.
+    ///
+    /// Calls the `didDeleteThread` delegate method.
+    ///
+    /// - parameter with: The data from the event
+    ///
+    private func handleThreadDelete(with thread: DiscordChannel) {
+        logger.info("Handling thread delete")
+
+        if let guildId = thread.guildId {
+            guilds[guildId]?.threads?.removeValue(forKey: thread.id)
+        }
+
+        channelCache.removeValue(forKey: thread.id)
+
+        logger.debug("(verbose) Removed thread: \(thread)")
+
+        delegate?.client(self, didDeleteThread: thread)
     }
 
     ///
