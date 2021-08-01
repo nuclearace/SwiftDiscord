@@ -196,7 +196,7 @@ public struct DiscordParty: Codable, Identifiable, Hashable {
     // MARK: Properties
 
     /// The id of the party.
-    public var id: String
+    public var id: String?
 
     /// The sizes of the party. Array of two elements, first is the current, second is the max size of the party.
     public var sizes: [Int]?
