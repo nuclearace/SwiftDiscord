@@ -122,11 +122,15 @@ public struct DiscordPermissions: RawRepresentable, OptionSet, Codable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let rawString = try container.decode(String.self)
-        guard let rawValue = BigInt(rawString) else {
-            throw DiscordPermissionsError.couldNotDecode("Could not decode permissions '\(rawString)' into big integer")
+        if let rawInt = try? container.decode(UInt64.self) {
+            self.init(rawInt)
+        } else {
+            let rawString = try container.decode(String.self)
+            guard let rawValue = BigInt(rawString) else {
+                throw DiscordPermissionsError.couldNotDecode("Could not decode permissions '\(rawString)' into big integer")
+            }
+            self.init(rawValue: rawValue)
         }
-        self.rawValue = rawValue
     }
 
     public func encode(to encoder: Encoder) throws {
