@@ -40,14 +40,6 @@ public class TestDiscordEngine: XCTestCase, DiscordShardDelegate {
     var expectation: XCTestExpectation!
     var loop: MultiThreadedEventLoopGroup!
 
-    public static var allTests: [(String, (TestDiscordEngine) -> () -> ())] {
-        return [
-            ("testEngineCorrectlyHandlesHelloPacket", testEngineCorrectlyHandlesHelloPacket),
-            ("testEngineSetsSessionIdFromReadyPacket", testEngineSetsSessionIdFromReadyPacket),
-            ("testEngineUpdatesSequenceNumber", testEngineUpdatesSequenceNumber),
-        ]
-    }
-
     public override func setUp() {
         loop = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         engine = DiscordEngine(delegate: self, intents: .unprivilegedIntents, onLoop: loop.next())

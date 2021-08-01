@@ -66,6 +66,14 @@ let testGuildTextChannel = DiscordChannel(
     name: "test-text-channel"
 )
 
+let testThread = DiscordChannel(
+    id: 209,
+    type: .publicThread,
+    guildId: 100,
+    name: "Test Thread",
+    parentId: testGuildTextChannel.id
+)
+
 let testGuildVoiceChannel = DiscordChannel(
     id: 202,
     type: .voice,
@@ -164,6 +172,7 @@ let testGuild = DiscordGuild(
     unavailable: false,
     members: .init(createGuildMemberObjects(n: 20)),
     channels: .init([testGuildTextChannel, testGuildVoiceChannel]),
+    threads: .init([]),
     memberCount: 20,
     presences: .init(createPresenceObjects(n: 20)),
     roles: [:],

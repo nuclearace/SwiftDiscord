@@ -336,6 +336,47 @@ public class TestDiscordClient: XCTestCase, DiscordClientDelegate {
         waitForExpectations(timeout: 0.2)
     }
 
+    func testClientCreatesThread() {
+        expectations[.threadCreate] = expectation(description: "Client should create thread")
+
+        client.handleDispatch(event: .guildCreate(testGuild))
+        client.handleDispatch(event: .threadCreate(testThread))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientArchivesThread() {
+        expectations[.threadCreate] = expectation(description: "Client should create thread")
+        expectations[.threadUpdate] = expectation(description: "Client should update thread")
+
+        var thread = testThread
+        thread.threadMetadata = DiscordThreadMetadata(
+            archived: false,
+            autoArchiveDuration: 60,
+            archiveTimestamp: Date(),
+            locked: false
+        )
+
+        client.handleDispatch(event: .guildCreate(testGuild))
+        client.handleDispatch(event: .threadCreate(thread))
+
+        thread.threadMetadata?.archived = true
+        client.handleDispatch(event: .threadUpdate(thread))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
+    func testClientDeletesThread() {
+        expectations[.threadCreate] = expectation(description: "Client should create thread")
+        expectations[.threadDelete] = expectation(description: "Client should delete thread")
+
+        client.handleDispatch(event: .guildCreate(testGuild))
+        client.handleDispatch(event: .threadCreate(testThread))
+        client.handleDispatch(event: .threadDelete(testThread))
+
+        waitForExpectations(timeout: 0.2)
+    }
+
     var client: DiscordClient!
     var expectations = [DiscordDispatchEventType: XCTestExpectation]()
 
@@ -454,6 +495,56 @@ public extension TestDiscordClient {
         }
 
         expectations[.channelUpdate]?.fulfill()
+    }
+
+    func client(_ client: DiscordClient, didCreateThread thread: DiscordChannel) {
+        guard let guildId = thread.guildId else {
+            XCTFail("Thread has no guild id")
+            return
+        }
+
+        guard let clientGuild = client.guilds[guildId] else {
+            XCTFail("Guild for thread should be in guilds")
+            return
+        }
+
+        XCTAssertEqual(clientGuild.threads?.count, 1, "Guild should have a thread")
+
+        expectations[.threadCreate]?.fulfill()
+    }
+
+    func client(_ client: DiscordClient, didUpdateThread thread: DiscordChannel) {
+        guard let guildId = thread.guildId else {
+            XCTFail("Thread has no guild id")
+            return
+        }
+
+        guard let clientGuild = client.guilds[guildId] else {
+            XCTFail("Guild for thread should be in guilds")
+            return
+        }
+
+        if thread.threadMetadata?.archived ?? false {
+            XCTAssertEqual(clientGuild.threads?.count, 0, "Guild should have archived the thread")
+        }
+
+        expectations[.threadUpdate]?.fulfill()
+    }
+
+    func client(_ client: DiscordClient, didDeleteThread thread: DiscordChannel) {
+        guard let guildId = thread.guildId else {
+            XCTFail("Thread has no guild id")
+            return
+        }
+
+        guard let clientGuild = client.guilds[guildId] else {
+            XCTFail("Guild for thread should be in guilds")
+            return
+        }
+
+        XCTAssertEqual(clientGuild.threads?.count, 0, "Guild should have deleted the thread")
+
+        expectations[.threadDelete]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didAddGuildMember member: DiscordGuildMember) {
