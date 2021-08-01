@@ -16,12 +16,11 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/// Represents a Discord Permission. Calculating Permissions involves bitwise operations.
-public struct DiscordPermissions: OptionSet, Codable, Hashable {
-    // TODO: Migrate to BigInt or similar since permission are string-serialized
-    //       and may have arbitrary size as of v8
+import BigInt
 
-    public let rawValue: UInt64
+/// Represents a Discord Permission. Calculating Permissions involves bitwise operations.
+public struct DiscordPermissions: RawRepresentable, OptionSet, Codable, Hashable {
+    public var rawValue: BigInt
 
     /// This user can create invites.
     public static let createInstantInvite = DiscordPermissions(rawValue: 1 << 0)
@@ -107,24 +106,47 @@ public struct DiscordPermissions: OptionSet, Codable, Hashable {
     public static let voice = DiscordPermissions(rawValue: 0x3F00000)
 
     /// User has all permissions.
-    public static let all = DiscordPermissions(rawValue: UInt64.max)
+    public static let all = DiscordPermissions(UInt64.max) // We may need to bump this in the future
 
-    public init(rawValue: UInt64) {
+    public init() {
+        rawValue = 0
+    }
+
+    public init(rawValue: BigInt) {
         self.rawValue = rawValue
+    }
+
+    public init(_ value: UInt64) {
+        self.init(rawValue: BigInt(value))
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let rawString = try container.decode(String.self)
-        guard let rawValue = UInt64(rawString) else {
-            throw DiscordPermissionsError.couldNotDecode("Could not decode permissions '\(rawString)' into 64-bit integer")
+        guard let rawValue = BigInt(rawString) else {
+            throw DiscordPermissionsError.couldNotDecode("Could not decode permissions '\(rawString)' into big integer")
         }
         self.rawValue = rawValue
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        try container.encode(rawValue.description)
+        try container.encode(String(rawValue))
+    }
+
+    /// Adds another set of permissions.
+    public mutating func formUnion(_ other: DiscordPermissions) {
+        rawValue |= other.rawValue
+    }
+
+    /// Forms the intersection with another set of permissions.
+    public mutating func formIntersection(_ other: DiscordPermissions) {
+        rawValue &= other.rawValue
+    }
+
+    /// Forms the symmetric difference between this and another set of permissions.
+    public mutating func formSymmetricDifference(_ other: DiscordPermissions) {
+        rawValue ^= other.rawValue
     }
 }
 

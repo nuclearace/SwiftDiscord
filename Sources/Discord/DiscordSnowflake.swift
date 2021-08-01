@@ -31,32 +31,32 @@ public struct Snowflake: RawRepresentable, Codable, Hashable, CustomStringConver
     /// CustomStrngConvertible conformance.
     public var description: String { String(rawValue) }
 
-    /// Initialize from a UInt64
-    public init(_ rawValue: UInt64) {
+    /// RawRepresentable conformance.
+    public init(rawValue: UInt64) {
         self.rawValue = rawValue
     }
 
-    /// RawRepresentable conformance.
-    public init(rawValue: UInt64) {
-        self.init(rawValue)
+    /// Initialize from a UInt64
+    public init(_ rawValue: UInt64) {
+        self.init(rawValue: rawValue)
     }
 
     /// Initialize from an integer literal.
     public init(integerLiteral rawValue: UInt64) {
-        self.init(rawValue)
+        self.init(rawValue: rawValue)
     }
 
     /// Initialize from a string
     public init?(_ string: String) {
         guard let rawValue = UInt64(string) else { return nil }
-        self.init(rawValue)
+        self.init(rawValue: rawValue)
     }
 
     /// Decodable implementation.
     public init(from decoder: Decoder) throws {
         do {
             let intForm = try UInt64(from: decoder)
-            self.init(intForm)
+            self.init(rawValue: intForm)
         } catch {
             guard let snowflake = Snowflake(try String(from: decoder)) else {
                 let context = DecodingError.Context(
