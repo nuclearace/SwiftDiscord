@@ -58,74 +58,74 @@ public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable, Hash
     public var id: GuildID
 
     /// Whether or not this a "large" guild.
-    public var large: Bool?
+    public var large: Bool? = nil
 
     /// The date the user joined the guild.
-    public var joinedAt: Date?
+    public var joinedAt: Date? = nil
 
     /// The base64 encoded splash image.
-    public var splash: String?
+    public var splash: String? = nil
 
     /// Whether this guild is unavailable.
-    public var unavailable: Bool?
+    public var unavailable: Bool? = nil
 
     /// - returns: A description of this guild
     public var description: String { "DiscordGuild(name: \(name.map { "\"\($0)\"" } ?? "nil"))" }
 
     /// A dictionary of this guild's members. The key is the snowflake id of the user.
-    public var members: DiscordIDDictionary<DiscordGuildMember>
+    public var members: DiscordIDDictionary<DiscordGuildMember> = [:]
 
     /// A dictionary of this guild's channels. The key is the snowflake id of the channel.
-    public var channels: DiscordIDDictionary<DiscordChannel>
+    public var channels: DiscordIDDictionary<DiscordChannel> = [:]
 
     /// A dictionary of this guild's emojis. The key is the snowflake id of the emoji.
-    public var emojis: DiscordIDDictionary<DiscordEmoji>
+    public var emojis: DiscordIDDictionary<DiscordEmoji> = [:]
 
     /// The number of members in this guild.
     ///
     /// *This number might not be the actual number of users in the `members` field.*
-    public var memberCount: Int?
+    public var memberCount: Int? = nil
 
     /// A `DiscordLazyDictionary` of presences. The key is the snowflake id of the user.
-    public var presences: DiscordIDDictionary<DiscordPresence>
+    public var presences: DiscordIDDictionary<DiscordPresence> = [:]
 
     /// A dictionary of this guild's roles. The key is the snowflake id of the role.
-    public var roles: DiscordIDDictionary<DiscordRole>
+    public var roles: DiscordIDDictionary<DiscordRole> = [:]
 
     /// A dictionary of this guild's current voice states.
     /// The key is the snowflake id of the user for this voice
     /// state.
-    public var voiceStates: DiscordIDDictionary<DiscordVoiceState>
+    public var voiceStates: DiscordIDDictionary<DiscordVoiceState> = [:]
 
     /// The default message notification setting.
-    public var defaultMessageNotifications: Int?
+    public var defaultMessageNotifications: Int? = nil
 
     /// The snowflake id of the embed channel for this guild.
-    public var widgetChannelId: ChannelID?
+    public var widgetChannelId: ChannelID? = nil
 
     /// Whether this guild has embed enabled.
-    public var widgetEnabled: Bool?
+    public var widgetEnabled: Bool? = nil
 
     /// The base64 encoded icon image for this guild.
-    public var icon: String?
+    public var icon: String? = nil
 
     /// The base64 encoded banner image for this guild.
-    public var banner: String?
+    public var banner: String? = nil
 
     /// The multi-factor authentication level for this guild.
-    public var mfaLevel: Int?
+    public var mfaLevel: Int? = nil
 
     /// The name of this guild.
-    public var name: String?
+    public var name: String? = nil
 
     /// The snowflake id of this guild's owner.
-    public var ownerId: UserID?
+    public var ownerId: UserID? = nil
 
     /// The region this guild is in.
-    public var region: String?
+    public var region: String? = nil
 
     /// The verification level a member of this guild must have to join.
-    public var verificationLevel: Int?
+    public var verificationLevel: Int? = nil
 
     // MARK: Methods
 

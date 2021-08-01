@@ -31,22 +31,22 @@ public struct DiscordPresence: Codable, Identifiable, Hashable {
     // MARK: Properties
 
     /// The user associated with this presence.
-    public let user: DiscordUser
+    public var user: DiscordUser
 
     /// All of the user's current activies.
-    public var activities: [DiscordActivity]?
+    public var activities: [DiscordActivity]? = nil
 
     /// This user's nick on this guild.
-    public var nick: String?
+    public var nick: String? = nil
 
     /// The roles?
-    public var roles: [String]?
+    public var roles: [String]? = nil
 
     /// The status of this user.
-    public var status: DiscordPresenceStatus?
+    public var status: DiscordPresenceStatus? = nil
 
     /// The id of the guild.
-    public var guildId: GuildID?
+    public var guildId: GuildID? = nil
 
     public var id: UserID { user.id }
 
@@ -106,31 +106,31 @@ public struct DiscordActivity: Codable, Hashable {
     // MARK: Properties
 
     /// The application id.
-    public let applicationId: String?
+    public var applicationId: String?
 
     /// The assets for this activity.
-    public let assets: DiscordActivityAssets?
+    public var assets: DiscordActivityAssets?
 
     /// What the player is currently doing.
-    public let details: String?
+    public var details: String?
 
     /// The name of the game.
-    public let name: String
+    public var name: String
 
     /// The party status.
-    public let party: DiscordParty?
+    public var party: DiscordParty?
 
     /// The user's current party status
-    public let state: String?
+    public var state: String?
 
     /// Unix timestamps for the start and end of a game.
-    public let timestamps: DiscordActivityTimestamps?
+    public var timestamps: DiscordActivityTimestamps?
 
     /// The type of the game.
-    public let type: DiscordActivityType
+    public var type: DiscordActivityType
 
     /// The url of the stream, if a stream.
-    public let url: String?
+    public var url: String?
 
     // MARK: Initializers
 
@@ -185,10 +185,10 @@ public struct DiscordActivityTimestamps: Codable, Hashable {
     // MARK: Properties
 
     /// The start.
-    public let start: Int?
+    public var start: Int?
 
     /// The end.
-    public let end: Int?
+    public var end: Int?
 }
 
 /// Represents the party status.
@@ -196,10 +196,10 @@ public struct DiscordParty: Codable, Identifiable, Hashable {
     // MARK: Properties
 
     /// The id of the party.
-    public let id: String
+    public var id: String
 
     /// The sizes of the party. Array of two elements, first is the current, second is the max size of the party.
-    public let sizes: [Int]?
+    public var sizes: [Int]?
 }
 
 /// Represents presence assets.
@@ -214,16 +214,16 @@ public struct DiscordActivityAssets: Codable, Hashable {
     // MARK: Properties
 
     /// The id of the large image.
-    public let largeImage: String?
+    public var largeImage: String?
 
     /// The hover text for the large image.
-    public let largeText: String?
+    public var largeText: String?
 
     /// The id of the small image.
-    public let smallImage: String?
+    public var smallImage: String?
 
     /// The hover text for the small image.
-    public let smallText: String?
+    public var smallText: String?
 }
 
 /// Used to send updates to Discord about our presence.

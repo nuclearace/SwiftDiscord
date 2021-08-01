@@ -26,6 +26,10 @@ public struct DiscordIDDictionary<Value: Identifiable>: ExpressibleByDictionaryL
     public var isEmpty: Bool { backingDictionary.isEmpty }
     public var description: String { "\(backingDictionary)" }
 
+    public init() {
+        backingDictionary = [:]
+    }
+
     public init(_ backingDictionary: [Value.ID: Value]) {
         self.backingDictionary = backingDictionary
     }

@@ -35,16 +35,16 @@ public struct DiscordGuildMember: Codable, Identifiable, Hashable {
     // MARK: Properties
 
     /// The id of the guild of this member.
-    public let guildId: GuildID
+    public var guildId: GuildID
 
     /// The date this member joined the guild.
-    public let joinedAt: Date
+    public var joinedAt: Date
 
     /// The user object for this member.
-    public let user: DiscordUser
+    public var user: DiscordUser
 
     /// Whether this member has been deafened.
-    public let deaf: Bool
+    public var deaf: Bool
 
     /// Whether this member is muted.
     public var mute: Bool
@@ -81,8 +81,8 @@ public struct DiscordGuildMemberUpdate: Codable {
     }
 
     /// The user role IDs
-    public let roleIds: [RoleID]
+    public var roleIds: [RoleID]
 
     /// Nickname of the user in the guild
-    public let nick: String?
+    public var nick: String?
 }

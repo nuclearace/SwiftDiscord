@@ -104,19 +104,8 @@ public class TestDiscordDataStructures : XCTestCase {
         let embed4 = roundTripEncode(embed3)
         currentCompare = "embed3 and embed4"
         compare(embed3, embed4)
-        let nilJSONTest = JSON.encodeJSON(embed3)!
+        let nilJSONTest = String(data: try! DiscordJSON.encode(embed3), encoding: .utf8)!
         XCTAssertFalse(nilJSONTest.contains("null"), "JSON-encoded embed should not have any null fields")
-    }
-
-    func testDiscordGatewayPayloadData() {
-        let dic = try! JSONSerialization.jsonObject(with: "[true, false, 0, 1, 2, -1]".data(using: .utf8)!, options: []) as! [Any]
-        let payloadData = dic.map(DiscordGatewayPayloadData.dataFromDictionary)
-        XCTAssertEqual(payloadData[0], DiscordGatewayPayloadData.bool(true), "Discord Gateway Payload should unwrap true")
-        XCTAssertEqual(payloadData[1], DiscordGatewayPayloadData.bool(false), "Discord Gateway Payload should unwrap false")
-        XCTAssertEqual(payloadData[2], DiscordGatewayPayloadData.integer(0), "Discord Gateway Payload should unwrap 0")
-        XCTAssertEqual(payloadData[3], DiscordGatewayPayloadData.integer(1), "Discord Gateway Payload should unwrap 1")
-        XCTAssertEqual(payloadData[4], DiscordGatewayPayloadData.integer(2), "Discord Gateway Payload should unwrap 2")
-        XCTAssertEqual(payloadData[5], DiscordGatewayPayloadData.integer(-1), "Discord Gateway Payload should unwrap -1")
     }
 
     func testDiscordGatewayPayload() {
@@ -162,7 +151,6 @@ public class TestDiscordDataStructures : XCTestCase {
             ("testPermissionOverwriteJSONification", testPermissionOverwriteJSONification),
             ("testGameJSONification", testGameJSONification),
             ("testEmbedJSONification", testEmbedJSONification),
-            ("testDiscordGatewayPayloadData", testDiscordGatewayPayloadData),
             ("testDiscordGatewayPayload", testDiscordGatewayPayload),
         ]
     }

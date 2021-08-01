@@ -122,10 +122,10 @@ public struct DiscordChannel: Codable, Identifiable, Hashable {
     public var videoQualityMode: Int?
 
     /// The approximate message count in a thread, stops at 50.
-    public var messageCount: Int?
+    public var messageCount: Int = 0
 
     /// The approximate user count in a thread, stops at 50.
-    public var memberCount: Int?
+    public var memberCount: Int = 0
 
     /// Thread-specific metadata in a thread.
     public var threadMetadata: DiscordThreadMetadata?

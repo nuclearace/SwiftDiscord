@@ -8,7 +8,7 @@ import XCTest
 
 public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     func testClientCreatesGuild() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild create method")
 
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
 
@@ -16,8 +16,8 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientUpdatesGuild() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
-        expectations[.guildUpdate] = expectation(description: "Client should call guild update method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild create method")
+        expectations[DiscordDispatchEventType.guildUpdate] = expectation(description: "Client should call guild update method")
 
         let updateJSON: [String: Any] = [
             "id": "100",
@@ -31,8 +31,8 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientDeletesGuild() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
-        expectations[.guildDelete] = expectation(description: "Client should call guild delete method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild create method")
+        expectations[DiscordDispatchEventType.guildDelete] = expectation(description: "Client should call guild delete method")
 
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
 
@@ -47,8 +47,8 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientHandlesGuildMemberAdd() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
-        expectations[.guildMemberAdd] = expectation(description: "Client should call guild member add method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild create method")
+        expectations[DiscordDispatchEventType.guildMemberAdd] = expectation(description: "Client should call guild member add method")
 
         var tMember = testMember
         var tUser = testUser
@@ -65,8 +65,8 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientHandlesGuildMemberUpdate() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild member update method")
-        expectations[.guildMemberUpdate] = expectation(description: "Client should call guild member update method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild member update method")
+        expectations[DiscordDispatchEventType.guildMemberUpdate] = expectation(description: "Client should call guild member update method")
 
         var tMember = testMember
         var tUser = testUser
@@ -83,8 +83,8 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientHandlesGuildMemberRemove() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
-        expectations[.guildMemberRemove] = expectation(description: "Client should call guild member remove method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[DiscordDispatchEventType.guildMemberRemove] = expectation(description: "Client should call guild member remove method")
 
         var tMember = testMember
         var tUser = testUser
@@ -100,8 +100,8 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientCreatesGuildChannel() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
-        expectations[.channelCreate] = expectation(description: "Client should call create create method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[DiscordDispatchEventType.channelCreate] = expectation(description: "Client should call create create method")
 
         var tChannel = testGuildTextChannel
 
@@ -115,7 +115,7 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientCreatesDMChannel() {
-        expectations[.channelCreate] = expectation(description: "Client should call create create method")
+        expectations[DiscordDispatchEventType.channelCreate] = expectation(description: "Client should call create create method")
 
         client.handleDispatch(event: .channelCreate, data: .object(testDMChannel))
 
@@ -123,7 +123,7 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientCreatesGroupDMChannel() {
-        expectations[.channelCreate] = expectation(description: "Client should call create create method")
+        expectations[DiscordDispatchEventType.channelCreate] = expectation(description: "Client should call create create method")
 
         client.handleDispatch(event: .channelCreate, data: .object(testGroupDMChannel))
 
@@ -131,9 +131,9 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientDeletesGuildChannel() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
-        expectations[.channelCreate] = expectation(description: "Client should call channel create method")
-        expectations[.channelDelete] = expectation(description: "Client should call delete channel method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[DiscordDispatchEventType.channelCreate] = expectation(description: "Client should call channel create method")
+        expectations[DiscordDispatchEventType.channelDelete] = expectation(description: "Client should call delete channel method")
 
         var tChannel = testGuildTextChannel
 
@@ -148,9 +148,9 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientDeletesGuildChannelCategory() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
-        expectations[.channelCreate] = expectation(description: "Client should call channel create method")
-        expectations[.channelDelete] = expectation(description: "Client should call delete channel method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[DiscordDispatchEventType.channelCreate] = expectation(description: "Client should call channel create method")
+        expectations[DiscordDispatchEventType.channelDelete] = expectation(description: "Client should call delete channel method")
 
         var tChannel = testGuildChannelCategory
 
@@ -164,8 +164,8 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientDeletesDirectChannel() {
-        expectations[.channelCreate] = expectation(description: "Client should call channel create method")
-        expectations[.channelDelete] = expectation(description: "Client should call channel delete method")
+        expectations[DiscordDispatchEventType.channelCreate] = expectation(description: "Client should call channel create method")
+        expectations[DiscordDispatchEventType.channelDelete] = expectation(description: "Client should call channel delete method")
 
         client.handleDispatch(event: .channelCreate, data: .object(testDMChannel))
         client.handleDispatch(event: .channelDelete, data: .object(testDMChannel))
@@ -174,8 +174,8 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientDeletesGroupDMChannel() {
-        expectations[.channelCreate] = expectation(description: "Client should call create create method")
-        expectations[.channelDelete] = expectation(description: "Client should call channel delete method")
+        expectations[DiscordDispatchEventType.channelCreate] = expectation(description: "Client should call create create method")
+        expectations[DiscordDispatchEventType.channelDelete] = expectation(description: "Client should call channel delete method")
 
         client.handleDispatch(event: .channelCreate, data: .object(testGroupDMChannel))
         client.handleDispatch(event: .channelDelete, data: .object(testGroupDMChannel))
@@ -184,8 +184,8 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientUpdatesGuildChannel() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
-        expectations[.channelUpdate] = expectation(description: "Client should call update channel method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[DiscordDispatchEventType.channelUpdate] = expectation(description: "Client should call update channel method")
 
         var tChannel = testGuildTextChannel
 
@@ -198,9 +198,9 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientUpdatesGuildChannelCategory() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
-        expectations[.channelCreate] = expectation(description: "Client should create a category channel")
-        expectations[.channelUpdate] = expectation(description: "Client should call update channel method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[DiscordDispatchEventType.channelCreate] = expectation(description: "Client should create a category channel")
+        expectations[DiscordDispatchEventType.channelUpdate] = expectation(description: "Client should call update channel method")
 
         var tChannel = testGuildChannelCategory
 
@@ -215,8 +215,8 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientHandlesGuildEmojiUpdate() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
-        expectations[.guildEmojisUpdate] = expectation(description: "Client should call guild emoji update method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[DiscordDispatchEventType.guildEmojisUpdate] = expectation(description: "Client should call guild emoji update method")
 
         let emojiUpdate: [String: Any] = [
             "guild_id": "100",
@@ -230,8 +230,8 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientHandlesRoleCreate() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
-        expectations[.guildRoleCreate] = expectation(description: "Client should call guild role create method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[DiscordDispatchEventType.guildRoleCreate] = expectation(description: "Client should call guild role create method")
 
         let roleCreate: [String: Any] = [
             "guild_id": "100",
@@ -245,9 +245,9 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientHandlesRoleUpdate() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
-        expectations[.guildRoleCreate] = expectation(description: "Client should call guild role create method")
-        expectations[.guildRoleUpdate] = expectation(description: "Client should call guild role update method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[DiscordDispatchEventType.guildRoleCreate] = expectation(description: "Client should call guild role create method")
+        expectations[DiscordDispatchEventType.guildRoleUpdate] = expectation(description: "Client should call guild role update method")
 
         var tRole = testRole
         var roleUpdate: [String: Any] = [
@@ -267,9 +267,9 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientHandlesRoleRemove() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild member remove method")
-        expectations[.guildRoleCreate] = expectation(description: "Client should call guild role create method")
-        expectations[.guildRoleDelete] = expectation(description: "Client should call guild role delete method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild member remove method")
+        expectations[DiscordDispatchEventType.guildRoleCreate] = expectation(description: "Client should call guild role create method")
+        expectations[DiscordDispatchEventType.guildRoleDelete] = expectation(description: "Client should call guild role delete method")
 
         let roleCreate: [String: Any] = [
             "guild_id": "100",
@@ -289,7 +289,7 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientCallsUnhandledEventMethod() {
-        expectations[.typingStart] = expectation(description: "Client should call the unhandled event method")
+        expectations[DiscordDispatchEventType.typingStart] = expectation(description: "Client should call the unhandled event method")
 
         client.handleDispatch(event: .typingStart, data: .object([:]))
 
@@ -297,7 +297,7 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientFindsGuildTextChannel() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild create method")
 
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
 
@@ -307,7 +307,7 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientFindsGuildVoiceChannel() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild create method")
 
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
 
@@ -317,7 +317,7 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientFindsDirectChannel() {
-        expectations[.channelCreate] = expectation(description: "Client should call guild create method")
+        expectations[DiscordDispatchEventType.channelCreate] = expectation(description: "Client should call guild create method")
 
         client.handleDispatch(event: .channelCreate, data: .object(testDMChannel))
 
@@ -327,7 +327,7 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientFindsGroupDMChannel() {
-        expectations[.channelCreate] = expectation(description: "Client should call guild create method")
+        expectations[DiscordDispatchEventType.channelCreate] = expectation(description: "Client should call guild create method")
 
         client.handleDispatch(event: .channelCreate, data: .object(testGroupDMChannel))
 
@@ -337,8 +337,8 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientCorrectlyAddsPresenceToGuild() {
-        expectations[.guildCreate] = expectation(description: "Client should call guild create method")
-        expectations[.presenceUpdate] = expectation(description: "Client should call presence update method")
+        expectations[DiscordDispatchEventType.guildCreate] = expectation(description: "Client should call guild create method")
+        expectations[DiscordDispatchEventType.presenceUpdate] = expectation(description: "Client should call presence update method")
 
         client.handleDispatch(event: .guildCreate, data: .object(testGuildJSON))
         client.handleDispatch(event: .presenceUpdate, data: .object(testPresence))
@@ -347,7 +347,7 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
     }
 
     func testClientCorrectlyCreatesMessage() {
-        expectations[.messageCreate] = expectation(description: "Client should call the message create method")
+        expectations[DiscordDispatchEventType.messageCreate] = expectation(description: "Client should call the message create method")
 
         client.handleDispatch(event: .messageCreate, data: .object(testMessage))
 
@@ -470,7 +470,7 @@ public extension TestDiscordClient {
             XCTFail("Unknown channel type")
         }
 
-        expectations[.channelCreate]?.fulfill()
+        expectations[DiscordDispatchEventType.channelCreate]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didDeleteChannel channel: DiscordChannel) {
@@ -485,7 +485,7 @@ public extension TestDiscordClient {
             XCTFail("Unknown channel type")
         }
 
-        expectations[.channelDelete]?.fulfill()
+        expectations[DiscordDispatchEventType.channelDelete]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didUpdateChannel channel: DiscordChannel) {
@@ -510,7 +510,7 @@ public extension TestDiscordClient {
             XCTAssertEqual(guildChannel.name, "A new channel", "A new channel should have been updated")
         }
 
-        expectations[.channelUpdate]?.fulfill()
+        expectations[DiscordDispatchEventType.channelUpdate]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didAddGuildMember member: DiscordGuildMember) {
@@ -525,7 +525,7 @@ public extension TestDiscordClient {
         XCTAssertEqual(clientGuild.members.count, 21, "Guild member add should correctly add a new member to members")
         XCTAssertEqual(clientGuild.memberCount, 21, "Guild member add should correctly increment the number of members")
 
-        expectations[.guildMemberAdd]?.fulfill()
+        expectations[DiscordDispatchEventType.guildMemberAdd]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didRemoveGuildMember member: DiscordGuildMember) {
@@ -539,7 +539,7 @@ public extension TestDiscordClient {
         XCTAssertEqual(clientGuild.members.count, 19, "Guild member remove should correctly remove a member")
         XCTAssertEqual(clientGuild.memberCount, 19, "Guild member remove should correctly decrement the number of members")
 
-        expectations[.guildMemberRemove]?.fulfill()
+        expectations[DiscordDispatchEventType.guildMemberRemove]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didUpdateGuildMember member: DiscordGuildMember) {
@@ -551,7 +551,7 @@ public extension TestDiscordClient {
 
         XCTAssertEqual(guildMember.nick, "a new nick", "Member on guild should be updated")
 
-        expectations[.guildMemberUpdate]?.fulfill()
+        expectations[DiscordDispatchEventType.guildMemberUpdate]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didCreateGuild guild: DiscordGuild) {
@@ -566,7 +566,7 @@ public extension TestDiscordClient {
         XCTAssertEqual(clientGuild.presences.count, 20, "Created guild should have 20 presences")
         XCTAssert(guild === clientGuild, "Guild on the client should be the same as one passed to handler")
 
-        expectations[.guildCreate]?.fulfill()
+        expectations[DiscordDispatchEventType.guildCreate]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didDeleteGuild guild: DiscordGuild) {
@@ -576,7 +576,7 @@ public extension TestDiscordClient {
         }
         XCTAssertEqual(guild.id, 100, "Test guild should be removed")
 
-        expectations[.guildDelete]?.fulfill()
+        expectations[DiscordDispatchEventType.guildDelete]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didUpdateGuild guild: DiscordGuild) {
@@ -589,28 +589,28 @@ public extension TestDiscordClient {
         XCTAssertEqual(clientGuild.name, "A new name", "Guild should correctly update name")
         XCTAssert(guild === clientGuild, "Guild on the client should be the same as one passed to handler")
 
-        expectations[.guildUpdate]?.fulfill()
+        expectations[DiscordDispatchEventType.guildUpdate]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didUpdateEmojis emojis: DiscordIDDictionary<DiscordEmoji>,
                 onGuild guild: DiscordGuild) {
         XCTAssertEqual(guild.emojis.count, 20, "Update should have 20 emoji")
 
-        expectations[.guildEmojisUpdate]?.fulfill()
+        expectations[DiscordDispatchEventType.guildEmojisUpdate]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didCreateMessage message: DiscordMessage) {
         XCTAssertEqual(message.content, testMessage["content"] as! String, "Message content should be the same")
         XCTAssertEqual(message.channelId, Snowflake(testMessage["channel_id"] as! String)!, "Channel id should be the same")
 
-        expectations[.messageCreate]?.fulfill()
+        expectations[DiscordDispatchEventType.messageCreate]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didReceivePresenceUpdate presence: DiscordPresence) {
         XCTAssertEqual(presence.user.id, Snowflake(testUser["id"] as! String)!, "Presence should be for the test user")
         XCTAssertNotNil(client.guilds[presence.guildId]?.presences[presence.user.id])
 
-        expectations[.presenceUpdate]?.fulfill()
+        expectations[DiscordDispatchEventType.presenceUpdate]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didCreateRole role: DiscordRole, onGuild guild: DiscordGuild) {
@@ -623,7 +623,7 @@ public extension TestDiscordClient {
         XCTAssertNotNil(clientGuild.roles[role.id], "Role should be in guild")
         XCTAssertEqual(role.name, "My Test Role", "Role create should correctly make role")
 
-        expectations[.guildRoleCreate]?.fulfill()
+        expectations[DiscordDispatchEventType.guildRoleCreate]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didDeleteRole role: DiscordRole, fromGuild guild: DiscordGuild) {
@@ -636,7 +636,7 @@ public extension TestDiscordClient {
         XCTAssertNil(clientGuild.roles[role.id], "Role should not be in guild")
         XCTAssertEqual(role.name, "My Test Role", "Role create should correctly make role")
 
-        expectations[.guildRoleDelete]?.fulfill()
+        expectations[DiscordDispatchEventType.guildRoleDelete]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didUpdateRole role: DiscordRole, onGuild guild: DiscordGuild) {
@@ -649,11 +649,11 @@ public extension TestDiscordClient {
         XCTAssertNotNil(clientGuild.roles[role.id], "Role should be in guild")
         XCTAssertEqual(role.name, "A dank role", "Role create should correctly update role")
 
-        expectations[.guildRoleUpdate]?.fulfill()
+        expectations[DiscordDispatchEventType.guildRoleUpdate]?.fulfill()
     }
 
     func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent) {
-        expectations[.typingStart]?.fulfill()
+        expectations[DiscordDispatchEventType.typingStart]?.fulfill()
     }
 
 }

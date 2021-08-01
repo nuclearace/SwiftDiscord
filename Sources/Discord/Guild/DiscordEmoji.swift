@@ -34,20 +34,20 @@ public struct DiscordEmoji: Identifiable, Codable, Hashable {
     // MARK: Properties
 
     /// The snowflake id of the emoji.  Nil if the emoji is a unicode emoji
-    public let id: EmojiID?
+    public var id: EmojiID?
 
     /// Whether this is a managed emoji.
-    public let managed: Bool
+    public var managed: Bool
     
     /// Whether this is an animated emoji.
-    public let animated: Bool
+    public var animated: Bool = false
 
     /// The name of the emoji or unicode representation if it's a unicode emoji.
-    public let name: String
+    public var name: String
 
     /// Whether this emoji requires colons.
-    public let requireColons: Bool
+    public var requireColons: Bool? = nil
 
     /// An array of role snowflake ids this emoji is active for.
-    public let roles: [RoleID]
+    public var roles: [RoleID]
 }

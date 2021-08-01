@@ -77,75 +77,75 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
 
     // MARK: Properties
 
+    /// The snowflake id of this message.
+    public var id: MessageID
+
+    /// The type of this message.
+    public var type: DiscordMessageType
+
     /// The activity for this message, if any.
-    public var activity: Activity?
+    public var activity: Activity? = nil
 
     /// Sent with Rich-Presence messages.
-    public var application: DiscordApplication?
+    public var application: DiscordApplication? = nil
 
     /// The attachments included in this message.
-    public var attachments: [DiscordAttachment]
+    public var attachments: [DiscordAttachment] = []
 
     /// Who sent this message.
-    public var author: DiscordUser?
+    public var author: DiscordUser? = nil
 
     /// The snowflake id of the channel this message is on.
     public var channelId: ChannelID
 
     /// The content of this message.
-    public var content: String
+    public var content: String = ""
 
     /// When this message was last edited.
-    public var editedTimestamp: Date
+    public var editedTimestamp: Date? = nil
 
     /// The embeds that are in this message.
-    public var embeds: [DiscordEmbed]
-
-    /// The snowflake id of this message.
-    public var id: MessageID
+    public var embeds: [DiscordEmbed] = []
 
     /// Whether or not this message mentioned everyone.
-    public var mentionEveryone: Bool
+    public var mentionEveryone: Bool = false
 
     /// List of snowflake ids of roles that were mentioned in this message.
-    public var mentionRoles: [RoleID]
+    public var mentionRoles: [RoleID] = []
 
     /// List of users that were mentioned in this message.
-    public var mentions: [DiscordUser]
+    public var mentions: [DiscordUser] = []
 
     /// Used for validating a message was sent.
-    public var nonce: Snowflake
+    public var nonce: Snowflake? = nil
 
     /// Whether this message is pinned.
-    public var pinned: Bool
+    public var pinned: Bool = false
 
     /// The reactions a message has.
-    public var reactions: [DiscordReaction]
+    public var reactions: [DiscordReaction] = []
 
     /// The stickers a message has.
-    public var stickers: [DiscordSticker]
+    public var stickers: [DiscordSticker] = []
 
     /// The timestamp of this message.
     public var timestamp: Date
 
     /// Whether or not this message should be read by a screen reader.
-    public var tts: Bool
+    public var tts: Bool = false
 
     /// Finer-grained control over the allowed mentions in an outgoing message.
-    public var allowedMentions: DiscordAllowedMentions?
+    public var allowedMentions: DiscordAllowedMentions? = nil
 
     /// A referenced message in an incoming message. Only present if it's a reply.
-    @CodableBox public var referencedMessage: DiscordMessage?
+    @CodableBox public var referencedMessage: DiscordMessage? = nil
 
     /// A referenced message in an outgoing message.
     public var messageReference: DiscordMessageReference? = nil
 
     /// Interactive components in the message. This top-level array should only
     /// contain action rows (which can then e.g. contain buttons).
-    public var components: [DiscordMessageComponent]?
-
-    /// The type of this message.
-    public var type: DiscordMessageType
+    public var components: [DiscordMessageComponent]? = nil
 
     /// Files to be uploaded as part of an outgoing message.
     public var files: [DiscordFileUpload] = []
@@ -153,7 +153,58 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
     // MARK: Initializers
 
     ///
-    /// Creates a message that can be used to send.
+    /// Creates an incoming message.
+    ///
+    /// This is only used internally for testing, the actual
+    /// messages from Discord will use the Decoder-based initializer.
+    ///
+    init(
+        id: MessageID,
+        type: DiscordMessageType,
+        activity: Activity? = nil,
+        application: DiscordApplication? = nil,
+        author: DiscordUser? = nil,
+        channelId: ChannelID,
+        content: String = "",
+        editedTimestamp: Date? = nil,
+        mentionEveryone: Bool = false,
+        mentionRoles: [RoleID] = [],
+        mentions: [DiscordUser] = [],
+        nonce: Snowflake? = nil,
+        pinned: Bool = false,
+        reactions: [DiscordReaction] = [],
+        stickers: [DiscordSticker] = [],
+        timestamp: Date = Date(),
+        tts: Bool = false,
+        allowedMentions: DiscordAllowedMentions? = nil,
+        referencedMessage: DiscordMessage? = nil,
+        components: [DiscordMessageComponent]? = nil
+    ) {
+        self.id = id
+        self.type = type
+        self.activity = activity
+        self.application = application
+        self.author = author
+        self.channelId = channelId
+        self.content = content
+        self.editedTimestamp = editedTimestamp
+        self.mentionEveryone = mentionEveryone
+        self.mentionRoles = mentionRoles
+        self.mentions = mentions
+        self.nonce = nonce
+        self.pinned = pinned
+        self.reactions = reactions
+        self.stickers = stickers
+        self.timestamp = timestamp
+        self.tts = tts
+        self.allowedMentions = allowedMentions
+        self._referencedMessage = .init(wrappedValue: referencedMessage)
+        self.components = components
+    }
+
+    ///
+    /// Creates an outgoing message (i.e. one that we can send
+    /// to Discord).
     ///
     /// - parameter content: The content of this message.
     /// - parameter embeds: The embeds for this message.

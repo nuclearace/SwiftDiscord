@@ -470,7 +470,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
 
         guard var guild = guilds[member.guildId] else { return }
         guild.members[member.id] = member
-        guild.memberCount = guild.members.count
+        guild.memberCount = guild.memberCount.map { $0 + 1 }
         guilds[member.guildId] = guild
 
         logger.debug("(verbose) Created guild member: \(member)")
@@ -490,7 +490,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
 
         guard var guild = guilds[event.guildId] else { return }
         let removedMember = guild.members.removeValue(forKey: event.user.id)
-        guild.memberCount = guild.members.count
+        guild.memberCount = guild.memberCount.map { $0 - 1 }
         guilds[event.guildId] = guild
 
         guard let removedMember = removedMember else { return }

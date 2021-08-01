@@ -33,23 +33,23 @@ public struct DiscordAttachment: Identifiable, Codable, Hashable {
     // MARK: Properties
 
     /// The snowflake id of this attachment.
-    public let id: AttachmentID
+    public var id: AttachmentID
 
     /// The name of the file.
-    public let filename: String
+    public var filename: String
 
     /// The height, if this is an image.
-    public let height: Int?
+    public var height: Int? = nil
 
     /// The proxy url for this attachment.
-    public let proxyUrl: URL
+    public var proxyUrl: URL? = nil
 
     /// The size of this attachment.
-    public let size: Int
+    public var size: Int? = nil
 
     /// The url of this attachment.
-    public let url: URL
+    public var url: URL? = nil
 
     /// The width, if this is an image.
-    public let width: Int?
+    public var width: Int? = nil
 }
