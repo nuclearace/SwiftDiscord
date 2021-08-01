@@ -273,7 +273,7 @@ public struct DiscordEmbed: Codable, Hashable {
     public var video: Video?
 
     /// The embed's fields
-    public var fields: [Field]
+    public var fields: [Field]?
 
     // MARK: Initializers
 
@@ -300,7 +300,7 @@ public struct DiscordEmbed: Codable, Hashable {
                 thumbnail: Thumbnail? = nil,
                 color: Int? = nil,
                 footer: Footer? = nil,
-                fields: [Field] = []) {
+                fields: [Field]? = nil) {
         self.title = title
         self.author = author
         self.description = description

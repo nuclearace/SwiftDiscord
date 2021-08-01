@@ -242,7 +242,9 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     /// - returns: An optional containing a `DiscordGuild` if one was found.
     ///
     public func guildForChannel(_ channelId: ChannelID) -> DiscordGuild? {
-        return guilds.filter({ $0.1.channels?[channelId] != nil }).map({ $0.1 }).first
+        return guilds
+            .values
+            .first { ($0.channels?[channelId] ?? $0.threads?[channelId]) != nil }
     }
 
     ///
