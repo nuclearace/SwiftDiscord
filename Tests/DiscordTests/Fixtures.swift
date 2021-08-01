@@ -81,7 +81,7 @@ let testGuildChannelCategory = DiscordChannel(
     guildId: 100,
     position: 0,
     name: "TestCategory",
-    parentId: -1
+    parentId: 1
 )
 
 let testDMChannel = DiscordChannel(

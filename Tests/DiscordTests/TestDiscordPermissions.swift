@@ -6,11 +6,11 @@ import Foundation
 import XCTest
 @testable import Discord
 
-public class TestDiscordPermissions : XCTestCase {
+public class TestDiscordPermissions: XCTestCase {
     func testBasicPermissions() {
         let channel = createPermissionTestChannel(overwrites: [])
 
-        XCTAssertEqual(channel.permissionOverwrites.count, 0, "There should be no permission overwrites for this test!")
+        XCTAssertEqual(channel.permissionOverwrites?.count, 0, "There should be no permission overwrites for this test!")
 
         XCTAssertTrue(channel.canMember(permissionsTestMembers[0], .banMembers), "Owners should be able to do anything")
         XCTAssertTrue(channel.canMember(permissionsTestMembers[1], .manageWebhooks), "Admins should be able to do anything")
@@ -51,7 +51,7 @@ public class TestDiscordPermissions : XCTestCase {
     func testOverwritesWithDependencies() {
         let channel = createPermissionTestChannel(overwrites: depencencyOverwrites)
 
-        XCTAssertEqual(channel.permissionOverwrites.count, depencencyOverwrites.count, "There should be the same number of permission overwrites in this channel as we put in")
+        XCTAssertEqual(channel.permissionOverwrites?.count, depencencyOverwrites.count, "There should be the same number of permission overwrites in this channel as we put in")
 
         XCTAssertFalse(channel.canMember(permissionsTestMembers[4], .sendMessages), "A user who can't read messages shouldn't be able to send them")
         XCTAssertEqual(channel.permissions(for: permissionsTestMembers[4]).intersection([.createInstantInvite, .manageChannels, .addReactions, .sendMessages, .sendTTSMessages, .manageMessages, .embedLinks, .attachFiles, .readMessageHistory, .mentionEveryone, .useExternalEmojis]), [], "A user who can't read messages shouldn't be able to do any channel-related things")
@@ -93,19 +93,19 @@ public class TestDiscordPermissions : XCTestCase {
     }
 
     public override func setUp() {
-        permissionsTestClient.handleGuildCreate(with: permissionsTestGuildJSON)
+        permissionsTestClient.handleDispatch(event: .guildCreate(permissionsTestGuild))
     }
 
     public override func tearDown() {
-        permissionsTestClient.handleGuildDelete(with: permissionsTestGuildJSON)
+        permissionsTestClient.handleDispatch(event: .guildDelete(permissionsTestGuild))
         XCTAssertEqual(permissionsTestClient.channelCache.count, 0, "Removing guild should clear its channels from the channel cache")
     }
 }
 
 let permissionsTestUsers = ["23416345", "32564235", "4359835345", "32499342123", "234234120985"].map({ id -> DiscordUser in
     var tmp = testUser
-    tmp["id"] = id
-    return DiscordUser(userObject: tmp)
+    tmp.id = .init(id)!
+    return tmp
 })
 
 let permissionsTestUserPermissions: DiscordPermissions = [.createInstantInvite, .addReactions, .viewChannel, .sendMessages, .readMessageHistory, .useExternalEmojis, .connect, .speak, .useVAD, .changeNickname]
@@ -120,15 +120,12 @@ class PermissionsTestClientDelegate: DiscordClientDelegate { }
 let permissionsTestClientDelegate = PermissionsTestClientDelegate()
 let permissionsTestClient = DiscordClient(token: "Testing", delegate: permissionsTestClientDelegate)
 
-let permissionsTestGuildJSON = { () -> [String: Any] in
+let permissionsTestGuild = { () -> DiscordGuild in
     var tmp = testGuild
-    tmp["owner_id"] = String(describing: permissionsTestUsers[0].id)
-    tmp["roles"] = permissionsTestRoles
-
-    return roundTripEncode(GenericEncodableDictionary(tmp))
+    tmp.ownerId = permissionsTestUsers[0].id
+    tmp.roles = .init(permissionsTestRoles)
+    return roundTripEncode(tmp)
 }()
-
-let permissionsTestGuild = DiscordGuild(guildObject: permissionsTestGuildJSON, client: permissionsTestClient)
 
 let permissionTestMemberRoles: [[RoleID]] = [
     [permissionsTestRoles[3].id],
@@ -141,7 +138,7 @@ let permissionTestMemberRoles: [[RoleID]] = [
 let permissionsTestMembers = zip(permissionsTestUsers, permissionTestMemberRoles).map({zipped -> DiscordGuildMember in
     let (user, roles) = zipped
     
-    return DiscordGuildMember(guildId: permissionsTestGuild.id, user: user, deaf: false, mute: false, nick: nil, roleIds: roles, joinedAt: DiscordDateFormatter.format("2017-04-25T20:00:00.000000+00:00")!, guild: permissionsTestGuild)
+    return DiscordGuildMember(guildId: permissionsTestGuild.id, user: user, deaf: false, mute: false, nick: nil, roleIds: roles, joinedAt: DiscordDateFormatter.format("2017-04-25T20:00:00.000000+00:00")!)
 })
 
 func createPermissionTestChannel(overwrites: [DiscordPermissionOverwrite]) -> DiscordChannel {

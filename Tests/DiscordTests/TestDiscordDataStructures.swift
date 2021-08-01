@@ -10,8 +10,7 @@ func roundTripEncode<T: Codable>(_ item: T) -> T {
     return try! DiscordJSON.decode(data)
 }
 
-public class TestDiscordDataStructures : XCTestCase {
-
+public class TestDiscordDataStructures: XCTestCase {
     func testRoleJSONification() {
         let role1 = DiscordRole(id: 324, color: 43, hoist: false, managed: true, mentionable: false, name: "Test Role", permissions: [.addReactions], position: 4)
         let role2 = roundTripEncode(role1)
@@ -107,14 +106,4 @@ public class TestDiscordDataStructures : XCTestCase {
         let nilJSONTest = String(data: try! DiscordJSON.encode(embed3), encoding: .utf8)!
         XCTAssertFalse(nilJSONTest.contains("null"), "JSON-encoded embed should not have any null fields")
     }
-
-    public static var allTests: [(String, (TestDiscordDataStructures) -> () -> ())] {
-        return [
-            ("testRoleJSONification", testRoleJSONification),
-            ("testPermissionOverwriteJSONification", testPermissionOverwriteJSONification),
-            ("testGameJSONification", testGameJSONification),
-            ("testEmbedJSONification", testEmbedJSONification),
-        ]
-    }
-
 }

@@ -271,10 +271,10 @@ public struct DiscordReadyEvent: Codable {
     /// when identifying. An array of two integers:
     /// - shard_id
     /// - num_shards
-    public var shard: [Int]
+    public var shard: [Int]? = nil
 
     /// The partial application object (contains `id` and `flags`).
-    public var application: DiscordApplication
+    public var application: DiscordApplication? = nil
 }
 
 /// Sent when a guild's voixce server is updated.

@@ -7,7 +7,7 @@ import XCTest
 import NIO
 @testable import Discord
 
-public class TestDiscordEngine : XCTestCase, DiscordShardDelegate {
+public class TestDiscordEngine: XCTestCase, DiscordShardDelegate {
     func testEngineCorrectlyHandlesHelloPacket() {
         expectation = expectation(description: "Engine should be connected after receiving hello packet")
 

@@ -6,7 +6,7 @@ import Foundation
 import XCTest
 @testable import Discord
 
-public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
+public class TestDiscordClient: XCTestCase, DiscordClientDelegate {
     func testClientCreatesGuild() {
         expectations[.guildCreate] = expectation(description: "Client should call guild create method")
 
@@ -338,37 +338,6 @@ public class TestDiscordClient : XCTestCase, DiscordClientDelegate {
 
     var client: DiscordClient!
     var expectations = [DiscordDispatchEventType: XCTestExpectation]()
-
-    public static var allTests: [(String, (TestDiscordClient) -> () -> ())] {
-        return [
-            ("testClientCreatesGuild", testClientCreatesGuild),
-            ("testClientUpdatesGuild", testClientUpdatesGuild),
-            ("testClientDeletesGuild", testClientDeletesGuild),
-            ("testClientHandlesGuildMemberAdd", testClientHandlesGuildMemberAdd),
-            ("testClientHandlesGuildMemberUpdate", testClientHandlesGuildMemberUpdate),
-            ("testClientHandlesGuildMemberRemove", testClientHandlesGuildMemberRemove),
-            ("testClientCreatesGuildChannel", testClientCreatesGuildChannel),
-            ("testClientCreatesDMChannel", testClientCreatesDMChannel),
-            ("testClientCreatesGroupDMChannel", testClientCreatesGroupDMChannel),
-            ("testClientDeletesGuildChannel", testClientDeletesGuildChannel),
-            ("testClientDeletesGuildCategoryChannel", testClientDeletesGuildChannelCategory),
-            ("testClientDeletesDirectChannel", testClientDeletesDirectChannel),
-            ("testClientDeletesGroupDMChannel", testClientDeletesGroupDMChannel),
-            ("testClientUpdatesGuildChannel", testClientUpdatesGuildChannel),
-            ("testClientUpdatesGuildChannelCategory", testClientUpdatesGuildChannelCategory),
-            ("testClientHandlesGuildEmojiUpdate", testClientHandlesGuildEmojiUpdate),
-            ("testClientHandlesRoleCreate", testClientHandlesRoleCreate),
-            ("testClientHandlesRoleUpdate", testClientHandlesRoleUpdate),
-            ("testClientHandlesRoleRemove", testClientHandlesRoleRemove),
-            ("testClientCallsUnhandledEventMethod", testClientCallsUnhandledEventMethod),
-            ("testClientFindsGuildTextChannel", testClientFindsGuildTextChannel),
-            ("testClientFindsGuildVoiceChannel", testClientFindsGuildVoiceChannel),
-            ("testClientFindsDirectChannel", testClientFindsDirectChannel),
-            ("testClientFindsGroupDMChannel", testClientFindsGroupDMChannel),
-            ("testClientCorrectlyAddsPresenceToGuild", testClientCorrectlyAddsPresenceToGuild),
-            ("testClientCorrectlyCreatesMessage", testClientCorrectlyCreatesMessage)
-        ]
-    }
 
     public override func setUp() {
         client = DiscordClient(token: "Testing", delegate: self)
