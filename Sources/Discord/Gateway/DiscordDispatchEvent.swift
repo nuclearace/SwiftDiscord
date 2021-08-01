@@ -59,6 +59,7 @@ public enum DiscordDispatchEvent: Decodable {
     case threadCreate(DiscordThreadCreateEvent)
     case threadUpdate(DiscordThreadUpdateEvent)
     case threadDelete(DiscordThreadDeleteEvent)
+    case threadListSync(DiscordThreadListSyncEvent)
     case threadMemberUpdate(DiscordThreadMemberUpdateEvent)
     case threadMembersUpdate(DiscordThreadMembersUpdateEvent)
 
@@ -121,6 +122,7 @@ public enum DiscordDispatchEvent: Decodable {
         case .threadCreate: self = .threadCreate(try container.decode(DiscordThreadCreateEvent.self, forKey: .data))
         case .threadUpdate: self = .threadUpdate(try container.decode(DiscordThreadUpdateEvent.self, forKey: .data))
         case .threadDelete: self = .threadDelete(try container.decode(DiscordThreadDeleteEvent.self, forKey: .data))
+        case .threadListSync: self = .threadListSync(try container.decode(DiscordThreadListSyncEvent.self, forKey: .data))
         case .threadMemberUpdate: self = .threadMemberUpdate(try container.decode(DiscordThreadMemberUpdateEvent.self, forKey: .data))
         case .threadMembersUpdate: self = .threadMembersUpdate(try container.decode(DiscordThreadMembersUpdateEvent.self, forKey: .data))
         case .voiceServerUpdate: self = .voiceServerUpdate(try container.decode(DiscordVoiceServerUpdateEvent.self, forKey: .data))
@@ -186,6 +188,7 @@ public struct DiscordDispatchEventType: RawRepresentable, Codable, Hashable {
     public static let threadCreate = DiscordDispatchEventType(rawValue: "THREAD_CREATE")
     public static let threadUpdate = DiscordDispatchEventType(rawValue: "THREAD_UPDATE")
     public static let threadDelete = DiscordDispatchEventType(rawValue: "THREAD_DELETE")
+    public static let threadListSync = DiscordDispatchEventType(rawValue: "THREAD_LIST_SYNC")
     public static let threadMemberUpdate = DiscordDispatchEventType(rawValue: "THREAD_MEMBER_UPDATE")
     public static let threadMembersUpdate = DiscordDispatchEventType(rawValue: "THREAD_MEMBERS_UPDATE")
 
