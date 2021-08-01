@@ -111,12 +111,13 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
 
         let url = URL(string: connectURL)!
         let path = url.path.isEmpty ? "/" : url.path
+        let query = url.query
 
         let future = WebSocket.connect(
             scheme: url.scheme ?? "wss",
             host: url.host!,
             port: url.port ?? 443,
-            path: path,
+            path: "\(path)\(query.map { "?\($0)" } ?? "")",
             configuration: .init(
                 tlsConfiguration: .clientDefault,
                 maxFrameSize: 1 << 31

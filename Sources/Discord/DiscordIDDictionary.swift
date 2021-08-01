@@ -71,7 +71,7 @@ extension DiscordIDDictionary: Codable where Value: Codable, Value.ID: Codable {
     public init(from decoder: Decoder) throws {
         let values = try [Value](from: decoder)
         let keyedValues = values.map { ($0.id, $0) }
-        self.init(Dictionary(uniqueKeysWithValues: keyedValues))
+        self.init(Dictionary(keyedValues, uniquingKeysWith: { _, v in v }))
     }
 
     public func encode(to encoder: Encoder) throws {
