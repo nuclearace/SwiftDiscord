@@ -81,7 +81,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
     public var id: MessageID
 
     /// The type of this message.
-    public var type: DiscordMessageType
+    public var type: DiscordMessageType? = nil
 
     /// The activity for this message, if any.
     public var activity: Activity? = nil
@@ -99,7 +99,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
     public var channelId: ChannelID
 
     /// The content of this message.
-    public var content: String = ""
+    public var content: String? = nil
 
     /// When this message was last edited.
     public var editedTimestamp: Date? = nil
@@ -108,7 +108,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
     public var embeds: [DiscordEmbed]? = nil
 
     /// Whether or not this message mentioned everyone.
-    public var mentionEveryone: Bool = false
+    public var mentionEveryone: Bool? = nil
 
     /// List of snowflake ids of roles that were mentioned in this message.
     public var mentionRoles: [RoleID]? = nil
@@ -120,7 +120,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
     public var nonce: Snowflake? = nil
 
     /// Whether this message is pinned.
-    public var pinned: Bool = false
+    public var pinned: Bool? = nil
 
     /// The reactions a message has.
     public var reactions: [DiscordReaction]? = nil
@@ -129,10 +129,10 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
     public var stickers: [DiscordSticker]? = nil
 
     /// The timestamp of this message.
-    public var timestamp: Date
+    public var timestamp: Date? = nil
 
     /// Whether or not this message should be read by a screen reader.
-    public var tts: Bool = false
+    public var tts: Bool? = nil
 
     /// Finer-grained control over the allowed mentions in an outgoing message.
     public var allowedMentions: DiscordAllowedMentions? = nil
@@ -166,23 +166,23 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
     ///
     init(
         id: MessageID,
-        type: DiscordMessageType,
+        type: DiscordMessageType? = nil,
         activity: Activity? = nil,
         application: DiscordApplication? = nil,
         attachments: [DiscordAttachment] = [],
         author: DiscordUser? = nil,
         channelId: ChannelID,
-        content: String = "",
+        content: String? = nil,
         editedTimestamp: Date? = nil,
         embeds: [DiscordEmbed] = [],
-        mentionEveryone: Bool = false,
+        mentionEveryone: Bool? = nil,
         mentionRoles: [RoleID] = [],
         mentions: [DiscordUser] = [],
         nonce: Snowflake? = nil,
         pinned: Bool = false,
         reactions: [DiscordReaction] = [],
         stickers: [DiscordSticker] = [],
-        timestamp: Date = Date(),
+        timestamp: Date? = nil,
         tts: Bool = false,
         allowedMentions: DiscordAllowedMentions? = nil,
         referencedMessage: DiscordMessage? = nil,
@@ -287,8 +287,8 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
 
     func createDataForSending() -> Either<Data, (boundary: String, body: Data)> {
         let fields = Draft(
-            content: content,
-            tts: tts,
+            content: content ?? "",
+            tts: tts ?? false,
             embed: embeds?.first,
             allowedMentions: allowedMentions,
             messageReference: messageReference,
