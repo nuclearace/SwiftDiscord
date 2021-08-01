@@ -146,6 +146,9 @@ public struct DiscordChannel: Codable, Identifiable, Hashable {
 
     /// Whether this is a direct message.
     public var isDM: Bool { [.dm, .groupDM].contains(type) }
+
+    /// Whether this is a voice channel.
+    public var isVoice: Bool { [.voice, .stageVoice].contains(type) }
 }
 
 /// Represents the type of a channel.

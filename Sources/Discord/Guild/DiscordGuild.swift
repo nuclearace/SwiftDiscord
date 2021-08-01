@@ -195,4 +195,74 @@ public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable, Hash
             self.verificationLevel = verificationLevel
         }
     }
+
+    /// Fetches the permissions for a given member in a given channel.
+    /// Nil if the channel could not be found.
+    public func permissions(for member: DiscordGuildMember, in channelId: ChannelID) -> DiscordPermissions? {
+        // Owner has all permissions
+        guard ownerId != member.user.id else { return .all }
+
+        var workingPermissions: DiscordPermissions = roles(for: member).reduce([], { $0.union($1.permissions) })
+        if let everybodyRole = roles[id] {
+            workingPermissions.formUnion(everybodyRole.permissions)
+        }
+
+        if workingPermissions.contains(.administrator) {
+            // Admins have all permissions
+            return .all
+        }
+
+        guard let channel = channels[channelId],
+              let permissionOverwrites = channel.permissionOverwrites else {
+            return nil
+        }
+
+        if let everybodyOverwrite = permissionOverwrites[id] {
+            workingPermissions.subtract(everybodyOverwrite.deny)
+            workingPermissions.formUnion(everybodyOverwrite.allow)
+        }
+
+        let roleOverwrites = permissionOverwrites.values.lazy.filter({ member.roleIds.contains($0.id) })
+        let (allowRole, denyRole): (DiscordPermissions, DiscordPermissions) = roleOverwrites.reduce(([], [])) { cur, overwrite in
+            (cur.0.union(overwrite.allow), cur.1.union(overwrite.deny))
+        }
+        workingPermissions.subtract(denyRole)
+        workingPermissions.formUnion(allowRole)
+
+        if let memberOverwrite = permissionOverwrites[member.user.id] {
+            workingPermissions.subtract(memberOverwrite.deny)
+            workingPermissions.formUnion(memberOverwrite.allow)
+        }
+
+        if !workingPermissions.contains(.sendMessages) {
+            // If they can't send messages, they automatically lose some permissions
+            workingPermissions.subtract([.sendTTSMessages, .mentionEveryone, .attachFiles, .embedLinks])
+        }
+
+        if !workingPermissions.contains(.viewChannel) {
+            // If they can't read, they lose all channel based permissions
+            workingPermissions.subtract(.allChannel)
+        }
+
+        if !channel.isVoice {
+            // Text channels don't have voice permissions.
+            workingPermissions.subtract(.voice)
+        }
+
+        return workingPermissions
+    }
+
+    /// Fetches the permission overwrites for a member in the given channel.
+    public func overwrites(for member: DiscordGuildMember, in channelId: ChannelID) -> [DiscordPermissionOverwrite] {
+        guard let permissionOverwrites = channels[channelId]?.permissionOverwrites else { return [] }
+        return permissionOverwrites
+            .filter { member.roleIds.contains($0.key) || member.user.id == $0.key }
+            .map({ $0.1 })
+    }
+
+    /// Determines whether the given member has the specified permissions in the given channel.
+    /// False if the channel does not exist.
+    public func canMember(_ member: DiscordGuildMember, _ permission: DiscordPermissions, in channelId: ChannelID) -> Bool {
+        permissions(for: member, in: channelId)?.isSuperset(of: permission) ?? false
+    }
 }
