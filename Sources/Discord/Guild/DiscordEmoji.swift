@@ -37,10 +37,10 @@ public struct DiscordEmoji: Identifiable, Codable, Hashable {
     public var id: EmojiID?
 
     /// Whether this is a managed emoji.
-    public var managed: Bool
+    public var managed: Bool? = nil
     
     /// Whether this is an animated emoji.
-    public var animated: Bool = false
+    public var animated: Bool? = nil
 
     /// The name of the emoji or unicode representation if it's a unicode emoji.
     public var name: String
@@ -49,5 +49,5 @@ public struct DiscordEmoji: Identifiable, Codable, Hashable {
     public var requireColons: Bool? = nil
 
     /// An array of role snowflake ids this emoji is active for.
-    public var roles: [RoleID]
+    public var roles: [RoleID]? = nil
 }

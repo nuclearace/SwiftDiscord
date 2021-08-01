@@ -30,6 +30,7 @@ public struct DiscordGuild: CustomStringConvertible, Identifiable, Codable, Hash
     public enum CodingKeys: String, CodingKey {
         case id
         case channels
+        case threads
         case defaultMessageNotifications = "default_message_notifications"
         case widgetEnabled = "widget_enabled"
         case widgetChannelId = "widget_channel_id"
