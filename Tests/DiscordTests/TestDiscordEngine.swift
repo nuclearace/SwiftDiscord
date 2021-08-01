@@ -26,7 +26,7 @@ public class TestDiscordEngine : XCTestCase, DiscordShardDelegate {
 
     func testEngineUpdatesSequenceNumber() {
         let payload1 = DiscordGatewayEvent.dispatch(.init(sequenceNumber: 1, event: .messageCreate(DiscordMessage())))
-        let payload1 = DiscordGatewayEvent.dispatch(.init(sequenceNumber: 2, event: .messageUpdate(DiscordMessage())))
+        let payload2 = DiscordGatewayEvent.dispatch(.init(sequenceNumber: 2, event: .messageUpdate(DiscordMessage())))
 
         expectation = expectation(description: "Engine should update the sequence number")
 
@@ -59,8 +59,7 @@ public extension TestDiscordEngine {
         return "Testing"
     }
 
-    func shard(_ shard: DiscordShard, didReceiveEvent event: DiscordDispatchEvent,
-                with payload: DiscordGatewayPayload) {
+    func shard(_ shard: DiscordShard, didReceiveEvent event: DiscordDispatchEvent) {
         let engine = shard as! DiscordEngine
 
         switch event {
@@ -77,7 +76,7 @@ public extension TestDiscordEngine {
         }
     }
 
-    func shard(_ shard: DiscordShard, gotHelloWithPayload payload: DiscordGatewayPayload) {
+    func shard(_ shard: DiscordShard, gotHello hello: DiscordGatewayHello) {
         XCTAssertTrue(engine.connected, "Engine should be connected after getting hello")
 
         expectation.fulfill()

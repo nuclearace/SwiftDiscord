@@ -202,7 +202,7 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     ///
     /// - parameter event: The dispatch event
     ///
-    private func handleDispatch(event: DiscordDispatchEvent) {
+    func handleDispatch(event: DiscordDispatchEvent) {
         switch event {
         case .presenceUpdate(let e): handlePresenceUpdate(with: e)
         case .messageCreate(let e): handleMessageCreate(with: e)
@@ -566,8 +566,8 @@ public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, Disco
     private func handleGuildRoleDelete(with event: DiscordGuildRoleDeleteEvent) {
         logger.info("Handling guild role remove")
 
-        guard var guild = guilds[event.guildId] else { return }
-        let removedRole = guild.roles.removeValue(forKey: event.role.id) ?? event.role
+        guard var guild = guilds[event.guildId],
+              let removedRole = guild.roles.removeValue(forKey: event.roleId) else { return }
         guilds[event.guildId] = guild
 
         logger.debug("(verbose) Removed role: \(removedRole)")

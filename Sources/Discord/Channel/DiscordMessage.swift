@@ -163,10 +163,12 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
         type: DiscordMessageType,
         activity: Activity? = nil,
         application: DiscordApplication? = nil,
+        attachments: [DiscordAttachment] = [],
         author: DiscordUser? = nil,
         channelId: ChannelID,
         content: String = "",
         editedTimestamp: Date? = nil,
+        embeds: [DiscordEmbed] = [],
         mentionEveryone: Bool = false,
         mentionRoles: [RoleID] = [],
         mentions: [DiscordUser] = [],
@@ -184,10 +186,12 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
         self.type = type
         self.activity = activity
         self.application = application
+        self.attachments = attachments
         self.author = author
         self.channelId = channelId
         self.content = content
         self.editedTimestamp = editedTimestamp
+        self.embeds = embeds
         self.mentionEveryone = mentionEveryone
         self.mentionRoles = mentionRoles
         self.mentions = mentions
@@ -221,11 +225,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
         components: [DiscordMessageComponent] = []
     ) {
         self.content = content
-        if let embed = embed {
-            self.embeds = [embed]
-        } else {
-            self.embeds = []
-        }
+        self.embeds = embed.map { [$0] } ?? []
         self.activity = nil
         self.application = nil
         self.files = files

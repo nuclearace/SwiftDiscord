@@ -311,7 +311,7 @@ public extension DiscordClientDelegate {
     func client(_ client: DiscordClient, didCreateInteraction interaction: DiscordInteraction) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didReceiveReady readyData: [String: Any]) { }
+    func client(_ client: DiscordClient, didReceiveReady event: DiscordReadyEvent) { }
 
     /// Default.
     func client(_ client: DiscordClient, didReceiveVoiceStateUpdate voiceState: DiscordVoiceState) { }

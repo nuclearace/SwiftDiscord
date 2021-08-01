@@ -228,7 +228,6 @@ public typealias DiscordGuildDeleteEvent = DiscordGuild
 public typealias DiscordGuildMemberAddEvent = DiscordGuildMember
 public typealias DiscordGuildMemberUpdateEvent = DiscordGuildMember
 public typealias DiscordGuildRoleCreateEvent = DiscordGuildRoleUpdateEvent
-public typealias DiscordGuildRoleDeleteEvent = DiscordGuildRoleUpdateEvent
 public typealias DiscordPresenceUpdateEvent = DiscordPresence
 public typealias DiscordChannelCreateEvent = DiscordChannel
 public typealias DiscordChannelUpdateEvent = DiscordChannel
@@ -393,7 +392,7 @@ public struct DiscordGuildMemberRemoveEvent: Codable {
     public var user: DiscordUser
 }
 
-/// Sent when a role is created/updated/removed on a guild.
+/// Sent when a role is created/updated on a guild.
 public struct DiscordGuildRoleUpdateEvent: Codable {
     public enum CodingKeys: String, CodingKey {
         case guildId = "guild_id"
@@ -404,6 +403,19 @@ public struct DiscordGuildRoleUpdateEvent: Codable {
     public var guildId: GuildID
     /// The role.
     public var role: DiscordRole
+}
+
+/// Sent when a role is removed from a guild.
+public struct DiscordGuildRoleDeleteEvent: Codable {
+    public enum CodingKeys: String, CodingKey {
+        case guildId = "guild_id"
+        case roleId = "role_id"
+    }
+
+    /// The id of the guild.
+    public var guildId: GuildID
+    /// The id of the role.
+    public var roleId: RoleID
 }
 
 /// Sent in response to Guild Request Members. You can use `chunk_index` and `chunk_count`

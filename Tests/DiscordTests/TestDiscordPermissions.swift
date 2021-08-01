@@ -144,11 +144,11 @@ let permissionsTestMembers = zip(permissionsTestUsers, permissionTestMemberRoles
     return DiscordGuildMember(guildId: permissionsTestGuild.id, user: user, deaf: false, mute: false, nick: nil, roleIds: roles, joinedAt: DiscordDateFormatter.format("2017-04-25T20:00:00.000000+00:00")!, guild: permissionsTestGuild)
 })
 
-func createPermissionTestChannel(overwrites: [DiscordPermissionOverwrite]) -> DiscordGuildTextChannel {
+func createPermissionTestChannel(overwrites: [DiscordPermissionOverwrite]) -> DiscordChannel {
     var channelData = testGuildTextChannel
-    channelData["permission_overwrites"] = overwrites
-    channelData["guild_id"] = String(describing: permissionsTestGuild.id)
-    channelData = roundTripEncode(GenericEncodableDictionary(channelData))
-    permissionsTestClient.handleChannelCreate(with: channelData)
-    return permissionsTestClient.findChannel(fromId: Snowflake(channelData["id"] as! String)!) as! DiscordGuildTextChannel
+    channelData.permissionOverwrites = .init(overwrites)
+    channelData.guildId = permissionsTestGuild.id
+    channelData = roundTripEncode(channelData)
+    permissionsTestClient.handleDispatch(event: .channelCreate(channelData))
+    return permissionsTestClient.findChannel(fromId: channelData.id)!
 }
