@@ -341,6 +341,10 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                 modifyJSON["topic"] = topic
             case let .userLimit(limit):
                 modifyJSON["user_limit"] = limit
+            case let .archived(archived):
+                modifyJSON["archived"] = archived
+            case let .locked(locked):
+                modifyJSON["locked"] = locked
             }
         }
 

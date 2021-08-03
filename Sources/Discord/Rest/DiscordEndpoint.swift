@@ -702,6 +702,12 @@ public extension DiscordEndpoint {
 
             /// The user limit of a voice channel.
             case userLimit(Int)
+
+            /// The archival status of a thread channel.
+            case archived(Bool)
+
+            /// The locked status of a thread channel.
+            case locked(Bool)
         }
 
         /// Modify a guild member.
