@@ -11,7 +11,7 @@
         }
       },
       {
-        "package": "BlueSocket",
+        "package": "Socket",
         "repositoryURL": "https://github.com/Kitura/BlueSocket.git",
         "state": {
           "branch": null,

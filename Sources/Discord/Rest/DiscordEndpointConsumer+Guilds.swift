@@ -325,40 +325,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
     /// Default implementation
     func modifyGuild(_ guildId: GuildID,
-                            options: [DiscordEndpoint.Options.ModifyGuild],
+                            options: DiscordEndpoint.Options.ModifyGuild,
                             reason: String? = nil,
                             callback: ((DiscordGuild?, HTTPURLResponse?) -> ())? = nil) {
-        var modifyJSON: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
             extraHeaders[.auditReason] = modifyReason
         }
 
-        for option in options {
-            switch option {
-            case let .afkChannelId(id):
-                modifyJSON["afk_channel_id"] = id
-            case let .afkTimeout(seconds):
-                modifyJSON["afk_timeout"] = seconds
-            case let .defaultMessageNotifications(level):
-                modifyJSON["default_message_notifications"] = level
-            case let .icon(icon):
-                modifyJSON["icon"] = icon
-            case let .name(name):
-                modifyJSON["name"] = name
-            case let .ownerId(id):
-                modifyJSON["owner_id"] = id
-            case let .region(region):
-                modifyJSON["region"] = region
-            case let .splash(splash):
-                modifyJSON["splash"] = splash
-            case let .verificationLevel(level):
-                modifyJSON["verification_level"] = level
-            }
-        }
-
-        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(modifyJSON)) else { return }
+        guard let contentData = try? DiscordJSON.encode(options) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard let guild: DiscordGuild = DiscordJSON.decodeResponse(data: data, response: response) else {
@@ -400,29 +376,18 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
     /// Default implementation
     func modifyGuildMember(_ id: UserID, on guildId: GuildID,
-                           options: [DiscordEndpoint.Options.ModifyMember],
+                           options: DiscordEndpoint.Options.ModifyMember,
                            reason: String? = nil,
                            callback: ((Bool, HTTPURLResponse?) -> ())? = nil) {
-        var patchParams: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
             extraHeaders[.auditReason] = modifyReason
         }
 
-        for option in options {
-            switch option {
-            case let .channel(id):      patchParams["channel_id"] = id
-            case let .deaf(deaf):       patchParams["deaf"] = deaf
-            case let .mute(mute):       patchParams["mute"] = mute
-            case let .nick(nick):       patchParams["nick"] = nick ?? ""
-            case let .roles(roles):     patchParams["roles"] = roles.map({ $0.id })
-            }
-        }
+        guard let contentData = try? DiscordJSON.encode(options) else { return }
 
-        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(patchParams)) else { return }
-
-        logger.debug("Modifying guild member \(id) with options: \(patchParams) on \(guildId)")
+        logger.debug("Modifying guild member \(id) with options: \(options) on \(guildId)")
 
         rateLimiter.executeRequest(endpoint: .guildMember(guild: guildId, user: id),
                                    token: token,

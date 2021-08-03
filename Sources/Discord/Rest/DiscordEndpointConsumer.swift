@@ -221,12 +221,12 @@ public protocol DiscordEndpointConsumer {
     /// Modifies the specified channel.
     ///
     /// - parameter channelId: The snowflake id of the channel.
-    /// - parameter options: An array of `DiscordEndpointOptions.ModifyChannel` options.
+    /// - parameter options: Properties to be modified
     /// - parameter reason: The reason this modification is being made.
     /// - parameter callback: An optional callback containing the edited guild channel, if successful.
     ///
     func modifyChannel(_ channelId: ChannelID,
-                       options: [DiscordEndpoint.Options.ModifyChannel],
+                       options: DiscordEndpoint.Options.ModifyChannel,
                        reason: String?,
                        callback: ((DiscordChannel?, HTTPURLResponse?) -> ())?)
 
@@ -410,12 +410,12 @@ public protocol DiscordEndpointConsumer {
     /// Modifies the specified guild.
     ///
     /// - parameter guildId: The snowflake id of the guild.
-    /// - parameter options: An array of `DiscordEndpointOptions.ModifyGuild` options.
+    /// - parameter options: Properties to be modified
     /// - parameter reason: The reason for this modification.
     /// - parameter callback: An optional callback containing the modified guild, if successful.
     ///
     func modifyGuild(_ guildId: GuildID,
-                     options: [DiscordEndpoint.Options.ModifyGuild],
+                     options: DiscordEndpoint.Options.ModifyGuild,
                      reason: String?,
                      callback: ((DiscordGuild?, HTTPURLResponse?) -> ())?)
 
@@ -442,7 +442,7 @@ public protocol DiscordEndpointConsumer {
     ///
     func modifyGuildMember(_ id: UserID,
                            on guildId: GuildID,
-                           options: [DiscordEndpoint.Options.ModifyMember],
+                           options: DiscordEndpoint.Options.ModifyMember,
                            reason: String?,
                            callback: ((Bool, HTTPURLResponse?) -> ())?)
 

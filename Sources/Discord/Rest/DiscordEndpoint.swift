@@ -687,75 +687,151 @@ public extension DiscordEndpoint {
         }
 
         /// Modify channel options.
-        public enum ModifyChannel {
+        public struct ModifyChannel: Codable {
+            public enum CodingKeys: String, CodingKey {
+                case bitrate
+                case name
+                case position
+                case topic
+                case userLimit = "user_limit"
+                case archived
+                case locked
+            }
+
             /// The bitrate of a voice channel.
-            case bitrate(Int)
+            public let bitrate: Int?
 
             /// The name of the channel.
-            case name(String)
+            public let name: String?
 
             /// The position of this channel.
-            case position(Int)
+            public let position: Int?
 
             /// The topic of a text channel.
-            case topic(String)
+            public let topic: String?
 
             /// The user limit of a voice channel.
-            case userLimit(Int)
+            public let userLimit: Int?
 
             /// The archival status of a thread channel.
-            case archived(Bool)
+            public let archived: Bool?
 
             /// The locked status of a thread channel.
-            case locked(Bool)
+            public let locked: Bool?
+
+            public init(
+                bitrate: Int? = nil,
+                name: String? = nil,
+                position: Int? = nil,
+                topic: String? = nil,
+                userLimit: Int? = nil,
+                archived: Bool? = nil,
+                locked: Bool? = nil
+            ) {
+                self.bitrate = bitrate
+                self.name = name
+                self.position = position
+                self.topic = topic
+                self.userLimit = userLimit
+                self.archived = archived
+                self.locked = locked
+            }
         }
 
         /// Modify a guild member.
-        public enum ModifyMember {
+        public struct ModifyMember: Codable {
             /// The id of the channel to move this member to. If they're connected to voice.
-            case channel(String)
+            public let channel: String?
 
             /// Whether this member is deafened.
-            case deaf(Bool)
+            public let deaf: Bool?
 
             /// Whether this member is muted.
-            case mute(Bool)
+            public let mute: Bool?
 
             /// The nick for this member.
-            case nick(String?)
+            public let nick: String?
 
             /// The roles this member should have.
-            case roles([DiscordRole])
+            public let roles: [DiscordRole]?
+
+            public init(
+                channel: String? = nil,
+                deaf: Bool? = nil,
+                mute: Bool? = nil,
+                nick: String? = nil,
+                roles: [DiscordRole]? = nil
+            ) {
+                self.channel = channel
+                self.deaf = deaf
+                self.mute = mute
+                self.nick = nick
+                self.roles = roles
+            }
         }
 
         /// Modify guild options.
-        public enum ModifyGuild {
+        public struct ModifyGuild: Codable {
+            public enum CodingKeys: String, CodingKey {
+                case afkChannelId = "afk_channel_id"
+                case afkTimeout = "afk_timeout"
+                case defaultMessageNotifications = "default_message_notifications"
+                case icon
+                case name
+                case ownerId = "owner_id"
+                case region
+                case splash
+                case verificationLevel = "verification_level"
+            }
+
             /// The snowflake id of the afk channel.
-            case afkChannelId(String)
+            public let afkChannelId: String?
 
             /// The length of time before a user is sent to the afk channel.
-            case afkTimeout(Int)
+            public let afkTimeout: Int?
 
             /// The default notification setting.
-            case defaultMessageNotifications(Int)
+            public let defaultMessageNotifications: Int?
 
             /// A base64 encoded string of the guild icon.
-            case icon(String)
+            public let icon: String?
 
             /// The name of the guild.
-            case name(String)
+            public let name: String?
 
             /// The snowflake id of the new guild owner.
-            case ownerId(String)
+            public let ownerId: String?
 
             /// The region this guild is in.
-            case region(String)
+            public let region: String?
 
             /// The base64 encoded splash image for this guild.
-            case splash(String)
+            public let splash: String?
 
             /// The required verification level of this guild.
-            case verificationLevel(Int)
+            public let verificationLevel: Int?
+
+            public init(
+                afkChannelId: String? = nil,
+                afkTimeout: Int? = nil,
+                defaultMessageNotifications: Int? = nil,
+                icon: String? = nil,
+                name: String? = nil,
+                ownerId: String? = nil,
+                region: String? = nil,
+                splash: String? = nil,
+                verificationLevel: Int? = nil
+            ) {
+                self.afkChannelId = afkChannelId
+                self.afkTimeout = afkTimeout
+                self.defaultMessageNotifications = defaultMessageNotifications
+                self.icon = icon
+                self.name = name
+                self.ownerId = ownerId
+                self.region = region
+                self.splash = splash
+                self.verificationLevel = verificationLevel
+            }
         }
 
         /// The options for creating/editing a webhook.

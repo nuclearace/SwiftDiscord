@@ -319,36 +319,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
     /// Default implementation
     func modifyChannel(_ channelId: ChannelID,
-                              options: [DiscordEndpoint.Options.ModifyChannel],
+                              options: DiscordEndpoint.Options.ModifyChannel,
                               reason: String? = nil,
                               callback: ((DiscordChannel?, HTTPURLResponse?) -> ())? = nil) {
-        var modifyJSON: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
             extraHeaders[.auditReason] = modifyReason
         }
 
-        for option in options {
-            switch option {
-            case let .bitrate(bps):
-                modifyJSON["bitrate"] = bps
-            case let .name(name):
-                modifyJSON["name"] = name
-            case let .position(position):
-                modifyJSON["position"] = position
-            case let .topic(topic):
-                modifyJSON["topic"] = topic
-            case let .userLimit(limit):
-                modifyJSON["user_limit"] = limit
-            case let .archived(archived):
-                modifyJSON["archived"] = archived
-            case let .locked(locked):
-                modifyJSON["locked"] = locked
-            }
-        }
-
-        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(modifyJSON)) else { return }
+        guard let contentData = try? DiscordJSON.encode(options) else { return }
 
         let requestCallback: DiscordRequestCallback = {data, response, error in
             guard let channel: DiscordChannel = DiscordJSON.decodeResponse(data: data, response: response) else {
