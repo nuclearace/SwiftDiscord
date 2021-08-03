@@ -18,7 +18,7 @@
 /// An ID-indexed dictionary that serializes to an array
 /// while enabling efficiently indexed access to the elements.
 public struct DiscordIDDictionary<Value: Identifiable>: ExpressibleByDictionaryLiteral, CustomStringConvertible, Sequence {
-    private var backingDictionary: [Value.ID: Value]
+    public private(set) var backingDictionary: [Value.ID: Value]
 
     public var keys: Dictionary<Value.ID, Value>.Keys { backingDictionary.keys }
     public var values: Dictionary<Value.ID, Value>.Values { backingDictionary.values }
