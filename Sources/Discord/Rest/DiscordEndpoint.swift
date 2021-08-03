@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -33,7 +34,7 @@ fileprivate let logger = Logger(label: "DiscordEndpoint")
 ///
 /// This enum defines the endpoints used to interact with the Discord API.
 ///
-public enum DiscordEndpoint : CustomStringConvertible {
+public enum DiscordEndpoint: CustomStringConvertible {
     /// The base url for the Discord REST API.
     case baseURL
 
@@ -237,7 +238,7 @@ public extension DiscordEndpoint {
             guard let url = endpoint.createURL(getParams: getParams) else { return nil }
             var request = URLRequest(url: url)
 
-            request.setValue(token.token, forHTTPHeaderField: "Authorization")
+            request.setValue(token.rawValue, forHTTPHeaderField: "Authorization")
             request.httpMethod = methodString
 
             addContent(to: &request)
@@ -293,7 +294,7 @@ public extension DiscordEndpoint {
     var description: String {
         switch self {
         case .baseURL:
-            return "https://discord.com/api/v8"
+            return "https://discord.com/api/v9"
 
         /* Channels */
         case let .channel(id):
@@ -632,7 +633,7 @@ public extension DiscordEndpoint {
             case name(String)
 
             /// The permissions this role has.
-            case permissions(DiscordPermission)
+            case permissions(DiscordPermissions)
         }
 
         /// Options for getting messages

@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -21,21 +22,10 @@ import Logging
 import NIO
 import WebSocketKit
 
-fileprivate let logger = Logger(label: "DiscordEngineSpec")
-
-/// Declares that a type will be an Engine for the Discord Gateway.
-public protocol DiscordEngineSpec : DiscordShard {
-    // MARK: Properties
-
-    /// The last received sequence number. Used for resume/reconnect.
-    var lastSequenceNumber: Int { get }
-
-    /// The session id of this engine.
-    var sessionId: String? { get set }
-}
+fileprivate let logger = Logger(label: "DiscordWebSocketable")
 
 /// Declares that a type will be capable of communicating with Discord's WebSockets
-public protocol DiscordWebSocketable : AnyObject {
+public protocol DiscordWebSocketable: AnyObject {
     /// MARK: Properties
 
     /// The url to connect to.
@@ -88,7 +78,7 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
 
             logger.debug("\(this.description), Got text: \(text)")
 
-            this.parseGatewayMessage(text)
+            this.parseAndHandleGatewayMessage(text)
         }
         
         websocket?.onClose.whenSuccess { [weak self] in
@@ -121,12 +111,13 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
 
         let url = URL(string: connectURL)!
         let path = url.path.isEmpty ? "/" : url.path
+        let query = url.query
 
         let future = WebSocket.connect(
             scheme: url.scheme ?? "wss",
             host: url.host!,
             port: url.port ?? 443,
-            path: path,
+            path: "\(path)\(query.map { "?\($0)" } ?? "")",
             configuration: .init(
                 tlsConfiguration: .clientDefault,
                 maxFrameSize: 1 << 31
@@ -163,14 +154,5 @@ public extension DiscordWebSocketable where Self: DiscordGatewayable & DiscordRu
         }
 
         let _ = websocket?.close()
-    }
-
-    ///
-    /// Logs that an error occured.
-    ///
-    /// - parameter message: The error message
-    ///
-    func error(message: String) {
-        logger.error("\(message)")
     }
 }

@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -16,7 +17,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 /// Represents a Discord role.
-public struct DiscordRole : Encodable, Equatable {
+public struct DiscordRole: Codable, Identifiable, Hashable {
     // MARK: Properties
 
     /// The snowflake id of the role.
@@ -38,45 +39,10 @@ public struct DiscordRole : Encodable, Equatable {
     public var name: String
 
     /// The permissions this role has.
-    public var permissions: DiscordPermission
+    public var permissions: DiscordPermissions
 
     /// The position of this role.
     public var position: Int
-
-    init(roleObject: [String: Any]) {
-        color = roleObject.get("color", or: 0)
-        hoist = roleObject.get("hoist", or: false)
-        id = roleObject.getSnowflake()
-        managed = roleObject.get("managed", or: false)
-        mentionable = roleObject.get("mentionable", or: false)
-        name = roleObject.get("name", or: "")
-        permissions = DiscordPermission(rawValue: Int(roleObject.get("permissions", or: "0")) ?? 0)
-        position = roleObject.get("position", or: 0)
-    }
-
-    init(id: RoleID, color: Int, hoist: Bool, managed: Bool, mentionable: Bool, name: String,
-         permissions: DiscordPermission, position: Int) {
-        self.id = id
-        self.color = color
-        self.hoist = hoist
-        self.managed = managed
-        self.mentionable = mentionable
-        self.name = name
-        self.permissions = permissions
-        self.position = position
-    }
-
-    static func rolesFromArray(_ rolesArray: [[String: Any]]) -> [RoleID: DiscordRole] {
-        var roles = [RoleID: DiscordRole]()
-
-        for role in rolesArray {
-            let role = DiscordRole(roleObject: role)
-
-            roles[role.id] = role
-        }
-
-        return roles
-    }
 
     ///
     /// Whether two roles are the same.

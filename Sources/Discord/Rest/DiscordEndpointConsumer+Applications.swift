@@ -14,12 +14,12 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func getApplicationCommands(callback: @escaping ([DiscordApplicationCommand], HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback([], nil); return }
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .array(commands)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let commands: [DiscordApplicationCommand] = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback([], response)
                 return
             }
 
-            callback(DiscordApplicationCommand.commandsFromArray(commands as! [[String: Any]]), response)
+            callback(commands, response)
         }
         rateLimiter.executeRequest(endpoint: .globalApplicationCommands(applicationId: applicationId),
                                    token: token,
@@ -34,17 +34,17 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                   callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())? = nil) {
         guard let applicationId = user?.id else { callback?(nil, nil); return }
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(command)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let command: DiscordApplicationCommand = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback?(nil, response)
                 return
             }
 
-            callback?(DiscordApplicationCommand(commandObject: command), response)
+            callback?(command, response)
         }
         let params = CommandParams(name: name, description: description, options: options)
         rateLimiter.executeRequest(endpoint: .globalApplicationCommands(applicationId: applicationId),
                                    token: token,
-                                   requestInfo: .post(content: .json(JSON.encodeJSONData(params) ?? Data()), extraHeaders: nil),
+                                   requestInfo: .post(content: .json((try? DiscordJSON.encode(params)) ?? Data()), extraHeaders: nil),
                                    callback: requestCallback)
     }
 
@@ -56,17 +56,17 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())? = nil) {
         guard let applicationId = user?.id else { callback?(nil, nil); return }
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(command)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let command: DiscordApplicationCommand = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback?(nil, response)
                 return
             }
 
-            callback?(DiscordApplicationCommand(commandObject: command), response)
+            callback?(command, response)
         }
         let params = CommandParams(name: name, description: description, options: options)
         rateLimiter.executeRequest(endpoint: .globalApplicationCommand(applicationId: applicationId, commandId: commandId),
                                    token: token,
-                                   requestInfo: .patch(content: .json(JSON.encodeJSONData(params) ?? Data()), extraHeaders: nil),
+                                   requestInfo: .patch(content: .json((try? DiscordJSON.encode(params)) ?? Data()), extraHeaders: nil),
                                    callback: requestCallback)
     }
 
@@ -88,12 +88,12 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 callback: @escaping ([DiscordApplicationCommand], HTTPURLResponse?) -> ()) {
         guard let applicationId = user?.id else { callback([], nil); return }
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .array(commands)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let commands: [DiscordApplicationCommand] = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback([], response)
                 return
             }
 
-            callback(DiscordApplicationCommand.commandsFromArray(commands as! [[String: Any]]), response)
+            callback(commands, response)
         }
         rateLimiter.executeRequest(endpoint: .guildApplicationCommands(applicationId: applicationId, guildId: guildId),
                                    token: token,
@@ -109,17 +109,17 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                   callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())? = nil) {
         guard let applicationId = user?.id else { callback?(nil, nil); return }
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(command)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let command: DiscordApplicationCommand = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback?(nil, response)
                 return
             }
 
-            callback?(DiscordApplicationCommand(commandObject: command), response)
+            callback?(command, response)
         }
         let params = CommandParams(name: name, description: description, options: options)
         rateLimiter.executeRequest(endpoint: .guildApplicationCommands(applicationId: applicationId, guildId: guildId),
                                    token: token,
-                                   requestInfo: .post(content: .json(JSON.encodeJSONData(params) ?? Data()), extraHeaders: nil),
+                                   requestInfo: .post(content: .json((try? DiscordJSON.encode(params)) ?? Data()), extraHeaders: nil),
                                    callback: requestCallback)
     }
 
@@ -132,17 +132,17 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 callback: ((DiscordApplicationCommand?, HTTPURLResponse?) -> ())? = nil) {
         guard let applicationId = user?.id else { callback?(nil, nil); return }
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(command)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let command: DiscordApplicationCommand = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback?(nil, response)
                 return
             }
 
-            callback?(DiscordApplicationCommand(commandObject: command), response)
+            callback?(command, response)
         }
         let params = CommandParams(name: name, description: description, options: options)
         rateLimiter.executeRequest(endpoint: .guildApplicationCommand(applicationId: applicationId, guildId: guildId, commandId: commandId),
                                    token: token,
-                                   requestInfo: .patch(content: .json(JSON.encodeJSONData(params) ?? Data()), extraHeaders: nil),
+                                   requestInfo: .patch(content: .json((try? DiscordJSON.encode(params)) ?? Data()), extraHeaders: nil),
                                    callback: requestCallback)
     }
 

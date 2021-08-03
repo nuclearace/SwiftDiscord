@@ -18,25 +18,33 @@
 import Foundation
 
 /// Represents an audit entry.
-public struct DiscordAuditLogEntry {
+public struct DiscordAuditLogEntry: Decodable, Identifiable {
+    public enum CodingKeys: String, CodingKey {
+        case actionType = "action_type"
+        case changes
+        case id
+        case options
+        case reason
+        case targetId = "target_id"
+        case userId = "user_id"
+    }
+
     // MARK: Properties
 
     /// The type of this entry.
     public let actionType: DiscordAuditLogActionType
 
     /// The changes done in this entry.
-    public let changes: [DiscordAuditLogChange]
+    public let changes: [DiscordAuditLogChange]?
 
     /// The id of this entry.
     public let id: Snowflake
 
-    // TODO An actual struct for this?
     /// Optional audit entry information for certain action types.
-    /// [Structure](https://discord.com/developers/docs/resources/audit-log#audit-log-entry-object-optional-audit-entry-info)
-    public let options: [String: Any]
+    public let options: Options?
 
     /// The reason for this entry.
-    public let reason: String
+    public let reason: String?
 
     /// The id of the effected entity.
     public let targetId: String
@@ -44,24 +52,54 @@ public struct DiscordAuditLogEntry {
     /// The user's id who caused this entry.
     public let userId: Snowflake
 
-    init(auditEntryObject: [String: Any]) {
-        actionType = DiscordAuditLogActionType(rawValue: auditEntryObject.get("action_type", or: -1)) ?? .other
-        changes = DiscordAuditLogChange.changes(fromArray: auditEntryObject.get("changes", or: []))
-        id = auditEntryObject.getSnowflake()
-        options = auditEntryObject.get("options", or: [:])
-        reason = auditEntryObject.get("reason", or: "")
-        targetId = auditEntryObject.get("target_id", or: "")
-        userId = auditEntryObject.getSnowflake(key: "user_id")
-    }
+    /// Additional info.
+    public struct Options: Codable {
+        public enum CodingKeys: String, CodingKey {
+            case deleteMemberDays = "delete_member_days"
+            case membersRemoved = "members_removed"
+            case channelId = "channel_id"
+            case messageId = "message_id"
+            case count
+            case id
+            case type
+            case roleName = "role_name"
+        }
 
-    static func entries(fromArray arr: [[String: Any]]) -> [DiscordAuditLogEntry] {
-        return arr.map(DiscordAuditLogEntry.init)
+        /// Number of days after which inactive members were kicked.
+        public var deleteMemberDays: String?
+
+        /// Number of members removed from the prune.
+        public var membersRemoved: String?
+
+        /// Channel in which the entities were targeted.
+        public var channelId: ChannelID?
+
+        /// ID of the message which was targeted.
+        public var messageId: MessageID?
+        
+        /// Number of entities that were targeted.
+        public var count: String?
+
+        /// ID of the overwritten entry.
+        public var id: Snowflake?
+
+        /// Type of overwritten entity - "0" for "role", "1" for "member"
+        public var type: String?
+
+        /// Name of the role if type is not "0" (not present if type is "1")
+        public var roleName: String?
     }
 }
 
 // TODO Better types for this
 /// Represents a change.
-public struct DiscordAuditLogChange {
+public struct DiscordAuditLogChange: Decodable {
+    public enum CodingKeys: String, CodingKey {
+        case key
+        case newValue = "new_value"
+        case oldValue = "old_value"
+    }
+
     // MARK: Properties
 
     /// The key for this change. Determines the types of the values.
@@ -73,99 +111,47 @@ public struct DiscordAuditLogChange {
     /// The old value.
     public let oldValue: Any
 
-    init(changeObject: [String: Any]) {
-        key = changeObject.get("key", or: "")
-        newValue = changeObject["new_value"] ?? ""
-        oldValue = changeObject["old_value"] ?? ""
-    }
-
-    static func changes(fromArray arr: [[String: Any]]) -> [DiscordAuditLogChange] {
-        return arr.map(DiscordAuditLogChange.init)
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        key = try container.decode(String.self, forKey: .key)
+        newValue = try container.decodePrimitiveAny(forKey: .newValue)
+        oldValue = try container.decodePrimitiveAny(forKey: .oldValue)
     }
 }
 
 /// The types of audit actions.
-public enum DiscordAuditLogActionType : Int {
-    // MARK: Cases
+public struct DiscordAuditLogActionType: RawRepresentable, Codable {
+    public var rawValue: Int
 
-    /// Other
-    case other = -1
+    public static let guildUpdate = DiscordAuditLogActionType(rawValue: 1)
+    public static let channelCreate = DiscordAuditLogActionType(rawValue: 10)
+    public static let channelUpdate = DiscordAuditLogActionType(rawValue: 11)
+    public static let channelDelete = DiscordAuditLogActionType(rawValue: 12)
+    public static let channelOverwriteCreate = DiscordAuditLogActionType(rawValue: 13)
+    public static let channelOverwriteUpdate = DiscordAuditLogActionType(rawValue: 14)
+    public static let channelOverwriteDelete = DiscordAuditLogActionType(rawValue: 15)
+    public static let memberKick = DiscordAuditLogActionType(rawValue: 20)
+    public static let memberPrune = DiscordAuditLogActionType(rawValue: 21)
+    public static let memberBanAdd = DiscordAuditLogActionType(rawValue: 22)
+    public static let memberBanRemove = DiscordAuditLogActionType(rawValue: 23)
+    public static let memberUpdate = DiscordAuditLogActionType(rawValue: 24)
+    public static let memberRoleUpdate = DiscordAuditLogActionType(rawValue: 25)
+    public static let roleCreate = DiscordAuditLogActionType(rawValue: 30)
+    public static let roleUpdate = DiscordAuditLogActionType(rawValue: 31)
+    public static let roleDelete = DiscordAuditLogActionType(rawValue: 32)
+    public static let inviteCreate = DiscordAuditLogActionType(rawValue: 40)
+    public static let inviteUpdate = DiscordAuditLogActionType(rawValue: 41)
+    public static let inviteDelete = DiscordAuditLogActionType(rawValue: 42)
+    public static let webhookCreate = DiscordAuditLogActionType(rawValue: 50)
+    public static let webhookUpdate = DiscordAuditLogActionType(rawValue: 51)
+    public static let webhookDelete = DiscordAuditLogActionType(rawValue: 52)
+    public static let emojiCreate = DiscordAuditLogActionType(rawValue: 60)
+    public static let emojiUpdate = DiscordAuditLogActionType(rawValue: 61)
+    public static let emojiDelete = DiscordAuditLogActionType(rawValue: 62)
+    public static let messageDelete = DiscordAuditLogActionType(rawValue: 72)
 
-    /// Guild update.
-    case guildUpdate = 1
-
-    /// Channel create.
-    case channelCreate = 10
-
-    /// Channel update.
-    case channelUpdate = 11
-
-    /// Channel delete.
-    case channelDelete = 12
-
-    /// Channel overwrite create.
-    case channelOverwriteCreate = 13
-
-    /// Channel overwrite update.
-    case channelOverwriteUpdate = 14
-
-    /// Channel overwrite delete.
-    case channelOverwriteDelete = 15
-
-    /// Member kick.
-    case memberKick = 20
-
-    /// Member prune.
-    case memberPrune = 21
-
-    /// Member ban add.
-    case memberBanAdd = 22
-
-    /// Member ban remove.
-    case memberBanRemove = 23
-
-    /// Member update.
-    case memberUpdate = 24
-
-    /// Member role update.
-    case memberRoleUpdate = 25
-
-    /// Role create.
-    case roleCreate = 30
-
-    /// Role update.
-    case roleUpdate = 31
-
-    /// Role delete.
-    case roleDelete = 32
-
-    /// Invite create.
-    case inviteCreate = 40
-
-    /// Invite update.
-    case inviteUpdate = 41
-
-    /// Invite delete.
-    case inviteDelete = 42
-
-    /// Webhook create.
-    case webhookCreate = 50
-
-    /// Webhook update.
-    case webhookUpdate = 51
-
-    /// Webhook delete.
-    case webhookDelete = 52
-
-    /// Emoji create.
-    case emojiCreate = 60
-
-    /// Emoji update.
-    case emojiUpdate = 61
-
-    /// Emoji delete.
-    case emojiDelete = 62
-
-    /// Message delete.
-    case messageDelete = 72
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
 }

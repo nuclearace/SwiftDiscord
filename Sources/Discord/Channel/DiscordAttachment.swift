@@ -16,42 +16,40 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/// Represents a Discord user.
-public struct DiscordUser: Codable, Identifiable, Hashable {
+import Foundation
+
+/// Represents an attachment.
+public struct DiscordAttachment: Identifiable, Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
-        case avatar
-        case bot
-        case discriminator
-        case email
         case id
-        case mfaEnabled = "mfa_enabled"
-        case username
-        case verified
+        case filename
+        case height
+        case proxyUrl = "proxy_url"
+        case size
+        case url
+        case width
     }
 
     // MARK: Properties
 
-    /// The snowflake id of the user.
-    public var id: UserID
+    /// The snowflake id of this attachment.
+    public var id: AttachmentID
 
-    /// The base64 encoded avatar of this user.
-    public var avatar: String? = nil
+    /// The name of the file.
+    public var filename: String
 
-    /// Whether this user is a bot.
-    public var bot: Bool? = nil
+    /// The height, if this is an image.
+    public var height: Int? = nil
 
-    /// This user's discriminator.
-    public var discriminator: String? = nil
+    /// The proxy url for this attachment.
+    public var proxyUrl: URL? = nil
 
-    /// The user's email. Only availabe if we are the user.
-    public var email: String? = nil
+    /// The size of this attachment.
+    public var size: Int? = nil
 
-    /// Whether this user has multi-factor authentication enabled.
-    public var mfaEnabled: Bool? = nil
+    /// The url of this attachment.
+    public var url: URL? = nil
 
-    /// This user's username.
-    public var username: String? = nil
-
-    /// Whether this user is verified.
-    public var verified: Bool? = nil
+    /// The width, if this is an image.
+    public var width: Int? = nil
 }

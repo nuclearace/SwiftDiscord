@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -216,14 +217,14 @@ public protocol DiscordRateLimiterSpec {
 /// An endpoint is made up of a REST api endpoint and any major parameters in that endpoint.
 /// Ex. /channels/232184444340011009/messages and /channels/186926276592795659/messages
 /// Are considered different endpoints
-public struct DiscordRateLimitKey : Hashable {
+public struct DiscordRateLimitKey: Hashable, Identifiable {
     /// URL Parts for the purpose of rate limiting.
     /// Combine all the parts of the URL into a list of which parts exist
     /// Ex. /channels/232184444340011009/messages would be represented by [.channels, .channelID, .messages]
     /// Anything that ends in "ID" represents the existence of a snowflake id, but the actual ID should be
     /// stored separately if needed.  Technically, the .guildID and .channelID fields aren't needed since
     /// the full ID will also be stored, but they're included to make the system more straightforward.
-    public struct DiscordRateLimitURLParts : OptionSet {
+    public struct DiscordRateLimitURLParts: OptionSet {
         public let rawValue: Int64
 
         static let           guilds = DiscordRateLimitURLParts(rawValue: 1 << 0)

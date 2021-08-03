@@ -19,15 +19,15 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
         createJSON["image"] = image
         createJSON["roles"] = roles.map { String($0.rawValue) }
 
-        guard let contentData = JSON.encodeJSONData(GenericEncodableDictionary(createJSON)) else { return }
+        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(createJSON)) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(emoji)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let emoji: DiscordEmoji = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback?(nil, response)
                 return
             }
 
-            callback?(DiscordEmoji(emojiObject: emoji), response)
+            callback?(emoji, response)
         }
 
         rateLimiter.executeRequest(endpoint: .guildEmojis(guild: guildId),
@@ -40,13 +40,12 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     func getGuildEmojis(on guildId: GuildID,
                                 callback: @escaping ([DiscordEmoji], HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .array(rawEmojis)? = JSON.jsonFromResponse(data: data, response: response),
-                       let emojis = rawEmojis as? [[String: Any]] else {
+            guard let emojis: [DiscordEmoji] = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback([], response)
                 return
             }
 
-            callback(emojis.map(DiscordEmoji.init(emojiObject:)), response)
+            callback(emojis, response)
         }
 
         rateLimiter.executeRequest(endpoint: .guildEmojis(guild: guildId),
@@ -60,12 +59,12 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 for emojiId: EmojiID,
                                 callback: @escaping (DiscordEmoji?, HTTPURLResponse?) -> ()) {
         let requestCallback: DiscordRequestCallback = { data, response, error in
-            guard case let .object(emoji)? = JSON.jsonFromResponse(data: data, response: response) else {
+            guard let emoji: DiscordEmoji = DiscordJSON.decodeResponse(data: data, response: response) else {
                 callback(nil, response)
                 return
             }
 
-            callback(DiscordEmoji(emojiObject: emoji), response)
+            callback(emoji, response)
         }
 
         rateLimiter.executeRequest(endpoint: .guildEmoji(guild: guildId, emoji: emojiId),

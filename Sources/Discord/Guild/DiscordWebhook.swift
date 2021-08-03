@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -18,7 +19,17 @@
 import Foundation
 
 /// Represents a webhook.
-public struct DiscordWebhook {
+public struct DiscordWebhook: Identifiable, Codable, Hashable {
+    public enum CodingKeys: String, CodingKey {
+        case avatar
+        case channelId = "channel_id"
+        case guildId = "guild_id"
+        case id
+        case name
+        case token
+        case user
+    }
+
     // MARK: Properties
 
     /// The avatar of this webhook.
@@ -41,23 +52,4 @@ public struct DiscordWebhook {
 
     /// The user this webhook was created by (not present when the webhook was gotten by its token).
     public let user: DiscordUser?
-
-    init(webhookObject: [String: Any]) {
-        avatar = webhookObject["avatar"] as? String
-        channelId = webhookObject.getSnowflake(key: "channel_id")
-        guildId = Snowflake(webhookObject["guild_id"] as? String)
-        id = webhookObject.getSnowflake()
-        name = webhookObject["name"] as? String
-        token = webhookObject.get("token", or: "")
-
-        if let userObject = webhookObject["user"] as? [String: Any] {
-            user = DiscordUser(userObject: userObject)
-        } else {
-            user = nil
-        }
-    }
-
-    static func webhooksFromArray(_ webhookArray: [[String: Any]]) -> [DiscordWebhook] {
-        return webhookArray.map(DiscordWebhook.init)
-    }
 }

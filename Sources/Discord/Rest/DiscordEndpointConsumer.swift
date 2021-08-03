@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -227,7 +228,7 @@ public protocol DiscordEndpointConsumer {
     func modifyChannel(_ channelId: ChannelID,
                        options: [DiscordEndpoint.Options.ModifyChannel],
                        reason: String?,
-                       callback: ((DiscordGuildChannel?, HTTPURLResponse?) -> ())?)
+                       callback: ((DiscordChannel?, HTTPURLResponse?) -> ())?)
 
     ///
     /// Gets the pinned messages for a channel.
@@ -306,7 +307,7 @@ public protocol DiscordEndpointConsumer {
     func createGuildChannel(on guildId: GuildID,
                             options: [DiscordEndpoint.Options.GuildCreateChannel],
                             reason: String?,
-                            callback: ((DiscordGuildChannel?, HTTPURLResponse?) -> ())?)
+                            callback: ((DiscordChannel?, HTTPURLResponse?) -> ())?)
 
     ///
     /// Creates a role on a guild.
@@ -354,10 +355,10 @@ public protocol DiscordEndpointConsumer {
     /// Gets the channels on a guild.
     ///
     /// - parameter guildId: The snowflake id of the guild
-    /// - parameter callback: The callback function, taking an array of `DiscordGuildChannel`
+    /// - parameter callback: The callback function, taking an array of `DiscordChannel`
     ///
     func getGuildChannels(_ guildId: GuildID,
-                          callback: @escaping ([DiscordGuildChannel], HTTPURLResponse?) -> ())
+                          callback: @escaping ([DiscordChannel], HTTPURLResponse?) -> ())
 
     ///
     /// Gets the specified guild member.
@@ -428,7 +429,7 @@ public protocol DiscordEndpointConsumer {
     ///
     func modifyGuildChannelPositions(on guildId: GuildID,
                                      channelPositions: [[String: Any]],
-                                     callback: (([DiscordGuildChannel], HTTPURLResponse?) -> ())?)
+                                     callback: (([DiscordChannel], HTTPURLResponse?) -> ())?)
 
     ///
     /// Modifies a guild member.
@@ -603,34 +604,33 @@ public protocol DiscordEndpointConsumer {
     ///
     /// - parameter with: The user that the channel will be opened with's snowflake id
     /// - parameter user: Our snowflake id
-    /// - parameter callback: The callback function. Takes an optional `DiscordDMChannel`
+    /// - parameter callback: The callback function. Takes an optional `DiscordChannel`
     ///
     func createDM(with: UserID,
-                  callback: @escaping (DiscordDMChannel?, HTTPURLResponse?) -> ())
+                  callback: @escaping (DiscordChannel?, HTTPURLResponse?) -> ())
 
     ///
     /// Gets the direct message channels for a user.
     ///
     /// - parameter user: Our snowflake id
-    /// - parameter callback: The callback function, taking a dictionary of `DiscordDMChannel` associated by
-    ///                       the recipient's id
+    /// - parameter callback: The callback function, taking the channels
     ///
-    func getDMs(callback: @escaping ([ChannelID: DiscordDMChannel], HTTPURLResponse?) -> ())
+    func getDMs(callback: @escaping ([DiscordChannel], HTTPURLResponse?) -> ())
 
     ///
     /// Gets guilds the user is in.
     ///
     /// - parameter user: Our snowflake id
-    /// - parameter callback: The callback function, taking a dictionary of `DiscordUserGuild` associated by guild id
+    /// - parameter callback: The callback function, taking the guilds
     ///
-    func getGuilds(callback: @escaping ([ChannelID: DiscordUserGuild], HTTPURLResponse?) -> ())
+    func getGuilds(callback: @escaping ([DiscordGuild], HTTPURLResponse?) -> ())
 
     // MARK: Applications
 
     ///
     /// Gets the global slash-commands of a user.
     ///
-    /// - parameter callback: The callback function, taking a dictionary of commands.
+    /// - parameter callback: The callback function, taking the commands
     ///
     func getApplicationCommands(callback: @escaping ([DiscordApplicationCommand], HTTPURLResponse?) -> ())
 
@@ -718,14 +718,14 @@ public protocol DiscordEndpointConsumer {
     ///
     /// Creates a url that can be used to authorize a bot.
     ///
-    /// - parameter with: An array of `DiscordPermission` that this bot should have
+    /// - parameter with: An array of `DiscordPermissions` that this bot should have
     ///
-    func getBotURL(with permissions: DiscordPermission) -> URL?
+    func getBotURL(with permissions: DiscordPermissions) -> URL?
 }
 
 public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
-    func getBotURL(with permissions: DiscordPermission) -> URL? {
+    func getBotURL(with permissions: DiscordPermissions) -> URL? {
         guard let user = self.user else { return nil }
 
         return DiscordOAuthEndpoint.createBotAddURL(for: user, with: permissions)

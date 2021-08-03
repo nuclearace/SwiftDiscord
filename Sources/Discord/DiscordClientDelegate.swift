@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -61,6 +62,30 @@ public protocol DiscordClientDelegate : AnyObject {
     /// - parameter didUpdateChannel: The channel that was updated.
     ///
     func client(_ client: DiscordClient, didUpdateChannel channel: DiscordChannel)
+
+    ///
+    /// Called when the client creates a new thread.
+    ///
+    /// - parameter client: The client that is calling.
+    /// - parameter didCreateThread: The thread that was created.
+    ///
+    func client(_ client: DiscordClient, didCreateThread thread: DiscordChannel)
+
+    ///
+    /// Called when the client deletes a thread.
+    ///
+    /// - parameter client: The client that is calling.
+    /// - parameter didDeleteThread: The thread that was deleted.
+    ///
+    func client(_ client: DiscordClient, didDeleteThread thread: DiscordChannel)
+
+    ///
+    /// Called when the client updates a thread.
+    ///
+    /// - parameter client: The client that is calling.
+    /// - parameter didUpdateThread: The thread that was updated.
+    ///
+    func client(_ client: DiscordClient, didUpdateThread thread: DiscordChannel)
 
     ///
     /// Called when the client creates a new guild.
@@ -135,7 +160,7 @@ public protocol DiscordClientDelegate : AnyObject {
     /// - parameter channel: The channel the message was on.
     /// - parameter userID: The ID of the user who added the reaction.
     ///
-    func client(_ client: DiscordClient, didAddReaction reaction: DiscordEmoji, toMessage messageID: MessageID, onChannel channel: DiscordTextChannel, user userID: UserID)
+    func client(_ client: DiscordClient, didAddReaction reaction: DiscordEmoji, toMessage messageID: MessageID, onChannel channel: DiscordChannel, user userID: UserID)
 
     ///
     /// Called when a user removes a reaction to a message.
@@ -146,7 +171,7 @@ public protocol DiscordClientDelegate : AnyObject {
     /// - parameter channel: The channel the message was on.
     /// - parameter userID: The ID of the user who added the reaction.
     ///
-    func client(_ client: DiscordClient, didRemoveReaction reaction: DiscordEmoji, fromMessage messageID: MessageID, onChannel channel: DiscordTextChannel, user userID: UserID)
+    func client(_ client: DiscordClient, didRemoveReaction reaction: DiscordEmoji, fromMessage messageID: MessageID, onChannel channel: DiscordChannel, user userID: UserID)
 
     ///
     /// Called when all reactions are removed from a message.
@@ -155,7 +180,7 @@ public protocol DiscordClientDelegate : AnyObject {
     /// - parameter messageID: The ID of the message all
     /// - parameter channel: The channel the message was on
     ///
-    func client(_ client: DiscordClient, didRemoveAllReactionsFrom messageID: MessageID, onChannel channel: DiscordTextChannel)
+    func client(_ client: DiscordClient, didRemoveAllReactionsFrom messageID: MessageID, onChannel channel: DiscordChannel)
 
     ///
     /// Called when the client adds a new role.
@@ -206,7 +231,7 @@ public protocol DiscordClientDelegate : AnyObject {
     /// - parameter client: The client that is calling.
     /// - parameter didReceiveReady: The presence that was received.
     ///
-    func client(_ client: DiscordClient, didReceiveReady readyData: [String: Any])
+    func client(_ client: DiscordClient, didReceiveReady ready: DiscordReadyEvent)
 
     ///
     /// Called when the client receives a voice state update.
@@ -217,45 +242,13 @@ public protocol DiscordClientDelegate : AnyObject {
     func client(_ client: DiscordClient, didReceiveVoiceStateUpdate voiceState: DiscordVoiceState)
 
     ///
-    /// Called when the client is ready to start sending voice data.
-    ///
-    /// - parameter client: The client that is calling.
-    /// - parameter isReadyToSendVoiceWithEngine: The encoder that will be used.
-    ///
-    func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine engine: DiscordVoiceEngine)
-
-    ///
-    /// Called when the client receives opus voice data.
-    ///
-    /// **Note** This is called from a queue that is dedicated to voice data, not the `handleQueue`.
-    ///
-    /// - parameter client: The client that is calling.
-    /// - parameter didReceiveOpusVoiceData: The voice data that was received.
-    /// - parameter fromEngine: The voice engine that received the data.
-    ///
-    func client(_ client: DiscordClient, didReceiveOpusVoiceData voiceData: DiscordOpusVoiceData,
-                fromEngine engine: DiscordVoiceEngine)
-
-    ///
-    /// Called when the client receives raw voice data.
-    ///
-    /// **Note** This is called from a queue that is dedicated to voice data, not the `handleQueue`.
-    ///
-    /// - parameter client: The client that is calling.
-    /// - parameter didReceiveRawVoiceData: The voice data that was received.
-    /// - parameter fromEngine: The voice engine that received the data.
-    ///
-    func client(_ client: DiscordClient, didReceiveRawVoiceData voiceData: DiscordRawVoiceData,
-                fromEngine engine: DiscordVoiceEngine)
-
-    ///
     /// Called when the client handles a guild member chunk.
     ///
     /// - parameter client: The client that is calling.
-    /// - parameter didHandleGuildMemberChunk: The chunk of guild members that was handled.
+    /// - parameter didHandleGuildMemberChunk: The new members
     /// - parameter forGuild: The guild the members were added to.
     ///
-    func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: DiscordLazyDictionary<UserID, DiscordGuildMember>,
+    func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: [DiscordGuildMember],
                 forGuild guild: DiscordGuild)
 
     ///
@@ -263,35 +256,18 @@ public protocol DiscordClientDelegate : AnyObject {
     ///
     /// - parameter client: The client that is calling.
     /// - parameter didNotHandleDispatchEvent: The event that wasn't handled.
-    /// - parameter withData: The data for the event.
     ///
-    func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent,
-                withData data: [String: Any])
+    func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent)
 
     ///
     /// Called when the client updates a guild's emojis.
     ///
     /// - parameter client: The client that is calling.
-    /// - parameter didUpdateEmojis: The chunk of guild members that was handled.
+    /// - parameter didUpdateEmojis: The chunk of guild emojis that was updated
     /// - parameter onGuild: The guild the emojis were updated on.
     ///
-    func client(_ client: DiscordClient, didUpdateEmojis emojis: [EmojiID: DiscordEmoji],
+    func client(_ client: DiscordClient, didUpdateEmojis emojis: [DiscordEmoji],
                 onGuild guild: DiscordGuild)
-
-    ///
-    /// Called when a voice engine is requesting a new data source, can be used to override the default encoder with
-    /// different bitrate/sample rate/etc.
-    ///
-    /// This should return the data source to use.
-    ///
-    /// **Note**: This method is not called on the main queue.
-    /// **Note**: This method must be implemented on iOS; there is no FFmpeg middleware on iOS.
-    ///
-    /// - parameter client: The client that is calling.
-    /// - parameter needsDataSourceForEngine: The engine that needs an encoder.
-    /// - returns: A DiscordVoiceEncoder to use to encode with.
-    ///
-    func client(_ client: DiscordClient, needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource
 }
 
 public extension DiscordClientDelegate {
@@ -309,6 +285,15 @@ public extension DiscordClientDelegate {
 
     /// Default.
     func client(_ client: DiscordClient, didUpdateChannel channel: DiscordChannel) { }
+
+    /// Default.
+    func client(_ client: DiscordClient, didCreateThread thread: DiscordChannel) { }
+
+    /// Default.
+    func client(_ client: DiscordClient, didDeleteThread thread: DiscordChannel) { }
+
+    /// Default.
+    func client(_ client: DiscordClient, didUpdateThread thread: DiscordChannel) { }
 
     /// Default.
     func client(_ client: DiscordClient, didCreateGuild guild: DiscordGuild) { }
@@ -344,13 +329,13 @@ public extension DiscordClientDelegate {
     func client(_ client: DiscordClient, didCreateMessage message: DiscordMessage) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didAddReaction reaction: DiscordEmoji, toMessage messageID: MessageID, onChannel channel: DiscordTextChannel, user userID: UserID) { }
+    func client(_ client: DiscordClient, didAddReaction reaction: DiscordEmoji, toMessage messageID: MessageID, onChannel channel: DiscordChannel, user userID: UserID) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didRemoveReaction reaction: DiscordEmoji, fromMessage messageID: MessageID, onChannel channel: DiscordTextChannel, user userID: UserID) { }
+    func client(_ client: DiscordClient, didRemoveReaction reaction: DiscordEmoji, fromMessage messageID: MessageID, onChannel channel: DiscordChannel, user userID: UserID) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didRemoveAllReactionsFrom messageID: MessageID, onChannel channel: DiscordTextChannel) { }
+    func client(_ client: DiscordClient, didRemoveAllReactionsFrom messageID: MessageID, onChannel channel: DiscordChannel) { }
 
     /// Default.
     func client(_ client: DiscordClient, didReceivePresenceUpdate presence: DiscordPresence) { }
@@ -359,40 +344,20 @@ public extension DiscordClientDelegate {
     func client(_ client: DiscordClient, didCreateInteraction interaction: DiscordInteraction) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didReceiveReady readyData: [String: Any]) { }
+    func client(_ client: DiscordClient, didReceiveReady event: DiscordReadyEvent) { }
 
     /// Default.
     func client(_ client: DiscordClient, didReceiveVoiceStateUpdate voiceState: DiscordVoiceState) { }
 
     /// Default.
-    func client(_ client: DiscordClient, isReadyToSendVoiceWithEngine engine: DiscordVoiceEngine) { }
-
-    /// Default.
-    func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: DiscordLazyDictionary<UserID, DiscordGuildMember>,
+    func client(_ client: DiscordClient, didHandleGuildMemberChunk chunk: [DiscordGuildMember],
                 forGuild guild: DiscordGuild) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent,
-                withData data: [String: Any]) { }
+    func client(_ client: DiscordClient, didNotHandleDispatchEvent event: DiscordDispatchEvent) { }
 
     /// Default.
-    func client(_ client: DiscordClient, didUpdateEmojis emojis: [EmojiID: DiscordEmoji],
+    func client(_ client: DiscordClient, didUpdateEmojis emojis: [DiscordEmoji],
                 onGuild guild: DiscordGuild) { }
 
-    /// Default.
-    func client(_ client: DiscordClient, didReceiveOpusVoiceData voiceData: DiscordOpusVoiceData,
-                fromEngine engine: DiscordVoiceEngine) { }
-
-    /// Default.
-    func client(_ client: DiscordClient, didReceiveRawVoiceData voiceData: DiscordRawVoiceData,
-                fromEngine engine: DiscordVoiceEngine) { }
-
-    #if !os(iOS)
-    /// Default
-    func client(_ client: DiscordClient, needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource {
-        return try DiscordBufferedVoiceDataSource(opusEncoder: DiscordOpusEncoder(bitrate: 128_000,
-                                                                                  sampleRate: 48_000,
-                                                                                  channels: 2))
-    }
-    #endif
 }

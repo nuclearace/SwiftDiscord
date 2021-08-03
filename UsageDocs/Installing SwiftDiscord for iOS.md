@@ -104,12 +104,6 @@ You may be tempted to skip some steps or to not follow them in order. If you'd l
 	            message.channel?.send("I got your command")
 	        }
 	    }
-	    
-	    func client(_ client: DiscordClient, needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource {
-	        return try DiscordBufferedVoiceDataSource(
-	            opusEncoder: DiscordOpusEncoder(bitrate: 128_000, sampleRate: 48_000, channels: 2)
-	        )
-	    }
 	}
 	``` 
 18. Build!

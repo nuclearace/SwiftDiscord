@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -19,7 +20,7 @@ import Foundation
 import Dispatch
 
 /// Protocol that abstracts a DiscordClient
-public protocol DiscordClientSpec : DiscordVoiceManagerDelegate, DiscordShardManagerDelegate, DiscordUserActor {
+public protocol DiscordClientSpec: DiscordShardManagerDelegate, DiscordUserActor {
 	// MARK: Properties
 
 	/// Whether or not this client is connected.
@@ -55,20 +56,6 @@ public protocol DiscordClientSpec : DiscordVoiceManagerDelegate, DiscordShardMan
 	func disconnect()
 
 	///
-	/// Joins a voice channel. A `voiceEngine.ready` event will be fired when the client has joined the channel.
-	///
-	/// - parameter channelId: The snowflake of the voice channel you would like to join
-	///
-	func joinVoiceChannel(_ channelId: ChannelID)
-
-	///
-	/// Leaves the currently connected voice channel.
-	///
-	/// - parameter onGuild: The snowflake of the guild whose voice channel you would like to leave.
-	///
-	func leaveVoiceChannel(onGuild guildId: GuildID)
-
-	///
 	/// Requests all users from Discord for the guild specified. Use this when you need to get all users on a large
 	/// guild. Multiple `guildMembersChunk` will be fired.
 	///
@@ -82,12 +69,4 @@ public protocol DiscordClientSpec : DiscordVoiceManagerDelegate, DiscordShardMan
 	/// - parameter presence: The new presence object
 	///
 	func setPresence(_ presence: DiscordPresenceUpdate)
-}
-
-/// Declares that a type will be able to reference a DiscordClient from within itself.
-public protocol DiscordClientHolder {
-	// MARK: Properties
-
-	/// A reference to the client.
-	var client: DiscordClient? { get set }
 }

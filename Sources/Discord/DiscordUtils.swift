@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -21,22 +22,6 @@ import Foundation
 enum Either<L, R> {
     case left(L)
     case right(R)
-}
-
-extension Dictionary where Value == Any {
-    func get<T>(_ value: Key, or default: T) -> T {
-        return self[value] as? T ?? `default`
-    }
-
-    func get<T>(_ value: Key, as type: T.Type) -> T? {
-        return self[value] as? T
-    }
-}
-
-extension Dictionary where Key == String, Value == Any {
-    func getSnowflake(key: String = "id") -> Snowflake {
-        return Snowflake(self[key] as? String) ?? 0
-    }
 }
 
 struct EncodableNull: Encodable {
@@ -145,7 +130,7 @@ func createMultipartBody(encodedJSON: Data, files: [DiscordFileUpload]) -> (boun
 enum DiscordDateFormatter {
     static let rfc3339DateFormatter: DateFormatter = { () -> DateFormatter in
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
         formatter.locale = Locale(identifier: "en_US")
         return formatter
     }()
@@ -179,5 +164,57 @@ extension Lockable {
         lock.wait()
 
         return getter()
+    }
+}
+
+/// An immutable container storing a wrapped value on
+/// the heap. This is useful when a codable value type
+/// recursively may contain itself.
+@propertyWrapper
+public class CodableBox<Value>: Codable where Value: Codable {
+    public let wrappedValue: Value
+
+    public required init(from decoder: Decoder) throws {
+        wrappedValue = try Value.init(from: decoder)
+    }
+
+    public init(wrappedValue: Value) {
+        self.wrappedValue = wrappedValue
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        try wrappedValue.encode(to: encoder)
+    }
+}
+
+extension CodableBox: Equatable where Value: Equatable {
+    public static func ==(lhs: CodableBox<Value>, rhs: CodableBox<Value>) -> Bool {
+        lhs.wrappedValue == rhs.wrappedValue
+    }
+}
+
+extension CodableBox: Hashable where Value: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        wrappedValue.hash(into: &hasher)
+    }
+}
+
+extension KeyedDecodingContainerProtocol {
+    func decodePrimitiveAny(forKey key: Key) throws -> Any {
+        if let b = try? decode(Bool.self, forKey: key) {
+            return b
+        } else if let i = try? decode(Int.self, forKey: key) {
+            return i
+        } else if let s = try? decode(String.self, forKey: key) {
+            return s
+        } else if let d = try? decode(Double.self, forKey: key) {
+            return d
+        } else {
+            throw DecodingError.typeMismatch(Any.self, .init(
+                codingPath: codingPath,
+                debugDescription: "Could not decode primitive any",
+                underlyingError: nil
+            ))
+        }
     }
 }

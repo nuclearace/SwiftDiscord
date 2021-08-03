@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -20,48 +21,49 @@ import Logging
 fileprivate let logger = Logger(label: "DiscordEmoji")
 
 /// Represents an Emoji.
-public struct DiscordEmoji {
+public struct DiscordEmoji: Identifiable, Codable, Hashable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case managed
+        case animated
+        case name
+        case requireColons = "require_colons"
+        case roles
+    }
+
     // MARK: Properties
 
     /// The snowflake id of the emoji.  Nil if the emoji is a unicode emoji
-    public let id: EmojiID?
+    public var id: EmojiID?
 
     /// Whether this is a managed emoji.
-    public let managed: Bool
+    public var managed: Bool? = nil
     
     /// Whether this is an animated emoji.
-    public let animated: Bool
+    public var animated: Bool? = nil
 
     /// The name of the emoji or unicode representation if it's a unicode emoji.
-    public let name: String
+    public var name: String
 
     /// Whether this emoji requires colons.
-    public let requireColons: Bool
+    public var requireColons: Bool? = nil
 
     /// An array of role snowflake ids this emoji is active for.
-    public let roles: [RoleID]
+    public var roles: [RoleID]? = nil
 
-    init(emojiObject: [String: Any]) {
-        id = Snowflake(emojiObject["id"] as? String)
-        managed = emojiObject.get("managed", or: false)
-        animated = emojiObject.get("animated", or: false)
-        name = emojiObject.get("name", or: "")
-        requireColons = emojiObject.get("require_colons", or: false)
-        roles = (emojiObject["roles"] as? [String])?.compactMap(Snowflake.init) ?? []
-    }
-
-    static func emojisFromArray(_ emojiArray: [[String: Any]]) -> [EmojiID: DiscordEmoji] {
-        var emojis = [EmojiID: DiscordEmoji]()
-
-        for emoji in emojiArray {
-            let emoji = DiscordEmoji(emojiObject: emoji)
-            if let emojiID = emoji.id {
-                emojis[emojiID] = emoji
-            } else {
-                logger.debug("EmojisFromArray used on array with non-custom emoji")
-            }
-        }
-
-        return emojis
+    public init(
+        id: EmojiID? = nil,
+        managed: Bool? = nil,
+        animated: Bool? = nil,
+        name: String,
+        requireColons: Bool? = nil,
+        roles: [RoleID]? = nil
+    ) {
+        self.id = id
+        self.managed = managed
+        self.animated = animated
+        self.name = name
+        self.requireColons = requireColons
+        self.roles = roles
     }
 }

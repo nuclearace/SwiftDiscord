@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -25,179 +26,161 @@ import class Dispatch.DispatchSemaphore
 
 fileprivate let logger = Logger(label: "DiscordChannel")
 
-/// Protocol that declares a type will be a Discord channel.
-public protocol DiscordChannel : DiscordClientHolder {
-    // MARK: Properties
+/// A Discord channel of unspecified type.
+public struct DiscordChannel: Codable, Identifiable, Hashable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case type
+        case guildId = "guild_id"
+        case position
+        case permissionOverwrites = "permission_overwrites"
+        case name
+        case topic
+        case nsfw
+        case lastMessageId = "last_message_id"
+        case bitrate
+        case userLimit = "user_limit"
+        case rateLimitPerUser = "rate_limit_per_user"
+        case recipients
+        case icon
+        case ownerId = "owner_id"
+        case applicationId = "application_id"
+        case parentId = "parent_id"
+        case lastPinTimestamp = "last_pin_timestamp"
+        case rtcRegion = "rtc_region"
+        case videoQualityMode = "video_quality_mode"
+        case messageCount = "message_count"
+        case threadMetadata = "thread_metadata"
+        case member
+        case defaultAutoArchiveDuration = "default_auto_archive_duration"
+        case permissions
+    }
 
-    /// The id of the channel.
-    var id: ChannelID { get }
-}
+    /// The snowflake id of the channel.
+    public var id: ChannelID
 
-/// Protocol that declares a type will be a Discord text-based channel.
-public protocol DiscordTextChannel : DiscordChannel {
-    // MARK: Properties
+    /// The type of the channel.
+    public var type: DiscordChannelType
 
-    /// The snowflake id of the last received message on this channel.
-    var lastMessageId: MessageID { get }
+    /// The id of the guild (may be missing for channel objects
+    /// received via gateway guild dispatches).
+    public var guildId: GuildID?
+
+    /// The sorting position of the channel.
+    public var position: Int?
+
+    /// Explicit permission overwrites for members and roles.
+    public var permissionOverwrites: DiscordIDDictionary<DiscordPermissionOverwrite>?
+
+    /// The name of the channel.
+    public var name: String?
+
+    /// The channel topic.
+    public var topic: String?
+
+    /// Whether the channel is NSFW.
+    public var nsfw: Bool?
+
+    /// The id of the last message sent in this channel (may not point to an
+    /// existing or valid message.)
+    public var lastMessageId: MessageID?
+
+    /// The bitrate in bits if this is a voice channel.
+    public var bitrate: Int?
+
+    /// The user limit if this is a voice channel.
+    public var userLimit: Int?
+
+    /// Amount of seconds a user has to wait before sending another message
+    /// (0-21600): bots, as well as users with the permission
+    /// `manage_messages` or `manage_channel` are unaffected
+    public var rateLimitPerUser: Int?
+
+    /// The recipients if this is a DM channel.
+    public var recipients: [DiscordUser]?
+
+    /// The icon hash.
+    public var icon: String?
+
+    /// The id of the creator of the group DM or thread.
+    public var ownerId: UserID?
+
+    /// The application id of the group DM creator if bot-created.
+    public var applicationId: UserID?
+
+    /// For guild channels the parent category, for threads the
+    /// text channel in which the thread was created.
+    public var parentId: ChannelID?
+
+    /// When the last pinned message was pinned.
+    /// TODO: For some reason this does not match our date format
+    public var lastPinTimestamp: String?
+
+    /// Voice region id for voice channels, automatic when set to null.
+    public var rtcRegion: String?
+
+    /// Camera video quality mode for the voice channel, 1 when not present.
+    public var videoQualityMode: Int?
+
+    /// The approximate message count in a thread, stops at 50.
+    public var messageCount: Int?
+
+    /// The approximate user count in a thread, stops at 50.
+    public var memberCount: Int?
+
+    /// Thread-specific metadata in a thread.
+    public var threadMetadata: DiscordThreadMetadata?
+
+    /// Thread member object for the current user if they have joined the
+    /// thread, only included on certain API endpoints.
+    public var member: DiscordThreadMember?
+
+    /// Default duration for newly created threads, in minutes, to
+    /// automatically archive the thread after recent activity, can be
+    /// set to 60, 1440, 4320, 10080
+    public var defaultAutoArchiveDuration: Int?
+
+    /// Computed permissions for the invoking user in the channel.
+    /// Only included when part of the resolved data received on
+    /// a slash command interaction.
+    public var permissions: DiscordPermissions?
+
+    /// Whether this is a direct message.
+    public var isDM: Bool { [.dm, .groupDM].contains(type) }
+
+    /// Whether this is a voice channel.
+    public var isVoice: Bool { [.voice, .stageVoice].contains(type) }
 }
 
 /// Represents the type of a channel.
-public enum DiscordChannelType : Int {
-    /// A text channel.
-    case text
+public struct DiscordChannelType: RawRepresentable, Codable, Hashable {
+    public var rawValue: Int
 
+    /// A guild text channel.
+    public static let text = DiscordChannelType(rawValue: 0)
     /// A direct message channel.
-    case direct
+    public static let dm = DiscordChannelType(rawValue: 1)
+    /// A voice channel within a guild.
+    public static let voice = DiscordChannelType(rawValue: 2)
+    /// A group direct message.
+    public static let groupDM = DiscordChannelType(rawValue: 3)
+    /// An organizational category in a guild that contains up to 50 channels.
+    public static let category = DiscordChannelType(rawValue: 4)
+    /// A channel that users can follow in their own guild.
+    public static let news = DiscordChannelType(rawValue: 5)
+    /// A channel in which game devs can sell their games on Discord.
+    public static let store = DiscordChannelType(rawValue: 6)
+    /// A temporary sub-channel in a guild news channel.
+    public static let newsThread = DiscordChannelType(rawValue: 10)
+    /// A temporary sub-channel within a guild text channel.
+    public static let publicThread = DiscordChannelType(rawValue: 11)
+    /// A temporary sub-channel in a guild text channel that is only viewable
+    /// by those invited and those with the 'manage threads' permission.
+    public static let privateThread = DiscordChannelType(rawValue: 12)
+    /// A guild voice channel for hosting events with an audience.
+    public static let stageVoice = DiscordChannelType(rawValue: 13)
 
-    /// A voice channel.
-    case voice
-
-    /// A GroupDM.
-    case groupDM
-
-    /// A Category.
-    case category
-}
-
-public extension DiscordChannel {
-    // MARK: Properties
-
-    /// - returns: The guild that this channel is associated with. Or nil if this channel has no guild.
-    var guild: DiscordGuild? {
-        return client?.guildForChannel(id)
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
     }
-
-    // MARK: Methods
-
-    ///
-    /// Deletes this channel.
-    ///
-    func delete(reason: String? = nil) {
-        guard let client = self.client else { return }
-
-        logger.info("Deleting channel: \(id)")
-
-        client.deleteChannel(id, reason: reason)
-    }
-
-    ///
-    /// Modifies this channel with `options`.
-    ///
-    /// - parameter options: An array of `DiscordEndpointOptions.ModifyChannel`
-    ///
-    func modifyChannel(options: [DiscordEndpoint.Options.ModifyChannel], reason: String? = nil) {
-        guard let client = self.client else { return }
-
-        client.modifyChannel(id, options: options, reason: reason)
-    }
-}
-
-public extension DiscordTextChannel {
-    // MARK: Text Channel Methods
-
-    ///
-    /// Pins a message to this channel.
-    ///
-    /// - parameter message: The message to pin
-    ///
-    func pinMessage(_ message: DiscordMessage) {
-        guard let client = self.client else { return }
-
-        client.addPinnedMessage(message.id, on: id)
-    }
-
-    ///
-    /// Deletes a message from this channel.
-    ///
-    /// - parameter message: The message to delete
-    ///
-    func deleteMessage(_ message: DiscordMessage) {
-        guard let client = self.client else { return }
-
-        client.deleteMessage(message.id, on: id)
-    }
-
-    ///
-    /// Gets the pinned messages for this channel.
-    ///
-    /// - parameter callback: The callback.
-    ///
-    func getPinnedMessages(callback: @escaping ([DiscordMessage], HTTPURLResponse?) -> ()) {
-        guard let client = self.client else { return callback([], nil) }
-
-        client.getPinnedMessages(for: id) {pins, response in
-            callback(pins, response)
-        }
-    }
-
-    ///
-    /// Sends a message to this channel. Can be used to send embeds and files as well.
-    ///
-    /// ```swift
-    /// channel.send("This is just a simple message")
-    /// ```
-    ///
-    /// Sending a message with an embed:
-    ///
-    /// ```swift
-    /// channel.send(DiscordMessage(content: "This message also comes with an embed", embeds: [embed]))
-    /// ```
-    ///
-    /// Sending a fully loaded message:
-    ///
-    /// ```swift
-    /// channel.send(DiscordMessage(content: "This message has it all", embeds: [embed], files: [file]))
-    /// ```
-    ///
-    /// - parameter message: The message to send.
-    ///
-    func send(_ message: DiscordMessage) {
-        guard let client = self.client else { return }
-
-        client.sendMessage(message, to: id)
-    }
-
-    ///
-    /// Sends that this user is typing on this channel.
-    ///
-    func triggerTyping() {
-        guard let client = self.client else { return }
-
-        client.triggerTyping(on: id)
-    }
-
-    ///
-    /// Unpins a message from this channel.
-    ///
-    /// - parameter message: The message to unpin.
-    ///
-    func unpinMessage(_ message: DiscordMessage) {
-        guard let client = self.client else { return }
-
-        client.deletePinnedMessage(message.id, on: id)
-    }
-}
-
-func channelFromObject(_ object: [String: Any], withClient client: DiscordClient?) -> DiscordChannel? {
-    guard let type = DiscordChannelType(rawValue: object.get("type", or: -1)) else { return nil }
-
-    switch type {
-    case .text:     return DiscordGuildTextChannel(guildChannelObject: object, guildID: nil, client: client)
-    case .voice:    return DiscordGuildVoiceChannel(guildChannelObject: object, guildID: nil, client: client)
-    case .direct:   return DiscordDMChannel(dmReadyObject: object, client: client)
-    case .groupDM:  return DiscordGroupDMChannel(dmReadyObject: object, client: client)
-    case .category: return DiscordGuildChannelCategory(categoryObject: object, guildID: nil, client: client)
-    }
-}
-
-func privateChannelsFromArray(_ channels: [[String: Any]], client: DiscordClient) -> [ChannelID: DiscordTextChannel] {
-    var channelDict = [ChannelID: DiscordTextChannel]()
-
-    for channel in channels {
-        guard let channel = channelFromObject(channel, withClient: client) as? DiscordTextChannel else { continue }
-
-        channelDict[channel.id] = channel
-    }
-
-    return channelDict
 }

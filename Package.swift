@@ -1,7 +1,8 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.4
 
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -27,18 +28,16 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/websocket-kit.git", .upToNextMinor(from: "2.1.0")),
-        .package(url: "https://github.com/Kitura/BlueSocket.git", .upToNextMinor(from: "1.0.0")),
+        .package(name: "Socket", url: "https://github.com/Kitura/BlueSocket.git", .upToNextMinor(from: "1.0.0")),
         .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
+        .package(url: "https://github.com/attaswift/BigInt.git", from: "5.2.1"),
     ],
     targets: [
-        .systemLibrary(name: "COPUS", pkgConfig: "opus"),
-        .systemLibrary(name: "Sodium", pkgConfig: "libsodium"),
         .target(name: "Discord", dependencies: [
             .product(name: "WebSocketKit", package: "websocket-kit"),
             .product(name: "Socket", package: "Socket"),
             .product(name: "Logging", package: "swift-log"),
-            .target(name: "COPUS"),
-            .target(name: "Sodium"),
+            .product(name: "BigInt", package: "BigInt"),
         ]),
         .testTarget(name: "DiscordTests", dependencies: [
             .target(name: "Discord"),

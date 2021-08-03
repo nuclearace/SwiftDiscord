@@ -1,5 +1,4 @@
 // The MIT License (MIT)
-// Copyright (c) 2016 Erik Little
 // Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -16,42 +15,26 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/// Represents a Discord user.
-public struct DiscordUser: Codable, Identifiable, Hashable {
+import Foundation
+
+/// Used to indicate that a user has joined a thread.
+public struct DiscordThreadMember: Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
-        case avatar
-        case bot
-        case discriminator
-        case email
         case id
-        case mfaEnabled = "mfa_enabled"
-        case username
-        case verified
+        case userId = "user_id"
+        case joinTimestamp = "join_timestamp"
+        case flags
     }
 
-    // MARK: Properties
+    /// The ID of the thread.
+    public var id: ChannelID?
 
-    /// The snowflake id of the user.
-    public var id: UserID
+    /// The ID of the user.
+    public var userId: UserID?
 
-    /// The base64 encoded avatar of this user.
-    public var avatar: String? = nil
+    /// The time the current user last joined the thread.
+    public var joinTimestamp: Date
 
-    /// Whether this user is a bot.
-    public var bot: Bool? = nil
-
-    /// This user's discriminator.
-    public var discriminator: String? = nil
-
-    /// The user's email. Only availabe if we are the user.
-    public var email: String? = nil
-
-    /// Whether this user has multi-factor authentication enabled.
-    public var mfaEnabled: Bool? = nil
-
-    /// This user's username.
-    public var username: String? = nil
-
-    /// Whether this user is verified.
-    public var verified: Bool? = nil
+    /// Any user-thread settings, currently only for notifications.
+    public var flags: Int
 }

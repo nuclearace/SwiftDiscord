@@ -16,42 +16,13 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/// Represents a Discord user.
-public struct DiscordUser: Codable, Identifiable, Hashable {
-    public enum CodingKeys: String, CodingKey {
-        case avatar
-        case bot
-        case discriminator
-        case email
-        case id
-        case mfaEnabled = "mfa_enabled"
-        case username
-        case verified
-    }
-
+/// Represents a ban.
+public struct DiscordBan: Codable, Hashable {
     // MARK: Properties
 
-    /// The snowflake id of the user.
-    public var id: UserID
+    /// The reason this person was banned.
+    public let reason: String?
 
-    /// The base64 encoded avatar of this user.
-    public var avatar: String? = nil
-
-    /// Whether this user is a bot.
-    public var bot: Bool? = nil
-
-    /// This user's discriminator.
-    public var discriminator: String? = nil
-
-    /// The user's email. Only availabe if we are the user.
-    public var email: String? = nil
-
-    /// Whether this user has multi-factor authentication enabled.
-    public var mfaEnabled: Bool? = nil
-
-    /// This user's username.
-    public var username: String? = nil
-
-    /// Whether this user is verified.
-    public var verified: Bool? = nil
+    /// The user who is banned.
+    public let user: DiscordUser
 }

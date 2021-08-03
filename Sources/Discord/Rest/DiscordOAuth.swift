@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -77,10 +78,10 @@ public enum DiscordOAuthEndpoint : String {
     /// Creates a url that can be used to authorize a bot.
     ///
     /// - parameter for: The snowflake id of the bot user
-    /// - parameter with: An array of `DiscordPermission` that this bot should have
+    /// - parameter with: An array of `DiscordPermissions` that this bot should have
     ///
-    public static func createBotAddURL(for user: DiscordUser, with permissions: DiscordPermission) -> URL? {
-        guard user.bot else { return nil }
+    public static func createBotAddURL(for user: DiscordUser, with permissions: DiscordPermissions) -> URL? {
+        guard user.bot ?? true else { return nil }
 
         return DiscordOAuthEndpoint.bot.createURL(getParams: [
             "permissions": permissions.rawValue.description,

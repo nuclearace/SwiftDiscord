@@ -1,5 +1,6 @@
 // The MIT License (MIT)
-// Copyright (c) 2017 Erik Little
+// Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -15,22 +16,19 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/// Represents the information sent in a VoiceServerUpdate.
-public struct DiscordVoiceServerInformation {
+/// Declares that a type will act as a Discord user.
+public protocol DiscordUserActor {
     // MARK: Properties
-    
-    /// The voice endpoint.
-    public let endpoint: String
 
-    /// The guild id that is associated with this update.
-    public let guildId: GuildID
+    /// The direct message channels this user is in.
+    var directChannels: DiscordIDDictionary<DiscordChannel> { get }
 
-    /// The token for the voice connection.
-    public let token: String
+    /// The guilds that this user is in.
+    var guilds: DiscordIDDictionary<DiscordGuild> { get }
 
-    init(voiceServerInformationObject: [String: Any]) {
-        endpoint = voiceServerInformationObject.get("endpoint", or: "")
-        guildId = Snowflake(voiceServerInformationObject["guild_id"] as? String) ?? 0
-        token = voiceServerInformationObject.get("token", or: "")
-    }
+    /// The Discord JWT for the user.
+    var token: DiscordToken { get }
+
+    /// The DiscordUser.
+    var user: DiscordUser? { get }
 }

@@ -7,11 +7,11 @@ import XCTest
 import NIO
 @testable import Discord
 
-public class TestDiscordEngine : XCTestCase, DiscordShardDelegate {
+public class TestDiscordEngine: XCTestCase, DiscordShardDelegate {
     func testEngineCorrectlyHandlesHelloPacket() {
         expectation = expectation(description: "Engine should be connected after receiving hello packet")
 
-        engine.parseGatewayMessage(helloPacket)
+        engine.parseAndHandleGatewayMessage(helloPacket)
 
         waitForExpectations(timeout: 0.2)
     }
@@ -19,16 +19,14 @@ public class TestDiscordEngine : XCTestCase, DiscordShardDelegate {
     func testEngineSetsSessionIdFromReadyPacket() {
         expectation = expectation(description: "Engine should set the session id from a ready packet")
 
-        engine.parseGatewayMessage(readyPacket)
+        engine.parseAndHandleGatewayMessage(readyPacket)
 
         waitForExpectations(timeout: 0.2)
     }
 
     func testEngineUpdatesSequenceNumber() {
-        let payload1 = DiscordGatewayPayload(code: .gateway(.dispatch), payload: .object([:]), sequenceNumber: 1,
-                                             name: DiscordDispatchEvent.messageCreate.rawValue)
-        let payload2 = DiscordGatewayPayload(code: .gateway(.dispatch), payload: .object([:]), sequenceNumber: 2,
-                                             name: DiscordDispatchEvent.messageUpdate.rawValue)
+        let payload1 = DiscordGatewayEvent.dispatch(.init(sequenceNumber: 1, event: .messageCreate(DiscordMessage())))
+        let payload2 = DiscordGatewayEvent.dispatch(.init(sequenceNumber: 2, event: .messageUpdate(DiscordMessage())))
 
         expectation = expectation(description: "Engine should update the sequence number")
 
@@ -42,14 +40,6 @@ public class TestDiscordEngine : XCTestCase, DiscordShardDelegate {
     var expectation: XCTestExpectation!
     var loop: MultiThreadedEventLoopGroup!
 
-    public static var allTests: [(String, (TestDiscordEngine) -> () -> ())] {
-        return [
-            ("testEngineCorrectlyHandlesHelloPacket", testEngineCorrectlyHandlesHelloPacket),
-            ("testEngineSetsSessionIdFromReadyPacket", testEngineSetsSessionIdFromReadyPacket),
-            ("testEngineUpdatesSequenceNumber", testEngineUpdatesSequenceNumber),
-        ]
-    }
-
     public override func setUp() {
         loop = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         engine = DiscordEngine(delegate: self, intents: .unprivilegedIntents, onLoop: loop.next())
@@ -61,8 +51,7 @@ public extension TestDiscordEngine {
         return "Testing"
     }
 
-    func shard(_ shard: DiscordShard, didReceiveEvent event: DiscordDispatchEvent,
-                with payload: DiscordGatewayPayload) {
+    func shard(_ shard: DiscordShard, didReceiveEvent event: DiscordDispatchEvent) {
         let engine = shard as! DiscordEngine
 
         switch event {
@@ -79,7 +68,7 @@ public extension TestDiscordEngine {
         }
     }
 
-    func shard(_ shard: DiscordShard, gotHelloWithPayload payload: DiscordGatewayPayload) {
+    func shard(_ shard: DiscordShard, gotHello hello: DiscordGatewayHello) {
         XCTAssertTrue(engine.connected, "Engine should be connected after getting hello")
 
         expectation.fulfill()

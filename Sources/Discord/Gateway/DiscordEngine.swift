@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -34,51 +35,38 @@ fileprivate let logger = Logger(label: "DiscordEngine")
 ///
 /// The base class for Discord WebSocket communications.
 ///
-open class DiscordEngine : DiscordEngineSpec {
+public class DiscordEngine: DiscordShard {
     // MARK: Properties
 
     /// The url for the gateway.
-    open var connectURL: String {
-        return DiscordEndpointGateway.gatewayURL + "/?v=8&encoding=json"
-    }
+    public var connectURL: String { DiscordEndpointGateway.gatewayURL + "/?v=9&encoding=json" }
 
     /// The type of DiscordEngineSpec. Used to correctly fire events.
-    open var description: String {
-        return "shard: \(shardNum)"
+    public var description: String { "shard: \(shardNum)" }
+
+    /// The handshake object that Discord expects.
+    public var identify: DiscordGatewayIdentify {
+        DiscordGatewayIdentify(
+            token: delegate!.token,
+            intents: intents,
+            properties: .init(
+                os: os,
+                browser: "swift-discord",
+                device: "swift-discord"
+            ),
+            compress: false,
+            largeThreshold: 250,
+            shard: numShards > 1 ? [shardNum, numShards] : nil
+        )
     }
 
-    /// Creates the handshake object that Discord expects.
-    /// Override if you need to customize the handshake object.
-    open var handshakeObject: [String: Any] {
-        var identify: [String: Any] = [
-            "token": delegate!.token.token,
-            "intents": intents.rawValue,
-            "properties": [
-                "$os": os,
-                "$browser": "SwiftDiscord",
-                "$device": "SwiftDiscord",
-                "$referrer": "",
-                "$referring_domain": ""
-            ],
-            "compress": false,
-            "large_threshold": 250,
-        ]
-
-        if numShards > 1 {
-            identify["shard"] = [shardNum, numShards]
-        }
-
-        return identify
-    }
-
-    /// Creates the resume object that Discord expects.
-    /// Override if you need to customize the resume object.
-    open var resumeObject: [String: Any] {
-        return [
-            "token": delegate!.token.token,
-            "session_id": sessionId!,
-            "seq": lastSequenceNumber
-        ]
+    /// The resume object that Discord expects.
+    public var resume: DiscordGatewayResume {
+        DiscordGatewayResume(
+            token: delegate!.token,
+            sessionId: sessionId!,
+            sequenceNumber: lastSequenceNumber
+        )
     }
 
     /// The dispatch queue that heartbeats are sent on.
@@ -94,7 +82,7 @@ open class DiscordEngine : DiscordEngineSpec {
     public let shardNum: Int
 
     /// The intents used when connecting to the gateway.
-    public let intents: DiscordGatewayIntent
+    public let intents: DiscordGatewayIntents
 
     /// The queue that WebSockets use to parse things.
     public let parseQueue = DispatchQueue(label: "discordEngine.parseQueue")
@@ -140,7 +128,7 @@ open class DiscordEngine : DiscordEngineSpec {
     ///
     /// - parameter delegate: The DiscordClientSpec this engine should be associated with.
     ///
-    public required init(delegate: DiscordShardDelegate, shardNum: Int = 0, numShards: Int = 1, intents: DiscordGatewayIntent, onLoop: EventLoop) {
+    public required init(delegate: DiscordShardDelegate, shardNum: Int = 0, numShards: Int = 1, intents: DiscordGatewayIntents, onLoop: EventLoop) {
         self.delegate = delegate
         self.shardNum = shardNum
         self.numShards = numShards
@@ -166,7 +154,7 @@ open class DiscordEngine : DiscordEngineSpec {
     ///
     /// - parameter reason: The reason the socket closed.
     ///
-    open func handleClose(reason: Error? = nil) {
+    public func handleClose(reason: Error? = nil) {
         let closeReason = DiscordGatewayCloseReason(error: reason) ?? .unknown
 
         connected = false
@@ -189,100 +177,89 @@ open class DiscordEngine : DiscordEngineSpec {
     ///
     /// Handles a dispatch payload.
     ///
-    /// - parameter payload: The dispatch payload
+    /// - parameter event: The dispatch payload
     ///
-    open func handleDispatch(_ payload: DiscordGatewayPayload) {
-        guard let type = payload.name, let event = DiscordDispatchEvent(rawValue: type) else {
-            logger.error("Could not create dispatch event \(payload)")
-
-            return
-        }
-
-        if event == .ready, case let .object(payloadObject) = payload.payload,
-           let sessionId = payloadObject["session_id"] as? String {
+    private func handleDispatch(_ event: DiscordDispatchEvent) {
+        switch event {
+        case .ready(let ready):
             delegate?.shardDidConnect(self)
-            self.sessionId = sessionId
-        } else if event == .resumed {
-            handleResumed(payload)
+            sessionId = ready.sessionId
+        case .resumed:
+            handleResumed()
+        default:
+            break
         }
 
-        delegate?.shard(self, didReceiveEvent: event, with: payload)
+        delegate?.shard(self, didReceiveEvent: event)
     }
 
     ///
-    /// Handles a DiscordGatewayPayload. You shouldn't need to call this directly.
+    /// Handles a DiscordGatewayEvent. You shouldn't need to call this directly.
     ///
-    /// Override this method if you need to customize payload handling.
+    /// - parameter event: The payload object
     ///
-    /// - parameter payload: The payload object
-    ///
-    open func handleGatewayPayload(_ payload: DiscordGatewayPayload) {
+    public func handleGatewayPayload(_ event: DiscordGatewayEvent) {
         handleQueue.async {
-            self._handleGatewayPayload(payload)
+            self._handleGatewayPayload(event)
         }
     }
 
-    func _handleGatewayPayload(_ payload: DiscordGatewayPayload) {
-        func handleInvalidSession() {
-            if case let .bool(netsplit) = payload.payload, netsplit {
-                logger.info("Netsplit recieved, trying to resume")
-            } else {
-                logger.info("Invalid session received. Invalidating session")
-
-                sessionId = nil
+    func _handleGatewayPayload(_ event: DiscordGatewayEvent) {
+        switch event {
+        case .dispatch(let e):
+            if let sequenceNumber = e.sequenceNumber {
+                lastSequenceNumber = sequenceNumber
             }
-
-            resuming = false
-            startHandshake()
-        }
-
-        guard case let .gateway(gatewayCode) = payload.code else {
-            fatalError("Got voice payload in non voice engine")
-        }
-
-        if let seq = payload.sequenceNumber {
-            lastSequenceNumber = seq
-        }
-
-        switch gatewayCode {
-        case .dispatch:
-            handleDispatch(payload)
-        case .hello:
-            handleHello(payload)
-        case .invalidSession:
-            handleInvalidSession()
+            handleDispatch(e.event)
+        case .hello(let e):
+            handleHello(e)
+        case .invalidSession(let e):
+            handleInvalidSession(e)
         case .heartbeat:
-            sendPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
+            sendPayload(.heartbeat(DiscordGatewayHeartbeat(lastSequenceNumber: lastSequenceNumber)))
         case .heartbeatAck:
             heartbeatQueue.sync { self.pongsMissed = 0 }
             logger.debug("Got heartbeat ack")
         default:
-            error(message: "Unhandled payload: \(payload.code)")
+            logger.error("Unhandled payload: \(event)")
         }
+    }
+
+    ///
+    /// Handles an invalid session event.
+    ///
+    /// - parameter event: The handled event.
+    ///
+    private func handleInvalidSession(_ event: DiscordGatewayInvalidSession) {
+        if event.isResumable {
+            logger.info("Netsplit recieved, trying to resume")
+        } else {
+            logger.info("Invalid session received. Invalidating session")
+
+            sessionId = nil
+        }
+
+        resuming = false
+        startHandshake()
     }
 
     ///
     /// Handles the hello event.
     ///
-    /// - parameter payload: The dispatch payload
+    /// - parameter hello: The dispatch payload
     ///
-    open func handleHello(_ payload: DiscordGatewayPayload) {
-        guard case let .object(eventData) = payload.payload else { fatalError("Got bad hello payload") }
-        guard let milliseconds = eventData["heartbeat_interval"] as? Int else {
-            fatalError("Got bad heartbeat interval")
-        }
-
+    private func handleHello(_ hello: DiscordGatewayHello) {
         heartbeatQueue.sync { self.pongsMissed = 0 }
         connected = true
 
-        startHeartbeat(milliseconds: milliseconds)
-        delegate?.shard(self, gotHelloWithPayload: payload)
+        startHeartbeat(milliseconds: hello.heartbeatInterval)
+        delegate?.shard(self, gotHello: hello)
     }
 
     ///
     /// Handles the resumed event. You shouldn't call this directly.
     ///
-    open func handleResumed(_ payload: DiscordGatewayPayload) {
+    private func handleResumed() {
         logger.info("Resumed gateway session on shard: \(shardNum)")
 
         heartbeatQueue.sync { self.pongsMissed = 0 }
@@ -295,24 +272,26 @@ open class DiscordEngine : DiscordEngineSpec {
     /// Parses a raw message from the WebSocket. This is the entry point for all Discord events.
     /// You shouldn't call this directly.
     ///
-    /// Override this method if you need to customize parsing.
-    ///
     /// - parameter string: The raw payload string
     ///
-    open func parseGatewayMessage(_ string: String) {
-        guard let decoded = DiscordGatewayPayload.payloadFromString(string) else {
-            error(message: "Got unknown payload \(string)")
-
+    public func parseAndHandleGatewayMessage(_ string: String) {
+        guard let data = string.data(using: .utf8) else {
+            logger.error("Could not decode gateway event: \(string)")
             return
         }
 
-        handleGatewayPayload(decoded)
+        do {
+            let decoded = try DiscordJSON.makeDecoder().decode(DiscordGatewayEvent.self, from: data)
+            handleGatewayPayload(decoded)
+        } catch {
+            logger.error("Could not decode gateway event: \(error)")
+        }
     }
 
     ///
     /// Tries to resume a disconnected gateway connection.
     ///
-    open func resumeGateway() {
+    private func resumeGateway() {
         guard !resuming && !closed else {
             logger.info("Already trying to resume or closed, ignoring")
 
@@ -342,7 +321,7 @@ open class DiscordEngine : DiscordEngineSpec {
     ///
     /// Override this method if you need to customize heartbeats.
     ///
-    open func sendHeartbeat() {
+    public func sendHeartbeat() {
         guard connected else {
             logger.error("Tried heartbeating on disconnected shard, shard: \(shardNum)")
 
@@ -361,7 +340,7 @@ open class DiscordEngine : DiscordEngineSpec {
         logger.debug("Sending heartbeat, shard: \(shardNum)")
 
         pongsMissed += 1
-        sendPayload(DiscordGatewayPayload(code: .gateway(.heartbeat), payload: .integer(lastSequenceNumber)))
+        sendPayload(.heartbeat(DiscordGatewayHeartbeat(lastSequenceNumber: lastSequenceNumber)))
 
         let time = DispatchTime.now() + .milliseconds(heartbeatInterval)
 
@@ -375,23 +354,20 @@ open class DiscordEngine : DiscordEngineSpec {
     ///
     /// Starts the handshake with the Discord server. You shouldn't need to call this directly.
     ///
-    /// Override this method if you need to customize the handshake process.
-    ///
-    open func startHandshake() {
+    public func startHandshake() {
         guard delegate != nil else {
-            error(message: "delegate nil before handshaked")
-
+            logger.error("delegate nil before handshaked")
             return
         }
 
         if sessionId != nil {
             logger.info("Sending resume, shard: \(shardNum)")
 
-            sendPayload(DiscordGatewayPayload(code: .gateway(.resume), payload: .object(resumeObject)))
+            sendPayload(.resume(resume))
         } else {
             logger.info("Sending handshake, shard: \(shardNum)")
 
-            sendPayload(DiscordGatewayPayload(code: .gateway(.identify), payload: .object(handshakeObject)))
+            sendPayload(.identify(identify))
         }
     }
 

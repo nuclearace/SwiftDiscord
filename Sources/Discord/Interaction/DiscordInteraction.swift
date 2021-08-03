@@ -1,7 +1,19 @@
 import Foundation
 
 /// Represents a slash-command invocation by the user.
-public struct DiscordInteraction {
+public struct DiscordInteraction: Identifiable, Codable, Hashable {
+    public enum CodingKeys: String, CodingKey {
+        case id
+        case type
+        case data
+        case message
+        case guildId = "guild_id"
+        case channelId = "channel_id"
+        case member
+        case token
+        case version
+    }
+
     // MARK: Properties
 
     /// ID of the interaction
@@ -32,22 +44,9 @@ public struct DiscordInteraction {
 
     /// Read-only property, always 1
     public let version: Int
-
-    init(interactionObject: [String: Any]) {
-        id = Snowflake(interactionObject["id"] as? String) ?? 0
-        type = (interactionObject["type"] as? Int).flatMap(DiscordInteractionType.init(rawValue:))
-        data = (interactionObject["data"] as? [String: Any]).map(DiscordApplicationCommandInteractionData.init(dataObject:))
-        message = (interactionObject["message"] as? [String: Any]).map { DiscordMessage(messageObject: $0, client: nil) }
-        let guildId = Snowflake(interactionObject["guild_id"] as? String) ?? 0
-        self.guildId = guildId
-        channelId = Snowflake(interactionObject["channel_id"] as? String) ?? 0
-        member = (interactionObject["member"] as? [String: Any]).map { DiscordGuildMember(guildMemberObject: $0, guildId: guildId) }
-        token = (interactionObject["token"] as? String) ?? ""
-        version = (interactionObject["version"] as? Int) ?? 1
-    }
 }
 
-public struct DiscordInteractionType: RawRepresentable, Hashable {
+public struct DiscordInteractionType: RawRepresentable, Hashable, Codable {
     public var rawValue: Int
 
     public static let ping = DiscordInteractionType(rawValue: 1)

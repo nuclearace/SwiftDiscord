@@ -1,5 +1,4 @@
 // The MIT License (MIT)
-// Copyright (c) 2016 Erik Little
 // Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -16,42 +15,29 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/// Represents a Discord user.
-public struct DiscordUser: Codable, Identifiable, Hashable {
+import Foundation
+
+/// Additional metadata about a thread.
+public struct DiscordThreadMetadata: Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
-        case avatar
-        case bot
-        case discriminator
-        case email
-        case id
-        case mfaEnabled = "mfa_enabled"
-        case username
-        case verified
+        case archived
+        case autoArchiveDuration = "auto_archive_duration"
+        case archiveTimestamp = "archive_timestamp"
+        case locked
     }
 
-    // MARK: Properties
+    /// Whether the thread is archived.
+    public var archived: Bool
 
-    /// The snowflake id of the user.
-    public var id: UserID
+    /// Duration in minutes, to auto-archive the thread.
+    /// Can be set to 60, 1440, 4320, 10080.
+    public var autoArchiveDuration: Int
 
-    /// The base64 encoded avatar of this user.
-    public var avatar: String? = nil
+    /// Timestamp when the thread's archive status was
+    /// last changed, used for calculating lecent activity.
+    public var archiveTimestamp: Date
 
-    /// Whether this user is a bot.
-    public var bot: Bool? = nil
-
-    /// This user's discriminator.
-    public var discriminator: String? = nil
-
-    /// The user's email. Only availabe if we are the user.
-    public var email: String? = nil
-
-    /// Whether this user has multi-factor authentication enabled.
-    public var mfaEnabled: Bool? = nil
-
-    /// This user's username.
-    public var username: String? = nil
-
-    /// Whether this user is verified.
-    public var verified: Bool? = nil
+    /// Whether the thread is locked, i.e. only users with
+    /// `MANAGE_THREADS` can unarchive it.
+    public var locked: Bool?
 }

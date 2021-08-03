@@ -3,165 +3,130 @@
 //
 
 import Foundation
+@testable import Discord
 
 // IDs: Guild: 1xx, Channel: 2xx, User: 3xx, Role: 4xx, Emoji: 5xx, Message: 6xx
 
 let helloPacket = "{\"t\":null,\"s\":null,\"op\":10,\"d\":{\"heartbeat_interval\":41250,\"_trace\":[\"discord-gateway-prd-1-24\"]}}"
 let readyPacket = "{\"t\":\"READY\",\"s\":null,\"op\":0,\"d\":{\"session_id\": \"hello_world\"}}"
 
-let testRole: [String: Any] = [
-    "color": 0,
-    "hoist": false,
-    "id": "400",
-    "managed": false,
-    "mentionable": true,
-    "name": "My Test Role",
-    "permissions": "0",
-    "position": 0
-]
+let testRole = DiscordRole(
+    id: 400,
+    color: 0,
+    hoist: false,
+    managed: false,
+    mentionable: true,
+    name: "My Test Role",
+    permissions: [],
+    position: 0
+)
 
-let testEmoji: [String: Any] = [
-    "id": "testEmoji",
-    "managed": false,
-    "name": "500",
-    "require_colons": true,
-    "roles": [] as [String]
-]
+let testEmoji = DiscordEmoji(
+    id: nil,
+    managed: false,
+    name: "500",
+    roles: []
+)
 
-let testUser: [String: Any] = [
-    "avatar": "",
-    "bot": false,
-    "discriminator": "",
-    "email": "",
-    "id": "300",
-    "mfa_enabled": false,
-    "username": "TestUser",
-    "verified": true
-]
+let testUser = DiscordUser(
+    id: 42,
+    bot: false,
+    mfaEnabled: true,
+    username: "TestUser",
+    verified: true
+)
 
-let testMember: [String: Any] = [
-    "user": testUser,
-    "deaf": false,
-    "mute": false,
-    "nick": "",
-    "roles": ["400"],
-    "joined_at": ""
-]
+let testMember = DiscordGuildMember(
+    guildId: 100,
+    user: testUser,
+    deaf: false,
+    mute: false,
+    nick: "",
+    roleIds: [400],
+    joinedAt: Date()
+)
 
-let testGame: [String: Any] = [
-    "name": "testGame",
-    "type": 0,
-    "url": ""
-]
+let testGame = DiscordActivity(
+    name: "testGame",
+    type: .game
+)
 
-let testPresence: [String: Any] = [
-    "guild_id": "100",
-    "user": testUser,
-    "game": testGame,
-    "nick": "",
-    "status": "offline"
-]
+let testPresence = DiscordPresence(
+    user: testUser,
+    activities: [testGame],
+    status: .offline,
+    guildId: 100
+)
 
-let testGuildTextChannel: [String: Any] = [
-    "id": "200",
-    "guild_id": "100",
-    "type": 0,
-    "name": "TestTextChannel",
-    "permission_overwrites": [[String: Any]](),
-    "position": 0
-]
+let testGuildTextChannel = DiscordChannel(
+    id: 200,
+    type: .text,
+    guildId: 100,
+    position: 1,
+    name: "test-text-channel"
+)
 
-let testGuildVoiceChannel: [String: Any] = [
-    "id": "202",
-    "guild_id": "testGuild",
-    "type": 2,
-    "name": "TestVoiceChannel",
-    "is_private": false,
-    "permission_overwrites": [[String: Any]](),
-    "position": 5,
-    "bitrate": 64000
-]
+let testThread = DiscordChannel(
+    id: 209,
+    type: .publicThread,
+    guildId: 100,
+    name: "Test Thread",
+    parentId: testGuildTextChannel.id
+)
 
-let testGuildChannelCategory: [String: Any] = [
-    "id": "203",
-    "guild_id": "100",
-    "type": 4,
-    "parent_id": -1,
-    "name": "TestCategory",
-    "permission_overwrites": [[String: Any]](),
-    "position": 0
-]
+let testGuildVoiceChannel = DiscordChannel(
+    id: 202,
+    type: .voice,
+    guildId: 100,
+    position: 5,
+    name: "TestVoiceChannel",
+    bitrate: 64_000
+)
 
-let testGuild: [String: Any] = [
-    "channels": [[String: Any]](),
-    "default_message_notifications": 0,
-    "widget_enabled": false,
-    "widget_channel_id": "",
-    "emojis": [[String: Any]](),
-    "features": [Any](),
-    "icon": "",
-    "id": "100",
-    "large": false,
-    "member_count": 0,
-    "mfa_level": 0,
-    "name": "Test Guild",
-    "owner_id": "",
-    "presences": [[String: Any]](),
-    "region": "",
-    "roles": [[String: Any]](),
-    "splash": "",
-    "verification_level": 0,
-    "voice_states": [[String: Any]](),
-    "unavailable": false,
-    "joined_at": "",
-    "members": [[String: Any]]()
-]
+let testGuildChannelCategory = DiscordChannel(
+    id: 203,
+    type: .category,
+    guildId: 100,
+    position: 0,
+    name: "TestCategory",
+    parentId: 1
+)
 
-let testDMChannel: [String: Any] = [
-    "type": 1,
-    "recipients": [testUser],
-    "id": testUser["id"] as! String,
-    "last_message_id": ""
-]
+let testDMChannel = DiscordChannel(
+    id: testUser.id,
+    type: .dm,
+    recipients: [testUser]
+)
 
-let testGroupDMChannel: [String: Any] = [
-    "type": 3,
-    "recipients": [testUser],
-    "id": testUser["id"] as! String,
-    "last_message_id": "",
-    "name": "A Group DM"
-]
+let testGroupDMChannel = DiscordChannel(
+    id: testUser.id,
+    type: .groupDM,
+    name: "A Group DM"
+)
 
-let testAttachment: [String: Any] = [:]
-let testEmbed: [String: Any] = [:]
+let testAttachment = DiscordAttachment(id: 0, filename: "test-attachment.txt")
+let testEmbed = DiscordEmbed()
 
-let testMessage: [String: Any] = [
-    "attachments": [testAttachment],
-    "author": testUser,
-    "channel_id": testGuildTextChannel["id"] as! String,
-    "content": "This is a test message",
-    "embeds": [testEmbed],
-    "id": "600",
-    "mention_everyone": false,
-    "mention_roles": [String](),
-    "mentions": [[String: Any]](),
-    "nonce": "",
-    "pinned": false,
-    "reactions": [[String: Any]](),
-    "tts": false,
-    "edited_timestamp": "",
-    "timestamp": ""
-]
+let testMessage = DiscordMessage(
+    id: 600,
+    type: .default,
+    attachments: [testAttachment],
+    author: testUser,
+    channelId: testGuildTextChannel.id,
+    content: "This is a test message",
+    embeds: [testEmbed],
+    timestamp: Date()
+)
 
-func createGuildMemberObjects(n: Int) -> [[String: Any]] {
-    var members = [[String: Any]]()
+func createGuildMemberObjects(n: Int) -> [DiscordGuildMember] {
+    var members: [DiscordGuildMember] = []
 
     for i in 0..<n {
         var user = testUser
         var member = testMember
 
-        user["id"] = String(i)
-        member["user"] = user
+        user.id = .init(UInt64(i))
+        member.user = user
 
         members.append(member)
     }
@@ -169,15 +134,15 @@ func createGuildMemberObjects(n: Int) -> [[String: Any]] {
     return members
 }
 
-func createPresenceObjects(n: Int) -> [[String: Any]] {
-    var presences = [[String: Any]]()
+func createPresenceObjects(n: Int) -> [DiscordPresence] {
+    var presences: [DiscordPresence] = []
 
     for i in 0..<n {
         var user = testUser
         var presence = testPresence
 
-        user["id"] = String(i)
-        presence["user"] = user
+        user.id = .init(UInt64(i))
+        presence.user = user
 
         presences.append(presence)
     }
@@ -185,14 +150,14 @@ func createPresenceObjects(n: Int) -> [[String: Any]] {
     return presences
 }
 
-func createEmojiObjects(n: Int) -> [[String: Any]] {
-    var emojis = [[String: Any]]()
+func createEmojiObjects(n: Int) -> [DiscordEmoji] {
+    var emojis: [DiscordEmoji] = []
 
     for i in 0..<n {
-        var emoji = testUser
+        var emoji = testEmoji
 
-        emoji["id"] = String("500\(i)")
-        emoji["name"] = String("Custom emoji \(i)")
+        emoji.id = .init("500\(i)")!
+        emoji.name = "Custom emoji \(i)"
 
         emojis.append(emoji)
     }
@@ -200,13 +165,16 @@ func createEmojiObjects(n: Int) -> [[String: Any]] {
     return emojis
 }
 
-let testGuildJSON: [String: Any] = {
-    var tGuild = testGuild
-
-    tGuild["channels"] = [testGuildTextChannel, testGuildVoiceChannel]
-    tGuild["members"] = createGuildMemberObjects(n: 20)
-    tGuild["presences"] = createPresenceObjects(n: 20)
-    tGuild["member_count"] = 20
-
-    return tGuild
-}()
+let testGuild = DiscordGuild(
+    id: 100,
+    large: false,
+    joinedAt: Date(),
+    unavailable: false,
+    members: .init(createGuildMemberObjects(n: 20)),
+    channels: .init([testGuildTextChannel, testGuildVoiceChannel]),
+    threads: .init([]),
+    memberCount: 20,
+    presences: .init(createPresenceObjects(n: 20)),
+    roles: [:],
+    name: "TestGuild"
+)

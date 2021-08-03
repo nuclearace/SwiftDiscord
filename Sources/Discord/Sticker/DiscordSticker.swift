@@ -1,5 +1,4 @@
 // The MIT License (MIT)
-// Copyright (c) 2016 Erik Little
 // Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -16,42 +15,44 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/// Represents a Discord user.
-public struct DiscordUser: Codable, Identifiable, Hashable {
+public struct DiscordSticker: Identifiable, Codable, Hashable {
     public enum CodingKeys: String, CodingKey {
-        case avatar
-        case bot
-        case discriminator
-        case email
         case id
-        case mfaEnabled = "mfa_enabled"
-        case username
-        case verified
+        case packId = "pack_id"
+        case name
+        case description
+        case tags
+        case asset
+        case previewAsset = "preview_asset"
+        case formatType = "format_type"
     }
 
-    // MARK: Properties
+    /// ID of the sticker
+    public let id: Snowflake
+    /// ID of the sticker pack
+    public let packId: Snowflake
+    /// Name of the sticker
+    public let name: String
+    /// Description of the sticker
+    public let description: String
+    /// List of tags for the sticker
+    public let tags: [String]
+    /// Sticker asset hash
+    public let asset: String?
+    /// Sticker preview asset hash
+    public let previewAsset: String?
+    /// Type of sticker format
+    public let formatType: DiscordStickerFormatType?
+}
 
-    /// The snowflake id of the user.
-    public var id: UserID
+public struct DiscordStickerFormatType: RawRepresentable, Codable, Hashable {
+    public var rawValue: Int
 
-    /// The base64 encoded avatar of this user.
-    public var avatar: String? = nil
+    public static let png = DiscordStickerFormatType(rawValue: 1)
+    public static let apng = DiscordStickerFormatType(rawValue: 2)
+    public static let lottie = DiscordStickerFormatType(rawValue: 3)
 
-    /// Whether this user is a bot.
-    public var bot: Bool? = nil
-
-    /// This user's discriminator.
-    public var discriminator: String? = nil
-
-    /// The user's email. Only availabe if we are the user.
-    public var email: String? = nil
-
-    /// Whether this user has multi-factor authentication enabled.
-    public var mfaEnabled: Bool? = nil
-
-    /// This user's username.
-    public var username: String? = nil
-
-    /// Whether this user is verified.
-    public var verified: Bool? = nil
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
 }

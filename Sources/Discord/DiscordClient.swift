@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -41,7 +42,7 @@ fileprivate let logger = Logger(label: "DiscordClient")
 ///
 /// See `DiscordClientDelegate` for a list of delegate methods that can be implemented.
 ///
-open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, DiscordEndpointConsumer {
+public class DiscordClient: DiscordShardManagerDelegate, DiscordUserActor, DiscordEndpointConsumer {
     // MARK: Properties
 
     /// The rate limiter for this client.
@@ -70,7 +71,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     public var shardingInfo = try! DiscordShardInformation(shardRange: 0..<1, totalShards: 1)
 
     /// The gateway intents.
-    public var intents = DiscordGatewayIntent.unprivilegedIntents
+    public var intents = DiscordGatewayIntents.unprivilegedIntents
 
     /// Whether large guilds should have their users fetched as soon as they are created.
     public var fillLargeGuilds = false
@@ -85,23 +86,15 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     public private(set) var connected = false
 
     /// The direct message channels this user is in.
-    public private(set) var directChannels = [ChannelID: DiscordTextChannel]()
+    public private(set) var directChannels = DiscordIDDictionary<DiscordChannel>()
 
     /// The guilds that this user is in.
-    public private(set) var guilds = [GuildID: DiscordGuild]()
-
-    /// The relationships this user has. Only valid for non-bot users.
-    public private(set) var relationships = [[String: Any]]()
+    public private(set) var guilds = DiscordIDDictionary<DiscordGuild>()
 
     /// The DiscordUser this client is connected to.
     public private(set) var user: DiscordUser?
 
-    /// A manager for the voice engines.
-    public private(set) var voiceManager: DiscordVoiceManager!
-
-    var channelCache = [ChannelID: DiscordChannel]()
-
-    private let voiceQueue = DispatchQueue(label: "voiceQueue")
+    var channelCache = DiscordIDDictionary<DiscordChannel>()
 
     // MARK: Initializers
 
@@ -114,7 +107,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
                          configuration: [DiscordClientOption] = []) {
         self.token = token
         self.shardManager = DiscordShardManager(delegate: self)
-        self.voiceManager = DiscordVoiceManager(delegate: self)
         self.delegate = delegate
 
         for config in configuration {
@@ -125,8 +117,6 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
                 self.rateLimiter = limiter
             case let .shardingInfo(shardingInfo):
                 self.shardingInfo = shardingInfo
-            case let .voiceConfiguration(config):
-                self.voiceManager.engineConfiguration = config
             case let .intents(intents):
                 self.intents = intents
             case .discardPresences:
@@ -153,11 +143,10 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// Begins the connection to Discord. Once this is called, wait for a `connect` event before trying to interact
     /// with the client.
     ///
-    open func connect() {
+    public func connect() {
         logger.info("Connecting")
 
         shardManager.manuallyShatter(withInfo: shardingInfo, intents: intents)
-
         shardManager.connect()
     }
 
@@ -166,16 +155,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     /// Calling this method turns off automatic resuming, set `resume` to `true` before calling `connect()` again.
     ///
-    open func disconnect() {
+    public func disconnect() {
         logger.info("Disconnecting")
 
         connected = false
 
         shardManager.disconnect()
-
-        for (_, engine) in voiceManager.get(voiceManager.voiceEngines) {
-            engine.disconnect()
-        }
     }
 
     ///
@@ -193,7 +178,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
 
         let channel: DiscordChannel
 
-        if let guild = guildForChannel(channelId), let guildChannel = guild.channels[channelId] {
+        if let guild = guildForChannel(channelId),
+           let guildChannel = guild.channels?[channelId] ?? guild.threads?[channelId] {
             channel = guildChannel
         } else if let dmChannel = directChannels[channelId] {
             channel = dmChannel
@@ -216,40 +202,36 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// Handles a dispatch event. This will call one of the other handle methods or the standard event handler.
     ///
     /// - parameter event: The dispatch event
-    /// - parameter data: The dispatch event's data
     ///
-    open func handleDispatch(event: DiscordDispatchEvent, data: DiscordGatewayPayloadData) {
-        guard case let .object(eventData) = data else {
-            logger.error("Got dispatch event without an object: \(event), \(data)")
-            return
-        }
-
+    func handleDispatch(event: DiscordDispatchEvent) {
         switch event {
-        case .presenceUpdate:        handlePresenceUpdate(with: eventData)
-        case .messageCreate:         handleMessageCreate(with: eventData)
-        case .messageUpdate:         handleMessageUpdate(with: eventData)
-        case .messageReactionAdd:    handleMessageReactionAdd(with: eventData)
-        case .messageReactionRemove: handleMessageReactionRemove(with: eventData)
-        case .messageReactionRemoveAll: handleMessageReactionRemoveAll(with: eventData)
-        case .guildMemberAdd:        handleGuildMemberAdd(with: eventData)
-        case .guildMembersChunk:     handleGuildMembersChunk(with: eventData)
-        case .guildMemberUpdate:     handleGuildMemberUpdate(with: eventData)
-        case .guildMemberRemove:     handleGuildMemberRemove(with: eventData)
-        case .guildRoleCreate:       handleGuildRoleCreate(with: eventData)
-        case .guildRoleDelete:       handleGuildRoleRemove(with: eventData)
-        case .guildRoleUpdate:       handleGuildRoleUpdate(with: eventData)
-        case .guildCreate:           handleGuildCreate(with: eventData)
-        case .guildDelete:           handleGuildDelete(with: eventData)
-        case .guildUpdate:           handleGuildUpdate(with: eventData)
-        case .guildEmojisUpdate:     handleGuildEmojiUpdate(with: eventData)
-        case .channelUpdate:         handleChannelUpdate(with: eventData)
-        case .channelCreate:         handleChannelCreate(with: eventData)
-        case .channelDelete:         handleChannelDelete(with: eventData)
-        case .interactionCreate:     handleInteractionCreate(with: eventData)
-        case .voiceServerUpdate:     handleVoiceServerUpdate(with: eventData)
-        case .voiceStateUpdate:      handleVoiceStateUpdate(with: eventData)
-        case .ready:                 handleReady(with: eventData)
-        default:                     delegate?.client(self, didNotHandleDispatchEvent: event, withData: eventData)
+        case .presenceUpdate(let e): handlePresenceUpdate(with: e)
+        case .messageCreate(let e): handleMessageCreate(with: e)
+        case .messageUpdate(let e): handleMessageUpdate(with: e)
+        case .messageReactionAdd(let e): handleMessageReactionAdd(with: e)
+        case .messageReactionRemove(let e): handleMessageReactionRemove(with: e)
+        case .messageReactionRemoveAll(let e): handleMessageReactionRemoveAll(with: e)
+        case .guildMemberAdd(let e): handleGuildMemberAdd(with: e)
+        case .guildMembersChunk(let e): handleGuildMembersChunk(with: e)
+        case .guildMemberUpdate(let e): handleGuildMemberUpdate(with: e)
+        case .guildMemberRemove(let e): handleGuildMemberRemove(with: e)
+        case .guildRoleCreate(let e): handleGuildRoleCreate(with: e)
+        case .guildRoleDelete(let e): handleGuildRoleDelete(with: e)
+        case .guildRoleUpdate(let e): handleGuildRoleUpdate(with: e)
+        case .guildCreate(let e): handleGuildCreate(with: e)
+        case .guildDelete(let e): handleGuildDelete(with: e)
+        case .guildUpdate(let e): handleGuildUpdate(with: e)
+        case .guildEmojisUpdate(let e): handleGuildEmojiUpdate(with: e)
+        case .channelCreate(let e): handleChannelCreate(with: e)
+        case .channelUpdate(let e): handleChannelUpdate(with: e)
+        case .channelDelete(let e): handleChannelDelete(with: e)
+        case .threadCreate(let e): handleThreadCreate(with: e)
+        case .threadUpdate(let e): handleThreadUpdate(with: e)
+        case .threadDelete(let e): handleThreadDelete(with: e)
+        case .voiceStateUpdate(let e): handleVoiceStateUpdate(with: e)
+        case .interactionCreate(let e): handleInteractionCreate(with: e)
+        case .ready(let e): handleReady(with: e)
+        default: delegate?.client(self, didNotHandleDispatchEvent: event)
         }
     }
 
@@ -260,40 +242,9 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// - returns: An optional containing a `DiscordGuild` if one was found.
     ///
     public func guildForChannel(_ channelId: ChannelID) -> DiscordGuild? {
-        return guilds.filter({ $0.1.channels[channelId] != nil }).map({ $0.1 }).first
-    }
-
-    ///
-    /// Joins a voice channel. A `voiceEngine.ready` event will be fired when the client has joined the channel.
-    ///
-    /// - parameter channelId: The snowflake of the voice channel you would like to join
-    ///
-    open func joinVoiceChannel(_ channelId: ChannelID) {
-        guard let guild = guildForChannel(channelId), let channel = guild.channels[channelId] as? DiscordGuildVoiceChannel else {
-
-            return
-        }
-
-        logger.info("Joining voice channel: \(channel)")
-
-        shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate),
-                                                       payload: .object(["guild_id": String(describing: guild.id),
-                                                                         "channel_id": String(describing: channel.id),
-                                                                         "self_mute": false,
-                                                                         "self_deaf": false
-                                                                        ])
-        ), onShard: guild.shardNumber(assuming: shardingInfo.totalShards))
-    }
-
-    ///
-    /// Leaves the voice channel that is associated with the guild specified.
-    ///
-    /// - parameter onGuild: The snowflake of the guild that you want to leave.
-    ///
-    open func leaveVoiceChannel(onGuild guildId: GuildID) {
-        logger.info("Leaving voice channel on guild: \(guildId)")
-
-        voiceManager.leaveVoiceChannel(onGuild: guildId)
+        return guilds
+            .values
+            .first { ($0.channels?[channelId] ?? $0.threads?[channelId]) != nil }
     }
 
     ///
@@ -302,18 +253,16 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     /// - parameter on: The snowflake of the guild you wish to request all users.
     ///
-    open func requestAllUsers(on guildId: GuildID) {
-        let requestObject: [String: Any] = [
-            "guild_id": guildId,
-            "query": "",
-            "limit": 0
-        ]
+    public func requestAllUsers(on guildId: GuildID) {
+        let request = DiscordGatewayRequestGuildMembers(
+            guildId: guildId,
+            query: "",
+            limit: 0
+        )
 
         guard let shardNum = guilds[guildId]?.shardNumber(assuming: shardingInfo.totalShards) else { return }
 
-        shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.requestGuildMembers),
-                                                       payload: .object(requestObject)),
-                                 onShard: shardNum)
+        shardManager.sendPayload(.requestGuildMembers(request), onShard: shardNum)
     }
 
     ///
@@ -321,14 +270,8 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     /// - parameter presence: The new presence object
     ///
-    open func setPresence(_ presence: DiscordPresenceUpdate) {
-        shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.statusUpdate),
-                                                       payload: .customEncodable(presence)),
-                                 onShard: 0)
-    }
-
-    private func startVoiceConnection(_ guildId: GuildID) {
-        voiceManager.startVoiceConnection(guildId)
+    public func setPresence(_ presence: DiscordPresenceUpdate) {
+        shardManager.sendPayload(.presenceUpdate(presence), onShard: 0)
     }
 
     // MARK: DiscordShardManagerDelegate conformance.
@@ -339,7 +282,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// - parameter manager: The manager.
     /// - parameter didConnect: Should always be true.
     ///
-    open func shardManager(_ manager: DiscordShardManager, didConnect connected: Bool) {
+    public func shardManager(_ manager: DiscordShardManager, didConnect connected: Bool) {
         handleQueue.async {
             self.connected = true
 
@@ -353,7 +296,7 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     /// - parameter manager: The manager.
     /// - parameter didDisconnectWithReason: The reason the manager disconnected.
     ///
-    open func shardManager(_ manager: DiscordShardManager, didDisconnectWithReason reason: String) {
+    public func shardManager(_ manager: DiscordShardManager, didDisconnectWithReason reason: String) {
         handleQueue.async {
             self.connected = false
 
@@ -366,114 +309,27 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     /// - parameter manager: The manager.
     /// - parameter shouldHandleEvent: The event to be handled.
-    /// - parameter withPayload: The payload that came with the event.
     ///
-    open func shardManager(_ manager: DiscordShardManager, shouldHandleEvent event: DiscordDispatchEvent,
-                           withPayload payload: DiscordGatewayPayload) {
+    public func shardManager(_ manager: DiscordShardManager, shouldHandleEvent event: DiscordDispatchEvent) {
         handleQueue.async {
-            self.handleDispatch(event: event, data: payload.payload)
+            self.handleDispatch(event: event)
         }
     }
-
-    ///
-    /// Called when an engine disconnects.
-    ///
-    /// - parameter manager: The manager.
-    /// - parameter engine: The engine that disconnected.
-    ///
-    open func voiceManager(_ manager: DiscordVoiceManager, didDisconnectEngine engine: DiscordVoiceEngine) {
-        handleQueue.async {
-            guard let shardNum = self.guilds[engine.guildId]?.shardNumber(assuming: self.shardingInfo.totalShards) else { return }
-
-            let payload = DiscordGatewayPayloadData.object(["guild_id": String(describing: engine.guildId),
-                                                            "channel_id": EncodableNull(),
-                                                            "self_mute": false,
-                                                            "self_deaf": false])
-
-            self.shardManager.sendPayload(DiscordGatewayPayload(code: .gateway(.voiceStatusUpdate), payload: payload),
-                                          onShard: shardNum)
-        }
-    }
-
-    ///
-    /// Called when a voice engine receives opus voice data.
-    ///
-    /// - parameter manager: The manager.
-    /// - parameter didReceiveVoiceData: The data received.
-    /// - parameter fromEngine: The engine that received the data.
-    ///
-    open func voiceManager(_ manager: DiscordVoiceManager, didReceiveOpusVoiceData data: DiscordOpusVoiceData,
-                           fromEngine engine: DiscordVoiceEngine) {
-        voiceQueue.async {
-            self.delegate?.client(self, didReceiveOpusVoiceData: data, fromEngine: engine)
-        }
-    }
-
-    ///
-    /// Called when a voice engine receives raw voice data.
-    ///
-    /// - parameter manager: The manager.
-    /// - parameter didReceiveVoiceData: The data received.
-    /// - parameter fromEngine: The engine that received the data.
-    ///
-    open func voiceManager(_ manager: DiscordVoiceManager, didReceiveRawVoiceData data: DiscordRawVoiceData,
-                           fromEngine engine: DiscordVoiceEngine) {
-        voiceQueue.async {
-            self.delegate?.client(self, didReceiveRawVoiceData: data, fromEngine: engine)
-        }
-    }
-
-    ///
-    /// Called when a voice engine needs a data source.
-    ///
-    /// **Not called on the handleQueue**
-    ///
-    /// - parameter manager: The manager that is requesting an encoder.
-    /// - parameter needsDataSourceForEngine: The engine that needs an encoder
-    /// - returns: An encoder.
-    ///
-    open func voiceManager(_ manager: DiscordVoiceManager,
-                           needsDataSourceForEngine engine: DiscordVoiceEngine) throws -> DiscordVoiceDataSource? {
-        return try delegate?.client(self, needsDataSourceForEngine: engine)
-    }
-
-    ///
-    /// Called when a voice engine is ready.
-    ///
-    /// - parameter manager: The manager.
-    /// - parameter engine: The engine that's ready.
-    ///
-    open func voiceManager(_ manager: DiscordVoiceManager, engineIsReady engine: DiscordVoiceEngine) {
-        handleQueue.async {
-            self.delegate?.client(self, isReadyToSendVoiceWithEngine: engine)
-        }
-    }
-
-    // MARK: DiscordDispatchEventHandler Conformance
 
     ///
     /// Handles channel creates from Discord. You shouldn't need to call this method directly.
-    ///
-    /// Override to provide additional customization around this event.
     ///
     /// Calls the `didCreateChannel` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleChannelCreate(with data: [String: Any]) {
+    private func handleChannelCreate(with channel: DiscordChannel) {
         logger.info("Handling channel create")
 
-        guard let channel = channelFromObject(data, withClient: self) else { return }
-
-        switch channel {
-        case let guildChannel as DiscordGuildChannel:
-            guilds[guildChannel.guildId]?.channels[guildChannel.id] = guildChannel
-        case let dmChannel as DiscordDMChannel:
-            directChannels[channel.id] = dmChannel
-        case let groupChannel as DiscordGroupDMChannel:
-            directChannels[channel.id] = groupChannel
-        default:
-            break
+        if channel.isDM {
+            directChannels[channel.id] = channel
+        } else if let guildId = channel.guildId {
+            guilds[guildId]?.channels?[channel.id] = channel
         }
 
         logger.debug("(verbose) Created channel: \(channel)")
@@ -484,58 +340,124 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     /// Handles channel deletes from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didDeleteChannel` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleChannelDelete(with data: [String: Any]) {
+    private func handleChannelDelete(with channel: DiscordChannel) {
         logger.info("Handling channel delete")
 
-        guard let type = DiscordChannelType(rawValue: data["type"] as? Int ?? -1) else { return }
-        guard let channelId = Snowflake(data["id"] as? String) else { return }
-
-        let removedChannel: DiscordChannel
-
-        switch type {
-        case .text, .voice, .category:
-            guard let guildId = Snowflake(data["guild_id"] as? String),
-                  let guildChannel = guilds[guildId]?.channels.removeValue(forKey: channelId) else { return }
-            removedChannel = guildChannel
-        case .direct, .groupDM:
-            guard let direct = directChannels.removeValue(forKey: channelId) else { return }
-            removedChannel = direct
+        if let guildId = channel.guildId {
+            guilds[guildId]?.channels?.removeValue(forKey: channel.id)
         }
 
-        channelCache.removeValue(forKey: channelId)
+        directChannels.removeValue(forKey: channel.id)
+        channelCache.removeValue(forKey: channel.id)
 
-        logger.debug("(verbose) Removed channel: \(removedChannel)")
+        logger.debug("(verbose) Removed channel: \(channel)")
 
-        delegate?.client(self, didDeleteChannel: removedChannel)
+        delegate?.client(self, didDeleteChannel: channel)
+    }
+
+    ///
+    /// Handles thread creates from Discord. You shouldn't need to call this method directly.
+    ///
+    /// Calls the `didCreateThread` delegate method.
+    ///
+    /// - parameter with: The data from the event
+    ///
+    private func handleThreadCreate(with thread: DiscordChannel) {
+        logger.info("Handling thread create")
+
+        guard let guildId = thread.guildId else { return }
+        guilds[guildId]?.threads?[thread.id] = thread
+
+        logger.debug("(verbose) Created thread: \(thread)")
+
+        delegate?.client(self, didCreateThread: thread)
+    }
+
+    ///
+    /// Handles thread updates from Discord. You shouldn't need to call this method directly.
+    ///
+    /// Calls the `didUpdateThread` delegate method.
+    ///
+    /// - parameter with: The data from the event
+    ///
+    private func handleThreadUpdate(with thread: DiscordChannel) {
+        logger.info("Handling thread update")
+
+        guard let guildId = thread.guildId else { return }
+        guilds[guildId]?.threads?[thread.id] = (thread.threadMetadata?.archived ?? false) ? nil : thread
+
+        logger.debug("(verbose) Updated thread: \(thread)")
+
+        delegate?.client(self, didUpdateThread: thread)
+    }
+
+    ///
+    /// Handles thread deletes from Discord. You shouldn't need to call this method directly.
+    ///
+    /// Calls the `didDeleteThread` delegate method.
+    ///
+    /// - parameter with: The data from the event
+    ///
+    private func handleThreadDelete(with thread: DiscordChannel) {
+        logger.info("Handling thread delete")
+
+        if let guildId = thread.guildId {
+            guilds[guildId]?.threads?.removeValue(forKey: thread.id)
+        }
+
+        channelCache.removeValue(forKey: thread.id)
+
+        logger.debug("(verbose) Removed thread: \(thread)")
+
+        delegate?.client(self, didDeleteThread: thread)
+    }
+
+    ///
+    /// Handles voice state updates from Discord. You shouldn't need to call this method directly.
+    ///
+    /// Calls the `didReceiveVoiceStateUpdate` delegate method.
+    ///
+    /// - parameter with: The data from the event
+    ///
+    private func handleVoiceStateUpdate(with state: DiscordVoiceState) {
+        logger.info("Handling voice state update")
+
+        guard let guildId = state.guildId,
+              var guild = guilds[guildId] else { return }
+
+        logger.debug("Voice state: \(state)")
+
+        if state.channelId == 0 {
+            guild.voiceStates?[state.userId] = nil
+        } else {
+            guild.voiceStates?[state.userId] = state
+        }
+
+        guilds[guildId] = guild
+
+        delegate?.client(self, didReceiveVoiceStateUpdate: state)
     }
 
     ///
     /// Handles channel updates from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didUpdateChannel` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleChannelUpdate(with data: [String: Any]) {
+    private func handleChannelUpdate(with channel: DiscordChannel) {
         logger.info("Handling channel update")
 
-        guard let channel = guildChannel(fromObject: data, guildID: nil, client: self) else {
-            return
-        }
-
-        logger.debug("(verbose) Updated channel: \(channel)")
-
-        guilds[channel.guildId]?.channels[channel.id] = channel
+        guard let guildId = channel.guildId else { return }
+        guilds[guildId]?.channels?[channel.id] = channel
 
         channelCache.removeValue(forKey: channel.id)
+
+        logger.debug("(verbose) Updated channel: \(channel)")
 
         delegate?.client(self, didUpdateChannel: channel)
     }
@@ -543,24 +465,20 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     /// Handles guild creates from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didCreateGuild` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildCreate(with data: [String: Any]) {
+    private func handleGuildCreate(with guild: DiscordGuild) {
         logger.info("Handling guild create")
-
-        let guild = DiscordGuild(guildObject: data, client: self)
-
-        logger.debug("(verbose) Created guild: \(guild)")
 
         guilds[guild.id] = guild
 
+        logger.debug("(verbose) Created guild: \(guild)")
+
         delegate?.client(self, didCreateGuild: guild)
 
-        guard fillLargeGuilds && guild.large else { return }
+        guard fillLargeGuilds && (guild.large ?? false) else { return }
 
         // Fill this guild with users immediately
         logger.debug("Fill large guild \(guild.id) with all users")
@@ -571,19 +489,16 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     /// Handles guild deletes from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didDeleteGuild` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildDelete(with data: [String: Any]) {
+    private func handleGuildDelete(with guild: DiscordGuild) {
         logger.info("Handling guild delete")
 
-        guard let guildId = Snowflake(data["id"] as? String) else { return }
-        guard let removedGuild = guilds.removeValue(forKey: guildId) else { return }
+        let removedGuild = guilds.removeValue(forKey: guild.id) ?? guild
 
-        for channel in removedGuild.channels.keys {
+        for channel in (removedGuild.channels ?? [:]).keys {
             channelCache[channel] = nil
         }
 
@@ -595,156 +510,135 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     /// Handles guild emoji updates from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didUpdateEmojis:onGuild:` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildEmojiUpdate(with data: [String: Any]) {
+    private func handleGuildEmojiUpdate(with event: DiscordGuildEmojisUpdateEvent) {
         logger.info("Handling guild emoji update")
 
-        guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
-        guard let emojis = data["emojis"] as? [[String: Any]] else { return }
+        guard var guild = guilds[event.guildId] else { return }
+        guild.emojis = .init(event.emojis)
+        guilds[event.guildId] = guild
 
-        let discordEmojis = DiscordEmoji.emojisFromArray(emojis)
+        logger.debug("(verbose) Created guild emojis: \(event.emojis)")
 
-        logger.debug("(verbose) Created guild emojis: \(discordEmojis)")
-
-        guild.emojis = discordEmojis
-
-        delegate?.client(self, didUpdateEmojis: discordEmojis, onGuild: guild)
+        delegate?.client(self, didUpdateEmojis: event.emojis, onGuild: guild)
     }
 
     ///
     /// Handles guild member adds from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didAddGuildMember` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildMemberAdd(with data: [String: Any]) {
+    private func handleGuildMemberAdd(with member: DiscordGuildMember) {
         logger.info("Handling guild member add")
 
-        guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
+        guard let guildId = member.guildId,
+              var guild = guilds[guildId] else { return }
+        guild.members?[member.id] = member
+        guild.memberCount = guild.memberCount.map { $0 + 1 }
+        guilds[guildId] = guild
 
-        let guildMember = DiscordGuildMember(guildMemberObject: data, guildId: guild.id, guild: guild)
+        logger.debug("(verbose) Created guild member: \(member)")
 
-        logger.debug("(verbose) Created guild member: \(guildMember)")
-
-        guild.members[guildMember.user.id] = guildMember
-        guild.memberCount += 1
-
-        delegate?.client(self, didAddGuildMember: guildMember)
+        delegate?.client(self, didAddGuildMember: member)
     }
 
     ///
     /// Handles guild member removes from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didRemoveGuildMember` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildMemberRemove(with data: [String: Any]) {
+    private func handleGuildMemberRemove(with event: DiscordGuildMemberRemoveEvent) {
         logger.info("Handling guild member remove")
 
-        guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
-        guard let user = data["user"] as? [String: Any], let id = Snowflake(user["id"] as? String) else { return }
+        guard var guild = guilds[event.guildId] else { return }
+        let removedMember = guild.members?.removeValue(forKey: event.user.id)
+        guild.memberCount = guild.memberCount.map { $0 - 1 }
+        guilds[event.guildId] = guild
 
-        guild.memberCount -= 1
+        guard let removedMember = removedMember else { return }
 
-        guard let removedGuildMember = guild.members.removeValue(forKey: id) else { return }
+        logger.debug("(verbose) Removed guild member: \(removedMember)")
 
-        logger.debug("(verbose) Removed guild member: \(removedGuildMember)")
-
-        delegate?.client(self, didRemoveGuildMember: removedGuildMember)
+        delegate?.client(self, didRemoveGuildMember: removedMember)
     }
 
     ///
     /// Handles guild member updates from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didUpdateGuildMember` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildMemberUpdate(with data: [String: Any]) {
+    private func handleGuildMemberUpdate(with member: DiscordGuildMember) {
         logger.info("Handling guild member update")
 
-        guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
-        guard let user = data["user"] as? [String: Any], let id = Snowflake(user["id"] as? String) else { return }
-        guard let guildMember = guild.members[id]?.updateMember(data) else { return }
+        guard let guildId = member.guildId,
+              var guild = guilds[guildId] else { return }
+        guild.members?[member.id] = member
+        guilds[guildId] = guild
 
-        logger.debug("(verbose) Updated guild member: \(guildMember)")
+        logger.debug("(verbose) Updated guild member: \(member)")
 
-        delegate?.client(self, didUpdateGuildMember: guildMember)
+        delegate?.client(self, didUpdateGuildMember: member)
     }
 
     ///
     /// Handles guild members chunks from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didHandleGuildMemberChunk:forGuild:` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildMembersChunk(with data: [String: Any]) {
+    private func handleGuildMembersChunk(with event: DiscordGuildMembersChunkEvent) {
         logger.info("Handling guild members chunk")
 
-        guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
-        guard let members = data["members"] as? [[String: Any]] else { return }
+        guard let guildId = event.guildId,
+              var guild = guilds[guildId] else { return }
+        guild.members?.merge(event.members)
+        guilds[guildId] = guild
 
-        let guildMembers = DiscordGuildMember.guildMembersFromArray(members, withGuildId: guildId, guild: guild)
-
-        guild.members.updateValues(withOtherDict: guildMembers)
-
-        delegate?.client(self, didHandleGuildMemberChunk: guildMembers, forGuild: guild)
+        delegate?.client(self, didHandleGuildMemberChunk: event.members, forGuild: guild)
     }
 
     ///
     /// Handles guild role creates from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didCreateRole` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildRoleCreate(with data: [String: Any]) {
+    private func handleGuildRoleCreate(with event: DiscordGuildRoleCreateEvent) {
         logger.info("Handling guild role create")
 
-        guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
-        guard let roleObject = data["role"] as? [String: Any] else { return }
-        let role = DiscordRole(roleObject: roleObject)
+        guard var guild = guilds[event.guildId] else { return }
+        guild.roles?[event.role.id] = event.role
+        guilds[event.guildId] = guild
 
-        logger.debug("(verbose) Created role: \(role)")
+        logger.debug("(verbose) Created role: \(event.role)")
 
-        guild.roles[role.id] = role
-
-        delegate?.client(self, didCreateRole: role, onGuild: guild)
+        delegate?.client(self, didCreateRole: event.role, onGuild: guild)
     }
 
     ///
     /// Handles guild role removes from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didDeleteRole` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildRoleRemove(with data: [String: Any]) {
+    private func handleGuildRoleDelete(with event: DiscordGuildRoleDeleteEvent) {
         logger.info("Handling guild role remove")
 
-        guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
-        guard let roleId = Snowflake(data["role_id"] as? String) else { return }
-        guard let removedRole = guild.roles.removeValue(forKey: roleId) else { return }
+        guard var guild = guilds[event.guildId],
+              let removedRole = guild.roles?.removeValue(forKey: event.roleId) else { return }
+        guilds[event.guildId] = guild
 
         logger.debug("(verbose) Removed role: \(removedRole)")
 
@@ -754,41 +648,36 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     /// Handles guild member updates from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didUpdateRole` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildRoleUpdate(with data: [String: Any]) {
+    private func handleGuildRoleUpdate(with event: DiscordGuildRoleUpdateEvent) {
         logger.info("Handling guild role update")
 
         // Functionally the same as adding
-        guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
-        guard let roleObject = data["role"] as? [String: Any] else { return }
-        let role = DiscordRole(roleObject: roleObject)
+        logger.debug("(verbose) Updated role: \(event.role)")
 
-        logger.debug("(verbose) Updated role: \(role)")
+        guard var guild = guilds[event.guildId] else { return }
+        guild.roles?[event.role.id] = event.role
+        guilds[event.guildId] = guild
 
-        guild.roles[role.id] = role
-
-        delegate?.client(self, didUpdateRole: role, onGuild: guild)
+        delegate?.client(self, didUpdateRole: event.role, onGuild: guild)
     }
 
     ///
     /// Handles guild updates from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didUpdateGuild` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleGuildUpdate(with data: [String: Any]) {
+    private func handleGuildUpdate(with guild: DiscordGuild) {
         logger.info("Handling guild update")
 
-        guard let guildId = Snowflake(data["id"] as? String) else { return }
-        guard let updatedGuild = guilds[guildId]?.updateGuild(fromGuildUpdate: data) else { return }
+        var updatedGuild = guilds[guild.id] ?? guild
+        updatedGuild.merge(update: guild)
+        guilds[guild.id] = updatedGuild
 
         logger.debug("(verbose) Updated guild: \(updatedGuild)")
 
@@ -798,16 +687,12 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     /// Handles message updates from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didUpdateMessage` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleMessageUpdate(with data: [String: Any]) {
+    private func handleMessageUpdate(with message: DiscordMessage) {
         logger.info("Handling message update")
-
-        let message = DiscordMessage(messageObject: data, client: self)
 
         logger.debug("(verbose) Message: \(message)")
 
@@ -817,239 +702,137 @@ open class DiscordClient : DiscordClientSpec, DiscordDispatchEventHandler, Disco
     ///
     /// Handles message creates from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didCreateMessage` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleMessageCreate(with data: [String: Any]) {
+    private func handleMessageCreate(with message: DiscordMessage) {
         logger.info("Handling message create")
-
-        let message = DiscordMessage(messageObject: data, client: self)
 
         logger.debug("(verbose) Message: \(message)")
 
         delegate?.client(self, didCreateMessage: message)
     }
 
-    /// Used to get fields for reaction notifications since add and remove are very similar
-    /// - parameter mode: A string to identify add/remove when logging errors
-    private func getReactionInfo(mode: String, from data: [String: Any]) -> (UserID, DiscordTextChannel, MessageID, DiscordEmoji)? {
-        guard let userID = UserID(data["user_id"] as? String),
-              let channelID = ChannelID(data["channel_id"] as? String),
-              let messageID = MessageID(data["message_id"] as? String),
-              let emoji = (data["emoji"] as? [String: Any]).map(DiscordEmoji.init(emojiObject:))
-        else {
-                logger.error("Failed to get required fields from reaction \(mode)")
-                return nil
-        }
-        guard let channel = findChannel(fromId: channelID) as? DiscordTextChannel else {
-            logger.error("Failed to get channel from ID in reaction \(mode)")
-            return nil
-        }
-        return (userID, channel, messageID, emoji)
-    }
-
     ///
     /// Handles reaction adds from Discord. You shouldn't need to call this method directly.
-    ///
-    /// Override to provide additional customization around this event.
     ///
     /// Calls the `didAddReaction` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleMessageReactionAdd(with data: [String: Any]) {
+    private func handleMessageReactionAdd(with event: DiscordMessageReactionAddEvent) {
         logger.info("Handling message reaction add")
 
-        guard let (userID, channel, messageID, emoji) = getReactionInfo(mode: "add", from: data) else { return }
+        guard let channel = findChannel(fromId: event.channelId) else { return }
 
-        if let guildID = GuildID(data["guild_id"] as? String),
-           let guild = guilds[guildID],
-           let member = (data["member"] as? [String: Any]).map({ DiscordGuildMember(guildMemberObject: $0, guildId: guildID) }) {
-            guild.members[member.user.id] = member
+        if let guildId = event.guildId,
+           let member = event.member {
+            guilds[guildId]?.members?[member.user.id] = member
         }
 
-        delegate?.client(self, didAddReaction: emoji, toMessage: messageID, onChannel: channel, user: userID)
+        delegate?.client(
+            self,
+            didAddReaction: event.emoji,
+            toMessage: event.messageId,
+            onChannel: channel,
+            user: event.userId
+        )
     }
 
     ///
     /// Handles reaction removals from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didRemoveReaction` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleMessageReactionRemove(with data: [String: Any]) {
+    private func handleMessageReactionRemove(with event: DiscordMessageReactionRemoveEvent) {
         logger.info("Handling message reaction remove")
 
-        guard let (userID, channel, messageID, emoji) = getReactionInfo(mode: "remove", from: data) else { return }
+        guard let channel = findChannel(fromId: event.channelId) else { return }
 
-        delegate?.client(self, didRemoveReaction: emoji, fromMessage: messageID, onChannel: channel, user: userID)
+        delegate?.client(
+            self,
+            didRemoveReaction: event.emoji,
+            fromMessage: event.messageId,
+            onChannel: channel,
+            user: event.userId
+        )
     }
 
     ///
     /// Handles reaction remove alls from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didRemoveAllReactionsFrom` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleMessageReactionRemoveAll(with data: [String: Any]) {
-        guard let channelID = ChannelID(data["channel_id"] as? String),
-              let messageID = MessageID(data["message_id"] as? String)
-        else {
-                logger.error("Failed to get required fields from reaction remove all")
-                return
-        }
-        guard let channel = findChannel(fromId: channelID) as? DiscordTextChannel else {
+    private func handleMessageReactionRemoveAll(with event: DiscordMessageReactionRemoveAllEvent) {
+        guard let channel = findChannel(fromId: event.channelId) else {
             logger.error("Failed to get channel from ID in reaction remove all")
             return
         }
 
-        delegate?.client(self, didRemoveAllReactionsFrom: messageID, onChannel: channel)
+        delegate?.client(self, didRemoveAllReactionsFrom: event.messageId, onChannel: channel)
     }
 
     ///
     /// Handles presence updates from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didReceivePresenceUpdate` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handlePresenceUpdate(with data: [String: Any]) {
-        guard let guildId = Snowflake(data["guild_id"] as? String), let guild = guilds[guildId] else { return }
-        guard let user = data["user"] as? [String: Any], let userId = Snowflake(user["id"] as? String) else { return }
+    private func handlePresenceUpdate(with update: DiscordPresenceUpdateEvent) {
+        guard let guildId = update.guildId,
+              var guild = guilds[guildId] else { return }
 
-        var presence = guild.presences[userId]
-
-        if presence != nil {
-            presence!.updatePresence(presenceObject: data)
-        } else {
-            presence = DiscordPresence(presenceObject: data, guildId: guildId)
-        }
+        var presence = guild.presences?[update.user.id] ?? update
+        presence.merge(update: update)
 
         if !discardPresences {
-            logger.debug("Updated presence: \(presence!)")
+            logger.debug("Updated presence: \(presence)")
 
-            guild.presences[userId] = presence!
+            guild.presences?[update.user.id] = presence
         }
 
-        delegate?.client(self, didReceivePresenceUpdate: presence!)
+        // TODO: Do we need to update the guild from the presences too?
 
-        guild.updateGuild(fromPresence: presence!, fillingUsers: fillUsers, pruningUsers: pruneUsers)
+        guilds[guildId] = guild
+
+        delegate?.client(self, didReceivePresenceUpdate: presence)
     }
 
     ///
     /// Handles interaction creations from Discord, i.e. slash command
     /// invocations. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didCreateInteraction` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleInteractionCreate(with data: [String: Any]) {
+    private func handleInteractionCreate(with interaction: DiscordInteraction) {
         logger.info("Handling interaction create")
 
-        delegate?.client(self, didCreateInteraction: DiscordInteraction(interactionObject: data))
+        delegate?.client(self, didCreateInteraction: interaction)
     }
 
     ///
     /// Handles the ready event from Discord. You shouldn't need to call this method directly.
     ///
-    /// Override to provide additional customization around this event.
-    ///
     /// Calls the `didReceiveReady` delegate method.
     ///
     /// - parameter with: The data from the event
     ///
-    open func handleReady(with data: [String: Any]) {
+    private func handleReady(with event: DiscordReadyEvent) {
         logger.info("Handling ready")
 
-        if let user = data["user"] as? [String: Any] {
-            self.user = DiscordUser(userObject: user)
-        }
+        user = event.user
+        guilds = .init(event.guilds ?? [])
 
-        if let guilds = data["guilds"] as? [[String: Any]] {
-            for (id, guild) in DiscordGuild.guildsFromArray(guilds, client: self) {
-                self.guilds.updateValue(guild, forKey: id)
-            }
-        }
+        // TODO: Use private_channels?
 
-        if let relationships = data["relationships"] as? [[String: Any]] {
-            self.relationships += relationships
-        }
-
-        if let privateChannels = data["private_channels"] as? [[String: Any]] {
-            for (id, channel) in privateChannelsFromArray(privateChannels, client: self) {
-                self.directChannels.updateValue(channel, forKey: id)
-            }
-        }
-
-        delegate?.client(self, didReceiveReady: data)
-    }
-
-    ///
-    /// Handles voice server updates from Discord. You shouldn't need to call this method directly.
-    ///
-    /// Override to provide additional customization around this event.
-    ///
-    /// - parameter with: The data from the event
-    ///
-    open func handleVoiceServerUpdate(with data: [String: Any]) {
-        logger.info("Handling voice server update")
-        logger.debug("(verbose) Voice server update: \(data)")
-
-        let info = DiscordVoiceServerInformation(voiceServerInformationObject: data)
-
-        voiceManager.voiceServerInformations[info.guildId] = info
-
-        self.startVoiceConnection(info.guildId)
-    }
-
-    ///
-    /// Handles voice state updates from Discord. You shouldn't need to call this method directly.
-    ///
-    /// Override to provide additional customization around this event.
-    ///
-    /// Calls the `didReceiveVoiceStateUpdate` delegate method.
-    ///
-    /// - parameter with: The data from the event
-    ///
-    open func handleVoiceStateUpdate(with data: [String: Any]) {
-        logger.info("Handling voice state update")
-
-        guard let guildId = Snowflake(data["guild_id"] as? String) else { return }
-
-        let state = DiscordVoiceState(voiceStateObject: data, guildId: guildId)
-
-        logger.debug("(verbose) Voice state: \(state)")
-
-        if state.channelId == 0 {
-            guilds[guildId]?.voiceStates[state.userId] = nil
-        } else {
-            guilds[guildId]?.voiceStates[state.userId] = state
-        }
-
-        if state.userId == user?.id {
-            if state.channelId == 0 {
-                voiceManager.protected { self.voiceManager.voiceStates[state.guildId] = nil }
-            } else {
-                voiceManager.protected { self.voiceManager.voiceStates[state.guildId] = state }
-
-                startVoiceConnection(state.guildId)
-            }
-        }
-
-        delegate?.client(self, didReceiveVoiceStateUpdate: state)
+        delegate?.client(self, didReceiveReady: event)
     }
 }

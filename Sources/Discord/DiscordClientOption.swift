@@ -1,5 +1,6 @@
 // The MIT License (MIT)
 // Copyright (c) 2016 Erik Little
+// Copyright (c) 2021 fwcd
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without
@@ -41,16 +42,13 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
 
     /// The gateway intents. By default, only the unprivileged intents are used, i.e. you won't
     /// get guild member and presence events, unless you specify these here (e.g. by using .allIntents).
-    case intents(DiscordGatewayIntent)
+    case intents(DiscordGatewayIntents)
 
     /// A DiscordRateLimiter for this client. All REST calls will be put through this limiter.
     case rateLimiter(DiscordRateLimiterSpec)
 
     /// Tells the client the number of shards to create. If not provided, one shard will be created.
     case shardingInfo(DiscordShardInformation)
-
-    /// The settings for voice engines. See `DiscordVoiceEngineConfiguration` for defaults.
-    case voiceConfiguration(DiscordVoiceEngineConfiguration)
 
     // MARK: Properties
 
@@ -65,7 +63,6 @@ public enum DiscordClientOption : CustomStringConvertible, Equatable {
         case .shardingInfo:         return "shardingInfo"
         case .pruneUsers:           return "pruneUsers"
         case .intents:              return "intents"
-        case .voiceConfiguration:   return "voiceConfiguration"
         }
     }
 
