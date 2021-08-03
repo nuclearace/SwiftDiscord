@@ -417,4 +417,43 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                    requestInfo: .post(content: nil, extraHeaders: nil),
                                    callback: { _, response, _ in callback?(response?.statusCode == 204, response) })
     }
+
+    /// Default implementation
+    func startThread(in channelId: ChannelID,
+                     with messageId: MessageID,
+                     callback: ((DiscordChannel?, HTTPURLResponse?) -> ())?) {
+        // TODO
+    }
+
+    /// Default implementation
+    func startThread(in channelId: ChannelID,
+                     callback: ((DiscordChannel?, HTTPURLResponse?) -> ())?) {
+        // TODO
+    }
+    
+    /// Default implementation
+    func joinThread(in threadId: ChannelID,
+                    callback: ((Bool, HTTPURLResponse?) -> ())?) {
+        // TODO
+    }
+
+    /// Default implementation
+    func addThreadMember(_ userId: UserID,
+                         to threadId: ChannelID,
+                         callback: ((Bool, HTTPURLResponse?) -> ())?) {
+        // TODO
+    }
+
+    /// Default implementation
+    func leaveThread(in threadId: ChannelID,
+                     callback: ((Bool, HTTPURLResponse?) -> ())?) {
+        // TODO
+    }
+
+    /// Default implementation
+    func removeThreadMember(_ userId: UserID,
+                            from threadId: ChannelID,
+                            callback: ((Bool, HTTPURLResponse?) -> ())?) {
+        // TODO
+    }
 }

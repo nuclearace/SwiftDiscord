@@ -266,6 +266,8 @@ public struct DiscordRateLimitKey: Hashable, Identifiable {
         static let    interactionID = DiscordRateLimitURLParts(rawValue: 1 << 36)
         static let interactionToken = DiscordRateLimitURLParts(rawValue: 1 << 37)
         static let         callback = DiscordRateLimitURLParts(rawValue: 1 << 38)
+        static let          threads = DiscordRateLimitURLParts(rawValue: 1 << 39)
+        static let    threadMembers = DiscordRateLimitURLParts(rawValue: 1 << 40)
 
         public init(rawValue: Int64) {
             self.rawValue = rawValue

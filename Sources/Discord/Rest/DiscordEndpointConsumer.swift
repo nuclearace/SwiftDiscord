@@ -279,6 +279,60 @@ public protocol DiscordEndpointConsumer {
     func triggerTyping(on channelId: ChannelID,
                        callback: ((Bool, HTTPURLResponse?) -> ())?)
 
+    ///
+    /// Creates a new public thread from an existing message.
+    ///
+    /// - parameter in: The id of the channel to create a thread in
+    /// - parameter with: The id of the message to start with
+    ///
+    func startThread(in channelId: ChannelID,
+                     with messageId: MessageID,
+                     callback: ((DiscordChannel?, HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Creates a new public thread without an initial message.
+    ///
+    /// - parameter in: The id of the channel to create a thread in
+    ///
+    func startThread(in channelId: ChannelID,
+                     callback: ((DiscordChannel?, HTTPURLResponse?) -> ())?)
+    
+    ///
+    /// Adds the current user to a thread.
+    ///
+    /// - parameter in: The id of the thread
+    ///
+    func joinThread(in threadId: ChannelID,
+                   callback: ((Bool, HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Adds a member to a thread.
+    ///
+    /// - parameter userId: The user to be added
+    /// - parameter to: The id of the thread
+    ///
+    func addThreadMember(_ userId: UserID,
+                         to threadId: ChannelID,
+                         callback: ((Bool, HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Removes the current user from a thread.
+    ///
+    /// - parameter in: The id of the thread
+    ///
+    func leaveThread(in threadId: ChannelID,
+                     callback: ((Bool, HTTPURLResponse?) -> ())?)
+
+    ///
+    /// Removes a member from a thread.
+    ///
+    /// - parameter userId: The user to be removed
+    /// - parameter to: The id of the thread
+    ///
+    func removeThreadMember(_ userId: UserID,
+                            from threadId: ChannelID,
+                            callback: ((Bool, HTTPURLResponse?) -> ())?)
+
     // MARK: Guilds
 
     ///
