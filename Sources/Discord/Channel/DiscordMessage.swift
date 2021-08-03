@@ -45,6 +45,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
         case attachments
         case author
         case channelId = "channel_id"
+        case guildId = "guild_id"
         case content
         case embeds
         case id
@@ -97,6 +98,9 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
 
     /// The snowflake id of the channel this message is on.
     public var channelId: ChannelID
+
+    /// The snowflake id of the guild this message is on.
+    public var guildId: GuildID? = nil
 
     /// The content of this message.
     public var content: String? = nil
@@ -172,6 +176,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
         attachments: [DiscordAttachment] = [],
         author: DiscordUser? = nil,
         channelId: ChannelID,
+        guildId: GuildID? = nil,
         content: String? = nil,
         editedTimestamp: Date? = nil,
         embeds: [DiscordEmbed] = [],
@@ -195,6 +200,7 @@ public struct DiscordMessage: ExpressibleByStringLiteral, Identifiable, Codable,
         self.attachments = attachments
         self.author = author
         self.channelId = channelId
+        self.guildId = guildId
         self.content = content
         self.editedTimestamp = editedTimestamp
         self.embeds = embeds
