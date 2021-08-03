@@ -44,32 +44,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
     /// Default implementation
     func createGuildChannel(on guildId: GuildID,
-                                   options: [DiscordEndpoint.Options.GuildCreateChannel],
+                                   options: DiscordEndpoint.Options.GuildCreateChannel,
                                    reason: String? = nil,
                                    callback: ((DiscordChannel?, HTTPURLResponse?) -> ())? = nil) {
-        var createJSON: [String: Encodable] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
             extraHeaders[.auditReason] = modifyReason
         }
 
-        for option in options {
-            switch option {
-            case let .bitrate(bps):
-                createJSON["bitrate"] = bps
-            case let .name(name):
-                createJSON["name"] = name
-            case let .permissionOverwrites(overwrites):
-                createJSON["permission_overwrites"] = overwrites
-            case let .type(type):
-                createJSON["type"] = type.rawValue
-            case let .userLimit(limit):
-                createJSON["user_limit"] = limit
-            }
-        }
-
-        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(createJSON)) else { return }
+        guard let contentData = try? DiscordJSON.encode(options) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard let channel: DiscordChannel = DiscordJSON.decodeResponse(data: data, response: response) else {
@@ -92,32 +76,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
                                 withOptions options: [DiscordEndpoint.Options.CreateRole] = [],
                                 reason: String? = nil,
                                 callback: @escaping (DiscordRole?, HTTPURLResponse?) -> ()) {
-        var roleData: [String: Any] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
             extraHeaders[.auditReason] = modifyReason
         }
 
-        for option in options {
-            switch option {
-            case let .color(color):
-                roleData["color"] = color
-            case let .hoist(hoist):
-                roleData["hoist"] = hoist
-            case let .mentionable(mentionable):
-                roleData["mentionable"] = mentionable
-            case let .name(name):
-                roleData["name"] = name
-            case let .permissions(permissions):
-                roleData["permissions"] = permissions.rawValue.description
-            }
-        }
-
         logger.info("Creating a new role on \(guildId)")
-        logger.debug("(verbose) Role options \(roleData)")
+        logger.debug("(verbose) Role options \(options)")
 
-        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(roleData)) else { return callback(nil, nil) }
+        guard let contentData = try? DiscordJSON.encode(options) else { return callback(nil, nil) }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard let role: DiscordRole = DiscordJSON.decodeResponse(data: data, response: response) else {

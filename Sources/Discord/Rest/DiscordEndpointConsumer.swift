@@ -64,12 +64,12 @@ public protocol DiscordEndpointConsumer {
     /// Creates an invite for a channelguild.
     ///
     /// - parameter for: The channel that we are creating for.
-    /// - parameter options: An array of `DiscordEndpointOptions.CreateInvite` options.
+    /// - parameter options: The invitation options.
     /// - parameter reason: The reason this invite was created.
     /// - parameter callback: The callback function. Takes an optional `DiscordInvite`
     ///
     func createInvite(for channelId: ChannelID,
-                      options: [DiscordEndpoint.Options.CreateInvite],
+                      options: DiscordEndpoint.Options.CreateInvite,
                       reason: String?,
                       callback: @escaping (DiscordInvite?, HTTPURLResponse?) -> ())
 
@@ -300,12 +300,12 @@ public protocol DiscordEndpointConsumer {
     /// Creates a guild channel.
     ///
     /// - parameter guildId: The snowflake id of the guild.
-    /// - parameter options: An array of `DiscordEndpointOptions.GuildCreateChannel` options.
+    /// - parameter options: The options for the new channel
     /// - parameter reason: The reason this channel is being created.
     /// - parameter callback: An optional callback containing the new channel, if successful.
     ///
     func createGuildChannel(on guildId: GuildID,
-                            options: [DiscordEndpoint.Options.GuildCreateChannel],
+                            options: DiscordEndpoint.Options.GuildCreateChannel,
                             reason: String?,
                             callback: ((DiscordChannel?, HTTPURLResponse?) -> ())?)
 

@@ -604,36 +604,55 @@ public extension DiscordEndpoint {
         }
 
         /// Create invite options.
-        public enum CreateInvite {
+        public struct CreateInvite: Codable {
+            public enum CodingKeys: String, CodingKey {
+                case maxAge = "max_age"
+                case maxUses = "max_uses"
+                case temporary
+                case unique
+            }
+
             /// How long this invite should live.
-            case maxAge(Int)
+            public let maxAge: Int?
 
             /// Number of uses this invite has before it becomes invalid
-            case maxUses(Int)
+            public let maxUses: Int?
 
             /// Whether this invite only grant temporary membership
-            case temporary(Bool)
+            public let temporary: Bool?
 
             /// if true, don't try to reuse a similar invite (useful for creating many unique one time use invites)
-            case unique(Bool)
+            public let unique: Bool?
+
+            public init(
+                maxAge: Int? = nil,
+                maxUses: Int? = nil,
+                temporary: Bool? = nil,
+                unique: Bool? = nil
+            ) {
+                self.maxAge = maxAge
+                self.maxUses = maxUses
+                self.temporary = temporary
+                self.unique = unique
+            }
         }
 
         /// Options for creating a role. All are optional.
-        public enum CreateRole {
+        public struct CreateRole: Codable {
             /// The color of the enum.
-            case color(Int)
+            public let color: Int?
 
             /// Whether the role should be displayed separately in the sidebar.
-            case hoist(Bool)
+            public let hoist: Bool?
 
             /// Whether this role is mentionable.
-            case mentionable(Bool)
+            public let mentionable: Bool?
 
             /// The name of this role.
-            case name(String)
+            public let name: String?
 
             /// The permissions this role has.
-            case permissions(DiscordPermissions)
+            public let permissions: DiscordPermissions?
         }
 
         /// Options for getting messages
@@ -660,21 +679,43 @@ public extension DiscordEndpoint {
         }
 
         /// Guild create channel options.
-        public enum GuildCreateChannel {
+        public struct GuildCreateChannel: Codable {
+            public enum CodingKeys: String, CodingKey {
+                case bitrate
+                case name
+                case permissionOverwrites = "permission_overwrites"
+                case type
+                case userLimit = "user_limit"
+            }
+
             /// The bitrate of a voice channel.
-            case bitrate(Int)
+            public let bitrate: Int?
 
             /// The name of the channel.
-            case name(String)
+            public let name: String?
 
             /// An array of permissions for this channel.
-            case permissionOverwrites([DiscordPermissionOverwrite])
+            public let permissionOverwrites: [DiscordPermissionOverwrite]?
 
             /// The type of this channel.
-            case type(DiscordChannelType)
+            public let type: DiscordChannelType?
 
             /// The user limit for a voice channel
-            case userLimit(Int)
+            public let userLimit: Int?
+
+            public init(
+                bitrate: Int? = nil,
+                name: String? = nil,
+                permissionOverwrites: [DiscordPermissionOverwrite]? = nil,
+                type: DiscordChannelType? = nil,
+                userLimit: Int? = nil
+            ) {
+                self.bitrate = bitrate
+                self.name = name
+                self.permissionOverwrites = permissionOverwrites
+                self.type = type
+                self.userLimit = userLimit
+            }
         }
 
         /// Guild get members options.

@@ -48,30 +48,16 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
 
     /// Default implementation
     func createInvite(for channelId: ChannelID,
-                             options: [DiscordEndpoint.Options.CreateInvite],
+                             options: DiscordEndpoint.Options.CreateInvite,
                              reason: String? = nil,
                              callback: @escaping (DiscordInvite?, HTTPURLResponse?) -> ()) {
-        var inviteJSON: [String: Encodable] = [:]
         var extraHeaders = [DiscordHeader: String]()
 
         if let modifyReason = reason {
             extraHeaders[.auditReason] = modifyReason
         }
 
-        for option in options {
-            switch option {
-            case let .maxAge(seconds):
-                inviteJSON["max_age"] = seconds
-            case let .maxUses(uses):
-                inviteJSON["max_uses"] = uses
-            case let .temporary(temporary):
-                inviteJSON["temporary"] = temporary
-            case let .unique(unique):
-                inviteJSON["unique"] = unique
-            }
-        }
-
-        guard let contentData = try? DiscordJSON.encode(GenericEncodableDictionary(inviteJSON)) else { return }
+        guard let contentData = try? DiscordJSON.encode(options) else { return }
 
         let requestCallback: DiscordRequestCallback = { data, response, error in
             guard let invite: DiscordInvite = DiscordJSON.decodeResponse(data: data, response: response) else {
