@@ -421,39 +421,93 @@ public extension DiscordEndpointConsumer where Self: DiscordUserActor {
     /// Default implementation
     func startThread(in channelId: ChannelID,
                      with messageId: MessageID,
+                     options: DiscordEndpoint.Options.StartThreadWithMessage,
+                     reason: String? = nil,
                      callback: ((DiscordChannel?, HTTPURLResponse?) -> ())?) {
-        // TODO
+        var extraHeaders = [DiscordHeader: String]()
+
+        if let modifyReason = reason {
+            extraHeaders[.auditReason] = modifyReason
+        }
+
+        let requestCallback: DiscordRequestCallback = { data, response, error in
+            guard let thread: DiscordChannel = DiscordJSON.decodeResponse(data: data, response: response) else {
+                callback?(nil, response)
+                return
+            }
+            callback?(thread, response)
+        }
+
+        guard let contentData = try? DiscordJSON.encode(options) else { return }
+
+        rateLimiter.executeRequest(endpoint: .channelMessageThreads(channel: channelId, message: messageId),
+                                   token: token,
+                                   requestInfo: .post(content: .json(contentData), extraHeaders: extraHeaders),
+                                   callback: requestCallback)
     }
 
     /// Default implementation
     func startThread(in channelId: ChannelID,
+                     options: DiscordEndpoint.Options.StartThread,
+                     reason: String? = nil,
                      callback: ((DiscordChannel?, HTTPURLResponse?) -> ())?) {
-        // TODO
+        var extraHeaders = [DiscordHeader: String]()
+
+        if let modifyReason = reason {
+            extraHeaders[.auditReason] = modifyReason
+        }
+
+        let requestCallback: DiscordRequestCallback = { data, response, error in
+            guard let thread: DiscordChannel = DiscordJSON.decodeResponse(data: data, response: response) else {
+                callback?(nil, response)
+                return
+            }
+            callback?(thread, response)
+        }
+
+        guard let contentData = try? DiscordJSON.encode(options) else { return }
+
+        rateLimiter.executeRequest(endpoint: .channelThreads(channel: channelId),
+                                   token: token,
+                                   requestInfo: .post(content: .json(contentData), extraHeaders: extraHeaders),
+                                   callback: requestCallback)
     }
     
     /// Default implementation
     func joinThread(in threadId: ChannelID,
                     callback: ((Bool, HTTPURLResponse?) -> ())?) {
-        // TODO
+        rateLimiter.executeRequest(endpoint: .threadMember(channel: threadId),
+                                   token: token,
+                                   requestInfo: .put(content: nil, extraHeaders: nil),
+                                   callback: { _, response, _ in callback?(response?.statusCode == 204, response) })
     }
 
     /// Default implementation
     func addThreadMember(_ userId: UserID,
                          to threadId: ChannelID,
                          callback: ((Bool, HTTPURLResponse?) -> ())?) {
-        // TODO
+        rateLimiter.executeRequest(endpoint: .userThreadMember(channel: threadId, user: userId),
+                                   token: token,
+                                   requestInfo: .put(content: nil, extraHeaders: nil),
+                                   callback: { _, response, _ in callback?(response?.statusCode == 204, response) })
     }
 
     /// Default implementation
     func leaveThread(in threadId: ChannelID,
                      callback: ((Bool, HTTPURLResponse?) -> ())?) {
-        // TODO
+        rateLimiter.executeRequest(endpoint: .threadMember(channel: threadId),
+                                   token: token,
+                                   requestInfo: .delete(content: nil, extraHeaders: nil),
+                                   callback: { _, response, _ in callback?(response?.statusCode == 204, response) })
     }
 
     /// Default implementation
     func removeThreadMember(_ userId: UserID,
                             from threadId: ChannelID,
                             callback: ((Bool, HTTPURLResponse?) -> ())?) {
-        // TODO
+        rateLimiter.executeRequest(endpoint: .userThreadMember(channel: threadId, user: userId),
+                                   token: token,
+                                   requestInfo: .delete(content: nil, extraHeaders: nil),
+                                   callback: { _, response, _ in callback?(response?.statusCode == 204, response) })
     }
 }

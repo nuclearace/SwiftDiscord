@@ -283,18 +283,26 @@ public protocol DiscordEndpointConsumer {
     /// Creates a new public thread from an existing message.
     ///
     /// - parameter in: The id of the channel to create a thread in
+    /// - parameter options: The parameters of the thread to be created
+    /// - parameter reason: The reason this thread is being created
     /// - parameter with: The id of the message to start with
     ///
     func startThread(in channelId: ChannelID,
                      with messageId: MessageID,
+                     options: DiscordEndpoint.Options.StartThreadWithMessage,
+                     reason: String?,
                      callback: ((DiscordChannel?, HTTPURLResponse?) -> ())?)
 
     ///
     /// Creates a new public thread without an initial message.
     ///
     /// - parameter in: The id of the channel to create a thread in
+    /// - parameter options: The parameters of the thread to be created
+    /// - parameter reason: The reason this thread is being created
     ///
     func startThread(in channelId: ChannelID,
+                     options: DiscordEndpoint.Options.StartThread,
+                     reason: String?,
                      callback: ((DiscordChannel?, HTTPURLResponse?) -> ())?)
     
     ///

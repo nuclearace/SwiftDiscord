@@ -912,5 +912,50 @@ public extension DiscordEndpoint {
             /// The avatar of the webhook. A base64 128x128 jpeg image.
             case avatar(String)
         }
+
+        /// Options for creating a message-attached thread.
+        public struct StartThreadWithMessage: Codable {
+            public enum CodingKeys: String, CodingKey {
+                case name
+                case autoArchiveDuration = "auto_archive_duration"
+            }
+
+            /// 1-100 char channel name
+            public let name: String
+
+            /// Duration in minutes to automatically archive the thread after
+            /// recent activity, can be set to 60, 1440, 4320, 10080
+            public let autoArchiveDuration: Int?
+
+            public init(name: String, autoArchiveDuration: Int? = nil) {
+                self.name = name
+                self.autoArchiveDuration = autoArchiveDuration
+            }
+        }
+
+        /// Options for creating a non-message-attached thread.
+        public struct StartThread: Codable {
+            public enum CodingKeys: String, CodingKey {
+                case name
+                case autoArchiveDuration = "auto_archive_duration"
+                case type
+            }
+
+            /// 1-100 char channel name
+            public let name: String
+
+            /// Duration in minutes to automatically archive the thread after
+            /// recent activity, can be set to 60, 1440, 4320, 10080
+            public let autoArchiveDuration: Int?
+
+            /// The type of thread to create.
+            public let type: DiscordChannelType?
+
+            public init(name: String, autoArchiveDuration: Int? = nil, type: DiscordChannelType? = nil) {
+                self.name = name
+                self.autoArchiveDuration = autoArchiveDuration
+                self.type = type
+            }
+        }
     }
 }
